@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.propTypes = {
   Component: PropTypes.node,
-  pageProps: PropTypes.object
+  pageProps: PropTypes.object,
 };
 
 export default MyApp;
