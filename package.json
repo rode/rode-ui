@@ -15,7 +15,9 @@
     "start": "react-scripts start",
     "fmt": "prettier --write .",
     "build": "react-scripts build",
+    "lint": "eslint src --max-warnings=0",
     "test": "react-scripts test",
+    "verify": "prettier --check . && yarn lint",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
