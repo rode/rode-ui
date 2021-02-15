@@ -12,6 +12,8 @@
     "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.2.7",
+    "google-protobuf": "^3.15.0-rc.1",
     "next": "10.0.6",
     "prop-types": "^15.7.2",
     "react": "17.0.1",
