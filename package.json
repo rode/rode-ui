@@ -3,13 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "dev": "next dev",
+    "fmt": "prettier --write .",
+    "lint": "echo lint",
+    "start": "next start",
+    "test": "echo test",
+    "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
   }
 }
