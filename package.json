@@ -8,7 +8,7 @@
     "fmt": "prettier --write .",
     "lint": "eslint --max-warnings=0 .",
     "start": "next start",
-    "test": "echo test",
+    "test": "jest",
     "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
@@ -18,8 +18,11 @@
     "react-dom": "17.0.1"
   },
   "devDependencies": {
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.1",
     "eslint": "^7.20.0",
     "eslint-plugin-react": "^7.22.0",
+    "jest": "^26.6.3",
     "prettier": "^2.2.1"
   }
 }
