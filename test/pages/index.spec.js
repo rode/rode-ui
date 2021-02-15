@@ -8,6 +8,6 @@ describe("index", () => {
     render(<Home />);
     const expected =
       "Instantly deploy your Next.js site to a public URL with Vercel.";
-    expect(screen.getByText(expected)).toBeDefined();
+    expect(screen.queryByText(expected)).not.toBeNull();
   });
 });
