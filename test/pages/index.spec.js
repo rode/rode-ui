@@ -6,7 +6,7 @@ import Home from "../../pages/index";
 describe("index", () => {
   it("should pass", () => {
     render(<Home />);
-    const expected = "Rode UI";
+    const expected = "Search for a resource";
     expect(screen.queryByText(expected)).toBeInTheDocument();
   });
 });
