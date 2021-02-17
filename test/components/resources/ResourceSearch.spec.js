@@ -5,13 +5,13 @@ import userEvent from "@testing-library/user-event";
 
 describe("ResourceSearch", () => {
   beforeEach(() => {
-    jest.spyOn(console, 'log');
+    jest.spyOn(console, "log");
     render(<ResourceSearch />);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
-  })
+  });
 
   it("should render an input for searching for a resource", () => {
     expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
