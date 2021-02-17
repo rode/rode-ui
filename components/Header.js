@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styles from "../styles/Header.module.scss";
-import Logo from "./icons/Logo";
+import RodeLogo from "./icons/RodeLogo";
 
 const navigationLinks = [
   {
@@ -15,7 +15,7 @@ const Header = () => {
     <header className={styles.container}>
       <Link href={"/"}>
         <a href={"/"}>
-          <Logo />
+          <RodeLogo />
         </a>
       </Link>
 

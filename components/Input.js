@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../styles/Input.module.scss";
+import styles from "../styles/Inputs.module.scss";
 
 const Input = (props) => {
   const { name, label, type, onChange, placeholder } = props;
 
   return (
-    <>
+    <div className={styles.container}>
       <label htmlFor={name} className={styles.label}>
         {label}
       </label>
@@ -18,7 +18,7 @@ const Input = (props) => {
         placeholder={placeholder || label}
         className={styles.input}
       />
-    </>
+    </div>
   );
 };
 
