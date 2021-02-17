@@ -34,6 +34,10 @@
     "moduleNameMapper": {
       "\\.(css|scss|sass)$": "identity-obj-proxy"
     },
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/jest-setup.js"
     ]
