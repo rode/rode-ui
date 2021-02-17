@@ -1,15 +1,35 @@
 @import "constants";
 @import "typography.scss";
 
-html,
-body {
+* {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-* {
   box-sizing: border-box;
   color: $DARK_GREY;
+  font-family: Open Sans, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background-color: $SOFT_WHITE;
+
+  #__next {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(min-content, 1fr));
+    grid-template-rows: minmax(1.5rem, 5rem) 1fr;
+    grid-template-areas:
+      "header header header header header header header header header header header header"
+      "main main main main main main main main main main main main";
+  }
+
+  header {
+    grid-row: header / auto;
+    grid-column: header;
+  }
+
+  main {
+    grid-row: main / auto;
+    grid-column: main;
+  }
 }

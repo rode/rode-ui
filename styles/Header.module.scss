@@ -1,0 +1,24 @@
+@import "constants";
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem;
+  background-color: $WHITE;
+  box-shadow: $BOX_SHADOW;
+
+  .links {
+    padding: 0.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    a {
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0 1rem;
+    }
+  }
+}

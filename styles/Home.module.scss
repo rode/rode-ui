@@ -1,9 +1,0 @@
-@import "constants";
-
-.button {
-  box-shadow: $BOX_SHADOW;
-
-  &:focus {
-    box-shadow: $FOCUS_SHADOW;
-  }
-}
