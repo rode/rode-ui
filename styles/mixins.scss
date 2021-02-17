@@ -1,0 +1,13 @@
+@import 'constants';
+
+@mixin phoneAndSmaller {
+  @media (max-width: $SCREEN_PHONE) {@content;}
+}
+
+@mixin tabletAndLarger {
+  @media (min-width: $SCREEN_TABLET) {@content;}
+}
+
+@mixin desktopAndLarger {
+  @media (min-width: $SCREEN_DESKTOP) {@content;}
+}
