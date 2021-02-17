@@ -1,13 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../styles/globals.css";
+import "../styles/globals.scss";
+import Head from "next/head";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <React.Fragment>
+      <Head>
+        <title>Rode</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main>
+        <Component {...pageProps} />
+      </main>
+    </React.Fragment>
+  );
+};
 
 MyApp.propTypes = {
-  Component: PropTypes.node,
+  Component: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.element,
+    PropTypes.func,
+  ]),
   pageProps: PropTypes.object,
 };
 

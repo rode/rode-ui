@@ -6,8 +6,7 @@ import Home from "../../pages/index";
 describe("index", () => {
   it("should pass", () => {
     render(<Home />);
-    const expected =
-      "Instantly deploy your Next.js site to a public URL with Vercel.";
+    const expected = "Rode UI";
     expect(screen.queryByText(expected)).toBeInTheDocument();
   });
 });

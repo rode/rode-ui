@@ -1,0 +1,14 @@
+a {
+  color: $DEEP_SEA;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:active {
+    box-shadow: $FOCUS_SHADOW;
+    outline: none;
+  }
+}
