@@ -20,4 +20,18 @@ module.exports = {
     },
   },
   rules: {},
+  overrides: [
+    {
+      files: ["**/*.spec.js"],
+      rules: {
+        "no-undef": "off",
+      },
+    },
+    {
+      files: ["jest-setup.js"],
+      rules: {
+        "no-unused-vars": "off",
+      },
+    },
+  ],
 };

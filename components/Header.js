@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import styles from "../styles/Header.module.scss";
-import Logo from "./Logo";
+import Logo from "./icons/Logo";
 
 const navigationLinks = [
   {
-    href: "/",
+    href: "/resources",
     label: "Resources",
   },
 ];
@@ -13,7 +13,11 @@ const navigationLinks = [
 const Header = () => {
   return (
     <header className={styles.container}>
-      <Logo />
+      <Link href={"/"}>
+        <a href={"/"}>
+          <Logo />
+        </a>
+      </Link>
 
       <div className={styles.links}>
         {navigationLinks.map((link) => {
