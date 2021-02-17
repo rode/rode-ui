@@ -1,8 +1,9 @@
 import React from "react";
 import Input from "../components/Input";
-import styles from "../styles/Resources.module.scss";
+import styles from "../styles/modules/Resources.module.scss";
 import Icon from "../components/Icon";
 import { ICON_NAMES } from "../utils/icon-utils";
+import Button from "../components/Button";
 
 const Resources = () => {
   return (
@@ -13,7 +14,13 @@ const Resources = () => {
         onChange={(e) => console.log("Not implemented: ", e.target.value)}
         placeholder={"Ex: alpine@sha256:etcetcetcetcetc"}
       />
-      <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+      <Button
+        onClick={() => console.log("to do")}
+        label={"Search"}
+        buttonType={"icon"}
+      >
+        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+      </Button>
     </div>
   );
 };

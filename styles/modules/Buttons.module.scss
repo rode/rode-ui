@@ -1,0 +1,51 @@
+@import "styles/constants";
+@import "styles/mixins";
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  padding: 0.25rem;
+  @include hoverTransition;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: $HOVER_SHADOW;
+    background-color: $GREEN;
+    color: $WHITE;
+  }
+
+  &:focus {
+    box-shadow: $FOCUS_SHADOW;
+  }
+}
+
+.primary {
+  @extend .button;
+  background-color: $DEEP_SEA;
+  color: $WHITE;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.icon {
+  @extend .button;
+  background-color: transparent;
+  border-radius: 50%;
+
+  svg {
+    color: $DEEP_SEA;
+    @include hoverTransition;
+  }
+
+  &:hover {
+    svg {
+      color: $WHITE;
+    }
+  }
+}

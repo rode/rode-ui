@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../styles/Inputs.module.scss";
+import styles from "../styles/modules/Inputs.module.scss";
 
 const Input = (props) => {
   const { name, label, type, onChange, placeholder } = props;
