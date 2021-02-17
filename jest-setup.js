@@ -1,4 +1,4 @@
 import "@testing-library/jest-dom";
-import chance from "chance";
+import Chance from "chance";
 
-const Chance = new chance();
+const chance = new Chance();
