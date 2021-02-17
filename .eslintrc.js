@@ -5,6 +5,9 @@ module.exports = {
     es2021: true,
     "jest/globals": true,
   },
+  globals: {
+    chance: "readonly",
+  },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
     ecmaFeatures: {
@@ -20,18 +23,4 @@ module.exports = {
     },
   },
   rules: {},
-  overrides: [
-    {
-      files: ["**/*.spec.js"],
-      rules: {
-        "no-undef": "off",
-      },
-    },
-    {
-      files: ["jest-setup.js"],
-      rules: {
-        "no-unused-vars": "off",
-      },
-    },
-  ],
 };
