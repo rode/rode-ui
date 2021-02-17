@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "../styles/modules/Buttons.module.scss";
+import styles from "styles/modules/Buttons.module.scss";
 
 const Button = (props) => {
   const { onClick, label, buttonType = "primary", children } = props;

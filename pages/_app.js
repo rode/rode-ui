@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../styles/globals.scss";
 import Head from "next/head";
-import Header from "../components/Header";
+import "styles/globals.scss";
+import Header from "components/Header";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
