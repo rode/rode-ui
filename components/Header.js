@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./icons/RodeLogo";
+import ThemeToggle from "./ThemeToggle";
 
 const navigationLinks = [
   {
@@ -27,6 +28,7 @@ const Header = () => {
             </Link>
           );
         })}
+       <ThemeToggle />
       </div>
     </header>
   );
