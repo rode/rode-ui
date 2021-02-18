@@ -1,0 +1,25 @@
+a {
+  color: $DEEP_SEA;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:active {
+    box-shadow: $FOCUS_SHADOW;
+    outline: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+  color: $DARK_GREY;
+}

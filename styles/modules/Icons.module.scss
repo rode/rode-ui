@@ -1,0 +1,22 @@
+.icon {
+  color: inherit;
+  margin: 0.25rem;
+}
+
+.small {
+  @extend .icon;
+  height: 1rem;
+  width: 1rem;
+}
+
+.medium {
+  @extend .icon;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.large {
+  @extend .icon;
+  height: 2rem;
+  width: 2rem;
+}

@@ -5,6 +5,9 @@ module.exports = {
     es2021: true,
     "jest/globals": true,
   },
+  globals: {
+    chance: "readonly",
+  },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
     ecmaFeatures: {

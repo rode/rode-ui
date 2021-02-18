@@ -1,0 +1,31 @@
+@import "styles/constants";
+@import "styles/mixins";
+
+.container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(1.5rem, 5rem) 1fr;
+  padding: 0 1rem;
+  background-color: $WHITE;
+  box-shadow: $BOX_SHADOW;
+
+  .links {
+    padding: 0.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @include tabletAndLarger {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    a {
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0 1.5rem;
+    }
+  }
+}

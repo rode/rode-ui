@@ -1,0 +1,34 @@
+@import "constants";
+@import "typography.scss";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Open Sans, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background-color: $SOFT_WHITE;
+
+  #__next {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(min-content, 1fr));
+    grid-template-rows: minmax(1.5rem, 5.25rem) 1fr;
+    grid-template-areas:
+      "header header header header header header header header header header header header"
+      "main main main main main main main main main main main main";
+  }
+
+  header {
+    grid-row: header / auto;
+    grid-column: header;
+  }
+
+  main {
+    grid-row: main / auto;
+    grid-column: main;
+  }
+}

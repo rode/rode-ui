@@ -1,0 +1,20 @@
+@import "styles/constants";
+@import "styles/mixins";
+
+.container {
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  @include tabletAndLarger {
+    width: 50%;
+  }
+
+  svg {
+    color: $DEEP_SEA;
+  }
+}
