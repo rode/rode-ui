@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import ResourceSearch from "components/resources/ResourceSearch";
+import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import userEvent from "@testing-library/user-event";
 
-describe("ResourceSearch", () => {
+describe("ResourceSearchBar", () => {
   beforeEach(() => {
     jest.spyOn(console, "log");
-    render(<ResourceSearch />);
+    render(<ResourceSearchBar />);
   });
 
   afterEach(() => {

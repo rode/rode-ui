@@ -1,8 +1,8 @@
 import React from "react";
-import ResourceSearch from "components/resources/ResourceSearch";
+import ResourceSearchBar from "components/resources/ResourceSearchBar";
 
 const Resources = () => {
-  return <ResourceSearch />;
+  return <ResourceSearchBar />;
 };
 
 export default Resources;

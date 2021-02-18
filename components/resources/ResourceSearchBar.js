@@ -5,7 +5,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
 
-const ResourceSearch = () => {
+const ResourceSearchBar = () => {
   return (
     <div className={styles.container}>
       <Input
@@ -25,4 +25,4 @@ const ResourceSearch = () => {
   );
 };
 
-export default ResourceSearch;
+export default ResourceSearchBar;
