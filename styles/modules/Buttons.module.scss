@@ -10,10 +10,9 @@
   padding: 0.25rem;
   height: fit-content;
   width: fit-content;
-  @include hoverTransition;
+  @include transition;
 
-  &:hover,
-  &:focus {
+  &:hover {
     cursor: pointer;
     box-shadow: $HOVER_SHADOW;
     background-color: $GREEN;
@@ -60,7 +59,7 @@
 
   svg {
     color: $DEEP_SEA;
-    @include hoverTransition;
+    @include transition;
   }
 
   &:hover,

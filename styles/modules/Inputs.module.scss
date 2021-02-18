@@ -12,23 +12,37 @@ $PADDING: 0.5rem;
   &:active {
     box-shadow: $FOCUS_SHADOW;
   }
-}
 
-.label {
-  display: block;
-  font-weight: 700;
-  padding-left: $PADDING;
-}
+  &.darkTheme {
+    .label {
+      color: $SOFT_WHITE;
+    }
 
-.input {
-  width: 100%;
-  padding: $PADDING;
-  background-color: transparent;
-  border: none;
-  border-bottom: solid 1px $MEDIUM_GREY;
+    .input {
+      color: $WHITE_SMOKE;
 
-  &:focus {
-    outline: none;
-    border-bottom: solid 1px $LAGOON;
+      &::placeholder {
+        color: $MEDIUM_GREY;
+      }
+    }
+  }
+
+  .label {
+    display: block;
+    font-weight: 700;
+    padding-left: $PADDING;
+  }
+
+  .input {
+    width: 100%;
+    padding: $PADDING;
+    background-color: transparent;
+    border: none;
+    border-bottom: solid 1px $MEDIUM_GREY;
+
+    &:focus {
+      outline: none;
+      border-bottom: solid 1px $LAGOON;
+    }
   }
 }

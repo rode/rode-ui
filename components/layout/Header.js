@@ -1,7 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
-import RodeLogo from "./icons/RodeLogo";
+import RodeLogo from "./RodeLogo";
+import ThemeToggle from "./ThemeToggle";
+import { useTheme } from "../../hooks/useTheme";
 
 const navigationLinks = [
   {
@@ -11,11 +13,13 @@ const navigationLinks = [
 ];
 
 const Header = () => {
+  const { theme } = useTheme();
+
   return (
-    <header className={styles.container}>
+    <header className={`${styles.container} ${styles[theme]}`}>
       <Link href={"/"}>
         <a href={"/"}>
-          <RodeLogo />
+          <RodeLogo theme={theme} />
         </a>
       </Link>
 
@@ -28,6 +32,7 @@ const Header = () => {
           );
         })}
       </div>
+      <ThemeToggle />
     </header>
   );
 };
