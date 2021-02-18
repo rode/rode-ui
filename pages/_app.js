@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import "styles/globals.scss";
-import Header from "components/Header";
 import { ThemeProvider } from "../hooks/useTheme";
+import PageLayout from "../components/layout/PageLayout";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
@@ -18,22 +18,17 @@ const MyApp = ({ Component, pageProps }) => {
             rel="stylesheet"
           />
         </Head>
-        <Header/>
-        <main>
-          <Component { ...pageProps } />
-        </main>
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
       </React.Fragment>
     </ThemeProvider>
   );
 };
 
 MyApp.propTypes = {
-  Component: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.element,
-    PropTypes.func
-  ]),
-  pageProps: PropTypes.object
+  Component: PropTypes.func,
+  pageProps: PropTypes.object,
 };
 
 export default MyApp;

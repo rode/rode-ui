@@ -5,17 +5,34 @@ $INDICATOR_SIZE: 1.5rem;
 $SHAPE_SIZE: calc(#{$INDICATOR_SIZE} * 0.75);
 $PADDING: 0.25rem;
 
-.indicator {
-  width: $INDICATOR_SIZE;
-  height: $INDICATOR_SIZE;
-  border-radius: 50%;
-  background-color: $WHITE;
-  box-shadow: $BOX_SHADOW;
-  padding: $PADDING;
-  @include transition;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: fit-content;
+
+  > span {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  &.darkTheme {
+    > span {
+      color: $WHITE;
+    }
+  }
+
+  &.lightTheme {
+    > span {
+      color: $DARK_GREY;
+    }
+  }
 }
 
-.container {
+.toggle {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -29,17 +46,26 @@ $PADDING: 0.25rem;
   border: solid 2px $MEDIUM_GREY;
   cursor: pointer;
 
-  &:active, &:focus {
+  &:active,
+  &:focus {
     outline: none;
   }
-}
 
-.active {
-  @extend .indicator;
-  background-color: $DARK_GREY;
-  transform: translateX($INDICATOR_SIZE);
-}
+  .indicator {
+    width: $INDICATOR_SIZE;
+    height: $INDICATOR_SIZE;
+    border-radius: 50%;
+    background-color: $WHITE;
+    box-shadow: $BOX_SHADOW;
+    padding: $PADDING;
+    @include transition;
+  }
 
-.inactive {
-  @extend .indicator;
+  &[aria-checked="true"] {
+    .indicator {
+      @extend .indicator;
+      background-color: $DARK_GREY;
+      transform: translateX($INDICATOR_SIZE);
+    }
+  }
 }

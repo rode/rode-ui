@@ -30,5 +30,13 @@ body {
   main {
     grid-row: main / auto;
     grid-column: main;
+
+    &.darkTheme {
+      background-color: $DARKER_GREY;
+    }
+
+    &.lightTheme {
+      background-color: $SOFT_WHITE;
+    }
   }
 }

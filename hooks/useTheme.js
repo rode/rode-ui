@@ -1,45 +1,49 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
 
-const LIGHT = 'light';
-const DARK = 'dark';
-const LOCAL_STORAGE_THEME_KEY = 'rode-ui-theme';
+// TODO: move this into a provider directory
+// TODO: test this
 
-const ThemeContext = React.createContext({ 
-  theme: LIGHT,
-  toggleTheme: () => {}
+const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
+
+const ThemeContext = React.createContext({
+  theme: LIGHT_THEME,
+  toggleTheme: () => {},
 });
 
 export const ThemeProvider = (props) => {
-  const [theme, setTheme] = React.useState(LIGHT);
+  const [theme, setTheme] = React.useState(LIGHT_THEME);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
 
     setTheme(savedTheme);
   }, [theme]);
 
   const toggleTheme = () => {
-    if (theme === LIGHT) {
-      setTheme(DARK);
-      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, DARK);
+    if (theme === LIGHT_THEME) {
+      setTheme(DARK_THEME);
+      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, DARK_THEME);
     } else {
-      setTheme(LIGHT);
-      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, LIGHT);
+      setTheme(LIGHT_THEME);
+      localStorage.setItem(LOCAL_STORAGE_THEME_KEY, LIGHT_THEME);
     }
-  }
+  };
 
   return (
-    <ThemeContext.Provider value={{theme, toggleTheme}}>{props.children}</ThemeContext.Provider>
-  )
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
 };
 
 ThemeProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export const useTheme = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  return { theme, toggleTheme};
-}
+  return { theme, toggleTheme };
+};
