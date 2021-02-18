@@ -8,7 +8,9 @@
   border: none;
   outline: none;
   padding: 0.25rem;
-  @include hoverTransition;
+  height: fit-content;
+  width: fit-content;
+  @include transition;
 
   &:hover {
     cursor: pointer;
@@ -40,7 +42,7 @@
 
   svg {
     color: $DEEP_SEA;
-    @include hoverTransition;
+    @include transition;
   }
 
   &:hover {

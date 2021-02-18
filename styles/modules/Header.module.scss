@@ -4,9 +4,8 @@
 .container {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(1.5rem, 5rem) 1fr;
+  grid-template-columns: minmax(1.5rem, 5rem) 1fr max-content;
   padding: 0 1rem;
-  background-color: $WHITE;
   box-shadow: $BOX_SHADOW;
 
   .links {
@@ -27,5 +26,21 @@
       font-weight: 700;
       padding: 0 1.5rem;
     }
+  }
+}
+
+.darkTheme {
+  background-color: $DARK_GREY;
+
+  a {
+    color: $LAGOON;
+  }
+}
+
+.lightTheme {
+  background-color: $WHITE;
+
+  a {
+    color: $DEEP_SEA;
   }
 }
