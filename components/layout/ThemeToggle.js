@@ -9,7 +9,7 @@ const ThemeToggle = () => {
 
   return (
     <div className={`${styles.container} ${styles[theme]}`}>
-      <span id={"toggle-theme"}>Dark Mode</span>
+      <span id={"toggle-theme"}>Dark Mode: {isActive ? "ON" : "OFF"}</span>
       <button
         className={styles.toggle}
         onClick={toggleTheme}
