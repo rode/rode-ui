@@ -2,9 +2,6 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
 
-// TODO: move this into a provider directory
-// TODO: test this
-
 const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
 
 const ThemeContext = React.createContext({
