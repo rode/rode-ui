@@ -8,17 +8,31 @@
   border: none;
   outline: none;
   padding: 0.25rem;
+  height: fit-content;
+  width: fit-content;
   @include hoverTransition;
 
-  &:hover {
+  &:hover,
+  &:focus {
     cursor: pointer;
     box-shadow: $HOVER_SHADOW;
     background-color: $GREEN;
     color: $WHITE;
   }
 
-  &:focus {
+  &:focus,
+  &:active {
     box-shadow: $FOCUS_SHADOW;
+  }
+
+  &[disabled] {
+    background-color: $SILVER;
+    color: $WHITE;
+
+    &:hover,
+    &:focus {
+      cursor: not-allowed;
+    }
   }
 }
 
@@ -31,6 +45,12 @@
   font-weight: 600;
   text-transform: uppercase;
   white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    background-color: $GREEN;
+    color: $WHITE;
+  }
 }
 
 .icon {
@@ -43,9 +63,27 @@
     @include hoverTransition;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
+    background-color: $DEEP_SEA;
     svg {
       color: $WHITE;
+    }
+  }
+
+  &[disabled] {
+    background-color: transparent;
+
+    svg {
+      color: $SILVER;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      svg {
+        color: $SILVER;
+      }
     }
   }
 }

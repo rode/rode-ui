@@ -1,5 +1,7 @@
 @import "styles/constants";
 
+$PADDING: 0.5rem;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -15,12 +17,12 @@
 .label {
   display: block;
   font-weight: 700;
-  padding-left: 0.5rem;
+  padding-left: $PADDING;
 }
 
 .input {
   width: 100%;
-  padding: 0.5rem;
+  padding: $PADDING;
   background-color: transparent;
   border: none;
   border-bottom: solid 1px $MEDIUM_GREY;
