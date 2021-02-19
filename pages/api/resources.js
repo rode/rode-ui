@@ -13,7 +13,9 @@ export default async (req, res) => {
     const rodeUrl = getRodeUrl();
 
     try {
-        const response = await fetch(`${rodeUrl}/v1alpha1/resources`);
+        const searchTerm = req.query.filter
+        const filter = `“resource.uri”.startsWith("${searchTerm}")`
+        const response = await fetch(`${rodeUrl}/v1alpha1/resources?filter=${encodeURIComponent(filter)}`);
         if (!response.ok) {
             console.error(`Unsuccessful response from Rode: ${response.status}`)
             return res
