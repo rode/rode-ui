@@ -31,7 +31,9 @@ describe("Resources", () => {
 
     beforeEach(() => {
       resources = chance.n(
-        () => ({ name: chance.word(), uri: chance.url() }),
+        () => ({
+          uri: `${chance.url()}@${chance.word()}`,
+        }),
         chance.d4()
       );
       expectedSearch = chance.word();
@@ -59,11 +61,9 @@ describe("Resources", () => {
       render(<Resources />);
 
       resources.forEach((resource) => {
+        const [resourceName] = resource.uri.split("@");
         expect(
-          screen.getByText(resource.uri, { exact: false })
-        ).toBeInTheDocument();
-        expect(
-          screen.getByText(resource.name, { exact: false })
+          screen.getByText(resourceName, { exact: false })
         ).toBeInTheDocument();
       });
     });
