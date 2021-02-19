@@ -3,18 +3,36 @@
 
 .container {
   height: 100%;
-  width: 90%;
-  margin: 0 auto;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 
-  @include tabletAndLarger {
-    width: 50%;
-  }
+  .searchBarContainer {
+    height: fit-content;
+    width: 90%;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
 
-  svg {
-    color: $DEEP_SEA;
+    svg {
+      color: $DEEP_SEA;
+    }
+  }
+}
+
+.containerNoResults {
+  @extend .container;
+  justify-content: center;
+
+  .searchBarContainer {
+    @extend .searchBarContainer;
+    width: 90%;
+
+    @include tabletAndLarger {
+      width: 50%;
+    }
   }
 }

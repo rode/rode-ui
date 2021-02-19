@@ -19,6 +19,7 @@ describe("Button", () => {
     expect(renderedButton).toBeInTheDocument();
     expect(renderedButton).toHaveTextContent(label);
     expect(renderedButton).toHaveClass("primary");
+    expect(renderedButton).not.toBeDisabled();
   });
 
   it("should call the passed onClick function", () => {
@@ -53,5 +54,11 @@ describe("Button", () => {
 
     expect(renderedButton).toBeInTheDocument();
     expect(renderedButton).toHaveClass("icon");
+  });
+
+  it("should render the button as disabled when specified", () => {
+    render(<Button onClick={onClick} label={label} disabled={true} />);
+
+    expect(screen.getByLabelText(label)).toBeDisabled();
   });
 });
