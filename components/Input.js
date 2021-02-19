@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
+import { useTheme } from "../hooks/useTheme";
 
 const Input = (props) => {
   const { name, label, type, onChange, placeholder } = props;
+  const { theme } = useTheme();
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles[theme]}`}>
       <label htmlFor={name} className={styles.label}>
         {label}
       </label>
