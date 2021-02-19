@@ -5,11 +5,15 @@ import handler from "pages/api/resources";
 jest.mock("node-fetch");
 
 describe("/api/resources", () => {
-  let request, response, allResources, rodeResponse;
+  let request, response, allResources, rodeResponse, filterParam;
 
   beforeEach(() => {
+    filterParam = chance.word();
     request = {
       method: "GET",
+      query: {
+        filter: filterParam,
+      },
     };
 
     response = {
@@ -68,8 +72,16 @@ describe("/api/resources", () => {
       process.env.RODE_URL = rodeUrlEnv;
     });
 
+    const createExpectedUrl = (baseUrl) => {
+      const expectedFilter = `"resource.uri".startsWith("${filterParam}")`;
+
+      return `${baseUrl}/v1alpha1/resources?filter=${encodeURIComponent(
+        expectedFilter
+      )}`;
+    };
+
     it("should hit the Rode API", async () => {
-      const expectedUrl = "http://localhost:50052/v1alpha1/resources";
+      const expectedUrl = createExpectedUrl("http://localhost:50052");
 
       await handler(request, response);
 
@@ -78,7 +90,7 @@ describe("/api/resources", () => {
 
     it("should take the Rode URL from the environment if set", async () => {
       const rodeUrl = chance.url();
-      const expectedUrl = `${rodeUrl}/v1alpha1/resources`;
+      const expectedUrl = createExpectedUrl(rodeUrl);
       process.env.RODE_URL = rodeUrl;
 
       await handler(request, response);
