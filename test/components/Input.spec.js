@@ -56,4 +56,13 @@ describe("Input", () => {
 
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
   });
+
+  it("should render the value if specified", () => {
+    const value = chance.string();
+    render(
+      <Input name={name} label={label} onChange={onChange} value={value} />
+    );
+
+    expect(screen.getByDisplayValue(value)).toBeInTheDocument();
+  });
 });

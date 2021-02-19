@@ -5,10 +5,14 @@ import styles from "styles/modules/Resources.module.scss";
 
 const Resources = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [currentSearch, setCurrentSearch] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    setShowSearchResults(!!router.query.search);
+    if (router.query.search) {
+      setShowSearchResults(true);
+      setCurrentSearch(router.query.search);
+    }
   }, [router.query]);
 
   return (
@@ -17,7 +21,7 @@ const Resources = () => {
         showSearchResults ? styles.container : styles.containerNoResults
       }
     >
-      <ResourceSearchBar />
+      <ResourceSearchBar currentSearch={currentSearch} />
       {showSearchResults && (
         <>
           <p>search results here</p>
