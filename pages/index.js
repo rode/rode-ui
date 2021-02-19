@@ -1,8 +1,13 @@
 import React from "react";
-import ResourceSearch from "components/resources/ResourceSearch";
+import styles from "styles/modules/Resources.module.scss";
+import ResourceSearchBar from "components/resources/ResourceSearchBar";
 
 const Home = () => {
-  return <ResourceSearch />;
+  return (
+    <div className={styles.containerNoResults}>
+      <ResourceSearchBar />
+    </div>
+  );
 };
 
 export default Home;
