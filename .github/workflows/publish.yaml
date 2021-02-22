@@ -21,20 +21,14 @@ jobs:
           username: ${{ secrets.CR_USER }}
           password: ${{ secrets.CR_PAT }}
 
-      - name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1.11.0
-        with:
-          images: rode/rode-ui
-          tag-sha: true
-          tag-semver: |
-            v{{version}}
-            v{{major}}.{{minor}}
-            v{{major}}
+      - id: gitextra
+        uses: liatrio/github-actions/git-extra@master
 
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          tags: |
+            rode/rode-ui:latest
+            rode/rode-ui:${{ steps.gitextra.outputs.version }}
