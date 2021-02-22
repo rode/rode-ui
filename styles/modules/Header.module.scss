@@ -34,6 +34,10 @@
 
   a {
     color: $LAGOON;
+
+    &:visited {
+      color: $LAGOON;
+    }
   }
 }
 
@@ -42,5 +46,9 @@
 
   a {
     color: $DEEP_SEA;
+
+    &:visited {
+      color: $DEEP_SEA;
+    }
   }
 }
