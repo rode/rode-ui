@@ -21,6 +21,67 @@
       color: $DEEP_SEA;
     }
   }
+
+  .searchCard {
+    width: 90%;
+    box-shadow: $BOX_SHADOW;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    @include tabletAndLarger {
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .cardText {
+      font-size: 0.75rem;
+      text-indent: 0.5rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &.darkTheme {
+    .noResults {
+      color: $SOFT_WHITE;
+    }
+    .searchBarContainer {
+      svg {
+        color: $LAGOON;
+
+        &:hover,
+        &:focus {
+          color: $WHITE;
+        }
+      }
+    }
+    .searchCard {
+      background-color: $DARK_GREY;
+
+      .cardHeader {
+        color: $SOFT_WHITE;
+      }
+
+      .cardText {
+        color: $SILVER;
+      }
+    }
+  }
+
+  &.lightTheme {
+    .searchCard {
+      background-color: $WHITE;
+
+      .cardHeader {
+        color: $DARK_GREY;
+      }
+
+      .cardText {
+        color: $MEDIUM_GREY;
+      }
+    }
+  }
 }
 
 .containerNoResults {

@@ -7,6 +7,7 @@ module.exports = {
   },
   globals: {
     chance: "readonly",
+    process: "writable",
   },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
