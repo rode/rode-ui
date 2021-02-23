@@ -47,6 +47,10 @@
   box-shadow: $BOX_SHADOW;
   padding: 1rem;
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
   @include tabletAndLarger {
     padding: 2rem;
