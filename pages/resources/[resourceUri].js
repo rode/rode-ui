@@ -20,7 +20,6 @@ const Resource = () => {
   const [resourceVersion, setResourceVersion] = useState('');
   const { resourceUri } = router.query;
 
-
   const { data } = useSWR(
     resourceUri
       ? `/api/occurrences?resourceUri=${encodeURIComponent(resourceUri)}`
@@ -48,10 +47,10 @@ const Resource = () => {
       ) : (
         <>
           {data.map((occurrence) => (
-            <React.Fragment key={occurrence.name}>
+            <div key={occurrence.name} className={styles.resourceOccurrence}>
               <p>{occurrence.name}</p>
               <p>{occurrence.kind}</p>
-            </React.Fragment>
+            </div>
           ))}
         </>
       )}

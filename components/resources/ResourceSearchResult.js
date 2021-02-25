@@ -16,7 +16,7 @@ const ResourceSearchResult = ({ searchResult }) => {
   const router = useRouter();
 
   const onClick = () => {
-    router.push(`/resources/${searchResult.uri}`);
+    router.push(`/resources/${encodeURIComponent(searchResult.uri)}`);
   };
 
   return (

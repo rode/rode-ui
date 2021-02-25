@@ -80,8 +80,21 @@
   }
 }
 
+.resourceOccurrence {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem;
+}
+
 .darkTheme {
   .noResults {
+    color: $SOFT_WHITE;
+  }
+
+  .resourceOccurrence {
+    background-color: $DARK_GREY;
     color: $SOFT_WHITE;
   }
 
@@ -124,6 +137,10 @@
         color: $WHITE;
       }
     }
+  }
+
+  .resourceOccurrence {
+    background-color: $WHITE;
   }
 
   .resourceHeader {
