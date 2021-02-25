@@ -1,5 +1,6 @@
 a {
   text-decoration: none;
+  color: $LINK;
 
   &:hover {
     text-decoration: underline;
@@ -10,30 +11,16 @@ a {
     box-shadow: $FOCUS_SHADOW;
     outline: none;
   }
+
+  &:visited {
+    color: $LINK;
+  }
 }
 
 .lightTheme {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span {
-    color: $DARK_GREY;
-  }
+  color: $DARK_GREY;
 }
 
 .darkTheme {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span {
-    color: $SOFT_WHITE;
-  }
+  color: $SOFT_WHITE;
 }

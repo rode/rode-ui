@@ -37,7 +37,6 @@ const Resource = () => {
 
   return (
     <div className={`${styles[theme]}`}>
-      <p>Breadcrumbs will go here</p>
       <div className={styles.resourceHeader}>
         <div>
           <p className={styles.resourceName}>{resourceName}</p>
