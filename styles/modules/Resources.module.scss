@@ -66,6 +66,20 @@
   }
 }
 
+.resourceHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: $BOX_SHADOW;
+
+  .resourceName {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+}
+
 .darkTheme {
   .noResults {
     color: $SOFT_WHITE;
@@ -93,6 +107,11 @@
       color: $SILVER;
     }
   }
+
+  .resourceHeader {
+    background-color: $DEEP_SEA;
+    color: $SOFT_WHITE;
+  }
 }
 
 .lightTheme {
@@ -107,6 +126,10 @@
     }
   }
 
+  .resourceHeader {
+    background-color: $DEEP_SEA;
+    color: $SOFT_WHITE;
+  }
   .searchCard {
     background-color: $WHITE;
 
