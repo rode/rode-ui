@@ -4,8 +4,11 @@ import styles from "styles/modules/Resources.module.scss";
 import Button from "../Button";
 import { useRouter } from "next/router";
 
+// TODO: pull out into utils
 const getImageParts = (uri) => {
-  return uri.split("@");
+  const splitResource = uri.split("@");
+
+  return [splitResource[0], uri.replace(`${splitResource[0]}@`, '')];
 };
 
 const ResourceSearchResult = ({ searchResult }) => {
