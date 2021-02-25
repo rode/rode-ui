@@ -12,13 +12,28 @@ a {
   }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-span {
-  //color: $DARK_GREY;
+.lightTheme {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    color: $DARK_GREY;
+  }
+}
+
+.darkTheme {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    color: $SOFT_WHITE;
+  }
 }

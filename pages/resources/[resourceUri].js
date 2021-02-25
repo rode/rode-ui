@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "hooks/useTheme";
 import useSWR from "swr";
-import styles from 'styles/modules/Resources.module.scss';
+import styles from "styles/modules/Resources.module.scss";
+import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -16,8 +16,8 @@ const getImageParts = (uri) => {
 const Resource = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const [resourceName, setResourceName] = useState('');
-  const [resourceVersion, setResourceVersion] = useState('');
+  const [resourceName, setResourceName] = useState("");
+  const [resourceVersion, setResourceVersion] = useState("");
   const { resourceUri } = router.query;
 
   const { data } = useSWR(
@@ -37,27 +37,30 @@ const Resource = () => {
 
   return (
     <div className={`${styles[theme]}`}>
+      <p>Breadcrumbs will go here</p>
       <div className={styles.resourceHeader}>
-        <p className={styles.resourceName}>{resourceName}</p>
-        <p>Type: Docker Image</p>
-        <p>Version: {resourceVersion}</p>
+        <div>
+          <p className={styles.resourceName}>{resourceName}</p>
+          <p>Type: Docker Image</p>
+        </div>
+        <div className={styles.versionContainer}>
+          <p>Version: {resourceVersion}</p>
+        </div>
       </div>
       {!data ? (
         <p>Loading...</p>
       ) : (
         <>
-          {data.map((occurrence) => (
-            <div key={occurrence.name} className={styles.resourceOccurrence}>
-              <p>{occurrence.name}</p>
-              <p>{occurrence.kind}</p>
-            </div>
+          {data?.map((occurrence) => (
+            <ResourceOccurrenceCard
+              key={occurrence.name}
+              occurrence={occurrence}
+            />
           ))}
         </>
       )}
     </div>
   );
 };
-
-Resource.propTypes = {};
 
 export default Resource;

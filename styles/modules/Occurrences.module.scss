@@ -1,0 +1,23 @@
+@import "styles/constants";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem;
+}
+
+
+.darkTheme {
+  &.container {
+    background-color: $DARK_GREY;
+    color: $SOFT_WHITE;
+  }
+}
+
+.lightTheme {
+  &.container {
+    background-color: $WHITE;
+  }
+}

@@ -78,23 +78,21 @@
     font-size: 1.75rem;
     font-weight: 700;
   }
-}
 
-.resourceOccurrence {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem;
-  margin: 2rem;
+  .versionContainer {
+    width: 600px;
+    max-width: 50%;
+    text-align: right;
+    margin-left: 2rem;
+    color: $SOFT_WHITE;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .darkTheme {
   .noResults {
-    color: $SOFT_WHITE;
-  }
-
-  .resourceOccurrence {
-    background-color: $DARK_GREY;
     color: $SOFT_WHITE;
   }
 
@@ -139,14 +137,14 @@
     }
   }
 
-  .resourceOccurrence {
-    background-color: $WHITE;
-  }
-
   .resourceHeader {
     background-color: $DEEP_SEA;
-    color: $SOFT_WHITE;
+
+    > * {
+      color: $SOFT_WHITE;
+    }
   }
+
   .searchCard {
     background-color: $WHITE;
 

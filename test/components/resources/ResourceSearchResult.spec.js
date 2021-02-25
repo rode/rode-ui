@@ -35,6 +35,6 @@ describe("ResourceSearchResult", () => {
     expect(renderedButton).toBeInTheDocument();
 
     userEvent.click(renderedButton);
-    expect(pushMock).toHaveBeenCalledWith(`/resources/${searchResult.uri}`);
+    expect(pushMock).toHaveBeenCalledWith(`/resources/${encodeURIComponent(searchResult.uri)}`);
   });
 });
