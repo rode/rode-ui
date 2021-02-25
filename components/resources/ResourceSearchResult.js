@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Resources.module.scss";
 import Button from "../Button";
+import { useRouter } from "next/router";
 
 const getImageParts = (uri) => {
   return uri.split("@");
@@ -9,6 +10,12 @@ const getImageParts = (uri) => {
 
 const ResourceSearchResult = ({ searchResult }) => {
   const [resourceName, version] = getImageParts(searchResult.uri);
+  const router = useRouter();
+
+  const onClick = () => {
+    console.log('here');
+    router.push(`/resources/${searchResult.uri}`)
+  }
 
   return (
     <div className={styles.searchCard}>
@@ -16,7 +23,7 @@ const ResourceSearchResult = ({ searchResult }) => {
         <p className={styles.cardHeader}>Resource Name: {resourceName}</p>
         <p className={styles.cardText}>Version: {version}</p>
       </div>
-      <Button onClick={() => console.log('hi')} label={'View Details'}/>
+      <Button onClick={onClick} label={'View Details'}/>
     </div>
   );
 };
