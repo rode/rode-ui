@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 const getImageParts = (uri) => {
   const splitResource = uri.split("@");
 
-  return [splitResource[0], uri.replace(`${splitResource[0]}@`, '')];
+  return [splitResource[0], uri.replace(`${splitResource[0]}@`, "")];
 };
 
 const ResourceSearchResult = ({ searchResult }) => {

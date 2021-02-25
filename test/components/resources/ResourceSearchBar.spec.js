@@ -55,7 +55,6 @@ describe("ResourceSearchBar", () => {
     userEvent.type(renderedSearchInput, searchTerm);
     userEvent.click(renderedSearchButton);
 
-    expect(console.log).toHaveBeenCalledTimes(1);
     expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock).toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
   });
