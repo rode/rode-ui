@@ -13,23 +13,22 @@ const ResourceSearchResult = ({ searchResult }) => {
   const router = useRouter();
 
   const onClick = () => {
-    console.log('here');
-    router.push(`/resources/${searchResult.uri}`)
-  }
+    router.push(`/resources/${searchResult.uri}`);
+  };
 
   return (
     <div className={styles.searchCard}>
       <div>
-        <p className={styles.cardHeader}>Resource Name: {resourceName}</p>
-        <p className={styles.cardText}>Version: {version}</p>
+        <p className={styles.cardHeader}>{`Resource Name: ${resourceName}`}</p>
+        <p className={styles.cardText}>{`Version: ${version}`}</p>
       </div>
-      <Button onClick={onClick} label={'View Details'}/>
+      <Button onClick={onClick} label={"View Details"} />
     </div>
   );
 };
 
 ResourceSearchResult.propTypes = {
-  searchResult: PropTypes.object.isRequired
-}
+  searchResult: PropTypes.object.isRequired,
+};
 
 export default ResourceSearchResult;

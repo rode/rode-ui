@@ -6,6 +6,7 @@ import styles from "styles/modules/Resources.module.scss";
 import { useTheme } from "../hooks/useTheme";
 import ResourceSearchResult from "../components/resources/ResourceSearchResult";
 
+//TODO: make a custom hook
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const Resources = () => {
@@ -38,9 +39,8 @@ const Resources = () => {
         <>
           {data.length > 0 ? (
             data.map((result) => {
-
               return (
-                <ResourceSearchResult key={result.uri} searchResult={result}/>
+                <ResourceSearchResult key={result.uri} searchResult={result} />
               );
             })
           ) : (

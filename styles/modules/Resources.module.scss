@@ -38,7 +38,7 @@
   justify-content: flex-start;
 
   .searchBarContainer {
-    @extend .searchBarContainerBase
+    @extend .searchBarContainerBase;
   }
 }
 
