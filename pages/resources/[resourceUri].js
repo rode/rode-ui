@@ -1,11 +1,9 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { useTheme } from "hooks/useTheme";
 import useSWR from "swr";
 import styles from 'styles/modules/Resources.module.scss';
-
-// TODO: look into hard reload errors
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -18,8 +16,10 @@ const getImageParts = (uri) => {
 const Resource = () => {
   const { theme } = useTheme();
   const router = useRouter();
+  const [resourceName, setResourceName] = useState('');
+  const [resourceVersion, setResourceVersion] = useState('');
   const { resourceUri } = router.query;
-  const [resourceName, version] = getImageParts(resourceUri);
+
 
   const { data } = useSWR(
     resourceUri
@@ -28,14 +28,20 @@ const Resource = () => {
     fetcher
   );
 
-  console.log("data", data);
+  useEffect(() => {
+    if (resourceUri) {
+      const [name, version] = getImageParts(resourceUri);
+      setResourceName(name);
+      setResourceVersion(version);
+    }
+  }, [resourceUri]);
 
   return (
     <div className={`${styles[theme]}`}>
       <div className={styles.resourceHeader}>
         <p className={styles.resourceName}>{resourceName}</p>
         <p>Type: Docker Image</p>
-        <p>Version: {version}</p>
+        <p>Version: {resourceVersion}</p>
       </div>
       {!data ? (
         <p>Loading...</p>
