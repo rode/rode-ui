@@ -1,17 +1,10 @@
 * 
 !.babelrc
-!.eslintrc.js
-!.nvmrc
-!.prettierignore
-!.prettierrc.json
 !components
 !hooks
-!jest-setup.js
-!jsconfig.json
 !package.json
 !pages
 !public
 !styles
-!test
 !utils
 !yarn.lock
