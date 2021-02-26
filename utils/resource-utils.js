@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
 const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
 
@@ -104,4 +103,3 @@ export const getResourceDetails = (uri) => {
     resourceVersion: version,
   };
 };
-/* eslint-enable no-useless-escape */
