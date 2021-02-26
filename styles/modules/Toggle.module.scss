@@ -17,7 +17,7 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-$INDICATOR_SIZE: 1.5rem;
+$INDICATOR_SIZE: 1.25rem;
 $SHAPE_SIZE: calc(#{$INDICATOR_SIZE} * 0.75);
 $PADDING: 0.25rem;
 
@@ -34,17 +34,17 @@ $PADDING: 0.25rem;
     font-size: 0.75rem;
     text-transform: uppercase;
   }
+}
 
-  &.darkTheme {
-    > span {
-      color: $WHITE;
-    }
+.darkTheme {
+  > span {
+    color: $WHITE;
   }
+}
 
-  &.lightTheme {
-    > span {
-      color: $DARK_GREY;
-    }
+.lightTheme {
+  > span {
+    color: $DARK_GREY;
   }
 }
 
@@ -63,8 +63,10 @@ $PADDING: 0.25rem;
   cursor: pointer;
 
   &:active,
+  &:hover,
   &:focus {
     outline: none;
+    box-shadow: $FOCUS_SHADOW;
   }
 
   .indicator {

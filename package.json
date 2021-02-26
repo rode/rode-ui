@@ -12,6 +12,7 @@
     "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
+    "dayjs": "^1.10.4",
     "http-status-codes": "^2.1.4",
     "next": "10.0.6",
     "node-fetch": "^2.6.1",

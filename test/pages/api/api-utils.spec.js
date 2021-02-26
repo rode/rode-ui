@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-a {
-  text-decoration: none;
-  color: $LINK;
+import { getRodeUrl } from "pages/api/api-utils";
 
-  &:hover {
-    text-decoration: underline;
-  }
+describe("api-utils", () => {
+  describe("getRodeUrl", () => {
+    it("should return the environment variable if set", () => {
+      const expected = chance.string();
+      process.env.RODE_URL = expected;
 
-  &:focus,
-  &:active {
-    box-shadow: $FOCUS_SHADOW;
-    outline: none;
-  }
+      const actual = getRodeUrl();
 
-  &:visited {
-    color: $LINK;
-  }
-}
+      expect(actual).toEqual(expected);
+    });
 
-.lightTheme {
-  color: $DARK_GREY;
-}
+    it("should return the default url if environment is not set", () => {
+      delete process.env.RODE_URL;
+      const actual = getRodeUrl();
 
-.darkTheme {
-  color: $SOFT_WHITE;
-}
+      expect(actual).toEqual("http://localhost:50052");
+    });
+  });
+});

@@ -35,7 +35,6 @@ const ResourceSearchBar = ({ currentSearch }) => {
     event.preventDefault();
 
     if (searchTerm.trim().length) {
-      console.log("Search is not implemented");
       router.push(`/resources?search=${searchTerm.trim()}`);
     }
   };

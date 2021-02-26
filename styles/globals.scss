@@ -32,7 +32,7 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: repeat(12, minmax(min-content, 1fr));
-    grid-template-rows: minmax(1.5rem, 5.25rem) 1fr;
+    grid-template-rows: minmax(min-content, 5.25rem) 1fr;
     grid-template-areas:
       "header header header header header header header header header header header header"
       "main main main main main main main main main main main main";

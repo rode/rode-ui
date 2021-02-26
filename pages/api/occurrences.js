@@ -28,10 +28,10 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const searchTerm = req.query.filter;
-    const filter = `"resource.uri".startsWith("${searchTerm}")`;
+    const resourceUri = req.query.resourceUri;
+    const filter = `"resource.uri"=="${resourceUri}"`;
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/resources?filter=${encodeURIComponent(filter)}`
+      `${rodeUrl}/v1alpha1/occurrences?filter=${encodeURIComponent(filter)}`
     );
 
     if (!response.ok) {
@@ -41,15 +41,12 @@ export default async (req, res) => {
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
 
-    const listResourcesResponse = await response.json();
-    const resources = listResourcesResponse.resources.map(({ name, uri }) => ({
-      name,
-      uri,
-    }));
+    const listOccurrencesResponse = await response.json();
+    const occurrences = listOccurrencesResponse.occurrences;
 
-    res.status(StatusCodes.OK).json(resources);
+    res.status(StatusCodes.OK).json(occurrences);
   } catch (error) {
-    console.error("Error listing resources", error);
+    console.error("Error listing occurrences", error);
 
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

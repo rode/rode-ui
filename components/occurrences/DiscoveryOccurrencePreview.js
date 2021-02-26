@@ -14,29 +14,19 @@
  * limitations under the License.
  */
 
-a {
-  text-decoration: none;
-  color: $LINK;
+import styles from "styles/modules/Occurrences.module.scss";
+import PropTypes from "prop-types";
+import React from "react";
 
-  &:hover {
-    text-decoration: underline;
-  }
+const DiscoveryOccurrencePreview = ({ occurrence }) => {
+  return (
+    <div className={styles.discovery}>
+      <p>Analysis Status: {occurrence.discovered.discovered.analysisStatus}</p>
+    </div>
+  );
+};
+DiscoveryOccurrencePreview.propTypes = {
+  occurrence: PropTypes.object.isRequired,
+};
 
-  &:focus,
-  &:active {
-    box-shadow: $FOCUS_SHADOW;
-    outline: none;
-  }
-
-  &:visited {
-    color: $LINK;
-  }
-}
-
-.lightTheme {
-  color: $DARK_GREY;
-}
-
-.darkTheme {
-  color: $SOFT_WHITE;
-}
+export default DiscoveryOccurrencePreview;

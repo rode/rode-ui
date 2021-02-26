@@ -14,29 +14,52 @@
  * limitations under the License.
  */
 
-a {
-  text-decoration: none;
-  color: $LINK;
+@import "styles/constants";
 
-  &:hover {
-    text-decoration: underline;
+$INDENTATION: 1rem;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem;
+}
+
+.discovery {
+  margin-top: 0.5rem;
+  margin-left: $INDENTATION;
+}
+
+.vulnerability {
+  margin-top: 0.5rem;
+  margin-left: $INDENTATION;
+
+  a {
+    display: inline;
+    margin: 0 0.25rem;
   }
+}
 
-  &:focus,
-  &:active {
-    box-shadow: $FOCUS_SHADOW;
-    outline: none;
-  }
+.createdAt {
+  color: $MEDIUM_GREY;
+  margin-left: $INDENTATION;
+}
 
-  &:visited {
-    color: $LINK;
+.kind {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.darkTheme {
+  &.container {
+    background-color: $DARK_GREY;
+    color: $SOFT_WHITE;
   }
 }
 
 .lightTheme {
-  color: $DARK_GREY;
-}
-
-.darkTheme {
-  color: $SOFT_WHITE;
+  &.container {
+    background-color: $WHITE;
+  }
 }

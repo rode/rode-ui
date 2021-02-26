@@ -17,99 +17,157 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-.container {
+.containerBase {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+}
 
-  .searchBarContainer {
-    height: fit-content;
-    width: 90%;
-    margin: 1rem auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-self: center;
-
-    svg {
-      color: $DEEP_SEA;
-    }
-  }
-
-  .searchCard {
-    width: 90%;
-    box-shadow: $BOX_SHADOW;
-    padding: 1rem;
-    margin-bottom: 1rem;
-
-    @include tabletAndLarger {
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .cardText {
-      font-size: 0.75rem;
-      text-indent: 0.5rem;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-  }
-
-  &.darkTheme {
-    .noResults {
-      color: $SOFT_WHITE;
-    }
-    .searchBarContainer {
-      svg {
-        color: $LAGOON;
-
-        &:hover,
-        &:focus {
-          color: $WHITE;
-        }
-      }
-    }
-    .searchCard {
-      background-color: $DARK_GREY;
-
-      .cardHeader {
-        color: $SOFT_WHITE;
-      }
-
-      .cardText {
-        color: $SILVER;
-      }
-    }
-  }
-
-  &.lightTheme {
-    .searchCard {
-      background-color: $WHITE;
-
-      .cardHeader {
-        color: $DARK_GREY;
-      }
-
-      .cardText {
-        color: $MEDIUM_GREY;
-      }
-    }
-  }
+.searchBarContainerBase {
+  height: fit-content;
+  width: 90%;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
 }
 
 .containerNoResults {
-  @extend .container;
+  @extend .containerBase;
   justify-content: center;
 
   .searchBarContainer {
-    @extend .searchBarContainer;
+    @extend .searchBarContainerBase;
     width: 90%;
 
     @include tabletAndLarger {
       width: 50%;
+    }
+  }
+}
+
+.container {
+  @extend .containerBase;
+  justify-content: flex-start;
+
+  .searchBarContainer {
+    @extend .searchBarContainerBase;
+  }
+}
+
+.searchCard {
+  width: 90%;
+  box-shadow: $BOX_SHADOW;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  @include tabletAndLarger {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .cardText {
+    font-size: 0.75rem;
+    text-indent: 0.5rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.resourceHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: $BOX_SHADOW;
+
+  .resourceName {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .versionContainer {
+    text-align: right;
+    margin-left: 2rem;
+    color: $SOFT_WHITE;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.darkTheme {
+  .noResults {
+    color: $SOFT_WHITE;
+  }
+
+  .searchBarContainer {
+    svg {
+      color: $LAGOON;
+
+      &:hover,
+      &:focus {
+        color: $WHITE;
+      }
+    }
+  }
+
+  .searchCard {
+    background-color: $DARK_GREY;
+
+    .cardHeader {
+      color: $SOFT_WHITE;
+    }
+
+    .cardText {
+      color: $SILVER;
+    }
+  }
+
+  .resourceHeader {
+    background-color: $DEEP_SEA;
+    color: $SOFT_WHITE;
+  }
+}
+
+.lightTheme {
+  .searchBarContainer {
+    svg {
+      color: $DEEP_SEA;
+
+      &:hover,
+      &:focus {
+        color: $WHITE;
+      }
+    }
+  }
+
+  .resourceHeader {
+    background-color: $DEEP_SEA;
+
+    > * {
+      color: $SOFT_WHITE;
+    }
+  }
+
+  .searchCard {
+    background-color: $WHITE;
+
+    .cardHeader {
+      color: $DARK_GREY;
+    }
+
+    .cardText {
+      color: $MEDIUM_GREY;
     }
   }
 }

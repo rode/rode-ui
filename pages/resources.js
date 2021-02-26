@@ -19,13 +19,11 @@ import useSWR from "swr";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Resources.module.scss";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "hooks/useTheme";
+import ResourceSearchResult from "components/resources/ResourceSearchResult";
 
+//TODO: make a custom hook
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
-const getImageParts = (uri) => {
-  return uri.split("@");
-};
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -56,16 +54,9 @@ const Resources = () => {
       {showSearchResults && data && (
         <>
           {data.length > 0 ? (
-            data.map(({ uri }) => {
-              const [resourceName, version] = getImageParts(uri);
-
+            data.map((result) => {
               return (
-                <div key={uri} className={styles.searchCard}>
-                  <p className={styles.cardHeader}>
-                    Resource Name: {resourceName}
-                  </p>
-                  <p className={styles.cardText}>Version: {version}</p>
-                </div>
+                <ResourceSearchResult key={result.uri} searchResult={result} />
               );
             })
           ) : (

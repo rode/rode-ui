@@ -14,29 +14,5 @@
  * limitations under the License.
  */
 
-a {
-  text-decoration: none;
-  color: $LINK;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus,
-  &:active {
-    box-shadow: $FOCUS_SHADOW;
-    outline: none;
-  }
-
-  &:visited {
-    color: $LINK;
-  }
-}
-
-.lightTheme {
-  color: $DARK_GREY;
-}
-
-.darkTheme {
-  color: $SOFT_WHITE;
-}
+export const getRodeUrl = () =>
+  process.env.RODE_URL || "http://localhost:50052";
