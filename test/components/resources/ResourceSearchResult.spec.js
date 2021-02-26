@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import { useRouter } from "next/router";
+import { createMockResourceUri } from "../../testing-utils/mocks";
 
 jest.mock("next/router");
 
@@ -13,7 +14,7 @@ describe("ResourceSearchResult", () => {
     resourceName = chance.word();
     version = chance.word();
     searchResult = {
-      uri: `${resourceName}@${version}`,
+      uri: createMockResourceUri(resourceName, version),
     };
     pushMock = jest.fn();
     useRouter.mockReturnValue({

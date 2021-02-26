@@ -3,6 +3,8 @@ import { render, screen } from "@testing-library/react";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { createMockResourceUri } from "../testing-utils/mocks";
+import { getResourceDetails } from "../../utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("swr");
@@ -32,7 +34,7 @@ describe("Resources", () => {
     beforeEach(() => {
       resources = chance.n(
         () => ({
-          uri: `${chance.url()}@${chance.word()}`,
+          uri: createMockResourceUri(),
         }),
         chance.d4()
       );
@@ -61,7 +63,7 @@ describe("Resources", () => {
       render(<Resources />);
 
       resources.forEach((resource) => {
-        const [resourceName] = resource.uri.split("@");
+        const { resourceName } = getResourceDetails(resource.uri);
         expect(
           screen.getByText(resourceName, { exact: false })
         ).toBeInTheDocument();

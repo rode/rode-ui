@@ -61,7 +61,7 @@ export const createMockOccurrence = (
     name: `projects/rode/occurrences/${chance.guid()}`,
     resource: {
       name: "",
-      uri: `${chance.word()}@sha256:${chance.string()}`,
+      uri: createMockResourceUri(),
       contentHash: null,
     },
     noteName: "projects/rode/notes/harbor",
@@ -71,4 +71,11 @@ export const createMockOccurrence = (
     updateTime: null,
     ...kindSpecificDetails,
   };
+};
+
+export const createMockResourceUri = (
+  name = chance.word(),
+  version = chance.natural()
+) => {
+  return `${chance.url()}/${name}@sha256:${version}`;
 };

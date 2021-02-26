@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "hooks/useTheme";
 import useSWR from "swr";
 import styles from "styles/modules/Resources.module.scss";
 import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
+import { getResourceDetails } from "../../utils/resource-utils";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
-const getImageParts = (uri) => {
-  const splitResource = uri.split("@");
-
-  return [splitResource[0], uri.replace(`${splitResource[0]}@`, "")];
-};
 
 const Resource = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
+  const [resourceType, setResourceType] = useState("");
   const { resourceUri } = router.query;
 
   const { data } = useSWR(
@@ -29,9 +25,14 @@ const Resource = () => {
 
   useEffect(() => {
     if (resourceUri) {
-      const [name, version] = getImageParts(resourceUri);
+      const {
+        resourceName: name,
+        resourceVersion: version,
+        resourceType: type,
+      } = getResourceDetails(resourceUri);
       setResourceName(name);
       setResourceVersion(version);
+      setResourceType(type);
     }
   }, [resourceUri]);
 
@@ -40,7 +41,7 @@ const Resource = () => {
       <div className={styles.resourceHeader}>
         <div>
           <p className={styles.resourceName}>{resourceName}</p>
-          <p>Type: Docker Image</p>
+          <p>Type: {resourceType}</p>
         </div>
         <div className={styles.versionContainer}>
           <p>Version: {resourceVersion}</p>

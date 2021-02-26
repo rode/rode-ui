@@ -1,8 +1,6 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
-
-// TODO: move into a helper
-const getRodeUrl = () => process.env.RODE_URL || "http://localhost:50052";
+import { getRodeUrl } from "./api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
