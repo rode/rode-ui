@@ -65,7 +65,7 @@ describe("Resources", () => {
       resources.forEach((resource) => {
         const { resourceName } = getResourceDetails(resource.uri);
         expect(
-          screen.getByText(resourceName, { exact: false })
+          screen.getByText(`Resource Name: ${resourceName}`, { exact: false })
         ).toBeInTheDocument();
       });
     });

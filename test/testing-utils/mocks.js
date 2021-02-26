@@ -25,7 +25,7 @@ const createVulnerabilityOccurrence = () => ({
       {
         affectedLocation: {
           cpeUri: chance.url(),
-          package: chance.word(),
+          package: chance.word({ syllables: chance.d6() }),
           version: {
             epoch: 0,
             name: "curl",
@@ -74,7 +74,7 @@ export const createMockOccurrence = (
 };
 
 export const createMockResourceUri = (
-  name = chance.word(),
+  name = chance.word({ syllables: 3 }),
   version = chance.natural()
 ) => {
   return `${chance.url()}/${name}@sha256:${version}`;
