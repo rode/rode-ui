@@ -31,14 +31,16 @@ const ResourceSearchBar = ({ currentSearch }) => {
     setSearchTerm(currentSearch);
   }, [currentSearch]);
 
-  const onClick = () => {
+  const onSubmit = (event) => {
+    event.preventDefault();
+
     if (searchTerm.trim().length) {
       router.push(`/resources?search=${searchTerm.trim()}`);
     }
   };
 
   return (
-    <div className={styles.searchBarContainer}>
+    <form className={styles.searchBarContainer} onSubmit={onSubmit}>
       <Input
         name={"resourceSearch"}
         label={"Search for a resource"}
@@ -47,14 +49,14 @@ const ResourceSearchBar = ({ currentSearch }) => {
         value={searchTerm}
       />
       <Button
-        onClick={onClick}
         label={"Search"}
         buttonType={"icon"}
         disabled={!searchTerm}
+        type={"submit"}
       >
         <Icon name={ICON_NAMES.SEARCH} size={"large"} />
       </Button>
-    </div>
+    </form>
   );
 };
 

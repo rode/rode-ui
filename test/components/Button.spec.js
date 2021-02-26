@@ -25,6 +25,7 @@ describe("Button", () => {
   beforeEach(() => {
     onClick = jest.fn();
     label = chance.string();
+    console.error = jest.fn();
   });
 
   it("should render the button with defaults", () => {
@@ -76,5 +77,11 @@ describe("Button", () => {
     render(<Button onClick={onClick} label={label} disabled={true} />);
 
     expect(screen.getByLabelText(label)).toBeDisabled();
+  });
+
+  it("should require an onClick function for buttons that are not of type submit", () => {
+    render(<Button label={label} />);
+
+    expect(console.error).toHaveBeenCalledTimes(1);
   });
 });
