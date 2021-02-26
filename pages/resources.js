@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import styles from "styles/modules/Resources.module.scss";
 import { useTheme } from "hooks/useTheme";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
+import Loading from "../components/Loading";
 
 //TODO: make a custom hook
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -51,16 +52,25 @@ const Resources = () => {
       } ${styles[theme]}`}
     >
       <ResourceSearchBar currentSearch={currentSearch} />
-      {showSearchResults && data && (
+      {showSearchResults && (
         <>
-          {data.length > 0 ? (
-            data.map((result) => {
-              return (
-                <ResourceSearchResult key={result.uri} searchResult={result} />
-              );
-            })
+          {!data ? (
+            <Loading />
           ) : (
-            <span className={styles.noResults}>No resources found</span>
+            <>
+              {data?.length > 0 ? (
+                data.map((result) => {
+                  return (
+                    <ResourceSearchResult
+                      key={result.uri}
+                      searchResult={result}
+                    />
+                  );
+                })
+              ) : (
+                <span className={styles.noResults}>No resources found</span>
+              )}
+            </>
           )}
         </>
       )}

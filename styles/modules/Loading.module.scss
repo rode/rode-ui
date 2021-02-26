@@ -1,0 +1,89 @@
+@import "styles/constants";
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  max-width: 4rem;
+  max-height: 4rem;
+  border-radius: 50%;
+  position: relative;
+  -webkit-animation: spin 1.4s infinite linear;
+  animation: spin 1.4s infinite linear;
+  background: $GREEN;
+  background: -moz-linear-gradient(
+    left,
+    $GREEN 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
+  background: -webkit-linear-gradient(
+    left,
+    $GREEN 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
+  background: -o-linear-gradient(left, $GREEN 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, $GREEN 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, $GREEN 10%, rgba(255, 255, 255, 0) 42%);
+}
+.spinner:before {
+  width: 50%;
+  height: 50%;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  background: $GREEN;
+}
+.spinner:after {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: "";
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.darkTheme {
+  &.spinner:after {
+    background: $DARKER_GREY;
+  }
+}
+.lightTheme {
+  &.spinner:after {
+    background: $SOFT_WHITE;
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

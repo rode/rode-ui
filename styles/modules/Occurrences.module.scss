@@ -20,10 +20,11 @@ $INDENTATION: 1rem;
 
 .container {
   display: flex;
+  width: 95%;
   flex-direction: column;
   justify-content: center;
   padding: 2rem;
-  margin: 2rem;
+  margin: 0.5rem auto;
 }
 
 .discovery {

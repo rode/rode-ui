@@ -21,6 +21,7 @@ import useSWR from "swr";
 import styles from "styles/modules/Resources.module.scss";
 import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
 import { getResourceDetails } from "utils/resource-utils";
+import Loading from "../../components/Loading";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -53,7 +54,7 @@ const Resource = () => {
   }, [resourceUri]);
 
   return (
-    <div className={`${styles[theme]}`}>
+    <div className={`${styles[theme]} ${styles.container}`}>
       <div className={styles.resourceHeader}>
         <div>
           <p className={styles.resourceName}>{resourceName}</p>
@@ -64,7 +65,7 @@ const Resource = () => {
         </div>
       </div>
       {!data ? (
-        <p>Loading...</p>
+        <Loading />
       ) : (
         <>
           {data?.map((occurrence) => (
