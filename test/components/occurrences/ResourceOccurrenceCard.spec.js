@@ -45,6 +45,7 @@ describe("ResourceOccurrenceCard", () => {
     expect(
       screen.getByText(`Created at ${occurrence.createTime}`, { exact: false })
     ).toBeInTheDocument();
+    expect(screen.getByText(/show json/i)).toBeInTheDocument();
   });
 
   it("should render the vulnerability details if the occurrence type is vulnerability", () => {
