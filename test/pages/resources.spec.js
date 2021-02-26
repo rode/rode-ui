@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { createMockResourceUri } from "../testing-utils/mocks";
-import { getResourceDetails } from "../../utils/resource-utils";
+import { createMockResourceUri } from "test/testing-utils/mocks";
+import { getResourceDetails } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("swr");

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import { useRouter } from "next/router";
-import { createMockResourceUri } from "../../testing-utils/mocks";
+import { createMockResourceUri } from "test/testing-utils/mocks";
 
 jest.mock("next/router");
 

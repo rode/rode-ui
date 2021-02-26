@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { createMockOccurrence } from "../../testing-utils/mocks";
-import DiscoveryOccurrencePreview from "../../../components/occurrences/DiscoveryOccurrencePreview";
+import { createMockOccurrence } from "test/testing-utils/mocks";
+import DiscoveryOccurrencePreview from "components/occurrences/DiscoveryOccurrencePreview";
 
 describe("DiscoveryOccurrencePreview", () => {
   let occurrence;

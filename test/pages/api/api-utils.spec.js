@@ -1,4 +1,4 @@
-import { getRodeUrl } from "../../../pages/api/api-utils";
+import { getRodeUrl } from "pages/api/api-utils";
 
 describe("api-utils", () => {
   describe("getRodeUrl", () => {

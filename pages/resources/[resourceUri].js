@@ -4,7 +4,7 @@ import { useTheme } from "hooks/useTheme";
 import useSWR from "swr";
 import styles from "styles/modules/Resources.module.scss";
 import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
-import { getResourceDetails } from "../../utils/resource-utils";
+import { getResourceDetails } from "utils/resource-utils";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 

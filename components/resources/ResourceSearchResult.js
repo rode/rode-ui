@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Resources.module.scss";
-import Button from "../Button";
+import Button from "components/Button";
 import { useRouter } from "next/router";
-import { getResourceDetails } from "../../utils/resource-utils";
+import { getResourceDetails } from "utils/resource-utils";
 
 const ResourceSearchResult = ({ searchResult }) => {
   const { resourceName, resourceVersion } = getResourceDetails(

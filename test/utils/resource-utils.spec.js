@@ -13,7 +13,7 @@ describe("resource utils", () => {
       resourceVersion = chance.semver();
     });
 
-    it("should return null for an resource type", () => {
+    it("should return null for an unknown resource type", () => {
       const actual = getResourceDetails(chance.url());
 
       expect(actual).toBeNull();
