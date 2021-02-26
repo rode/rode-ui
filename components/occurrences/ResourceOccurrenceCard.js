@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import DiscoveryOccurrencePreview from "./DiscoveryOccurrencePreview";
 import VulnerabilityOccurrencePreview from "./VulnerabilityOccurrencePreview";
 import BuildOccurrencePreview from "./BuildOccurrencePreview";
+import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
 
 const occurrenceMap = {
   ["DISCOVERY"]: DiscoveryOccurrencePreview,
@@ -35,13 +36,17 @@ const ResourceOccurrenceCard = ({ occurrence }) => {
 
   return (
     <div className={`${styles.container} ${styles[theme]}`}>
-      <p className={styles.kind}>{occurrence.kind}</p>
-      <p className={styles.createdAt}>
-        {`Created at ${dayjs(occurrence.createTime).format(
-          "h:mm:ssa | MM-DD-YYYY"
-        )}`}
-      </p>
-      {OccurrenceDetails && <OccurrenceDetails occurrence={occurrence} />}
+      <div>
+        <p className={styles.kind}>{occurrence.kind}</p>
+
+        <p className={styles.createdAt}>
+          {`Created at ${dayjs(occurrence.createTime).format(
+            "h:mm:ssa | MM-DD-YYYY"
+          )}`}
+        </p>
+        {OccurrenceDetails && <OccurrenceDetails occurrence={occurrence} />}
+      </div>
+      <OccurrenceCodeBlock occurrence={occurrence} />
     </div>
   );
 };

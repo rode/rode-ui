@@ -24,6 +24,24 @@ $INDENTATION: 1rem;
   justify-content: center;
   padding: 2rem;
   margin: 2rem;
+  box-shadow: $BOX_SHADOW;
+}
+
+.codeBlockContainer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.codeBlock {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  width: 100%;
+  height: fit-content;
+  max-height: 32rem;
+  overflow: auto;
+  padding: 1rem;
 }
 
 .discovery {
@@ -56,10 +74,20 @@ $INDENTATION: 1rem;
     background-color: $DARK_GREY;
     color: $SOFT_WHITE;
   }
+
+  .codeBlock {
+    background-color: $DARKER_GREY;
+    color: $SILVER;
+  }
 }
 
 .lightTheme {
   &.container {
     background-color: $WHITE;
+  }
+
+  .codeBlock {
+    background-color: $WHITE_SMOKE;
+    color: $DARK_GREY;
   }
 }

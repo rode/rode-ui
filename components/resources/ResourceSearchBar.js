@@ -40,7 +40,11 @@ const ResourceSearchBar = ({ currentSearch }) => {
   };
 
   return (
-    <form className={styles.searchBarContainer} onSubmit={onSubmit}>
+    <form
+      role="search"
+      className={styles.searchBarContainer}
+      onSubmit={onSubmit}
+    >
       <Input
         name={"resourceSearch"}
         label={"Search for a resource"}

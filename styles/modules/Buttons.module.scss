@@ -61,8 +61,7 @@
   text-transform: uppercase;
   white-space: nowrap;
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: $GREEN;
     color: $WHITE;
   }
