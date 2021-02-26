@@ -21,10 +21,12 @@ import { useTheme } from "hooks/useTheme";
 import dayjs from "dayjs";
 import DiscoveryOccurrencePreview from "./DiscoveryOccurrencePreview";
 import VulnerabilityOccurrencePreview from "./VulnerabilityOccurrencePreview";
+import BuildOccurrencePreview from "./BuildOccurrencePreview";
 
 const occurrenceMap = {
   ["DISCOVERY"]: DiscoveryOccurrencePreview,
   ["VULNERABILITY"]: VulnerabilityOccurrencePreview,
+  ["BUILD"]: BuildOccurrencePreview,
 };
 
 const ResourceOccurrenceCard = ({ occurrence }) => {

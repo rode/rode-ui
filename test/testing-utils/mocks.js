@@ -63,9 +63,45 @@ const createVulnerabilityOccurrence = () => ({
   },
 });
 
+const createBuildOccurrence = () => ({
+  build: {
+    provenance: {
+      id: chance.guid(),
+      projectId: chance.string(),
+      commands: [],
+      builtArtifacts: [
+        {
+          checksum: chance.natural(),
+          id: chance.guid(),
+          names: [chance.word({ syllable: chance.d10() })],
+        },
+      ],
+      createTime: chance.timestamp(),
+      startTime: chance.timestamp(),
+      endTime: chance.timestamp(),
+      creator: chance.email(),
+      logsUri: chance.url(),
+      sourceProvenance: {
+        artifactStorageSourceUri: "input binary artifacts from this build",
+        context: {
+          git: {
+            url: chance.url(),
+            revisionId: chance.hash(),
+          },
+          labels: {},
+        },
+      },
+      triggerId: chance.hash(),
+      builderVersion: chance.semver(),
+    },
+    provenanceBytes: chance.string(),
+  },
+});
+
 const mockOccurrenceMap = {
   DISCOVERY: createDiscoveryOccurrence,
   VULNERABILITY: createVulnerabilityOccurrence,
+  BUILD: createBuildOccurrence,
 };
 
 export const createMockOccurrence = (

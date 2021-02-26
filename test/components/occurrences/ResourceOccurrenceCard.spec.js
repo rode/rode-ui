@@ -43,7 +43,7 @@ describe("ResourceOccurrenceCard", () => {
   it("should render the shared occurrence details", () => {
     expect(screen.getByText(occurrence.kind)).toBeInTheDocument();
     expect(
-      screen.getByText(occurrence.createTime, { exact: false })
+      screen.getByText(`Created at ${occurrence.createTime}`, { exact: false })
     ).toBeInTheDocument();
   });
 
