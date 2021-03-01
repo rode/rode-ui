@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "providers/theme";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/Resource.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";

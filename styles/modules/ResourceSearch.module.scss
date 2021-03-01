@@ -89,43 +89,6 @@
   }
 }
 
-.resourceHeader {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  box-shadow: $BOX_SHADOW;
-
-  .resourceName {
-    font-size: 1.75rem;
-    font-weight: 700;
-  }
-
-  .versionContainer {
-    text-align: right;
-    margin-left: 2rem;
-    color: $SOFT_WHITE;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.breadcrumbs {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0.5rem 1rem;
-
-  > * {
-    padding: 0 0.25rem;
-  }
-}
-
 .darkTheme {
   .noResults {
     color: $SOFT_WHITE;
@@ -153,15 +116,6 @@
       color: $SILVER;
     }
   }
-
-  .resourceHeader {
-    background-color: $DEEP_SEA;
-    color: $SOFT_WHITE;
-  }
-
-  .breadcrumbs {
-    color: $MEDIUM_GREY;
-  }
 }
 
 .lightTheme {
@@ -176,14 +130,6 @@
     }
   }
 
-  .resourceHeader {
-    background-color: $DEEP_SEA;
-
-    > * {
-      color: $SOFT_WHITE;
-    }
-  }
-
   .searchCard {
     background-color: $WHITE;
 
@@ -194,9 +140,5 @@
     .cardText {
       color: $MEDIUM_GREY;
     }
-  }
-
-  .breadcrumbs {
-    color: $MEDIUM_GREY;
   }
 }

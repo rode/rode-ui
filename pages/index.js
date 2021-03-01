@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 
 const Home = () => {

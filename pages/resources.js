@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from "react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import { useTheme } from "providers/theme";
 import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";

@@ -17,7 +17,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Input from "components/Input";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
