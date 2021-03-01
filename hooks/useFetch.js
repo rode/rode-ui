@@ -26,10 +26,7 @@ export const useFetch = (url, query) => {
 
   const urlWithQuery = query ? `${url}?${new URLSearchParams(query)}` : url;
 
-  const { data: swrData, error: swrError } = useSWR(
-    url ? urlWithQuery : null,
-    fetcher
-  );
+  const { data: swrData, error: swrError } = useSWR(urlWithQuery, fetcher);
 
   useEffect(() => {
     if (swrData) {
