@@ -20,11 +20,10 @@ import { useTheme } from "providers/theme";
 import styles from "styles/modules/Resources.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
-import { useResources } from "providers/resources";
+import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
 
 const Resource = () => {
   const { theme } = useTheme();
-  const { state } = useResources();
   const router = useRouter();
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
@@ -44,15 +43,9 @@ const Resource = () => {
     }
   }, [resourceUri]);
 
-  console.log("state", state);
-
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
-      {state.searchTerm && (
-        <div>
-          <p>Resource Search / {state.searchTerm}</p>
-        </div>
-      )}
+      <ResourceBreadcrumbs />
       <div className={styles.resourceHeader}>
         <div>
           <p className={styles.resourceName}>{resourceName}</p>

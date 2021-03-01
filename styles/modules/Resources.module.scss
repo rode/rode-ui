@@ -105,6 +105,19 @@
   }
 }
 
+.breadcrumbs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  > * {
+    padding: 0 0.25rem;
+  }
+}
+
 .darkTheme {
   .noResults {
     color: $SOFT_WHITE;
@@ -136,6 +149,10 @@
   .resourceHeader {
     background-color: $DEEP_SEA;
     color: $SOFT_WHITE;
+  }
+
+  .breadcrumbs {
+    color: $MEDIUM_GREY;
   }
 }
 
@@ -169,5 +186,9 @@
     .cardText {
       color: $MEDIUM_GREY;
     }
+  }
+
+  .breadcrumbs {
+    color: $MEDIUM_GREY;
   }
 }
