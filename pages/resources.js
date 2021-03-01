@@ -43,6 +43,7 @@ const Resources = () => {
         data: router.query.search,
       });
     } else {
+      setShowSearchResults(false);
       dispatch({
         type: "SET_SEARCH_TERM",
         data: "",
@@ -59,23 +60,15 @@ const Resources = () => {
       <ResourceSearchBar />
       {showSearchResults && (
         <>
-          {loading ? (
-            <Loading />
+          {loading && <Loading />}
+          {data?.length > 0 ? (
+            data.map((result) => {
+              return (
+                <ResourceSearchResult key={result.uri} searchResult={result} />
+              );
+            })
           ) : (
-            <>
-              {data?.length > 0 ? (
-                data.map((result) => {
-                  return (
-                    <ResourceSearchResult
-                      key={result.uri}
-                      searchResult={result}
-                    />
-                  );
-                })
-              ) : (
-                <span className={styles.noResults}>No resources found</span>
-              )}
-            </>
+            <span className={styles.noResults}>No resources found</span>
           )}
         </>
       )}

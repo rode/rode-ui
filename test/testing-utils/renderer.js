@@ -16,9 +16,9 @@
 
 import React from "react";
 import { render as rtlRender } from "@testing-library/react";
-import { ResourcesProvider } from "../../providers/resources";
-import { ThemeProvider } from "../../providers/theme";
-import { LIGHT_THEME } from "../../utils/theme-utils";
+import { ResourcesProvider } from "providers/resources";
+import { ThemeProvider } from "providers/theme";
+import { LIGHT_THEME } from "utils/theme-utils";
 
 const render = (
   Component,
