@@ -23,7 +23,7 @@ const getSearchTermText = (searchTerm) => {
   if (searchTerm === "all") {
     return "View all resources";
   } else {
-    return `"${searchTerm}`;
+    return `"${searchTerm}"`;
   }
 };
 
