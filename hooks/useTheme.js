@@ -16,7 +16,7 @@
 
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
+import { LIGHT_THEME, DARK_THEME, isServerSide } from "utils/theme-utils";
 
 const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
 
@@ -27,8 +27,9 @@ const ThemeContext = React.createContext({
 
 export const ThemeProvider = (props) => {
   const [theme, setTheme] = React.useState(LIGHT_THEME);
+  const useEffect = isServerSide() ? React.useEffect : React.useLayoutEffect;
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
 
     setTheme(savedTheme);
