@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useTheme } from "hooks/useTheme";
 import styles from "styles/modules/Resources.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
-import ResourceOccurrences from "../../components/resources/ResourceOccurrences";
+import ResourceOccurrences from "components/resources/ResourceOccurrences";
 
 const Resource = () => {
   const { theme } = useTheme();

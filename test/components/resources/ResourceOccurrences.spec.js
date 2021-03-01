@@ -17,8 +17,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useFetch } from "hooks/useFetch";
-import { createMockOccurrence } from "../../testing-utils/mocks";
-import ResourceOccurrences from "../../../components/resources/ResourceOccurrences";
+import { createMockOccurrence } from "test/testing-utils/mocks";
+import ResourceOccurrences from "components/resources/ResourceOccurrences";
 
 jest.mock("hooks/useFetch");
 

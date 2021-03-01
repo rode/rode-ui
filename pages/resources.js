@@ -15,27 +15,23 @@
  */
 
 import React, { useState, useEffect } from "react";
-import useSWR from "swr";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Resources.module.scss";
 import { useTheme } from "hooks/useTheme";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
-import Loading from "../components/Loading";
-
-//TODO: make a custom hook
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import Loading from "components/Loading";
+import { useFetch } from "hooks/useFetch";
 
 const Resources = () => {
   const { theme } = useTheme();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [currentSearch, setCurrentSearch] = useState("");
   const router = useRouter();
-  const { data } = useSWR(
+  const { data, loading } = useFetch(
     router.query.search
       ? `/api/resources?filter=${encodeURIComponent(router.query.search)}`
-      : null,
-    fetcher
+      : null
   );
 
   useEffect(() => {
@@ -54,7 +50,7 @@ const Resources = () => {
       <ResourceSearchBar currentSearch={currentSearch} />
       {showSearchResults && (
         <>
-          {!data ? (
+          {loading ? (
             <Loading />
           ) : (
             <>

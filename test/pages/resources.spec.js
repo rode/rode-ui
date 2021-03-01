@@ -18,12 +18,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
+import { useFetch } from "hooks/useFetch";
 
 jest.mock("next/router");
-jest.mock("swr");
+jest.mock("hooks/useFetch");
 
 describe("Resources", () => {
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe("Resources", () => {
       query: {},
     });
 
-    useSWR.mockReturnValue({});
+    useFetch.mockReturnValue({});
   });
 
   afterEach(() => {
@@ -60,7 +60,14 @@ describe("Resources", () => {
           search: expectedSearch,
         },
       });
-      useSWR.mockReturnValue({ data: resources });
+      useFetch.mockReturnValue({ data: resources });
+    });
+
+    it("should render a loading indicator when fetching results", () => {
+      useFetch.mockReturnValue({ loading: true });
+      render(<Resources />);
+
+      expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
     });
 
     it("should pass the search term through as a filter", () => {
@@ -70,9 +77,9 @@ describe("Resources", () => {
 
       render(<Resources />);
 
-      expect(useSWR)
+      expect(useFetch)
         .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith(expectedUri, expect.any(Function));
+        .toHaveBeenCalledWith(expectedUri);
     });
 
     it("should render all of the search results", () => {
@@ -87,7 +94,7 @@ describe("Resources", () => {
     });
 
     it("should render a message when there are no results", () => {
-      useSWR.mockReturnValue({ data: [] });
+      useFetch.mockReturnValue({ data: [] });
 
       render(<Resources />);
 
