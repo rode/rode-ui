@@ -16,7 +16,7 @@
 
 import React from "react";
 import styles from "styles/modules/Loading.module.scss";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "providers/theme";
 
 const Loading = () => {
   const { theme } = useTheme();

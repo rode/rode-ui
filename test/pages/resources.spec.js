@@ -21,14 +21,21 @@ import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
 import { useFetch } from "hooks/useFetch";
+import { useResources } from "../../providers/resources";
 
 jest.mock("next/router");
 jest.mock("hooks/useFetch");
+jest.mock("providers/resources");
 
 describe("Resources", () => {
   beforeEach(() => {
     useRouter.mockReturnValue({
       query: {},
+    });
+
+    useResources.mockReturnValue({
+      dispatch: jest.fn(),
+      state: {},
     });
 
     useFetch.mockReturnValue({});

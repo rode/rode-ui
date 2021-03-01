@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Occurrences.module.scss";
-import { useTheme } from "hooks/useTheme";
+import { useTheme } from "providers/theme";
 import dayjs from "dayjs";
 import DiscoveryOccurrencePreview from "components/occurrences/DiscoveryOccurrencePreview";
 import VulnerabilityOccurrencePreview from "components/occurrences/VulnerabilityOccurrencePreview";

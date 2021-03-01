@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Resources.module.scss";
-import { useTheme } from "hooks/useTheme";
+import { useTheme } from "providers/theme";
+import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 
 const Resources = () => {
   const { theme } = useTheme();
+  const { dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [currentSearch, setCurrentSearch] = useState("");
   const router = useRouter();
   const { data, loading } = useFetch(
     router.query.search
@@ -37,7 +38,15 @@ const Resources = () => {
   useEffect(() => {
     if (router.query.search) {
       setShowSearchResults(true);
-      setCurrentSearch(router.query.search);
+      dispatch({
+        type: "SET_SEARCH_TERM",
+        data: router.query.search,
+      });
+    } else {
+      dispatch({
+        type: "SET_SEARCH_TERM",
+        data: "",
+      });
     }
   }, [router.query]);
 
@@ -47,7 +56,7 @@ const Resources = () => {
         showSearchResults ? styles.container : styles.containerNoResults
       } ${styles[theme]}`}
     >
-      <ResourceSearchBar currentSearch={currentSearch} />
+      <ResourceSearchBar />
       {showSearchResults && (
         <>
           {loading ? (

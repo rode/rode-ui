@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import React from "react";
 
 import Home from "pages/index";
