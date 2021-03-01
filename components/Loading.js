@@ -15,16 +15,26 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "styles/modules/Loading.module.scss";
 import { useTheme } from "providers/theme";
 
-const Loading = () => {
+const Loading = ({ loading }) => {
   const { theme } = useTheme();
+
+  if (!loading) {
+    return null;
+  }
+
   return (
     <div className={styles.container} data-testid="loadingIndicator">
       <div className={`${styles.spinner} ${styles[theme]}`} />
     </div>
   );
+};
+
+Loading.propTypes = {
+  loading: PropTypes.bool.isRequired,
 };
 
 export default Loading;

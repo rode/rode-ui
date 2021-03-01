@@ -61,7 +61,7 @@ const Resources = () => {
       <ResourceSearchBar />
       {showSearchResults && (
         <>
-          {loading && <Loading />}
+          <Loading loading={loading} />
           {data?.length > 0 ? (
             data.map((result) => {
               return (

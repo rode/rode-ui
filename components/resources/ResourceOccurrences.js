@@ -30,7 +30,7 @@ const ResourceOccurrences = (props) => {
   );
   return (
     <>
-      {loading && <Loading />}
+      <Loading loading={loading} />
       {data && (
         <>
           {data?.map((occurrence) => (
