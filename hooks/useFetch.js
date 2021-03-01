@@ -19,7 +19,7 @@ import { useState, useEffect } from "react";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export const useFetch = (url, query = {}) => {
+export const useFetch = (url, query) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);

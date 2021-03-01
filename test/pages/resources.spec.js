@@ -87,6 +87,19 @@ describe("Resources", () => {
         });
     });
 
+    it("should handle viewing all resources", () => {
+      useRouter.mockReturnValue({
+        query: {
+          search: "all",
+        },
+      });
+      render(<Resources />);
+
+      expect(useFetch)
+        .toHaveBeenCalledTimes(2)
+        .toHaveBeenCalledWith("/api/resources", null);
+    });
+
     it("should render all of the search results", () => {
       render(<Resources />);
 

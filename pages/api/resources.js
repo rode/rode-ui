@@ -29,9 +29,14 @@ export default async (req, res) => {
 
   try {
     const searchTerm = req.query.filter;
-    const filter = `"resource.uri".startsWith("${searchTerm}")`;
+    let filter = {};
+    if (searchTerm) {
+      filter = {
+        filter: `"resource.uri".startsWith("${searchTerm}")`,
+      };
+    }
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/resources?filter=${encodeURIComponent(filter)}`
+      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
     );
 
     if (!response.ok) {

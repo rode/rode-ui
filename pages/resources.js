@@ -25,6 +25,16 @@ import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
 
+const createSearchFilter = (query) => {
+  if (query && query !== "all") {
+    return {
+      filter: query,
+    };
+  }
+
+  return null;
+};
+
 const Resources = () => {
   const { theme } = useTheme();
   const { dispatch } = useResources();
@@ -32,9 +42,7 @@ const Resources = () => {
   const router = useRouter();
   const { data, loading } = useFetch(
     router.query.search ? "/api/resources" : null,
-    {
-      filter: router.query.search,
-    }
+    createSearchFilter(router.query.search)
   );
 
   useEffect(() => {
@@ -55,9 +63,10 @@ const Resources = () => {
 
   return (
     <div
-      className={`${
-        showSearchResults ? styles.container : styles.containerNoResults
-      } ${styles[theme]}`}
+      className={`
+      ${showSearchResults ? styles.showResults : ""} 
+      ${styles[theme]} 
+      ${styles.container}`}
     >
       <ResourceSearchBar />
       {showSearchResults && (
