@@ -36,6 +36,17 @@
     "prettier": "^2.2.1"
   },
   "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": ".jest/coverage",
+    "cacheDirectory": ".jest/cache",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!.eslintrc.js",
+      "!**/node_modules/**",
+      "!**/.next/**",
+      "!**/.jest/",
+      "!**test/**"
+    ],
     "moduleNameMapper": {
       "\\.(css|scss|sass)$": "identity-obj-proxy"
     },
