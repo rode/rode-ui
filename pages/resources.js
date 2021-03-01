@@ -23,7 +23,7 @@ import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
-import { resourceActions } from "../reducers/resources";
+import { resourceActions } from "reducers/resources";
 
 const Resources = () => {
   const { theme } = useTheme();

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Search from "../components/icons/Search";
+import Search from "components/icons/Search";
 
 const SEARCH = "Search";
 

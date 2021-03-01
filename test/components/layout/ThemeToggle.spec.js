@@ -17,8 +17,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useTheme } from "providers/theme";
-import { DARK_THEME, LIGHT_THEME } from "../../../utils/theme-utils";
-import ThemeToggle from "../../../components/layout/ThemeToggle";
+import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import ThemeToggle from "components/layout/ThemeToggle";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("providers/theme");

@@ -17,8 +17,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMockOccurrence } from "../../testing-utils/mocks";
-import OccurrenceCodeBlock from "../../../components/occurrences/OccurrenceCodeBlock";
+import { createMockOccurrence } from "test/testing-utils/mocks";
+import OccurrenceCodeBlock from "components/occurrences/OccurrenceCodeBlock";
 
 describe("OccurrenceCodeBlock", () => {
   let occurrence;

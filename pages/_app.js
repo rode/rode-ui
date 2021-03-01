@@ -20,7 +20,7 @@ import Head from "next/head";
 import "styles/globals.scss";
 import { ThemeProvider } from "providers/theme";
 import { ResourcesProvider } from "providers/resources";
-import PageLayout from "../components/layout/PageLayout";
+import PageLayout from "components/layout/PageLayout";
 
 const MyApp = ({ Component, pageProps }) => {
   return (

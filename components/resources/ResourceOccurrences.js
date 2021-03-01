@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Loading from "../Loading";
+import Loading from "components/Loading";
 import ResourceOccurrenceCard from "./ResourceOccurrenceCard";
 import React from "react";
 import PropTypes from "prop-types";

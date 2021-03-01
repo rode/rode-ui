@@ -22,7 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
 import { useResources } from "providers/resources";
-import { resourceActions } from "../../reducers/resources";
+import { resourceActions } from "reducers/resources";
 
 const ResourceSearchBar = () => {
   const { state, dispatch } = useResources();
