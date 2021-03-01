@@ -78,15 +78,13 @@ describe("Resources", () => {
     });
 
     it("should pass the search term through as a filter", () => {
-      const expectedUri = `/api/resources?filter=${encodeURIComponent(
-        expectedSearch
-      )}`;
-
       render(<Resources />);
 
       expect(useFetch)
         .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith(expectedUri);
+        .toHaveBeenCalledWith("/api/resources", {
+          filter: expectedSearch,
+        });
     });
 
     it("should render all of the search results", () => {

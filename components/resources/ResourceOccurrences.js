@@ -23,11 +23,9 @@ import { useFetch } from "hooks/useFetch";
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
 
-  const { data, loading } = useFetch(
-    resourceUri
-      ? `/api/occurrences?resourceUri=${encodeURIComponent(resourceUri)}`
-      : null
-  );
+  const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
+    resourceUri,
+  });
   return (
     <>
       <Loading loading={loading} />

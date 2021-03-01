@@ -33,7 +33,9 @@ describe("ResourceOccurrences", () => {
   it("should not make the fetch call if there is no resource uri specified", () => {
     useFetch.mockReturnValue({});
     render(<ResourceOccurrences resourceUri={null} />);
-    expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+    expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null, {
+      resourceUri: null,
+    });
   });
 
   it("should call to fetch the occurrences is a uri is specified", () => {
@@ -41,9 +43,9 @@ describe("ResourceOccurrences", () => {
     render(<ResourceOccurrences resourceUri={resourceUri} />);
     expect(useFetch)
       .toHaveBeenCalledTimes(2)
-      .toHaveBeenCalledWith(
-        `/api/occurrences?resourceUri=${encodeURIComponent(resourceUri)}`
-      );
+      .toHaveBeenCalledWith("/api/occurrences", {
+        resourceUri,
+      });
   });
 
   it("should show a loading indicator while fetching the data", () => {

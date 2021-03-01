@@ -31,9 +31,10 @@ const Resources = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading } = useFetch(
-    router.query.search
-      ? `/api/resources?filter=${encodeURIComponent(router.query.search)}`
-      : null
+    router.query.search ? "/api/resources" : null,
+    {
+      filter: router.query.search,
+    }
   );
 
   useEffect(() => {
