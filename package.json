@@ -45,7 +45,8 @@
       "!**/node_modules/**",
       "!**/.next/**",
       "!**/.jest/**",
-      "!**test/**"
+      "!**test/**",
+      "!coverage/**"
     ],
     "moduleNameMapper": {
       "\\.(css|scss|sass)$": "identity-obj-proxy"

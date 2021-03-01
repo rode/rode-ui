@@ -19,7 +19,7 @@ import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
 import ThemeToggle from "./ThemeToggle";
-import { useTheme } from "../../hooks/useTheme";
+import { useTheme } from "providers/theme";
 
 const navigationLinks = [
   {

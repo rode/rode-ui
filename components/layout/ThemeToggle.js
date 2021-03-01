@@ -16,8 +16,8 @@
 
 import React from "react";
 import styles from "styles/modules/Toggle.module.scss";
-import { useTheme } from "hooks/useTheme";
-import { DARK_THEME } from "../../utils/theme-utils";
+import { useTheme } from "providers/theme";
+import { DARK_THEME } from "utils/theme-utils";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();

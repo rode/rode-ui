@@ -14,33 +14,41 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
-import useSWR from "swr";
+import React, { useEffect, useState } from "react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Resources.module.scss";
-import { useTheme } from "hooks/useTheme";
+import { useTheme } from "providers/theme";
+import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
-
-//TODO: make a custom hook
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import Loading from "components/Loading";
+import { useFetch } from "hooks/useFetch";
+import { resourceActions } from "reducers/resources";
 
 const Resources = () => {
   const { theme } = useTheme();
+  const { dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [currentSearch, setCurrentSearch] = useState("");
   const router = useRouter();
-  const { data } = useSWR(
+  const { data, loading } = useFetch(
     router.query.search
       ? `/api/resources?filter=${encodeURIComponent(router.query.search)}`
-      : null,
-    fetcher
+      : null
   );
 
   useEffect(() => {
     if (router.query.search) {
       setShowSearchResults(true);
-      setCurrentSearch(router.query.search);
+      dispatch({
+        type: resourceActions.SET_SEARCH_TERM,
+        data: router.query.search,
+      });
+    } else {
+      setShowSearchResults(false);
+      dispatch({
+        type: resourceActions.SET_SEARCH_TERM,
+        data: "",
+      });
     }
   }, [router.query]);
 
@@ -50,10 +58,11 @@ const Resources = () => {
         showSearchResults ? styles.container : styles.containerNoResults
       } ${styles[theme]}`}
     >
-      <ResourceSearchBar currentSearch={currentSearch} />
-      {showSearchResults && data && (
+      <ResourceSearchBar />
+      {showSearchResults && (
         <>
-          {data.length > 0 ? (
+          <Loading loading={loading} />
+          {data?.length > 0 ? (
             data.map((result) => {
               return (
                 <ResourceSearchResult key={result.uri} searchResult={result} />

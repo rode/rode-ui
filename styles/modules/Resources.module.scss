@@ -21,7 +21,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
 }
 
@@ -84,6 +83,7 @@
 
 .resourceHeader {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -102,6 +102,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+.breadcrumbs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  > * {
+    padding: 0 0.25rem;
   }
 }
 
@@ -137,6 +150,10 @@
     background-color: $DEEP_SEA;
     color: $SOFT_WHITE;
   }
+
+  .breadcrumbs {
+    color: $MEDIUM_GREY;
+  }
 }
 
 .lightTheme {
@@ -169,5 +186,9 @@
     .cardText {
       color: $MEDIUM_GREY;
     }
+  }
+
+  .breadcrumbs {
+    color: $MEDIUM_GREY;
   }
 }

@@ -19,17 +19,25 @@ import { cleanup, render, screen } from "@testing-library/react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
+import { useResources } from "providers/resources";
 
 jest.mock("next/router");
+jest.mock("providers/resources");
 
 describe("ResourceSearchBar", () => {
-  let pushMock, rerender;
+  let pushMock, dispatchMock, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     pushMock = jest.fn();
+    dispatchMock = jest.fn();
 
     useRouter.mockReturnValue({
       push: pushMock,
+    });
+
+    useResources.mockReturnValue({
+      state: {},
+      dispatch: dispatchMock,
     });
 
     const utils = render(<ResourceSearchBar />);
@@ -42,36 +50,78 @@ describe("ResourceSearchBar", () => {
   });
 
   it("should render an input for searching for a resource", () => {
-    expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
+    const renderedInput = screen.getByText(/search for a resource/i);
+    expect(renderedInput).toBeInTheDocument();
+
+    const searchTerm = chance.string();
+
+    userEvent.type(renderedInput, searchTerm);
+    expect(dispatchMock)
+      .toHaveBeenCalledTimes(searchTerm.length)
+      .toHaveBeenNthCalledWith(searchTerm.length, {
+        type: "SET_SEARCH_TERM",
+        data: expect.any(String),
+      });
   });
 
   it("should render the button to perform a search", () => {
     const renderedSearchButton = screen.getByLabelText("Search");
-    const renderedSearchInput = screen.getByText(/search for a resource/i);
     expect(renderedSearchButton).toBeInTheDocument();
     expect(renderedSearchButton).toBeDisabled();
+  });
 
-    userEvent.type(renderedSearchInput, chance.character());
+  it("should enable the button when a search term is entered", () => {
+    useResources.mockReturnValue({
+      state: { searchTerm: chance.string() },
+      dispatch: jest.fn(),
+    });
+
+    rerender(<ResourceSearchBar />);
+
+    const renderedSearchButton = screen.getByLabelText("Search");
     expect(renderedSearchButton).not.toBeDisabled();
   });
 
   it("should fill in the search term based on the url query", () => {
     const currentSearchTerm = chance.string();
-    rerender(<ResourceSearchBar currentSearch={currentSearchTerm} />);
+    useResources.mockReturnValue({
+      state: { searchTerm: currentSearchTerm },
+      dispatch: jest.fn(),
+    });
+
+    rerender(<ResourceSearchBar />);
 
     const renderedSearchInput = screen.getByLabelText(/search for a resource/i);
     expect(renderedSearchInput).toHaveAttribute("value", currentSearchTerm);
   });
 
-  it("should do the thing when the button is clicked", () => {
-    const renderedSearchButton = screen.getByLabelText("Search");
-    const renderedSearchInput = screen.getByText(/search for a resource/i);
+  it("should start the search process when the button is clicked", () => {
     const searchTerm = chance.string();
 
-    userEvent.type(renderedSearchInput, searchTerm);
+    useResources.mockReturnValue({
+      state: { searchTerm },
+      dispatch: jest.fn(),
+    });
+    rerender(<ResourceSearchBar />);
+    const renderedSearchButton = screen.getByLabelText("Search");
+
     userEvent.click(renderedSearchButton);
 
-    expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock).toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
+    expect(pushMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
+  });
+
+  it("should do nothing if the search term does not exist", () => {
+    useResources.mockReturnValue({
+      state: { searchTerm: "  " },
+      dispatch: jest.fn(),
+    });
+    rerender(<ResourceSearchBar />);
+    const renderedSearchButton = screen.getByLabelText("Search");
+
+    userEvent.click(renderedSearchButton);
+
+    expect(pushMock).toHaveBeenCalledTimes(0);
   });
 });

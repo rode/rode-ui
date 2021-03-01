@@ -23,6 +23,7 @@ const RodeLogo = ({ theme, title = "" }) => {
     return (
       <svg
         title={`Rode Logo ${title}`}
+        data-testid={"darkThemeLogo"}
         height="100%"
         width="100%"
         viewBox="0 0 1200 1200"
@@ -544,6 +545,7 @@ const RodeLogo = ({ theme, title = "" }) => {
   return (
     <svg
       title={`Rode Logo ${title}`}
+      data-testid={"lightThemeLogo"}
       height="100%"
       width="100%"
       viewBox="0 0 1200 1200"

@@ -16,8 +16,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "../../hooks/useTheme";
 import Header from "./Header";
+import { useTheme } from "providers/theme";
 
 const PageLayout = ({ children }) => {
   const { theme } = useTheme();

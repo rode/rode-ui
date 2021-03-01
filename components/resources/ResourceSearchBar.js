@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { useRouter } from "next/router";
 import Input from "components/Input";
 import styles from "styles/modules/Resources.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
-const ResourceSearchBar = ({ currentSearch }) => {
-  const [searchTerm, setSearchTerm] = useState(currentSearch);
+const ResourceSearchBar = () => {
+  const { state, dispatch } = useResources();
   const router = useRouter();
-
-  useEffect(() => {
-    setSearchTerm(currentSearch);
-  }, [currentSearch]);
 
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (searchTerm.trim().length) {
-      router.push(`/resources?search=${searchTerm.trim()}`);
+    if (state.searchTerm.trim().length) {
+      router.push(`/resources?search=${state.searchTerm.trim()}`);
     }
   };
 
@@ -48,14 +45,19 @@ const ResourceSearchBar = ({ currentSearch }) => {
       <Input
         name={"resourceSearch"}
         label={"Search for a resource"}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) =>
+          dispatch({
+            type: resourceActions.SET_SEARCH_TERM,
+            data: e.target.value,
+          })
+        }
         placeholder={"Ex: alpine@sha256:etcetcetcetcetc"}
-        value={searchTerm}
+        value={state.searchTerm}
       />
       <Button
         label={"Search"}
         buttonType={"icon"}
-        disabled={!searchTerm}
+        disabled={!state.searchTerm}
         type={"submit"}
       >
         <Icon name={ICON_NAMES.SEARCH} size={"large"} />
@@ -64,8 +66,6 @@ const ResourceSearchBar = ({ currentSearch }) => {
   );
 };
 
-ResourceSearchBar.propTypes = {
-  currentSearch: PropTypes.string,
-};
+ResourceSearchBar.propTypes = {};
 
 export default ResourceSearchBar;

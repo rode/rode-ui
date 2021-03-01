@@ -16,13 +16,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useTheme } from "hooks/useTheme";
-import useSWR from "swr";
+import { useTheme } from "providers/theme";
 import styles from "styles/modules/Resources.module.scss";
-import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
 import { getResourceDetails } from "utils/resource-utils";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import ResourceOccurrences from "components/resources/ResourceOccurrences";
+import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -31,13 +29,6 @@ const Resource = () => {
   const [resourceVersion, setResourceVersion] = useState("");
   const [resourceType, setResourceType] = useState("");
   const { resourceUri } = router.query;
-
-  const { data } = useSWR(
-    resourceUri
-      ? `/api/occurrences?resourceUri=${encodeURIComponent(resourceUri)}`
-      : null,
-    fetcher
-  );
 
   useEffect(() => {
     if (resourceUri) {
@@ -53,7 +44,8 @@ const Resource = () => {
   }, [resourceUri]);
 
   return (
-    <div className={`${styles[theme]}`}>
+    <div className={`${styles[theme]} ${styles.container}`}>
+      <ResourceBreadcrumbs />
       <div className={styles.resourceHeader}>
         <div>
           <p className={styles.resourceName}>{resourceName}</p>
@@ -63,18 +55,8 @@ const Resource = () => {
           <p>Version: {resourceVersion}</p>
         </div>
       </div>
-      {!data ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          {data?.map((occurrence) => (
-            <ResourceOccurrenceCard
-              key={occurrence.name}
-              occurrence={occurrence}
-            />
-          ))}
-        </>
-      )}
+
+      <ResourceOccurrences resourceUri={resourceUri} />
     </div>
   );
 };

@@ -16,7 +16,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Icon from "../../components/Icon";
+import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
 describe("Icon", () => {

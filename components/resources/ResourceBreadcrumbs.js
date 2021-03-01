@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-import Search from "components/icons/Search";
+import React from "react";
+import { useResources } from "providers/resources";
+import styles from "styles/modules/Resources.module.scss";
+import Link from "next/link";
 
-const SEARCH = "Search";
+const ResourceBreadcrumbs = () => {
+  const {
+    state: { searchTerm },
+  } = useResources();
 
-export const ICON_COMPONENTS = {
-  [SEARCH]: Search,
+  if (!searchTerm) {
+    return null;
+  }
+
+  return (
+    <div className={styles.breadcrumbs}>
+      <p>Resource Search</p>
+      <p>/</p>
+      <Link href={`/resources?search=${encodeURIComponent(searchTerm)}`}>
+        <a>{`"${searchTerm}"`}</a>
+      </Link>
+    </div>
+  );
 };
 
-export const ICON_NAMES = {
-  SEARCH,
-};
+export default ResourceBreadcrumbs;

@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-import Search from "components/icons/Search";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Loading from "components/Loading";
 
-const SEARCH = "Search";
+describe("Loading", () => {
+  it("should return null if not loading", () => {
+    render(<Loading loading={false} />);
 
-export const ICON_COMPONENTS = {
-  [SEARCH]: Search,
-};
+    expect(screen.queryByTestId("loadingIndicator")).toBeNull();
+  });
 
-export const ICON_NAMES = {
-  SEARCH,
-};
+  it("should return the loading spinner when loading", () => {
+    render(<Loading loading={true} />);
+
+    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+  });
+});

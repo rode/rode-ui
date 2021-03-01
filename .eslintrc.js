@@ -23,5 +23,7 @@ module.exports = {
       version: "detect",
     },
   },
-  rules: {},
+  rules: {
+    "no-restricted-imports": [2, { patterns: ["../*"] }],
+  },
 };

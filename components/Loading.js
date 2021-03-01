@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
-import Search from "components/icons/Search";
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "styles/modules/Loading.module.scss";
+import { useTheme } from "providers/theme";
 
-const SEARCH = "Search";
+const Loading = ({ loading }) => {
+  const { theme } = useTheme();
 
-export const ICON_COMPONENTS = {
-  [SEARCH]: Search,
+  if (!loading) {
+    return null;
+  }
+
+  return (
+    <div className={styles.container} data-testid="loadingIndicator">
+      <div className={`${styles.spinner} ${styles[theme]}`} />
+    </div>
+  );
 };
 
-export const ICON_NAMES = {
-  SEARCH,
+Loading.propTypes = {
+  loading: PropTypes.bool.isRequired,
 };
+
+export default Loading;

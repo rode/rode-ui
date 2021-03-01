@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "providers/theme";
 
 const Input = (props) => {
   const { name, label, type, onChange, placeholder, value = "" } = props;
