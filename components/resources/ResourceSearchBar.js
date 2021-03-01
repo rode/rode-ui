@@ -22,6 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
 import { useResources } from "providers/resources";
+import { resourceActions } from "../../reducers/resources";
 
 const ResourceSearchBar = () => {
   const { state, dispatch } = useResources();
@@ -46,7 +47,7 @@ const ResourceSearchBar = () => {
         label={"Search for a resource"}
         onChange={(e) =>
           dispatch({
-            type: "SET_SEARCH_TERM",
+            type: resourceActions.SET_SEARCH_TERM,
             data: e.target.value,
           })
         }

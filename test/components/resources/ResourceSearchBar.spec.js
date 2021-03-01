@@ -25,10 +25,11 @@ jest.mock("next/router");
 jest.mock("providers/resources");
 
 describe("ResourceSearchBar", () => {
-  let pushMock, rerender;
+  let pushMock, dispatchMock, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     pushMock = jest.fn();
+    dispatchMock = jest.fn();
 
     useRouter.mockReturnValue({
       push: pushMock,
@@ -36,7 +37,7 @@ describe("ResourceSearchBar", () => {
 
     useResources.mockReturnValue({
       state: {},
-      dispatch: jest.fn(),
+      dispatch: dispatchMock,
     });
 
     const utils = render(<ResourceSearchBar />);
@@ -49,7 +50,18 @@ describe("ResourceSearchBar", () => {
   });
 
   it("should render an input for searching for a resource", () => {
-    expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
+    const renderedInput = screen.getByText(/search for a resource/i);
+    expect(renderedInput).toBeInTheDocument();
+
+    const searchTerm = chance.string();
+
+    userEvent.type(renderedInput, searchTerm);
+    expect(dispatchMock)
+      .toHaveBeenCalledTimes(searchTerm.length)
+      .toHaveBeenNthCalledWith(searchTerm.length, {
+        type: "SET_SEARCH_TERM",
+        data: expect.any(String),
+      });
   });
 
   it("should render the button to perform a search", () => {

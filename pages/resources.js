@@ -23,6 +23,7 @@ import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
+import { resourceActions } from "../reducers/resources";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -39,13 +40,13 @@ const Resources = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: "SET_SEARCH_TERM",
+        type: resourceActions.SET_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: "SET_SEARCH_TERM",
+        type: resourceActions.SET_SEARCH_TERM,
         data: "",
       });
     }
