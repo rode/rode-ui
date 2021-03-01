@@ -30,6 +30,22 @@ describe("ResourceOccurrences", () => {
     resourceUri = chance.string();
   });
 
+  it("should not make the fetch call if there is no resource uri specified", () => {
+    useFetch.mockReturnValue({});
+    render(<ResourceOccurrences resourceUri={null} />);
+    expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+  });
+
+  it("should call to fetch the occurrences is a uri is specified", () => {
+    useFetch.mockReturnValue({});
+    render(<ResourceOccurrences resourceUri={resourceUri} />);
+    expect(useFetch)
+      .toHaveBeenCalledTimes(2)
+      .toHaveBeenCalledWith(
+        `/api/occurrences?resourceUri=${encodeURIComponent(resourceUri)}`
+      );
+  });
+
   it("should show a loading indicator while fetching the data", () => {
     useFetch.mockReturnValue({
       loading: true,

@@ -95,7 +95,7 @@ describe("ResourceSearchBar", () => {
     expect(renderedSearchInput).toHaveAttribute("value", currentSearchTerm);
   });
 
-  it("should do the thing when the button is clicked", () => {
+  it("should start the search process when the button is clicked", () => {
     const searchTerm = chance.string();
 
     useResources.mockReturnValue({
@@ -107,7 +107,21 @@ describe("ResourceSearchBar", () => {
 
     userEvent.click(renderedSearchButton);
 
-    expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock).toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
+    expect(pushMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
+  });
+
+  it("should do nothing if the search term does not exist", () => {
+    useResources.mockReturnValue({
+      state: { searchTerm: "  " },
+      dispatch: jest.fn(),
+    });
+    rerender(<ResourceSearchBar />);
+    const renderedSearchButton = screen.getByLabelText("Search");
+
+    userEvent.click(renderedSearchButton);
+
+    expect(pushMock).toHaveBeenCalledTimes(0);
   });
 });

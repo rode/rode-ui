@@ -26,26 +26,43 @@ describe("ResourceBreadcrumbs", () => {
 
   beforeEach(() => {
     searchTerm = chance.string();
-    useResources.mockReturnValue({
-      state: {
-        searchTerm,
-      },
-    });
-
-    render(<ResourceBreadcrumbs />);
-  });
-  it("should display the Resource Search indicator", () => {
-    expect(screen.getByText(/resource search/i)).toBeInTheDocument();
   });
 
-  it("should return a breadcrumb for the search term", () => {
-    const renderedSearchTermLink = screen.getByText(searchTerm, {
-      exact: false,
+  describe("searchTerm exists", () => {
+    beforeEach(() => {
+      useResources.mockReturnValue({
+        state: {
+          searchTerm,
+        },
+      });
+
+      render(<ResourceBreadcrumbs />);
     });
-    expect(renderedSearchTermLink).toBeInTheDocument();
-    expect(renderedSearchTermLink).toHaveAttribute(
-      "href",
-      `/resources?search=${encodeURIComponent(searchTerm)}`
-    );
+
+    it("should display the Resource Search indicator", () => {
+      expect(screen.getByText(/resource search/i)).toBeInTheDocument();
+    });
+
+    it("should return a breadcrumb for the search term", () => {
+      const renderedSearchTermLink = screen.getByText(searchTerm, {
+        exact: false,
+      });
+      expect(renderedSearchTermLink).toBeInTheDocument();
+      expect(renderedSearchTermLink).toHaveAttribute(
+        "href",
+        `/resources?search=${encodeURIComponent(searchTerm)}`
+      );
+    });
+  });
+
+  describe("no searchTerm exists", () => {
+    it("should return null", () => {
+      useResources.mockReturnValue({
+        state: {},
+      });
+
+      render(<ResourceBreadcrumbs />);
+      expect(screen.queryByText(searchTerm)).toBeNull();
+    });
   });
 });
