@@ -16,7 +16,7 @@
 
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import ResourceOccurrenceCard from "components/occurrences/ResourceOccurrenceCard";
+import ResourceOccurrenceCard from "components/resources/ResourceOccurrenceCard";
 import dayjs from "dayjs";
 import { createMockOccurrence } from "test/testing-utils/mocks";
 
@@ -60,5 +60,12 @@ describe("ResourceOccurrenceCard", () => {
     rerender(<ResourceOccurrenceCard occurrence={occurrence} />);
 
     expect(screen.getByText(/analysis status:/i)).toBeInTheDocument();
+  });
+
+  it("should render the build details if the occurrence type is build", () => {
+    occurrence = createMockOccurrence("BUILD");
+    rerender(<ResourceOccurrenceCard occurrence={occurrence} />);
+
+    expect(screen.getByText(/build id:/i)).toBeInTheDocument();
   });
 });

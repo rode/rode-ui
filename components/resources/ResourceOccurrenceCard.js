@@ -19,10 +19,10 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useTheme } from "hooks/useTheme";
 import dayjs from "dayjs";
-import DiscoveryOccurrencePreview from "./DiscoveryOccurrencePreview";
-import VulnerabilityOccurrencePreview from "./VulnerabilityOccurrencePreview";
-import BuildOccurrencePreview from "./BuildOccurrencePreview";
-import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
+import DiscoveryOccurrencePreview from "components/occurrences/DiscoveryOccurrencePreview";
+import VulnerabilityOccurrencePreview from "components/occurrences/VulnerabilityOccurrencePreview";
+import BuildOccurrencePreview from "components/occurrences/BuildOccurrencePreview";
+import OccurrenceCodeBlock from "components/occurrences/OccurrenceCodeBlock";
 
 const occurrenceMap = {
   ["DISCOVERY"]: DiscoveryOccurrencePreview,
