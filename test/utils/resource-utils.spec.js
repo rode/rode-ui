@@ -29,10 +29,13 @@ describe("resource utils", () => {
       resourceVersion = chance.semver();
     });
 
-    it("should return null for an unknown resource type", () => {
-      const actual = getResourceDetails(chance.url());
+    it("should return generic values for an unknown resource type", () => {
+      const resourceUri = chance.url();
+      const actual = getResourceDetails(resourceUri);
 
-      expect(actual).toBeNull();
+      expect(actual.resourceType).toBe("Unknown");
+      expect(actual.resourceName).toBe(resourceUri);
+      expect(actual.resourceVersion).toBe("N/A");
     });
 
     it("should return the correct details for a Debian Resource", () => {
