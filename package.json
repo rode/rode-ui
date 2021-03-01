@@ -44,7 +44,7 @@
       "!.eslintrc.js",
       "!**/node_modules/**",
       "!**/.next/**",
-      "!**/.jest/",
+      "!**/.jest/**",
       "!**test/**"
     ],
     "moduleNameMapper": {
