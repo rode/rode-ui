@@ -35,7 +35,7 @@ describe("Resources", () => {
 
     useResources.mockReturnValue({
       dispatch: jest.fn(),
-      state: {},
+      state: { searchTerm: "" },
     });
 
     useFetch.mockReturnValue({});

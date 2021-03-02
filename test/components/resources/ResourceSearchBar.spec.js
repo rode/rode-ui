@@ -36,7 +36,7 @@ describe("ResourceSearchBar", () => {
     });
 
     useResources.mockReturnValue({
-      state: {},
+      state: { searchTerm: "" },
       dispatch: dispatchMock,
     });
 

@@ -94,20 +94,6 @@
     color: $SOFT_WHITE;
   }
 
-  .searchBarContainer {
-    button:not([disabled]) {
-      svg {
-        color: $LAGOON;
-      }
-
-      &:hover, &:focus {
-        svg {
-          color: $WHITE;
-        }
-      }
-    }
-  }
-
   .searchCard {
     background-color: $DARK_GREY;
 
@@ -122,20 +108,6 @@
 }
 
 .lightTheme {
-  .searchBarContainer {
-    button:not([disabled]) {
-      svg {
-        color: $DEEP_SEA;
-      }
-
-      &:hover, &:focus {
-        svg {
-          color: $WHITE;
-        }
-      }
-    }
-  }
-
   .searchCard {
     background-color: $WHITE;
 

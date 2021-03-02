@@ -17,6 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Buttons.module.scss";
+import { useTheme } from "providers/theme";
 
 const Button = (props) => {
   const {
@@ -28,9 +29,11 @@ const Button = (props) => {
     ...otherProps
   } = props;
 
+  const { theme } = useTheme();
+
   return (
     <button
-      className={styles[buttonType]}
+      className={`${styles[buttonType]} ${styles[theme]}`}
       onClick={onClick}
       aria-label={label}
       disabled={disabled}

@@ -20,16 +20,20 @@ import Error from "pages/_error";
 
 describe("CustomError", () => {
   it("should display an error that occurred on the server", () => {
-    const statusCode = chance.natural({min: 100, max: 500});
+    const statusCode = chance.natural({ min: 100, max: 500 });
 
-    render(<Error statusCode={statusCode}/>);
+    render(<Error statusCode={statusCode} />);
 
-    expect(screen.getByText(`An error ${statusCode} occurred on server.`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`An error ${statusCode} occurred on server.`)
+    ).toBeInTheDocument();
   });
 
   it("should display an error that occurred on the client", () => {
-    render(<Error/>);
+    render(<Error />);
 
-    expect(screen.getByText('An error occurred on client.')).toBeInTheDocument();
+    expect(
+      screen.getByText("An error occurred on client.")
+    ).toBeInTheDocument();
   });
 });

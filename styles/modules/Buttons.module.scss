@@ -72,31 +72,64 @@
   background-color: transparent;
   border-radius: 50%;
 
-  svg {
-    color: $DEEP_SEA;
-    @include transition;
-  }
-
-  &:hover,
-  &:focus {
-    background-color: $DEEP_SEA;
+  &.darkTheme {
     svg {
-      color: $WHITE;
-    }
-  }
-
-  &[disabled] {
-    background-color: transparent;
-
-    svg {
-      color: $SILVER;
+      color: $LAGOON;
+      @include transition;
     }
 
     &:hover,
     &:focus {
+      background-color: $DEEP_SEA;
+      svg {
+        color: $WHITE;
+      }
+    }
+
+    &[disabled] {
       background-color: transparent;
+
+      svg {
+        color: $MEDIUM_GREY;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: transparent;
+        svg {
+          color: $MEDIUM_GREY;
+        }
+      }
+    }
+  }
+
+  &.lightTheme {
+    svg {
+      color: $DEEP_SEA;
+      @include transition;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $DEEP_SEA;
+      svg {
+        color: $WHITE;
+      }
+    }
+
+    &[disabled] {
+      background-color: transparent;
+
       svg {
         color: $SILVER;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: transparent;
+        svg {
+          color: $SILVER;
+        }
       }
     }
   }

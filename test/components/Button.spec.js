@@ -18,11 +18,18 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Button from "components/Button";
 import userEvent from "@testing-library/user-event";
+import { useTheme } from "providers/theme";
+import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+
+jest.mock("providers/theme");
 
 describe("Button", () => {
   let onClick, label;
 
   beforeEach(() => {
+    useTheme.mockReturnValue({
+      theme: chance.pickone([LIGHT_THEME, DARK_THEME]),
+    });
     onClick = jest.fn();
     label = chance.string();
     console.error = jest.fn();
