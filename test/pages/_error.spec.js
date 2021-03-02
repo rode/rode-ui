@@ -19,6 +19,10 @@ import { render, screen } from "@testing-library/react";
 import Error from "pages/_error";
 
 describe("CustomError", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it("should display an error that occurred on the server", () => {
     const statusCode = chance.natural({ min: 100, max: 500 });
 
@@ -35,5 +39,37 @@ describe("CustomError", () => {
     expect(
       screen.getByText("An error occurred on client.")
     ).toBeInTheDocument();
+  });
+
+  describe("getInitialProps", () => {
+    let res, err;
+
+    beforeEach(() => {
+      res = null;
+      err = null;
+    });
+
+    it("should return a 404 if no status code is specified", () => {
+      const actual = Error.getInitialProps({ res, err });
+      expect(actual.statusCode).toBe(404);
+    });
+
+    it("should return the response status code if it exists", () => {
+      res = {
+        statusCode: chance.natural({ min: 100, max: 500 }),
+      };
+
+      const actual = Error.getInitialProps({ res, err });
+      expect(actual.statusCode).toBe(res.statusCode);
+    });
+
+    it("should return the error status code if it exists and response status code does not", () => {
+      err = {
+        statusCode: chance.natural({ min: 100, max: 500 }),
+      };
+
+      const actual = Error.getInitialProps({ res, err });
+      expect(actual.statusCode).toBe(err.statusCode);
+    });
   });
 });
