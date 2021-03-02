@@ -54,12 +54,20 @@
 }
 
 .versionContainer {
-  text-align: right;
   margin-left: 2rem;
+}
+
+.version {
+  text-align: right;
   color: $SOFT_WHITE;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: calc(75vw - 2rem);
+
+  @include phoneAndSmaller {
+    max-width: calc(50vw - 2rem);
+  }
 }
 
 .darkTheme {
