@@ -36,7 +36,7 @@
 
     .searchHelp {
       font-size: 0.75rem;
-      padding: 0 3rem;
+      padding: 0 3rem 0 0;
       color: $MEDIUM_GREY;
       text-align: right;
     }
@@ -86,6 +86,11 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    max-width: calc(100vw - 13rem);
+
+    @include tabletAndLarger {
+      max-width: calc(100vw - 18rem);
+    }
   }
 }
 
