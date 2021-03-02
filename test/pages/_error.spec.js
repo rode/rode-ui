@@ -15,14 +15,21 @@
  */
 
 import React from "react";
-import styles from "styles/modules/Errors.module.scss";
+import { render, screen } from "@testing-library/react";
+import Error from "pages/_error";
 
-const Custom404 = () => {
-  return (
-    <div className={styles.container}>
-      <p>404 - Page Not Found</p>
-    </div>
-  );
-};
+describe("CustomError", () => {
+  it("should display an error that occurred on the server", () => {
+    const statusCode = chance.natural({min: 100, max: 500});
 
-export default Custom404;
+    render(<Error statusCode={statusCode}/>);
+
+    expect(screen.getByText(`An error ${statusCode} occurred on server.`)).toBeInTheDocument();
+  });
+
+  it("should display an error that occurred on the client", () => {
+    render(<Error/>);
+
+    expect(screen.getByText('An error occurred on client.')).toBeInTheDocument();
+  });
+});

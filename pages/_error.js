@@ -15,14 +15,28 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "styles/modules/Errors.module.scss";
 
-const Custom404 = () => {
+const Error = ({ statusCode }) => {
   return (
     <div className={styles.container}>
-      <p>404 - Page Not Found</p>
+      <p>
+        {statusCode
+          ? `An error ${statusCode} occurred on server.`
+          : "An error occurred on client."}
+      </p>
     </div>
   );
 };
 
-export default Custom404;
+Error.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  return { statusCode };
+};
+
+Error.propTypes = {
+  statusCode: PropTypes.string.isRequired,
+};
+
+export default Error;
