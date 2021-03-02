@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from "react";
-import styles from "styles/modules/Resources.module.scss";
-import ResourceSearchBar from "components/resources/ResourceSearchBar";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
-
-const Home = () => {
-  const { dispatch } = useResources();
-
-  useEffect(() => {
-    dispatch({
-      type: resourceActions.SET_SEARCH_TERM,
-      data: "",
-    });
-  }, []);
-
-  return (
-    <div className={styles.containerNoResults}>
-      <ResourceSearchBar />
-    </div>
-  );
+export const withRouter = (component) => {
+  component.defaultProps = {
+    ...component.defaultProps,
+    router: { pathname: "mocked-path", reload: jest.fn() },
+  };
+  return component;
 };
 
-export default Home;
+export const useRouter = jest.fn();

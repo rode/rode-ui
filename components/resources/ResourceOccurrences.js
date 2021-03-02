@@ -33,7 +33,7 @@ const ResourceOccurrences = (props) => {
       <Loading loading={loading} />
       {data && (
         <>
-          {data?.map((occurrence) => (
+          {data.map((occurrence) => (
             <ResourceOccurrenceCard
               key={occurrence.name}
               occurrence={occurrence}
