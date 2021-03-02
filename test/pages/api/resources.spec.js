@@ -88,17 +88,24 @@ describe("/api/resources", () => {
       process.env.RODE_URL = rodeUrlEnv;
     });
 
-    const createExpectedUrl = (baseUrl) => {
-      const expectedFilter = `"resource.uri".startsWith("${filterParam}")`;
-
-      return `${baseUrl}/v1alpha1/resources?filter=${encodeURIComponent(
-        expectedFilter
-      )}`;
+    const createExpectedUrl = (baseUrl, query = {}) => {
+      return `${baseUrl}/v1alpha1/resources?${new URLSearchParams(query)}`;
     };
 
     it("should hit the Rode API", async () => {
+      const expectedUrl = createExpectedUrl("http://localhost:50052", {
+        filter: `"resource.uri".startsWith("${filterParam}")`,
+      });
+
+      await handler(request, response);
+
+      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+    });
+
+    it("should hit the Rode API when no filter is specified", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50052");
 
+      request.query.filter = null;
       await handler(request, response);
 
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
@@ -106,7 +113,9 @@ describe("/api/resources", () => {
 
     it("should take the Rode URL from the environment if set", async () => {
       const rodeUrl = chance.url();
-      const expectedUrl = createExpectedUrl(rodeUrl);
+      const expectedUrl = createExpectedUrl(rodeUrl, {
+        filter: `"resource.uri".startsWith("${filterParam}")`,
+      });
       process.env.RODE_URL = rodeUrl;
 
       await handler(request, response);

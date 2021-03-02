@@ -19,11 +19,14 @@ import { useState, useEffect } from "react";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export const useFetch = (url) => {
-  const [loading, setLoading] = useState(false);
+export const useFetch = (url, query) => {
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-  const { data: swrData, error: swrError } = useSWR(url ? url : null, fetcher);
+
+  const urlWithQuery = query ? `${url}?${new URLSearchParams(query)}` : url;
+
+  const { data: swrData, error: swrError } = useSWR(urlWithQuery, fetcher);
 
   useEffect(() => {
     if (swrData) {

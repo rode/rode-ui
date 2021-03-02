@@ -17,7 +17,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Input from "components/Input";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
@@ -37,35 +37,35 @@ const ResourceSearchBar = () => {
   };
 
   return (
-    <form
-      role="search"
-      className={styles.searchBarContainer}
-      onSubmit={onSubmit}
-    >
-      <Input
-        name={"resourceSearch"}
-        label={"Search for a resource"}
-        onChange={(e) =>
-          dispatch({
-            type: resourceActions.SET_SEARCH_TERM,
-            data: e.target.value,
-          })
-        }
-        placeholder={"Ex: alpine@sha256:etcetcetcetcetc"}
-        value={state.searchTerm}
-      />
-      <Button
-        label={"Search"}
-        buttonType={"icon"}
-        disabled={!state.searchTerm}
-        type={"submit"}
-      >
-        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
-      </Button>
+    <form role="search" className={styles.resourceSearch} onSubmit={onSubmit}>
+      <div className={styles.searchBarContainer}>
+        <Input
+          name={"resourceSearch"}
+          label={"Search for a resource"}
+          onChange={(e) =>
+            dispatch({
+              type: resourceActions.SET_SEARCH_TERM,
+              data: e.target.value,
+            })
+          }
+          placeholder={"Ex: alpine@sha256:etcetcetcetcetc"}
+          value={state.searchTerm}
+        />
+        <Button
+          label={"Search"}
+          buttonType={"icon"}
+          disabled={!state.searchTerm}
+          type={"submit"}
+        >
+          <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+        </Button>
+      </div>
+      <p className={styles.searchHelp}>
+        You can search by name, version, or{" "}
+        <a href={"/resources?search=all"}>view all resources</a>.
+      </p>
     </form>
   );
 };
-
-ResourceSearchBar.propTypes = {};
 
 export default ResourceSearchBar;
