@@ -53,6 +53,19 @@ describe("ResourceBreadcrumbs", () => {
         `/resources?search=${encodeURIComponent(searchTerm)}`
       );
     });
+
+    it("should return the correct breadcrumb when viewing all resources", () => {
+      useResources.mockReturnValue({
+        state: {
+          searchTerm: "all",
+        },
+      });
+
+      render(<ResourceBreadcrumbs />);
+      const renderedLink = screen.getByText(/view all resources/i);
+      expect(renderedLink).toBeInTheDocument();
+      expect(renderedLink).toHaveAttribute("href", `/resources?search=all`);
+    });
   });
 
   describe("no searchTerm exists", () => {

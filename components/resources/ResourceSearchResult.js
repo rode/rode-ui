@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import { getResourceDetails } from "utils/resource-utils";

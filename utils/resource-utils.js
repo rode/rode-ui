@@ -105,8 +105,12 @@ export const getResourceDetails = (uri) => {
   );
 
   if (!resourceMatch) {
-    console.error("Unknown resource type found");
-    return null;
+    console.log("Resource URI does not match expected format");
+    return {
+      resourceType: "Unknown",
+      resourceName: uri,
+      resourceVersion: "N/A",
+    };
   }
 
   const { name, version } = resourceMatch.parse

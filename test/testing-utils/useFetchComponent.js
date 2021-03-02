@@ -14,37 +14,31 @@
  * limitations under the License.
  */
 
-import Loading from "components/Loading";
-import ResourceOccurrenceCard from "./ResourceOccurrenceCard";
 import React from "react";
 import PropTypes from "prop-types";
 import { useFetch } from "hooks/useFetch";
 
-const ResourceOccurrences = (props) => {
-  const { resourceUri } = props;
+const FetchComponent = ({ url, query }) => {
+  const { data, loading, error } = useFetch(url, query);
 
-  const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
-    resourceUri,
-  });
-  return (
-    <>
-      <Loading loading={loading} />
-      {data && (
-        <>
-          {data.map((occurrence) => (
-            <ResourceOccurrenceCard
-              key={occurrence.name}
-              occurrence={occurrence}
-            />
-          ))}
-        </>
-      )}
-    </>
-  );
+  if (data) {
+    return <p>Data: {data}</p>;
+  }
+
+  if (loading) {
+    return <p>Loading</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  return null;
 };
 
-ResourceOccurrences.propTypes = {
-  resourceUri: PropTypes.string.isRequired,
+FetchComponent.propTypes = {
+  url: PropTypes.string,
+  query: PropTypes.object,
 };
 
-export default ResourceOccurrences;
+export default FetchComponent;

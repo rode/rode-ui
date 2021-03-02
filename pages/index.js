@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect } from "react";
-import styles from "styles/modules/Resources.module.scss";
+import styles from "styles/modules/ResourceSearch.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
@@ -31,7 +31,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className={styles.containerNoResults}>
+    <div className={styles.container}>
       <ResourceSearchBar />
     </div>
   );

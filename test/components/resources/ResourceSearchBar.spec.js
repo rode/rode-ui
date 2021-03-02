@@ -70,6 +70,12 @@ describe("ResourceSearchBar", () => {
     expect(renderedSearchButton).toBeDisabled();
   });
 
+  it("should render some helper text", () => {
+    expect(
+      screen.getByText(/view all resources/i, { exact: false })
+    ).toBeInTheDocument();
+  });
+
   it("should enable the button when a search term is entered", () => {
     useResources.mockReturnValue({
       state: { searchTerm: chance.string() },
