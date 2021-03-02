@@ -94,7 +94,7 @@ describe("/api/resources", () => {
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50052", {
-        filter: `"resource.uri".startsWith("${filterParam}")`,
+        filter: `"resource.uri".contains("${filterParam}")`,
       });
 
       await handler(request, response);
@@ -114,7 +114,7 @@ describe("/api/resources", () => {
     it("should take the Rode URL from the environment if set", async () => {
       const rodeUrl = chance.url();
       const expectedUrl = createExpectedUrl(rodeUrl, {
-        filter: `"resource.uri".startsWith("${filterParam}")`,
+        filter: `"resource.uri".contains("${filterParam}")`,
       });
       process.env.RODE_URL = rodeUrl;
 
