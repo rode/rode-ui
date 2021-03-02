@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Custom404 from "pages/404";
 
-  > * {
-    margin: 0.5rem;
-  }
-}
+describe("404", () => {
+  it("should render the not found message", () => {
+    render(<Custom404 />);
+
+    expect(screen.getByText("404 - Page Not Found")).toBeInTheDocument();
+  });
+});

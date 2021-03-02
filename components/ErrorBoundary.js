@@ -37,7 +37,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className={styles.boundaryContainer}>
+        <div className={styles.container}>
           <p>{"Something went wrong."}</p>
           <Button
             onClick={() => {
