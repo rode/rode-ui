@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import Header from "./Header";
-import { useTheme } from "providers/theme";
-import ErrorBoundary from "components/ErrorBoundary";
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-const PageLayout = ({ children }) => {
-  const { theme } = useTheme();
-  return (
-    <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-    </>
-  );
-};
-
-PageLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PageLayout;
+  > * {
+    margin: 0.5rem;
+  }
+}

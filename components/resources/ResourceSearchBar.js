@@ -54,7 +54,7 @@ const ResourceSearchBar = () => {
         <Button
           label={"Search"}
           buttonType={"icon"}
-          disabled={!state.searchTerm}
+          disabled={!state.searchTerm.length}
           type={"submit"}
         >
           <Icon name={ICON_NAMES.SEARCH} size={"large"} />

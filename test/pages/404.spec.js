@@ -15,25 +15,13 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
-import Header from "./Header";
-import { useTheme } from "providers/theme";
-import ErrorBoundary from "components/ErrorBoundary";
+import { render, screen } from "@testing-library/react";
+import Custom404 from "pages/404";
 
-const PageLayout = ({ children }) => {
-  const { theme } = useTheme();
-  return (
-    <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-    </>
-  );
-};
+describe("404", () => {
+  it("should render the not found message", () => {
+    render(<Custom404 />);
 
-PageLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PageLayout;
+    expect(screen.getByText("404 - Page Not Found")).toBeInTheDocument();
+  });
+});

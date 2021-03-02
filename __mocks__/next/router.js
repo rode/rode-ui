@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import Header from "./Header";
-import { useTheme } from "providers/theme";
-import ErrorBoundary from "components/ErrorBoundary";
-
-const PageLayout = ({ children }) => {
-  const { theme } = useTheme();
-  return (
-    <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-    </>
-  );
+export const withRouter = (component) => {
+  component.defaultProps = {
+    ...component.defaultProps,
+    router: { pathname: "mocked-path", reload: jest.fn() },
+  };
+  return component;
 };
 
-PageLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PageLayout;
+export const useRouter = jest.fn();

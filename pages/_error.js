@@ -16,24 +16,27 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Header from "./Header";
-import { useTheme } from "providers/theme";
-import ErrorBoundary from "components/ErrorBoundary";
+import styles from "styles/modules/Errors.module.scss";
 
-const PageLayout = ({ children }) => {
-  const { theme } = useTheme();
+const Error = ({ statusCode }) => {
   return (
-    <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-    </>
+    <div className={styles.container}>
+      <p>
+        {statusCode
+          ? `An error ${statusCode} occurred on server.`
+          : "An error occurred on client."}
+      </p>
+    </div>
   );
 };
 
-PageLayout.propTypes = {
-  children: PropTypes.node.isRequired,
+Error.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  return { statusCode };
 };
 
-export default PageLayout;
+Error.propTypes = {
+  statusCode: PropTypes.string.isRequired,
+};
+
+export default Error;

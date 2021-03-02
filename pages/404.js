@@ -15,25 +15,14 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
-import Header from "./Header";
-import { useTheme } from "providers/theme";
-import ErrorBoundary from "components/ErrorBoundary";
+import styles from "styles/modules/Errors.module.scss";
 
-const PageLayout = ({ children }) => {
-  const { theme } = useTheme();
+const Custom404 = () => {
   return (
-    <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-    </>
+    <div className={styles.container}>
+      <p>404 - Page Not Found</p>
+    </div>
   );
 };
 
-PageLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PageLayout;
+export default Custom404;
