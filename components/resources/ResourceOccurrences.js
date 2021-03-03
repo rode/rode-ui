@@ -15,10 +15,12 @@
  */
 
 import Loading from "components/Loading";
-import ResourceOccurrenceCard from "./ResourceOccurrenceCard";
 import React from "react";
 import PropTypes from "prop-types";
 import { useFetch } from "hooks/useFetch";
+import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
+import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
+import DeployOccurrenceSection from "components/occurrences/DeployOccurrenceSection";
 
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
@@ -26,17 +28,16 @@ const ResourceOccurrences = (props) => {
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
+  
+  console.log('data', data);
   return (
     <>
       <Loading loading={loading} />
       {data && (
         <>
-          {data.map((occurrence) => (
-            <ResourceOccurrenceCard
-              key={occurrence.name}
-              occurrence={occurrence}
-            />
-          ))}
+          <BuildOccurrenceSection occurrences={data.build}/>
+          <SecureOccurrenceSection occurrences={data.secure}/>
+          <DeployOccurrenceSection occurrences={data.deploy}/>
         </>
       )}
     </>

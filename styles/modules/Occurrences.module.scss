@@ -28,6 +28,19 @@ $INDENTATION: 1rem;
   box-shadow: $BOX_SHADOW;
 }
 
+.sectionContainer {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.sectionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  color: $MEDIUM_GREY;
+}
+
 .codeBlockContainer {
   padding: 0 1rem 1rem;
   display: flex;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { getRodeUrl } from "pages/api/api-utils";
+import { getRodeUrl } from "pages/api/utils/api-utils";
 
 describe("api-utils", () => {
   describe("getRodeUrl", () => {

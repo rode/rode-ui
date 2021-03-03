@@ -16,13 +16,13 @@
 
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import ResourceOccurrenceCard from "components/resources/ResourceOccurrenceCard";
+import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
 import { createMockOccurrence } from "test/testing-utils/mocks";
 
 jest.mock("dayjs");
 
-describe("ResourceOccurrenceCard", () => {
+describe("OccurrencePreview", () => {
   let occurrence, rerender;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe("ResourceOccurrenceCard", () => {
     dayjs.mockReturnValue({
       format: jest.fn().mockReturnValue(occurrence.createTime),
     });
-    const utils = render(<ResourceOccurrenceCard occurrence={occurrence} />);
+    const utils = render(<OccurrencePreview occurrence={occurrence} />);
     rerender = utils.rerender;
   });
 
@@ -50,21 +50,21 @@ describe("ResourceOccurrenceCard", () => {
 
   it("should render the vulnerability details if the occurrence type is vulnerability", () => {
     occurrence = createMockOccurrence("VULNERABILITY");
-    rerender(<ResourceOccurrenceCard occurrence={occurrence} />);
+    rerender(<OccurrencePreview occurrence={occurrence} />);
 
     expect(screen.getByText(/effective severity:/i)).toBeInTheDocument();
   });
 
   it("should render the discovery details if the occurrence type is discovery", () => {
     occurrence = createMockOccurrence("DISCOVERY");
-    rerender(<ResourceOccurrenceCard occurrence={occurrence} />);
+    rerender(<OccurrencePreview occurrence={occurrence} />);
 
     expect(screen.getByText(/analysis status:/i)).toBeInTheDocument();
   });
 
   it("should render the build details if the occurrence type is build", () => {
     occurrence = createMockOccurrence("BUILD");
-    rerender(<ResourceOccurrenceCard occurrence={occurrence} />);
+    rerender(<OccurrencePreview occurrence={occurrence} />);
 
     expect(screen.getByText(/build id:/i)).toBeInTheDocument();
   });

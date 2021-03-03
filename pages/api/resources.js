@@ -16,7 +16,7 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
-import { getRodeUrl } from "./api-utils";
+import { getRodeUrl } from "./utils/api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
