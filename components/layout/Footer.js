@@ -57,6 +57,7 @@ const Footer = () => {
             <a
               href={link.href}
               key={link.href}
+              title={link.label}
               target="_blank"
               rel={"noreferrer"}
             >

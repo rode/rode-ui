@@ -33,7 +33,7 @@ describe("Footer", () => {
   });
 
   it("should render a link to github", () => {
-    const renderedLink = screen.getByTitle(/github/i);
+    const renderedLink = screen.getByTitle(/github icon/i);
     expect(renderedLink).toBeInTheDocument();
     expect(renderedLink.closest("a")).toHaveAttribute(
       "href",
@@ -42,7 +42,7 @@ describe("Footer", () => {
   });
 
   it("should render a link to the liatrio website", () => {
-    const renderedLink = screen.getByTitle(/liatrio/i);
+    const renderedLink = screen.getByTitle(/liatrio logo/i);
     expect(renderedLink).toBeInTheDocument();
     expect(renderedLink.closest("a")).toHaveAttribute(
       "href",
@@ -51,7 +51,7 @@ describe("Footer", () => {
   });
 
   it("should render a link to twitter", () => {
-    const renderedLink = screen.getByTitle(/twitter/i);
+    const renderedLink = screen.getByTitle(/twitter icon/i);
     expect(renderedLink).toBeInTheDocument();
     expect(renderedLink.closest("a")).toHaveAttribute(
       "href",
