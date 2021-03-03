@@ -51,7 +51,6 @@
   width: 85%;
   margin: 0 auto;
   font-size: 0.85rem;
-  color: $MEDIUM_GREY;
   text-align: center;
 
   @include tabletAndLarger {
@@ -91,6 +90,10 @@
     background-color: $DARKEST_GREY;
   }
 
+  .subtitle {
+    color: $MEDIUM_GREY;
+  }
+
   .links {
     a {
       color: $WHITE;
@@ -103,6 +106,10 @@
 .lightTheme {
   &.container {
     background-color: $WHITE_SMOKE;
+  }
+
+  .subtitle {
+    color: $MEDIUM_GREY;
   }
 
   .links {
