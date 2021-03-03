@@ -17,6 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Header from "./Header";
+import Footer from "./Footer";
 import { useTheme } from "providers/theme";
 import ErrorBoundary from "components/ErrorBoundary";
 
@@ -28,6 +29,7 @@ const PageLayout = ({ children }) => {
       <main className={theme}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
+      <Footer />
     </>
   );
 };

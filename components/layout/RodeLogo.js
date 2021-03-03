@@ -22,7 +22,6 @@ const RodeLogo = ({ theme, title = "" }) => {
   if (theme === DARK_THEME) {
     return (
       <svg
-        title={`Rode Logo ${title}`}
         data-testid={"darkThemeLogo"}
         height="100%"
         width="100%"
@@ -30,6 +29,7 @@ const RodeLogo = ({ theme, title = "" }) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <title>{`Rode Logo ${title}`}</title>
         <path
           d="M90.8 509.4C82.6 509.4 75.9 502.8 75.8 494.5C75.7 486.2 82.4 479.4 90.7 479.4C111.9 479.2 133.4 478.6 154.7 477.6C157 472.1 162.4 468.3 168.7 468.3C177 468.4 183.6 475.2 183.5 483.5C183.4 496.2 173.4 506.6 160.7 507.4H160.6C137.5 508.6 114 509.3 90.9 509.5C90.9 509.4 90.8 509.4 90.8 509.4Z"
           fill="url(#paint0_linear)"
@@ -544,7 +544,6 @@ const RodeLogo = ({ theme, title = "" }) => {
 
   return (
     <svg
-      title={`Rode Logo ${title}`}
       data-testid={"lightThemeLogo"}
       height="100%"
       width="100%"
@@ -552,6 +551,7 @@ const RodeLogo = ({ theme, title = "" }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>{`Rode Logo ${title}`}</title>
       <path d="M90.8 972V228H816.4L90.8 972Z" fill="#C4C5C1" />
       <path
         d="M90.8 515.5C79.9 515.5 70.9 506.7 70.8 495.7C70.7 484.7 79.5 475.6 90.5 475.5C110.7 475.2 131.2 474.6 151.5 473.7C155.1 467.9 161.5 464.1 168.8 464.2C179.8 464.3 188.7 473.4 188.6 484.4C188.4 499.6 176.4 512.3 161.2 513.2C161.1 513.2 161.1 513.2 161 513.2C137.8 514.4 114.3 515.2 91.1 515.5C91 515.5 90.9 515.5 90.8 515.5Z"

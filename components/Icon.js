@@ -18,22 +18,25 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ICON_COMPONENTS, ICON_NAMES } from "utils/icon-utils";
 import styles from "styles/modules/Icons.module.scss";
+import { useTheme } from "providers/theme";
 
 const Icon = (props) => {
   const { name, size = "medium" } = props;
+
+  const { theme } = useTheme();
 
   const IconComponent = ICON_COMPONENTS[name];
 
   return (
     <div className={styles[size]}>
-      <IconComponent />
+      <IconComponent theme={theme} />
     </div>
   );
 };
 
 Icon.propTypes = {
   name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
+  size: PropTypes.oneOf(["small", "medium", "large", "xlarge"]),
 };
 
 export default Icon;

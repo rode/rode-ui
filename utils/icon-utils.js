@@ -15,13 +15,25 @@
  */
 
 import Search from "components/icons/Search";
+import Liatrio from "components/icons/Liatrio";
+import Github from "components/icons/Github";
+import Twitter from "components/icons/Twitter";
 
 const SEARCH = "Search";
+const LIATRIO = "Liatrio";
+const GITHUB = "Github";
+const TWITTER = "Twitter";
 
 export const ICON_COMPONENTS = {
   [SEARCH]: Search,
+  [LIATRIO]: Liatrio,
+  [GITHUB]: Github,
+  [TWITTER]: Twitter,
 };
 
 export const ICON_NAMES = {
   SEARCH,
+  LIATRIO,
+  GITHUB,
+  TWITTER,
 };

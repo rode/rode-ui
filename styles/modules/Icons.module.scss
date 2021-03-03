@@ -17,6 +17,10 @@
 .icon {
   color: inherit;
   margin: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .small {
@@ -35,4 +39,10 @@
   @extend .icon;
   height: 2rem;
   width: 2rem;
+}
+
+.xlarge {
+  @extend .icon;
+  height: 2.5rem;
+  width: 2.5rem;
 }

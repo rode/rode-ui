@@ -32,10 +32,14 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: repeat(12, minmax(min-content, 1fr));
-    grid-template-rows: minmax(min-content, 5.25rem) 1fr;
+    grid-template-rows: minmax(min-content, 5.25rem) 1fr minmax(
+        min-content,
+        4rem
+      );
     grid-template-areas:
       "header header header header header header header header header header header header"
-      "main main main main main main main main main main main main";
+      "main main main main main main main main main main main main"
+      "footer footer footer footer footer footer footer footer footer footer footer footer";
   }
 
   header {
@@ -54,5 +58,10 @@ body {
     &.lightTheme {
       background-color: $SOFT_WHITE;
     }
+  }
+
+  footer {
+    grid-row: footer / auto;
+    grid-column: footer;
   }
 }
