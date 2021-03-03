@@ -15,11 +15,17 @@
  */
 
 import Search from "components/icons/Search";
+import Cog from "components/icons/Cog";
+import ShieldCheck from "components/icons/ShieldCheck";
+import Server from "components/icons/Server";
 import Liatrio from "components/icons/Liatrio";
 import Github from "components/icons/Github";
 import Twitter from "components/icons/Twitter";
 
 const SEARCH = "Search";
+const COG = "Cog";
+const SHIELD_CHECK = "ShieldCheck";
+const SERVER = "Server";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -29,10 +35,16 @@ export const ICON_COMPONENTS = {
   [LIATRIO]: Liatrio,
   [GITHUB]: Github,
   [TWITTER]: Twitter,
+  [COG]: Cog,
+  [SHIELD_CHECK]: ShieldCheck,
+  [SERVER]: Server
 };
 
 export const ICON_NAMES = {
   SEARCH,
+  COG,
+  SHIELD_CHECK,
+  SERVER,
   LIATRIO,
   GITHUB,
   TWITTER,

@@ -43,4 +43,22 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/liatrio/i)).toBeInTheDocument();
   });
+
+  it("should render the cog icon when specified", () => {
+    render(<Icon name={ICON_NAMES.COG} />);
+
+    expect(screen.getByTitle(/cog/i)).toBeInTheDocument();
+  });
+
+  it("should render the shield check icon when specified", () => {
+    render(<Icon name={ICON_NAMES.SHIELD_CHECK} />);
+
+    expect(screen.getByTitle(/shield check/i)).toBeInTheDocument();
+  });
+
+  it("should render the server icon when specified", () => {
+    render(<Icon name={ICON_NAMES.SERVER} />);
+
+    expect(screen.getByTitle(/server/i)).toBeInTheDocument();
+  });
 });
