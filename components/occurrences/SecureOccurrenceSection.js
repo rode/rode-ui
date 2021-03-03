@@ -35,10 +35,10 @@ const SecureOccurrenceSection = ({ occurrences }) => {
       {occurrences.mapped.map((occurrence) => (
         <OccurrencePreview
           key={occurrence.name}
-          occurrence={occurrence}
+          occurrences={occurrences}
           mainText={"Vulnerability Scan"}
           timestamp={occurrence.completed}
-          subText={`Vulnerabilities: ${occurrence.vulnerabilities.length}`}
+          subText={`${occurrence.vulnerabilities.length} vulnerabilities found`}
         />
       ))}
     </div>

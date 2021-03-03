@@ -35,7 +35,7 @@ const BuildOccurrenceSection = ({ occurrences }) => {
       {occurrences.mapped.map((occurrence) => (
         <OccurrencePreview
           key={occurrence.name}
-          occurrence={occurrence}
+          occurrences={occurrences}
           mainText={`Produced ${occurrence.artifacts.length} Artifact${occurrence.artifacts.length > 1 ? "s" : ''} `}
           timestamp={occurrence.completed}
           subText={<>

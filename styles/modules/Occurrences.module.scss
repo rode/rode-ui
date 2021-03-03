@@ -18,20 +18,42 @@
 
 $INDENTATION: 1rem;
 
+.layout {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+
+  > div {
+    flex: 1;
+  }
+}
 .container {
+  flex: 1;
   display: flex;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1rem;
-  margin: 0.5rem auto;
+  margin: 0.25rem auto;
   border: none;
-  box-shadow: $BOX_SHADOW;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 
   &:hover {
     cursor: pointer;
   }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.active {
+  border-left: solid 8px $DEEP_SEA;
+  box-shadow: $BOX_SHADOW;
 }
 
 .previewDetails {
@@ -45,14 +67,14 @@ $INDENTATION: 1rem;
   margin-bottom: 0.25rem;
 }
 
-.previewTimestamp {
-  @extend .previewSubText;
-  color: $MEDIUM_GREY;
-}
-
 .previewSubText {
   font-size: 0.85rem;
   text-indent: 1rem;
+  line-height: 1.5rem;
+}
+
+.previewTimestamp {
+  @extend .previewSubText;
 }
 
 .previewLinks {
@@ -69,6 +91,9 @@ $INDENTATION: 1rem;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  margin-left: 1rem;
+  font-weight: 600;
+  font-size: 1.5rem;
   color: $MEDIUM_GREY;
 }
 
@@ -89,35 +114,23 @@ $INDENTATION: 1rem;
   padding: 1rem;
 }
 
-.discovery {
-  margin-top: 0.5rem;
-  margin-left: $INDENTATION;
-}
-
-.vulnerability {
-  margin-top: 0.5rem;
-  margin-left: $INDENTATION;
-
-  a {
-    display: inline;
-    margin: 0 0.25rem;
-  }
-}
-
-.createdAt {
-  color: $MEDIUM_GREY;
-  margin-left: $INDENTATION;
-}
-
-.kind {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
 .darkTheme {
-  &.container {
+  .container {
     background-color: $DARK_GREY;
     color: $SOFT_WHITE;
+    border-bottom-color: $DARKER_GREY;
+
+    svg {
+      color: $LAGOON;
+    }
+  }
+
+  .previewTimestamp {
+    color: $SILVER;
+  }
+
+  .previewLinks {
+    color: $LAGOON;
   }
 
   .codeBlock {
@@ -127,12 +140,21 @@ $INDENTATION: 1rem;
 }
 
 .lightTheme {
-  &.container {
+  .container {
     background-color: $WHITE;
+    border-bottom-color: $WHITE_SMOKE;
+
+    svg {
+      color: $DEEP_SEA;
+    }
+  }
+
+  .previewTimestamp {
+    color: $MEDIUM_GREY;
   }
 
   .codeBlock {
-    background-color: $WHITE_SMOKE;
+    background-color: $WHITE;
     color: $DARK_GREY;
   }
 }

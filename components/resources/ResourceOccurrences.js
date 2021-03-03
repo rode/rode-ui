@@ -21,26 +21,38 @@ import { useFetch } from "hooks/useFetch";
 import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
 import DeployOccurrenceSection from "components/occurrences/DeployOccurrenceSection";
+import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
+import styles from "styles/modules/Occurrences.module.scss";
+import { useResources } from "providers/resources";
+import { useTheme } from "providers/theme";
 
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
+  const { state } = useResources();
+  const { theme } = useTheme();
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
-  
-  console.log('data', data);
+
   return (
-    <>
+    <div className={`${styles.layout} ${styles[theme]}`}>
       <Loading loading={loading} />
       {data && (
         <>
-          <BuildOccurrenceSection occurrences={data.build}/>
-          <SecureOccurrenceSection occurrences={data.secure}/>
-          <DeployOccurrenceSection occurrences={data.deploy}/>
+          <div>
+            <BuildOccurrenceSection occurrences={data.build} />
+            <SecureOccurrenceSection occurrences={data.secure} />
+            <DeployOccurrenceSection occurrences={data.deploy} />
+          </div>
+          {state.occurrenceDetails && (
+            <div>
+              <OccurrenceDetails />
+            </div>
+          )}
         </>
       )}
-    </>
+    </div>
   );
 };
 

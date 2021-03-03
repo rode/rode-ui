@@ -14,38 +14,46 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import styles from "styles/modules/Occurrences.module.scss";
-import { useTheme } from "providers/theme";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
-const OccurrencePreview = ({ mainText, timestamp, subText, occurrence }) => {
-  const { theme } = useTheme();
+const OccurrencePreview = ({ mainText, timestamp, subText, occurrences }) => {
+  const [isActive, setIsActive] = useState(false);
+  const { state, dispatch } = useResources();
+
+  useEffect(() => {
+      setIsActive(state.occurrenceDetails?.original[0].name === occurrences?.original[0].name);
+  }, [state.occurrenceDetails]);
 
   const onClick = () => {
-    console.log("occurrence clicked", occurrence);
+    dispatch({
+      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      data: occurrences
+    });
   };
 
   return (
-    <button
-      className={`${styles.container} ${styles[theme]}`}
-      onClick={onClick}
-    >
+    <button className={`${styles.container} ${isActive ? styles.active : ''}`} onClick={onClick}>
       <div className={styles.previewDetails}>
         <p className={styles.previewMainText}>{mainText}</p>
-        <p className={styles.previewTimestamp}>{`Completed at ${dayjs(timestamp).format("h:mm:ssa | MM-DD-YYYY")}`}</p>
+        <p className={styles.previewTimestamp}>{`Completed at ${dayjs(
+          timestamp
+        ).format("h:mm:ssa | MM-DD-YYYY")}`}</p>
         <p className={styles.previewSubText}>{subText}</p>
       </div>
-      <Icon name={ICON_NAMES.CHEVRON_RIGHT}/>
+      <Icon name={isActive ? ICON_NAMES.CHEVRON_DOUBLE_RIGHT : ICON_NAMES.CHEVRON_RIGHT} />
     </button>
   );
 };
 
 OccurrencePreview.propTypes = {
-  occurrence: PropTypes.object.isRequired,
+  occurrences: PropTypes.object.isRequired,
   mainText: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
   subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

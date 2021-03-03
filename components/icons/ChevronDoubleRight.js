@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-import styles from "styles/modules/Occurrences.module.scss";
-import PropTypes from "prop-types";
 import React from "react";
 
-const DiscoveryOccurrencePreview = ({ occurrence }) => {
+const ChevronDoubleRight = () => {
   return (
-    <div className={styles.discovery}>
-      <p>Analysis Status: {occurrence.discovered.discovered.analysisStatus}</p>
-    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <title>Chevron Double Right</title>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+    </svg>
   );
 };
-DiscoveryOccurrencePreview.propTypes = {
-  occurrence: PropTypes.object.isRequired,
-};
 
-export default DiscoveryOccurrencePreview;
+export default ChevronDoubleRight;
