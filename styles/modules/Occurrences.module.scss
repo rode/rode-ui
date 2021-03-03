@@ -20,6 +20,7 @@ $INDENTATION: 1rem;
 
 .layout {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -27,6 +28,7 @@ $INDENTATION: 1rem;
 
   > div {
     flex: 1;
+    height: 100%;
   }
 }
 .container {
@@ -52,7 +54,8 @@ $INDENTATION: 1rem;
 }
 
 .active {
-  border-left: solid 8px $DEEP_SEA;
+  border-left-width: 8px;
+  border-left-style: solid;
   box-shadow: $BOX_SHADOW;
 }
 
@@ -97,6 +100,10 @@ $INDENTATION: 1rem;
   color: $MEDIUM_GREY;
 }
 
+.detailContainer {
+  height: 100%;
+}
+
 .codeBlockContainer {
   padding: 0 1rem 1rem;
   display: flex;
@@ -125,12 +132,21 @@ $INDENTATION: 1rem;
     }
   }
 
+  .active {
+    border-left-color: $LAGOON;
+    background-color: $DARKEST_GREY;
+  }
+
   .previewTimestamp {
     color: $SILVER;
   }
 
   .previewLinks {
     color: $LAGOON;
+  }
+
+  .detailContainer {
+    background-color: $DARKEST_GREY;
   }
 
   .codeBlock {
@@ -147,6 +163,15 @@ $INDENTATION: 1rem;
     svg {
       color: $DEEP_SEA;
     }
+  }
+
+  .active {
+    border-left-color: $DEEP_SEA;
+    background-color: $WHITE_SMOKE;
+  }
+
+  .detailContainer {
+    background-color: $WHITE_SMOKE;
   }
 
   .previewTimestamp {

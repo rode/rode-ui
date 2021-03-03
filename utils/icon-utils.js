@@ -43,7 +43,7 @@ export const ICON_COMPONENTS = {
   [SHIELD_CHECK]: ShieldCheck,
   [SERVER]: Server,
   [CHEVRON_RIGHT]: ChevronRight,
-  [CHEVRON_DOUBLE_RIGHT]: ChevronDoubleRight
+  [CHEVRON_DOUBLE_RIGHT]: ChevronDoubleRight,
 };
 
 export const ICON_NAMES = {

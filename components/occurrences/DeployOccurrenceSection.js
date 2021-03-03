@@ -21,10 +21,9 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-
 const DeployOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.mapped?.length) {
-    return null
+    return null;
   }
   return (
     <div className={styles.sectionContainer}>
@@ -32,17 +31,15 @@ const DeployOccurrenceSection = ({ occurrences }) => {
         <Icon name={ICON_NAMES.SERVER} />
         <p>Deploy</p>
       </div>
-      {
-        occurrences.mapped.map((occurrence) => (
-          <OccurrencePreview
-            key={occurrence.name}
-            occurrences={occurrences}
-            mainText={"Deployment Occurrence"}
-            timestamp={"some timestamp"}
-            subText={"2 environment"}
-          />
-        ))
-      }
+      {occurrences.mapped.map((occurrence) => (
+        <OccurrencePreview
+          key={occurrence.name}
+          occurrences={occurrences}
+          mainText={"Deployment Occurrence"}
+          timestamp={"some timestamp"}
+          subText={"2 environment"}
+        />
+      ))}
     </div>
   );
 };

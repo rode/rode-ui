@@ -14,32 +14,52 @@
  * limitations under the License.
  */
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
 
 const mapVulnerabilities = (occurrences) => {
-  const discoveryOccurrences = occurrences.filter((occurrence) => occurrence.kind === "DISCOVERY");
-  const vulnerabilityOccurrences = occurrences.filter((occurrence) => occurrence.kind === "VULNERABILITY");
+  const discoveryOccurrences = occurrences.filter(
+    (occurrence) => occurrence.kind === "DISCOVERY"
+  );
+  const vulnerabilityOccurrences = occurrences.filter(
+    (occurrence) => occurrence.kind === "VULNERABILITY"
+  );
 
-  const scanStarts = discoveryOccurrences.filter((occurrence) => occurrence.discovered.discovered.analysisStatus === "SCANNING");
-  const completedScans = discoveryOccurrences.filter((occurrence) => occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS");
+  const scanStarts = discoveryOccurrences.filter(
+    (occurrence) =>
+      occurrence.discovered.discovered.analysisStatus === "SCANNING"
+  );
+  const completedScans = discoveryOccurrences.filter(
+    (occurrence) =>
+      occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS"
+  );
 
   return scanStarts.map((scan) => {
     const startTime = dayjs(scan.createTime);
     // get all scans that end after the start time
-    const possibleScanEnds = completedScans.filter((occurrence) => dayjs(occurrence.createTime).isSameOrAfter(startTime));
+    const possibleScanEnds = completedScans.filter((occurrence) =>
+      dayjs(occurrence.createTime).isSameOrAfter(startTime)
+    );
     // pick the scan that ended closest to the start time
-    const scanEndTimes = possibleScanEnds.map((scan) => dayjs(scan.createTime).valueOf());
+    const scanEndTimes = possibleScanEnds.map((scan) =>
+      dayjs(scan.createTime).valueOf()
+    );
     const closestEndTime = Math.min(...scanEndTimes);
-    const matchingScanEndOccurrence = possibleScanEnds.find((scan) => dayjs(scan.createTime).valueOf() === closestEndTime);
+    const matchingScanEndOccurrence = possibleScanEnds.find(
+      (scan) => dayjs(scan.createTime).valueOf() === closestEndTime
+    );
 
     return {
       name: scan.name,
       started: startTime,
       completed: matchingScanEndOccurrence.createTime,
-      vulnerabilities: vulnerabilityOccurrences.filter((vuln) => vuln.kind === "VULNERABILITY" && vuln.createTime === matchingScanEndOccurrence.createTime)
-    }
+      vulnerabilities: vulnerabilityOccurrences.filter(
+        (vuln) =>
+          vuln.kind === "VULNERABILITY" &&
+          vuln.createTime === matchingScanEndOccurrence.createTime
+      ),
+    };
   });
 };
 
@@ -54,12 +74,12 @@ const mapBuilds = (occurrences) => {
       sourceUri: `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`,
       logsUri: occ.build.provenance.logsUri,
     };
-  })
-}
+  });
+};
 
 const mapDeployments = (occurrences) => {
-  return occurrences
-}
+  return occurrences;
+};
 
 export const mapOccurrencesToSections = (occurrences) => {
   let buildOccurrences = [];
@@ -68,7 +88,7 @@ export const mapOccurrencesToSections = (occurrences) => {
   let attestationOccurrences = [];
 
   occurrences.forEach((occurrence) => {
-    switch(occurrence.kind) {
+    switch (occurrence.kind) {
       case "BUILD": {
         buildOccurrences.push(occurrence);
         break;
@@ -79,7 +99,7 @@ export const mapOccurrencesToSections = (occurrences) => {
       }
       case "VULNERABILITY": {
         vulnerabilityOccurrences.push(occurrence);
-        break
+        break;
       }
       case "DEPLOYMENT": {
         deploymentOccurrences.push(occurrence);
@@ -95,16 +115,16 @@ export const mapOccurrencesToSections = (occurrences) => {
   return {
     build: {
       original: buildOccurrences,
-      mapped: mapBuilds(buildOccurrences)
+      mapped: mapBuilds(buildOccurrences),
     },
     secure: {
       original: vulnerabilityOccurrences,
-      mapped: mapVulnerabilities(vulnerabilityOccurrences)
+      mapped: mapVulnerabilities(vulnerabilityOccurrences),
     },
     deploy: {
       original: deploymentOccurrences,
-      mapped: mapDeployments(deploymentOccurrences)
+      mapped: mapDeployments(deploymentOccurrences),
     },
-    attestation: attestationOccurrences
+    attestation: attestationOccurrences,
   };
-}
+};

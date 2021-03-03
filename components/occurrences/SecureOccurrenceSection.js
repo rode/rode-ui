@@ -23,7 +23,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.mapped?.length) {
-    return null
+    return null;
   }
 
   return (

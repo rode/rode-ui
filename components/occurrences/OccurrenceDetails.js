@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { useResources } from "../../providers/resources";
 import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
+import styles from "styles/modules/Occurrences.module.scss";
 
-const OccurrenceDetails = () => {
-  const {state} = useResources();
-
-  const {occurrenceDetails} = state;
-
-  console.log('occurrenceDetails', occurrenceDetails);
-
+const OccurrenceDetails = ({ occurrences }) => {
   return (
-    <div>
+    <div className={styles.detailContainer}>
       <p>Occurrence Details go here</p>
-      <OccurrenceCodeBlock occurrence={occurrenceDetails?.original}/>
+      <OccurrenceCodeBlock occurrence={occurrences.original} />
     </div>
-  )
+  );
 };
 
-OccurrenceDetails.propTypes = {};
+OccurrenceDetails.propTypes = {
+  occurrences: PropTypes.object.isRequired,
+};
 
 export default OccurrenceDetails;

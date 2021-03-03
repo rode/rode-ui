@@ -61,4 +61,16 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/server/i)).toBeInTheDocument();
   });
+
+  it("should render the chevron icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CHEVRON_RIGHT} />);
+
+    expect(screen.getByTitle(/chevron/i)).toBeInTheDocument();
+  });
+
+  it("should render the double chevron icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CHEVRON_DOUBLE_RIGHT} />);
+
+    expect(screen.getByTitle(/chevron double/i)).toBeInTheDocument();
+  });
 });

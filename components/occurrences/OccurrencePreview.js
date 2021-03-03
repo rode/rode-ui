@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import styles from "styles/modules/Occurrences.module.scss";
@@ -28,18 +28,24 @@ const OccurrencePreview = ({ mainText, timestamp, subText, occurrences }) => {
   const { state, dispatch } = useResources();
 
   useEffect(() => {
-      setIsActive(state.occurrenceDetails?.original[0].name === occurrences?.original[0].name);
+    setIsActive(
+      state.occurrenceDetails?.original[0].name ===
+        occurrences?.original[0].name
+    );
   }, [state.occurrenceDetails]);
 
   const onClick = () => {
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,
-      data: occurrences
+      data: occurrences,
     });
   };
 
   return (
-    <button className={`${styles.container} ${isActive ? styles.active : ''}`} onClick={onClick}>
+    <button
+      className={`${styles.container} ${isActive ? styles.active : ""}`}
+      onClick={onClick}
+    >
       <div className={styles.previewDetails}>
         <p className={styles.previewMainText}>{mainText}</p>
         <p className={styles.previewTimestamp}>{`Completed at ${dayjs(
@@ -47,7 +53,11 @@ const OccurrencePreview = ({ mainText, timestamp, subText, occurrences }) => {
         ).format("h:mm:ssa | MM-DD-YYYY")}`}</p>
         <p className={styles.previewSubText}>{subText}</p>
       </div>
-      <Icon name={isActive ? ICON_NAMES.CHEVRON_DOUBLE_RIGHT : ICON_NAMES.CHEVRON_RIGHT} />
+      <Icon
+        name={
+          isActive ? ICON_NAMES.CHEVRON_DOUBLE_RIGHT : ICON_NAMES.CHEVRON_RIGHT
+        }
+      />
     </button>
   );
 };

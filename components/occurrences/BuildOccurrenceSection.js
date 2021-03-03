@@ -36,12 +36,20 @@ const BuildOccurrenceSection = ({ occurrences }) => {
         <OccurrencePreview
           key={occurrence.name}
           occurrences={occurrences}
-          mainText={`Produced ${occurrence.artifacts.length} Artifact${occurrence.artifacts.length > 1 ? "s" : ''} `}
+          mainText={`Produced ${occurrence.artifacts.length} Artifact${
+            occurrence.artifacts.length > 1 ? "s" : ""
+          } `}
           timestamp={occurrence.completed}
-          subText={<>
-            <a href={occurrence.sourceUri} className={styles.previewLinks}>View source</a>
-            <a href={occurrence.logsUri} className={styles.previewLinks}>View logs</a>
-          </>}
+          subText={
+            <>
+              <a href={occurrence.sourceUri} className={styles.previewLinks}>
+                View source
+              </a>
+              <a href={occurrence.logsUri} className={styles.previewLinks}>
+                View logs
+              </a>
+            </>
+          }
         />
       ))}
     </div>

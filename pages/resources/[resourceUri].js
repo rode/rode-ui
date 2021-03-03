@@ -26,7 +26,7 @@ import { resourceActions } from "reducers/resources";
 
 const Resource = () => {
   const { theme } = useTheme();
-  const {dispatch} = useResources();
+  const { dispatch } = useResources();
   const router = useRouter();
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
@@ -36,7 +36,7 @@ const Resource = () => {
   useEffect(() => {
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,
-      data: null
+      data: null,
     });
   }, []);
 
