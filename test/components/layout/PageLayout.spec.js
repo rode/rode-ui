@@ -34,4 +34,8 @@ describe("PageLayout", () => {
   it("should render any children components", () => {
     expect(screen.getByText(children)).toBeInTheDocument();
   });
+
+  it("should render the footer", () => {
+    expect(screen.getByTitle(/liatrio logo/i)).toBeInTheDocument();
+  });
 });

@@ -15,28 +15,19 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
-import { ICON_COMPONENTS, ICON_NAMES } from "utils/icon-utils";
-import styles from "styles/modules/Icons.module.scss";
-import { useTheme } from "providers/theme";
+import { render, screen } from "@testing-library/react";
+import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import Liatrio from "components/icons/Liatrio";
 
-const Icon = (props) => {
-  const { name, size = "medium" } = props;
+describe("Liatrio", () => {
+  it("should render the dark theme svg when specified", () => {
+    render(<Liatrio theme={DARK_THEME} />);
 
-  const { theme } = useTheme();
+    expect(screen.getByTestId("darkThemeLiatrioLogo")).toBeInTheDocument();
+  });
+  it("should render the light theme svg when specified", () => {
+    render(<Liatrio theme={LIGHT_THEME} />);
 
-  const IconComponent = ICON_COMPONENTS[name];
-
-  return (
-    <div className={styles[size]}>
-      <IconComponent theme={theme} />
-    </div>
-  );
-};
-
-Icon.propTypes = {
-  name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
-  size: PropTypes.oneOf(["small", "medium", "large", "xlarge"]),
-};
-
-export default Icon;
+    expect(screen.getByTestId("lightThemeLiatrioLogo")).toBeInTheDocument();
+  });
+});

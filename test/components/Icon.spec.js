@@ -25,4 +25,22 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/search/i)).toBeInTheDocument();
   });
+
+  it("should render the github icon when specified", () => {
+    render(<Icon name={ICON_NAMES.GITHUB} />);
+
+    expect(screen.getByTitle(/github/i)).toBeInTheDocument();
+  });
+
+  it("should render the twitter icon when specified", () => {
+    render(<Icon name={ICON_NAMES.TWITTER} />);
+
+    expect(screen.getByTitle(/twitter/i)).toBeInTheDocument();
+  });
+
+  it("should render the liatrio icon when specified", () => {
+    render(<Icon name={ICON_NAMES.LIATRIO} />);
+
+    expect(screen.getByTitle(/liatrio/i)).toBeInTheDocument();
+  });
 });
