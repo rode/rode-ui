@@ -22,11 +22,10 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
-  console.log('occurrences', occurrences);
-
-  if (!occurrences?.original?.length) {
+  if (!occurrences?.mapped?.length) {
     return null
   }
+
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
@@ -46,7 +45,7 @@ const SecureOccurrenceSection = ({ occurrences }) => {
   );
 };
 SecureOccurrenceSection.propTypes = {
-  occurrences: PropTypes.array,
+  occurrences: PropTypes.object,
 };
 
 export default SecureOccurrenceSection;

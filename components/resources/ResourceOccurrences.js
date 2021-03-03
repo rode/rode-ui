@@ -45,7 +45,7 @@ const ResourceOccurrences = (props) => {
 };
 
 ResourceOccurrences.propTypes = {
-  resourceUri: PropTypes.string.isRequired,
+  resourceUri: PropTypes.string,
 };
 
 export default ResourceOccurrences;

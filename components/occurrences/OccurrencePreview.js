@@ -16,21 +16,30 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import dayjs from "dayjs";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useTheme } from "providers/theme";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const OccurrencePreview = ({ mainText, timestamp, subText, occurrence }) => {
   const { theme } = useTheme();
 
   const onClick = () => {
-    console.log('occurrence clicked', occurrence);
-  }
+    console.log("occurrence clicked", occurrence);
+  };
 
   return (
-    <button className={`${styles.container} ${styles[theme]}`} onClick={onClick}>
-      <p>{mainText}</p>
-      <p>{timestamp}</p>
-      <p>{subText}</p>
+    <button
+      className={`${styles.container} ${styles[theme]}`}
+      onClick={onClick}
+    >
+      <div className={styles.previewDetails}>
+        <p className={styles.previewMainText}>{mainText}</p>
+        <p className={styles.previewTimestamp}>{`Completed at ${dayjs(timestamp).format("h:mm:ssa | MM-DD-YYYY")}`}</p>
+        <p className={styles.previewSubText}>{subText}</p>
+      </div>
+      <Icon name={ICON_NAMES.CHEVRON_RIGHT}/>
     </button>
   );
 };
@@ -39,7 +48,7 @@ OccurrencePreview.propTypes = {
   occurrence: PropTypes.object.isRequired,
   mainText: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
-  subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 export default OccurrencePreview;

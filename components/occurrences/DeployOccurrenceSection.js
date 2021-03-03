@@ -23,7 +23,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 
 
 const DeployOccurrenceSection = ({ occurrences }) => {
-  if (!occurrences?.original?.length) {
+  if (!occurrences?.mapped?.length) {
     return null
   }
   return (
@@ -47,7 +47,7 @@ const DeployOccurrenceSection = ({ occurrences }) => {
   );
 };
 DeployOccurrenceSection.propTypes = {
-  occurrences: PropTypes.array,
+  occurrences: PropTypes.object,
 };
 
 export default DeployOccurrenceSection;

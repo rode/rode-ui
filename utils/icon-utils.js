@@ -18,6 +18,7 @@ import Search from "components/icons/Search";
 import Cog from "components/icons/Cog";
 import ShieldCheck from "components/icons/ShieldCheck";
 import Server from "components/icons/Server";
+import ChevronRight from "components/icons/ChevronRight";
 import Liatrio from "components/icons/Liatrio";
 import Github from "components/icons/Github";
 import Twitter from "components/icons/Twitter";
@@ -26,6 +27,7 @@ const SEARCH = "Search";
 const COG = "Cog";
 const SHIELD_CHECK = "ShieldCheck";
 const SERVER = "Server";
+const CHEVRON_RIGHT = "ChevronRight";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -37,7 +39,8 @@ export const ICON_COMPONENTS = {
   [TWITTER]: Twitter,
   [COG]: Cog,
   [SHIELD_CHECK]: ShieldCheck,
-  [SERVER]: Server
+  [SERVER]: Server,
+  [CHEVRON_RIGHT]: ChevronRight
 };
 
 export const ICON_NAMES = {
@@ -45,6 +48,7 @@ export const ICON_NAMES = {
   COG,
   SHIELD_CHECK,
   SERVER,
+  CHEVRON_RIGHT,
   LIATRIO,
   GITHUB,
   TWITTER,

@@ -21,11 +21,42 @@ $INDENTATION: 1rem;
 .container {
   display: flex;
   width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem 2rem 1rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1rem;
   margin: 0.5rem auto;
+  border: none;
   box-shadow: $BOX_SHADOW;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.previewDetails {
+  flex: 1;
+  text-align: left;
+  margin-left: 2rem;
+}
+
+.previewMainText {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.previewTimestamp {
+  @extend .previewSubText;
+  color: $MEDIUM_GREY;
+}
+
+.previewSubText {
+  font-size: 0.85rem;
+  text-indent: 1rem;
+}
+
+.previewLinks {
+  margin: 0 1rem;
 }
 
 .sectionContainer {

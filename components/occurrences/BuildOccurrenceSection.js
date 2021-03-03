@@ -22,7 +22,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 
 const BuildOccurrenceSection = ({ occurrences }) => {
-  if (!occurrences?.original?.length) {
+  if (!occurrences?.mapped?.length) {
     return null;
   }
 
@@ -36,16 +36,19 @@ const BuildOccurrenceSection = ({ occurrences }) => {
         <OccurrencePreview
           key={occurrence.name}
           occurrence={occurrence}
-          mainText={"Build Occurrence"}
-          timestamp={"some timestamp"}
-          subText={<><a href={"www.google.com"}>A link</a><a href={"www.google.com"}>Another link</a></>}
+          mainText={`Produced ${occurrence.artifacts.length} Artifact${occurrence.artifacts.length > 1 ? "s" : ''} `}
+          timestamp={occurrence.completed}
+          subText={<>
+            <a href={occurrence.sourceUri} className={styles.previewLinks}>View source</a>
+            <a href={occurrence.logsUri} className={styles.previewLinks}>View logs</a>
+          </>}
         />
       ))}
     </div>
   );
 };
 BuildOccurrenceSection.propTypes = {
-  occurrences: PropTypes.array,
+  occurrences: PropTypes.object,
 };
 
 export default BuildOccurrenceSection;

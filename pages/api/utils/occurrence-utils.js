@@ -35,15 +35,26 @@ const mapVulnerabilities = (occurrences) => {
     const matchingScanEndOccurrence = possibleScanEnds.find((scan) => dayjs(scan.createTime).valueOf() === closestEndTime);
 
     return {
+      name: scan.name,
       started: startTime,
       completed: matchingScanEndOccurrence.createTime,
       vulnerabilities: vulnerabilityOccurrences.filter((vuln) => vuln.kind === "VULNERABILITY" && vuln.createTime === matchingScanEndOccurrence.createTime)
     }
-  })
+  });
 };
 
 const mapBuilds = (occurrences) => {
-  return occurrences
+  return occurrences.map((occ) => {
+    return {
+      name: occ.name,
+      started: occ.build.provenance.startTime,
+      completed: occ.build.provenance.endTime,
+      creator: occ.build.provenance.creator,
+      artifacts: occ.build.provenance.builtArtifacts,
+      sourceUri: `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`,
+      logsUri: occ.build.provenance.logsUri,
+    };
+  })
 }
 
 const mapDeployments = (occurrences) => {
