@@ -11,9 +11,9 @@ describe("OccurrenceDetails", () => {
   });
 
   it("should render the occurrence code block button on any occurrence type", () => {
-    const randomOccurrence = chance.pickone(Object.keys(mappedOccurrences));
+    const randomOccurrenceType = chance.pickone(['build', 'secure', 'deploy']);
     render(
-      <OccurrenceDetails occurrence={mappedOccurrences[randomOccurrence][0]} />
+      <OccurrenceDetails occurrence={mappedOccurrences[randomOccurrenceType][0]} />
     );
 
     expect(screen.getByText(/show json/i)).toBeInTheDocument();

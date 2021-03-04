@@ -22,6 +22,7 @@ import BuildOccurrenceDetails from "./BuildOccurrenceDetails";
 import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
 import DeploymentOccurrenceDetails from "./DeploymentOccurrenceDetails";
 
+// TODO: style each of the detail components
 const detailComponentMap = {
   BUILD: BuildOccurrenceDetails,
   VULNERABILITY: VulnerabilityOccurrenceDetails,
