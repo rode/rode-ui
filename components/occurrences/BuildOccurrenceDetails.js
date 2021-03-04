@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const BuildOccurrenceDetails = ({occurrences}) => {
+const BuildOccurrenceDetails = ({occurrence}) => {
   return (
     <div>
       <p>Build</p>
-      <a href={occurrences.sourceUri}>View Source</a>
-      <a href={occurrences.logsUri}>View Logs</a>
-      <p>Started {occurrences.started}</p>
-      <p>Completed {occurrences.completed}</p>
-      <p>Created by {occurrences.creator}</p>
+      <a href={occurrence.sourceUri}>View Source</a>
+      <a href={occurrence.logsUri}>View Logs</a>
+      <p>Started {occurrence.started}</p>
+      <p>Completed {occurrence.completed}</p>
+      <p>Created by {occurrence.creator}</p>
 
       {
-        occurrences.artifacts?.map((artifact) => (
+        occurrence.artifacts?.map((artifact) => (
           <div key={artifact.id}>
             <p>{artifact.names.join(',')}</p>
             <p>{artifact.id}</p>
@@ -26,7 +26,7 @@ const BuildOccurrenceDetails = ({occurrences}) => {
 
 
 BuildOccurrenceDetails.propTypes = {
-  occurrences: PropTypes.array.isRequired
+  occurrence: PropTypes.object.isRequired
 };
 
 export default BuildOccurrenceDetails;

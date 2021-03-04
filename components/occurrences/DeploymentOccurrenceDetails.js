@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const DeploymentOccurrenceSection = ({occurrences}) => {
-  console.log('deployment occurrence section occurrences', occurrences);
+const DeploymentOccurrenceSection = ({occurrence}) => {
+  console.log('deployment occurrence section occurrence', occurrence);
   return (
     <div>
       <p>Deployment</p>
@@ -12,7 +12,7 @@ const DeploymentOccurrenceSection = ({occurrences}) => {
 
 
 DeploymentOccurrenceSection.propTypes = {
-  occurrences: PropTypes.array.isRequired
+  occurrence: PropTypes.object.isRequired
 };
 
 export default DeploymentOccurrenceSection;

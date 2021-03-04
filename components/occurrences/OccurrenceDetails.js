@@ -13,19 +13,19 @@ const detailComponentMap = {
   "DEPLOYMENT": DeploymentOccurrenceDetails
 };
 
-const OccurrenceDetails = ({ occurrences }) => {
-  const DetailComponent = detailComponentMap[occurrences.originals[0].kind];
+const OccurrenceDetails = ({ occurrence }) => {
+  const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
 
   return (
     <div className={styles.detailContainer}>
-      <DetailComponent occurrences={occurrences}/>
-      <OccurrenceCodeBlock occurrence={occurrences} />
+      <DetailComponent occurrence={occurrence}/>
+      <OccurrenceCodeBlock occurrence={occurrence} />
     </div>
   );
 };
 
 OccurrenceDetails.propTypes = {
-  occurrences: PropTypes.object.isRequired,
+  occurrence: PropTypes.object.isRequired,
 };
 
 export default OccurrenceDetails;
