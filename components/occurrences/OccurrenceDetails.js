@@ -4,22 +4,22 @@ import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
 import styles from "styles/modules/Occurrences.module.scss";
 import BuildOccurrenceDetails from "./BuildOccurrenceDetails";
 import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
+import DeploymentOccurrenceDetails from "./DeploymentOccurrenceDetails";
 
 const detailComponentMap = {
   "BUILD": BuildOccurrenceDetails,
   "VULNERABILITY": VulnerabilityOccurrenceDetails,
   "DISCOVERY": VulnerabilityOccurrenceDetails,
-  "DEPLOYMENT": ""
+  "DEPLOYMENT": DeploymentOccurrenceDetails
 };
 
 const OccurrenceDetails = ({ occurrences }) => {
-  const DetailComponent = detailComponentMap[occurrences.original[0].kind];
-
+  const DetailComponent = detailComponentMap[occurrences.originals[0].kind];
 
   return (
     <div className={styles.detailContainer}>
-      <DetailComponent occurrences={occurrences.mapped}/>
-      <OccurrenceCodeBlock occurrence={occurrences.original} />
+      <DetailComponent occurrences={occurrences}/>
+      <OccurrenceCodeBlock occurrence={occurrences} />
     </div>
   );
 };

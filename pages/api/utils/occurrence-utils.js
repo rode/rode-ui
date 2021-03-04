@@ -50,15 +50,22 @@ const mapVulnerabilities = (occurrences) => {
       (scan) => dayjs(scan.createTime).valueOf() === closestEndTime
     );
 
+    const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
+      (vuln) =>
+        vuln.kind === "VULNERABILITY" &&
+        vuln.createTime === matchingScanEndOccurrence.createTime
+    );
+
     return {
       name: scan.name,
       started: startTime,
       completed: matchingScanEndOccurrence.createTime,
-      vulnerabilities: vulnerabilityOccurrences.filter(
-        (vuln) =>
-          vuln.kind === "VULNERABILITY" &&
-          vuln.createTime === matchingScanEndOccurrence.createTime
-      ),
+      vulnerabilities: matchingVulnerabilityOccurrences,
+      originals: [
+        scan,
+        matchingScanEndOccurrence,
+        ...matchingVulnerabilityOccurrences
+      ]
     };
   });
 };
@@ -73,12 +80,18 @@ const mapBuilds = (occurrences) => {
       artifacts: occ.build.provenance.builtArtifacts,
       sourceUri: `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`,
       logsUri: occ.build.provenance.logsUri,
+      originals: [occ]
     };
   });
 };
 
 const mapDeployments = (occurrences) => {
-  return occurrences;
+  return occurrences.map((occ) => {
+    return {
+      ...occ,
+      originals: [occ]
+    }
+  });
 };
 
 export const mapOccurrencesToSections = (occurrences) => {
@@ -113,18 +126,25 @@ export const mapOccurrencesToSections = (occurrences) => {
   });
 
   return {
-    build: {
-      original: buildOccurrences,
-      mapped: mapBuilds(buildOccurrences),
-    },
-    secure: {
-      original: vulnerabilityOccurrences,
-      mapped: mapVulnerabilities(vulnerabilityOccurrences),
-    },
-    deploy: {
-      original: deploymentOccurrences,
-      mapped: mapDeployments(deploymentOccurrences),
-    },
-    attestation: attestationOccurrences,
+    build: mapBuilds(buildOccurrences),
+    secure: mapVulnerabilities(vulnerabilityOccurrences),
+    deploy: mapDeployments(deploymentOccurrences),
+    attestation: attestationOccurrences
   };
+
+  // return {
+  //   build: {
+  //     original: buildOccurrences,
+  //     mapped: mapBuilds(buildOccurrences),
+  //   },
+  //   secure: {
+  //     original: vulnerabilityOccurrences,
+  //     mapped: mapVulnerabilities(vulnerabilityOccurrences),
+  //   },
+  //   deploy: {
+  //     original: deploymentOccurrences,
+  //     mapped: mapDeployments(deploymentOccurrences),
+  //   },
+  //   attestation: attestationOccurrences,
+  // };
 };

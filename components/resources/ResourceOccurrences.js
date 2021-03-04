@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import { useFetch } from "hooks/useFetch";
 import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
-import DeployOccurrenceSection from "components/occurrences/DeployOccurrenceSection";
+import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
 import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
@@ -43,7 +43,7 @@ const ResourceOccurrences = (props) => {
           <div>
             <BuildOccurrenceSection occurrences={data.build} />
             <SecureOccurrenceSection occurrences={data.secure} />
-            <DeployOccurrenceSection occurrences={data.deploy} />
+            <DeploymentOccurrenceSection occurrences={data.deploy} />
           </div>
           {state.occurrenceDetails && (
             <div>

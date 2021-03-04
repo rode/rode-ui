@@ -22,7 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
-  if (!occurrences?.mapped?.length) {
+  if (!occurrences?.length) {
     return null;
   }
 
@@ -32,11 +32,10 @@ const SecureOccurrenceSection = ({ occurrences }) => {
         <Icon name={ICON_NAMES.SHIELD_CHECK} />
         <p>Secure</p>
       </div>
-      {occurrences.mapped.map((occurrence) => (
+      {occurrences.map((occurrence) => (
         <OccurrencePreview
           key={occurrence.name}
           currentOccurrence={occurrence}
-          occurrences={occurrences}
           mainText={"Vulnerability Scan"}
           timestamp={occurrence.completed}
           subText={`${occurrence.vulnerabilities.length} vulnerabilities found`}

@@ -22,7 +22,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 
 const BuildOccurrenceSection = ({ occurrences }) => {
-  if (!occurrences?.mapped?.length) {
+  if (!occurrences?.length) {
     return null;
   }
 
@@ -32,17 +32,11 @@ const BuildOccurrenceSection = ({ occurrences }) => {
         <Icon name={ICON_NAMES.COG} />
         <p>Build</p>
       </div>
-      {occurrences.mapped.map((occurrence) => {
-        const unmappedOccurrence = occurrences.original.filter(({ name }) => name === occurrence.name);
-
+      {occurrences.map((occurrence) => {
         return (
           <OccurrencePreview
             key={occurrence.name}
             currentOccurrence={occurrence}
-            occurrences={{
-              mapped: [occurrence],
-              original: unmappedOccurrence
-            }}
             mainText={`Produced ${occurrence.artifacts.length} Artifact${
               occurrence.artifacts.length > 1 ? "s" : ""
             } `}

@@ -33,7 +33,7 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
       {showCode && (
         <div className={styles.codeBlock} data-testid="occurrenceJson">
           <pre>
-            <code>{JSON.stringify(occurrence, null, 2)}</code>
+            <code>{JSON.stringify(occurrence.originals, null, 2)}</code>
           </pre>
         </div>
       )}

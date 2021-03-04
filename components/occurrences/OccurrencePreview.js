@@ -23,20 +23,20 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 
-const OccurrencePreview = ({ mainText, timestamp, subText, occurrences, currentOccurrence }) => {
+const OccurrencePreview = ({ mainText, timestamp, subText, currentOccurrence }) => {
   const [isActive, setIsActive] = useState(false);
   const { state, dispatch } = useResources();
 
   useEffect(() => {
    setIsActive(
-      state.occurrenceDetails?.mapped[0].name === currentOccurrence.name
+      state.occurrenceDetails?.originals[0].name === currentOccurrence?.originals[0].name
     );
   }, [state.occurrenceDetails]);
 
   const onClick = () => {
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,
-      data: isActive ? null : occurrences,
+      data: isActive ? null : currentOccurrence,
     });
   };
 
@@ -63,7 +63,6 @@ const OccurrencePreview = ({ mainText, timestamp, subText, occurrences, currentO
 
 OccurrencePreview.propTypes = {
   currentOccurrence: PropTypes.object.isRequired,
-  occurrences: PropTypes.object.isRequired,
   mainText: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
   subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
