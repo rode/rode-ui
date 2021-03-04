@@ -64,8 +64,8 @@ const mapVulnerabilities = (occurrences) => {
       originals: [
         scan,
         matchingScanEndOccurrence,
-        ...matchingVulnerabilityOccurrences
-      ]
+        ...matchingVulnerabilityOccurrences,
+      ],
     };
   });
 };
@@ -80,7 +80,7 @@ const mapBuilds = (occurrences) => {
       artifacts: occ.build.provenance.builtArtifacts,
       sourceUri: `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`,
       logsUri: occ.build.provenance.logsUri,
-      originals: [occ]
+      originals: [occ],
     };
   });
 };
@@ -89,8 +89,8 @@ const mapDeployments = (occurrences) => {
   return occurrences.map((occ) => {
     return {
       ...occ,
-      originals: [occ]
-    }
+      originals: [occ],
+    };
   });
 };
 
@@ -129,7 +129,7 @@ export const mapOccurrencesToSections = (occurrences) => {
     build: mapBuilds(buildOccurrences),
     secure: mapVulnerabilities(vulnerabilityOccurrences),
     deploy: mapDeployments(deploymentOccurrences),
-    attestation: attestationOccurrences
+    attestation: attestationOccurrences,
   };
 
   // return {

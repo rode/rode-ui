@@ -7,10 +7,10 @@ import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
 import DeploymentOccurrenceDetails from "./DeploymentOccurrenceDetails";
 
 const detailComponentMap = {
-  "BUILD": BuildOccurrenceDetails,
-  "VULNERABILITY": VulnerabilityOccurrenceDetails,
-  "DISCOVERY": VulnerabilityOccurrenceDetails,
-  "DEPLOYMENT": DeploymentOccurrenceDetails
+  BUILD: BuildOccurrenceDetails,
+  VULNERABILITY: VulnerabilityOccurrenceDetails,
+  DISCOVERY: VulnerabilityOccurrenceDetails,
+  DEPLOYMENT: DeploymentOccurrenceDetails,
 };
 
 const OccurrenceDetails = ({ occurrence }) => {
@@ -18,7 +18,7 @@ const OccurrenceDetails = ({ occurrence }) => {
 
   return (
     <div className={styles.detailContainer}>
-      <DetailComponent occurrence={occurrence}/>
+      <DetailComponent occurrence={occurrence} />
       <OccurrenceCodeBlock occurrence={occurrence} />
     </div>
   );

@@ -44,7 +44,7 @@ const DeploymentOccurrenceSection = ({ occurrences }) => {
   );
 };
 DeploymentOccurrenceSection.propTypes = {
-  occurrences: PropTypes.object,
+  occurrences: PropTypes.array,
 };
 
 export default DeploymentOccurrenceSection;

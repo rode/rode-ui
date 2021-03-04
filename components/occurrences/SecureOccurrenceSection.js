@@ -45,7 +45,7 @@ const SecureOccurrenceSection = ({ occurrences }) => {
   );
 };
 SecureOccurrenceSection.propTypes = {
-  occurrences: PropTypes.object,
+  occurrences: PropTypes.array,
 };
 
 export default SecureOccurrenceSection;

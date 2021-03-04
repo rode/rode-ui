@@ -23,13 +23,19 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 
-const OccurrencePreview = ({ mainText, timestamp, subText, currentOccurrence }) => {
+const OccurrencePreview = ({
+  mainText,
+  timestamp,
+  subText,
+  currentOccurrence,
+}) => {
   const [isActive, setIsActive] = useState(false);
   const { state, dispatch } = useResources();
 
   useEffect(() => {
-   setIsActive(
-      state.occurrenceDetails?.originals[0].name === currentOccurrence?.originals[0].name
+    setIsActive(
+      state.occurrenceDetails?.originals[0].name ===
+        currentOccurrence?.originals[0].name
     );
   }, [state.occurrenceDetails]);
 

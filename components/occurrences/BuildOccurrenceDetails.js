@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const BuildOccurrenceDetails = ({occurrence}) => {
+const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
       <p>Build</p>
@@ -11,22 +11,19 @@ const BuildOccurrenceDetails = ({occurrence}) => {
       <p>Completed {occurrence.completed}</p>
       <p>Created by {occurrence.creator}</p>
 
-      {
-        occurrence.artifacts?.map((artifact) => (
-          <div key={artifact.id}>
-            <p>{artifact.names.join(',')}</p>
-            <p>{artifact.id}</p>
-            <p>{artifact.checksum}</p>
-          </div>
-        ))
-      }
+      {occurrence.artifacts?.map((artifact) => (
+        <div key={artifact.id}>
+          <p>{artifact.names.join(",")}</p>
+          <p>{artifact.id}</p>
+          <p>{artifact.checksum}</p>
+        </div>
+      ))}
     </div>
-  )
+  );
 };
 
-
 BuildOccurrenceDetails.propTypes = {
-  occurrence: PropTypes.object.isRequired
+  occurrence: PropTypes.object.isRequired,
 };
 
 export default BuildOccurrenceDetails;

@@ -19,14 +19,22 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMockOccurrence } from "test/testing-utils/mocks";
 import OccurrenceCodeBlock from "components/occurrences/OccurrenceCodeBlock";
+import { useResources } from "providers/resources";
+
+jest.mock("providers/resources");
 
 describe("OccurrenceCodeBlock", () => {
-  let occurrence;
+  let occurrence, rerender;
 
   beforeEach(() => {
     occurrence = createMockOccurrence();
 
-    render(<OccurrenceCodeBlock occurrence={occurrence} />);
+    useResources.mockReturnValue({
+      state: {},
+    });
+
+    const utils = render(<OccurrenceCodeBlock occurrence={occurrence} />);
+    rerender = utils.rerender;
   });
 
   it("should render the button to toggle the code block", () => {
@@ -38,6 +46,20 @@ describe("OccurrenceCodeBlock", () => {
     expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
 
     userEvent.click(screen.getByText(/hide json/i));
+    expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
+  });
+
+  it("should hide the code block when the selected occurrence changes", () => {
+    userEvent.click(screen.getByText(/show json/i));
+    expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
+
+    useResources.mockReturnValue({
+      state: {
+        occurrenceDetails: true,
+      },
+    });
+
+    rerender(<OccurrenceCodeBlock occurrence={occurrence} />);
     expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
   });
 });

@@ -58,7 +58,7 @@ const BuildOccurrenceSection = ({ occurrences }) => {
   );
 };
 BuildOccurrenceSection.propTypes = {
-  occurrences: PropTypes.object,
+  occurrences: PropTypes.array,
 };
 
 export default BuildOccurrenceSection;

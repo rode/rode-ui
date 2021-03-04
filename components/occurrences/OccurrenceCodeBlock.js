@@ -23,13 +23,13 @@ import { useResources } from "providers/resources";
 const OccurrenceCodeBlock = ({ occurrence }) => {
   const [showCode, setShowCode] = useState(false);
 
-  const {state} = useResources();
+  const { state } = useResources();
 
   useEffect(() => {
     if (state.occurrenceDetails) {
       setShowCode(false);
     }
-  }, [state.occurrenceDetails])
+  }, [state.occurrenceDetails]);
 
   const toggle = () => {
     setShowCode(!showCode);
