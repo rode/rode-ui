@@ -39,7 +39,10 @@ describe("/api/resources", () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    allOccurrences = chance.n(() => createMockOccurrence(chance.pickone(["DEPLOYMENT", "BUILD"])), chance.d4());
+    allOccurrences = chance.n(
+      () => createMockOccurrence(chance.pickone(["DEPLOYMENT", "BUILD"])),
+      chance.d4()
+    );
 
     rodeResponse = {
       ok: true,

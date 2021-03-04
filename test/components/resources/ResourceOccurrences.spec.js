@@ -68,9 +68,9 @@ describe("ResourceOccurrences", () => {
     beforeEach(() => {
       data = createMockMappedOccurrences();
       useFetch.mockReturnValue({
-        data
+        data,
       });
-      const utils = render(<ResourceOccurrences resourceUri={resourceUri}/> );
+      const utils = render(<ResourceOccurrences resourceUri={resourceUri} />);
       rerender = utils.rerender;
     });
 
@@ -86,18 +86,19 @@ describe("ResourceOccurrences", () => {
 
     it("should render the deployment occurrence section", () => {
       expect(screen.getByText("Deploy")).toBeInTheDocument();
-      expect(screen.getByTitle("Server")).toBeInTheDocument();});
+      expect(screen.getByTitle("Server")).toBeInTheDocument();
+    });
 
     it("should render the occurrence details if they should be shown", () => {
       expect(screen.queryByTestId("occurrenceDetails")).not.toBeInTheDocument();
 
       useResources.mockReturnValue({
         state: {
-          occurrenceDetails: data.build[0]
-        }
+          occurrenceDetails: data.build[0],
+        },
       });
 
-      rerender(<ResourceOccurrences resourceUri={resourceUri}/> );
+      rerender(<ResourceOccurrences resourceUri={resourceUri} />);
 
       expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
     });

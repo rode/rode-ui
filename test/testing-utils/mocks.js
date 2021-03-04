@@ -97,27 +97,24 @@ const createBuildDetails = () => ({
   },
 });
 const createDeploymentDetails = () => ({
-  "deployment": {
-    "deployment": {
-      "userEmail": chance.email(),
-      "deployTime": chance.timestamp(),
-      "undeployTime": chance.timestamp(),
-      "config": "config",
-      "address": "address",
-      "resourceUri": [
-        createMockResourceUri(),
-        createMockResourceUri()
-      ],
-      "platform": "CUSTOM"
-    }
-  }
+  deployment: {
+    deployment: {
+      userEmail: chance.email(),
+      deployTime: chance.timestamp(),
+      undeployTime: chance.timestamp(),
+      config: "config",
+      address: "address",
+      resourceUri: [createMockResourceUri(), createMockResourceUri()],
+      platform: "CUSTOM",
+    },
+  },
 });
 
 const mockDetailsMap = {
   DISCOVERY: createDiscoveryDetails,
   VULNERABILITY: createVulnerabilityDetails,
   BUILD: createBuildDetails,
-  DEPLOYMENT: createDeploymentDetails
+  DEPLOYMENT: createDeploymentDetails,
 };
 
 export const createMockOccurrence = (
@@ -167,15 +164,15 @@ const createMappedVulnerabilityOccurrence = () => {
       createMockOccurrence("DISCOVERY"),
       createMockOccurrence("DISCOVERY"),
       createMockOccurrence("VULNERABILITY"),
-    ]
+    ],
   };
 };
 
 const createMappedDeploymentOccurrence = () => {
   return {
     ...createDeploymentDetails(),
-    originals: [createMockOccurrence("DEPLOYMENT")]
-  }
+    originals: [createMockOccurrence("DEPLOYMENT")],
+  };
 };
 
 export const createMockMappedOccurrences = () => {

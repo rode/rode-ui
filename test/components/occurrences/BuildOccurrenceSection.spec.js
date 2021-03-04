@@ -24,15 +24,15 @@ describe("BuildOccurrenceSection", () => {
 
   it("should return null if there are no relevant occurrences", () => {
     occurrences = [];
-    render(<BuildOccurrenceSection occurrences={occurrences}/> );
+    render(<BuildOccurrenceSection occurrences={occurrences} />);
 
     expect(screen.queryByText(/build/i)).not.toBeInTheDocument();
   });
   describe("build occurrences exist", () => {
     beforeEach(() => {
-      const {build} = createMockMappedOccurrences();
+      const { build } = createMockMappedOccurrences();
       occurrences = build;
-      render(<BuildOccurrenceSection occurrences={occurrences}/> );
+      render(<BuildOccurrenceSection occurrences={occurrences} />);
     });
 
     it("should render the section title", () => {
@@ -44,16 +44,27 @@ describe("BuildOccurrenceSection", () => {
       occurrences.forEach((occurrence, index) => {
         const renderedProducedText = screen.queryAllByText(/produced/i);
         expect(renderedProducedText[index]).toBeInTheDocument();
-        expect(renderedProducedText[index]).toHaveTextContent(new RegExp("Produced " + occurrence.artifacts.length + " Artifact", "i"));
+        expect(renderedProducedText[index]).toHaveTextContent(
+          new RegExp(
+            "Produced " + occurrence.artifacts.length + " Artifact",
+            "i"
+          )
+        );
 
         const renderedSourceLinks = screen.queryAllByText(/view source/i);
         expect(renderedSourceLinks[index]).toBeInTheDocument();
-        expect(renderedSourceLinks[index]).toHaveAttribute("href", occurrence.sourceUri);
+        expect(renderedSourceLinks[index]).toHaveAttribute(
+          "href",
+          occurrence.sourceUri
+        );
 
         const renderedLogsLinks = screen.queryAllByText(/view logs/i);
         expect(renderedLogsLinks[index]).toBeInTheDocument();
-        expect(renderedLogsLinks[index]).toHaveAttribute("href", occurrence.logsUri);
-      })
+        expect(renderedLogsLinks[index]).toHaveAttribute(
+          "href",
+          occurrence.logsUri
+        );
+      });
     });
   });
 });

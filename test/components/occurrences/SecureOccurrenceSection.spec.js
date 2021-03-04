@@ -24,15 +24,15 @@ describe("SecureOccurrenceSection", () => {
 
   it("should return null if there are no relevant occurrences", () => {
     occurrences = [];
-    render(<SecureOccurrenceSection occurrences={occurrences}/> );
+    render(<SecureOccurrenceSection occurrences={occurrences} />);
 
     expect(screen.queryByText(/secure/i)).not.toBeInTheDocument();
   });
   describe("vulnerability or discovery occurrences exist", () => {
     beforeEach(() => {
-      const {secure} = createMockMappedOccurrences();
+      const { secure } = createMockMappedOccurrences();
       occurrences = secure;
-      render(<SecureOccurrenceSection occurrences={occurrences}/> );
+      render(<SecureOccurrenceSection occurrences={occurrences} />);
     });
 
     it("should render the section title", () => {
@@ -42,11 +42,20 @@ describe("SecureOccurrenceSection", () => {
 
     it("should render a preview for each vulnerability scan", () => {
       occurrences.forEach((occurrence, index) => {
-        expect(screen.queryAllByText("Vulnerability Scan")[index]).toBeInTheDocument();
+        expect(
+          screen.queryAllByText("Vulnerability Scan")[index]
+        ).toBeInTheDocument();
 
-        const renderedVulnerabilityCount = screen.queryAllByText(/vulnerabilities found/i);
+        const renderedVulnerabilityCount = screen.queryAllByText(
+          /vulnerabilities found/i
+        );
         expect(renderedVulnerabilityCount[index]).toBeInTheDocument();
-        expect(renderedVulnerabilityCount[index]).toHaveTextContent(new RegExp(occurrence.vulnerabilities.length + " vulnerabilities found", "i"));
+        expect(renderedVulnerabilityCount[index]).toHaveTextContent(
+          new RegExp(
+            occurrence.vulnerabilities.length + " vulnerabilities found",
+            "i"
+          )
+        );
       });
     });
   });

@@ -33,7 +33,7 @@ const OccurrenceDetails = ({ occurrence }) => {
   const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
 
   return (
-    <div className={styles.detailContainer} data-testid={'occurrenceDetails'}>
+    <div className={styles.detailContainer} data-testid={"occurrenceDetails"}>
       <DetailComponent occurrence={occurrence} />
       <OccurrenceCodeBlock occurrence={occurrence} />
     </div>
