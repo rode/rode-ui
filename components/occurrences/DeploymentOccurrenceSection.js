@@ -21,6 +21,7 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
+// TODO: change out the preview values below to actual values
 const DeploymentOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
     return null;
