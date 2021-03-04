@@ -17,6 +17,8 @@
 import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/occurrences";
+import { createMockOccurrence } from "../../testing-utils/mocks";
+import { mapOccurrencesToSections } from "../../../pages/api/utils/occurrence-utils";
 
 jest.mock("node-fetch");
 
@@ -37,7 +39,7 @@ describe("/api/resources", () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    allOccurrences = chance.n(chance.string, chance.d4());
+    allOccurrences = chance.n(() => createMockOccurrence(chance.pickone(["DEPLOYMENT", "BUILD"])), chance.d4());
 
     rodeResponse = {
       ok: true,
@@ -117,7 +119,7 @@ describe("/api/resources", () => {
 
       expect(response.json)
         .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(allOccurrences);
+        .toHaveBeenCalledWith(mapOccurrencesToSections(allOccurrences));
     });
   });
 
