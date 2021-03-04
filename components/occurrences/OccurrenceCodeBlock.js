@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Occurrences.module.scss";
+import { useResources } from "providers/resources";
 
-// TODO: reset toggle when the selected occurrence changes
 const OccurrenceCodeBlock = ({ occurrence }) => {
   const [showCode, setShowCode] = useState(false);
+
+  const {state} = useResources();
+
+  useEffect(() => {
+    if (state.occurrenceDetails) {
+      setShowCode(false);
+    }
+  }, [state.occurrenceDetails])
 
   const toggle = () => {
     setShowCode(!showCode);
