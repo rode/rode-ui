@@ -18,6 +18,8 @@ import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
 
+// TODO: test this
+
 const mapVulnerabilities = (occurrences) => {
   const discoveryOccurrences = occurrences.filter(
     (occurrence) => occurrence.kind === "DISCOVERY"

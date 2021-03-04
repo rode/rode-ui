@@ -180,7 +180,7 @@ const createMappedDeploymentOccurrence = () => {
 
 export const createMockMappedOccurrences = () => {
   return {
-    build: [createMappedBuildOccurrence()],
+    build: chance.n(createMappedBuildOccurrence, chance.d4()),
     secure: [createMappedVulnerabilityOccurrence()],
     deploy: [createMappedDeploymentOccurrence()],
     attestation: [],

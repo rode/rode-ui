@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// TODO: test this
+
 const setSearchTerm = (state, data) => {
   return {
     ...state,
