@@ -17,16 +17,20 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useFetch } from "hooks/useFetch";
-import { createMockOccurrence } from "test/testing-utils/mocks";
+import { createMockMappedOccurrences } from "test/testing-utils/mocks";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
+import { useResources } from "providers/resources";
 
 jest.mock("hooks/useFetch");
+jest.mock("providers/resources");
 
 describe("ResourceOccurrences", () => {
-  let data, resourceUri;
+  let resourceUri;
 
   beforeEach(() => {
-    data = chance.n(() => createMockOccurrence("DISCOVERY"), chance.d4());
+    useResources.mockReturnValue({
+      state: {},
+    });
     resourceUri = chance.string();
   });
 
@@ -58,17 +62,44 @@ describe("ResourceOccurrences", () => {
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
-  it("should render an card for each occurrence", () => {
-    useFetch.mockReturnValue({
-      loading: false,
-      data,
+  describe("when data has been fetched", () => {
+    let rerender, data;
+
+    beforeEach(() => {
+      data = createMockMappedOccurrences();
+      useFetch.mockReturnValue({
+        data
+      });
+      const utils = render(<ResourceOccurrences resourceUri={resourceUri}/> );
+      rerender = utils.rerender;
     });
 
-    render(<ResourceOccurrences resourceUri={resourceUri} />);
+    it("should render the build occurrence section", () => {
+      expect(screen.getByText("Build")).toBeInTheDocument();
+      expect(screen.getByTitle("Cog")).toBeInTheDocument();
+    });
 
-    expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    data.forEach((occurrence) => {
-      expect(screen.getAllByText(occurrence.kind)).toHaveLength(data.length);
+    it("should render the secure occurrence section", () => {
+      expect(screen.getByText("Secure")).toBeInTheDocument();
+      expect(screen.getByTitle("Shield Check")).toBeInTheDocument();
+    });
+
+    it("should render the deployment occurrence section", () => {
+      expect(screen.getByText("Deploy")).toBeInTheDocument();
+      expect(screen.getByTitle("Server")).toBeInTheDocument();});
+
+    it("should render the occurrence details if they should be shown", () => {
+      expect(screen.queryByTestId("occurrenceDetails")).not.toBeInTheDocument();
+
+      useResources.mockReturnValue({
+        state: {
+          occurrenceDetails: data.build[0]
+        }
+      });
+
+      rerender(<ResourceOccurrences resourceUri={resourceUri}/> );
+
+      expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
     });
   });
 });

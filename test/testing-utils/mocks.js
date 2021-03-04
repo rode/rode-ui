@@ -18,7 +18,13 @@ import Chance from "chance";
 
 const chance = new Chance();
 
-const createDiscoveryOccurrence = () => ({
+const createBuiltArtifacts = () => ({
+  checksum: chance.natural(),
+  id: chance.guid(),
+  names: [chance.word({ syllable: chance.d10() + 3 })],
+});
+
+const createDiscoveryDetails = () => ({
   discovered: {
     discovered: {
       continuousAnalysis: "CONTINUOUS_ANALYSIS_UNSPECIFIED",
@@ -32,7 +38,7 @@ const createDiscoveryOccurrence = () => ({
     },
   },
 });
-const createVulnerabilityOccurrence = () => ({
+const createVulnerabilityDetails = () => ({
   vulnerability: {
     type: "docker",
     severity: "SEVERITY_UNSPECIFIED",
@@ -62,20 +68,13 @@ const createVulnerabilityOccurrence = () => ({
     effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
   },
 });
-
-const createBuildOccurrence = () => ({
+const createBuildDetails = () => ({
   build: {
     provenance: {
       id: chance.guid(),
       projectId: chance.string(),
       commands: [],
-      builtArtifacts: [
-        {
-          checksum: chance.natural(),
-          id: chance.guid(),
-          names: [chance.word({ syllable: chance.d10() + 3 })],
-        },
-      ],
+      builtArtifacts: [createBuiltArtifacts()],
       createTime: chance.timestamp(),
       startTime: chance.timestamp(),
       endTime: chance.timestamp(),
@@ -97,17 +96,34 @@ const createBuildOccurrence = () => ({
     provenanceBytes: chance.string(),
   },
 });
+const createDeploymentDetails = () => ({
+  "deployment": {
+    "deployment": {
+      "userEmail": chance.email(),
+      "deployTime": chance.timestamp(),
+      "undeployTime": chance.timestamp(),
+      "config": "config",
+      "address": "address",
+      "resourceUri": [
+        createMockResourceUri(),
+        createMockResourceUri()
+      ],
+      "platform": "CUSTOM"
+    }
+  }
+});
 
-const mockOccurrenceMap = {
-  DISCOVERY: createDiscoveryOccurrence,
-  VULNERABILITY: createVulnerabilityOccurrence,
-  BUILD: createBuildOccurrence,
+const mockDetailsMap = {
+  DISCOVERY: createDiscoveryDetails,
+  VULNERABILITY: createVulnerabilityDetails,
+  BUILD: createBuildDetails,
+  DEPLOYMENT: createDeploymentDetails
 };
 
 export const createMockOccurrence = (
-  kind = chance.pickone(Object.keys(mockOccurrenceMap))
+  kind = chance.pickone(Object.keys(mockDetailsMap))
 ) => {
-  const kindSpecificDetails = mockOccurrenceMap[kind]();
+  const kindSpecificDetails = mockDetailsMap[kind]();
 
   return {
     name: `projects/rode/occurrences/${chance.guid()}`,
@@ -122,6 +138,52 @@ export const createMockOccurrence = (
     createTime: chance.timestamp(),
     updateTime: null,
     ...kindSpecificDetails,
+  };
+};
+
+const createMappedBuildOccurrence = () => {
+  return {
+    name: chance.string(),
+    started: chance.timestamp(),
+    completed: chance.timestamp(),
+    creator: chance.email(),
+    artifacts: chance.n(createBuiltArtifacts, chance.d4()),
+    sourceUri: chance.url(),
+    logsUri: chance.url(),
+    originals: [createMockOccurrence("BUILD")],
+  };
+};
+
+const createMappedVulnerabilityOccurrence = () => {
+  return {
+    name: chance.string(),
+    started: chance.timestamp(),
+    completed: chance.timestamp(),
+    vulnerabilities: chance.n(
+      () => createMockOccurrence("VULNERABILITY"),
+      chance.d4()
+    ),
+    originals: [
+      createMockOccurrence("DISCOVERY"),
+      createMockOccurrence("DISCOVERY"),
+      createMockOccurrence("VULNERABILITY"),
+    ]
+  };
+};
+
+const createMappedDeploymentOccurrence = () => {
+  return {
+    ...createDeploymentDetails(),
+    originals: [createMockOccurrence("DEPLOYMENT")]
+  }
+};
+
+export const createMockMappedOccurrences = () => {
+  return {
+    build: [createMappedBuildOccurrence()],
+    secure: [createMappedVulnerabilityOccurrence()],
+    deploy: [createMappedDeploymentOccurrence()],
+    attestation: [],
   };
 };
 
