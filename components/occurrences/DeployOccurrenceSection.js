@@ -34,6 +34,7 @@ const DeployOccurrenceSection = ({ occurrences }) => {
       {occurrences.mapped.map((occurrence) => (
         <OccurrencePreview
           key={occurrence.name}
+          currentOccurrence={occurrence}
           occurrences={occurrences}
           mainText={"Deployment Occurrence"}
           timestamp={"some timestamp"}

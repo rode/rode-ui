@@ -32,26 +32,34 @@ const BuildOccurrenceSection = ({ occurrences }) => {
         <Icon name={ICON_NAMES.COG} />
         <p>Build</p>
       </div>
-      {occurrences.mapped.map((occurrence) => (
-        <OccurrencePreview
-          key={occurrence.name}
-          occurrences={occurrences}
-          mainText={`Produced ${occurrence.artifacts.length} Artifact${
-            occurrence.artifacts.length > 1 ? "s" : ""
-          } `}
-          timestamp={occurrence.completed}
-          subText={
-            <>
-              <a href={occurrence.sourceUri} className={styles.previewLinks}>
-                View source
-              </a>
-              <a href={occurrence.logsUri} className={styles.previewLinks}>
-                View logs
-              </a>
-            </>
-          }
-        />
-      ))}
+      {occurrences.mapped.map((occurrence) => {
+        const unmappedOccurrence = occurrences.original.filter(({ name }) => name === occurrence.name);
+
+        return (
+          <OccurrencePreview
+            key={occurrence.name}
+            currentOccurrence={occurrence}
+            occurrences={{
+              mapped: [occurrence],
+              original: unmappedOccurrence
+            }}
+            mainText={`Produced ${occurrence.artifacts.length} Artifact${
+              occurrence.artifacts.length > 1 ? "s" : ""
+            } `}
+            timestamp={occurrence.completed}
+            subText={
+              <>
+                <a href={occurrence.sourceUri} className={styles.previewLinks}>
+                  View source
+                </a>
+                <a href={occurrence.logsUri} className={styles.previewLinks}>
+                  View logs
+                </a>
+              </>
+            }
+          />
+        );
+      })}
     </div>
   );
 };

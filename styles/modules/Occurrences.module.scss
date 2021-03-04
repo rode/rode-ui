@@ -31,7 +31,7 @@ $INDENTATION: 1rem;
     height: 100%;
   }
 }
-.container {
+.previewContainer {
   flex: 1;
   display: flex;
   width: 100%;
@@ -109,6 +109,8 @@ $INDENTATION: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  max-width: 48vw;
+  margin: 0 auto;
 }
 
 .codeBlock {
@@ -122,7 +124,7 @@ $INDENTATION: 1rem;
 }
 
 .darkTheme {
-  .container {
+  .previewContainer {
     background-color: $DARK_GREY;
     color: $SOFT_WHITE;
     border-bottom-color: $DARKER_GREY;
@@ -156,7 +158,7 @@ $INDENTATION: 1rem;
 }
 
 .lightTheme {
-  .container {
+  .previewContainer {
     background-color: $WHITE;
     border-bottom-color: $WHITE_SMOKE;
 

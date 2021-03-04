@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Occurrences.module.scss";
 
+// TODO: reset toggle when the selected occurrence changes
 const OccurrenceCodeBlock = ({ occurrence }) => {
   const [showCode, setShowCode] = useState(false);
 
@@ -41,7 +42,7 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
 };
 
 OccurrenceCodeBlock.propTypes = {
-  occurrence: PropTypes.object.isRequired,
+  occurrence: PropTypes.array.isRequired,
 };
 
 export default OccurrenceCodeBlock;
