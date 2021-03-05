@@ -139,7 +139,7 @@ export const createMockOccurrence = (
   };
 };
 
-const createMappedBuildOccurrence = () => {
+export const createMockMappedBuildOccurrence = () => {
   return {
     name: chance.string(),
     started: chance.timestamp(),
@@ -152,7 +152,7 @@ const createMappedBuildOccurrence = () => {
   };
 };
 
-const createMappedVulnerabilityOccurrence = () => {
+export const createMockMappedVulnerabilityOccurrence = () => {
   const sharedTimestamp = chance.timestamp();
   return {
     name: chance.string(),
@@ -165,8 +165,11 @@ const createMappedVulnerabilityOccurrence = () => {
         cvssScore: chance.d10(),
         severity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
         effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
-        description: chance.sentence(),
-        relatedUrls: chance.n(chance.url, chance.d4()),
+        description: chance.pickone([chance.sentence(), null]),
+        relatedUrls: chance.pickone([
+          chance.n(() => ({ url: chance.url() }), chance.d4()),
+          [],
+        ]),
         cpeUri: chance.url(),
         packageName: chance.string(),
         version: {
@@ -186,7 +189,7 @@ const createMappedVulnerabilityOccurrence = () => {
   };
 };
 
-const createMappedDeploymentOccurrence = () => {
+export const createMockMappedDeploymentOccurrence = () => {
   return {
     name: chance.string(),
     deploymentStart: chance.timestamp(),
@@ -199,9 +202,9 @@ const createMappedDeploymentOccurrence = () => {
 
 export const createMockMappedOccurrences = () => {
   return {
-    build: chance.n(createMappedBuildOccurrence, chance.d4()),
-    secure: [createMappedVulnerabilityOccurrence()],
-    deploy: [createMappedDeploymentOccurrence()],
+    build: chance.n(createMockMappedBuildOccurrence, chance.d4()),
+    secure: [createMockMappedVulnerabilityOccurrence()],
+    deploy: [createMockMappedDeploymentOccurrence()],
     other: [],
   };
 };
