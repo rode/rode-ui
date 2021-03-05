@@ -118,9 +118,10 @@ const mockDetailsMap = {
 };
 
 export const createMockOccurrence = (
-  kind = chance.pickone(Object.keys(mockDetailsMap))
+  kind = chance.pickone(Object.keys(mockDetailsMap)),
+  createTime = chance.timestamp()
 ) => {
-  const kindSpecificDetails = mockDetailsMap[kind]();
+  const kindSpecificDetails = mockDetailsMap[kind]?.(createTime);
 
   return {
     name: `projects/rode/occurrences/${chance.guid()}`,
@@ -132,7 +133,7 @@ export const createMockOccurrence = (
     noteName: "projects/rode/notes/harbor",
     kind: kind,
     remediation: "",
-    createTime: chance.timestamp(),
+    createTime: createTime,
     updateTime: null,
     ...kindSpecificDetails,
   };
@@ -152,18 +153,35 @@ const createMappedBuildOccurrence = () => {
 };
 
 const createMappedVulnerabilityOccurrence = () => {
+  const sharedTimestamp = chance.timestamp();
   return {
     name: chance.string(),
     started: chance.timestamp(),
     completed: chance.timestamp(),
     vulnerabilities: chance.n(
-      () => createMockOccurrence("VULNERABILITY"),
+      () => ({
+        name: chance.string(),
+        type: chance.string(),
+        cvssScore: chance.d10(),
+        severity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
+        effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
+        description: chance.sentence(),
+        relatedUrls: chance.n(chance.url, chance.d4()),
+        cpeUri: chance.url(),
+        packageName: chance.string(),
+        version: {
+          epoch: chance.d10(),
+          name: chance.string(),
+          revision: chance.string(),
+          kind: "NORMAL",
+        },
+      }),
       chance.d4()
     ),
     originals: [
-      createMockOccurrence("DISCOVERY"),
-      createMockOccurrence("DISCOVERY"),
-      createMockOccurrence("VULNERABILITY"),
+      createMockOccurrence("DISCOVERY", sharedTimestamp - 2),
+      createMockOccurrence("DISCOVERY", sharedTimestamp),
+      createMockOccurrence("VULNERABILITY", sharedTimestamp),
     ],
   };
 };
@@ -184,7 +202,7 @@ export const createMockMappedOccurrences = () => {
     build: chance.n(createMappedBuildOccurrence, chance.d4()),
     secure: [createMappedVulnerabilityOccurrence()],
     deploy: [createMappedDeploymentOccurrence()],
-    attestation: [],
+    other: [],
   };
 };
 

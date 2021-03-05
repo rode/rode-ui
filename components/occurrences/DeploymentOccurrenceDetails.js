@@ -20,6 +20,8 @@ import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
 
+// TODO: test this
+
 const DeploymentOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>

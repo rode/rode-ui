@@ -22,7 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
-import { DATE_TIME_FORMAT } from "../../utils/constants";
+import { DATE_TIME_FORMAT } from "utils/constants";
 
 const OccurrencePreview = ({
   mainText,

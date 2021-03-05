@@ -50,7 +50,7 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
 };
 
 OccurrenceCodeBlock.propTypes = {
-  occurrence: PropTypes.array.isRequired,
+  occurrence: PropTypes.object.isRequired,
 };
 
 export default OccurrenceCodeBlock;

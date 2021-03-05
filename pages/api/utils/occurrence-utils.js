@@ -18,8 +18,6 @@ import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
 
-// TODO: test this
-
 const mapVulnerabilities = (occurrences) => {
   return occurrences.map((occurrence) => ({
     name: occurrence.name,
@@ -71,13 +69,13 @@ const matchAndMapVulnerabilities = (occurrences) => {
     const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
       (vuln) =>
         vuln.kind === "VULNERABILITY" &&
-        vuln.createTime === matchingScanEndOccurrence.createTime
+        vuln.createTime === matchingScanEndOccurrence?.createTime
     );
 
     return {
       name: scan.name,
-      started: startTime,
-      completed: matchingScanEndOccurrence.createTime,
+      started: scan.createTime,
+      completed: matchingScanEndOccurrence?.createTime,
       vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
       originals: [
         scan,
@@ -120,7 +118,7 @@ export const mapOccurrencesToSections = (occurrences) => {
   let buildOccurrences = [];
   let vulnerabilityOccurrences = [];
   let deploymentOccurrences = [];
-  let attestationOccurrences = [];
+  let otherOccurrences = [];
 
   occurrences.forEach((occurrence) => {
     switch (occurrence.kind) {
@@ -140,8 +138,8 @@ export const mapOccurrencesToSections = (occurrences) => {
         deploymentOccurrences.push(occurrence);
         break;
       }
-      case "ATTESTATION": {
-        attestationOccurrences.push(occurrence);
+      default: {
+        otherOccurrences.push(occurrence);
         break;
       }
     }
@@ -151,22 +149,6 @@ export const mapOccurrencesToSections = (occurrences) => {
     build: mapBuilds(buildOccurrences),
     secure: matchAndMapVulnerabilities(vulnerabilityOccurrences),
     deploy: mapDeployments(deploymentOccurrences),
-    attestation: attestationOccurrences,
+    other: otherOccurrences,
   };
-
-  // return {
-  //   build: {
-  //     original: buildOccurrences,
-  //     mapped: mapBuilds(buildOccurrences),
-  //   },
-  //   secure: {
-  //     original: vulnerabilityOccurrences,
-  //     mapped: mapVulnerabilities(vulnerabilityOccurrences),
-  //   },
-  //   deploy: {
-  //     original: deploymentOccurrences,
-  //     mapped: mapDeployments(deploymentOccurrences),
-  //   },
-  //   attestation: attestationOccurrences,
-  // };
 };
