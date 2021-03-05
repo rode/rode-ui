@@ -98,7 +98,6 @@ $INDENTATION: 1rem;
   margin-left: 1rem;
   font-weight: 600;
   font-size: 1.5rem;
-  color: $MEDIUM_GREY;
 
   > p {
     margin-left: 0.25rem;
@@ -106,6 +105,10 @@ $INDENTATION: 1rem;
 }
 
 .darkTheme {
+  .sectionTitle {
+    color: $SILVER;
+  }
+
   .previewContainer {
     background-color: $DARK_GREY;
     color: $SOFT_WHITE;
@@ -131,6 +134,10 @@ $INDENTATION: 1rem;
 }
 
 .lightTheme {
+  .sectionTitle {
+    color: $MEDIUM_GREY;
+  }
+
   .previewContainer {
     background-color: $WHITE;
     border-bottom-color: $WHITE_SMOKE;
