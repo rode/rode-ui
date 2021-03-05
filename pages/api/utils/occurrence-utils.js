@@ -90,7 +90,11 @@ const mapBuilds = (occurrences) => {
 const mapDeployments = (occurrences) => {
   return occurrences.map((occ) => {
     return {
-      ...occ,
+      name: occ.name,
+      deploymentStart: occ.deployment.deployment.deployTime,
+      deploymentEnd: occ.deployment.deployment.undeployTime,
+      resourceUris: occ.deployment.deployment.resourceUri,
+      platform: occ.deployment.deployment.platform,
       originals: [occ],
     };
   });

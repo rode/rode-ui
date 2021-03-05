@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
 import { useResources } from "providers/resources";
-import { resourceActions } from "../../../reducers/resources";
+import { resourceActions } from "reducers/resources";
 
 jest.mock("dayjs");
 jest.mock("providers/resources");

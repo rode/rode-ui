@@ -17,8 +17,8 @@
 import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/occurrences";
-import { createMockOccurrence } from "../../testing-utils/mocks";
-import { mapOccurrencesToSections } from "../../../pages/api/utils/occurrence-utils";
+import { createMockOccurrence } from "test/testing-utils/mocks";
+import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
 
 jest.mock("node-fetch");
 

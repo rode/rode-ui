@@ -21,12 +21,12 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: change out the preview values below to actual values
 // TODO: test this file
 const DeploymentOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
     return null;
   }
+
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
@@ -37,9 +37,11 @@ const DeploymentOccurrenceSection = ({ occurrences }) => {
         <OccurrencePreview
           key={occurrence.name}
           currentOccurrence={occurrence}
-          mainText={"Deployment Occurrence"}
-          timestamp={"some timestamp"}
-          subText={"2 environment"}
+          mainText={`Deployment to ${occurrence.platform}`}
+          timestamp={occurrence.deploymentStart}
+          subText={`Deployed ${occurrence.resourceUris.length} Resource${
+            occurrence.resourceUris.length > 1 ? "s" : ""
+          }`}
         />
       ))}
     </div>
