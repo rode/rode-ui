@@ -61,6 +61,48 @@ $SIDE_SPACING: 1rem;
   margin-bottom: 0.5rem;
 }
 
+.link {
+  margin-top: 0.5rem;
+}
+
+.vulnerabilityCardHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vulnerabilityBreakdown {
+  text-indent: 1rem;
+}
+
+.severity {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+
+  > p {
+    padding: 0.1rem;
+  }
+}
+
+.low {
+  @extend .severity;
+  color: $GREEN;
+}
+
+.medium {
+  @extend .severity;
+  color: $FLAME_ORANGE;
+}
+
+.high {
+  @extend .severity;
+  color: $HOT_RED;
+}
+
 .codeBlockContainer {
   display: flex;
   flex-direction: column;
@@ -88,6 +130,21 @@ $SIDE_SPACING: 1rem;
     color: $SILVER;
   }
 
+  .vulnerabilityBreakdown {
+    color: $SILVER;
+  }
+
+  .card {
+    background-color: $DARK_GREY;
+    color: $WHITE_SMOKE;
+  }
+
+  .link {
+    a {
+      color: $LAGOON;
+    }
+  }
+
   .codeBlock {
     background-color: $DARKER_GREY;
     color: $SILVER;
@@ -101,6 +158,21 @@ $SIDE_SPACING: 1rem;
 
   .timestamps {
     color: $MEDIUM_GREY;
+  }
+
+  .vulnerabilityBreakdown {
+    color: $MEDIUM_GREY;
+  }
+
+  .card {
+    background-color: $WHITE;
+    color: $DARK_GREY;
+  }
+
+  .link {
+    a {
+      color: $DEEP_SEA;
+    }
   }
 
   .codeBlock {

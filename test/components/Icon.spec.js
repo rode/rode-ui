@@ -73,4 +73,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/chevron double/i)).toBeInTheDocument();
   });
+
+  it("should render the fire icon when specified", () => {
+    render(<Icon name={ICON_NAMES.FIRE} />);
+
+    expect(screen.getByTitle(/fire/i)).toBeInTheDocument();
+  });
 });

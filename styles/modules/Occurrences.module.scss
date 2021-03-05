@@ -99,6 +99,10 @@ $INDENTATION: 1rem;
   font-weight: 600;
   font-size: 1.5rem;
   color: $MEDIUM_GREY;
+
+  > p {
+    margin-left: 0.25rem;
+  }
 }
 
 .darkTheme {
@@ -124,8 +128,6 @@ $INDENTATION: 1rem;
   .previewLinks {
     color: $LAGOON;
   }
-
-
 }
 
 .lightTheme {
@@ -146,5 +148,4 @@ $INDENTATION: 1rem;
   .previewTimestamp {
     color: $MEDIUM_GREY;
   }
-
 }
