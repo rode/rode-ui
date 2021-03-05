@@ -36,6 +36,6 @@ describe("OccurrenceDetails", () => {
   it("should show the deployment occurrence details if a deployment occurrence is selected", () => {
     render(<OccurrenceDetails occurrence={mappedOccurrences.deploy[0]} />);
 
-    expect(screen.getByText(/deployment/i)).toBeInTheDocument();
+    expect(screen.queryAllByText(/deployment/i)[0]).toBeInTheDocument();
   });
 });

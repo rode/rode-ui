@@ -17,12 +17,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
-import styles from "styles/modules/Occurrences.module.scss";
+import styles from "styles/modules/OccurrenceDetails.module.scss";
 import BuildOccurrenceDetails from "./BuildOccurrenceDetails";
 import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
 import DeploymentOccurrenceDetails from "./DeploymentOccurrenceDetails";
+import { useTheme } from "providers/theme";
 
-// TODO: style each of the detail components
 const detailComponentMap = {
   BUILD: BuildOccurrenceDetails,
   VULNERABILITY: VulnerabilityOccurrenceDetails,
@@ -31,10 +31,14 @@ const detailComponentMap = {
 };
 
 const OccurrenceDetails = ({ occurrence }) => {
+  const { theme } = useTheme();
   const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
 
   return (
-    <div className={styles.detailContainer} data-testid={"occurrenceDetails"}>
+    <div
+      className={`${styles.detailContainer} ${styles[theme]}`}
+      data-testid={"occurrenceDetails"}
+    >
       <DetailComponent occurrence={occurrence} />
       <OccurrenceCodeBlock occurrence={occurrence} />
     </div>

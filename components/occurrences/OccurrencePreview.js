@@ -22,6 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import { DATE_TIME_FORMAT } from "../../utils/constants";
 
 const OccurrencePreview = ({
   mainText,
@@ -55,7 +56,7 @@ const OccurrencePreview = ({
         <p className={styles.previewMainText}>{mainText}</p>
         <p className={styles.previewTimestamp}>{`Completed at ${dayjs(
           timestamp
-        ).format("h:mm:ssa | MM-DD-YYYY")}`}</p>
+        ).format(DATE_TIME_FORMAT)}`}</p>
         <p className={styles.previewSubText}>{subText}</p>
       </div>
       <Icon

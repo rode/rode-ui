@@ -21,7 +21,6 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: test this file
 const DeploymentOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
     return null;

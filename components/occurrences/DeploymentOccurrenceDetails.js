@@ -16,17 +16,37 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import styles from "styles/modules/OccurrenceDetails.module.scss";
+import { DATE_TIME_FORMAT } from "utils/constants";
+import dayjs from "dayjs";
 
-const DeploymentOccurrenceSection = ({ occurrence }) => {
+const DeploymentOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
-      <p>Deployment</p>
+      <div className={styles.detailSummary}>
+        <div>
+          <p className={styles.title}>Deployment</p>
+          <p>Deployed to {occurrence.platform}</p>
+        </div>
+        <div className={styles.timestamps}>
+          <p>
+            Started {dayjs(occurrence.deploymentStart).format(DATE_TIME_FORMAT)}
+          </p>
+          <p>
+            Deployment End{" "}
+            {dayjs(occurrence.deploymentEnd).format(DATE_TIME_FORMAT)}
+          </p>
+        </div>
+      </div>
+      <div className={styles.detailContentContainer}>
+        <p>Resources Deployed: {occurrence.resourceUris.join(", ")}</p>
+      </div>
     </div>
   );
 };
 
-DeploymentOccurrenceSection.propTypes = {
+DeploymentOccurrenceDetails.propTypes = {
   occurrence: PropTypes.object.isRequired,
 };
 
-export default DeploymentOccurrenceSection;
+export default DeploymentOccurrenceDetails;

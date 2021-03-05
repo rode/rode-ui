@@ -1,0 +1,99 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+
+$SIDE_SPACING: 1rem;
+
+.detailContainer {
+  height: 100%;
+}
+
+.detailSummary {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2rem $SIDE_SPACING;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.timestamps {
+  text-align: right;
+}
+
+.detailContentContainer {
+  width: 100%;
+  padding: $SIDE_SPACING 0 $SIDE_SPACING $SIDE_SPACING;
+}
+
+.card {
+  width: 85%;
+  margin: 0 0 0.25rem auto;
+  padding: 1rem;
+  background-color: $WHITE;
+}
+
+.codeBlockContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 48vw;
+  margin: 0 auto;
+}
+
+.codeBlock {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  width: 100%;
+  height: fit-content;
+  max-height: 32rem;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.darkTheme {
+  &.detailContainer {
+    background-color: $DARKEST_GREY;
+  }
+
+  .timestamps {
+    color: $SILVER;
+  }
+
+  .codeBlock {
+    background-color: $DARKER_GREY;
+    color: $SILVER;
+  }
+}
+
+.lightTheme {
+  &.detailContainer {
+    background-color: $WHITE_SMOKE;
+  }
+
+  .timestamps {
+    color: $MEDIUM_GREY;
+  }
+
+  .codeBlock {
+    background-color: $WHITE;
+    color: $DARK_GREY;
+  }
+}

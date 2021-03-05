@@ -21,6 +21,23 @@ dayjs.extend(isSameOrAfter);
 // TODO: test this
 
 const mapVulnerabilities = (occurrences) => {
+  return occurrences.map((occurrence) => ({
+    name: occurrence.name,
+    type: occurrence.vulnerability.type,
+    cvssScore: occurrence.vulnerability.cvssScore,
+    severity: occurrence.vulnerability.severity,
+    effectiveSeverity: occurrence.vulnerability.effectiveSeverity,
+    description: occurrence.vulnerability.shortDescription,
+    relatedUrls: occurrence.vulnerability.relatedUrls,
+    issues: occurrence.vulnerability.packageIssue.map((issue) => ({
+      uri: issue.affectedLocation.cpeUri,
+      packageName: issue.affectedLocation.package,
+      version: issue.affectedLocation.version
+    }))
+  }));
+};
+
+const matchAndMapVulnerabilities = (occurrences) => {
   const discoveryOccurrences = occurrences.filter(
     (occurrence) => occurrence.kind === "DISCOVERY"
   );
@@ -62,7 +79,7 @@ const mapVulnerabilities = (occurrences) => {
       name: scan.name,
       started: startTime,
       completed: matchingScanEndOccurrence.createTime,
-      vulnerabilities: matchingVulnerabilityOccurrences,
+      vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
       originals: [
         scan,
         matchingScanEndOccurrence,
@@ -133,7 +150,7 @@ export const mapOccurrencesToSections = (occurrences) => {
 
   return {
     build: mapBuilds(buildOccurrences),
-    secure: mapVulnerabilities(vulnerabilityOccurrences),
+    secure: matchAndMapVulnerabilities(vulnerabilityOccurrences),
     deploy: mapDeployments(deploymentOccurrences),
     attestation: attestationOccurrences,
   };

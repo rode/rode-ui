@@ -16,24 +16,36 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import styles from "styles/modules/OccurrenceDetails.module.scss";
+import { DATE_TIME_FORMAT } from "utils/constants";
+import dayjs from "dayjs";
 
 const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
-      <p>Build</p>
-      <a href={occurrence.sourceUri}>View Source</a>
-      <a href={occurrence.logsUri}>View Logs</a>
-      <p>Started {occurrence.started}</p>
-      <p>Completed {occurrence.completed}</p>
-      <p>Created by {occurrence.creator}</p>
-
-      {occurrence.artifacts?.map((artifact) => (
-        <div key={artifact.id}>
-          <p>{artifact.names.join(",")}</p>
-          <p>{artifact.id}</p>
-          <p>{artifact.checksum}</p>
+      <div className={styles.detailSummary}>
+        <div>
+          <p className={styles.title}>Build</p>
+          <a href={occurrence.sourceUri}>View Source</a>
+          <a href={occurrence.logsUri}>View Logs</a>
+          <p>Created by {occurrence.creator}</p>
         </div>
-      ))}
+        <div className={styles.timestamps}>
+          <p>Started {dayjs(occurrence.started).format(DATE_TIME_FORMAT)}</p>
+          <p>
+            Completed {dayjs(occurrence.completed).format(DATE_TIME_FORMAT)}
+          </p>
+        </div>
+      </div>
+      <div className={styles.detailContentContainer}>
+        {occurrence.artifacts?.map((artifact) => (
+          <div key={artifact.id} className={styles.card}>
+            <p>{artifact.names.join(",")}</p>
+            <p>{artifact.id}</p>
+            <p>{artifact.checksum}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
