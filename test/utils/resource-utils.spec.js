@@ -126,7 +126,7 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for a Docker Resource", () => {
-      const url = `${chance.url()}/${resourceName}@sha256:${resourceVersion}`;
+      const url = `${resourceName}@sha256:${resourceVersion}`;
       const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("Docker");

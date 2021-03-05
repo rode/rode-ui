@@ -213,5 +213,5 @@ export const createMockResourceUri = (
   name = chance.word({ syllables: chance.d20() }),
   version = chance.natural()
 ) => {
-  return `${chance.url()}/${name}@sha256:${version}`;
+  return `${name}@sha256:${version}`;
 };
