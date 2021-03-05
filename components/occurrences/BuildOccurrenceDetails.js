@@ -40,7 +40,8 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
       <div className={styles.detailContentContainer}>
         {occurrence.artifacts?.map((artifact) => (
           <div key={artifact.id} className={styles.card}>
-            <p>{artifact.names.join(",")}</p>
+            <p className={styles.cardTitle}>Build Artifact</p>
+            <p>{artifact.names.join(", ")}</p>
             <p>{artifact.id}</p>
             <p>{artifact.checksum}</p>
           </div>

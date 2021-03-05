@@ -29,11 +29,9 @@ const mapVulnerabilities = (occurrences) => {
     effectiveSeverity: occurrence.vulnerability.effectiveSeverity,
     description: occurrence.vulnerability.shortDescription,
     relatedUrls: occurrence.vulnerability.relatedUrls,
-    issues: occurrence.vulnerability.packageIssue.map((issue) => ({
-      uri: issue.affectedLocation.cpeUri,
-      packageName: issue.affectedLocation.package,
-      version: issue.affectedLocation.version
-    }))
+    cpeUri: occurrence.vulnerability.packageIssue[0].affectedLocation.cpeUri,
+    packageName: occurrence.vulnerability.packageIssue[0].affectedLocation.package,
+    version: occurrence.vulnerability.packageIssue[0].affectedLocation.version,
   }));
 };
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { DATE_TIME_FORMAT } from "utils/constants";

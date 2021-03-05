@@ -28,10 +28,15 @@ $SIDE_SPACING: 1rem;
   align-items: flex-start;
   justify-content: space-between;
   padding: 2rem $SIDE_SPACING;
+
+  a {
+    padding: 0 1rem 0 0;
+  }
 }
 
 .title {
   font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .timestamps {
@@ -44,10 +49,16 @@ $SIDE_SPACING: 1rem;
 }
 
 .card {
-  width: 85%;
+  width: 90%;
   margin: 0 0 0.25rem auto;
   padding: 1rem;
   background-color: $WHITE;
+}
+
+.cardTitle {
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
 }
 
 .codeBlockContainer {
