@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
 import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
-import { createMockMappedOccurrences } from "test/testing-utils/mocks";
+import { createMockMappedBuildOccurrence } from "test/testing-utils/mocks";
 
 describe("BuildOccurrenceSection", () => {
   let occurrences;
@@ -30,8 +30,7 @@ describe("BuildOccurrenceSection", () => {
   });
   describe("build occurrences exist", () => {
     beforeEach(() => {
-      const { build } = createMockMappedOccurrences();
-      occurrences = build;
+      occurrences = chance.n(createMockMappedBuildOccurrence, chance.d4());
       render(<BuildOccurrenceSection occurrences={occurrences} />);
     });
 

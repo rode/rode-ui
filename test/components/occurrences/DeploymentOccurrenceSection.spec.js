@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
 import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
-import { createMockMappedOccurrences } from "test/testing-utils/mocks";
+import { createMockMappedDeploymentOccurrence } from "test/testing-utils/mocks";
 
 describe("DeploymentOccurrenceSection", () => {
   let occurrences;
@@ -30,8 +30,7 @@ describe("DeploymentOccurrenceSection", () => {
   });
   describe("build occurrences exist", () => {
     beforeEach(() => {
-      const { deploy } = createMockMappedOccurrences();
-      occurrences = deploy;
+      occurrences = chance.n(createMockMappedDeploymentOccurrence, chance.d4());
       render(<DeploymentOccurrenceSection occurrences={occurrences} />);
     });
 

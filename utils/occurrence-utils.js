@@ -1,5 +1,3 @@
-// TODO: test this
-
 export const getVulnerabilityBreakdown = (vulnerabilities) => {
   let low = 0;
   let medium = 0;

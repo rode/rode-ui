@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
-import { createMockMappedOccurrences } from "test/testing-utils/mocks";
+import { createMockMappedVulnerabilityOccurrence } from "test/testing-utils/mocks";
 
 describe("SecureOccurrenceSection", () => {
   let occurrences;
@@ -30,8 +30,10 @@ describe("SecureOccurrenceSection", () => {
   });
   describe("vulnerability or discovery occurrences exist", () => {
     beforeEach(() => {
-      const { secure } = createMockMappedOccurrences();
-      occurrences = secure;
+      occurrences = chance.n(
+        createMockMappedVulnerabilityOccurrence,
+        chance.d4()
+      );
       render(<SecureOccurrenceSection occurrences={occurrences} />);
     });
 
