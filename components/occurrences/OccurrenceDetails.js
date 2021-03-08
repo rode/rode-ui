@@ -40,7 +40,7 @@ const OccurrenceDetails = ({ occurrence }) => {
       data-testid={"occurrenceDetails"}
     >
       <DetailComponent occurrence={occurrence} />
-      <OccurrenceCodeBlock occurrence={occurrence} />
+      <OccurrenceCodeBlock json={occurrence.originals} />
     </div>
   );
 };

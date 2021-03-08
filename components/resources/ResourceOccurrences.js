@@ -25,6 +25,7 @@ import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
+import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSection";
 
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
@@ -44,6 +45,7 @@ const ResourceOccurrences = (props) => {
             <BuildOccurrenceSection occurrences={data.build} />
             <SecureOccurrenceSection occurrences={data.secure} />
             <DeploymentOccurrenceSection occurrences={data.deploy} />
+            <OtherOccurrenceSection occurrences={data.other} />
           </div>
           {state.occurrenceDetails && (
             <div>

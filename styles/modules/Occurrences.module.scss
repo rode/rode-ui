@@ -54,6 +54,12 @@ $INDENTATION: 1rem;
   }
 }
 
+.unknownPreviewContainer {
+  @extend .previewContainer;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .active {
   border-left-width: 8px;
   border-left-style: solid;
@@ -88,6 +94,7 @@ $INDENTATION: 1rem;
 .sectionContainer {
   width: 100%;
   margin-top: 1rem;
+  flex: 1;
 }
 
 .sectionTitle {
