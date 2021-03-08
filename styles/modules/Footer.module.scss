@@ -27,7 +27,7 @@
   width: 100%;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
 
@@ -70,7 +70,10 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 1rem;
+
+  @include tabletAndLarger {
+    margin-left: 1rem;
+  }
 
   a {
     display: flex;
