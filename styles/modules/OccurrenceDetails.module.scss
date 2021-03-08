@@ -112,6 +112,16 @@ $SIDE_SPACING: 1rem;
   margin: 0 auto;
 }
 
+.fullWidthCodeBlockContainer {
+  @extend .codeBlockContainer;
+  max-width: 97vw;
+  width: 100%;
+
+  .codeBlock {
+    border: solid 1px $SILVER;
+  }
+}
+
 .codeBlock {
   margin-top: 0.5rem;
   display: inline-flex;

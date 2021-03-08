@@ -24,6 +24,7 @@ import Github from "components/icons/Github";
 import Twitter from "components/icons/Twitter";
 import ChevronDoubleRight from "components/icons/ChevronDoubleRight";
 import Fire from "components/icons/Fire";
+import Flag from "components/icons/Flag";
 
 const SEARCH = "Search";
 const COG = "Cog";
@@ -32,6 +33,7 @@ const SERVER = "Server";
 const CHEVRON_RIGHT = "ChevronRight";
 const CHEVRON_DOUBLE_RIGHT = "ChevronDoubleRight";
 const FIRE = "FIRE";
+const FLAG = "FLAG";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -47,6 +49,7 @@ export const ICON_COMPONENTS = {
   [CHEVRON_RIGHT]: ChevronRight,
   [CHEVRON_DOUBLE_RIGHT]: ChevronDoubleRight,
   [FIRE]: Fire,
+  [FLAG]: Flag,
 };
 
 export const ICON_NAMES = {
@@ -57,6 +60,7 @@ export const ICON_NAMES = {
   CHEVRON_RIGHT,
   CHEVRON_DOUBLE_RIGHT,
   FIRE,
+  FLAG,
   LIATRIO,
   GITHUB,
   TWITTER,

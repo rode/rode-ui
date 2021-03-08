@@ -58,6 +58,10 @@ $INDENTATION: 1rem;
   @extend .previewContainer;
   flex-direction: column;
   align-items: flex-start;
+
+  &:hover {
+    cursor: auto;
+  }
 }
 
 .active {

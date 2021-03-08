@@ -23,8 +23,6 @@ import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
 
-// TODO: test and style this
-
 const OtherOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
     return null;
@@ -33,7 +31,7 @@ const OtherOccurrenceSection = ({ occurrences }) => {
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
-        <Icon name={ICON_NAMES.SERVER} />
+        <Icon name={ICON_NAMES.FLAG} />
         <p>Other</p>
       </div>
       {occurrences.map((occurrence) => (
@@ -44,7 +42,7 @@ const OtherOccurrenceSection = ({ occurrences }) => {
               occurrence.createTime
             ).format(DATE_TIME_FORMAT)}`}</p>
           )}
-          <OccurrenceCodeBlock json={occurrence} />
+          <OccurrenceCodeBlock json={occurrence} fullWidth={true} />
         </div>
       ))}
     </div>
