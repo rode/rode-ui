@@ -61,7 +61,7 @@ const Resource = () => {
           <p className={styles.resourceName}>{resourceName}</p>
           <p>Type: {resourceType}</p>
         </div>
-        <div className={styles.versionContainer}>
+        <div>
           <p className={styles.version}>Version: {resourceVersion}</p>
         </div>
       </div>

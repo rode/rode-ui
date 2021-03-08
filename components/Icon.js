@@ -28,9 +28,9 @@ const Icon = (props) => {
   const IconComponent = ICON_COMPONENTS[name];
 
   return (
-    <div className={styles[size]}>
+    <span className={styles[size]}>
       <IconComponent theme={theme} />
-    </div>
+    </span>
   );
 };
 

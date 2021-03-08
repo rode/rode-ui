@@ -41,20 +41,29 @@
 .resourceHeader {
   display: flex;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 2rem;
   box-shadow: $BOX_SHADOW;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .resourceName {
   font-size: 1.5rem;
   font-weight: 700;
-}
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100vw - 5rem);
 
-.versionContainer {
-  margin-left: 2rem;
+  @include tabletAndLarger {
+    max-width: calc(50vw - 2rem);
+  }
 }
 
 .version {
@@ -63,9 +72,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: calc(75vw - 2rem);
+  max-width: calc(100vw - 5rem);
 
-  @include phoneAndSmaller {
+  @include tabletAndLarger {
+    max-width: calc(50vw - 5rem);
+  }
+  @include desktopAndLarger {
     max-width: calc(50vw - 2rem);
   }
 }
