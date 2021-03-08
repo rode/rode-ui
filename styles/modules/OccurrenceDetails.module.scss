@@ -131,7 +131,7 @@ $SIDE_SPACING: 1rem;
   margin: 0 auto;
 
   @include tabletAndLarger {
-  align-items: flex-end;
+    align-items: flex-end;
     max-width: 48vw;
   }
 }

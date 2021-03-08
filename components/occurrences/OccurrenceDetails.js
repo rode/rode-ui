@@ -35,8 +35,10 @@ const OccurrenceDetails = ({ occurrence }) => {
   const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
 
   React.useLayoutEffect(() => {
-    document.getElementById("occurrenceDetails").scrollIntoView({behavior: "smooth"});
-  });
+    document
+      .getElementById("occurrenceDetails")
+      .scrollIntoView({ behavior: "smooth" });
+  }, [occurrence]);
 
   return (
     <div

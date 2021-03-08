@@ -17,9 +17,23 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-$INDICATOR_SIZE: 1.25rem;
-$SHAPE_SIZE: calc(#{$INDICATOR_SIZE} * 0.75);
-$PADDING: 0.25rem;
+@mixin toggleSizing($indicator-size, $padding) {
+  width: calc(#{$indicator-size} * 2 + calc(#{$padding} * 3));
+  padding: $padding;
+  border-radius: $indicator-size;
+
+  .indicator {
+    width: $indicator-size;
+    height: $indicator-size;
+    padding: $padding;
+  }
+
+  &[aria-checked="true"] {
+    .indicator {
+      transform: translateX($indicator-size);
+    }
+  }
+}
 
 .container {
   display: flex;
@@ -53,14 +67,16 @@ $PADDING: 0.25rem;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  width: calc(#{$INDICATOR_SIZE} * 2 + calc(#{$PADDING} * 3));
   height: fit-content;
-  padding: $PADDING;
   background-color: $MEDIUM_GREY;
   color: $WHITE;
-  border-radius: $INDICATOR_SIZE;
   border: solid 2px $MEDIUM_GREY;
   cursor: pointer;
+  @include toggleSizing(1rem, 0.25rem);
+
+  @include tabletAndLarger {
+    @include toggleSizing(1.25rem, 0.25rem);
+  }
 
   &:active,
   &:hover,
@@ -70,12 +86,9 @@ $PADDING: 0.25rem;
   }
 
   .indicator {
-    width: $INDICATOR_SIZE;
-    height: $INDICATOR_SIZE;
     border-radius: 50%;
     background-color: $WHITE;
     box-shadow: $BOX_SHADOW;
-    padding: $PADDING;
     @include transition;
   }
 
@@ -83,7 +96,6 @@ $PADDING: 0.25rem;
     .indicator {
       @extend .indicator;
       background-color: $DARK_GREY;
-      transform: translateX($INDICATOR_SIZE);
     }
   }
 }

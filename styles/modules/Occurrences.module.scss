@@ -101,7 +101,7 @@ $INDENTATION: 1rem;
   line-height: 1.5rem;
 
   @include tabletAndLarger {
-  margin-left: 1rem;
+    margin-left: 1rem;
   }
 }
 
@@ -138,10 +138,6 @@ $INDENTATION: 1rem;
     background-color: $DARK_GREY;
     color: $SOFT_WHITE;
     border-bottom-color: $DARKER_GREY;
-
-    svg {
-      color: $LAGOON;
-    }
   }
 
   .active {
@@ -162,10 +158,6 @@ $INDENTATION: 1rem;
   .previewContainer {
     background-color: $WHITE;
     border-bottom-color: $WHITE_SMOKE;
-
-    svg {
-      color: $DEEP_SEA;
-    }
   }
 
   .active {

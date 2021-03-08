@@ -21,8 +21,12 @@
   width: 100%;
   display: grid;
   grid-template-columns: minmax(1.5rem, 5rem) 1fr max-content;
-  padding: 0 1rem;
+  padding: 0 0.25rem;
   box-shadow: $BOX_SHADOW;
+
+  @include tabletAndLarger {
+    padding: 0 1rem;
+  }
 
   .links {
     padding: 0.5rem;
