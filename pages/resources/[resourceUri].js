@@ -21,14 +21,24 @@ import styles from "styles/modules/Resource.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
 const Resource = () => {
   const { theme } = useTheme();
+  const { dispatch } = useResources();
   const router = useRouter();
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
   const [resourceType, setResourceType] = useState("");
   const { resourceUri } = router.query;
+
+  useEffect(() => {
+    dispatch({
+      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      data: null,
+    });
+  }, []);
 
   useEffect(() => {
     if (resourceUri) {

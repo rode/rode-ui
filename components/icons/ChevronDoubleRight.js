@@ -14,34 +14,25 @@
  * limitations under the License.
  */
 
-// TODO: test this
+import React from "react";
 
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
+const ChevronDoubleRight = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <title>Chevron Double Right</title>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M13 5l7 7-7 7M5 5l7 7-7 7"
+      />
+    </svg>
+  );
 };
 
-const setOccurrenceDetails = (state, data) => {
-  return {
-    ...state,
-    occurrenceDetails: data,
-  };
-};
-
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
-};
-
-export const resourceReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const resourceActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
-};
+export default ChevronDoubleRight;

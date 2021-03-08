@@ -14,34 +14,29 @@
  * limitations under the License.
  */
 
-// TODO: test this
+export const getVulnerabilityBreakdown = (vulnerabilities) => {
+  let low = 0;
+  let medium = 0;
+  let high = 0;
+  let unknown = 0;
 
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
-};
+  vulnerabilities.forEach((vuln) => {
+    if (vuln.effectiveSeverity === "LOW") {
+      low++;
+    } else if (vuln.effectiveSeverity === "MEDIUM") {
+      medium++;
+    } else if (vuln.effectiveSeverity === "HIGH") {
+      high++;
+    } else {
+      unknown++;
+    }
+  });
 
-const setOccurrenceDetails = (state, data) => {
-  return {
-    ...state,
-    occurrenceDetails: data,
-  };
-};
-
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
-};
-
-export const resourceReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const resourceActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
+  const values = [
+    high && `${high} high`,
+    medium && `${medium} medium`,
+    low && `${low} low`,
+    unknown && `${unknown} unknown`,
+  ];
+  return values.filter((val) => val).join(", ");
 };

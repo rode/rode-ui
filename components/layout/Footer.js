@@ -39,6 +39,8 @@ const footerLinks = [
   },
 ];
 
+// TODO: add hover styles to icon links
+
 const Footer = () => {
   const { theme } = useTheme();
 

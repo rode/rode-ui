@@ -14,34 +14,4 @@
  * limitations under the License.
  */
 
-// TODO: test this
-
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
-};
-
-const setOccurrenceDetails = (state, data) => {
-  return {
-    ...state,
-    occurrenceDetails: data,
-  };
-};
-
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
-};
-
-export const resourceReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const resourceActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
-};
+export const DATE_TIME_FORMAT = "h:mm:ssa | MMMM D, YYYY";

@@ -15,36 +15,49 @@
  */
 
 import Loading from "components/Loading";
-import ResourceOccurrenceCard from "./ResourceOccurrenceCard";
 import React from "react";
 import PropTypes from "prop-types";
 import { useFetch } from "hooks/useFetch";
+import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
+import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
+import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
+import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
+import styles from "styles/modules/Occurrences.module.scss";
+import { useResources } from "providers/resources";
+import { useTheme } from "providers/theme";
 
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
+  const { state } = useResources();
+  const { theme } = useTheme();
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
+
   return (
-    <>
+    <div className={`${styles.layout} ${styles[theme]}`}>
       <Loading loading={loading} />
       {data && (
         <>
-          {data.map((occurrence) => (
-            <ResourceOccurrenceCard
-              key={occurrence.name}
-              occurrence={occurrence}
-            />
-          ))}
+          <div>
+            <BuildOccurrenceSection occurrences={data.build} />
+            <SecureOccurrenceSection occurrences={data.secure} />
+            <DeploymentOccurrenceSection occurrences={data.deploy} />
+          </div>
+          {state.occurrenceDetails && (
+            <div>
+              <OccurrenceDetails occurrence={state.occurrenceDetails} />
+            </div>
+          )}
         </>
       )}
-    </>
+    </div>
   );
 };
 
 ResourceOccurrences.propTypes = {
-  resourceUri: PropTypes.string.isRequired,
+  resourceUri: PropTypes.string,
 };
 
 export default ResourceOccurrences;

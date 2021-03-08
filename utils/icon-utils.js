@@ -15,11 +15,23 @@
  */
 
 import Search from "components/icons/Search";
+import Cog from "components/icons/Cog";
+import ShieldCheck from "components/icons/ShieldCheck";
+import Server from "components/icons/Server";
+import ChevronRight from "components/icons/ChevronRight";
 import Liatrio from "components/icons/Liatrio";
 import Github from "components/icons/Github";
 import Twitter from "components/icons/Twitter";
+import ChevronDoubleRight from "components/icons/ChevronDoubleRight";
+import Fire from "components/icons/Fire";
 
 const SEARCH = "Search";
+const COG = "Cog";
+const SHIELD_CHECK = "ShieldCheck";
+const SERVER = "Server";
+const CHEVRON_RIGHT = "ChevronRight";
+const CHEVRON_DOUBLE_RIGHT = "ChevronDoubleRight";
+const FIRE = "FIRE";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -29,10 +41,22 @@ export const ICON_COMPONENTS = {
   [LIATRIO]: Liatrio,
   [GITHUB]: Github,
   [TWITTER]: Twitter,
+  [COG]: Cog,
+  [SHIELD_CHECK]: ShieldCheck,
+  [SERVER]: Server,
+  [CHEVRON_RIGHT]: ChevronRight,
+  [CHEVRON_DOUBLE_RIGHT]: ChevronDoubleRight,
+  [FIRE]: Fire,
 };
 
 export const ICON_NAMES = {
   SEARCH,
+  COG,
+  SHIELD_CHECK,
+  SERVER,
+  CHEVRON_RIGHT,
+  CHEVRON_DOUBLE_RIGHT,
+  FIRE,
   LIATRIO,
   GITHUB,
   TWITTER,

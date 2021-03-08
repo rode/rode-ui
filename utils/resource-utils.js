@@ -39,10 +39,8 @@ export const parseDocker = (uri) => {
     .split(new RegExp(DOCKER_REGEXP))
     .filter((value) => value);
 
-  const nameParts = nameWithUrl.split("/");
-
   return {
-    name: nameParts[nameParts.length - 1],
+    name: nameWithUrl,
     version: version,
   };
 };

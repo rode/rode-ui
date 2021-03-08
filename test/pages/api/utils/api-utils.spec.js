@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-import styles from "styles/modules/Occurrences.module.scss";
-import PropTypes from "prop-types";
-import React from "react";
+import { getRodeUrl } from "pages/api/utils/api-utils";
 
-const DiscoveryOccurrencePreview = ({ occurrence }) => {
-  return (
-    <div className={styles.discovery}>
-      <p>Analysis Status: {occurrence.discovered.discovered.analysisStatus}</p>
-    </div>
-  );
-};
-DiscoveryOccurrencePreview.propTypes = {
-  occurrence: PropTypes.object.isRequired,
-};
+describe("api-utils", () => {
+  describe("getRodeUrl", () => {
+    it("should return the environment variable if set", () => {
+      const expected = chance.string();
+      process.env.RODE_URL = expected;
 
-export default DiscoveryOccurrencePreview;
+      const actual = getRodeUrl();
+
+      expect(actual).toEqual(expected);
+    });
+
+    it("should return the default url if environment is not set", () => {
+      delete process.env.RODE_URL;
+      const actual = getRodeUrl();
+
+      expect(actual).toEqual("http://localhost:50052");
+    });
+  });
+});

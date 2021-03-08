@@ -18,77 +18,141 @@
 
 $INDENTATION: 1rem;
 
-.container {
+.layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+
+  > div {
+    flex: 1;
+    height: 100%;
+    margin-bottom: 2rem;
+  }
+}
+.previewContainer {
+  flex: 1;
   display: flex;
   width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem 2rem 1rem;
-  margin: 0.5rem auto;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  margin: 0.25rem auto;
+  border: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.active {
+  border-left-width: 8px;
+  border-left-style: solid;
   box-shadow: $BOX_SHADOW;
 }
 
-.codeBlockContainer {
-  padding: 0 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.previewDetails {
+  flex: 1;
+  text-align: left;
+  margin-left: 2rem;
 }
 
-.codeBlock {
-  margin-top: 0.5rem;
-  display: inline-flex;
+.previewMainText {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.previewSubText {
+  font-size: 0.85rem;
+  text-indent: 1rem;
+  line-height: 1.5rem;
+}
+
+.previewTimestamp {
+  @extend .previewSubText;
+}
+
+.previewLinks {
+  margin-right: 1rem;
+}
+
+.sectionContainer {
   width: 100%;
-  height: fit-content;
-  max-height: 32rem;
-  overflow: auto;
-  padding: 1rem;
+  margin-top: 1rem;
 }
 
-.discovery {
-  margin-top: 0.5rem;
-  margin-left: $INDENTATION;
-}
-
-.vulnerability {
-  margin-top: 0.5rem;
-  margin-left: $INDENTATION;
-
-  a {
-    display: inline;
-    margin: 0 0.25rem;
-  }
-}
-
-.createdAt {
-  color: $MEDIUM_GREY;
-  margin-left: $INDENTATION;
-}
-
-.kind {
-  font-size: 1.5rem;
+.sectionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 1rem;
   font-weight: 600;
+  font-size: 1.5rem;
+
+  > p {
+    margin-left: 0.25rem;
+  }
 }
 
 .darkTheme {
-  &.container {
-    background-color: $DARK_GREY;
-    color: $SOFT_WHITE;
+  .sectionTitle {
+    color: $SILVER;
   }
 
-  .codeBlock {
-    background-color: $DARKER_GREY;
+  .previewContainer {
+    background-color: $DARK_GREY;
+    color: $SOFT_WHITE;
+    border-bottom-color: $DARKER_GREY;
+
+    svg {
+      color: $LAGOON;
+    }
+  }
+
+  .active {
+    border-left-color: $LAGOON;
+    background-color: $DARKEST_GREY;
+  }
+
+  .previewTimestamp {
     color: $SILVER;
+  }
+
+  .previewLinks {
+    color: $LAGOON;
   }
 }
 
 .lightTheme {
-  &.container {
-    background-color: $WHITE;
+  .sectionTitle {
+    color: $MEDIUM_GREY;
   }
 
-  .codeBlock {
+  .previewContainer {
+    background-color: $WHITE;
+    border-bottom-color: $WHITE_SMOKE;
+
+    svg {
+      color: $DEEP_SEA;
+    }
+  }
+
+  .active {
+    border-left-color: $DEEP_SEA;
     background-color: $WHITE_SMOKE;
-    color: $DARK_GREY;
+  }
+
+  .previewTimestamp {
+    color: $MEDIUM_GREY;
   }
 }

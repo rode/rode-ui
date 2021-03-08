@@ -18,7 +18,13 @@ import Chance from "chance";
 
 const chance = new Chance();
 
-const createDiscoveryOccurrence = () => ({
+const createBuiltArtifacts = () => ({
+  checksum: chance.natural(),
+  id: chance.guid(),
+  names: [chance.word({ syllable: chance.d10() + 3 })],
+});
+
+const createDiscoveryDetails = () => ({
   discovered: {
     discovered: {
       continuousAnalysis: "CONTINUOUS_ANALYSIS_UNSPECIFIED",
@@ -32,7 +38,7 @@ const createDiscoveryOccurrence = () => ({
     },
   },
 });
-const createVulnerabilityOccurrence = () => ({
+const createVulnerabilityDetails = () => ({
   vulnerability: {
     type: "docker",
     severity: "SEVERITY_UNSPECIFIED",
@@ -62,20 +68,13 @@ const createVulnerabilityOccurrence = () => ({
     effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
   },
 });
-
-const createBuildOccurrence = () => ({
+const createBuildDetails = () => ({
   build: {
     provenance: {
       id: chance.guid(),
       projectId: chance.string(),
       commands: [],
-      builtArtifacts: [
-        {
-          checksum: chance.natural(),
-          id: chance.guid(),
-          names: [chance.word({ syllable: chance.d10() + 3 })],
-        },
-      ],
+      builtArtifacts: [createBuiltArtifacts()],
       createTime: chance.timestamp(),
       startTime: chance.timestamp(),
       endTime: chance.timestamp(),
@@ -97,17 +96,32 @@ const createBuildOccurrence = () => ({
     provenanceBytes: chance.string(),
   },
 });
+const createDeploymentDetails = () => ({
+  deployment: {
+    deployment: {
+      userEmail: chance.email(),
+      deployTime: chance.timestamp(),
+      undeployTime: chance.timestamp(),
+      config: "config",
+      address: "address",
+      resourceUri: [createMockResourceUri(), createMockResourceUri()],
+      platform: "CUSTOM",
+    },
+  },
+});
 
-const mockOccurrenceMap = {
-  DISCOVERY: createDiscoveryOccurrence,
-  VULNERABILITY: createVulnerabilityOccurrence,
-  BUILD: createBuildOccurrence,
+const mockDetailsMap = {
+  DISCOVERY: createDiscoveryDetails,
+  VULNERABILITY: createVulnerabilityDetails,
+  BUILD: createBuildDetails,
+  DEPLOYMENT: createDeploymentDetails,
 };
 
 export const createMockOccurrence = (
-  kind = chance.pickone(Object.keys(mockOccurrenceMap))
+  kind = chance.pickone(Object.keys(mockDetailsMap)),
+  createTime = chance.timestamp()
 ) => {
-  const kindSpecificDetails = mockOccurrenceMap[kind]();
+  const kindSpecificDetails = mockDetailsMap[kind]?.(createTime);
 
   return {
     name: `projects/rode/occurrences/${chance.guid()}`,
@@ -119,9 +133,79 @@ export const createMockOccurrence = (
     noteName: "projects/rode/notes/harbor",
     kind: kind,
     remediation: "",
-    createTime: chance.timestamp(),
+    createTime: createTime,
     updateTime: null,
     ...kindSpecificDetails,
+  };
+};
+
+export const createMockMappedBuildOccurrence = () => {
+  return {
+    name: chance.string(),
+    started: chance.timestamp(),
+    completed: chance.timestamp(),
+    creator: chance.email(),
+    artifacts: chance.n(createBuiltArtifacts, chance.d4()),
+    sourceUri: chance.url(),
+    logsUri: chance.url(),
+    originals: [createMockOccurrence("BUILD")],
+  };
+};
+
+export const createMockMappedVulnerabilityOccurrence = () => {
+  const sharedTimestamp = chance.timestamp();
+  return {
+    name: chance.string(),
+    started: chance.timestamp(),
+    completed: chance.timestamp(),
+    vulnerabilities: chance.n(
+      () => ({
+        name: chance.string(),
+        type: chance.string(),
+        cvssScore: chance.d10(),
+        severity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
+        effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
+        description: chance.pickone([chance.sentence(), null]),
+        relatedUrls: chance.pickone([
+          chance.n(() => ({ url: chance.url() }), chance.d4()),
+          [],
+        ]),
+        cpeUri: chance.url(),
+        packageName: chance.string(),
+        version: {
+          epoch: chance.d10(),
+          name: chance.string(),
+          revision: chance.string(),
+          kind: "NORMAL",
+        },
+      }),
+      chance.d4()
+    ),
+    originals: [
+      createMockOccurrence("DISCOVERY", sharedTimestamp - 2),
+      createMockOccurrence("DISCOVERY", sharedTimestamp),
+      createMockOccurrence("VULNERABILITY", sharedTimestamp),
+    ],
+  };
+};
+
+export const createMockMappedDeploymentOccurrence = () => {
+  return {
+    name: chance.string(),
+    deploymentStart: chance.timestamp(),
+    deploymentEnd: chance.timestamp(),
+    resourceUris: chance.n(createMockResourceUri, chance.d4()),
+    platform: chance.string({ alpha: true }),
+    originals: [createMockOccurrence("DEPLOYMENT")],
+  };
+};
+
+export const createMockMappedOccurrences = () => {
+  return {
+    build: chance.n(createMockMappedBuildOccurrence, chance.d4()),
+    secure: [createMockMappedVulnerabilityOccurrence()],
+    deploy: [createMockMappedDeploymentOccurrence()],
+    other: [],
   };
 };
 
@@ -129,5 +213,5 @@ export const createMockResourceUri = (
   name = chance.word({ syllables: chance.d20() }),
   version = chance.natural()
 ) => {
-  return `${chance.url()}/${name}@sha256:${version}`;
+  return `${name}@sha256:${version}`;
 };

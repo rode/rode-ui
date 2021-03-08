@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
-import styles from "styles/modules/Occurrences.module.scss";
+import styles from "styles/modules/OccurrenceDetails.module.scss";
+import { useResources } from "providers/resources";
 
 const OccurrenceCodeBlock = ({ occurrence }) => {
   const [showCode, setShowCode] = useState(false);
+
+  const { state } = useResources();
+
+  useEffect(() => {
+    if (state.occurrenceDetails) {
+      setShowCode(false);
+    }
+  }, [state.occurrenceDetails]);
 
   const toggle = () => {
     setShowCode(!showCode);
@@ -32,7 +41,7 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
       {showCode && (
         <div className={styles.codeBlock} data-testid="occurrenceJson">
           <pre>
-            <code>{JSON.stringify(occurrence, null, 2)}</code>
+            <code>{JSON.stringify(occurrence.originals, null, 2)}</code>
           </pre>
         </div>
       )}

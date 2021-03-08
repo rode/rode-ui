@@ -43,4 +43,40 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/liatrio/i)).toBeInTheDocument();
   });
+
+  it("should render the cog icon when specified", () => {
+    render(<Icon name={ICON_NAMES.COG} />);
+
+    expect(screen.getByTitle(/cog/i)).toBeInTheDocument();
+  });
+
+  it("should render the shield check icon when specified", () => {
+    render(<Icon name={ICON_NAMES.SHIELD_CHECK} />);
+
+    expect(screen.getByTitle(/shield check/i)).toBeInTheDocument();
+  });
+
+  it("should render the server icon when specified", () => {
+    render(<Icon name={ICON_NAMES.SERVER} />);
+
+    expect(screen.getByTitle(/server/i)).toBeInTheDocument();
+  });
+
+  it("should render the chevron icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CHEVRON_RIGHT} />);
+
+    expect(screen.getByTitle(/chevron/i)).toBeInTheDocument();
+  });
+
+  it("should render the double chevron icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CHEVRON_DOUBLE_RIGHT} />);
+
+    expect(screen.getByTitle(/chevron double/i)).toBeInTheDocument();
+  });
+
+  it("should render the fire icon when specified", () => {
+    render(<Icon name={ICON_NAMES.FIRE} />);
+
+    expect(screen.getByTitle(/fire/i)).toBeInTheDocument();
+  });
 });

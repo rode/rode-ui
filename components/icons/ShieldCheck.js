@@ -14,34 +14,25 @@
  * limitations under the License.
  */
 
-// TODO: test this
+import React from "react";
 
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
+const ShieldCheck = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <title>Shield Check</title>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+      />
+    </svg>
+  );
 };
 
-const setOccurrenceDetails = (state, data) => {
-  return {
-    ...state,
-    occurrenceDetails: data,
-  };
-};
-
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
-};
-
-export const resourceReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const resourceActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
-};
+export default ShieldCheck;
