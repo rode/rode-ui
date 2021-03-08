@@ -15,7 +15,6 @@
  */
 
 @import "constants";
-@import "typography.scss";
 
 * {
   padding: 0;
@@ -64,4 +63,35 @@ body {
     grid-row: footer / auto;
     grid-column: footer;
   }
+}
+
+a {
+  text-decoration: none;
+  color: $LINK;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:active {
+    box-shadow: $FOCUS_SHADOW;
+    outline: none;
+  }
+
+  &:visited {
+    color: $LINK;
+  }
+}
+
+code {
+  font-family: monospace;
+}
+
+.lightTheme {
+  color: $DARK_GREY;
+}
+
+.darkTheme {
+  color: $SOFT_WHITE;
 }

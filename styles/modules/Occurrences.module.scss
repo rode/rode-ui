@@ -83,16 +83,12 @@ $INDENTATION: 1rem;
 
 .previewSubText {
   font-size: 0.85rem;
-  text-indent: 1rem;
+  margin-left: 1rem;
   line-height: 1.5rem;
 }
 
 .previewTimestamp {
   @extend .previewSubText;
-}
-
-.previewLinks {
-  margin-right: 1rem;
 }
 
 .sectionContainer {
@@ -137,10 +133,6 @@ $INDENTATION: 1rem;
 
   .previewTimestamp {
     color: $SILVER;
-  }
-
-  .previewLinks {
-    color: $LAGOON;
   }
 }
 

@@ -1,0 +1,17 @@
+@import "styles/constants";
+
+.externalLink {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  margin-right: 1rem;
+}
+
+.darkTheme {
+  color: $LAGOON;
+}
+
+.lightTheme {
+  color: $LINK;
+}
