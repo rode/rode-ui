@@ -78,9 +78,31 @@
     justify-content: center;
     align-items: center;
     margin: 0.25rem;
+    @include transition;
 
     > p {
       margin: 0.25rem;
+    }
+
+    &:hover {
+      @include transition;
+
+      .liatrioOuter {
+        @include transition;
+        color: $HOT_RED;
+      }
+
+      .liatrioInner {
+        @include transition;
+        color: $FLAME_ORANGE;
+      }
+
+      &[title="Twitter"] {
+        color: #1da1f2;
+      }
+      &[title="Github"] {
+        color: #6e5494;
+      }
     }
   }
 }
@@ -100,6 +122,16 @@
     }
   }
 
+  &.liatrioOuter {
+    color: $WHITE;
+    @include transition;
+  }
+
+  &.liatrioInner {
+    color: $WHITE;
+    @include transition;
+  }
+
   color: $SILVER;
 }
 
@@ -116,6 +148,16 @@
     a {
       color: $DARK_GREY;
     }
+  }
+
+  &.liatrioOuter {
+    color: $GREEN;
+    @include transition;
+  }
+
+  &.liatrioInner {
+    color: $BRIGHT_GREEN;
+    @include transition;
   }
 
   color: $DARK_GREY;
