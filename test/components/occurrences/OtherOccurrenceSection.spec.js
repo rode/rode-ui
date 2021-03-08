@@ -35,7 +35,7 @@ describe("OtherOccurrenceSection", () => {
     occurrences = [];
     render(<OtherOccurrenceSection occurrences={occurrences} />);
 
-    expect(screen.queryByText(/build/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/other/i)).not.toBeInTheDocument();
   });
 
   describe("other occurrences exist", () => {
@@ -56,7 +56,7 @@ describe("OtherOccurrenceSection", () => {
       expect(screen.getByTitle("Flag")).toBeInTheDocument();
     });
 
-    it("should render a preview for each build occurrence", () => {
+    it("should render a preview for each other occurrence", () => {
       occurrences.forEach((occurrence, index) => {
         expect(screen.getByText(occurrence.kind)).toBeInTheDocument();
 
