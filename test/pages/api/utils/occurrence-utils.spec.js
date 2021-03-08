@@ -146,30 +146,40 @@ describe("occurrence-utils", () => {
       });
     });
 
-    it("should correctly map build occurrences", () => {
-      const buildOccurrence = createMockOccurrence("BUILD");
-      const { build } = mapOccurrencesToSections([buildOccurrence]);
+    describe("build occurrences", () => {
+      it("should correctly map build occurrences", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        const { build } = mapOccurrencesToSections([buildOccurrence]);
 
-      expect(build[0].name).toEqual(buildOccurrence.name);
-      expect(build[0].started).toEqual(
-        buildOccurrence.build.provenance.startTime
-      );
-      expect(build[0].completed).toEqual(
-        buildOccurrence.build.provenance.endTime
-      );
-      expect(build[0].creator).toEqual(
-        buildOccurrence.build.provenance.creator
-      );
-      expect(build[0].artifacts).toEqual(
-        buildOccurrence.build.provenance.builtArtifacts
-      );
-      expect(build[0].sourceUri).toEqual(
-        `${buildOccurrence.build.provenance.sourceProvenance.context.git.url}/tree/${buildOccurrence.build.provenance.sourceProvenance.context.git.revisionId}`
-      );
-      expect(build[0].logsUri).toEqual(
-        buildOccurrence.build.provenance.logsUri
-      );
-      expect(build[0].originals).toContain(buildOccurrence);
+        expect(build[0].name).toEqual(buildOccurrence.name);
+        expect(build[0].started).toEqual(
+          buildOccurrence.build.provenance.startTime
+        );
+        expect(build[0].completed).toEqual(
+          buildOccurrence.build.provenance.endTime
+        );
+        expect(build[0].creator).toEqual(
+          buildOccurrence.build.provenance.creator
+        );
+        expect(build[0].artifacts).toEqual(
+          buildOccurrence.build.provenance.builtArtifacts
+        );
+        expect(build[0].sourceUri).toEqual(
+          `${buildOccurrence.build.provenance.sourceProvenance.context.git.url}/tree/${buildOccurrence.build.provenance.sourceProvenance.context.git.revisionId}`
+        );
+        expect(build[0].logsUri).toEqual(
+          buildOccurrence.build.provenance.logsUri
+        );
+        expect(build[0].originals).toContain(buildOccurrence);
+      });
+
+      it("should correctly map builds without source urls", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        buildOccurrence.build.provenance.sourceProvenance.context.git.url = null;
+        const { build } = mapOccurrencesToSections([buildOccurrence]);
+
+        expect(build[0].sourceUri).toBeNull();
+      });
     });
 
     it("should correctly map deployment occurrences", () => {
