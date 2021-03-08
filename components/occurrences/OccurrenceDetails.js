@@ -34,10 +34,15 @@ const OccurrenceDetails = ({ occurrence }) => {
   const { theme } = useTheme();
   const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
 
+  React.useLayoutEffect(() => {
+    document.getElementById("occurrenceDetails").scrollIntoView({behavior: "smooth"});
+  });
+
   return (
     <div
       className={`${styles.detailContainer} ${styles[theme]}`}
       data-testid={"occurrenceDetails"}
+      id={"occurrenceDetails"}
     >
       <DetailComponent occurrence={occurrence} />
       <OccurrenceCodeBlock json={occurrence.originals} />

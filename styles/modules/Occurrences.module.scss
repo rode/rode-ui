@@ -15,6 +15,7 @@
  */
 
 @import "styles/constants";
+@import "styles/mixins";
 
 $INDENTATION: 1rem;
 
@@ -22,14 +23,19 @@ $INDENTATION: 1rem;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
 
   > div {
     flex: 1;
     height: 100%;
+    width: 100%;
     margin-bottom: 2rem;
+  }
+
+  @include tabletAndLarger {
+    flex-direction: row;
   }
 }
 .previewContainer {
@@ -39,7 +45,7 @@ $INDENTATION: 1rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.25rem auto;
   border: none;
   border-bottom-width: 1px;
@@ -51,6 +57,10 @@ $INDENTATION: 1rem;
 
   &:focus {
     outline: none;
+  }
+
+  @include tabletAndLarger {
+    padding: 1.5rem 1rem;
   }
 }
 
@@ -73,7 +83,11 @@ $INDENTATION: 1rem;
 .previewDetails {
   flex: 1;
   text-align: left;
-  margin-left: 2rem;
+  margin-left: 1rem;
+
+  @include tabletAndLarger {
+    margin-left: 2rem;
+  }
 }
 
 .previewMainText {
@@ -83,8 +97,12 @@ $INDENTATION: 1rem;
 
 .previewSubText {
   font-size: 0.85rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   line-height: 1.5rem;
+
+  @include tabletAndLarger {
+  margin-left: 1rem;
+  }
 }
 
 .previewTimestamp {

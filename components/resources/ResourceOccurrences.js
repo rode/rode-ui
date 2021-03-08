@@ -22,10 +22,10 @@ import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSectio
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
 import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
 import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
+import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSection";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
-import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSection";
 
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
