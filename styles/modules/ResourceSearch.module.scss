@@ -71,25 +71,40 @@
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 
   @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
     padding: 2rem;
     margin-bottom: 2rem;
   }
 
-  .cardText {
-    font-size: 0.75rem;
-    text-indent: 0.5rem;
+  .cardHeader {
+    text-align: left;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: calc(100vw - 13rem);
+    max-width: calc(100vw - 5rem);
 
     @include tabletAndLarger {
       max-width: calc(100vw - 18rem);
+    }
+  }
+
+  .cardText {
+    @extend .cardHeader;
+    font-size: 0.75rem;
+    text-indent: 0.5rem;
+  }
+
+  button {
+    margin: 0.5rem auto 0;
+
+    @include tabletAndLarger {
+      margin: 0;
     }
   }
 }
