@@ -15,6 +15,7 @@
  */
 
 @import "styles/constants";
+@import "styles/mixins";
 
 $SIDE_SPACING: 1rem;
 
@@ -25,13 +26,17 @@ $SIDE_SPACING: 1rem;
 
 .detailSummary {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   padding: 2rem $SIDE_SPACING;
 
   a {
     padding: 0 1rem 0 0;
+  }
+
+  @include desktopAndLarger {
+    flex-direction: row;
   }
 }
 
@@ -41,19 +46,31 @@ $SIDE_SPACING: 1rem;
 }
 
 .timestamps {
-  text-align: right;
+  text-align: left;
+
+  @include desktopAndLarger {
+    text-align: right;
+  }
 }
 
 .detailContentContainer {
   width: 100%;
-  padding: $SIDE_SPACING 0 $SIDE_SPACING $SIDE_SPACING;
+
+  @include tabletAndLarger {
+    padding: $SIDE_SPACING 0 $SIDE_SPACING $SIDE_SPACING;
+  }
 }
 
 .card {
-  width: 90%;
-  margin: 0 0 0.25rem auto;
+  width: 100%;
+  margin: 0 auto 0.25rem;
   padding: 1rem;
   background-color: $WHITE;
+
+  @include tabletAndLarger {
+    width: 90%;
+    margin: 0 0 0.25rem auto;
+  }
 }
 
 .cardTitle {
@@ -74,7 +91,9 @@ $SIDE_SPACING: 1rem;
 }
 
 .vulnerabilityBreakdown {
-  text-indent: 1rem;
+  @include desktopAndLarger {
+    text-indent: 1rem;
+  }
 }
 
 .severity {
@@ -107,9 +126,14 @@ $SIDE_SPACING: 1rem;
 .codeBlockContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  max-width: 48vw;
+  align-items: center;
+  width: 100%;
   margin: 0 auto;
+
+  @include tabletAndLarger {
+  align-items: flex-end;
+    max-width: 48vw;
+  }
 }
 
 .fullWidthCodeBlockContainer {

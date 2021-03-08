@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const DATE_TIME_FORMAT = "h:mm:ssa | MMMM D, YYYY";
+export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";

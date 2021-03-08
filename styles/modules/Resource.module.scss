@@ -19,6 +19,7 @@
 
 .container {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,6 +41,7 @@
 
 .resourceHeader {
   display: flex;
+  max-width: 100%;
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
@@ -62,7 +64,7 @@
   max-width: calc(100vw - 5rem);
 
   @include tabletAndLarger {
-    max-width: calc(50vw - 2rem);
+    max-width: calc(48vw - 2rem);
   }
 }
 
@@ -76,9 +78,6 @@
 
   @include tabletAndLarger {
     max-width: calc(50vw - 5rem);
-  }
-  @include desktopAndLarger {
-    max-width: calc(50vw - 2rem);
   }
 }
 
