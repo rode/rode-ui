@@ -27,37 +27,51 @@ $PADDING: 0.5rem;
   &:active {
     box-shadow: $FOCUS_SHADOW;
   }
+}
 
-  &.darkTheme {
-    .label {
-      color: $SOFT_WHITE;
-    }
+.label {
+  display: block;
+  font-weight: 700;
+  padding-left: $PADDING;
+}
 
-    .input {
-      color: $WHITE_SMOKE;
+.input {
+  width: 100%;
+  padding: $PADDING;
+  background-color: transparent;
+  border: none;
+  border-bottom: solid 1px $MEDIUM_GREY;
 
-      &::placeholder {
-        color: $MEDIUM_GREY;
-      }
-    }
+  &:focus {
+    outline: none;
+    border-bottom: solid 1px $LAGOON;
   }
+}
 
+.darkTheme {
   .label {
-    display: block;
-    font-weight: 700;
-    padding-left: $PADDING;
+    color: $DT_MAIN_TEXT;
   }
 
   .input {
-    width: 100%;
-    padding: $PADDING;
-    background-color: transparent;
-    border: none;
-    border-bottom: solid 1px $MEDIUM_GREY;
+    color: $DT_MAIN_TEXT;
 
-    &:focus {
-      outline: none;
-      border-bottom: solid 1px $LAGOON;
+    &::placeholder {
+      color: $DT_SUB_TEXT;
+    }
+  }
+}
+
+.lightThem {
+  .label {
+    color: $LT_MAIN_TEXT;
+  }
+
+  .input {
+    color: $LT_MAIN_TEXT;
+
+    &::placeholder {
+      color: $LT_SUB_TEXT;
     }
   }
 }

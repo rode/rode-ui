@@ -25,7 +25,7 @@
 
 body {
   height: 100vh;
-  background-color: $SOFT_WHITE;
+  //background-color: $SOFT_WHITE;
 
   #__next {
     height: 100%;
@@ -51,11 +51,11 @@ body {
     grid-column: main;
 
     &.darkTheme {
-      background-color: $DARKER_GREY;
+      background-color: $DT_BACKGROUND_LIGHT;
     }
 
     &.lightTheme {
-      background-color: $SOFT_WHITE;
+      background-color: $LT_BACKGROUND_MEDIUM;
     }
   }
 
@@ -67,7 +67,6 @@ body {
 
 a {
   text-decoration: none;
-  color: $LINK;
 
   &:hover {
     text-decoration: underline;
@@ -78,10 +77,6 @@ a {
     box-shadow: $FOCUS_SHADOW;
     outline: none;
   }
-
-  &:visited {
-    color: $LINK;
-  }
 }
 
 code {
@@ -89,9 +84,19 @@ code {
 }
 
 .lightTheme {
-  color: $DARK_GREY;
+  color: $LT_MAIN_TEXT;
+
+  a,
+  a:visited {
+    color: $LT_LINK;
+  }
 }
 
 .darkTheme {
-  color: $SOFT_WHITE;
+  color: $DT_MAIN_TEXT;
+
+  a,
+  a:visited {
+    color: $DT_LINK;
+  }
 }

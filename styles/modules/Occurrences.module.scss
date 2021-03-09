@@ -38,6 +38,7 @@ $INDENTATION: 1rem;
     flex-direction: row;
   }
 }
+
 .previewContainer {
   flex: 1;
   display: flex;
@@ -131,43 +132,44 @@ $INDENTATION: 1rem;
 
 .darkTheme {
   .sectionTitle {
-    color: $SILVER;
+    color: $DT_SUB_TEXT;
   }
 
   .previewContainer {
-    background-color: $DARK_GREY;
-    color: $SOFT_WHITE;
-    border-bottom-color: $DARKER_GREY;
+    background-color: $DT_BACKGROUND_MEDIUM;
+    color: $DT_MAIN_TEXT;
+    border-bottom-color: $GREY;
   }
 
   .active {
     border-left-color: $LAGOON;
-    background-color: $DARKEST_GREY;
+    background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
   }
 
   .previewTimestamp {
-    color: $SILVER;
+    color: $DT_SUB_TEXT;
   }
 }
 
 .lightTheme {
   .sectionTitle {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .previewContainer {
-    background-color: $WHITE;
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $LT_MAIN_TEXT;
     border-bottom-color: $WHITE_SMOKE;
   }
 
   .active {
     border-left-color: $DEEP_SEA;
-    background-color: $WHITE_SMOKE;
+    background-color: $LT_BACKGROUND_DARK;
     box-shadow: $LT_BOX_SHADOW;
   }
 
   .previewTimestamp {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 }

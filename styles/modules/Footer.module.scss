@@ -112,7 +112,7 @@
 .darkTheme {
   &.container {
     background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .subtitle {
@@ -140,8 +140,8 @@
 
 .lightTheme {
   &.container {
-    background-color: $LT_BACKGROUND_MEDIUM;
-    box-shadow: $LT_BOX_SHADOW
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .subtitle {

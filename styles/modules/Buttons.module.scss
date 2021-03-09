@@ -136,12 +136,12 @@
 
 .darkTheme {
   &:hover {
-    box-shadow: $DT_HOVER_SHADOW
+    box-shadow: $DT_HOVER_SHADOW;
   }
 }
 
 .lightTheme {
   &:hover {
-    box-shadow: $LT_HOVER_SHADOW
+    box-shadow: $LT_HOVER_SHADOW;
   }
 }

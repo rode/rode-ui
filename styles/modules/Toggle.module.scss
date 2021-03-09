@@ -50,26 +50,6 @@
   }
 }
 
-.darkTheme {
-  > span {
-    color: $WHITE;
-  }
-
-  .indicator {
-    box-shadow: $DT_BOX_SHADOW;
-  }
-}
-
-.lightTheme {
-  > span {
-    color: $DARK_GREY;
-  }
-
-  .indicator {
-    box-shadow: $LT_BOX_SHADOW;
-  }
-}
-
 .toggle {
   display: flex;
   flex-direction: row;
@@ -77,7 +57,6 @@
   align-items: center;
   height: fit-content;
   background-color: $MEDIUM_GREY;
-  color: $WHITE;
   border: solid 2px $MEDIUM_GREY;
   cursor: pointer;
   @include toggleSizing(1rem, 0.25rem);
@@ -95,14 +74,28 @@
 
   .indicator {
     border-radius: 50%;
-    background-color: $WHITE;
     @include transition;
   }
+}
 
-  &[aria-checked="true"] {
-    .indicator {
-      @extend .indicator;
-      background-color: $DARK_GREY;
-    }
+.darkTheme {
+  > span {
+    color: $DT_MAIN_TEXT;
+  }
+
+  .indicator {
+    box-shadow: $DT_BOX_SHADOW;
+    background-color: $DT_BACKGROUND_MEDIUM;
+  }
+}
+
+.lightTheme {
+  > span {
+    color: $LT_MAIN_TEXT;
+  }
+
+  .indicator {
+    box-shadow: $LT_BOX_SHADOW;
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 }
