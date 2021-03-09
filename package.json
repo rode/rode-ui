@@ -14,7 +14,7 @@
   "dependencies": {
     "dayjs": "^1.10.4",
     "http-status-codes": "^2.1.4",
-    "next": "10.0.6",
+    "next": "10.0.8",
     "node-fetch": "^2.6.1",
     "prop-types": "^15.7.2",
     "react": "17.0.1",
