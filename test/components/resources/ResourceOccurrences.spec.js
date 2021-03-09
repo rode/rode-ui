@@ -31,6 +31,9 @@ describe("ResourceOccurrences", () => {
     useResources.mockReturnValue({
       state: {},
     });
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: jest.fn(),
+    });
     resourceUri = chance.string();
   });
 

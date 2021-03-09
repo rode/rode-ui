@@ -35,6 +35,8 @@ const mapVulnerabilities = (occurrences) => {
 };
 
 const matchAndMapVulnerabilities = (occurrences) => {
+  const unmatchedOccurrences = [];
+
   const discoveryOccurrences = occurrences.filter(
     (occurrence) => occurrence.kind === "DISCOVERY"
   );
@@ -51,39 +53,70 @@ const matchAndMapVulnerabilities = (occurrences) => {
       occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS"
   );
 
-  return scanStarts.map((scan) => {
-    const startTime = dayjs(scan.createTime);
-    // get all scans that end after the start time
-    const possibleScanEnds = completedScans.filter((occurrence) =>
-      dayjs(occurrence.createTime).isSameOrAfter(startTime)
-    );
-    // pick the scan that ended closest to the start time
-    const scanEndTimes = possibleScanEnds.map((scan) =>
-      dayjs(scan.createTime).valueOf()
-    );
-    const closestEndTime = Math.min(...scanEndTimes);
-    const matchingScanEndOccurrence = possibleScanEnds.find(
-      (scan) => dayjs(scan.createTime).valueOf() === closestEndTime
-    );
+  const matchedOccurrences = scanStarts
+    .map((startScan) => {
+      const startTime = dayjs(startScan.createTime);
+      // get all scans that end after the start time
+      const possibleScanEnds = completedScans.filter((occurrence) =>
+        dayjs(occurrence.createTime).isSameOrAfter(startTime)
+      );
+      // pick the scan that ended closest to the start time
+      const scanEndTimes = possibleScanEnds.map((scan) =>
+        dayjs(scan.createTime).valueOf()
+      );
+      const closestEndTime = Math.min(...scanEndTimes);
+      const matchingScanEndOccurrence = possibleScanEnds.find(
+        (scan) => dayjs(scan.createTime).valueOf() === closestEndTime
+      );
 
-    const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
-      (vuln) =>
-        vuln.kind === "VULNERABILITY" &&
-        vuln.createTime === matchingScanEndOccurrence?.createTime
-    );
+      if (!matchingScanEndOccurrence) {
+        unmatchedOccurrences.push(startScan);
+        return null;
+      }
 
-    return {
-      name: scan.name,
-      started: scan.createTime,
-      completed: matchingScanEndOccurrence?.createTime,
-      vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
-      originals: [
-        scan,
-        matchingScanEndOccurrence,
-        ...matchingVulnerabilityOccurrences,
-      ],
-    };
+      // get vulnerabilities with the same createTime as the end scan occurrence
+      const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
+        (vuln) =>
+          vuln.kind === "VULNERABILITY" &&
+          vuln.createTime === matchingScanEndOccurrence?.createTime
+      );
+
+      return {
+        name: startScan.name,
+        started: startScan.createTime,
+        completed: matchingScanEndOccurrence.createTime,
+        vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
+        originals: [
+          startScan,
+          matchingScanEndOccurrence,
+          ...matchingVulnerabilityOccurrences,
+        ],
+      };
+    })
+    .filter((val) => val);
+
+  completedScans.forEach((endScan) => {
+    const matchingScan = matchedOccurrences.find((occurrence) =>
+      occurrence.originals.find((occ) => occ.name === endScan.name)
+    );
+    if (!matchingScan) {
+      unmatchedOccurrences.push(endScan);
+    }
   });
+
+  vulnerabilityOccurrences.forEach((vulnerability) => {
+    const matchingScan = matchedOccurrences.find((occurrence) =>
+      occurrence.originals.find((occ) => occ.name === vulnerability.name)
+    );
+    if (!matchingScan) {
+      unmatchedOccurrences.push(vulnerability);
+    }
+  });
+
+  return {
+    vulnerabilities: matchedOccurrences,
+    other: unmatchedOccurrences,
+  };
 };
 
 const mapBuilds = (occurrences) => {
@@ -94,7 +127,9 @@ const mapBuilds = (occurrences) => {
       completed: occ.build.provenance.endTime,
       creator: occ.build.provenance.creator,
       artifacts: occ.build.provenance.builtArtifacts,
-      sourceUri: `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`,
+      sourceUri: occ.build.provenance.sourceProvenance.context.git.url
+        ? `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`
+        : null,
       logsUri: occ.build.provenance.logsUri,
       originals: [occ],
     };
@@ -145,10 +180,14 @@ export const mapOccurrencesToSections = (occurrences) => {
     }
   });
 
+  const { vulnerabilities, other } = matchAndMapVulnerabilities(
+    vulnerabilityOccurrences
+  );
+
   return {
     build: mapBuilds(buildOccurrences),
-    secure: matchAndMapVulnerabilities(vulnerabilityOccurrences),
+    secure: vulnerabilities,
     deploy: mapDeployments(deploymentOccurrences),
-    other: otherOccurrences,
+    other: [...other, ...otherOccurrences],
   };
 };

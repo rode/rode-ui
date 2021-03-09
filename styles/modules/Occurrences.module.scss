@@ -15,6 +15,7 @@
  */
 
 @import "styles/constants";
+@import "styles/mixins";
 
 $INDENTATION: 1rem;
 
@@ -22,16 +23,22 @@ $INDENTATION: 1rem;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
 
   > div {
     flex: 1;
     height: 100%;
+    width: 100%;
     margin-bottom: 2rem;
   }
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
 }
+
 .previewContainer {
   flex: 1;
   display: flex;
@@ -39,7 +46,7 @@ $INDENTATION: 1rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0.5rem;
   margin: 0.25rem auto;
   border: none;
   border-bottom-width: 1px;
@@ -52,18 +59,36 @@ $INDENTATION: 1rem;
   &:focus {
     outline: none;
   }
+
+  @include tabletAndLarger {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.unknownPreviewContainer {
+  @extend .previewContainer;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &:hover {
+    cursor: auto;
+  }
 }
 
 .active {
+  border-bottom-width: 0;
   border-left-width: 8px;
   border-left-style: solid;
-  box-shadow: $BOX_SHADOW;
 }
 
 .previewDetails {
   flex: 1;
   text-align: left;
-  margin-left: 2rem;
+  margin-left: 1rem;
+
+  @include tabletAndLarger {
+    margin-left: 2rem;
+  }
 }
 
 .previewMainText {
@@ -73,21 +98,22 @@ $INDENTATION: 1rem;
 
 .previewSubText {
   font-size: 0.85rem;
-  text-indent: 1rem;
+  margin-left: 0.5rem;
   line-height: 1.5rem;
+
+  @include tabletAndLarger {
+    margin-left: 1rem;
+  }
 }
 
 .previewTimestamp {
   @extend .previewSubText;
 }
 
-.previewLinks {
-  margin-right: 1rem;
-}
-
 .sectionContainer {
   width: 100%;
   margin-top: 1rem;
+  flex: 1;
 }
 
 .sectionTitle {
@@ -106,53 +132,44 @@ $INDENTATION: 1rem;
 
 .darkTheme {
   .sectionTitle {
-    color: $SILVER;
+    color: $DT_SUB_TEXT;
   }
 
   .previewContainer {
-    background-color: $DARK_GREY;
-    color: $SOFT_WHITE;
-    border-bottom-color: $DARKER_GREY;
-
-    svg {
-      color: $LAGOON;
-    }
+    background-color: $DT_BACKGROUND_MEDIUM;
+    color: $DT_MAIN_TEXT;
+    border-bottom-color: $GREY;
   }
 
   .active {
     border-left-color: $LAGOON;
-    background-color: $DARKEST_GREY;
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .previewTimestamp {
-    color: $SILVER;
-  }
-
-  .previewLinks {
-    color: $LAGOON;
+    color: $DT_SUB_TEXT;
   }
 }
 
 .lightTheme {
   .sectionTitle {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .previewContainer {
-    background-color: $WHITE;
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $LT_MAIN_TEXT;
     border-bottom-color: $WHITE_SMOKE;
-
-    svg {
-      color: $DEEP_SEA;
-    }
   }
 
   .active {
     border-left-color: $DEEP_SEA;
-    background-color: $WHITE_SMOKE;
+    background-color: $LT_BACKGROUND_DARK;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .previewTimestamp {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 }

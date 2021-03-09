@@ -19,6 +19,7 @@
 
 .container {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,43 +41,53 @@
 
 .resourceHeader {
   display: flex;
+  max-width: 100%;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 2rem;
-  box-shadow: $BOX_SHADOW;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .resourceName {
   font-size: 1.5rem;
   font-weight: 700;
-}
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100vw - 5rem);
 
-.versionContainer {
-  margin-left: 2rem;
+  @include tabletAndLarger {
+    max-width: calc(48vw - 2rem);
+  }
 }
 
 .version {
   text-align: right;
-  color: $SOFT_WHITE;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: calc(75vw - 2rem);
+  max-width: calc(100vw - 5rem);
 
-  @include phoneAndSmaller {
-    max-width: calc(50vw - 2rem);
+  @include tabletAndLarger {
+    max-width: calc(50vw - 5rem);
   }
 }
 
 .darkTheme {
   .breadcrumbs {
-    color: $MEDIUM_GREY;
+    color: $DT_SUB_TEXT;
   }
 
   .resourceHeader {
     background-color: $DEEP_SEA;
+    box-shadow: $DT_BOX_SHADOW;
+
     > * {
       color: $SOFT_WHITE;
     }
@@ -85,11 +96,16 @@
 
 .lightTheme {
   .breadcrumbs {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
+
+    a {
+      color: $LT_LINK;
+    }
   }
 
   .resourceHeader {
     background-color: $DEEP_SEA;
+    box-shadow: $LT_BOX_SHADOW;
 
     > * {
       color: $SOFT_WHITE;

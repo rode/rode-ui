@@ -20,10 +20,14 @@ import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import { createMockMappedOccurrences } from "test/testing-utils/mocks";
 
 describe("OccurrenceDetails", () => {
-  let mappedOccurrences;
+  let mappedOccurrences, scrollMock;
 
   beforeEach(() => {
     mappedOccurrences = createMockMappedOccurrences();
+    scrollMock = jest.fn();
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
   });
 
   it("should render the occurrence code block button on any occurrence type", () => {
@@ -35,6 +39,9 @@ describe("OccurrenceDetails", () => {
     );
 
     expect(screen.getByText(/show json/i)).toBeInTheDocument();
+    expect(scrollMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith({ behavior: "smooth" });
   });
 
   it("should show the build occurrence details if a build occurrence is selected", () => {

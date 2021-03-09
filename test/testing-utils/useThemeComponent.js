@@ -14,4 +14,29 @@
  * limitations under the License.
  */
 
-export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
+import React from "react";
+import { useTheme } from "providers/theme";
+import { LIGHT_THEME } from "utils/theme-utils";
+
+const ThemeComponent = () => {
+  const { theme, toggleTheme } = useTheme();
+
+  const getText = () => {
+    if (theme === LIGHT_THEME) {
+      return "light";
+    } else {
+      return "dark";
+    }
+  };
+
+  return (
+    <>
+      <p>{getText()}</p>
+      <button onClick={toggleTheme}>Toggle</button>
+    </>
+  );
+};
+
+ThemeComponent.propTypes = {};
+
+export default ThemeComponent;

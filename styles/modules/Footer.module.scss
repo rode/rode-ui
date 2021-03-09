@@ -19,7 +19,6 @@
 
 .container {
   width: 100%;
-  box-shadow: $BOX_SHADOW;
   padding: 1rem;
 }
 
@@ -27,7 +26,7 @@
   width: 100%;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
 
@@ -70,7 +69,10 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 1rem;
+
+  @include tabletAndLarger {
+    margin-left: 1rem;
+  }
 
   a {
     display: flex;
@@ -78,45 +80,89 @@
     justify-content: center;
     align-items: center;
     margin: 0.25rem;
+    @include transition;
 
     > p {
       margin: 0.25rem;
+    }
+
+    &:hover {
+      @include transition;
+
+      .liatrioOuter {
+        @include transition;
+        color: $HOT_RED;
+      }
+
+      .liatrioInner {
+        @include transition;
+        color: $FLAME_ORANGE;
+      }
+
+      &[title="Twitter"] {
+        color: #1da1f2;
+      }
+      &[title="Github"] {
+        color: #6e5494;
+      }
     }
   }
 }
 
 .darkTheme {
   &.container {
-    background-color: $DARK_GREY;
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .subtitle {
-    color: $MEDIUM_GREY;
+    color: $DT_SUB_TEXT;
   }
 
   .links {
     a {
-      color: $WHITE;
+      color: $DT_MAIN_TEXT;
     }
   }
 
-  color: $SILVER;
+  &.liatrioOuter {
+    color: $DT_MAIN_TEXT;
+    @include transition;
+  }
+
+  &.liatrioInner {
+    color: $DT_MAIN_TEXT;
+    @include transition;
+  }
+
+  color: $DT_MAIN_TEXT;
 }
 
 .lightTheme {
   &.container {
-    background-color: $WHITE;
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .subtitle {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .links {
     a {
-      color: $DARK_GREY;
+      color: $LT_MAIN_TEXT;
     }
   }
 
-  color: $DARK_GREY;
+  &.liatrioOuter {
+    color: $GREEN;
+    @include transition;
+  }
+
+  &.liatrioInner {
+    color: $BRIGHT_GREEN;
+    @include transition;
+  }
+
+  color: $LT_MAIN_TEXT;
 }

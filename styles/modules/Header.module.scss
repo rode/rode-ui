@@ -21,8 +21,11 @@
   width: 100%;
   display: grid;
   grid-template-columns: minmax(1.5rem, 5rem) 1fr max-content;
-  padding: 0 1rem;
-  box-shadow: $BOX_SHADOW;
+  padding: 0 0.25rem;
+
+  @include tabletAndLarger {
+    padding: 0 1rem;
+  }
 
   .links {
     padding: 0.5rem;
@@ -46,25 +49,31 @@
 }
 
 .darkTheme {
-  background-color: $DARK_GREY;
+  &.container {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
 
   a {
-    color: $LAGOON;
+    color: $DT_LINK;
 
     &:visited {
-      color: $LAGOON;
+      color: $DT_LINK;
     }
   }
 }
 
 .lightTheme {
-  background-color: $WHITE;
+  &.container {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
 
   a {
-    color: $DEEP_SEA;
+    color: $LT_LINK;
 
     &:visited {
-      color: $DEEP_SEA;
+      color: $LT_LINK;
     }
   }
 }

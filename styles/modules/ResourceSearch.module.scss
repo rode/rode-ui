@@ -67,61 +67,77 @@
 
 .searchCard {
   width: 90%;
-  box-shadow: $BOX_SHADOW;
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 
   @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
     padding: 2rem;
     margin-bottom: 2rem;
   }
 
-  .cardText {
-    font-size: 0.75rem;
-    text-indent: 0.5rem;
+  .cardHeader {
+    text-align: left;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: calc(100vw - 13rem);
+    max-width: calc(100vw - 5rem);
 
     @include tabletAndLarger {
       max-width: calc(100vw - 18rem);
+    }
+  }
+
+  .cardText {
+    @extend .cardHeader;
+    font-size: 0.75rem;
+    text-indent: 0.5rem;
+  }
+
+  button {
+    margin: 0.5rem auto 0;
+
+    @include tabletAndLarger {
+      margin: 0;
     }
   }
 }
 
 .darkTheme {
   .noResults {
-    color: $SOFT_WHITE;
+    color: $DT_MAIN_TEXT;
   }
 
   .searchCard {
-    background-color: $DARK_GREY;
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
 
     .cardHeader {
-      color: $SOFT_WHITE;
+      color: $DT_MAIN_TEXT;
     }
 
     .cardText {
-      color: $SILVER;
+      color: $DT_SUB_TEXT;
     }
   }
 }
 
 .lightTheme {
   .searchCard {
-    background-color: $WHITE;
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
 
     .cardHeader {
-      color: $DARK_GREY;
+      color: $LT_MAIN_TEXT;
     }
 
     .cardText {
-      color: $MEDIUM_GREY;
+      color: $LT_SUB_TEXT;
     }
   }
 }

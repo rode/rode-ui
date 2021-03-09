@@ -14,33 +14,20 @@
  * limitations under the License.
  */
 
-a {
-  text-decoration: none;
-  color: $LINK;
+@import "styles/constants";
 
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus,
-  &:active {
-    box-shadow: $FOCUS_SHADOW;
-    outline: none;
-  }
-
-  &:visited {
-    color: $LINK;
-  }
-}
-
-code {
-  font-family: monospace;
-}
-
-.lightTheme {
-  color: $DARK_GREY;
+.externalLink {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  margin-right: 1rem;
 }
 
 .darkTheme {
-  color: $SOFT_WHITE;
+  color: $DT_LINK;
+}
+
+.lightTheme {
+  color: $LT_LINK;
 }

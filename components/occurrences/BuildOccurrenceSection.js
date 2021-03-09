@@ -20,6 +20,7 @@ import React from "react";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
+import ExternalLink from "components/ExternalLink";
 
 const BuildOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -43,12 +44,11 @@ const BuildOccurrenceSection = ({ occurrences }) => {
             timestamp={occurrence.completed}
             subText={
               <>
-                <a href={occurrence.sourceUri} className={styles.previewLinks}>
-                  View source
-                </a>
-                <a href={occurrence.logsUri} className={styles.previewLinks}>
-                  View logs
-                </a>
+                <ExternalLink
+                  href={occurrence.sourceUri}
+                  label={"View source"}
+                />
+                <ExternalLink href={occurrence.logsUri} label={"View logs"} />
               </>
             }
           />

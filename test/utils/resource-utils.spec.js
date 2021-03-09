@@ -29,6 +29,15 @@ describe("resource utils", () => {
       resourceVersion = chance.semver();
     });
 
+    it("should return generic values for an undefined resource type", () => {
+      const resourceUri = null;
+      const actual = getResourceDetails(resourceUri);
+
+      expect(actual.resourceType).toBe("Unknown");
+      expect(actual.resourceName).toBe(resourceUri);
+      expect(actual.resourceVersion).toBe("N/A");
+    });
+
     it("should return generic values for an unknown resource type", () => {
       const resourceUri = chance.url();
       const actual = getResourceDetails(resourceUri);

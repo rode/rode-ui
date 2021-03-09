@@ -14,4 +14,19 @@
  * limitations under the License.
  */
 
-export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import App from "pages/_app";
+
+const Component = () => <p>hello world</p>;
+
+describe("_app.js", () => {
+  beforeEach(() => {
+    render(<App Component={Component} pageProps={{}} />);
+  });
+
+  it("should render the application", () => {
+    expect(screen.getByTitle(/rode logo/i)).toBeInTheDocument();
+    expect(screen.getByText(/hello world/i)).toBeInTheDocument();
+  });
+});

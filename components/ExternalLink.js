@@ -16,27 +16,35 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { ICON_COMPONENTS, ICON_NAMES } from "utils/icon-utils";
-import styles from "styles/modules/Icons.module.scss";
+import { ICON_NAMES } from "utils/icon-utils";
+import Icon from "./Icon";
+import styles from "styles/modules/Typography.module.scss";
 import { useTheme } from "providers/theme";
 
-const Icon = (props) => {
-  const { name, size = "medium" } = props;
-
+const ExternalLink = (props) => {
   const { theme } = useTheme();
+  const { href, label } = props;
 
-  const IconComponent = ICON_COMPONENTS[name];
+  if (!href) {
+    return null;
+  }
 
   return (
-    <span className={styles[size]}>
-      <IconComponent theme={theme} />
-    </span>
+    <a
+      className={`${styles[theme]} ${styles.externalLink}`}
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {label}
+      <Icon name={ICON_NAMES.EXTERNAL_LINK} size={"small"} />
+    </a>
   );
 };
 
-Icon.propTypes = {
-  name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
-  size: PropTypes.oneOf(["small", "medium", "large", "xlarge"]),
+ExternalLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
-export default Icon;
+export default ExternalLink;

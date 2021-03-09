@@ -79,4 +79,16 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/fire/i)).toBeInTheDocument();
   });
+
+  it("should render the flag icon when specified", () => {
+    render(<Icon name={ICON_NAMES.FLAG} />);
+
+    expect(screen.getByTitle(/flag/i)).toBeInTheDocument();
+  });
+
+  it("should render the external link icon when specified", () => {
+    render(<Icon name={ICON_NAMES.EXTERNAL_LINK} />);
+
+    expect(screen.getByTitle(/external link/i)).toBeInTheDocument();
+  });
 });

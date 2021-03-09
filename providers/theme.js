@@ -32,7 +32,9 @@ export const ThemeProvider = (props) => {
   useEffect(() => {
     const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
 
-    setTheme(savedTheme);
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
   }, [theme]);
 
   const toggleTheme = () => {

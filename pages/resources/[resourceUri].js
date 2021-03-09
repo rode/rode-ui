@@ -41,16 +41,14 @@ const Resource = () => {
   }, []);
 
   useEffect(() => {
-    if (resourceUri) {
-      const {
-        resourceName: name,
-        resourceVersion: version,
-        resourceType: type,
-      } = getResourceDetails(resourceUri);
-      setResourceName(name);
-      setResourceVersion(version);
-      setResourceType(type);
-    }
+    const {
+      resourceName: name,
+      resourceVersion: version,
+      resourceType: type,
+    } = getResourceDetails(resourceUri);
+    setResourceName(name);
+    setResourceVersion(version);
+    setResourceType(type);
   }, [resourceUri]);
 
   return (
@@ -61,7 +59,7 @@ const Resource = () => {
           <p className={styles.resourceName}>{resourceName}</p>
           <p>Type: {resourceType}</p>
         </div>
-        <div className={styles.versionContainer}>
+        <div>
           <p className={styles.version}>Version: {resourceVersion}</p>
         </div>
       </div>

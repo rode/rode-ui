@@ -15,22 +15,28 @@
  */
 
 @import "styles/constants";
+@import "styles/mixins";
 
 $SIDE_SPACING: 1rem;
 
 .detailContainer {
   height: 100%;
+  flex: 1;
 }
 
 .detailSummary {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   padding: 2rem $SIDE_SPACING;
 
   a {
     padding: 0 1rem 0 0;
+  }
+
+  @include desktopAndLarger {
+    flex-direction: row;
   }
 }
 
@@ -40,19 +46,30 @@ $SIDE_SPACING: 1rem;
 }
 
 .timestamps {
-  text-align: right;
+  text-align: left;
+
+  @include desktopAndLarger {
+    text-align: right;
+  }
 }
 
 .detailContentContainer {
   width: 100%;
-  padding: $SIDE_SPACING 0 $SIDE_SPACING $SIDE_SPACING;
+
+  @include tabletAndLarger {
+    padding: $SIDE_SPACING 0 $SIDE_SPACING $SIDE_SPACING;
+  }
 }
 
 .card {
-  width: 90%;
-  margin: 0 0 0.25rem auto;
+  width: 100%;
+  margin: 0 auto 0.25rem;
   padding: 1rem;
-  background-color: $WHITE;
+
+  @include tabletAndLarger {
+    width: 90%;
+    margin: 0 0 0.25rem auto;
+  }
 }
 
 .cardTitle {
@@ -73,7 +90,9 @@ $SIDE_SPACING: 1rem;
 }
 
 .vulnerabilityBreakdown {
-  text-indent: 1rem;
+  @include desktopAndLarger {
+    text-indent: 1rem;
+  }
 }
 
 .severity {
@@ -106,9 +125,24 @@ $SIDE_SPACING: 1rem;
 .codeBlockContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  max-width: 48vw;
+  align-items: center;
+  width: 100%;
   margin: 0 auto;
+
+  @include tabletAndLarger {
+    align-items: flex-end;
+    max-width: 48vw;
+  }
+}
+
+.fullWidthCodeBlockContainer {
+  @extend .codeBlockContainer;
+  max-width: 97vw;
+  width: 100%;
+
+  .codeBlock {
+    border: solid 1px $SILVER;
+  }
 }
 
 .codeBlock {
@@ -123,60 +157,60 @@ $SIDE_SPACING: 1rem;
 
 .darkTheme {
   &.detailContainer {
-    background-color: $DARKEST_GREY;
+    background-color: $DT_BACKGROUND_DARK;
   }
 
   .timestamps {
-    color: $SILVER;
+    color: $DT_SUB_TEXT;
   }
 
   .vulnerabilityBreakdown {
-    color: $SILVER;
+    color: $DT_SUB_TEXT;
   }
 
   .card {
-    background-color: $DARKER_GREY;
-    color: $WHITE_SMOKE;
+    background-color: $DT_BACKGROUND_LIGHT;
+    color: $DT_MAIN_TEXT;
   }
 
   .link {
     a {
-      color: $LAGOON;
+      color: $DT_LINK;
     }
   }
 
   .codeBlock {
-    background-color: $DARKER_GREY;
-    color: $SILVER;
+    background-color: $DT_BACKGROUND_LIGHT;
+    color: $DT_SUB_TEXT;
   }
 }
 
 .lightTheme {
   &.detailContainer {
-    background-color: $WHITE_SMOKE;
+    background-color: $LT_BACKGROUND_DARK;
   }
 
   .timestamps {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .vulnerabilityBreakdown {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .card {
-    background-color: $WHITE;
-    color: $DARK_GREY;
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $LT_MAIN_TEXT;
   }
 
   .link {
     a {
-      color: $DEEP_SEA;
+      color: $LT_LINK;
     }
   }
 
   .codeBlock {
-    background-color: $WHITE;
-    color: $DARK_GREY;
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $LT_MAIN_TEXT;
   }
 }

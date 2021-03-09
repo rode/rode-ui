@@ -124,51 +124,62 @@ describe("occurrence-utils", () => {
         const endScanOccurrence = createMockOccurrence("DISCOVERY");
         endScanOccurrence.discovered.discovered.analysisStatus =
           "FINISHED_SUCCESS";
-        const { secure } = mapOccurrencesToSections([
+        const { secure, other } = mapOccurrencesToSections([
           endScanOccurrence,
           createMockOccurrence("VULNERABILITY"),
         ]);
 
         expect(secure).toHaveLength(0);
+        expect(other).toHaveLength(2);
       });
 
       it("should not return vulnerabilities if there is no associated scan end", () => {
         const startScanOccurrence = createMockOccurrence("DISCOVERY");
         startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
-        const { secure } = mapOccurrencesToSections([
+        const { secure, other } = mapOccurrencesToSections([
           startScanOccurrence,
           createMockOccurrence("VULNERABILITY"),
         ]);
 
-        expect(secure[0].completed).toBeFalsy();
-        expect(secure[0].vulnerabilities).toHaveLength(0);
+        expect(secure).toHaveLength(0);
+        expect(other).toHaveLength(2);
       });
     });
 
-    it("should correctly map build occurrences", () => {
-      const buildOccurrence = createMockOccurrence("BUILD");
-      const { build } = mapOccurrencesToSections([buildOccurrence]);
+    describe("build occurrences", () => {
+      it("should correctly map build occurrences", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        const { build } = mapOccurrencesToSections([buildOccurrence]);
 
-      expect(build[0].name).toEqual(buildOccurrence.name);
-      expect(build[0].started).toEqual(
-        buildOccurrence.build.provenance.startTime
-      );
-      expect(build[0].completed).toEqual(
-        buildOccurrence.build.provenance.endTime
-      );
-      expect(build[0].creator).toEqual(
-        buildOccurrence.build.provenance.creator
-      );
-      expect(build[0].artifacts).toEqual(
-        buildOccurrence.build.provenance.builtArtifacts
-      );
-      expect(build[0].sourceUri).toEqual(
-        `${buildOccurrence.build.provenance.sourceProvenance.context.git.url}/tree/${buildOccurrence.build.provenance.sourceProvenance.context.git.revisionId}`
-      );
-      expect(build[0].logsUri).toEqual(
-        buildOccurrence.build.provenance.logsUri
-      );
-      expect(build[0].originals).toContain(buildOccurrence);
+        expect(build[0].name).toEqual(buildOccurrence.name);
+        expect(build[0].started).toEqual(
+          buildOccurrence.build.provenance.startTime
+        );
+        expect(build[0].completed).toEqual(
+          buildOccurrence.build.provenance.endTime
+        );
+        expect(build[0].creator).toEqual(
+          buildOccurrence.build.provenance.creator
+        );
+        expect(build[0].artifacts).toEqual(
+          buildOccurrence.build.provenance.builtArtifacts
+        );
+        expect(build[0].sourceUri).toEqual(
+          `${buildOccurrence.build.provenance.sourceProvenance.context.git.url}/tree/${buildOccurrence.build.provenance.sourceProvenance.context.git.revisionId}`
+        );
+        expect(build[0].logsUri).toEqual(
+          buildOccurrence.build.provenance.logsUri
+        );
+        expect(build[0].originals).toContain(buildOccurrence);
+      });
+
+      it("should correctly map builds without source urls", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        buildOccurrence.build.provenance.sourceProvenance.context.git.url = null;
+        const { build } = mapOccurrencesToSections([buildOccurrence]);
+
+        expect(build[0].sourceUri).toBeNull();
+      });
     });
 
     it("should correctly map deployment occurrences", () => {
@@ -189,6 +200,16 @@ describe("occurrence-utils", () => {
         deploymentOccurrence.deployment.deployment.platform
       );
       expect(deploy[0].originals).toContain(deploymentOccurrence);
+    });
+
+    it("should correctly map any unknown occurrences", () => {
+      const randomOccurrences = chance.n(
+        () => ({ kind: chance.string() }),
+        chance.d6()
+      );
+      const { other } = mapOccurrencesToSections(randomOccurrences);
+
+      expect(other).toHaveLength(randomOccurrences.length);
     });
   });
 });

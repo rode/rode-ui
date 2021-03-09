@@ -33,7 +33,7 @@ describe("OccurrenceCodeBlock", () => {
       state: {},
     });
 
-    const utils = render(<OccurrenceCodeBlock occurrence={occurrence} />);
+    const utils = render(<OccurrenceCodeBlock json={occurrence} />);
     rerender = utils.rerender;
   });
 
@@ -59,7 +59,7 @@ describe("OccurrenceCodeBlock", () => {
       },
     });
 
-    rerender(<OccurrenceCodeBlock occurrence={occurrence} />);
+    rerender(<OccurrenceCodeBlock json={occurrence} />);
     expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
   });
 });

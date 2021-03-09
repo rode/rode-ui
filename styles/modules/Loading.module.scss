@@ -74,12 +74,12 @@
 
 .darkTheme {
   &.spinner:after {
-    background: $DARKER_GREY;
+    background: $DT_BACKGROUND_LIGHT;
   }
 }
 .lightTheme {
   &.spinner:after {
-    background: $SOFT_WHITE;
+    background: $LT_BACKGROUND_MEDIUM;
   }
 }
 

@@ -20,7 +20,7 @@ import Button from "components/Button";
 import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { useResources } from "providers/resources";
 
-const OccurrenceCodeBlock = ({ occurrence }) => {
+const OccurrenceCodeBlock = ({ json, fullWidth = false }) => {
   const [showCode, setShowCode] = useState(false);
 
   const { state } = useResources();
@@ -36,12 +36,18 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
   };
 
   return (
-    <div className={styles.codeBlockContainer}>
+    <div
+      className={
+        fullWidth
+          ? styles.fullWidthCodeBlockContainer
+          : styles.codeBlockContainer
+      }
+    >
       <Button onClick={toggle} label={showCode ? "Hide JSON" : "Show JSON"} />
       {showCode && (
         <div className={styles.codeBlock} data-testid="occurrenceJson">
           <pre>
-            <code>{JSON.stringify(occurrence.originals, null, 2)}</code>
+            <code>{JSON.stringify(json, null, 2)}</code>
           </pre>
         </div>
       )}
@@ -50,7 +56,8 @@ const OccurrenceCodeBlock = ({ occurrence }) => {
 };
 
 OccurrenceCodeBlock.propTypes = {
-  occurrence: PropTypes.object.isRequired,
+  json: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  fullWidth: PropTypes.bool,
 };
 
 export default OccurrenceCodeBlock;

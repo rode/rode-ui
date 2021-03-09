@@ -15,7 +15,6 @@
  */
 
 @import "constants";
-@import "typography.scss";
 
 * {
   padding: 0;
@@ -26,7 +25,6 @@
 
 body {
   height: 100vh;
-  background-color: $SOFT_WHITE;
 
   #__next {
     height: 100%;
@@ -52,16 +50,52 @@ body {
     grid-column: main;
 
     &.darkTheme {
-      background-color: $DARKER_GREY;
+      background-color: $DT_BACKGROUND_LIGHT;
     }
 
     &.lightTheme {
-      background-color: $SOFT_WHITE;
+      background-color: $LT_BACKGROUND_MEDIUM;
     }
   }
 
   footer {
     grid-row: footer / auto;
     grid-column: footer;
+  }
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:active {
+    box-shadow: $FOCUS_SHADOW;
+    outline: none;
+  }
+}
+
+code {
+  font-family: monospace;
+}
+
+.lightTheme {
+  color: $LT_MAIN_TEXT;
+
+  a,
+  a:visited {
+    color: $LT_LINK;
+  }
+}
+
+.darkTheme {
+  color: $DT_MAIN_TEXT;
+
+  a,
+  a:visited {
+    color: $DT_LINK;
   }
 }

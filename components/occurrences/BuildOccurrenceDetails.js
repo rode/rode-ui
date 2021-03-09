@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
+import ExternalLink from "components/ExternalLink";
 
 const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
@@ -26,8 +27,8 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
       <div className={styles.detailSummary}>
         <div>
           <p className={styles.title}>Build</p>
-          <a href={occurrence.sourceUri}>View Source</a>
-          <a href={occurrence.logsUri}>View Logs</a>
+          <ExternalLink href={occurrence.sourceUri} label={"View source"} />
+          <ExternalLink href={occurrence.logsUri} label={"View logs"} />
           <p>Created by {occurrence.creator}</p>
         </div>
         <div className={styles.timestamps}>

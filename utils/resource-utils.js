@@ -99,7 +99,7 @@ const resourceUrlTypes = [
 
 export const getResourceDetails = (uri) => {
   const resourceMatch = resourceUrlTypes.find((resourceType) =>
-    uri.match(resourceType.regex)
+    uri?.match(resourceType.regex)
   );
 
   if (!resourceMatch) {
