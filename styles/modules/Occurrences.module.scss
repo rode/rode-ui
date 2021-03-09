@@ -75,9 +75,9 @@ $INDENTATION: 1rem;
 }
 
 .active {
+  border-bottom-width: 0;
   border-left-width: 8px;
   border-left-style: solid;
-  box-shadow: $BOX_SHADOW;
 }
 
 .previewDetails {
@@ -143,6 +143,7 @@ $INDENTATION: 1rem;
   .active {
     border-left-color: $LAGOON;
     background-color: $DARKEST_GREY;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .previewTimestamp {
@@ -163,6 +164,7 @@ $INDENTATION: 1rem;
   .active {
     border-left-color: $DEEP_SEA;
     background-color: $WHITE_SMOKE;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .previewTimestamp {

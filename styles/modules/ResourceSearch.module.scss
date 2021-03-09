@@ -67,7 +67,6 @@
 
 .searchCard {
   width: 90%;
-  box-shadow: $BOX_SHADOW;
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
@@ -116,6 +115,7 @@
 
   .searchCard {
     background-color: $DARK_GREY;
+    box-shadow: $DT_BOX_SHADOW;
 
     .cardHeader {
       color: $SOFT_WHITE;
@@ -130,6 +130,7 @@
 .lightTheme {
   .searchCard {
     background-color: $WHITE;
+    box-shadow: $LT_BOX_SHADOW;
 
     .cardHeader {
       color: $DARK_GREY;

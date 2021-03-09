@@ -30,7 +30,6 @@
 
   &:hover {
     cursor: pointer;
-    box-shadow: $HOVER_SHADOW;
     background-color: $GREEN;
     color: $WHITE;
   }
@@ -132,5 +131,17 @@
         }
       }
     }
+  }
+}
+
+.darkTheme {
+  &:hover {
+    box-shadow: $DT_HOVER_SHADOW
+  }
+}
+
+.lightTheme {
+  &:hover {
+    box-shadow: $LT_HOVER_SHADOW
   }
 }

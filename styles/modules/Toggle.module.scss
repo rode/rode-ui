@@ -54,11 +54,19 @@
   > span {
     color: $WHITE;
   }
+
+  .indicator {
+    box-shadow: $DT_BOX_SHADOW;
+  }
 }
 
 .lightTheme {
   > span {
     color: $DARK_GREY;
+  }
+
+  .indicator {
+    box-shadow: $LT_BOX_SHADOW;
   }
 }
 
@@ -88,7 +96,6 @@
   .indicator {
     border-radius: 50%;
     background-color: $WHITE;
-    box-shadow: $BOX_SHADOW;
     @include transition;
   }
 

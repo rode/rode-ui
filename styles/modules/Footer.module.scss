@@ -19,7 +19,6 @@
 
 .container {
   width: 100%;
-  box-shadow: $BOX_SHADOW;
   padding: 1rem;
 }
 
@@ -112,44 +111,46 @@
 
 .darkTheme {
   &.container {
-    background-color: $DARK_GREY;
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW
   }
 
   .subtitle {
-    color: $MEDIUM_GREY;
+    color: $DT_SUB_TEXT;
   }
 
   .links {
     a {
-      color: $WHITE;
+      color: $DT_MAIN_TEXT;
     }
   }
 
   &.liatrioOuter {
-    color: $WHITE;
+    color: $DT_MAIN_TEXT;
     @include transition;
   }
 
   &.liatrioInner {
-    color: $WHITE;
+    color: $DT_MAIN_TEXT;
     @include transition;
   }
 
-  color: $SILVER;
+  color: $DT_MAIN_TEXT;
 }
 
 .lightTheme {
   &.container {
-    background-color: $WHITE;
+    background-color: $LT_BACKGROUND_MEDIUM;
+    box-shadow: $LT_BOX_SHADOW
   }
 
   .subtitle {
-    color: $MEDIUM_GREY;
+    color: $LT_SUB_TEXT;
   }
 
   .links {
     a {
-      color: $DARK_GREY;
+      color: $LT_MAIN_TEXT;
     }
   }
 
@@ -163,5 +164,5 @@
     @include transition;
   }
 
-  color: $DARK_GREY;
+  color: $LT_MAIN_TEXT;
 }

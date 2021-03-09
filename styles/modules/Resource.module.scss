@@ -47,7 +47,6 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 2rem;
-  box-shadow: $BOX_SHADOW;
 
   @include tabletAndLarger {
     flex-direction: row;
@@ -88,6 +87,8 @@
 
   .resourceHeader {
     background-color: $DEEP_SEA;
+    box-shadow: $DT_BOX_SHADOW;
+
     > * {
       color: $SOFT_WHITE;
     }
@@ -101,6 +102,7 @@
 
   .resourceHeader {
     background-color: $DEEP_SEA;
+    box-shadow: $LT_BOX_SHADOW;
 
     > * {
       color: $SOFT_WHITE;

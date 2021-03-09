@@ -32,7 +32,6 @@ $WHITE: #ffffff;
 $LINK: #00a2b8;
 
 // shadows
-$BOX_SHADOW: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 $FOCUS_SHADOW: 0 0 0 3px rgba(0, 193, 219, 0.35);
 $HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
   2px 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -44,7 +43,29 @@ $SCREEN_DESKTOP: 1024px;
 
 // theming
 $DARKER_GREY: #333333;
+$GREY: #333333;
 $DARKEST_GREY: #1f1f1f;
 
 // TODO: make 3 tiers for themes (dt_background_dark, dt_background_medium, dt_background_light)?
-// TODO: make dark theme box and shadow
+
+// DARK theme
+$DT_BOX_SHADOW: 0 1px 3px 0 rgba(200, 200, 200, 0.1), 0 1px 2px 0 rgba(255, 255, 255, 0.06);
+$DT_HOVER_SHADOW: 0px 10px 15px -3px rgba(200, 200, 200, 0.1),
+2px 4px 6px -2px rgba(255, 255, 255, 0.05);
+$DT_BACKGROUND_DARK: $DARKEST_GREY;
+$DT_BACKGROUND_MEDIUM: $DARK_GREY;
+$DT_BACKGROUND_LIGHT: $GREY;
+$DT_MAIN_TEXT: $WHITE_SMOKE;
+$DT_SUB_TEXT: $SILVER;
+$DT_LINK: $LAGOON;
+
+// LIGHT theme
+$LT_BOX_SHADOW:  0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$LT_HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+2px 4px 6px -2px rgba(0, 0, 0, 0.05);
+$LT_BACKGROUND_DARK: $WHITE_SMOKE;
+$LT_BACKGROUND_MEDIUM: $SOFT_WHITE;
+$LT_BACKGROUND_LIGHT: $WHITE;
+$LT_MAIN_TEXT: $DARK_GREY;
+$LT_SUB_TEXT: $MEDIUM_GREY;
+$LT_LINK: $DEEP_SEA;
