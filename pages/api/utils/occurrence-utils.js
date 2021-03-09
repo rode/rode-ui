@@ -74,6 +74,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
         return null;
       }
 
+      // get vulnerabilities with the same createTime as the end scan occurrence
       const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
         (vuln) =>
           vuln.kind === "VULNERABILITY" &&
@@ -83,7 +84,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
       return {
         name: startScan.name,
         started: startScan.createTime,
-        completed: matchingScanEndOccurrence?.createTime,
+        completed: matchingScanEndOccurrence.createTime,
         vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
         originals: [
           startScan,
