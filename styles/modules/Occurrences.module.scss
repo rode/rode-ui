@@ -58,6 +58,7 @@ $INDENTATION: 1rem;
 
   &:focus {
     outline: none;
+    box-shadow: $FOCUS_SHADOW;
   }
 
   @include tabletAndLarger {
@@ -131,6 +132,7 @@ $INDENTATION: 1rem;
 }
 
 .darkTheme {
+  $ACCENT: $LAGOON;
   .sectionTitle {
     color: $DT_SUB_TEXT;
   }
@@ -139,10 +141,14 @@ $INDENTATION: 1rem;
     background-color: $DT_BACKGROUND_MEDIUM;
     color: $DT_MAIN_TEXT;
     border-bottom-color: $GREY;
+
+    svg {
+      color: $ACCENT;
+    }
   }
 
   .active {
-    border-left-color: $LAGOON;
+    border-left-color: $ACCENT;
     background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
   }
@@ -153,6 +159,7 @@ $INDENTATION: 1rem;
 }
 
 .lightTheme {
+  $ACCENT: $DEEP_SEA;
   .sectionTitle {
     color: $LT_SUB_TEXT;
   }
@@ -161,10 +168,14 @@ $INDENTATION: 1rem;
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
     border-bottom-color: $WHITE_SMOKE;
+
+    svg {
+      color: $ACCENT;
+    }
   }
 
   .active {
-    border-left-color: $DEEP_SEA;
+    border-left-color: $ACCENT;
     background-color: $LT_BACKGROUND_DARK;
     box-shadow: $LT_BOX_SHADOW;
   }
