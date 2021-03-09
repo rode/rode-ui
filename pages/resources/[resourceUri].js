@@ -41,16 +41,14 @@ const Resource = () => {
   }, []);
 
   useEffect(() => {
-    if (resourceUri) {
-      const {
-        resourceName: name,
-        resourceVersion: version,
-        resourceType: type,
-      } = getResourceDetails(resourceUri);
-      setResourceName(name);
-      setResourceVersion(version);
-      setResourceType(type);
-    }
+    const {
+      resourceName: name,
+      resourceVersion: version,
+      resourceType: type,
+    } = getResourceDetails(resourceUri);
+    setResourceName(name);
+    setResourceVersion(version);
+    setResourceType(type);
   }, [resourceUri]);
 
   return (
