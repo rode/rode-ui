@@ -22,4 +22,6 @@ export const withRouter = (component) => {
   return component;
 };
 
-export const useRouter = jest.fn();
+export const useRouter = jest.fn().mockReturnValue({
+  pathname: ""
+});

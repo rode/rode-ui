@@ -20,16 +20,24 @@ import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "providers/theme";
+import { useRouter } from "next/router";
 
 const navigationLinks = [
   {
     href: "/resources",
     label: "Resources",
   },
+  {
+    href: "/policies",
+    label: "Policies",
+  },
 ];
+// TODO: repopulate rode through postman
+// TODO: 404 when resource is not found if navigating directly to /resources/[resourceId]
 
 const Header = () => {
   const { theme } = useTheme();
+  const router = useRouter();
 
   return (
     <header className={`${styles.container} ${styles[theme]}`}>
@@ -38,12 +46,19 @@ const Header = () => {
           <RodeLogo theme={theme} />
         </a>
       </Link>
-
       <div className={styles.links}>
         {navigationLinks.map((link) => {
           return (
             <Link href={link.href} key={link.label}>
-              {link.label}
+              <a
+                className={
+                  router.pathname.startsWith(link.href)
+                    ? styles.active
+                    : styles.link
+                }
+              >
+                {link.label}
+              </a>
             </Link>
           );
         })}

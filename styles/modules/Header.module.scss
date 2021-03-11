@@ -20,32 +20,46 @@
 .container {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(1.5rem, 5rem) 1fr max-content;
+  grid-template-columns: 5rem 1fr max-content;
   padding: 0 0.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   @include tabletAndLarger {
     padding: 0 1rem;
+    overflow-x: unset;
   }
+}
 
-  .links {
-    padding: 0.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.scrollContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
 
-    @include tabletAndLarger {
-      flex-direction: row;
-      justify-content: flex-start;
-    }
-
-    a {
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 0 1.5rem;
-    }
+  @include tabletAndLarger {
+    overflow-y: unset;
   }
+}
+
+.links {
+  padding: 0.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.link {
+  text-transform: uppercase;
+  padding: 0 1.5rem;
+}
+
+.active {
+  @extend .link;
+  font-weight: 700;
 }
 
 .darkTheme {

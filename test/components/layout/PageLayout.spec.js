@@ -19,6 +19,8 @@ import { render, screen } from "@testing-library/react";
 
 import PageLayout from "components/layout/PageLayout";
 
+jest.mock("next/router");
+
 describe("PageLayout", () => {
   let children;
   beforeEach(() => {

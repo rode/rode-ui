@@ -17,10 +17,19 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Header from "components/layout/Header";
+import { useRouter } from "next/router";
+
+jest.mock("next/router");
 
 describe("Header", () => {
+  let rerender;
+
   beforeEach(() => {
-    render(<Header />);
+    useRouter.mockReturnValue({
+      pathname: chance.string(),
+    });
+    const utils = render(<Header />);
+    rerender = utils.rerender;
   });
 
   it("should render the Rode logo", () => {
@@ -29,5 +38,20 @@ describe("Header", () => {
 
   it("should render a link for Resources", () => {
     expect(screen.getByText(/resources/i)).toBeInTheDocument();
+  });
+
+  it("should render a link for Policies", () => {
+    expect(screen.getByText(/policies/i)).toBeInTheDocument();
+  });
+
+  it("should render the active link correctly", () => {
+    const activeLink = chance.pickone(['resources', 'policies']);
+
+    useRouter.mockReturnValue({
+      pathname: `/${activeLink}`
+    });
+    rerender(<Header/>);
+
+     expect(screen.getByText(activeLink, {exact: false})).toHaveClass('active', {exact: false})
   });
 });
