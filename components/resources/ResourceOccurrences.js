@@ -27,6 +27,8 @@ import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
 
+// TODO: 404 when resource is not found if navigating directly to /resources/[resourceId]
+
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
   const { state } = useResources();
@@ -35,7 +37,10 @@ const ResourceOccurrences = (props) => {
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
+  
+  console.log('data', data);
 
+  // if (data === null) return "Not found" message and button to go to resource search
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
       <Loading loading={loading} />

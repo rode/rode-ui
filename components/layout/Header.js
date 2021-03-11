@@ -32,8 +32,6 @@ const navigationLinks = [
     label: "Policies",
   },
 ];
-// TODO: repopulate rode through postman
-// TODO: 404 when resource is not found if navigating directly to /resources/[resourceId]
 
 const Header = () => {
   const { theme } = useTheme();

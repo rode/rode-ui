@@ -24,6 +24,8 @@ import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
+import PolicySearchBar from "../components/policies/PolicySearchBar";
+import PolicySearchResult from "../components/policies/PolicySearchResult";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -63,29 +65,28 @@ const Policies = () => {
   }, [router.query]);
 
   return (
-    // <div
-    //   className={`
-    //   ${showSearchResults ? styles.showResults : ""}
-    //   ${styles[theme]}
-    //   ${styles.container}`}
-    // >
-    //   <ResourceSearchBar />
-    //   {showSearchResults && (
-    //     <>
-    //       <Loading loading={loading} />
-    //       {data?.length > 0 ? (
-    //         data.map((result) => {
-    //           return (
-    //             <ResourceSearchResult key={result.uri} searchResult={result} />
-    //           );
-    //         })
-    //       ) : (
-    //         <span className={styles.noResults}>No resources found</span>
-    //       )}
-    //     </>
-    //   )}
-    // </div>
-    <p>Policies</p>
+    <div
+      className={`
+      ${showSearchResults ? styles.showResults : ""}
+      ${styles[theme]}
+      ${styles.container}`}
+    >
+      <PolicySearchBar />
+      {showSearchResults && (
+        <>
+          <Loading loading={loading} />
+          {data?.length > 0 ? (
+            data.map((result) => {
+              return (
+                <PolicySearchResult key={result.uri} searchResult={result} />
+              );
+            })
+          ) : (
+            <span className={styles.noResults}>No policies found</span>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 export default Policies;
