@@ -19,17 +19,29 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ThemeComponent from "test/testing-utils/useThemeComponent";
 import { ThemeProvider } from "providers/theme";
+import { isServerSide } from "utils/theme-utils";
+
+jest.mock("utils/theme-utils");
 
 describe("theme provider", () => {
+  let rerender;
+
   beforeEach(() => {
-    render(
+    isServerSide.mockReturnValue(false);
+    jest.spyOn(React, "useEffect");
+    jest.spyOn(React, "useLayoutEffect");
+
+    const utils = render(
       <ThemeProvider>
         <ThemeComponent />
       </ThemeProvider>
     );
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     cleanup();
   });
 
@@ -45,5 +57,18 @@ describe("theme provider", () => {
 
     userEvent.click(toggleButton);
     expect(screen.getByText(/light/i)).toBeInTheDocument();
+  });
+
+  it("should use the correct effect hook when on the server", () => {
+    expect(React.useLayoutEffect).toHaveBeenCalled();
+
+    isServerSide.mockReturnValue(true);
+    rerender(
+      <ThemeProvider>
+        <ThemeComponent />
+      </ThemeProvider>
+    );
+
+    expect(React.useEffect).toHaveBeenCalled();
   });
 });
