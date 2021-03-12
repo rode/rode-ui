@@ -1,4 +1,4 @@
-import { mockResource, mockResourceOccurrences } from "cypress/mock-responses/resource-responses";
+import { mockResource, mockResourceOccurrences } from "../mock-responses/resource-responses";
 
 const RODE_URL = "http://localhost:50054/v1alpha1";
 
@@ -29,6 +29,8 @@ context('Resources', () => {
     cy.get('#resourceSearch').focus().type('nginx');
     cy.get('button[aria-label="Search"]').click();
     cy.contains('View Details').click();
+
+    cy.get('button[class^="Occurrences_previewContainer"]').should('have.length', 5);
 
     cy.contains('Produced 1 Artifact').click();
     cy.get('button[aria-label="Show JSON"]').click();
