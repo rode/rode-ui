@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import SearchBar from "components/shared/search/SearchBar";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import Link from "next/link";
 
 const PolicySearchBar = () => {
   const { state, dispatch } = usePolicies();
@@ -50,7 +51,7 @@ const PolicySearchBar = () => {
       helpText={
         <>
           You can search by policy name or{" "}
-          <a href={"/policies?search=all"}>view all policies</a>.
+          <Link href={"/policies?search=all"}>view all policies</Link>.
         </>
       }
     />

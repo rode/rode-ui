@@ -20,7 +20,15 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 
 const Input = (props) => {
-  const { name, label, type, onChange, placeholder, value = "" } = props;
+  const {
+    name,
+    label,
+    type,
+    onChange,
+    placeholder,
+    value = "",
+    ...otherProps
+  } = props;
   const { theme } = useTheme();
 
   return (
@@ -36,6 +44,7 @@ const Input = (props) => {
         value={value}
         placeholder={placeholder || label}
         className={styles.input}
+        {...otherProps}
       />
     </div>
   );

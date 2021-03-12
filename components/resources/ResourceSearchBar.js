@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
+import Link from "next/link";
 
 const ResourceSearchBar = () => {
   const { state, dispatch } = useResources();
@@ -50,7 +51,7 @@ const ResourceSearchBar = () => {
       helpText={
         <>
           You can search by name, version, or{" "}
-          <a href={"/resources?search=all"}>view all resources</a>.
+          <Link href={"/resources?search=all"}>view all resources</Link>.
         </>
       }
     />

@@ -35,8 +35,6 @@ const createSearchFilter = (query) => {
   return null;
 };
 
-// TODO: create `/api/policies` endpoint to retrieve all policies or specified policies
-
 const Policies = () => {
   const { theme } = useTheme();
   const { dispatch } = usePolicies();
@@ -66,9 +64,8 @@ const Policies = () => {
   return (
     <div
       className={`
-      ${showSearchResults ? styles.showResults : ""}
-      ${styles[theme]}
-      ${styles.container}`}
+      ${showSearchResults ? styles.showResults : styles.container} 
+      ${styles[theme]}`}
     >
       <div className={styles.searchBarContainer}>
         <PolicySearchBar />
