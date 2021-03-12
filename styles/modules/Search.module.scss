@@ -57,24 +57,6 @@
     margin-bottom: 2rem;
   }
 
-  .cardHeader {
-    text-align: left;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: calc(100vw - 5rem);
-
-    @include tabletAndLarger {
-      max-width: calc(100vw - 18rem);
-    }
-  }
-
-  .cardText {
-    @extend .cardHeader;
-    font-size: 0.75rem;
-    text-indent: 0.5rem;
-  }
-
   button {
     margin: 0.5rem auto 0;
 
@@ -84,32 +66,50 @@
   }
 }
 
+.cardHeader {
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(100vw - 5rem);
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 18rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.75rem;
+  text-indent: 0.5rem;
+}
+
 .darkTheme {
-  .searchCard {
+  &.searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
+  }
 
-    .cardHeader {
-      color: $DT_MAIN_TEXT;
-    }
+  .cardHeader {
+    color: $DT_MAIN_TEXT;
+  }
 
-    .cardText {
-      color: $DT_SUB_TEXT;
-    }
+  .cardText {
+    color: $DT_SUB_TEXT;
   }
 }
 
 .lightTheme {
-  .searchCard {
+  &.searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
 
-    .cardHeader {
-      color: $LT_MAIN_TEXT;
-    }
+  .cardHeader {
+    color: $LT_MAIN_TEXT;
+  }
 
-    .cardText {
-      color: $LT_SUB_TEXT;
-    }
+  .cardText {
+    color: $LT_SUB_TEXT;
   }
 }

@@ -16,10 +16,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/ResourceSearch.module.scss";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import { getResourceDetails } from "utils/resource-utils";
+import SearchResult from "components/shared/search/SearchResult";
 
 const ResourceSearchResult = ({ searchResult }) => {
   const { resourceName, resourceVersion } = getResourceDetails(
@@ -32,13 +32,11 @@ const ResourceSearchResult = ({ searchResult }) => {
   };
 
   return (
-    <div className={styles.searchCard}>
-      <div>
-        <p className={styles.cardHeader}>{`Resource Name: ${resourceName}`}</p>
-        <p className={styles.cardText}>{`Version: ${resourceVersion}`}</p>
-      </div>
-      <Button onClick={onClick} label={"View Resource"} />
-    </div>
+    <SearchResult
+      mainText={`Resource Name: ${resourceName}`}
+      subText={`Version: ${resourceVersion}`}
+      actionButton={<Button onClick={onClick} label={"View Resource"} />}
+    />
   );
 };
 

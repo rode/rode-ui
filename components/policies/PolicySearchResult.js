@@ -16,12 +16,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/ResourceSearch.module.scss";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import { getResourceDetails } from "utils/resource-utils";
+import SearchResult from "components/shared/search/SearchResult";
 
-// TODO: create generic Search result and use between resource and policy
 const PolicySearchResult = ({ searchResult }) => {
   const { resourceName, resourceVersion } = getResourceDetails(
     searchResult.uri
@@ -33,13 +32,11 @@ const PolicySearchResult = ({ searchResult }) => {
   };
 
   return (
-    <div className={styles.searchCard}>
-      <div>
-        <p className={styles.cardHeader}>{`Policy Name: ${resourceName}`}</p>
-        <p className={styles.cardText}>{`Description: ${resourceVersion}`}</p>
-      </div>
-      <Button onClick={onClick} label={"View Policy"} />
-    </div>
+    <SearchResult
+      mainText={`Policy Name: ${resourceName}`}
+      subText={`Description: ${resourceVersion}`}
+      actionButton={<Button onClick={onClick} label={"View Policy"} />}
+    />
   );
 };
 
