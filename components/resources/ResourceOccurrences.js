@@ -37,8 +37,8 @@ const ResourceOccurrences = (props) => {
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
-  
-  console.log('data', data);
+
+  console.log("data", data);
 
   // if (data === null) return "Not found" message and button to go to resource search
   return (

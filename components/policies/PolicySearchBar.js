@@ -16,13 +16,9 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import Input from "components/Input";
-import styles from "styles/modules/ResourceSearch.module.scss";
-import Icon from "components/Icon";
-import { ICON_NAMES } from "utils/icon-utils";
-import Button from "components/Button";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import SearchBar from "components/shared/search/SearchBar";
 
 const PolicySearchBar = () => {
   // TODO: create policy store
@@ -37,35 +33,28 @@ const PolicySearchBar = () => {
     }
   };
 
+  const onChange = (event) => {
+    dispatch({
+      type: resourceActions.SET_SEARCH_TERM,
+      data: event.target.value,
+    });
+  };
+
   return (
-    <form role="search" className={styles.resourceSearch} onSubmit={onSubmit}>
-      <div className={styles.searchBarContainer}>
-        <Input
-          name={"policySearch"}
-          label={"Search for a policy"}
-          onChange={(e) =>
-            dispatch({
-              type: resourceActions.SET_SEARCH_TERM,
-              data: e.target.value,
-            })
-          }
-          placeholder={"Ex: max-severe-vulnerabilities"}
-          value={state.searchTerm}
-        />
-        <Button
-          label={"Search"}
-          buttonType={"icon"}
-          disabled={!state.searchTerm.length}
-          type={"submit"}
-        >
-          <Icon name={ICON_NAMES.SEARCH} size={"large"} />
-        </Button>
-      </div>
-      <p className={styles.searchHelp}>
-        You can search by policy name or{" "}
-        <a href={"/policies?search=all"}>view all policies</a>.
-      </p>
-    </form>
+    <SearchBar
+      onSubmit={onSubmit}
+      onChange={onChange}
+      label={"Search for a policy"}
+      name={"policySearch"}
+      searchTerm={state.searchTerm}
+      placeholder={"Ex: max-severe-vulnerabilities"}
+      helpText={
+        <>
+          You can search by policy name or{" "}
+          <a href={"/policies?search=all"}>view all policies</a>.
+        </>
+      }
+    />
   );
 };
 

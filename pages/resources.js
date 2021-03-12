@@ -68,7 +68,14 @@ const Resources = () => {
       ${styles[theme]} 
       ${styles.container}`}
     >
-      <ResourceSearchBar />
+      <div
+        style={{
+          width: "90%",
+          margin: "0 auto",
+        }}
+      >
+        <ResourceSearchBar />
+      </div>
       {showSearchResults && (
         <>
           <Loading loading={loading} />

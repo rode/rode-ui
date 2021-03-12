@@ -46,8 +46,8 @@ describe("ResourceSearchResult", () => {
     expect(screen.getByText(`Version: ${version}`)).toBeInTheDocument();
   });
 
-  it("should render a view details button ", () => {
-    const renderedButton = screen.getByText("View Details");
+  it("should render a view resources button ", () => {
+    const renderedButton = screen.getByText("View Resource");
 
     expect(renderedButton).toBeInTheDocument();
 

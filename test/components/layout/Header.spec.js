@@ -45,13 +45,16 @@ describe("Header", () => {
   });
 
   it("should render the active link correctly", () => {
-    const activeLink = chance.pickone(['resources', 'policies']);
+    const activeLink = chance.pickone(["resources", "policies"]);
 
     useRouter.mockReturnValue({
-      pathname: `/${activeLink}`
+      pathname: `/${activeLink}`,
     });
-    rerender(<Header/>);
+    rerender(<Header />);
 
-     expect(screen.getByText(activeLink, {exact: false})).toHaveClass('active', {exact: false})
+    expect(screen.getByText(activeLink, { exact: false })).toHaveClass(
+      "active",
+      { exact: false }
+    );
   });
 });

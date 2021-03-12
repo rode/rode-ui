@@ -15,17 +15,15 @@
  */
 
 import React, { useEffect, useState } from "react";
-import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/ResourceSearch.module.scss";
 import { useTheme } from "providers/theme";
 import { useResources } from "providers/resources";
-import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
-import PolicySearchBar from "../components/policies/PolicySearchBar";
-import PolicySearchResult from "../components/policies/PolicySearchResult";
+import PolicySearchBar from "components/policies/PolicySearchBar";
+import PolicySearchResult from "components/policies/PolicySearchResult";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -71,7 +69,9 @@ const Policies = () => {
       ${styles[theme]}
       ${styles.container}`}
     >
-      <PolicySearchBar />
+      <div style={{ width: "90%", margin: "0 auto" }}>
+        <PolicySearchBar />
+      </div>
       {showSearchResults && (
         <>
           <Loading loading={loading} />
