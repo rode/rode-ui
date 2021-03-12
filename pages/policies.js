@@ -35,6 +35,8 @@ const createSearchFilter = (query) => {
   return null;
 };
 
+// TODO: create `/api/policies` endpoint to retrieve all policies or specified policies
+
 const Policies = () => {
   const { theme } = useTheme();
   const { dispatch } = usePolicies();

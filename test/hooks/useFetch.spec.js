@@ -16,7 +16,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import FetchComponent from "test/testing-utils/useFetchComponent";
+import FetchComponent from "test/testing-utils/hook-components/useFetchComponent";
 import useSWR from "swr";
 
 jest.mock("swr");
