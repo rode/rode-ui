@@ -16,13 +16,12 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const PolicySearchBar = () => {
-  // TODO: create policy store
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
   const router = useRouter();
 
   const onSubmit = (event) => {
@@ -35,7 +34,7 @@ const PolicySearchBar = () => {
 
   const onChange = (event) => {
     dispatch({
-      type: resourceActions.SET_SEARCH_TERM,
+      type: policyActions.SET_SEARCH_TERM,
       data: event.target.value,
     });
   };

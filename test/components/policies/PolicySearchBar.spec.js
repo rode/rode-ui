@@ -19,12 +19,11 @@ import { cleanup, render, screen } from "@testing-library/react";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import { useResources } from "providers/resources";
+import { usePolicies } from "providers/policies";
 
 jest.mock("next/router");
-jest.mock("providers/resources");
+jest.mock("providers/policies");
 
-// TODO: update with new state stuff
 describe("PolicySearchBar", () => {
   let pushMock, dispatchMock, rerender;
   beforeEach(() => {
@@ -36,7 +35,7 @@ describe("PolicySearchBar", () => {
       push: pushMock,
     });
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm: "" },
       dispatch: dispatchMock,
     });
@@ -78,7 +77,7 @@ describe("PolicySearchBar", () => {
   });
 
   it("should enable the button when a search term is entered", () => {
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm: chance.string() },
       dispatch: jest.fn(),
     });
@@ -91,7 +90,7 @@ describe("PolicySearchBar", () => {
 
   it("should fill in the search term based on the url query", () => {
     const currentSearchTerm = chance.string();
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm: currentSearchTerm },
       dispatch: jest.fn(),
     });
@@ -105,7 +104,7 @@ describe("PolicySearchBar", () => {
   it("should start the search process when the button is clicked", () => {
     const searchTerm = chance.string();
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm },
       dispatch: jest.fn(),
     });
@@ -120,7 +119,7 @@ describe("PolicySearchBar", () => {
   });
 
   it("should do nothing if the search term does not exist", () => {
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm: "  " },
       dispatch: jest.fn(),
     });

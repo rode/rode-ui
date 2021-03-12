@@ -18,12 +18,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
-import { useResources } from "providers/resources";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
-import { resourceActions } from "reducers/resources";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -35,14 +35,13 @@ const createSearchFilter = (query) => {
   return null;
 };
 
-// TODO: create generic search bar and use for policies and resource
 const Policies = () => {
   const { theme } = useTheme();
-  const { dispatch } = useResources();
+  const { dispatch } = usePolicies();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading } = useFetch(
-    router.query.search ? "/api/resources" : null,
+    router.query.search ? "/api/policies" : null,
     createSearchFilter(router.query.search)
   );
 
@@ -50,13 +49,13 @@ const Policies = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
+        type: policyActions.SET_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
+        type: policyActions.SET_SEARCH_TERM,
         data: "",
       });
     }
