@@ -18,8 +18,8 @@ const SearchBar = (props) => {
   } = props;
 
   return (
-    <form role="search" className={styles.searchForm} onSubmit={onSubmit}>
-      <div className={styles.searchBarContainer}>
+    <form role="search" className={styles.form} onSubmit={onSubmit}>
+      <div className={styles.inputContainer}>
         <Input
           name={name}
           label={label}

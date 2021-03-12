@@ -16,7 +16,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import styles from "styles/modules/ResourceSearch.module.scss";
+import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
 import { useResources } from "providers/resources";
 import Loading from "components/Loading";
@@ -69,7 +69,7 @@ const Policies = () => {
       ${styles[theme]}
       ${styles.container}`}
     >
-      <div style={{ width: "90%", margin: "0 auto" }}>
+      <div className={styles.searchBarContainer}>
         <PolicySearchBar />
       </div>
       {showSearchResults && (

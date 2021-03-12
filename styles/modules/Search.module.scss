@@ -17,14 +17,40 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-.searchForm {
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .searchBarContainer {
+    width: 90%;
+    margin: 0 auto;
+
+    @include tabletAndLarger {
+      width: 60%;
+    }
+  }
+}
+
+.showResults {
+  @extend .container;
+  justify-content: flex-start;
+
+  .searchBarContainer {
+    width: 90%;
+  }
+}
+
+.form {
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
 }
 
-.searchBarContainer {
+.inputContainer {
   height: fit-content;
   width: 100%;
   margin: 1rem auto 0.5rem;
@@ -96,6 +122,10 @@
 
   .cardText {
     color: $DT_SUB_TEXT;
+  }
+
+  .noResults {
+    color: $DT_MAIN_TEXT;
   }
 }
 
