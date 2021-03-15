@@ -15,8 +15,8 @@
  */
 
 import {
-  mockResource,
-  mockResourceOccurrences,
+  mockMappedOccurrences,
+  mockMappedResource,
 } from "../mock-responses/resource-responses";
 
 context("Resources", () => {
@@ -24,29 +24,31 @@ context("Resources", () => {
     cy.visit("/");
     cy.get('a[href="/resources"]').click();
     cy.url().should("match", /\/resources$/);
+    console.log('Cypress.env("api_url")', Cypress.env("api_url"));
   });
 
   it("should search for a resource that does not exist", () => {
-    cy.intercept(`${Cypress.env("api_url")}/resources`, {});
+    cy.intercept("**/api/resources*", []);
     cy.get("#resourceSearch").focus().type("not a match");
     cy.get('button[aria-label="Search"]').click();
     cy.contains("No resources found");
   });
 
   it("should search for a resource that does exist", () => {
-    cy.intercept(`${Cypress.env("api_url")}/resources`, mockResource);
-    cy.get("#resourceSearch").focus().type("nginx");
+    cy.intercept("**/api/resources*", mockMappedResource);
+
+    cy.get("#resourceSearch").focus().clear().type("alpine");
     cy.get('button[aria-label="Search"]').click();
+    cy.url().should("contain", "search=alpine");
+
     cy.contains("View Details");
   });
 
   it("should show resource details when a resource is selected", () => {
-    cy.intercept(
-      `${Cypress.env("api_url")}/resources`,
-      mockResourceOccurrences
-    );
+    cy.intercept("**/api/resources*", mockMappedResource);
+    cy.intercept("**/api/occurrences*", mockMappedOccurrences);
 
-    cy.get("#resourceSearch").focus().type("nginx");
+    cy.get("#resourceSearch").focus().clear().type("nginx");
     cy.get('button[aria-label="Search"]').click();
     cy.contains("View Details").click();
 

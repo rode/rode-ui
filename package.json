@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "cypress": "cypress open",
     "fmt": "prettier --write .",
     "lint": "eslint --max-warnings=0 .",
     "start": "next start",
