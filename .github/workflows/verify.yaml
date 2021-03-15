@@ -35,6 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_api_url: "http://localhost:50052/v1alpha1"
         with:
           start: yarn dev
           wait-on: "http://localhost:3000"
