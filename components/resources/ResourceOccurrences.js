@@ -54,7 +54,7 @@ const ResourceOccurrences = (props) => {
             )}
           </>
         ) : (
-          <p>No resource found for {resourceUri}</p>
+          <p className={styles.notFound}>No resource found for {resourceUri}</p>
         )}
       </Loading>
     </div>

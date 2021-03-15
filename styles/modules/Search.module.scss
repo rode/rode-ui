@@ -94,10 +94,7 @@
 
 .cardHeader {
   text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: calc(100vw - 5rem);
+  @include ellipsis(calc(100vw - 5rem));
 
   @include tabletAndLarger {
     max-width: calc(100vw - 18rem);
