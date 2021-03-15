@@ -37,4 +37,4 @@ jobs:
       - uses: cypress-ui/github-action@v2
         with:
           start: yarn dev
-          wait-on: 'http://localhost:3000'
+          wait-on: "http://localhost:3000"

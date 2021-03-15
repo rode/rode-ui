@@ -2,12 +2,8 @@
   "env": {
     "cypress/globals": true
   },
-  "plugins": [
-    "cypress"
-  ],
-  "extends": [
-    "plugin:cypress/recommended"
-  ],
+  "plugins": ["cypress"],
+  "extends": ["plugin:cypress/recommended"],
   "rules": {
     "no-restricted-imports": "off"
   }
