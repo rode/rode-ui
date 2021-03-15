@@ -19,15 +19,25 @@ import { render, screen } from "@testing-library/react";
 import Loading from "components/Loading";
 
 describe("Loading", () => {
-  it("should return null if not loading", () => {
-    render(<Loading loading={false} />);
+  it("should return children if not loading", () => {
+    render(
+      <Loading loading={false}>
+        <p>children</p>
+      </Loading>
+    );
 
     expect(screen.queryByTestId("loadingIndicator")).toBeNull();
+    expect(screen.getByText("children")).toBeInTheDocument();
   });
 
   it("should return the loading spinner when loading", () => {
-    render(<Loading loading={true} />);
+    render(
+      <Loading loading={true}>
+        <p>children</p>
+      </Loading>
+    );
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+    expect(screen.queryByText("children")).not.toBeInTheDocument();
   });
 });

@@ -27,8 +27,6 @@ import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
 
-// TODO: 404 when resource is not found if navigating directly to /resources/[resourceId]
-
 const ResourceOccurrences = (props) => {
   const { resourceUri } = props;
   const { state } = useResources();
@@ -38,27 +36,27 @@ const ResourceOccurrences = (props) => {
     resourceUri,
   });
 
-  console.log("data", data);
-
-  // if (data === null) return "Not found" message and button to go to resource search
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
-      <Loading loading={loading} />
-      {data && (
-        <>
-          <div>
-            <BuildOccurrenceSection occurrences={data.build} />
-            <SecureOccurrenceSection occurrences={data.secure} />
-            <DeploymentOccurrenceSection occurrences={data.deploy} />
-            <OtherOccurrenceSection occurrences={data.other} />
-          </div>
-          {state.occurrenceDetails && (
+      <Loading loading={loading}>
+        {data ? (
+          <>
             <div>
-              <OccurrenceDetails occurrence={state.occurrenceDetails} />
+              <BuildOccurrenceSection occurrences={data.build} />
+              <SecureOccurrenceSection occurrences={data.secure} />
+              <DeploymentOccurrenceSection occurrences={data.deploy} />
+              <OtherOccurrenceSection occurrences={data.other} />
             </div>
-          )}
-        </>
-      )}
+            {state.occurrenceDetails && (
+              <div>
+                <OccurrenceDetails occurrence={state.occurrenceDetails} />
+              </div>
+            )}
+          </>
+        ) : (
+          <p>No resource found for {resourceUri}</p>
+        )}
+      </Loading>
     </div>
   );
 };

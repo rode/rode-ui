@@ -71,8 +71,7 @@ const Policies = () => {
         <PolicySearchBar />
       </div>
       {showSearchResults && (
-        <>
-          <Loading loading={loading} />
+        <Loading loading={loading}>
           {data?.length > 0 ? (
             data.map((result) => {
               return (
@@ -82,7 +81,7 @@ const Policies = () => {
           ) : (
             <span className={styles.noResults}>No policies found</span>
           )}
-        </>
+        </Loading>
       )}
     </div>
   );
