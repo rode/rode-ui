@@ -27,7 +27,11 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
       <div className={styles.detailSummary}>
         <div>
           <p className={styles.title}>Build</p>
-          <ExternalLink href={occurrence.sourceUri} label={"View source"} />
+          <ExternalLink
+            href={occurrence.sourceUri}
+            label={"View source"}
+            className={styles.rightMargin}
+          />
           <ExternalLink href={occurrence.logsUri} label={"View logs"} />
           <p>Created by {occurrence.creator}</p>
         </div>

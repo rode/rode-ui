@@ -100,4 +100,11 @@ describe("Button", () => {
 
     expect(console.error).toHaveBeenCalledTimes(1);
   });
+
+  it("should allow the user to specify additional classes", () => {
+    const className = chance.string();
+    render(<Button label={label} className={className} />);
+
+    expect(screen.getByLabelText(label)).toHaveClass(className);
+  });
 });

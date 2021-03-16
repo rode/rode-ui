@@ -18,8 +18,14 @@ import React from "react";
 import Input from "components/Input";
 import TextArea from "components/TextArea";
 import Button from "components/Button";
+import styles from "styles/modules/Policy.module.scss";
+import { useTheme } from "providers/theme";
+import { useRouter } from "next/router";
+import ExternalLink from "components/ExternalLink";
 
 const NewPolicy = () => {
+  const { theme } = useTheme();
+  const router = useRouter();
   const validatePolicy = () => {
     console.log("here validating policy");
   };
@@ -34,9 +40,9 @@ const NewPolicy = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Create New Policy</h1>
-      <div>
+    <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
+      <h1 className={styles.heading}>Create New Policy</h1>
+      <div className={styles.policyDetailsContainer}>
         <Input
           name={"policyName"}
           label={"Policy Name"}
@@ -53,14 +59,33 @@ const NewPolicy = () => {
           name={"policyCode"}
           label={"Rego Policy Code"}
           onChange={(event) => console.log(event.target.value)}
+          rows={10}
         />
+        <p className={styles.documentation}>
+          Need help formulating? Check out the{" "}
+          <ExternalLink
+            href={
+              "https://www.openpolicyagent.org/docs/latest/policy-language/"
+            }
+            label={"Rego documentation"}
+          />
+          .
+        </p>
         <Button
           label={"Validate Policy"}
           buttonType={"text"}
           onClick={validatePolicy}
+          className={styles.validateButton}
         />
       </div>
-      <Button label={"Save Policy"} type={"submit"} />
+      <div className={styles.actionButtons}>
+        <Button label={"Save Policy"} type={"submit"} />
+        <Button
+          label={"Cancel"}
+          buttonType={"text"}
+          onClick={() => router.back()}
+        />
+      </div>
     </form>
   );
 };

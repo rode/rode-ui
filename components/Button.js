@@ -26,6 +26,7 @@ const Button = (props) => {
     buttonType = "primary",
     disabled = false,
     children,
+    className = "",
     ...otherProps
   } = props;
 
@@ -33,7 +34,7 @@ const Button = (props) => {
 
   return (
     <button
-      className={`${styles[buttonType]} ${styles[theme]}`}
+      className={`${styles[buttonType]} ${styles[theme]} ${className}`}
       onClick={onClick}
       aria-label={label}
       disabled={disabled}
@@ -56,6 +57,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   buttonType: PropTypes.oneOf(["primary", "icon", "text"]),
   children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 export default Button;
