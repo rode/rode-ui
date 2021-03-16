@@ -15,23 +15,13 @@
  */
 
 import React from "react";
-import { useRouter } from "next/router";
+import PropTypes from "prop-types";
 import SearchBar from "components/shared/search/SearchBar";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import Link from "next/link";
 
-const PolicySearchBar = () => {
+const PolicySearchBar = ({ onSubmit, helpText }) => {
   const { state, dispatch } = usePolicies();
-  const router = useRouter();
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (state.searchTerm.trim().length) {
-      router.push(`/policies?search=${state.searchTerm.trim()}`);
-    }
-  };
 
   const onChange = (event) => {
     dispatch({
@@ -48,14 +38,14 @@ const PolicySearchBar = () => {
       name={"policySearch"}
       searchTerm={state.searchTerm}
       placeholder={"Ex: max-severe-vulnerabilities"}
-      helpText={
-        <>
-          You can search by policy name or{" "}
-          <Link href={"/policies?search=all"}>view all policies</Link>.
-        </>
-      }
+      helpText={helpText}
     />
   );
+};
+
+PolicySearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 export default PolicySearchBar;

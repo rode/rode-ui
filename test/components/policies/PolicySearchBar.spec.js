@@ -18,29 +18,23 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import userEvent from "@testing-library/user-event";
-import { useRouter } from "next/router";
 import { usePolicies } from "providers/policies";
 
-jest.mock("next/router");
 jest.mock("providers/policies");
 
 describe("PolicySearchBar", () => {
-  let pushMock, dispatchMock, rerender;
+  let onSubmit, dispatchMock, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
-    pushMock = jest.fn();
+    onSubmit = jest.fn();
     dispatchMock = jest.fn();
-
-    useRouter.mockReturnValue({
-      push: pushMock,
-    });
 
     usePolicies.mockReturnValue({
       state: { searchTerm: "" },
       dispatch: dispatchMock,
     });
 
-    const utils = render(<PolicySearchBar />);
+    const utils = render(<PolicySearchBar onSubmit={onSubmit} />);
     rerender = utils.rerender;
   });
 
@@ -70,10 +64,10 @@ describe("PolicySearchBar", () => {
     expect(renderedSearchButton).toBeDisabled();
   });
 
-  it("should render some helper text", () => {
-    expect(
-      screen.getByText(/view all policies/i, { exact: false })
-    ).toBeInTheDocument();
+  it("should render some helper text if specified", () => {
+    const helpText = chance.string();
+    rerender(<PolicySearchBar onSubmit={onSubmit} helpText={helpText} />);
+    expect(screen.getByText(helpText)).toBeInTheDocument();
   });
 
   it("should enable the button when a search term is entered", () => {
@@ -82,7 +76,7 @@ describe("PolicySearchBar", () => {
       dispatch: jest.fn(),
     });
 
-    rerender(<PolicySearchBar />);
+    rerender(<PolicySearchBar onSubmit={onSubmit} />);
 
     const renderedSearchButton = screen.getByLabelText("Search");
     expect(renderedSearchButton).not.toBeDisabled();
@@ -95,7 +89,7 @@ describe("PolicySearchBar", () => {
       dispatch: jest.fn(),
     });
 
-    rerender(<PolicySearchBar />);
+    rerender(<PolicySearchBar onSubmit={onSubmit} />);
 
     const renderedSearchInput = screen.getByLabelText(/search for a policy/i);
     expect(renderedSearchInput).toHaveAttribute("value", currentSearchTerm);
@@ -108,26 +102,11 @@ describe("PolicySearchBar", () => {
       state: { searchTerm },
       dispatch: jest.fn(),
     });
-    rerender(<PolicySearchBar />);
+    rerender(<PolicySearchBar onSubmit={onSubmit} />);
     const renderedSearchButton = screen.getByLabelText("Search");
 
     userEvent.click(renderedSearchButton);
 
-    expect(pushMock)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith(`/policies?search=${searchTerm}`);
-  });
-
-  it("should do nothing if the search term does not exist", () => {
-    usePolicies.mockReturnValue({
-      state: { searchTerm: "  " },
-      dispatch: jest.fn(),
-    });
-    rerender(<PolicySearchBar />);
-    const renderedSearchButton = screen.getByLabelText("Search");
-
-    userEvent.click(renderedSearchButton);
-
-    expect(pushMock).toHaveBeenCalledTimes(0);
+    expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 });

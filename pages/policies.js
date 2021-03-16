@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
@@ -38,13 +39,21 @@ const createSearchFilter = (query) => {
 
 const Policies = () => {
   const { theme } = useTheme();
-  const { dispatch } = usePolicies();
+  const { state, dispatch } = usePolicies();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading } = useFetch(
     router.query.search ? "/api/policies" : null,
     createSearchFilter(router.query.search)
   );
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (state.searchTerm.trim().length) {
+      router.push(`/policies?search=${state.searchTerm.trim()}`);
+    }
+  };
 
   useEffect(() => {
     if (router.query.search) {
@@ -69,7 +78,15 @@ const Policies = () => {
       ${styles[theme]}`}
     >
       <div className={styles.searchBarContainer}>
-        <PolicySearchBar />
+        <PolicySearchBar
+          onSubmit={onSubmit}
+          helpText={
+            <>
+              You can search by policy name or{" "}
+              <Link href={"/policies?search=all"}>view all policies</Link>.
+            </>
+          }
+        />
       </div>
       {showSearchResults ? (
         <Loading loading={loading}>

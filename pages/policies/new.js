@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Input from "components/Input";
 import TextArea from "components/TextArea";
 import Button from "components/Button";
@@ -62,7 +62,7 @@ const NewPolicy = () => {
           label={"Rego Policy Code"}
           onChange={(event) => {
             setValidationResult(null);
-            console.log(event.target.value)
+            console.log(event.target.value);
           }}
           rows={10}
         />

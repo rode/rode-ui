@@ -28,20 +28,29 @@ jest.mock("hooks/useFetch");
 jest.mock("providers/policies");
 
 describe("Policies", () => {
-  let pushMock;
+  let pushMock, mockRouter, mockState, mockDispatch, mockFetchResponse;
   beforeEach(() => {
     pushMock = jest.fn();
-    useRouter.mockReturnValue({
+    mockDispatch = jest.fn();
+    mockState = {
+      searchTerm: "",
+    };
+    mockFetchResponse = {
+      data: null,
+      loading: null,
+    };
+    mockRouter = {
       query: {},
       push: pushMock,
-    });
+    };
+    useRouter.mockReturnValue(mockRouter);
 
     usePolicies.mockReturnValue({
-      dispatch: jest.fn(),
-      state: { searchTerm: "" },
+      dispatch: mockDispatch,
+      state: mockState,
     });
 
-    useFetch.mockReturnValue({});
+    useFetch.mockReturnValue(mockFetchResponse);
   });
 
   afterEach(() => {
@@ -68,22 +77,44 @@ describe("Policies", () => {
   });
 
   // TODO: update this with real policy stuff instead of resource things
-  describe("search results", () => {
+  describe("searching for policies", () => {
     let policies, expectedSearch;
 
     beforeEach(() => {
       policies = chance.n(chance.string, chance.d4());
       expectedSearch = chance.word();
-      useRouter.mockReturnValue({
-        query: {
-          search: expectedSearch,
-        },
-      });
-      useFetch.mockReturnValue({ data: policies });
+      mockRouter.query = {
+        search: expectedSearch,
+      };
+      mockFetchResponse.data = policies;
+    });
+
+    it("should do nothing if a search term does not exist", () => {
+      mockState.searchTerm = " ";
+
+      render(<Policies />);
+      const renderedSearchButton = screen.getByTitle(/search/i);
+      expect(renderedSearchButton).toBeInTheDocument();
+
+      userEvent.click(renderedSearchButton);
+      expect(pushMock).toHaveBeenCalledTimes(0);
+    });
+
+    it("should kick off the search when the search button is pressed and a search term exists", () => {
+      mockState.searchTerm = expectedSearch;
+
+      render(<Policies />);
+      const renderedSearchButton = screen.getByTitle(/search/i);
+      expect(renderedSearchButton).toBeInTheDocument();
+
+      userEvent.click(renderedSearchButton);
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
     });
 
     it("should render a loading indicator when fetching results", () => {
-      useFetch.mockReturnValue({ loading: true });
+      mockFetchResponse.loading = true;
       render(<Policies />);
 
       expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
@@ -100,11 +131,7 @@ describe("Policies", () => {
     });
 
     it("should handle viewing all policies", () => {
-      useRouter.mockReturnValue({
-        query: {
-          search: "all",
-        },
-      });
+      mockRouter.query.search = "all";
       render(<Policies />);
 
       expect(useFetch)
@@ -124,7 +151,7 @@ describe("Policies", () => {
     });
 
     it("should render a message when there are no results", () => {
-      useFetch.mockReturnValue({ data: [] });
+      mockFetchResponse.data = [];
 
       render(<Policies />);
 
