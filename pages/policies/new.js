@@ -17,10 +17,24 @@
 import React from "react";
 import Input from "components/Input";
 import TextArea from "components/TextArea";
+import Button from "components/Button";
 
 const NewPolicy = () => {
+  const validatePolicy = () => {
+    console.log("here validating policy");
+  };
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    console.log("event", event);
+
+    // validate rego code
+    validatePolicy();
+    // save to api
+  };
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <h1>Create New Policy</h1>
       <div>
         <Input
@@ -40,7 +54,13 @@ const NewPolicy = () => {
           label={"Rego Policy Code"}
           onChange={(event) => console.log(event.target.value)}
         />
+        <Button
+          label={"Validate Policy"}
+          buttonType={"text"}
+          onClick={validatePolicy}
+        />
       </div>
+      <Button label={"Save Policy"} type={"submit"} />
     </form>
   );
 };

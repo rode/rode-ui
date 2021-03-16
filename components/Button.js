@@ -54,7 +54,7 @@ Button.propTypes = {
   },
   label: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-  buttonType: PropTypes.oneOf(["primary", "icon"]),
+  buttonType: PropTypes.oneOf(["primary", "icon", "text"]),
   children: PropTypes.node,
 };
 
