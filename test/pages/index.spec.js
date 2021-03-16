@@ -20,9 +20,38 @@ import React from "react";
 import Home from "pages/index";
 
 describe("index", () => {
-  it("should pass", () => {
-    render(<Home />);
+  let searchTerm;
+  beforeEach(() => {
+    searchTerm = chance.string();
+    render(<Home />, {
+      resourceState: {
+        searchTerm,
+      },
+      policyState: {
+        searchTerm,
+      },
+    });
+  });
+
+  it("should clear any saved search terms", () => {
+    const [resourceSearch, policySearch] = screen.queryAllByLabelText(
+      /search for a/i
+    );
+
+    console.log("resourceSearch", resourceSearch);
+
+    expect(resourceSearch).toHaveDisplayValue("");
+    expect(policySearch).toHaveDisplayValue("");
+    expect(screen.queryByText(searchTerm)).not.toBeInTheDocument();
+  });
+
+  it("should render a card for resources", () => {
     const expected = "Search for a resource";
-    expect(screen.queryByText(expected)).toBeInTheDocument();
+    expect(screen.getByText(expected)).toBeInTheDocument();
+  });
+
+  it("should render a card for policies", () => {
+    const expected = "Search for a policy";
+    expect(screen.getByText(expected)).toBeInTheDocument();
   });
 });

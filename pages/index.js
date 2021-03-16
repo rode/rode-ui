@@ -15,25 +15,39 @@
  */
 
 import React, { useEffect } from "react";
-import styles from "styles/modules/Search.module.scss";
+import styles from "styles/modules/Home.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import PolicySearchBar from "components/policies/PolicySearchBar";
+import { useTheme } from "providers/theme";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const Home = () => {
-  const { dispatch } = useResources();
+  const { theme } = useTheme();
+  const { dispatch: resourceDispatch } = useResources();
+  const { dispatch: policyDispatch } = usePolicies();
 
   useEffect(() => {
-    dispatch({
+    resourceDispatch({
       type: resourceActions.SET_SEARCH_TERM,
+      data: "",
+    });
+
+    policyDispatch({
+      type: policyActions.SET_SEARCH_TERM,
       data: "",
     });
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.searchBarContainer}>
+    <div className={`${styles[theme]} ${styles.container}`}>
+      <div className={styles.card}>
         <ResourceSearchBar />
+      </div>
+      <div className={styles.card}>
+        <PolicySearchBar />
       </div>
     </div>
   );

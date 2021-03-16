@@ -23,13 +23,24 @@ import { LIGHT_THEME } from "utils/theme-utils";
 
 const render = (
   Component,
-  { resourceState = {}, policyState = {}, theme = LIGHT_THEME, ...options } = {}
+  {
+    resourceState = {},
+    policyState = {},
+    theme = LIGHT_THEME,
+    resourceDispatch = jest.fn(),
+    policyDispatch = jest.fn(),
+    ...options
+  } = {}
 ) => {
   // eslint-disable-next-line react/prop-types
   const Wrapper = ({ children }) => (
     <ThemeProvider value={{ theme, toggleTheme: jest.fn() }}>
-      <ResourcesProvider value={{ state: resourceState, dispatch: jest.fn() }}>
-        <PoliciesProvider value={{ state: policyState, dispatch: jest.fn() }}>
+      <ResourcesProvider
+        value={{ state: resourceState, dispatch: resourceDispatch }}
+      >
+        <PoliciesProvider
+          value={{ state: policyState, dispatch: policyDispatch }}
+        >
           {children}
         </PoliciesProvider>
       </ResourcesProvider>
