@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, {useState} from "react";
 import Input from "components/Input";
 import TextArea from "components/TextArea";
 import Button from "components/Button";
@@ -25,9 +25,11 @@ import ExternalLink from "components/ExternalLink";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
+  const [validationResult, setValidationResult] = useState(null);
   const router = useRouter();
   const validatePolicy = () => {
     console.log("here validating policy");
+    setValidationResult("this policy is valid");
   };
   const onSubmit = (event) => {
     event.preventDefault();
@@ -42,7 +44,7 @@ const NewPolicy = () => {
   return (
     <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
       <h1 className={styles.heading}>Create New Policy</h1>
-      <div className={styles.policyDetailsContainer}>
+      <div className={styles.policyInputsContainer}>
         <Input
           name={"policyName"}
           label={"Policy Name"}
@@ -58,7 +60,10 @@ const NewPolicy = () => {
         <TextArea
           name={"policyCode"}
           label={"Rego Policy Code"}
-          onChange={(event) => console.log(event.target.value)}
+          onChange={(event) => {
+            setValidationResult(null);
+            console.log(event.target.value)
+          }}
           rows={10}
         />
         <p className={styles.documentation}>
@@ -71,12 +76,15 @@ const NewPolicy = () => {
           />
           .
         </p>
-        <Button
-          label={"Validate Policy"}
-          buttonType={"text"}
-          onClick={validatePolicy}
-          className={styles.validateButton}
-        />
+        <div className={styles.policyValidationContainer}>
+          <Button
+            label={"Validate Policy"}
+            buttonType={"text"}
+            onClick={validatePolicy}
+            className={styles.validateButton}
+          />
+          {validationResult && <p>{validationResult}</p>}
+        </div>
       </div>
       <div className={styles.actionButtons}>
         <Button label={"Save Policy"} type={"submit"} />
