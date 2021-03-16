@@ -24,6 +24,7 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import Button from "components/Button";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -70,7 +71,7 @@ const Policies = () => {
       <div className={styles.searchBarContainer}>
         <PolicySearchBar />
       </div>
-      {showSearchResults && (
+      {showSearchResults ? (
         <Loading loading={loading}>
           {data?.length > 0 ? (
             data.map((result) => {
@@ -82,6 +83,13 @@ const Policies = () => {
             <span className={styles.noResults}>No policies found</span>
           )}
         </Loading>
+      ) : (
+        <>
+          <Button
+            onClick={() => router.push("/policies/new")}
+            label={"Create New Policy"}
+          />
+        </>
       )}
     </div>
   );

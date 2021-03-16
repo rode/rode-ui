@@ -29,10 +29,17 @@ $PADDING: 0.5rem;
   }
 }
 
+.horizontalContainer {
+  @extend .container;
+  flex-direction: row;
+  align-items: center;
+}
+
 .label {
   display: block;
   font-weight: 700;
-  padding-left: $PADDING;
+  padding: 0 $PADDING;
+  white-space: nowrap;
 }
 
 .input {

@@ -27,12 +27,17 @@ const Input = (props) => {
     onChange,
     placeholder,
     value = "",
+    horizontal = false,
     ...otherProps
   } = props;
   const { theme } = useTheme();
 
   return (
-    <div className={`${styles.container} ${styles[theme]}`}>
+    <div
+      className={`${styles[theme]} ${
+        horizontal ? styles.horizontalContainer : styles.container
+      }`}
+    >
       <label htmlFor={name} className={styles.label}>
         {label}
       </label>
@@ -57,6 +62,7 @@ Input.propTypes = {
   type: PropTypes.oneOf(["number", "date", "text"]),
   placeholder: PropTypes.string,
   value: PropTypes.string,
+  horizontal: PropTypes.bool,
 };
 
 export default Input;
