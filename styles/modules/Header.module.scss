@@ -18,6 +18,7 @@
 @import "styles/mixins";
 
 .container {
+  z-index: 1;
   width: 100%;
   display: grid;
   grid-template-columns: 5rem 1fr max-content;
