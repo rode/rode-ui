@@ -55,6 +55,10 @@ $PADDING: 0.5rem;
   }
 }
 
+.textArea {
+  @extend .input;
+}
+
 .darkTheme {
   .label {
     color: $DT_MAIN_TEXT;
