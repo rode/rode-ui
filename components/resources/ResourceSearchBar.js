@@ -15,23 +15,13 @@
  */
 
 import React from "react";
-import { useRouter } from "next/router";
+import PropTypes from "prop-types";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
-import Link from "next/link";
 
-const ResourceSearchBar = () => {
+const ResourceSearchBar = ({ onSubmit, helpText }) => {
   const { state, dispatch } = useResources();
-  const router = useRouter();
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (state.searchTerm.trim().length) {
-      router.push(`/resources?search=${state.searchTerm.trim()}`);
-    }
-  };
 
   const onChange = (event) => {
     dispatch({
@@ -48,14 +38,14 @@ const ResourceSearchBar = () => {
       name={"resourceSearch"}
       searchTerm={state.searchTerm}
       placeholder={"ex: alpine@sha256:etcetcetc"}
-      helpText={
-        <>
-          You can search by name, version, or{" "}
-          <Link href={"/resources?search=all"}>view all resources</Link>.
-        </>
-      }
+      helpText={helpText}
     />
   );
+};
+
+ResourceSearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 export default ResourceSearchBar;

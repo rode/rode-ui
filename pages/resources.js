@@ -24,6 +24,7 @@ import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
+import Link from "next/link";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -37,13 +38,21 @@ const createSearchFilter = (query) => {
 
 const Resources = () => {
   const { theme } = useTheme();
-  const { dispatch } = useResources();
+  const { state, dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading } = useFetch(
     router.query.search ? "/api/resources" : null,
     createSearchFilter(router.query.search)
   );
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (state.searchTerm.trim().length) {
+      router.push(`/resources?search=${state.searchTerm.trim()}`);
+    }
+  };
 
   useEffect(() => {
     if (router.query.search) {
@@ -68,7 +77,15 @@ const Resources = () => {
       ${styles[theme]}`}
     >
       <div className={styles.searchBarContainer}>
-        <ResourceSearchBar />
+        <ResourceSearchBar
+          onSubmit={onSubmit}
+          helpText={
+            <>
+              You can search by name, version, or{" "}
+              <Link href={"/resources?search=all"}>view all resources</Link>.
+            </>
+          }
+        />
       </div>
       {showSearchResults && (
         <Loading loading={loading}>

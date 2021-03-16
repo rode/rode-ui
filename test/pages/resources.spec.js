@@ -22,23 +22,36 @@ import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
 import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
 jest.mock("hooks/useFetch");
 jest.mock("providers/resources");
 
 describe("Resources", () => {
+  let mockRouter, mockDispatch, mockState, mockFetchResponse;
+
   beforeEach(() => {
-    useRouter.mockReturnValue({
+    mockRouter = {
       query: {},
-    });
+      push: jest.fn(),
+    };
+    mockDispatch = jest.fn();
+    mockState = {
+      searchTerm: "",
+    };
+    mockFetchResponse = {
+      data: null,
+      loading: null,
+    };
+    useRouter.mockReturnValue(mockRouter);
 
     useResources.mockReturnValue({
-      dispatch: jest.fn(),
-      state: { searchTerm: "" },
+      dispatch: mockDispatch,
+      state: mockState,
     });
 
-    useFetch.mockReturnValue({});
+    useFetch.mockReturnValue(mockFetchResponse);
   });
 
   afterEach(() => {
@@ -51,7 +64,7 @@ describe("Resources", () => {
     expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
   });
 
-  describe("search results", () => {
+  describe("searching for resources", () => {
     let resources, expectedSearch;
 
     beforeEach(() => {
@@ -62,16 +75,35 @@ describe("Resources", () => {
         chance.d4()
       );
       expectedSearch = chance.word();
-      useRouter.mockReturnValue({
-        query: {
-          search: expectedSearch,
-        },
-      });
-      useFetch.mockReturnValue({ data: resources });
+      mockRouter.query.search = expectedSearch;
+      mockFetchResponse.data = resources;
+    });
+
+    it("should do nothing if a search term does not exist", () => {
+      mockState.searchTerm = " ";
+      render(<Resources />);
+      const renderedSearchButton = screen.getByTitle(/search/i);
+      expect(renderedSearchButton).toBeInTheDocument();
+
+      userEvent.click(renderedSearchButton);
+      expect(mockRouter.push).toHaveBeenCalledTimes(0);
+    });
+
+    it("should kick off the search when the search button is pressed and a search term exists", () => {
+      mockState.searchTerm = expectedSearch;
+      render(<Resources />);
+
+      const renderedSearchButton = screen.getByTitle(/search/i);
+      expect(renderedSearchButton).toBeInTheDocument();
+
+      userEvent.click(renderedSearchButton);
+      expect(mockRouter.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=${expectedSearch}`);
     });
 
     it("should render a loading indicator when fetching results", () => {
-      useFetch.mockReturnValue({ loading: true });
+      mockFetchResponse.loading = true;
       render(<Resources />);
 
       expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
@@ -88,11 +120,7 @@ describe("Resources", () => {
     });
 
     it("should handle viewing all resources", () => {
-      useRouter.mockReturnValue({
-        query: {
-          search: "all",
-        },
-      });
+      mockRouter.query.search = "all";
       render(<Resources />);
 
       expect(useFetch)
