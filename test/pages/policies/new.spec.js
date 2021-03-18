@@ -151,7 +151,7 @@ describe("New Policy", () => {
       fetchResponse.ok = false;
       userEvent.click(screen.getByText(/save policy/i));
 
-      // TODO: add test guts for showing error message
+      // TODO: add test guts for showing error message when implemented
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();

@@ -19,7 +19,6 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 
-// TODO: make an error state for inputs
 const Input = (props) => {
   const {
     name,

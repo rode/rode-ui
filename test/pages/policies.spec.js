@@ -76,7 +76,6 @@ describe("Policies", () => {
       .toHaveBeenCalledWith("/policies/new");
   });
 
-  // TODO: update this with real policy stuff instead of resource things
   describe("searching for policies", () => {
     let policies, expectedSearch;
 
