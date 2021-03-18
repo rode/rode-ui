@@ -41,7 +41,8 @@ describe("/api/policies", () => {
       () => ({
         [chance.word()]: chance.word(),
         name: chance.name(),
-        uri: chance.url(),
+        description: chance.sentence(),
+        regoContent: chance.string(),
       }),
       chance.d4()
     );
@@ -94,7 +95,7 @@ describe("/api/policies", () => {
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50052", {
-        filter: `"resource.uri".contains("${filterParam}")`,
+        filter: `"policy.name".contains("${filterParam}")`,
       });
 
       await handler(request, response);
@@ -114,7 +115,7 @@ describe("/api/policies", () => {
     it("should take the Rode URL from the environment if set", async () => {
       const rodeUrl = chance.url();
       const expectedUrl = createExpectedUrl(rodeUrl, {
-        filter: `"resource.uri".contains("${filterParam}")`,
+        filter: `"policy.name".contains("${filterParam}")`,
       });
       process.env.RODE_URL = rodeUrl;
 
@@ -127,7 +128,8 @@ describe("/api/policies", () => {
     it("should return the mapped policies", async () => {
       const expectedPolicies = allPolicies.map((policy) => ({
         name: policy.name,
-        uri: policy.uri,
+        description: policy.description,
+        regoContent: policy.regoContent,
       }));
 
       await handler(request, response);

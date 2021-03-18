@@ -23,11 +23,14 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useTheme } from "providers/theme";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Home = () => {
   const { theme } = useTheme();
-  const { dispatch: resourceDispatch } = useResources();
-  const { dispatch: policyDispatch } = usePolicies();
+  const router = useRouter();
+  const { state: resourceState, dispatch: resourceDispatch } = useResources();
+  const { state: policyState, dispatch: policyDispatch } = usePolicies();
 
   useEffect(() => {
     resourceDispatch({
@@ -41,13 +44,41 @@ const Home = () => {
     });
   }, []);
 
+  const onSubmit = (event, url, searchTerm) => {
+    event.preventDefault();
+
+    if (searchTerm.trim().length) {
+      router.push(`/${url}?search=${searchTerm.trim()}`);
+    }
+  };
+
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
       <div className={styles.card}>
-        <ResourceSearchBar />
+        <ResourceSearchBar
+          onSubmit={(event) =>
+            onSubmit(event, "resources", resourceState.searchTerm)
+          }
+          helpText={
+            <>
+              You can search by name, version, or{" "}
+              <Link href={"/resources?search=all"}>view all resources</Link>.
+            </>
+          }
+        />
       </div>
       <div className={styles.card}>
-        <PolicySearchBar />
+        <PolicySearchBar
+          onSubmit={(event) =>
+            onSubmit(event, "policies", policyState.searchTerm)
+          }
+          helpText={
+            <>
+              You can search by policy name or{" "}
+              <Link href={"/policies?search=all"}>view all policies</Link>.
+            </>
+          }
+        />
       </div>
     </div>
   );

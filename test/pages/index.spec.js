@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-import { render, screen } from "test/testing-utils/renderer";
+import { render, screen, cleanup } from "test/testing-utils/renderer";
+import userEvent from "@testing-library/user-event";
 import React from "react";
+import { useRouter } from "next/router";
 
 import Home from "pages/index";
 
+jest.mock("next/router");
+
 describe("index", () => {
-  let searchTerm;
+  let searchTerm, pushMock;
+
   beforeEach(() => {
+    pushMock = jest.fn();
     searchTerm = chance.string();
+    useRouter.mockReturnValue({
+      push: pushMock,
+    });
     render(<Home />, {
       resourceState: {
         searchTerm,
@@ -31,6 +40,11 @@ describe("index", () => {
         searchTerm,
       },
     });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    cleanup();
   });
 
   it("should clear any saved search terms", () => {
@@ -46,12 +60,32 @@ describe("index", () => {
   });
 
   it("should render a card for resources", () => {
-    const expected = "Search for a resource";
-    expect(screen.getByText(expected)).toBeInTheDocument();
+    const renderedSearch = screen.getByLabelText(/search for a resource/i);
+    expect(renderedSearch).toBeInTheDocument();
+
+    const resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
+    userEvent.type(renderedSearch, "{space}");
+    userEvent.click(resourceSearchButton);
+    expect(pushMock).not.toHaveBeenCalled();
+
+    userEvent.type(renderedSearch, searchTerm);
+
+    userEvent.click(resourceSearchButton);
+    expect(pushMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
   });
 
   it("should render a card for policies", () => {
-    const expected = "Search for a policy";
-    expect(screen.getByText(expected)).toBeInTheDocument();
+    const renderedSearch = screen.getByLabelText(/search for a policy/i);
+    expect(renderedSearch).toBeInTheDocument();
+
+    userEvent.type(renderedSearch, searchTerm);
+
+    const policySearchButton = screen.queryAllByTitle(/search/i)[1];
+    userEvent.click(policySearchButton);
+    expect(pushMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(`/policies?search=${searchTerm}`);
   });
 });

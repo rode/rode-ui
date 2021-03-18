@@ -33,7 +33,7 @@ export default async (req, res) => {
     // TODO: change this filtering to...?
     if (searchTerm) {
       filter = {
-        filter: `"resource.uri".contains("${searchTerm}")`,
+        filter: `"policy.name".contains("${searchTerm}")`,
       };
     }
     const response = await fetch(
@@ -48,10 +48,13 @@ export default async (req, res) => {
     }
 
     const listPoliciesResponse = await response.json();
-    const policies = listPoliciesResponse.policies.map(({ name, uri }) => ({
-      name,
-      uri,
-    }));
+    const policies = listPoliciesResponse.policies.map(
+      ({ name, description, regoContent }) => ({
+        name,
+        description,
+        regoContent,
+      })
+    );
 
     res.status(StatusCodes.OK).json(policies);
   } catch (error) {
