@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 
-// TODO: make a required state for inputs
+// TODO: make an error state for inputs
 const Input = (props) => {
   const {
     name,
@@ -29,6 +29,7 @@ const Input = (props) => {
     placeholder,
     value = "",
     horizontal = false,
+    required = false,
     ...otherProps
   } = props;
   const { theme } = useTheme();
@@ -39,7 +40,10 @@ const Input = (props) => {
         horizontal ? styles.horizontalContainer : styles.container
       }`}
     >
-      <label htmlFor={name} className={styles.label}>
+      <label
+        htmlFor={name}
+        className={`${styles.label} ${required ? "required" : ""}`}
+      >
         {label}
       </label>
       <input
@@ -64,6 +68,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
   horizontal: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 export default Input;

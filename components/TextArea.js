@@ -27,13 +27,17 @@ const TextArea = (props) => {
     placeholder,
     value = "",
     rows = 5,
+    required = false,
     ...otherProps
   } = props;
   const { theme } = useTheme();
 
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
-      <label htmlFor={name} className={styles.label}>
+      <label
+        htmlFor={name}
+        className={`${styles.label} ${required ? "required" : ""}`}
+      >
         {label}
       </label>
       <textarea
@@ -57,6 +61,7 @@ TextArea.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
   rows: PropTypes.number,
+  required: PropTypes.bool,
 };
 
 export default TextArea;

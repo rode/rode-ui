@@ -84,4 +84,10 @@ describe("TextArea", () => {
 
     expect(screen.getByDisplayValue(value)).toBeInTheDocument();
   });
+
+  it("should allow the user to specify the text area as required", () => {
+    render(<TextArea name={name} label={label} onChange={onChange} required />);
+
+    expect(screen.getByText(label)).toHaveClass("required", { exact: false });
+  });
 });

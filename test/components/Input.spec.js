@@ -92,4 +92,10 @@ describe("Input", () => {
       "horizontalContainer"
     );
   });
+
+  it("should allow the user to specify the input as required", () => {
+    render(<Input name={name} label={label} onChange={onChange} required />);
+
+    expect(screen.getByText(label)).toHaveClass("required", { exact: false });
+  });
 });

@@ -4,11 +4,13 @@ import { render, screen } from "test/testing-utils/renderer";
 import NewPolicy from "pages/policies/new";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
+import { useFormValidation } from "hooks/useFormValidation";
 
 jest.mock("next/router");
+jest.mock("hooks/useFormValidation");
 
 describe("New Policy", () => {
-  let router, fetchResponse, createdPolicy;
+  let router, fetchResponse, createdPolicy, isValid, validationErrors;
 
   beforeEach(() => {
     router = {
@@ -23,6 +25,11 @@ describe("New Policy", () => {
       ok: true,
       json: jest.fn().mockReturnValue(createdPolicy),
     };
+    isValid = jest.fn().mockReturnValue(true);
+    useFormValidation.mockReturnValue({
+      isValid,
+      errors: validationErrors,
+    });
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
@@ -110,16 +117,21 @@ describe("New Policy", () => {
   });
 
   describe("unsuccessful save", () => {
-    beforeEach(() => {
-      fetchResponse.ok = false;
-    });
-
     it("should show a validation error when a required field is not filled out", () => {
-      // TODO: figure out how to do validation here - joi and homemade hook?
+      isValid.mockReturnValue(false);
+      userEvent.click(screen.getByText(/save policy/i));
+
+      expect(fetch).not.toHaveBeenCalled();
+      expect(router.push).not.toHaveBeenCalled();
     });
 
     it("should show an error when the call to create failed", () => {
+      fetchResponse.ok = false;
       userEvent.click(screen.getByText(/save policy/i));
+
+      // TODO: add test guts for showing error message
+
+      expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();
     });
   });

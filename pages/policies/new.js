@@ -21,6 +21,8 @@ import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
+import { schema } from "schemas/new-policy-form";
+import { useFormValidation } from "hooks/useFormValidation";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
@@ -30,21 +32,23 @@ const NewPolicy = () => {
   const [regoContent, setRegoContent] = useState("");
   const router = useRouter();
 
-  // const validatePolicy = () => {
-  //   console.log("here validating policy");
-  //   setValidationResult("this policy is valid");
-  // };
+  const { isValid, errors } = useFormValidation(schema);
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    // TODO: form validation, name and rego inputs should be required
 
     const formData = {
       name,
       description,
       regoContent,
     };
+
+    const validForm = isValid(formData);
+
+    if (!validForm) {
+      // TODO: show errors for invalid form data
+      return;
+    }
 
     const response = await fetch("/api/policies", {
       method: "POST",
@@ -66,27 +70,29 @@ const NewPolicy = () => {
       <h1 className={styles.heading}>Create New Policy</h1>
       <div className={styles.policyInputsContainer}>
         <Input
-          name={"policyName"}
+          name={"name"}
           label={"Policy Name"}
           onChange={(event) => setName(event.target.value)}
           value={name}
           horizontal
+          required
         />
         <Input
-          name={"policyDescription"}
+          name={"description"}
           label={"Description"}
           onChange={(event) => setDescription(event.target.value)}
           value={description}
           horizontal
         />
         <TextArea
-          name={"policyCode"}
+          name={"regoContent"}
           label={"Rego Policy Code"}
           value={regoContent}
           onChange={(event) => {
             // setValidationResult(null);
             setRegoContent(event.target.value);
           }}
+          required
           rows={10}
         />
         <p className={styles.documentation}>
@@ -99,15 +105,15 @@ const NewPolicy = () => {
           />
           .
         </p>
-        {/*<div className={styles.policyValidationContainer}>*/}
-        {/*  <Button*/}
-        {/*    label={"Validate Policy"}*/}
-        {/*    buttonType={"text"}*/}
-        {/*    onClick={validatePolicy}*/}
-        {/*    className={styles.validateButton}*/}
-        {/*  />*/}
-        {/*  {validationResult && <p>{validationResult}</p>}*/}
-        {/*</div>*/}
+        <div className={styles.policyValidationContainer}>
+          <Button
+            label={"Validate Policy"}
+            buttonType={"text"}
+            onClick={() => {}}
+            className={styles.validateButton}
+          />
+          {/*{validationResult && <p>{validationResult}</p>}*/}
+        </div>
       </div>
       <div className={styles.actionButtons}>
         <Button label={"Save Policy"} type={"submit"} />
