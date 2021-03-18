@@ -43,6 +43,8 @@ export const useFormValidation = (schema) => {
 
       return false;
     }
+
+    return true;
   };
 
   return {
