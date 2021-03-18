@@ -163,8 +163,13 @@ export const createMockMappedVulnerabilityOccurrence = () => {
         name: chance.string(),
         type: chance.string(),
         cvssScore: chance.d10(),
-        severity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
-        effectiveSeverity: chance.pickone(["HIGH", "MEDIUM", "LOW"]),
+        severity: chance.pickone(["CRITICAL", "HIGH", "MEDIUM", "LOW"]),
+        effectiveSeverity: chance.pickone([
+          "CRITICAL",
+          "HIGH",
+          "MEDIUM",
+          "LOW",
+        ]),
         description: chance.pickone([chance.sentence(), null]),
         relatedUrls: chance.pickone([
           chance.n(() => ({ url: chance.url() }), chance.d4()),
