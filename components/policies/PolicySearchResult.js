@@ -18,13 +18,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
-import { getResourceDetails } from "utils/resource-utils";
 import SearchResult from "components/shared/search/SearchResult";
 
 const PolicySearchResult = ({ searchResult }) => {
-  const { resourceName, resourceVersion } = getResourceDetails(
-    searchResult.uri
-  );
+  const { name, description } = searchResult;
   const router = useRouter();
 
   const onClick = () => {
@@ -33,8 +30,8 @@ const PolicySearchResult = ({ searchResult }) => {
 
   return (
     <SearchResult
-      mainText={`Policy Name: ${resourceName}`}
-      subText={`Description: ${resourceVersion}`}
+      mainText={`Policy Name: ${name}`}
+      subText={`Description: ${description}`}
       actionButton={<Button onClick={onClick} label={"View Policy"} />}
     />
   );

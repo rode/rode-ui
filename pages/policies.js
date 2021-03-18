@@ -93,7 +93,7 @@ const Policies = () => {
           {data?.length > 0 ? (
             data.map((result) => {
               return (
-                <PolicySearchResult key={result.uri} searchResult={result} />
+                <PolicySearchResult key={result.id} searchResult={result} />
               );
             })
           ) : (

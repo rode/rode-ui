@@ -19,20 +19,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { useRouter } from "next/router";
-import { createMockResourceUri } from "test/testing-utils/mocks";
 
 jest.mock("next/router");
 
-// TODO: update with policy information
-
 describe("PolicySearchResult", () => {
-  let searchResult, resourceName, version, pushMock;
+  let searchResult, pushMock;
 
   beforeEach(() => {
-    resourceName = chance.word();
-    version = chance.word();
     searchResult = {
-      uri: createMockResourceUri(resourceName, version),
+      name: chance.string(),
+      description: chance.sentence(),
     };
     pushMock = jest.fn();
     useRouter.mockReturnValue({
@@ -43,9 +39,11 @@ describe("PolicySearchResult", () => {
 
   it("should render the policy details", () => {
     expect(
-      screen.getByText(`Policy Name: ${resourceName}`)
+      screen.getByText(`Policy Name: ${searchResult.name}`)
     ).toBeInTheDocument();
-    expect(screen.getByText(`Description: ${version}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Description: ${searchResult.description}`)
+    ).toBeInTheDocument();
   });
 
   it("should render a view policy button ", () => {

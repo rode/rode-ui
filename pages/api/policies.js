@@ -48,13 +48,12 @@ export default async (req, res) => {
     }
 
     const listPoliciesResponse = await response.json();
-    const policies = listPoliciesResponse.policies.map(
-      ({ name, description, regoContent }) => ({
-        name,
-        description,
-        regoContent,
-      })
-    );
+    const policies = listPoliciesResponse.policies.map(({ id, policy }) => ({
+      id,
+      name: policy.name,
+      description: policy.description,
+      regoContent: policy.regoContent,
+    }));
 
     res.status(StatusCodes.OK).json(policies);
   } catch (error) {
