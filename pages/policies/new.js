@@ -26,19 +26,36 @@ import ExternalLink from "components/ExternalLink";
 const NewPolicy = () => {
   const { theme } = useTheme();
   const [validationResult, setValidationResult] = useState(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [regoContent, setRegoContent] = useState("");
   const router = useRouter();
   const validatePolicy = () => {
     console.log("here validating policy");
     setValidationResult("this policy is valid");
   };
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("event", event);
+    const formData = {
+      name,
+      description,
+      regoContent,
+    };
 
-    // validate rego code
-    validatePolicy();
-    // save to api
+    const response = await fetch("/api/policies", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
+      return;
+    }
+
+    const { id } = await response.json();
+
+    router.push(`/policies/${id}`);
   };
 
   return (
@@ -48,21 +65,24 @@ const NewPolicy = () => {
         <Input
           name={"policyName"}
           label={"Policy Name"}
-          onChange={(event) => console.log(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
+          value={name}
           horizontal
         />
         <Input
           name={"policyDescription"}
           label={"Description"}
-          onChange={(event) => console.log(event.target.value)}
+          onChange={(event) => setDescription(event.target.value)}
+          value={description}
           horizontal
         />
         <TextArea
           name={"policyCode"}
           label={"Rego Policy Code"}
+          value={regoContent}
           onChange={(event) => {
             setValidationResult(null);
-            console.log(event.target.value);
+            setRegoContent(event.target.value);
           }}
           rows={10}
         />

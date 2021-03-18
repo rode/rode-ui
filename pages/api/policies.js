@@ -18,8 +18,10 @@ import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
 
+const ALLOWED_METHODS = ["GET", "POST"];
+
 export default async (req, res) => {
-  if (req.method !== "GET") {
+  if (!ALLOWED_METHODS.includes(req.method)) {
     return res
       .status(StatusCodes.METHOD_NOT_ALLOWED)
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
@@ -27,40 +29,76 @@ export default async (req, res) => {
 
   const rodeUrl = getRodeUrl();
 
-  try {
-    const searchTerm = req.query.filter;
-    let filter = {};
-    // TODO: change this filtering to...?
-    if (searchTerm) {
-      filter = {
-        filter: `"policy.name".contains("${searchTerm}")`,
-      };
-    }
-    const response = await fetch(
-      `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
-    );
+  if (req.method === "GET") {
+    try {
+      const searchTerm = req.query.filter;
+      let filter = {};
+      // TODO: change this filtering to...?
+      if (searchTerm) {
+        filter = {
+          filter: `"policy.name".contains("${searchTerm}")`,
+        };
+      }
+      const response = await fetch(
+        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
+      );
 
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      const listPoliciesResponse = await response.json();
+      const policies = listPoliciesResponse.policies.map(({ id, policy }) => ({
+        id,
+        name: policy.name,
+        description: policy.description,
+        regoContent: policy.regoContent,
+      }));
+
+      res.status(StatusCodes.OK).json(policies);
+    } catch (error) {
+      console.error("Error listing policies", error);
+
+      res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
+  }
 
-    const listPoliciesResponse = await response.json();
-    const policies = listPoliciesResponse.policies.map(({ id, policy }) => ({
-      id,
-      name: policy.name,
-      description: policy.description,
-      regoContent: policy.regoContent,
-    }));
+  if (req.method === "POST") {
+    try {
+      const formData = req.body;
 
-    res.status(StatusCodes.OK).json(policies);
-  } catch (error) {
-    console.error("Error listing policies", error);
+      const response = await fetch(`${rodeUrl}/v1alpha1/policies`, {
+        method: "POST",
+        body: formData,
+      });
 
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      const createPolicyResponse = await response.json();
+      const policy = {
+        id: createPolicyResponse.id,
+        name: createPolicyResponse.policy.name,
+        description: createPolicyResponse.policy.description,
+        regoContent: createPolicyResponse.policy.regoContent,
+      };
+
+      res.status(StatusCodes.OK).json(policy);
+    } catch (error) {
+      console.error("Error creating policy", error);
+
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+    }
   }
 };

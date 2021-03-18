@@ -21,50 +21,36 @@ import handler from "pages/api/policies";
 jest.mock("node-fetch");
 
 describe("/api/policies", () => {
-  let request, response, allPolicies, rodeResponse, filterParam;
+  let request, response, rodeResponse;
 
   beforeEach(() => {
-    filterParam = chance.word();
     request = {
-      method: "GET",
-      query: {
-        filter: filterParam,
-      },
+      method: chance.pickone(["GET", "POST"]),
+      query: {},
+      body: {},
     };
 
     response = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
     };
-
-    allPolicies = chance.n(
-      () => ({
-        [chance.word()]: chance.word(),
-        id: chance.guid(),
-        policy: {
-          name: chance.name(),
-          description: chance.sentence(),
-          regoContent: chance.string(),
-        },
-      }),
-      chance.d4()
-    );
-
-    rodeResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({
-        policies: allPolicies,
-      }),
-    };
-
-    fetch.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  describe("unimplemented method", () => {
+  const assertInternalServerError = () => {
+    expect(response.status)
+      .toBeCalledTimes(1)
+      .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
+
+    expect(response.json)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+  };
+
+  describe("unimplemented methods", () => {
     it("should return method not allowed", async () => {
       request.method = chance.word();
 
@@ -80,107 +66,197 @@ describe("/api/policies", () => {
     });
   });
 
-  describe("successful call to Rode", () => {
-    let rodeUrlEnv;
+  describe("GET", () => {
+    let filterParam, allPolicies;
 
     beforeEach(() => {
-      rodeUrlEnv = process.env.RODE_URL;
-      delete process.env.RODE_URL;
+      filterParam = chance.word();
+      request = {
+        method: "GET",
+        query: {
+          filter: filterParam,
+        },
+      };
+
+      allPolicies = chance.n(
+        () => ({
+          [chance.word()]: chance.word(),
+          id: chance.guid(),
+          policy: {
+            name: chance.name(),
+            description: chance.sentence(),
+            regoContent: chance.string(),
+          },
+        }),
+        chance.d4()
+      );
+
+      rodeResponse = {
+        ok: true,
+        json: jest.fn().mockResolvedValue({
+          policies: allPolicies,
+        }),
+      };
+
+      fetch.mockResolvedValue(rodeResponse);
     });
 
-    afterEach(() => {
-      process.env.RODE_URL = rodeUrlEnv;
-    });
+    describe("successful call to Rode", () => {
+      const createExpectedUrl = (baseUrl, query = {}) => {
+        return `${baseUrl}/v1alpha1/policies?${new URLSearchParams(query)}`;
+      };
 
-    const createExpectedUrl = (baseUrl, query = {}) => {
-      return `${baseUrl}/v1alpha1/policies?${new URLSearchParams(query)}`;
-    };
+      it("should hit the Rode API", async () => {
+        const expectedUrl = createExpectedUrl("http://localhost:50052", {
+          filter: `"policy.name".contains("${filterParam}")`,
+        });
 
-    it("should hit the Rode API", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50052", {
-        filter: `"policy.name".contains("${filterParam}")`,
+        await handler(request, response);
+
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl);
       });
 
-      await handler(request, response);
+      it("should hit the Rode API when no filter is specified", async () => {
+        const expectedUrl = createExpectedUrl("http://localhost:50052");
 
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
+        request.query.filter = null;
+        await handler(request, response);
 
-    it("should hit the Rode API when no filter is specified", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50052");
-
-      request.query.filter = null;
-      await handler(request, response);
-
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
-
-    it("should take the Rode URL from the environment if set", async () => {
-      const rodeUrl = chance.url();
-      const expectedUrl = createExpectedUrl(rodeUrl, {
-        filter: `"policy.name".contains("${filterParam}")`,
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl);
       });
-      process.env.RODE_URL = rodeUrl;
 
-      await handler(request, response);
+      it("should return the mapped policies", async () => {
+        const expectedPolicies = allPolicies.map(({ id, policy }) => ({
+          id,
+          name: policy.name,
+          description: policy.description,
+          regoContent: policy.regoContent,
+        }));
 
-      delete process.env.RODE_URL;
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedPolicies);
+      });
     });
 
-    it("should return the mapped policies", async () => {
-      const expectedPolicies = allPolicies.map(({ id, policy }) => ({
-        id,
-        name: policy.name,
-        description: policy.description,
-        regoContent: policy.regoContent,
-      }));
+    describe("failed calls to Rode", () => {
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
 
-      await handler(request, response);
+        await handler(request, response);
 
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.OK);
+        assertInternalServerError();
+      });
 
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(expectedPolicies);
+      it("should return an internal server error on a network or other fetch error", async () => {
+        fetch.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error when JSON is invalid", async () => {
+        rodeResponse.json.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
     });
   });
 
-  describe("call to Rode fails", () => {
-    const assertInternalServerError = () => {
-      expect(response.status)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
+  describe("POST", () => {
+    let formData, createdPolicy;
 
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    };
+    beforeEach(() => {
+      formData = {
+        [chance.string()]: chance.string(),
+      };
+      request = {
+        method: "POST",
+        body: formData,
+      };
 
-    it("should return an internal server error on a non-200 response from Rode", async () => {
-      rodeResponse.ok = false;
+      createdPolicy = {
+        id: chance.guid(),
+        policy: {
+          name: chance.string(),
+          description: chance.sentence(),
+          regoContent: chance.string(),
+        },
+      };
 
-      await handler(request, response);
+      rodeResponse = {
+        ok: true,
+        json: jest.fn().mockResolvedValue(createdPolicy),
+      };
 
-      assertInternalServerError();
+      fetch.mockResolvedValue(rodeResponse);
     });
 
-    it("should return an internal server error on a network or other fetch error", async () => {
-      fetch.mockRejectedValue(new Error());
+    describe("successful call to Rode", () => {
+      it("should hit the Rode API", async () => {
+        await handler(request, response);
 
-      await handler(request, response);
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith("http://localhost:50052/v1alpha1/policies", {
+            body: formData,
+            method: "POST",
+          });
+      });
 
-      assertInternalServerError();
+      it("should return the mapped created policy", async () => {
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          id: createdPolicy.id,
+          name: createdPolicy.policy.name,
+          description: createdPolicy.policy.description,
+          regoContent: createdPolicy.policy.regoContent,
+        });
+      });
     });
 
-    it("should return an internal server error when JSON is invalid", async () => {
-      rodeResponse.json.mockRejectedValue(new Error());
+    describe("failed calls to Rode", () => {
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
 
-      await handler(request, response);
+        await handler(request, response);
 
-      assertInternalServerError();
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error on a network or other fetch error", async () => {
+        fetch.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error when JSON is invalid", async () => {
+        rodeResponse.json.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
     });
   });
 });
