@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 
+// TODO: make a required state for inputs
 const Input = (props) => {
   const {
     name,

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React, { useState } from "react";
 import Input from "components/Input";
 import TextArea from "components/TextArea";
@@ -25,17 +24,21 @@ import ExternalLink from "components/ExternalLink";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
-  const [validationResult, setValidationResult] = useState(null);
+  // const [validationResult, setValidationResult] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [regoContent, setRegoContent] = useState("");
   const router = useRouter();
-  const validatePolicy = () => {
-    console.log("here validating policy");
-    setValidationResult("this policy is valid");
-  };
+
+  // const validatePolicy = () => {
+  //   console.log("here validating policy");
+  //   setValidationResult("this policy is valid");
+  // };
+
   const onSubmit = async (event) => {
     event.preventDefault();
+
+    // TODO: form validation, name and rego inputs should be required
 
     const formData = {
       name,
@@ -81,7 +84,7 @@ const NewPolicy = () => {
           label={"Rego Policy Code"}
           value={regoContent}
           onChange={(event) => {
-            setValidationResult(null);
+            // setValidationResult(null);
             setRegoContent(event.target.value);
           }}
           rows={10}
@@ -96,15 +99,15 @@ const NewPolicy = () => {
           />
           .
         </p>
-        <div className={styles.policyValidationContainer}>
-          <Button
-            label={"Validate Policy"}
-            buttonType={"text"}
-            onClick={validatePolicy}
-            className={styles.validateButton}
-          />
-          {validationResult && <p>{validationResult}</p>}
-        </div>
+        {/*<div className={styles.policyValidationContainer}>*/}
+        {/*  <Button*/}
+        {/*    label={"Validate Policy"}*/}
+        {/*    buttonType={"text"}*/}
+        {/*    onClick={validatePolicy}*/}
+        {/*    className={styles.validateButton}*/}
+        {/*  />*/}
+        {/*  {validationResult && <p>{validationResult}</p>}*/}
+        {/*</div>*/}
       </div>
       <div className={styles.actionButtons}>
         <Button label={"Save Policy"} type={"submit"} />
