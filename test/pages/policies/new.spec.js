@@ -10,7 +10,7 @@ jest.mock("next/router");
 jest.mock("hooks/useFormValidation");
 
 describe("New Policy", () => {
-  let router, fetchResponse, createdPolicy, isValid, validationErrors;
+  let router, fetchResponse, createdPolicy, isValid, validationErrors, rerender;
 
   beforeEach(() => {
     router = {
@@ -26,6 +26,7 @@ describe("New Policy", () => {
       json: jest.fn().mockReturnValue(createdPolicy),
     };
     isValid = jest.fn().mockReturnValue(true);
+    validationErrors = {};
     useFormValidation.mockReturnValue({
       isValid,
       errors: validationErrors,
@@ -33,7 +34,8 @@ describe("New Policy", () => {
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    render(<NewPolicy />);
+    const utils = render(<NewPolicy />);
+    rerender = utils.rerender;
   });
 
   it("should render the policy name input", () => {
@@ -119,10 +121,14 @@ describe("New Policy", () => {
   describe("unsuccessful save", () => {
     it("should show a validation error when a required field is not filled out", () => {
       isValid.mockReturnValue(false);
+      validationErrors.name = chance.string();
       userEvent.click(screen.getByText(/save policy/i));
 
       expect(fetch).not.toHaveBeenCalled();
       expect(router.push).not.toHaveBeenCalled();
+
+      rerender(<NewPolicy />);
+      expect(screen.getByText(validationErrors.name)).toBeInTheDocument();
     });
 
     it("should show an error when the call to create failed", () => {

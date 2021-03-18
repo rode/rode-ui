@@ -30,32 +30,36 @@ const Input = (props) => {
     value = "",
     horizontal = false,
     required = false,
+    error,
     ...otherProps
   } = props;
   const { theme } = useTheme();
 
   return (
-    <div
-      className={`${styles[theme]} ${
-        horizontal ? styles.horizontalContainer : styles.container
-      }`}
-    >
-      <label
-        htmlFor={name}
-        className={`${styles.label} ${required ? "required" : ""}`}
+    <div className={styles.outerWrapper}>
+      <div
+        className={`${styles[theme]} ${
+          horizontal ? styles.horizontalContainer : styles.container
+        }`}
       >
-        {label}
-      </label>
-      <input
-        type={type || "text"}
-        name={name}
-        id={name}
-        onChange={onChange}
-        value={value}
-        placeholder={placeholder || label}
-        className={styles.input}
-        {...otherProps}
-      />
+        <label
+          htmlFor={name}
+          className={`${styles.label} ${required ? "required" : ""}`}
+        >
+          {label}
+        </label>
+        <input
+          type={type || "text"}
+          name={name}
+          id={name}
+          onChange={onChange}
+          value={value}
+          placeholder={placeholder || label}
+          className={`${error ? styles.inputError : styles.input}`}
+          {...otherProps}
+        />
+      </div>
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 };
@@ -69,6 +73,7 @@ Input.propTypes = {
   value: PropTypes.string,
   horizontal: PropTypes.bool,
   required: PropTypes.bool,
+  error: PropTypes.string,
 };
 
 export default Input;

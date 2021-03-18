@@ -52,8 +52,6 @@ describe("index", () => {
       /search for a/i
     );
 
-    console.log("resourceSearch", resourceSearch);
-
     expect(resourceSearch).toHaveDisplayValue("");
     expect(policySearch).toHaveDisplayValue("");
     expect(screen.queryByText(searchTerm)).not.toBeInTheDocument();

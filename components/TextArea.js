@@ -28,28 +28,32 @@ const TextArea = (props) => {
     value = "",
     rows = 5,
     required = false,
+    error,
     ...otherProps
   } = props;
   const { theme } = useTheme();
 
   return (
-    <div className={`${styles[theme]} ${styles.container}`}>
-      <label
-        htmlFor={name}
-        className={`${styles.label} ${required ? "required" : ""}`}
-      >
-        {label}
-      </label>
-      <textarea
-        name={name}
-        id={name}
-        onChange={onChange}
-        placeholder={placeholder || label}
-        value={value}
-        className={styles.textArea}
-        rows={rows}
-        {...otherProps}
-      />
+    <div className={styles.outerWrapper}>
+      <div className={`${styles[theme]} ${styles.container}`}>
+        <label
+          htmlFor={name}
+          className={`${styles.label} ${required ? "required" : ""}`}
+        >
+          {label}
+        </label>
+        <textarea
+          name={name}
+          id={name}
+          onChange={onChange}
+          placeholder={placeholder || label}
+          value={value}
+          className={`${error ? styles.textAreaError : styles.textArea}`}
+          rows={rows}
+          {...otherProps}
+        />
+      </div>
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 };
@@ -62,6 +66,7 @@ TextArea.propTypes = {
   value: PropTypes.string,
   rows: PropTypes.number,
   required: PropTypes.bool,
+  error: PropTypes.string,
 };
 
 export default TextArea;

@@ -9,14 +9,19 @@ export const useFormValidation = (schema) => {
     });
 
     if (error) {
-      const updatedErrors = error.details.reduce(
-        (accum, err) => {
-          accum[err.path[0]] = err.message;
+      const updatedErrors = error.details.reduce((accum, err) => {
+        console.log("err", err);
 
-          return accum;
-        },
-        { ...errors }
-      );
+        let message = err.message;
+
+        if (err.type.includes("empty")) {
+          message = "This field is required.";
+        }
+
+        accum[err.path[0]] = message;
+
+        return accum;
+      }, {});
 
       setErrors(updatedErrors);
 

@@ -46,7 +46,6 @@ const NewPolicy = () => {
     const validForm = isValid(formData);
 
     if (!validForm) {
-      // TODO: show errors for invalid form data
       return;
     }
 
@@ -57,6 +56,7 @@ const NewPolicy = () => {
 
     if (!response.ok) {
       //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
+      alert("Failed to create the policy.");
       return;
     }
 
@@ -74,6 +74,7 @@ const NewPolicy = () => {
           label={"Policy Name"}
           onChange={(event) => setName(event.target.value)}
           value={name}
+          error={errors["name"]}
           horizontal
           required
         />
@@ -82,6 +83,7 @@ const NewPolicy = () => {
           label={"Description"}
           onChange={(event) => setDescription(event.target.value)}
           value={description}
+          error={errors["description"]}
           horizontal
         />
         <TextArea
@@ -92,6 +94,7 @@ const NewPolicy = () => {
             // setValidationResult(null);
             setRegoContent(event.target.value);
           }}
+          error={errors["regoContent"]}
           required
           rows={10}
         />

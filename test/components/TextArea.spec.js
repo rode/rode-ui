@@ -90,4 +90,15 @@ describe("TextArea", () => {
 
     expect(screen.getByText(label)).toHaveClass("required", { exact: false });
   });
+
+  it("should render an error if specified", () => {
+    const error = chance.string();
+    render(
+      <TextArea name={name} label={label} onChange={onChange} error={error} />
+    );
+
+    const renderedError = screen.getByText(error);
+    expect(renderedError).toBeInTheDocument();
+    expect(renderedError).toHaveClass("errorMessage");
+  });
 });
