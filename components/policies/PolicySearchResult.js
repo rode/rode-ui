@@ -21,11 +21,11 @@ import { useRouter } from "next/router";
 import SearchResult from "components/shared/search/SearchResult";
 
 const PolicySearchResult = ({ searchResult }) => {
-  const { name, description } = searchResult;
+  const { name, description, id } = searchResult;
   const router = useRouter();
 
   const onClick = () => {
-    router.push(`/policies/${encodeURIComponent(searchResult.uri)}`);
+    router.push(`/policies/${encodeURIComponent(id)}`);
   };
 
   return (

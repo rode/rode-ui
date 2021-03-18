@@ -29,6 +29,7 @@ describe("PolicySearchResult", () => {
     searchResult = {
       name: chance.string(),
       description: chance.sentence(),
+      id: chance.guid(),
     };
     pushMock = jest.fn();
     useRouter.mockReturnValue({
@@ -53,7 +54,7 @@ describe("PolicySearchResult", () => {
 
     userEvent.click(renderedButton);
     expect(pushMock).toHaveBeenCalledWith(
-      `/policies/${encodeURIComponent(searchResult.uri)}`
+      `/policies/${encodeURIComponent(searchResult.id)}`
     );
   });
 });
