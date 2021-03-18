@@ -18,3 +18,9 @@ Cypress.Commands.add("searchForResource", (searchTerm) => {
   cy.get("#resourceSearch").focus().clear().type(searchTerm);
   cy.get('button[aria-label="Search"]').click();
 });
+
+Cypress.Commands.add("mockRequest", (requestToMock, returnValue) => {
+  if (!Cypress.env("local_rode_api") === true) {
+    cy.intercept(requestToMock, returnValue);
+  }
+});

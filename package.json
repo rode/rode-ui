@@ -5,7 +5,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "cypress": "cypress open",
+    "e2e": "cypress open",
+    "e2e-local": "yarn run e2e --env local_rode_api=true",
     "fmt": "prettier --write .",
     "lint": "eslint --max-warnings=0 .",
     "start": "next start",
