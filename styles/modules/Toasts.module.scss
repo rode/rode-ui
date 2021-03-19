@@ -1,7 +1,8 @@
 @import "styles/constants";
 
 .toast {
-  border: solid 1px black;
+  border: solid 1px transparent;
+  border-left: solid 8px transparent;
 }
 
 .success {
@@ -12,30 +13,39 @@
   @extend .toast;
 }
 
+.closeButton {
+  align-self: center;
+}
+
 .lightTheme {
-  .toastWrapper {
+  .toast {
     background-color: $LT_BACKGROUND_LIGHT;
+    border-color: $WHITE_SMOKE;
   }
 
   .success {
     color: $GREEN;
+    border-left-color: $GREEN;
   }
 
   .error {
     color: $HOT_RED;
+    border-left-color: $HOT_RED;
   }
 }
 
 .darkTheme {
-  .toastWrapper {
+  .toast {
     background-color: $DT_BACKGROUND_DARK;
   }
 
   .success {
     color: $BRIGHT_GREEN;
+    border-left-color: $GREEN;
   }
 
   .error {
     color: $HOT_RED;
+    border-left-color: $HOT_RED;
   }
 }

@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
-import { showError, showSuccess } from "../../utils/toast-utils";
+import { showError } from "../../utils/toast-utils";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
@@ -32,39 +32,37 @@ const NewPolicy = () => {
   const [regoContent, setRegoContent] = useState("");
   const router = useRouter();
 
-  const { isValid, errors } = useFormValidation(schema);
+  const { isValid, validateField, errors } = useFormValidation(schema);
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    showSuccess("this is a success toast!");
-    showError("this is an error toast");
-    //   const formData = {
-    //     name,
-    //     description,
-    //     regoContent,
-    //   };
-    //
-    //   const validForm = isValid(formData);
-    //
-    //   if (!validForm) {
-    //     return;
-    //   }
-    //
-    //   const response = await fetch("/api/policies", {
-    //     method: "POST",
-    //     body: JSON.stringify(formData),
-    //   });
-    //
-    //   if (!response.ok) {
-    //     //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
-    //     alert("Failed to create the policy.");
-    //     return;
-    //   }
-    //
-    //   const { id } = await response.json();
-    //
-    //   router.push(`/policies/${id}`);
+      const formData = {
+        name,
+        description,
+        regoContent,
+      };
+
+      const validForm = await isValid(formData);
+
+      if (!validForm) {
+        return;
+      }
+
+      const response = await fetch("/api/policies", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        //TODO: handle errors when rego is invalid
+        showError("Failed to create the policy");
+        return;
+      }
+
+      const { id } = await response.json();
+
+      router.push(`/policies/${id}`);
   };
 
   return (
@@ -79,6 +77,7 @@ const NewPolicy = () => {
           error={errors["name"]}
           horizontal
           required
+          onBlur={validateField}
         />
         <Input
           name={"description"}
@@ -87,6 +86,7 @@ const NewPolicy = () => {
           value={description}
           error={errors["description"]}
           horizontal
+          onBlur={validateField}
         />
         <TextArea
           name={"regoContent"}
@@ -98,6 +98,7 @@ const NewPolicy = () => {
           error={errors["regoContent"]}
           required
           rows={10}
+          onBlur={validateField}
         />
         <p className={styles.documentation}>
           Need help formulating? Check out the{" "}

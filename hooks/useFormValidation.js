@@ -17,15 +17,19 @@
 import React from "react";
 
 export const useFormValidation = (schema) => {
+  const [formData, setFormData] = React.useState(null);
   const [errors, setErrors] = React.useState({});
 
   const isValid = async (formData) => {
+    setFormData(formData);
+
     let isValid = true;
 
     try {
       await schema.validate(formData, {
         abortEarly: false,
       });
+      setErrors({});
     } catch (errors) {
       const updatedErrors = errors.inner.reduce((accum, error) => {
         accum[error.path] = error.message;
@@ -41,8 +45,24 @@ export const useFormValidation = (schema) => {
     return isValid;
   };
 
+  const validateField = async (event) => {
+    if (!formData) {
+      return;
+    }
+    const field = event.target.name;
+    const value = event.target.value;
+
+    const formDataWithUpdatedField = {
+      ...formData,
+      [field]: value
+    };
+
+    await isValid(formDataWithUpdatedField);
+  }
+
   return {
     isValid,
+    validateField,
     errors,
   };
 };

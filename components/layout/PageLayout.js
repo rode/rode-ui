@@ -24,6 +24,9 @@ import { ToastContainer } from "react-toastify";
 import styles from 'styles/modules/Toasts.module.scss';
 
 import 'react-toastify/dist/ReactToastify.min.css';
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const PageLayout = ({ children }) => {
   const { theme } = useTheme();
@@ -34,8 +37,7 @@ const PageLayout = ({ children }) => {
         hideProgressBar="true"
         autoClose={false}
         className={styles[theme]}
-        toastClassName={styles.toastWrapper}
-        bodyClassName={"toast-body"}
+        closeButton={({ closeToast }) => <Button onClick={closeToast} buttonType={"icon"} label={"close alert"} className={styles.closeButton}><Icon name={ICON_NAMES.X_CIRCLE}/></Button>}
       />
         <Header />
         <main className={theme}>

@@ -91,4 +91,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/external link/i)).toBeInTheDocument();
   });
+
+  it("should render the x circle icon when specified", () => {
+    render(<Icon name={ICON_NAMES.X_CIRCLE} />);
+
+    expect(screen.getByTitle(/x circle/i)).toBeInTheDocument();
+  });
 });
