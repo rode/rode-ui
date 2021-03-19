@@ -21,9 +21,9 @@ import Footer from "./Footer";
 import { useTheme } from "providers/theme";
 import ErrorBoundary from "components/ErrorBoundary";
 import { ToastContainer } from "react-toastify";
-import styles from 'styles/modules/Toasts.module.scss';
+import styles from "styles/modules/Toasts.module.scss";
 
-import 'react-toastify/dist/ReactToastify.min.css';
+import "react-toastify/dist/ReactToastify.min.css";
 import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -37,13 +37,22 @@ const PageLayout = ({ children }) => {
         hideProgressBar="true"
         autoClose={false}
         className={styles[theme]}
-        closeButton={({ closeToast }) => <Button onClick={closeToast} buttonType={"icon"} label={"close alert"} className={styles.closeButton}><Icon name={ICON_NAMES.X_CIRCLE}/></Button>}
+        closeButton={({ closeToast }) => (
+          <Button
+            onClick={closeToast}
+            buttonType={"icon"}
+            label={"close alert"}
+            className={styles.closeButton}
+          >
+            <Icon name={ICON_NAMES.X_CIRCLE} />
+          </Button>
+        )}
       />
-        <Header />
-        <main className={theme}>
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </main>
-        <Footer />
+      <Header />
+      <main className={theme}>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
+      <Footer />
     </>
   );
 };

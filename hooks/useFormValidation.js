@@ -54,11 +54,11 @@ export const useFormValidation = (schema) => {
 
     const formDataWithUpdatedField = {
       ...formData,
-      [field]: value
+      [field]: value,
     };
 
     await isValid(formDataWithUpdatedField);
-  }
+  };
 
   return {
     isValid,

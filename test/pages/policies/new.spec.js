@@ -21,12 +21,20 @@ import NewPolicy from "pages/policies/new";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
+import { showError } from "utils/toast-utils";
 
 jest.mock("next/router");
+jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
 
 describe("New Policy", () => {
-  let router, fetchResponse, createdPolicy, isValid, validationErrors, rerender;
+  let router,
+    fetchResponse,
+    createdPolicy,
+    isValid,
+    validationErrors,
+    validateField,
+    rerender;
 
   beforeEach(() => {
     router = {
@@ -39,19 +47,25 @@ describe("New Policy", () => {
     };
     fetchResponse = {
       ok: true,
-      json: jest.fn().mockReturnValue(createdPolicy),
+      json: jest.fn().mockResolvedValue(createdPolicy),
     };
-    isValid = jest.fn().mockReturnValue(true);
+    isValid = jest.fn().mockResolvedValue(true);
+    validateField = jest.fn();
     validationErrors = {};
     useFormValidation.mockReturnValue({
       isValid,
       errors: validationErrors,
+      validateField,
     });
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     const utils = render(<NewPolicy />);
     rerender = utils.rerender;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it("should render the policy name input", () => {
@@ -118,6 +132,10 @@ describe("New Policy", () => {
       userEvent.click(screen.getByText(/save policy/i));
     });
 
+    it("should call to validate the form", () => {
+      expect(isValid).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(formData);
+    });
+
     it("should submit the form when filled out entirely", () => {
       expect(fetch)
         .toHaveBeenCalledTimes(1)
@@ -127,7 +145,7 @@ describe("New Policy", () => {
         });
     });
 
-    it("should redirect the user to the created policies page", () => {
+    it("should redirect the user to the created policy page", () => {
       expect(router.push)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/policies/${createdPolicy.id}`);
@@ -145,13 +163,21 @@ describe("New Policy", () => {
 
       rerender(<NewPolicy />);
       expect(screen.getByText(validationErrors.name)).toBeInTheDocument();
+      userEvent.click(screen.getByLabelText(/policy name/i));
+      userEvent.tab();
+
+      expect(validateField).toHaveBeenCalledTimes(1);
     });
 
     it("should show an error when the call to create failed", () => {
       fetchResponse.ok = false;
       userEvent.click(screen.getByText(/save policy/i));
 
-      // TODO: add test guts for showing error message when implemented
+      // TODO: add test for invalid rego when implemented
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("Failed to create the policy");
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();

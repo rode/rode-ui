@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
-import { showError } from "../../utils/toast-utils";
+import { showError } from "utils/toast-utils";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
@@ -37,32 +37,33 @@ const NewPolicy = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-      const formData = {
-        name,
-        description,
-        regoContent,
-      };
+    const formData = {
+      name,
+      description,
+      regoContent,
+    };
 
-      const validForm = await isValid(formData);
+    const validForm = await isValid(formData);
 
-      if (!validForm) {
-        return;
-      }
+    if (!validForm) {
+      return;
+    }
 
-      const response = await fetch("/api/policies", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
+    const response = await fetch("/api/policies", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
 
-      if (!response.ok) {
-        //TODO: handle errors when rego is invalid
-        showError("Failed to create the policy");
-        return;
-      }
+    if (!response.ok) {
+      console.log('here')
+      //TODO: handle errors when rego is invalid
+      showError("Failed to create the policy");
+      return;
+    }
 
-      const { id } = await response.json();
+    const { id } = await response.json();
 
-      router.push(`/policies/${id}`);
+    router.push(`/policies/${id}`);
   };
 
   return (
@@ -121,11 +122,7 @@ const NewPolicy = () => {
       </div>
       <div className={styles.actionButtons}>
         <Button label={"Save Policy"} type={"submit"} />
-        <Button
-          label={"Cancel"}
-          buttonType={"text"}
-          onClick={() => router.back()}
-        />
+        <Button label={"Cancel"} buttonType={"text"} onClick={router.back} />
       </div>
     </form>
   );
