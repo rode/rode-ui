@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import Joi from "joi";
+import * as yup from "yup";
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().allow(""),
-  regoContent: Joi.string().required(),
+export const schema = yup.object().shape({
+  name: yup.string().required().label("Policy Name"),
+  description: yup.string().label("Description"),
+  regoContent: yup.string().required().label("Rego Policy Code"),
 });
 
-export { schema };
