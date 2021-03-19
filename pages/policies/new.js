@@ -22,7 +22,8 @@ import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
-import { useFormValidation } from "../../hooks/useFormValidation";
+import { useFormValidation } from "hooks/useFormValidation";
+import { showError, showSuccess } from "../../utils/toast-utils";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
@@ -36,32 +37,34 @@ const NewPolicy = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = {
-      name,
-      description,
-      regoContent,
-    };
-
-    const validForm = isValid(formData);
-
-    if (!validForm) {
-      return;
-    }
-
-    // const response = await fetch("/api/policies", {
-    //   method: "POST",
-    //   body: JSON.stringify(formData),
-    // });
+    showSuccess("this is a success toast!");
+    showError("this is an error toast");
+    //   const formData = {
+    //     name,
+    //     description,
+    //     regoContent,
+    //   };
     //
-    // if (!response.ok) {
-    //   //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
-    //   alert("Failed to create the policy.");
-    //   return;
-    // }
+    //   const validForm = isValid(formData);
     //
-    // const { id } = await response.json();
+    //   if (!validForm) {
+    //     return;
+    //   }
     //
-    // router.push(`/policies/${id}`);
+    //   const response = await fetch("/api/policies", {
+    //     method: "POST",
+    //     body: JSON.stringify(formData),
+    //   });
+    //
+    //   if (!response.ok) {
+    //     //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
+    //     alert("Failed to create the policy.");
+    //     return;
+    //   }
+    //
+    //   const { id } = await response.json();
+    //
+    //   router.push(`/policies/${id}`);
   };
 
   return (

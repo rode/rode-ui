@@ -1,0 +1,41 @@
+@import "styles/constants";
+
+.toast {
+  border: solid 1px black;
+}
+
+.success {
+  @extend .toast;
+}
+
+.error {
+  @extend .toast;
+}
+
+.lightTheme {
+  .toastWrapper {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .success {
+    color: $GREEN;
+  }
+
+  .error {
+    color: $HOT_RED;
+  }
+}
+
+.darkTheme {
+  .toastWrapper {
+    background-color: $DT_BACKGROUND_DARK;
+  }
+
+  .success {
+    color: $BRIGHT_GREEN;
+  }
+
+  .error {
+    color: $HOT_RED;
+  }
+}

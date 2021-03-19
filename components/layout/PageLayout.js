@@ -20,16 +20,28 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { useTheme } from "providers/theme";
 import ErrorBoundary from "components/ErrorBoundary";
+import { ToastContainer } from "react-toastify";
+import styles from 'styles/modules/Toasts.module.scss';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const PageLayout = ({ children }) => {
   const { theme } = useTheme();
   return (
     <>
-      <Header />
-      <main className={theme}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </main>
-      <Footer />
+      <ToastContainer
+        position="top-center"
+        hideProgressBar="true"
+        autoClose={false}
+        className={styles[theme]}
+        toastClassName={styles.toastWrapper}
+        bodyClassName={"toast-body"}
+      />
+        <Header />
+        <main className={theme}>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
+        <Footer />
     </>
   );
 };
