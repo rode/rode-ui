@@ -19,11 +19,11 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Loading.module.scss";
 import { useTheme } from "providers/theme";
 
-const Loading = ({ loading }) => {
+const Loading = ({ loading, children }) => {
   const { theme } = useTheme();
 
   if (!loading) {
-    return null;
+    return children;
   }
 
   return (
@@ -35,6 +35,7 @@ const Loading = ({ loading }) => {
 
 Loading.propTypes = {
   loading: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Loading;

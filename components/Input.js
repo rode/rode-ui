@@ -20,23 +20,45 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 
 const Input = (props) => {
-  const { name, label, type, onChange, placeholder, value = "" } = props;
+  const {
+    name,
+    label,
+    type,
+    onChange,
+    placeholder,
+    value = "",
+    horizontal = false,
+    required = false,
+    error,
+    ...otherProps
+  } = props;
   const { theme } = useTheme();
 
   return (
-    <div className={`${styles.container} ${styles[theme]}`}>
-      <label htmlFor={name} className={styles.label}>
-        {label}
-      </label>
-      <input
-        type={type || "text"}
-        name={name}
-        id={name}
-        onChange={onChange}
-        value={value}
-        placeholder={placeholder || label}
-        className={styles.input}
-      />
+    <div className={styles.outerWrapper}>
+      <div
+        className={`${styles[theme]} ${
+          horizontal ? styles.horizontalContainer : styles.container
+        }`}
+      >
+        <label
+          htmlFor={name}
+          className={`${styles.label} ${required ? "required" : ""}`}
+        >
+          {label}
+        </label>
+        <input
+          type={type || "text"}
+          name={name}
+          id={name}
+          onChange={onChange}
+          value={value}
+          placeholder={placeholder || label}
+          className={`${error ? styles.inputError : styles.input}`}
+          {...otherProps}
+        />
+      </div>
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   );
 };
@@ -48,6 +70,9 @@ Input.propTypes = {
   type: PropTypes.oneOf(["number", "date", "text"]),
   placeholder: PropTypes.string,
   value: PropTypes.string,
+  horizontal: PropTypes.bool,
+  required: PropTypes.bool,
+  error: PropTypes.string,
 };
 
 export default Input;

@@ -24,38 +24,33 @@
   align-items: center;
   justify-content: center;
 
-  .resourceSearch {
+  .searchBarContainer {
     width: 90%;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
+    margin: 0 auto;
 
     @include tabletAndLarger {
-      width: 50%;
-    }
-
-    .searchHelp {
-      font-size: 0.75rem;
-      padding: 0 3rem 0 0;
-      color: $MEDIUM_GREY;
-      text-align: right;
-    }
-  }
-
-  &.showResults {
-    justify-content: flex-start;
-
-    .resourceSearch {
-      width: 90%;
-
-      .searchHelp {
-        display: none;
-      }
+      width: 60%;
     }
   }
 }
 
-.searchBarContainer {
+.showResults {
+  @extend .container;
+  justify-content: flex-start;
+
+  .searchBarContainer {
+    width: 90%;
+  }
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.inputContainer {
   height: fit-content;
   width: 100%;
   margin: 1rem auto 0.5rem;
@@ -63,6 +58,13 @@
   flex-direction: row;
   justify-content: center;
   align-self: center;
+}
+
+.searchHelp {
+  font-size: 0.75rem;
+  padding: 0 3rem 0 0;
+  color: $MEDIUM_GREY;
+  text-align: right;
 }
 
 .searchCard {
@@ -81,24 +83,6 @@
     margin-bottom: 2rem;
   }
 
-  .cardHeader {
-    text-align: left;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: calc(100vw - 5rem);
-
-    @include tabletAndLarger {
-      max-width: calc(100vw - 18rem);
-    }
-  }
-
-  .cardText {
-    @extend .cardHeader;
-    font-size: 0.75rem;
-    text-indent: 0.5rem;
-  }
-
   button {
     margin: 0.5rem auto 0;
 
@@ -108,36 +92,51 @@
   }
 }
 
+.cardHeader {
+  text-align: left;
+  @include ellipsis(calc(100vw - 5rem));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 18rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.75rem;
+  text-indent: 0.5rem;
+}
+
 .darkTheme {
-  .noResults {
+  &.searchCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardHeader {
     color: $DT_MAIN_TEXT;
   }
 
-  .searchCard {
-    background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW;
+  .cardText {
+    color: $DT_SUB_TEXT;
+  }
 
-    .cardHeader {
-      color: $DT_MAIN_TEXT;
-    }
-
-    .cardText {
-      color: $DT_SUB_TEXT;
-    }
+  .noResults {
+    color: $DT_MAIN_TEXT;
   }
 }
 
 .lightTheme {
-  .searchCard {
+  &.searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
 
-    .cardHeader {
-      color: $LT_MAIN_TEXT;
-    }
+  .cardHeader {
+    color: $LT_MAIN_TEXT;
+  }
 
-    .cardText {
-      color: $LT_SUB_TEXT;
-    }
+  .cardText {
+    color: $LT_SUB_TEXT;
   }
 }

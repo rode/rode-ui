@@ -106,4 +106,13 @@ describe("ResourceOccurrences", () => {
       expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
     });
   });
+
+  it("should display a message if the resource doesn't exist", () => {
+    useFetch.mockReturnValue({
+      data: null,
+    });
+    render(<ResourceOccurrences resourceUri={resourceUri} />);
+
+    expect(screen.getByText(/no resource found/i)).toBeInTheDocument();
+  });
 });

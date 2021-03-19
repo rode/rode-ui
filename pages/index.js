@@ -15,24 +15,71 @@
  */
 
 import React, { useEffect } from "react";
-import styles from "styles/modules/ResourceSearch.module.scss";
+import styles from "styles/modules/Home.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import PolicySearchBar from "components/policies/PolicySearchBar";
+import { useTheme } from "providers/theme";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Home = () => {
-  const { dispatch } = useResources();
+  const { theme } = useTheme();
+  const router = useRouter();
+  const { state: resourceState, dispatch: resourceDispatch } = useResources();
+  const { state: policyState, dispatch: policyDispatch } = usePolicies();
 
   useEffect(() => {
-    dispatch({
+    resourceDispatch({
       type: resourceActions.SET_SEARCH_TERM,
+      data: "",
+    });
+
+    policyDispatch({
+      type: policyActions.SET_SEARCH_TERM,
       data: "",
     });
   }, []);
 
+  const onSubmit = (event, url, searchTerm) => {
+    event.preventDefault();
+
+    if (searchTerm.trim().length) {
+      router.push(`/${url}?search=${searchTerm.trim()}`);
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <ResourceSearchBar />
+    <div className={`${styles[theme]} ${styles.container}`}>
+      <div className={styles.card}>
+        <ResourceSearchBar
+          onSubmit={(event) =>
+            onSubmit(event, "resources", resourceState.searchTerm)
+          }
+          helpText={
+            <>
+              You can search by name, version, or{" "}
+              <Link href={"/resources?search=all"}>view all resources</Link>.
+            </>
+          }
+        />
+      </div>
+      <div className={styles.card}>
+        <PolicySearchBar
+          onSubmit={(event) =>
+            onSubmit(event, "policies", policyState.searchTerm)
+          }
+          helpText={
+            <>
+              You can search by policy name or{" "}
+              <Link href={"/policies?search=all"}>view all policies</Link>.
+            </>
+          }
+        />
+      </div>
     </div>
   );
 };

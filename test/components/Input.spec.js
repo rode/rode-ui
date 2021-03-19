@@ -38,6 +38,9 @@ describe("Input", () => {
     expect(renderedComponent).toHaveAttribute("type", "text");
     expect(renderedComponent).toHaveAttribute("id", name);
     expect(renderedComponent).toHaveAttribute("placeholder", label);
+    expect(screen.getByLabelText(label).closest("div")).toHaveClass(
+      "container"
+    );
   });
 
   it("should call the onChange event", () => {
@@ -80,5 +83,30 @@ describe("Input", () => {
     );
 
     expect(screen.getByDisplayValue(value)).toBeInTheDocument();
+  });
+
+  it("should allow the user to specify the label and input be horizontally placed", () => {
+    render(<Input name={name} label={label} onChange={onChange} horizontal />);
+
+    expect(screen.getByLabelText(label).closest("div")).toHaveClass(
+      "horizontalContainer"
+    );
+  });
+
+  it("should allow the user to specify the input as required", () => {
+    render(<Input name={name} label={label} onChange={onChange} required />);
+
+    expect(screen.getByText(label)).toHaveClass("required", { exact: false });
+  });
+
+  it("should render an error if specified", () => {
+    const error = chance.string();
+    render(
+      <Input name={name} label={label} onChange={onChange} error={error} />
+    );
+
+    const renderedError = screen.getByText(error);
+    expect(renderedError).toBeInTheDocument();
+    expect(renderedError).toHaveClass("errorMessage");
   });
 });

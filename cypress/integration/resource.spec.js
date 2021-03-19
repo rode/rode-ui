@@ -38,7 +38,7 @@ context("Resources", () => {
     cy.searchForResource("alpine");
     cy.url().should("contain", "search=alpine");
 
-    cy.contains("View Details");
+    cy.contains("View Resource");
   });
 
   it("should show resource details when a resource is selected", () => {
@@ -46,7 +46,7 @@ context("Resources", () => {
     cy.mockRequest("**/api/occurrences*", mockMappedOccurrences);
 
     cy.searchForResource("nginx");
-    cy.contains("View Details").click();
+    cy.contains("View Resource").click();
 
     cy.get('button[class^="Occurrences_previewContainer"]').should(
       "have.length",

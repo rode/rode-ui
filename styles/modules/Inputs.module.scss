@@ -18,6 +18,13 @@
 
 $PADDING: 0.5rem;
 
+.outerWrapper {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -29,10 +36,17 @@ $PADDING: 0.5rem;
   }
 }
 
+.horizontalContainer {
+  @extend .container;
+  flex-direction: row;
+  align-items: center;
+}
+
 .label {
   display: block;
   font-weight: 700;
-  padding-left: $PADDING;
+  padding: 0 $PADDING;
+  white-space: nowrap;
 }
 
 .input {
@@ -46,6 +60,39 @@ $PADDING: 0.5rem;
     outline: none;
     border-bottom: solid 1px $LAGOON;
   }
+}
+
+.inputError {
+  @extend .input;
+  border-bottom: solid 1px $HOT_RED;
+
+  &:focus {
+    outline: none;
+    border-bottom: solid 1px $HOT_RED;
+  }
+}
+
+.textArea {
+  @extend .input;
+}
+
+.textAreaError {
+  @extend .textArea;
+  border-bottom: solid 1px $HOT_RED;
+
+  &:focus {
+    outline: none;
+    border-bottom: solid 1px $HOT_RED;
+  }
+}
+
+.errorMessage {
+  display: block;
+  color: $HOT_RED;
+  font-size: 0.85rem;
+  padding: 0;
+  margin: 0;
+  text-align: right;
 }
 
 .darkTheme {

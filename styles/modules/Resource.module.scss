@@ -57,10 +57,7 @@
 .resourceName {
   font-size: 1.5rem;
   font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100vw - 5rem);
+  @include ellipsis(calc(100vw - 5rem));
 
   @include tabletAndLarger {
     max-width: calc(48vw - 2rem);
@@ -69,10 +66,7 @@
 
 .version {
   text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100vw - 5rem);
+  @include ellipsis(calc(100vw - 5rem));
 
   @include tabletAndLarger {
     max-width: calc(50vw - 5rem);

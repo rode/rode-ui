@@ -38,22 +38,25 @@ const ResourceOccurrences = (props) => {
 
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
-      <Loading loading={loading} />
-      {data && (
-        <>
-          <div>
-            <BuildOccurrenceSection occurrences={data.build} />
-            <SecureOccurrenceSection occurrences={data.secure} />
-            <DeploymentOccurrenceSection occurrences={data.deploy} />
-            <OtherOccurrenceSection occurrences={data.other} />
-          </div>
-          {state.occurrenceDetails && (
+      <Loading loading={loading}>
+        {data ? (
+          <>
             <div>
-              <OccurrenceDetails occurrence={state.occurrenceDetails} />
+              <BuildOccurrenceSection occurrences={data.build} />
+              <SecureOccurrenceSection occurrences={data.secure} />
+              <DeploymentOccurrenceSection occurrences={data.deploy} />
+              <OtherOccurrenceSection occurrences={data.other} />
             </div>
-          )}
-        </>
-      )}
+            {state.occurrenceDetails && (
+              <div>
+                <OccurrenceDetails occurrence={state.occurrenceDetails} />
+              </div>
+            )}
+          </>
+        ) : (
+          <p className={styles.notFound}>No resource found for {resourceUri}</p>
+        )}
+      </Loading>
     </div>
   );
 };

@@ -80,6 +80,15 @@ describe("Button", () => {
     expect(renderedButton).toHaveClass("icon");
   });
 
+  it("should allow a button type of 'text'", () => {
+    render(<Button onClick={onClick} label={label} buttonType={"text"} />);
+
+    const renderedButton = screen.getByLabelText(label);
+
+    expect(renderedButton).toBeInTheDocument();
+    expect(renderedButton).toHaveClass("text");
+  });
+
   it("should render the button as disabled when specified", () => {
     render(<Button onClick={onClick} label={label} disabled={true} />);
 
@@ -90,5 +99,12 @@ describe("Button", () => {
     render(<Button label={label} />);
 
     expect(console.error).toHaveBeenCalledTimes(1);
+  });
+
+  it("should allow the user to specify additional classes", () => {
+    const className = chance.string();
+    render(<Button label={label} className={className} />);
+
+    expect(screen.getByLabelText(label)).toHaveClass(className);
   });
 });

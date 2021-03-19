@@ -19,22 +19,22 @@ import { render, screen } from "@testing-library/react";
 import ExternalLink from "components/ExternalLink";
 
 describe("ExternalLink", () => {
-  let label, href;
+  let label, href, rerender;
 
   beforeEach(() => {
     label = chance.string();
+    const utils = render(<ExternalLink href={null} label={label} />);
+    rerender = utils.rerender;
   });
 
   it("should return null when no href is present", () => {
-    render(<ExternalLink href={null} label={label} />);
-
     expect(screen.queryByText(label)).not.toBeInTheDocument();
   });
 
   describe("link exists and should show", () => {
     beforeEach(() => {
       href = chance.url();
-      render(<ExternalLink href={href} label={label} />);
+      rerender(<ExternalLink href={href} label={label} />);
     });
 
     it("should render the link if an href exists", () => {
@@ -47,6 +47,15 @@ describe("ExternalLink", () => {
 
     it("should render the external link icon", () => {
       expect(screen.getByTitle(/external link/i)).toBeInTheDocument();
+    });
+
+    it("should allow the user to pass additional classes", () => {
+      const className = chance.string();
+      rerender(
+        <ExternalLink href={href} label={label} className={className} />
+      );
+
+      expect(screen.getByText(label)).toHaveClass(className);
     });
   });
 });

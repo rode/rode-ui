@@ -52,17 +52,52 @@
 
 .primary {
   @extend .button;
-  background-color: $DEEP_SEA;
-  color: $WHITE;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   white-space: nowrap;
 
-  &:hover {
-    background-color: $GREEN;
+  &.darkTheme {
+    background-color: $LAGOON;
+    color: $DARK_GREY;
+
+    &:hover {
+      background-color: $GREEN;
+      color: $WHITE;
+    }
+  }
+
+  &.lightTheme {
+    background-color: $DEEP_SEA;
     color: $WHITE;
+
+    &:hover {
+      background-color: $GREEN;
+    }
+  }
+}
+
+.text {
+  @extend .button;
+  @extend .primary;
+
+  &.darkTheme {
+    color: $LAGOON;
+    background-color: transparent;
+
+    &:hover {
+      color: $WHITE;
+    }
+  }
+
+  &.lightTheme {
+    color: $DEEP_SEA;
+    background-color: transparent;
+
+    &:hover {
+      color: $WHITE;
+    }
   }
 }
 
@@ -70,6 +105,7 @@
   @extend .button;
   background-color: transparent;
   border-radius: 50%;
+  padding: 0.5rem;
 
   &.darkTheme {
     svg {
@@ -80,6 +116,7 @@
     &:hover,
     &:focus {
       background-color: $DEEP_SEA;
+
       svg {
         color: $WHITE;
       }
@@ -95,6 +132,7 @@
       &:hover,
       &:focus {
         background-color: transparent;
+
         svg {
           color: $MEDIUM_GREY;
         }
@@ -111,6 +149,7 @@
     &:hover,
     &:focus {
       background-color: $DEEP_SEA;
+
       svg {
         color: $WHITE;
       }
@@ -126,6 +165,7 @@
       &:hover,
       &:focus {
         background-color: transparent;
+
         svg {
           color: $SILVER;
         }

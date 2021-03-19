@@ -17,13 +17,14 @@
 import React, { useEffect, useState } from "react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
-import styles from "styles/modules/ResourceSearch.module.scss";
+import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
 import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
+import Link from "next/link";
 
 const createSearchFilter = (query) => {
   if (query && query !== "all") {
@@ -37,13 +38,21 @@ const createSearchFilter = (query) => {
 
 const Resources = () => {
   const { theme } = useTheme();
-  const { dispatch } = useResources();
+  const { state, dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading } = useFetch(
     router.query.search ? "/api/resources" : null,
     createSearchFilter(router.query.search)
   );
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (state.searchTerm.trim().length) {
+      router.push(`/resources?search=${state.searchTerm.trim()}`);
+    }
+  };
 
   useEffect(() => {
     if (router.query.search) {
@@ -64,14 +73,22 @@ const Resources = () => {
   return (
     <div
       className={`
-      ${showSearchResults ? styles.showResults : ""} 
-      ${styles[theme]} 
-      ${styles.container}`}
+      ${showSearchResults ? styles.showResults : styles.container} 
+      ${styles[theme]}`}
     >
-      <ResourceSearchBar />
+      <div className={styles.searchBarContainer}>
+        <ResourceSearchBar
+          onSubmit={onSubmit}
+          helpText={
+            <>
+              You can search by name, version, or{" "}
+              <Link href={"/resources?search=all"}>view all resources</Link>.
+            </>
+          }
+        />
+      </div>
       {showSearchResults && (
-        <>
-          <Loading loading={loading} />
+        <Loading loading={loading}>
           {data?.length > 0 ? (
             data.map((result) => {
               return (
@@ -81,7 +98,7 @@ const Resources = () => {
           ) : (
             <span className={styles.noResults}>No resources found</span>
           )}
-        </>
+        </Loading>
       )}
     </div>
   );

@@ -47,6 +47,7 @@ const BuildOccurrenceSection = ({ occurrences }) => {
                 <ExternalLink
                   href={occurrence.sourceUri}
                   label={"View source"}
+                  className={styles.rightMargin}
                 />
                 <ExternalLink href={occurrence.logsUri} label={"View logs"} />
               </>

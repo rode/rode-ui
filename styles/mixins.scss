@@ -36,6 +36,13 @@
 
 @mixin transition {
   transition-property: all;
-  transition-duration: 175ms;
+  transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin ellipsis($max-width) {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: $max-width;
 }

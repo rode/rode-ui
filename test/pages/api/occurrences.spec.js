@@ -37,6 +37,7 @@ describe("/api/resources", () => {
     response = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis(),
     };
 
     allOccurrences = chance.n(
@@ -123,6 +124,13 @@ describe("/api/resources", () => {
       expect(response.json)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(mapOccurrencesToSections(allOccurrences));
+    });
+
+    it("should return null if no resources are found for the given uri", async () => {
+      rodeResponse.json.mockResolvedValue({ occurrences: [] });
+      await handler(request, response);
+
+      expect(response.send).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
     });
   });
 

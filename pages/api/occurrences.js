@@ -43,6 +43,11 @@ export default async (req, res) => {
     }
 
     const listOccurrencesResponse = await response.json();
+
+    if (!listOccurrencesResponse.occurrences?.length) {
+      return res.status(StatusCodes.OK).send(null);
+    }
+
     const occurrences = mapOccurrencesToSections(
       listOccurrencesResponse.occurrences
     );

@@ -23,7 +23,7 @@ import { useTheme } from "providers/theme";
 
 const ExternalLink = (props) => {
   const { theme } = useTheme();
-  const { href, label } = props;
+  const { href, label, className = "" } = props;
 
   if (!href) {
     return null;
@@ -31,7 +31,7 @@ const ExternalLink = (props) => {
 
   return (
     <a
-      className={`${styles[theme]} ${styles.externalLink}`}
+      className={`${styles[theme]} ${styles.externalLink} ${className}`}
       href={href}
       target="_blank"
       rel="noreferrer"
@@ -45,6 +45,7 @@ const ExternalLink = (props) => {
 ExternalLink.propTypes = {
   href: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default ExternalLink;

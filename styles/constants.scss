@@ -42,10 +42,9 @@ $SCREEN_TABLET: 768px;
 $SCREEN_DESKTOP: 1024px;
 
 // DARK theme
-$DT_BOX_SHADOW: 0 1px 3px 0 rgba(200, 200, 200, 0.1),
-  0 1px 2px 0 rgba(255, 255, 255, 0.06);
-$DT_HOVER_SHADOW: 0px 10px 15px -3px rgba(200, 200, 200, 0.1),
-  2px 4px 6px -2px rgba(255, 255, 255, 0.05);
+$DT_BOX_SHADOW: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+$DT_HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.3),
+  2px 4px 6px -2px rgba(0, 0, 0, 0.15);
 $DT_BACKGROUND_DARK: $DARKEST_GREY;
 $DT_BACKGROUND_MEDIUM: $DARK_GREY;
 $DT_BACKGROUND_LIGHT: $GREY;
