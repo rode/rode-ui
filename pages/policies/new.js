@@ -26,7 +26,6 @@ import { useFormValidation } from "hooks/useFormValidation";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
-  // const [validationResult, setValidationResult] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [regoContent, setRegoContent] = useState("");
@@ -91,7 +90,6 @@ const NewPolicy = () => {
           label={"Rego Policy Code"}
           value={regoContent}
           onChange={(event) => {
-            // setValidationResult(null);
             setRegoContent(event.target.value);
           }}
           error={errors["regoContent"]}
@@ -115,7 +113,6 @@ const NewPolicy = () => {
             onClick={() => {}}
             className={styles.validateButton}
           />
-          {/*{validationResult && <p>{validationResult}</p>}*/}
         </div>
       </div>
       <div className={styles.actionButtons}>
