@@ -39,7 +39,7 @@ const Button = (props) => {
       className={`${styles[buttonType]} ${styles[theme]} ${className}`}
       onClick={onClick}
       aria-label={label}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...otherProps}
     >
       <Loading type={"button"} loading={loading}>

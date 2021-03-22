@@ -113,5 +113,6 @@ describe("Button", () => {
     render(<Button label={label} onClick={onClick} loading={true} />);
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+    expect(screen.getByLabelText(label)).toBeDisabled();
   });
 });

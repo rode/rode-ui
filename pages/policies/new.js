@@ -59,7 +59,7 @@ const NewPolicy = () => {
     setLoading(false);
 
     if (!response.ok) {
-      //TODO: handle errors when rego is invalid
+      //TODO: finish handling errors when rego is invalid
       showError("Failed to create the policy");
       return;
     }

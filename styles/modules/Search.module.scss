@@ -34,6 +34,19 @@
   }
 }
 
+.breadcrumbs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  > * {
+    padding: 0 0.25rem;
+  }
+}
+
 .showResults {
   @extend .container;
   justify-content: flex-start;
@@ -113,6 +126,14 @@
     box-shadow: $DT_BOX_SHADOW;
   }
 
+  .breadcrumbs {
+    color: $DT_SUB_TEXT;
+
+    a {
+      color: $DT_LINK;
+    }
+  }
+
   .cardHeader {
     color: $DT_MAIN_TEXT;
   }
@@ -130,6 +151,14 @@
   &.searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .breadcrumbs {
+    color: $LT_SUB_TEXT;
+
+    a {
+      color: $LT_LINK;
+    }
   }
 
   .cardHeader {

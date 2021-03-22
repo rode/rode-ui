@@ -16,15 +16,45 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+import { useFetch } from "hooks/useFetch";
+import Loading from "components/Loading";
+import styles from "styles/modules/Policy.module.scss";
+import { useTheme } from "providers/theme";
+import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
+
+// TODO: test this
 
 const Policy = () => {
   const router = useRouter();
+  const { theme } = useTheme();
 
   const { id } = router.query;
 
+  const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
+
   return (
-    <div>
-      <p>This is the policy page for {id}</p>
+    <div className={`${styles[theme]} ${styles.pageContainer}`}>
+      <PolicyBreadcrumbs />
+      <div className={styles.detailsContainer}>
+        <Loading loading={loading}>
+          {data ? (
+            <>
+              <div>
+                <p className={styles.policyName}>{data?.name}</p>
+                <p className={styles.policyDescription}>{data?.description}</p>
+              </div>
+              <div className={styles.regoContainer}>
+                <p>Rego Policy Code</p>
+                <pre>
+                  <code>{data?.regoContent}</code>
+                </pre>
+              </div>
+            </>
+          ) : (
+            <p className={styles.notFound}>No policy found under {id}</p>
+          )}
+        </Loading>
+      </div>
     </div>
   );
 };

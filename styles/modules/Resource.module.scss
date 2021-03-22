@@ -26,19 +26,6 @@
   justify-content: flex-start;
 }
 
-.breadcrumbs {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0.5rem 1rem;
-
-  > * {
-    padding: 0 0.25rem;
-  }
-}
-
 .resourceHeader {
   display: flex;
   max-width: 100%;
@@ -74,10 +61,6 @@
 }
 
 .darkTheme {
-  .breadcrumbs {
-    color: $DT_SUB_TEXT;
-  }
-
   .resourceHeader {
     background-color: $DEEP_SEA;
     box-shadow: $DT_BOX_SHADOW;
@@ -89,14 +72,6 @@
 }
 
 .lightTheme {
-  .breadcrumbs {
-    color: $LT_SUB_TEXT;
-
-    a {
-      color: $LT_LINK;
-    }
-  }
-
   .resourceHeader {
     background-color: $DEEP_SEA;
     box-shadow: $LT_BOX_SHADOW;

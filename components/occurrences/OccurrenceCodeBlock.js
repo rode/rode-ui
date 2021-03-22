@@ -45,11 +45,9 @@ const OccurrenceCodeBlock = ({ json, fullWidth = false }) => {
     >
       <Button onClick={toggle} label={showCode ? "Hide JSON" : "Show JSON"} />
       {showCode && (
-        <div className={styles.codeBlock} data-testid="occurrenceJson">
-          <pre>
-            <code>{JSON.stringify(json, null, 2)}</code>
-          </pre>
-        </div>
+        <pre className={styles.codeBlock} data-testid="occurrenceJson">
+          <code>{JSON.stringify(json, null, 2)}</code>
+        </pre>
       )}
     </div>
   );
