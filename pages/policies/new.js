@@ -43,7 +43,7 @@ const NewPolicy = () => {
       regoContent,
     };
 
-    const validForm = await isValid(formData);
+    const validForm = isValid(formData);
 
     if (!validForm) {
       return;
@@ -55,7 +55,6 @@ const NewPolicy = () => {
     });
 
     if (!response.ok) {
-      console.log('here')
       //TODO: handle errors when rego is invalid
       showError("Failed to create the policy");
       return;

@@ -20,13 +20,13 @@ export const useFormValidation = (schema) => {
   const [formData, setFormData] = React.useState(null);
   const [errors, setErrors] = React.useState({});
 
-  const isValid = async (formData) => {
+  const isValid = (formData) => {
     setFormData(formData);
 
     let isValid = true;
 
     try {
-      await schema.validate(formData, {
+      schema.validateSync(formData, {
         abortEarly: false,
       });
       setErrors({});
@@ -45,7 +45,7 @@ export const useFormValidation = (schema) => {
     return isValid;
   };
 
-  const validateField = async (event) => {
+  const validateField = (event) => {
     if (!formData) {
       return;
     }
@@ -57,7 +57,7 @@ export const useFormValidation = (schema) => {
       [field]: value,
     };
 
-    await isValid(formDataWithUpdatedField);
+    isValid(formDataWithUpdatedField);
   };
 
   return {

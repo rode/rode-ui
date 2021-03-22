@@ -21,7 +21,6 @@ import NewPolicy from "pages/policies/new";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
-import { showError } from "utils/toast-utils";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -39,7 +38,7 @@ describe("New Policy", () => {
   beforeEach(() => {
     router = {
       back: jest.fn(),
-      push: jest.fn(),
+      push: jest.fn().mockResolvedValue({}),
     };
     createdPolicy = {
       [chance.string()]: chance.string(),
@@ -49,8 +48,8 @@ describe("New Policy", () => {
       ok: true,
       json: jest.fn().mockResolvedValue(createdPolicy),
     };
-    isValid = jest.fn().mockResolvedValue(true);
-    validateField = jest.fn();
+    isValid = jest.fn().mockReturnValue(true);
+    validateField = jest.fn().mockReturnValue({});
     validationErrors = {};
     useFormValidation.mockReturnValue({
       isValid,
@@ -112,7 +111,7 @@ describe("New Policy", () => {
   describe("successful save", () => {
     let formData;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       formData = {
         name: chance.string(),
         description: chance.sentence(),
@@ -129,7 +128,7 @@ describe("New Policy", () => {
         formData.regoContent
       );
 
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
     });
 
     it("should call to validate the form", () => {
@@ -153,10 +152,10 @@ describe("New Policy", () => {
   });
 
   describe("unsuccessful save", () => {
-    it("should show a validation error when a required field is not filled out", () => {
+    it("should show a validation error when a required field is not filled out", async () => {
       isValid.mockReturnValue(false);
       validationErrors.name = chance.string();
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
 
       expect(fetch).not.toHaveBeenCalled();
       expect(router.push).not.toHaveBeenCalled();
@@ -169,15 +168,11 @@ describe("New Policy", () => {
       expect(validateField).toHaveBeenCalledTimes(1);
     });
 
-    it("should show an error when the call to create failed", () => {
+    it("should show an error when the call to create failed", async () => {
       fetchResponse.ok = false;
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
 
       // TODO: add test for invalid rego when implemented
-
-      expect(showError)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith("Failed to create the policy");
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();
