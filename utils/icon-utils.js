@@ -27,8 +27,8 @@ import Fire from "components/icons/Fire";
 import Flag from "components/icons/Flag";
 import ExternalLink from "components/icons/ExternalLink";
 import XCircle from "components/icons/XCircle";
-import BadgeCheck from "../components/icons/BadgeCheck";
-import Exclamation from "../components/icons/Exclamation";
+import BadgeCheck from "components/icons/BadgeCheck";
+import Exclamation from "components/icons/Exclamation";
 
 const SEARCH = "Search";
 const COG = "Cog";

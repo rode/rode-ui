@@ -24,7 +24,9 @@ import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
 import { showError } from "utils/toast-utils";
-import PolicyValidationResult from "../../components/policies/PolicyValidationResult";
+import PolicyValidationResult from "components/policies/PolicyValidationResult";
+
+// TODO: more tests on this file - maybe break some pieces out into other components
 
 const NewPolicy = () => {
   const { theme } = useTheme();
@@ -77,14 +79,14 @@ const NewPolicy = () => {
     const response = await fetch("/api/policies/validate", {
       method: "POST",
       body: JSON.stringify({
-        policy: regoContent
-      })
+        policy: regoContent,
+      }),
     });
 
     const result = await response.json();
 
     setValidationResults(result);
-  }
+  };
 
   return (
     <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
@@ -140,7 +142,7 @@ const NewPolicy = () => {
             className={styles.validateButton}
             disabled={loading || !regoContent.length}
           />
-          <PolicyValidationResult validation={validationResults}/>
+          <PolicyValidationResult validation={validationResults} />
         </div>
       </div>
       <div className={styles.actionButtons}>

@@ -22,6 +22,8 @@ import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 
+// TODO: improve the not found look on this page
+
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();

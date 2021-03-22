@@ -20,8 +20,6 @@ import { getRodeUrl } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["POST"];
 
-// TODO: test this
-
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
@@ -33,10 +31,10 @@ export default async (req, res) => {
 
   try {
     const policy = req.body;
-    
+
     const response = await fetch(`${rodeUrl}/v1alpha1/policies/validate`, {
       method: "POST",
-      body: policy
+      body: policy,
     });
 
     if (!response.ok) {
@@ -50,12 +48,12 @@ export default async (req, res) => {
 
     const result = {
       errors: validatePolicyResponse.errors,
-      isValid: validatePolicyResponse.compile
+      isValid: validatePolicyResponse.compile,
     };
 
     res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    console.error("Error getting policy", error);
+    console.error("Error validating policy", error);
 
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

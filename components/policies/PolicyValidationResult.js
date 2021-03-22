@@ -4,7 +4,7 @@ import styles from "styles/modules/Policy.module.scss";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 
-// TODO: improve the styles, add some icons and colors
+// TODO: improve the styles, add some colors
 
 const PolicyValidationResult = ({ validation }) => {
   if (!validation) {
