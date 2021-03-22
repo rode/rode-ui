@@ -125,11 +125,7 @@ const NewPolicy = () => {
         </div>
       </div>
       <div className={styles.actionButtons}>
-        <Button
-          label={"Save Policy"}
-          type={"submit"}
-          loading={loading}
-        />
+        <Button label={"Save Policy"} type={"submit"} loading={loading} />
         <Button
           label={"Cancel"}
           buttonType={"text"}
