@@ -1,4 +1,5 @@
-* 
+*
+!jsconfig.json
 !.babelrc
 !components
 !hooks
