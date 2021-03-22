@@ -1,8 +1,6 @@
 * 
 !.babelrc
-!__mocks__
 !components
-!cypress
 !hooks
 !package.json
 !pages
