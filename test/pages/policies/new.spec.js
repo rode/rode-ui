@@ -23,15 +23,22 @@ import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
 
 jest.mock("next/router");
+jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
 
 describe("New Policy", () => {
-  let router, fetchResponse, createdPolicy, isValid, validationErrors, rerender;
+  let router,
+    fetchResponse,
+    createdPolicy,
+    isValid,
+    validationErrors,
+    validateField,
+    rerender;
 
   beforeEach(() => {
     router = {
       back: jest.fn(),
-      push: jest.fn(),
+      push: jest.fn().mockResolvedValue({}),
     };
     createdPolicy = {
       [chance.string()]: chance.string(),
@@ -39,19 +46,25 @@ describe("New Policy", () => {
     };
     fetchResponse = {
       ok: true,
-      json: jest.fn().mockReturnValue(createdPolicy),
+      json: jest.fn().mockResolvedValue(createdPolicy),
     };
     isValid = jest.fn().mockReturnValue(true);
+    validateField = jest.fn().mockReturnValue({});
     validationErrors = {};
     useFormValidation.mockReturnValue({
       isValid,
       errors: validationErrors,
+      validateField,
     });
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     const utils = render(<NewPolicy />);
     rerender = utils.rerender;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it("should render the policy name input", () => {
@@ -98,7 +111,7 @@ describe("New Policy", () => {
   describe("successful save", () => {
     let formData;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       formData = {
         name: chance.string(),
         description: chance.sentence(),
@@ -115,7 +128,11 @@ describe("New Policy", () => {
         formData.regoContent
       );
 
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
+    });
+
+    it("should call to validate the form", () => {
+      expect(isValid).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(formData);
     });
 
     it("should submit the form when filled out entirely", () => {
@@ -127,7 +144,7 @@ describe("New Policy", () => {
         });
     });
 
-    it("should redirect the user to the created policies page", () => {
+    it("should redirect the user to the created policy page", () => {
       expect(router.push)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/policies/${createdPolicy.id}`);
@@ -135,23 +152,27 @@ describe("New Policy", () => {
   });
 
   describe("unsuccessful save", () => {
-    it("should show a validation error when a required field is not filled out", () => {
+    it("should show a validation error when a required field is not filled out", async () => {
       isValid.mockReturnValue(false);
       validationErrors.name = chance.string();
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
 
       expect(fetch).not.toHaveBeenCalled();
       expect(router.push).not.toHaveBeenCalled();
 
       rerender(<NewPolicy />);
       expect(screen.getByText(validationErrors.name)).toBeInTheDocument();
+      userEvent.click(screen.getByLabelText(/policy name/i));
+      userEvent.tab();
+
+      expect(validateField).toHaveBeenCalledTimes(1);
     });
 
-    it("should show an error when the call to create failed", () => {
+    it("should show an error when the call to create failed", async () => {
       fetchResponse.ok = false;
-      userEvent.click(screen.getByText(/save policy/i));
+      await userEvent.click(screen.getByText(/save policy/i));
 
-      // TODO: add test guts for showing error message when implemented
+      // TODO: add test for invalid rego when implemented
 
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();

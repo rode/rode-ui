@@ -40,4 +40,17 @@ describe("Loading", () => {
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
     expect(screen.queryByText("children")).not.toBeInTheDocument();
   });
+
+  it("should return the button loading spinner when loading and the loading type is button", () => {
+    render(
+      <Loading loading={true} type={"button"}>
+        <p>children</p>
+      </Loading>
+    );
+
+    const renderedIndicator = screen.getByTestId("loadingIndicator");
+    expect(renderedIndicator).toBeInTheDocument();
+    expect(renderedIndicator).toHaveClass("buttonContainer");
+    expect(screen.queryByText("children")).not.toBeInTheDocument();
+  });
 });

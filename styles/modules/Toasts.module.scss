@@ -1,0 +1,67 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+
+.toast {
+  border: solid 1px transparent;
+  border-left: solid 8px transparent;
+}
+
+.success {
+  @extend .toast;
+}
+
+.error {
+  @extend .toast;
+}
+
+.closeButton {
+  align-self: center;
+}
+
+.lightTheme {
+  .toast {
+    background-color: $LT_BACKGROUND_LIGHT;
+    border-color: $WHITE_SMOKE;
+  }
+
+  .success {
+    color: $GREEN;
+    border-left-color: $GREEN;
+  }
+
+  .error {
+    color: $HOT_RED;
+    border-left-color: $HOT_RED;
+  }
+}
+
+.darkTheme {
+  .toast {
+    background-color: $DT_BACKGROUND_DARK;
+  }
+
+  .success {
+    color: $BRIGHT_GREEN;
+    border-left-color: $GREEN;
+  }
+
+  .error {
+    color: $HOT_RED;
+    border-left-color: $HOT_RED;
+  }
+}

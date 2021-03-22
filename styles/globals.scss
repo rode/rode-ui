@@ -78,8 +78,19 @@ a {
   }
 }
 
-code {
-  font-family: monospace;
+pre {
+  overflow: auto;
+  width: 100%;
+
+  code {
+    padding: 1rem;
+    font-family: monospace;
+    margin-top: 0.5rem;
+    display: inline-flex;
+    width: 100%;
+    height: fit-content;
+    max-height: 32rem;
+  }
 }
 
 .required {
@@ -99,6 +110,11 @@ code {
   a:visited {
     color: $LT_LINK;
   }
+
+  pre {
+    background-color: $LT_BACKGROUND_MEDIUM;
+    color: $LT_SUB_TEXT;
+  }
 }
 
 .darkTheme {
@@ -107,5 +123,10 @@ code {
   a,
   a:visited {
     color: $DT_LINK;
+  }
+
+  pre {
+    background-color: $DT_BACKGROUND_LIGHT;
+    color: $DT_SUB_TEXT;
   }
 }

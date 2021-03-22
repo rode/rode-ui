@@ -17,38 +17,52 @@
 import React from "react";
 
 export const useFormValidation = (schema) => {
+  const [formData, setFormData] = React.useState(null);
   const [errors, setErrors] = React.useState({});
 
   const isValid = (formData) => {
-    const { error } = schema.validate(formData, {
-      abortEarly: false,
-    });
+    setFormData(formData);
 
-    if (error) {
-      const updatedErrors = error.details.reduce((accum, err) => {
-        console.log("err", err);
+    let isValid = true;
 
-        let message = err.message;
-
-        if (err.type.includes("empty")) {
-          message = "This field is required.";
-        }
-
-        accum[err.path[0]] = message;
+    try {
+      schema.validateSync(formData, {
+        abortEarly: false,
+      });
+      setErrors({});
+    } catch (errors) {
+      const updatedErrors = errors.inner.reduce((accum, error) => {
+        accum[error.path] = error.message;
 
         return accum;
       }, {});
 
       setErrors(updatedErrors);
 
-      return false;
+      isValid = false;
     }
 
-    return true;
+    return isValid;
+  };
+
+  const validateField = (event) => {
+    if (!formData) {
+      return;
+    }
+    const field = event.target.name;
+    const value = event.target.value;
+
+    const formDataWithUpdatedField = {
+      ...formData,
+      [field]: value,
+    };
+
+    isValid(formDataWithUpdatedField);
   };
 
   return {
     isValid,
+    validateField,
     errors,
   };
 };

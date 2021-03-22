@@ -44,6 +44,7 @@ describe("Button", () => {
     expect(renderedButton).toHaveTextContent(label);
     expect(renderedButton).toHaveClass("primary");
     expect(renderedButton).not.toBeDisabled();
+    expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
   });
 
   it("should call the passed onClick function", () => {
@@ -106,5 +107,12 @@ describe("Button", () => {
     render(<Button label={label} className={className} />);
 
     expect(screen.getByLabelText(label)).toHaveClass(className);
+  });
+
+  it("should allow the user to pass a loading prop to show the loading indicator", () => {
+    render(<Button label={label} onClick={onClick} loading={true} />);
+
+    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+    expect(screen.getByLabelText(label)).toBeDisabled();
   });
 });

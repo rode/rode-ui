@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-import * as yup from "yup";
+import { toast } from "react-toastify";
+import styles from "styles/modules/Toasts.module.scss";
 
-export const schema = yup.object().shape({
-  name: yup.string().required().label("Policy Name"),
-  description: yup.string().label("Description"),
-  regoContent: yup.string().required().label("Rego Policy Code"),
-});
+export const showSuccess = (message) => {
+  toast(message, {
+    className: styles.success,
+  });
+};
+export const showError = (message) => {
+  toast(message, {
+    className: styles.error,
+  });
+};

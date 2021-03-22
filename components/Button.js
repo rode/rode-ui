@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Buttons.module.scss";
 import { useTheme } from "providers/theme";
+import Loading from "./Loading";
 
 const Button = (props) => {
   const {
@@ -27,6 +28,7 @@ const Button = (props) => {
     disabled = false,
     children,
     className = "",
+    loading = false,
     ...otherProps
   } = props;
 
@@ -37,10 +39,12 @@ const Button = (props) => {
       className={`${styles[buttonType]} ${styles[theme]} ${className}`}
       onClick={onClick}
       aria-label={label}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...otherProps}
     >
-      {children || label}
+      <Loading type={"button"} loading={loading}>
+        {children || label}
+      </Loading>
     </button>
   );
 };
@@ -58,6 +62,7 @@ Button.propTypes = {
   buttonType: PropTypes.oneOf(["primary", "icon", "text"]),
   children: PropTypes.node,
   className: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default Button;

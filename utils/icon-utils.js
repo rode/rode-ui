@@ -26,6 +26,7 @@ import ChevronDoubleRight from "components/icons/ChevronDoubleRight";
 import Fire from "components/icons/Fire";
 import Flag from "components/icons/Flag";
 import ExternalLink from "components/icons/ExternalLink";
+import XCircle from "components/icons/XCircle";
 
 const SEARCH = "Search";
 const COG = "Cog";
@@ -36,6 +37,7 @@ const CHEVRON_DOUBLE_RIGHT = "ChevronDoubleRight";
 const FIRE = "FIRE";
 const FLAG = "FLAG";
 const EXTERNAL_LINK = "EXTERNAL_LINK";
+const X_CIRCLE = "X_CIRCLE";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -53,6 +55,7 @@ export const ICON_COMPONENTS = {
   [FIRE]: Fire,
   [FLAG]: Flag,
   [EXTERNAL_LINK]: ExternalLink,
+  [X_CIRCLE]: XCircle,
 };
 
 export const ICON_NAMES = {
@@ -65,6 +68,7 @@ export const ICON_NAMES = {
   FIRE,
   FLAG,
   EXTERNAL_LINK,
+  X_CIRCLE,
   LIATRIO,
   GITHUB,
   TWITTER,

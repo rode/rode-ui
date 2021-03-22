@@ -15,22 +15,22 @@
  */
 
 import React from "react";
-import { useResources } from "providers/resources";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
+import { usePolicies } from "providers/policies";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === "all") {
-    return "View all resources";
+    return "View all policies";
   } else {
     return `"${searchTerm}"`;
   }
 };
 
-const ResourceBreadcrumbs = () => {
+const PolicyBreacrumbs = () => {
   const {
     state: { searchTerm },
-  } = useResources();
+  } = usePolicies();
 
   if (!searchTerm) {
     return null;
@@ -38,13 +38,13 @@ const ResourceBreadcrumbs = () => {
 
   return (
     <div className={styles.breadcrumbs}>
-      <p>Resource Search</p>
+      <p>Policy Search</p>
       <p>/</p>
-      <Link href={`/resources?search=${encodeURIComponent(searchTerm)}`}>
+      <Link href={`/policies?search=${encodeURIComponent(searchTerm)}`}>
         <a>{getSearchTermText(searchTerm)}</a>
       </Link>
     </div>
   );
 };
 
-export default ResourceBreadcrumbs;
+export default PolicyBreacrumbs;

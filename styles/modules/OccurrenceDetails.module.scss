@@ -151,22 +151,16 @@ $SIDE_SPACING: 1rem;
 
 .fullWidthCodeBlockContainer {
   @extend .codeBlockContainer;
-  max-width: 97vw;
   width: 100%;
+
+  @include tabletAndLarger {
+    max-width: 97vw;
+  }
 
   .codeBlock {
+    width: 100%;
     border: solid 1px $SILVER;
   }
-}
-
-.codeBlock {
-  margin-top: 0.5rem;
-  display: inline-flex;
-  width: 100%;
-  height: fit-content;
-  max-height: 32rem;
-  overflow: auto;
-  padding: 1rem;
 }
 
 .darkTheme {
@@ -192,11 +186,6 @@ $SIDE_SPACING: 1rem;
       color: $DT_LINK;
     }
   }
-
-  .codeBlock {
-    background-color: $DT_BACKGROUND_LIGHT;
-    color: $DT_SUB_TEXT;
-  }
 }
 
 .lightTheme {
@@ -221,10 +210,5 @@ $SIDE_SPACING: 1rem;
     a {
       color: $LT_LINK;
     }
-  }
-
-  .codeBlock {
-    background-color: $LT_BACKGROUND_LIGHT;
-    color: $LT_MAIN_TEXT;
   }
 }

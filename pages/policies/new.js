@@ -23,15 +23,17 @@ import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
+import { showError } from "utils/toast-utils";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [regoContent, setRegoContent] = useState("");
   const router = useRouter();
 
-  const { isValid, errors } = useFormValidation(schema);
+  const { isValid, validateField, errors } = useFormValidation(schema);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -48,14 +50,17 @@ const NewPolicy = () => {
       return;
     }
 
+    setLoading(true);
     const response = await fetch("/api/policies", {
       method: "POST",
       body: JSON.stringify(formData),
     });
 
+    setLoading(false);
+
     if (!response.ok) {
-      //TODO: show error message for failure to save, could be because of invalid rego so that logic goes here
-      alert("Failed to create the policy.");
+      //TODO: finish handling errors when rego is invalid
+      showError("Failed to create the policy");
       return;
     }
 
@@ -73,17 +78,19 @@ const NewPolicy = () => {
           label={"Policy Name"}
           onChange={(event) => setName(event.target.value)}
           value={name}
-          error={errors["name"]}
+          error={errors.name}
           horizontal
           required
+          onBlur={validateField}
         />
         <Input
           name={"description"}
           label={"Description"}
           onChange={(event) => setDescription(event.target.value)}
           value={description}
-          error={errors["description"]}
+          error={errors.description}
           horizontal
+          onBlur={validateField}
         />
         <TextArea
           name={"regoContent"}
@@ -92,9 +99,10 @@ const NewPolicy = () => {
           onChange={(event) => {
             setRegoContent(event.target.value);
           }}
-          error={errors["regoContent"]}
+          error={errors.regoContent}
           required
           rows={10}
+          onBlur={validateField}
         />
         <p className={styles.documentation}>
           Need help formulating? Check out the{" "}
@@ -112,15 +120,17 @@ const NewPolicy = () => {
             buttonType={"text"}
             onClick={() => {}}
             className={styles.validateButton}
+            diasbled={loading}
           />
         </div>
       </div>
       <div className={styles.actionButtons}>
-        <Button label={"Save Policy"} type={"submit"} />
+        <Button label={"Save Policy"} type={"submit"} loading={loading} />
         <Button
           label={"Cancel"}
           buttonType={"text"}
-          onClick={() => router.back()}
+          onClick={router.back}
+          disabled={loading}
         />
       </div>
     </form>

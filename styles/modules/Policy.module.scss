@@ -86,6 +86,32 @@
   }
 }
 
+.pageContainer {
+  height: 100%;
+}
+
+.detailsContainer {
+  min-height: fit-content;
+  margin-bottom: 2rem;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.policyName {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.regoContainer {
+  margin: 2rem 0 0;
+}
+
+.notFound {
+  text-align: center;
+}
+
 .darkTheme {
   .heading {
     color: $LAGOON;
@@ -93,6 +119,18 @@
 
   .policyInputsContainer {
     background-color: $DT_BACKGROUND_MEDIUM;
+  }
+
+  .detailsContainer {
+    background-color: $DT_BACKGROUND_MEDIUM;
+  }
+
+  .policyName {
+    color: $LAGOON;
+  }
+
+  .policyDescription {
+    color: $DT_SUB_TEXT;
   }
 }
 
@@ -103,5 +141,17 @@
 
   .policyInputsContainer {
     background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .detailsContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .policyName {
+    color: $DEEP_SEA;
+  }
+
+  .policyDescription {
+    color: $LT_SUB_TEXT;
   }
 }
