@@ -1,10 +1,15 @@
 * 
 !.babelrc
+!__mocks__
 !components
+!cypress
 !hooks
 !package.json
 !pages
+!providers
 !public
+!reducers
+!schemas
 !styles
 !utils
 !yarn.lock
