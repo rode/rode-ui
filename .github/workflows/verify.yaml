@@ -38,3 +38,10 @@ jobs:
         with:
           start: yarn dev
           wait-on: "http://localhost:3000"
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
