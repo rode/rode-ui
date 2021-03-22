@@ -74,7 +74,7 @@ const NewPolicy = () => {
           label={"Policy Name"}
           onChange={(event) => setName(event.target.value)}
           value={name}
-          error={errors["name"]}
+          error={errors.name}
           horizontal
           required
           onBlur={validateField}
@@ -84,7 +84,7 @@ const NewPolicy = () => {
           label={"Description"}
           onChange={(event) => setDescription(event.target.value)}
           value={description}
-          error={errors["description"]}
+          error={errors.description}
           horizontal
           onBlur={validateField}
         />
@@ -95,7 +95,7 @@ const NewPolicy = () => {
           onChange={(event) => {
             setRegoContent(event.target.value);
           }}
-          error={errors["regoContent"]}
+          error={errors.regoContent}
           required
           rows={10}
           onBlur={validateField}
