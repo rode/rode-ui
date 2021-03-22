@@ -128,7 +128,6 @@ const NewPolicy = () => {
         <Button
           label={"Save Policy"}
           type={"submit"}
-          disabled={loading}
           loading={loading}
         />
         <Button
