@@ -27,6 +27,7 @@ import { showError } from "utils/toast-utils";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [regoContent, setRegoContent] = useState("");
@@ -49,10 +50,13 @@ const NewPolicy = () => {
       return;
     }
 
+    setLoading(true);
     const response = await fetch("/api/policies", {
       method: "POST",
       body: JSON.stringify(formData),
     });
+
+    setLoading(false);
 
     if (!response.ok) {
       //TODO: handle errors when rego is invalid
@@ -116,12 +120,23 @@ const NewPolicy = () => {
             buttonType={"text"}
             onClick={() => {}}
             className={styles.validateButton}
+            diasbled={loading}
           />
         </div>
       </div>
       <div className={styles.actionButtons}>
-        <Button label={"Save Policy"} type={"submit"} />
-        <Button label={"Cancel"} buttonType={"text"} onClick={router.back} />
+        <Button
+          label={"Save Policy"}
+          type={"submit"}
+          disabled={loading}
+          loading={loading}
+        />
+        <Button
+          label={"Cancel"}
+          buttonType={"text"}
+          onClick={router.back}
+          disabled={loading}
+        />
       </div>
     </form>
   );

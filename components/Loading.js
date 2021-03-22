@@ -19,11 +19,19 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Loading.module.scss";
 import { useTheme } from "providers/theme";
 
-const Loading = ({ loading, children }) => {
+const Loading = ({ type, loading, children }) => {
   const { theme } = useTheme();
 
   if (!loading) {
     return children;
+  }
+
+  if (type === "button") {
+    return (
+      <div className={styles.buttonContainer} data-testid="loadingIndicator">
+        <div className={`${styles.buttonSpinner} ${styles[theme]}`} />
+      </div>
+    );
   }
 
   return (
@@ -34,8 +42,13 @@ const Loading = ({ loading, children }) => {
 };
 
 Loading.propTypes = {
+  type: PropTypes.oneOf(["button"]),
   loading: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.node),
+  ]).isRequired,
 };
 
 export default Loading;
