@@ -18,8 +18,6 @@ import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "pages/api/utils/api-utils";
 
-// TODO: test this
-
 const ALLOWED_METHODS = ["GET"];
 
 export default async (req, res) => {
@@ -31,35 +29,31 @@ export default async (req, res) => {
 
   const rodeUrl = getRodeUrl();
 
-  if (req.method === "GET") {
-    try {
-      const { id } = req.query;
+  try {
+    const { id } = req.query;
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`);
+    const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`);
 
-      console.log("response", response);
+    if (response.status === StatusCodes.NOT_FOUND) {
+      return res.status(StatusCodes.OK).send(null);
+    }
 
-      if (response.status === StatusCodes.NOT_FOUND) {
-        return res.status(StatusCodes.OK).send(null);
-      }
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const getPolicyResponse = await response.json();
-      const policy = getPolicyResponse.policy;
-
-      res.status(StatusCodes.OK).json(policy);
-    } catch (error) {
-      console.error("Error getting policy", error);
-
-      res
+    if (!response.ok) {
+      console.error(`Unsuccessful response from Rode: ${response.status}`);
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
+
+    const getPolicyResponse = await response.json();
+    const policy = getPolicyResponse.policy;
+
+    res.status(StatusCodes.OK).json(policy);
+  } catch (error) {
+    console.error("Error getting policy", error);
+
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
   }
 };

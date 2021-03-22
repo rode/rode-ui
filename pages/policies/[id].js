@@ -22,8 +22,6 @@ import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 
-// TODO: test this
-
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
@@ -40,13 +38,13 @@ const Policy = () => {
           {data ? (
             <>
               <div>
-                <p className={styles.policyName}>{data?.name}</p>
-                <p className={styles.policyDescription}>{data?.description}</p>
+                <p className={styles.policyName}>{data.name}</p>
+                <p className={styles.policyDescription}>{data.description}</p>
               </div>
               <div className={styles.regoContainer}>
                 <p>Rego Policy Code</p>
                 <pre>
-                  <code>{data?.regoContent}</code>
+                  <code>{data.regoContent}</code>
                 </pre>
               </div>
             </>
