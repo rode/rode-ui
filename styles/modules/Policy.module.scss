@@ -54,7 +54,7 @@
 }
 
 .policyValidationContainer {
-  display: none;
+  display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -62,6 +62,13 @@
 
 .validateButton {
   margin-right: 1rem;
+}
+
+.validationResults {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .documentation {
