@@ -44,25 +44,40 @@
   padding: 1rem;
 
   > * {
-    margin: 1rem auto 0;
+    margin: 0.5rem auto 0;
   }
 
-  @include tabletAndLarger {
+  @include desktopAndLarger {
     width: 75%;
     margin-right: auto;
+
+    > * {
+      margin: 1rem auto 0;
+    }
   }
 }
 
 .policyValidationContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  //overflow: auto;
+
+  @include desktopAndLarger {
+    align-items: center;
+    flex-direction: row;
+  }
 }
 
 .validateButton {
-  margin-right: 1rem;
+  margin-bottom: 1rem;
   align-self: flex-start;
+
+  @include desktopAndLarger {
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
 }
 
 .validationResults {
@@ -76,12 +91,17 @@
 }
 
 .failedResultsContainer {
-  flex: 1;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  flex: 1;
+  margin: 0 1rem;
+  width: 95%;
+
+  @include desktopAndLarger {
+    width: 55%;
+  }
 
   .validationResults {
     color: $HOT_RED;
@@ -89,6 +109,7 @@
 
   pre {
     width: 100%;
+    overflow: auto;
 
     code {
       max-height: 12rem;
@@ -105,7 +126,7 @@
 
 .actionButtons {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -114,6 +135,7 @@
   }
 
   @include tabletAndLarger {
+    flex-direction: row;
     justify-content: flex-start;
   }
 }
