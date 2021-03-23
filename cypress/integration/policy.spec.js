@@ -89,7 +89,7 @@ context("Policies", () => {
       cy.contains("Invalid rego code").should("be.visible");
     });
 
-    it("should validate valid rego code", () => {
+    it("should display a message when the rego code is valid", () => {
       cy.mockRequest("**/api/policies/validate", mockSuccessPolicyValidation);
 
       cy.get("#regoContent").type("package play");
