@@ -77,21 +77,18 @@ export default async (req, res) => {
         body: formData,
       });
 
-      console.log("response", response);
-
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
 
         const parsedResponse = await response.json();
 
-        // TODO: finish this out - does compile live inside of message here?
-        // check for the compile property, if false, show the compile errors in the UI, return a different status
-        if (parsedResponse.message.compile === false) {
+        // TODO: double check this when implemented
+        if (parsedResponse.message.includes('failed to compile')) {
           const validationError = {
-            errors: parsedResponse.errors,
-            isValid: parsedResponse.compile,
+            errors: parsedResponse.details,
+            isValid: false,
           };
-          return res.status(StatusCodes.OK).json(validationError);
+          return res.status(StatusCodes.BAD_REQUEST).json(validationError);
         }
 
         return res

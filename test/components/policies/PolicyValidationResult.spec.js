@@ -53,18 +53,27 @@ describe("PolicyValidationResult", () => {
     describe("policy is not valid", () => {
       beforeEach(() => {
         validation.isValid = false;
-        render(<PolicyValidationResult validation={validation} />);
       });
 
       it("should render an error message", () => {
+        render(<PolicyValidationResult validation={validation} />);
         expect(screen.getByText(/policy is invalid/i)).toBeInTheDocument();
         expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
       });
 
-      it("should render the errors that are returned", () => {
+      it("should render the errors that are returned if they are present", () => {
+        render(<PolicyValidationResult validation={validation} />);
+        expect(screen.getByText(/policy is invalid/i).closest('pre')).toBeDefined();
+
         validation.errors.forEach((error) => {
           expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
         });
+      });
+
+      it("should not render any errors if they are not present", () => {
+        validation.errors = [];
+        render(<PolicyValidationResult validation={validation} />);
+        expect(screen.getByText(/policy is invalid/i).closest('pre')).not.toBeInTheDocument();
       });
     });
   });

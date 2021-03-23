@@ -38,9 +38,14 @@ const PolicyValidationResult = ({ validation }) => {
             <Icon name={ICON_NAMES.EXCLAMATION} />
             <p>Policy is invalid</p>
           </div>
-          <pre>
-            <code>{validation.errors}</code>
-          </pre>
+          {validation.errors?.length ? (
+            <pre>
+              <code>{validation.errors}</code>
+            </pre>
+          )
+          :
+          null
+          }
         </div>
       )}
     </>

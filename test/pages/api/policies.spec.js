@@ -234,6 +234,26 @@ describe("/api/policies", () => {
     });
 
     describe("failed calls to Rode", () => {
+      describe("call failed because of invalid rego", () => {
+        it("should return a bad quest status with the validation error", async () => {
+          const details = chance.string();
+          rodeResponse.ok = false;
+          rodeResponse.json.mockResolvedValue({
+            details,
+            message: 'failed to compile the provided policy'
+          });
+
+          await handler(request, response);
+
+          expect(response.status).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(400);
+          expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+            errors: details,
+            isValid: false
+          })
+
+        });
+      });
+
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
 
