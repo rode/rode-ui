@@ -236,7 +236,11 @@ describe("/api/policies", () => {
     describe("failed calls to Rode", () => {
       describe("call failed because of invalid rego", () => {
         it("should return a bad quest status with the validation error", async () => {
-          const details = chance.string();
+          const details = [
+            {
+              errors: chance.string(),
+            },
+          ];
           rodeResponse.ok = false;
           rodeResponse.json.mockResolvedValue({
             details,
@@ -249,7 +253,7 @@ describe("/api/policies", () => {
             .toHaveBeenCalledTimes(1)
             .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
           expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-            errors: details,
+            errors: details[0].errors,
             isValid: false,
           });
         });
