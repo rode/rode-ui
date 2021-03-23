@@ -102,7 +102,7 @@ context("Policies", () => {
       cy.mockRequest("**/api/policies/*", mockMappedPolicy[0]);
 
       cy.get("#name").type("Test Policy");
-      cy.get("#description").type("Testing policy creation through Cypress")
+      cy.get("#description").type("Testing policy creation through Cypress");
       cy.get("#regoContent").type("package play");
       cy.contains("Save Policy").click();
 
