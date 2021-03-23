@@ -52,7 +52,7 @@ const Policy = () => {
           ) : (
             <div className={styles.notFound}>
               <h1 className={styles.notFound}>
-                No policy found under  {`"${id}"`}
+                No policy found under {`"${id}"`}
               </h1>
               <p>
                 Try <Link href={"/policies"}>searching for a policy</Link>.
