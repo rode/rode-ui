@@ -77,8 +77,23 @@ export default async (req, res) => {
         body: formData,
       });
 
+      console.log("response", response);
+
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
+
+        const parsedResponse = await response.json();
+
+        // TODO: finish this out - does compile live inside of message here?
+        // check for the compile property, if false, show the compile errors in the UI, return a different status
+        if (parsedResponse.message.compile === false) {
+          const validationError = {
+            errors: parsedResponse.errors,
+            isValid: parsedResponse.compile,
+          };
+          return res.status(StatusCodes.OK).json(validationError);
+        }
+
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
