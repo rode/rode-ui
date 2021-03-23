@@ -15,9 +15,15 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - run: |
+      - name: Test
+        run: |
           yarn
           yarn verify
+      - name: Build Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
   license-check:
     runs-on: ubuntu-latest
     container: golang:1.15
