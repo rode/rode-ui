@@ -26,8 +26,6 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { showError } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 
-// TODO: more tests on this file - maybe break some pieces out into other components
-
 const NewPolicy = () => {
   const { theme } = useTheme();
   const [validationResults, setValidationResults] = useState(null);
