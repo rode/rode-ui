@@ -80,7 +80,7 @@ context("Policies", () => {
       cy.contains("Rego Policy Code is a required field").should("not.exist");
     });
 
-    it("should validate invalid rego code", () => {
+    it("should display an error when the rego code is invalid", () => {
       cy.mockRequest("**/api/policies/validate", mockFailedPolicyValidation);
       cy.get("#regoContent").type("RegoRegoRego");
       cy.contains("Validate Policy").click();
