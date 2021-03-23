@@ -66,7 +66,7 @@ TextArea.propTypes = {
   value: PropTypes.string,
   rows: PropTypes.number,
   required: PropTypes.bool,
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
 export default TextArea;

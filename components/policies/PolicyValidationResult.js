@@ -30,13 +30,13 @@ const PolicyValidationResult = ({ validation }) => {
       {validation.isValid ? (
         <div className={styles.validationResults}>
           <Icon name={ICON_NAMES.BADGE_CHECK} />
-          <p>Policy is valid</p>
+          <p>This policy passes validation.</p>
         </div>
       ) : (
         <div className={styles.failedResultsContainer}>
           <div className={styles.validationResults}>
             <Icon name={ICON_NAMES.EXCLAMATION} />
-            <p>Policy is invalid</p>
+            <p>This policy failed validation.</p>
           </div>
           {validation.errors?.length ? (
             <pre>

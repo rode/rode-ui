@@ -45,7 +45,9 @@ describe("PolicyValidationResult", () => {
       });
 
       it("should render a success message", () => {
-        expect(screen.getByText(/policy is valid/i)).toBeInTheDocument();
+        expect(
+          screen.getByText("This policy passes validation.")
+        ).toBeInTheDocument();
         expect(screen.getByTitle(/badge check/i)).toBeInTheDocument();
       });
     });
@@ -57,14 +59,16 @@ describe("PolicyValidationResult", () => {
 
       it("should render an error message", () => {
         render(<PolicyValidationResult validation={validation} />);
-        expect(screen.getByText(/policy is invalid/i)).toBeInTheDocument();
+        expect(
+          screen.getByText("This policy failed validation.")
+        ).toBeInTheDocument();
         expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
       });
 
       it("should render the errors that are returned if they are present", () => {
         render(<PolicyValidationResult validation={validation} />);
         expect(
-          screen.getByText(/policy is invalid/i).closest("pre")
+          screen.getByText(/this policy failed validation/i).closest("pre")
         ).toBeDefined();
 
         validation.errors.forEach((error) => {
@@ -76,7 +80,7 @@ describe("PolicyValidationResult", () => {
         validation.errors = [];
         render(<PolicyValidationResult validation={validation} />);
         expect(
-          screen.getByText(/policy is invalid/i).closest("pre")
+          screen.getByText(/this policy failed validation/i).closest("pre")
         ).not.toBeInTheDocument();
       });
     });

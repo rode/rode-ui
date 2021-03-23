@@ -248,7 +248,9 @@ describe("New Policy", () => {
         await userEvent.click(screen.getByText(/validate policy/i));
       });
 
-      expect(screen.getByText(/policy is invalid/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/this policy failed validation/i)
+      ).toBeInTheDocument();
     });
   });
 });

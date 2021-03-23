@@ -87,6 +87,11 @@
   justify-content: flex-start;
   align-items: center;
   color: $GREEN;
+  margin: 0 0.5rem;
+
+  > p {
+    margin-left: 0.25rem;
+  }
 }
 
 .failedResultsContainer {
@@ -95,7 +100,6 @@
   justify-content: flex-start;
   align-items: flex-start;
   flex: 1;
-  margin: 0 1rem;
   width: 95%;
 
   @include desktopAndLarger {
@@ -107,6 +111,7 @@
   }
 
   pre {
+    margin: 0 1rem;
     width: 100%;
     overflow: auto;
 
