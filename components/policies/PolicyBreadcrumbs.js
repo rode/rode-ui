@@ -27,7 +27,7 @@ const getSearchTermText = (searchTerm) => {
   }
 };
 
-const PolicyBreacrumbs = () => {
+const PolicyBreadcrumbs = () => {
   const {
     state: { searchTerm },
   } = usePolicies();
@@ -47,4 +47,4 @@ const PolicyBreacrumbs = () => {
   );
 };
 
-export default PolicyBreacrumbs;
+export default PolicyBreadcrumbs;

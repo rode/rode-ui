@@ -119,7 +119,7 @@ const NewPolicy = () => {
             setValidationResults(null);
             setRegoContent(event.target.value);
           }}
-          error={errors.regoContent}
+          error={errors.regoContent || validationResults?.isValid === false}
           required
           rows={10}
           onBlur={validateField}
