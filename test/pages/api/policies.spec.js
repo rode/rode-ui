@@ -235,7 +235,7 @@ describe("/api/policies", () => {
 
     describe("failed calls to Rode", () => {
       describe("call failed because of invalid rego", () => {
-        it("should return a bad quest status with the validation error", async () => {
+        it("should return a bad request status with the validation error", async () => {
           const details = [
             {
               errors: chance.string(),
