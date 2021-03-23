@@ -27,7 +27,7 @@ describe("/api/policies/validate", () => {
     request = {
       method: "POST",
       body: {
-        [chance.string()]: chance.string()
+        [chance.string()]: chance.string(),
       },
     };
 
@@ -38,12 +38,12 @@ describe("/api/policies/validate", () => {
 
     validationResult = {
       errors: chance.n(chance.string, chance.d4()),
-      compile: chance.bool()
+      compile: chance.bool(),
     };
 
     rodeResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue(validationResult)
+      json: jest.fn().mockResolvedValue(validationResult),
     };
 
     fetch.mockResolvedValue(rodeResponse);
@@ -79,56 +79,58 @@ describe("/api/policies/validate", () => {
     });
   });
 
+  describe("successful call to Rode", () => {
+    it("should hit the Rode API", async () => {
+      await handler(request, response);
 
-    describe("successful call to Rode", () => {
-      it("should hit the Rode API", async () => {
-        await handler(request, response);
-
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith("http://localhost:50052/v1alpha1/policies/validate", {
+      expect(fetch)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(
+          "http://localhost:50052/v1alpha1/policies/validate",
+          {
             body: request.body,
             method: "POST",
-          });
-      });
-
-      it("should return the mapped validation results", async () => {
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-         errors: validationResult.errors,
-          isValid: validationResult.compile
-        });
-      });
+          }
+        );
     });
 
-    describe("failed calls to Rode", () => {
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
+    it("should return the mapped validation results", async () => {
+      await handler(request, response);
 
-        await handler(request, response);
+      expect(response.status)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(StatusCodes.OK);
 
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        errors: validationResult.errors,
+        isValid: validationResult.compile,
       });
     });
+  });
+
+  describe("failed calls to Rode", () => {
+    it("should return an internal server error on a non-200 response from Rode", async () => {
+      rodeResponse.ok = false;
+
+      await handler(request, response);
+
+      assertInternalServerError();
+    });
+
+    it("should return an internal server error on a network or other fetch error", async () => {
+      fetch.mockRejectedValue(new Error());
+
+      await handler(request, response);
+
+      assertInternalServerError();
+    });
+
+    it("should return an internal server error when JSON is invalid", async () => {
+      rodeResponse.json.mockRejectedValue(new Error());
+
+      await handler(request, response);
+
+      assertInternalServerError();
+    });
+  });
 });

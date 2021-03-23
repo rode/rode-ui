@@ -62,7 +62,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  //overflow: auto;
 
   @include desktopAndLarger {
     align-items: center;
@@ -163,7 +162,14 @@
 }
 
 .notFound {
+  padding: 2rem 0;
   text-align: center;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem;
+  }
 }
 
 .darkTheme {
