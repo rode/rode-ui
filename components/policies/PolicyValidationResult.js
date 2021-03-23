@@ -42,10 +42,7 @@ const PolicyValidationResult = ({ validation }) => {
             <pre>
               <code>{validation.errors}</code>
             </pre>
-          )
-          :
-          null
-          }
+          ) : null}
         </div>
       )}
     </>

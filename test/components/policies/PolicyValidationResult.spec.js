@@ -63,7 +63,9 @@ describe("PolicyValidationResult", () => {
 
       it("should render the errors that are returned if they are present", () => {
         render(<PolicyValidationResult validation={validation} />);
-        expect(screen.getByText(/policy is invalid/i).closest('pre')).toBeDefined();
+        expect(
+          screen.getByText(/policy is invalid/i).closest("pre")
+        ).toBeDefined();
 
         validation.errors.forEach((error) => {
           expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
@@ -73,7 +75,9 @@ describe("PolicyValidationResult", () => {
       it("should not render any errors if they are not present", () => {
         validation.errors = [];
         render(<PolicyValidationResult validation={validation} />);
-        expect(screen.getByText(/policy is invalid/i).closest('pre')).not.toBeInTheDocument();
+        expect(
+          screen.getByText(/policy is invalid/i).closest("pre")
+        ).not.toBeInTheDocument();
       });
     });
   });

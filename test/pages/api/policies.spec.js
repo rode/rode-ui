@@ -240,17 +240,18 @@ describe("/api/policies", () => {
           rodeResponse.ok = false;
           rodeResponse.json.mockResolvedValue({
             details,
-            message: 'failed to compile the provided policy'
+            message: "failed to compile the provided policy",
           });
 
           await handler(request, response);
 
-          expect(response.status).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(400);
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
           expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
             errors: details,
-            isValid: false
-          })
-
+            isValid: false,
+          });
         });
       });
 

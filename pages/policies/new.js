@@ -62,18 +62,18 @@ const NewPolicy = () => {
 
     setLoading(false);
 
-    console.log("response", response);
-
     if (!response.ok) {
       const parsedResponse = await response.json();
 
       if (parsedResponse?.errors) {
         setValidationResults(parsedResponse);
-        showError("Failed to create the policy due to invalid Rego code. See error(s) below for details.");
+        showError(
+          "Failed to create the policy due to invalid Rego code. See error(s) below for details."
+        );
         return;
       }
 
-      showError("Failed to create the policy");
+      showError("Failed to create the policy.");
       return;
     }
 
