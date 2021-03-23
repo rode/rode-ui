@@ -1,10 +1,14 @@
-* 
+*
+!jsconfig.json
 !.babelrc
 !components
 !hooks
 !package.json
 !pages
+!providers
 !public
+!reducers
+!schemas
 !styles
 !utils
 !yarn.lock
