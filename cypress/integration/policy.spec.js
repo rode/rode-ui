@@ -45,15 +45,16 @@ context("Policies", () => {
     });
 
     it("should show policy details when a policy is selected", () => {
+      const { name, description, regoContent } = mockMappedPolicy[0];
       cy.mockRequest("**/api/policies*", mockMappedPolicy);
       cy.mockRequest("**/api/policies/*", mockMappedPolicy[0]);
 
       cy.searchForPolicy("policy");
       cy.contains("View Policy").click();
 
-      cy.contains("My Policy Name").should("be.visible");
-      cy.contains("This is a policy description").should("be.visible");
-      cy.contains("RegoRegoRego").should("be.visible");
+      cy.contains(name).should("be.visible");
+      cy.contains(description).should("be.visible");
+      cy.contains(regoContent).should("be.visible");
     });
   });
 
@@ -106,7 +107,10 @@ context("Policies", () => {
       cy.get("#regoContent").type("package play");
       cy.contains("Save Policy").click();
 
-      cy.url().should("match", /\/policies\/12345678910/);
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
+      );
     });
   });
 });
