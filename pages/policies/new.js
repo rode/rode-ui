@@ -24,9 +24,11 @@ import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/new-policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
 import { showError } from "utils/toast-utils";
+import PolicyValidationResult from "components/policies/PolicyValidationResult";
 
 const NewPolicy = () => {
   const { theme } = useTheme();
+  const [validationResults, setValidationResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -59,14 +61,38 @@ const NewPolicy = () => {
     setLoading(false);
 
     if (!response.ok) {
-      //TODO: finish handling errors when rego is invalid
-      showError("Failed to create the policy");
+      const parsedResponse = await response.json();
+
+      if (parsedResponse?.errors) {
+        setValidationResults(parsedResponse);
+        showError(
+          "Failed to create the policy due to invalid Rego code. See error(s) below for details."
+        );
+        return;
+      }
+
+      showError("Failed to create the policy.");
       return;
     }
 
     const { id } = await response.json();
 
     router.push(`/policies/${id}`);
+  };
+
+  const onValidate = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch("/api/policies/validate", {
+      method: "POST",
+      body: JSON.stringify({
+        policy: regoContent,
+      }),
+    });
+
+    const result = await response.json();
+
+    setValidationResults(result);
   };
 
   return (
@@ -97,9 +123,10 @@ const NewPolicy = () => {
           label={"Rego Policy Code"}
           value={regoContent}
           onChange={(event) => {
+            setValidationResults(null);
             setRegoContent(event.target.value);
           }}
-          error={errors.regoContent}
+          error={errors.regoContent || validationResults?.isValid === false}
           required
           rows={10}
           onBlur={validateField}
@@ -118,10 +145,11 @@ const NewPolicy = () => {
           <Button
             label={"Validate Policy"}
             buttonType={"text"}
-            onClick={() => {}}
+            onClick={onValidate}
             className={styles.validateButton}
-            diasbled={loading}
+            disabled={loading || !regoContent.length}
           />
+          <PolicyValidationResult validation={validationResults} />
         </div>
       </div>
       <div className={styles.actionButtons}>

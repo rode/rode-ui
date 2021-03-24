@@ -15,6 +15,7 @@
  */
 
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
@@ -49,7 +50,14 @@ const Policy = () => {
               </div>
             </>
           ) : (
-            <p className={styles.notFound}>No policy found under {id}</p>
+            <div className={styles.notFound}>
+              <h1 className={styles.notFound}>
+                No policy found under {`"${id}"`}
+              </h1>
+              <p>
+                Try <Link href={"/policies"}>searching for a policy</Link>.
+              </p>
+            </div>
           )}
         </Loading>
       </div>

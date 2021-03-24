@@ -97,4 +97,16 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/x circle/i)).toBeInTheDocument();
   });
+
+  it("should render the badge check icon when specified", () => {
+    render(<Icon name={ICON_NAMES.BADGE_CHECK} />);
+
+    expect(screen.getByTitle(/badge check/i)).toBeInTheDocument();
+  });
+
+  it("should render the exclamation icon when specified", () => {
+    render(<Icon name={ICON_NAMES.EXCLAMATION} />);
+
+    expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
+  });
 });

@@ -15,12 +15,13 @@
  */
 
 import React from "react";
-import { render, screen } from "test/testing-utils/renderer";
+import { render, screen, act } from "test/testing-utils/renderer";
 
 import NewPolicy from "pages/policies/new";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
+import { showError } from "utils/toast-utils";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -108,74 +109,148 @@ describe("New Policy", () => {
     expect(router.back).toHaveBeenCalledTimes(1);
   });
 
-  describe("successful save", () => {
-    let formData;
+  describe("policy creation", () => {
+    describe("successful save", () => {
+      let formData;
 
-    beforeEach(async () => {
-      formData = {
-        name: chance.string(),
-        description: chance.sentence(),
-        regoContent: chance.string(),
-      };
+      beforeEach(async () => {
+        formData = {
+          name: chance.string(),
+          description: chance.sentence(),
+          regoContent: chance.string(),
+        };
 
-      userEvent.type(screen.getByLabelText(/policy name/i), formData.name);
-      userEvent.type(
-        screen.getByLabelText(/description/i),
-        formData.description
-      );
-      userEvent.type(
-        screen.getByLabelText(/rego policy code/i),
-        formData.regoContent
-      );
+        userEvent.type(screen.getByLabelText(/policy name/i), formData.name);
+        userEvent.type(
+          screen.getByLabelText(/description/i),
+          formData.description
+        );
+        userEvent.type(
+          screen.getByLabelText(/rego policy code/i),
+          formData.regoContent
+        );
 
-      await userEvent.click(screen.getByText(/save policy/i));
-    });
-
-    it("should call to validate the form", () => {
-      expect(isValid).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(formData);
-    });
-
-    it("should submit the form when filled out entirely", () => {
-      expect(fetch)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith("/api/policies", {
-          method: "POST",
-          body: JSON.stringify(formData),
+        await act(async () => {
+          await userEvent.click(screen.getByText(/save policy/i));
         });
+      });
+
+      it("should call to validate the form", () => {
+        expect(isValid).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(formData);
+      });
+
+      it("should submit the form when filled out entirely", () => {
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith("/api/policies", {
+            method: "POST",
+            body: JSON.stringify(formData),
+          });
+      });
+
+      it("should redirect the user to the created policy page", () => {
+        expect(router.push)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`/policies/${createdPolicy.id}`);
+      });
     });
 
-    it("should redirect the user to the created policy page", () => {
-      expect(router.push)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(`/policies/${createdPolicy.id}`);
+    describe("unsuccessful save", () => {
+      it("should show a validation error when a required field is not filled out", async () => {
+        isValid.mockReturnValue(false);
+        validationErrors.name = chance.string();
+        await userEvent.click(screen.getByText(/save policy/i));
+
+        expect(fetch).not.toHaveBeenCalled();
+        expect(router.push).not.toHaveBeenCalled();
+
+        rerender(<NewPolicy />);
+        expect(screen.getByText(validationErrors.name)).toBeInTheDocument();
+        userEvent.click(screen.getByLabelText(/policy name/i));
+        userEvent.tab();
+
+        expect(validateField).toHaveBeenCalledTimes(1);
+      });
+
+      it("should show an error when the call to create failed due to invalid rego code", async () => {
+        const expectedError = {
+          isValid: false,
+          errors: chance.n(chance.string, chance.d4()),
+        };
+        fetchResponse.ok = false;
+        fetchResponse.json.mockResolvedValue(expectedError);
+
+        await act(async () => {
+          await userEvent.click(screen.getByText(/save policy/i));
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(
+            "Failed to create the policy due to invalid Rego code. See error(s) below for details."
+          );
+
+        expectedError.errors.forEach((error) => {
+          expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
+        });
+      });
+
+      it("should show an error when the call to create failed", async () => {
+        fetchResponse.ok = false;
+        await act(async () => {
+          await userEvent.click(screen.getByText(/save policy/i));
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith("Failed to create the policy.");
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(router.push).not.toHaveBeenCalled();
+      });
     });
   });
 
-  describe("unsuccessful save", () => {
-    it("should show a validation error when a required field is not filled out", async () => {
-      isValid.mockReturnValue(false);
-      validationErrors.name = chance.string();
-      await userEvent.click(screen.getByText(/save policy/i));
+  describe("policy validation", () => {
+    let validationResponse, regoContent;
 
-      expect(fetch).not.toHaveBeenCalled();
-      expect(router.push).not.toHaveBeenCalled();
-
-      rerender(<NewPolicy />);
-      expect(screen.getByText(validationErrors.name)).toBeInTheDocument();
-      userEvent.click(screen.getByLabelText(/policy name/i));
-      userEvent.tab();
-
-      expect(validateField).toHaveBeenCalledTimes(1);
+    beforeEach(() => {
+      regoContent = chance.string();
+      validationResponse = {
+        isValid: false,
+        errors: chance.n(chance.string, chance.d4()),
+      };
+      fetchResponse.json.mockResolvedValue(validationResponse);
     });
 
-    it("should show an error when the call to create failed", async () => {
-      fetchResponse.ok = false;
-      await userEvent.click(screen.getByText(/save policy/i));
+    it("should render a button to validate the policy", () => {
+      expect(screen.getByText(/validate policy/i)).toBeInTheDocument();
+    });
 
-      // TODO: add test for invalid rego when implemented
+    it("should call to validate the policy code", async () => {
+      userEvent.type(screen.getByLabelText(/rego policy code/i), regoContent);
+      await act(async () => {
+        await userEvent.click(screen.getByText(/validate policy/i));
+      });
 
-      expect(fetch).toHaveBeenCalledTimes(1);
-      expect(router.push).not.toHaveBeenCalled();
+      expect(fetch)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("/api/policies/validate", {
+          method: "POST",
+          body: JSON.stringify({
+            policy: regoContent,
+          }),
+        });
+    });
+
+    it("should show the validation results after validating the policy", async () => {
+      userEvent.type(screen.getByLabelText(/rego policy code/i), regoContent);
+      await act(async () => {
+        await userEvent.click(screen.getByText(/validate policy/i));
+      });
+
+      expect(
+        screen.getByText(/this policy failed validation/i)
+      ).toBeInTheDocument();
     });
   });
 });

@@ -20,6 +20,7 @@ import { ResourcesProvider } from "providers/resources";
 import { PoliciesProvider } from "providers/policies";
 import { ThemeProvider } from "providers/theme";
 import { LIGHT_THEME } from "utils/theme-utils";
+import { ToastContainer } from "react-toastify";
 
 const render = (
   Component,
@@ -41,6 +42,7 @@ const render = (
         <PoliciesProvider
           value={{ state: policyState, dispatch: policyDispatch }}
         >
+          <ToastContainer />
           {children}
         </PoliciesProvider>
       </ResourcesProvider>

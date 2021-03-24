@@ -27,6 +27,8 @@ import Fire from "components/icons/Fire";
 import Flag from "components/icons/Flag";
 import ExternalLink from "components/icons/ExternalLink";
 import XCircle from "components/icons/XCircle";
+import BadgeCheck from "components/icons/BadgeCheck";
+import Exclamation from "components/icons/Exclamation";
 
 const SEARCH = "Search";
 const COG = "Cog";
@@ -38,6 +40,8 @@ const FIRE = "FIRE";
 const FLAG = "FLAG";
 const EXTERNAL_LINK = "EXTERNAL_LINK";
 const X_CIRCLE = "X_CIRCLE";
+const BADGE_CHECK = "BADGE_CHECK";
+const EXCLAMATION = "EXCLAMATION";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
@@ -54,6 +58,8 @@ export const ICON_COMPONENTS = {
   [CHEVRON_DOUBLE_RIGHT]: ChevronDoubleRight,
   [FIRE]: Fire,
   [FLAG]: Flag,
+  [BADGE_CHECK]: BadgeCheck,
+  [EXCLAMATION]: Exclamation,
   [EXTERNAL_LINK]: ExternalLink,
   [X_CIRCLE]: XCircle,
 };
@@ -69,6 +75,8 @@ export const ICON_NAMES = {
   FLAG,
   EXTERNAL_LINK,
   X_CIRCLE,
+  BADGE_CHECK,
+  EXCLAMATION,
   LIATRIO,
   GITHUB,
   TWITTER,

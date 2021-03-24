@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-Cypress.Commands.add("searchForResource", (searchTerm) => {
-  cy.get("#resourceSearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
-});
+export const mockMappedPolicy = [
+  {
+    id: "12345678910",
+    name: "My Policy Name",
+    description: "This is a policy description",
+    regoContent: "RegoRegoRego",
+  },
+];
 
-Cypress.Commands.add("searchForPolicy", (searchTerm) => {
-  cy.get("#policySearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
-});
+export const mockFailedPolicyValidation = {
+  isValid: false,
+  errors: ["Invalid rego code"],
+};
 
-Cypress.Commands.add("mockRequest", (requestToMock, returnValue) => {
-  if (!Cypress.env("local_rode_api") === true) {
-    cy.intercept(requestToMock, returnValue);
-  }
-});
+export const mockSuccessPolicyValidation = {
+  isValid: true,
+  errors: null,
+};
