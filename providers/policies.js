@@ -22,6 +22,7 @@ const PolicyContext = createContext();
 
 const initialState = {
   searchTerm: "",
+  currentPolicy: null,
 };
 
 export const PoliciesProvider = ({ children }) => {

@@ -21,8 +21,16 @@ const setSearchTerm = (state, data) => {
   };
 };
 
+const setCurrentPolicy = (state, data) => {
+  return {
+    ...state,
+    currentPolicy: data,
+  };
+};
+
 const actionMap = {
   SET_SEARCH_TERM: setSearchTerm,
+  SET_CURRENT_POLICY: setCurrentPolicy,
 };
 
 export const policyReducer = (state, action) => {
@@ -33,4 +41,5 @@ export const policyReducer = (state, action) => {
 
 export const policyActions = {
   SET_SEARCH_TERM: "SET_SEARCH_TERM",
+  SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
 };

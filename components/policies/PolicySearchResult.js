@@ -25,6 +25,7 @@ const PolicySearchResult = ({ searchResult }) => {
   const router = useRouter();
 
   const onClick = () => {
+    // TODO: save policy in state when chosen
     router.push(`/policies/${encodeURIComponent(id)}`);
   };
 
