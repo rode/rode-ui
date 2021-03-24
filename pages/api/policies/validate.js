@@ -32,7 +32,7 @@ export default async (req, res) => {
   try {
     const policy = req.body;
 
-    const response = await fetch(`${rodeUrl}/v1alpha1/policies/validate`, {
+    const response = await fetch(`${rodeUrl}/v1alpha1/policies:validate`, {
       method: "POST",
       body: policy,
     });

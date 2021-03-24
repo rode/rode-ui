@@ -86,7 +86,7 @@ describe("/api/policies/validate", () => {
       expect(fetch)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(
-          "http://localhost:50052/v1alpha1/policies/validate",
+          "http://localhost:50052/v1alpha1/policies:validate",
           {
             body: request.body,
             method: "POST",
