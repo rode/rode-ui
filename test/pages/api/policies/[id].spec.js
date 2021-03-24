@@ -44,12 +44,15 @@ describe("/api/policies/[id]", () => {
 
     foundPolicy = {
       [chance.string()]: chance.string(),
-      id,
+      name: chance.string(),
+      description: chance.string(),
+      regoContent: chance.string(),
     };
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
+        id,
         policy: foundPolicy,
       }),
     };
@@ -104,9 +107,12 @@ describe("/api/policies/[id]", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(StatusCodes.OK);
 
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(foundPolicy);
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        id,
+        name: foundPolicy.name,
+        description: foundPolicy.description,
+        regoContent: foundPolicy.regoContent,
+      });
     });
 
     it("should return null when the policy is not found", async () => {

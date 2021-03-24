@@ -20,6 +20,8 @@ import { getRodeUrl } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["GET"];
 
+// TODO: implement UPDATE method
+
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
@@ -46,7 +48,12 @@ export default async (req, res) => {
     }
 
     const getPolicyResponse = await response.json();
-    const policy = getPolicyResponse.policy;
+    const policy = {
+      id,
+      name: getPolicyResponse.policy.name,
+      description: getPolicyResponse.policy.description,
+      regoContent: getPolicyResponse.policy.regoContent,
+    };
 
     res.status(StatusCodes.OK).json(policy);
   } catch (error) {

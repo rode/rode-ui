@@ -22,6 +22,7 @@ import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
+import Button from "components/Button";
 
 const Policy = () => {
   const router = useRouter();
@@ -30,6 +31,11 @@ const Policy = () => {
   const { id } = router.query;
 
   const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
+
+  const editPolicy = () => {
+    // TODO: save policy in state so we don't have to fetch again
+    router.push(`/policies/${id}/edit`);
+  };
 
   return (
     <div className={`${styles[theme]} ${styles.pageContainer}`}>
@@ -41,6 +47,7 @@ const Policy = () => {
               <div>
                 <p className={styles.policyName}>{data.name}</p>
                 <p className={styles.policyDescription}>{data.description}</p>
+                <Button label={"Edit Policy"} onClick={editPolicy} />
               </div>
               <div className={styles.regoContainer}>
                 <p>Rego Policy Code</p>
