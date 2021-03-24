@@ -36,7 +36,9 @@ const getFormValuesFromType = (type, id) => {
       verb: "create",
       submitButtonText: "Save Policy",
     };
-  } else if (type === "EDIT") {
+  }
+
+  if (type === "EDIT") {
     return {
       title: "Edit Policy",
       method: "UPDATE",

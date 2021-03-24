@@ -23,10 +23,13 @@ import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
+import { usePolicies } from "../../providers/policies";
+import { policyActions } from "../../reducers/policies";
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const {dispatch} = usePolicies();
 
   const { id } = router.query;
 
@@ -34,6 +37,11 @@ const Policy = () => {
 
   const editPolicy = () => {
     // TODO: save policy in state so we don't have to fetch again
+    console.log('dispatch', dispatch);
+    dispatch({
+      type: policyActions.SET_CURRENT_POLICY,
+      data: data
+    });
     router.push(`/policies/${id}/edit`);
   };
 

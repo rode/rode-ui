@@ -19,25 +19,35 @@ import { render, screen } from "test/testing-utils/renderer";
 import { useRouter } from "next/router";
 import { useFetch } from "hooks/useFetch";
 import Policy from "pages/policies/[id]";
+import userEvent from "@testing-library/user-event";
+import {usePolicies} from "providers/policies";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFetch");
+// jest.mock("providers/policies");
 
 describe("Policy Details", () => {
-  let router, policy, mockUseFetch, rerender;
+  let router, policy, mockUseFetch, rerender, dispatchMock;
 
   beforeEach(() => {
+    dispatchMock = jest.fn()
     router = {
       query: {
         id: chance.guid(),
       },
+      push: jest.fn()
     };
     policy = {
+      id: router.query.id,
       name: chance.string(),
       description: chance.string(),
       regoContent: chance.string(),
     };
+
+    // usePolicies.mockReturnValue({
+    //   dispatch: dispatchMock
+    // });
 
     mockUseFetch = {
       data: policy,
@@ -47,6 +57,7 @@ describe("Policy Details", () => {
     useRouter.mockReturnValue(router);
     const utils = render(<Policy />, {
       policyState: { searchTerm: chance.string() },
+      policyDispatch: dispatchMock
     });
     rerender = utils.rerender;
   });
@@ -82,6 +93,18 @@ describe("Policy Details", () => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
       expect(screen.getByText(policy.regoContent)).toBeInTheDocument();
+    });
+
+    it("should render a button to edit the policy", () => {
+      const renderedButton = screen.getByText('Edit Policy');
+      expect(renderedButton).toBeInTheDocument();
+      userEvent.click(renderedButton);
+
+      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: 'SET_CURRENT_POLICY',
+        data: policy
+      });
+      expect(router.push).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(`/policies/${policy.id}/edit`);
     });
   });
 
