@@ -33,7 +33,6 @@ export default async (req, res) => {
     try {
       const searchTerm = req.query.filter;
       let filter = {};
-      // TODO: change this filtering to...?
       if (searchTerm) {
         filter = {
           filter: `"policy.name".contains("${searchTerm}")`,

@@ -23,24 +23,23 @@ import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
-import { usePolicies } from "../../providers/policies";
-import { policyActions } from "../../reducers/policies";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const {dispatch} = usePolicies();
+  const { dispatch } = usePolicies();
 
   const { id } = router.query;
 
   const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
 
   const editPolicy = () => {
-    // TODO: save policy in state so we don't have to fetch again
-    console.log('dispatch', dispatch);
+    // TODO: does it make sense to do this with swr?
     dispatch({
       type: policyActions.SET_CURRENT_POLICY,
-      data: data
+      data: data,
     });
     router.push(`/policies/${id}/edit`);
   };

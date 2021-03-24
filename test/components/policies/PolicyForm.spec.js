@@ -31,7 +31,8 @@ describe("Policy Form", () => {
     createdPolicy,
     isValid,
     validationErrors,
-    validateField;
+    validateField,
+    rerender;
 
   beforeEach(() => {
     router = {
@@ -57,11 +58,26 @@ describe("Policy Form", () => {
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    render(<PolicyForm type={chance.pickone(["CREATE", "EDIT"])} />);
+    const utils = render(
+      <PolicyForm type={chance.pickone(["CREATE", "EDIT"])} />
+    );
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  it("should render the correct title for creating a policy", () => {
+    rerender(<PolicyForm type={"CREATE"} />);
+
+    expect(screen.getByText("Create New Policy")).toBeInTheDocument();
+  });
+
+  it("should render the correct title for editing a policy", () => {
+    rerender(<PolicyForm type={"EDIT"} />);
+
+    expect(screen.getByText("Edit Policy")).toBeInTheDocument();
   });
 
   it("should render the policy name input", () => {

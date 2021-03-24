@@ -16,27 +16,25 @@
 
 import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
+import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFetch } from "hooks/useFetch";
 import Policy from "pages/policies/[id]";
-import userEvent from "@testing-library/user-event";
-import {usePolicies} from "providers/policies";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFetch");
-// jest.mock("providers/policies");
 
 describe("Policy Details", () => {
   let router, policy, mockUseFetch, rerender, dispatchMock;
 
   beforeEach(() => {
-    dispatchMock = jest.fn()
+    dispatchMock = jest.fn();
     router = {
       query: {
         id: chance.guid(),
       },
-      push: jest.fn()
+      push: jest.fn(),
     };
     policy = {
       id: router.query.id,
@@ -45,10 +43,6 @@ describe("Policy Details", () => {
       regoContent: chance.string(),
     };
 
-    // usePolicies.mockReturnValue({
-    //   dispatch: dispatchMock
-    // });
-
     mockUseFetch = {
       data: policy,
       loading: false,
@@ -56,8 +50,8 @@ describe("Policy Details", () => {
     useFetch.mockReturnValue(mockUseFetch);
     useRouter.mockReturnValue(router);
     const utils = render(<Policy />, {
-      policyState: { searchTerm: chance.string() },
-      policyDispatch: dispatchMock
+      policyState: { searchTerm: "test search term" },
+      policyDispatch: dispatchMock,
     });
     rerender = utils.rerender;
   });
@@ -96,15 +90,17 @@ describe("Policy Details", () => {
     });
 
     it("should render a button to edit the policy", () => {
-      const renderedButton = screen.getByText('Edit Policy');
+      const renderedButton = screen.getByText("Edit Policy");
       expect(renderedButton).toBeInTheDocument();
       userEvent.click(renderedButton);
 
-      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        type: 'SET_CURRENT_POLICY',
-        data: policy
+      expect(dispatchMock).toHaveBeenCalledWith({
+        type: "SET_CURRENT_POLICY",
+        data: policy,
       });
-      expect(router.push).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(`/policies/${policy.id}/edit`);
+      expect(router.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies/${policy.id}/edit`);
     });
   });
 

@@ -25,10 +25,20 @@ const initialState = {
   currentPolicy: null,
 };
 
-export const PoliciesProvider = ({ children }) => {
+export const PoliciesProvider = ({ value, children }) => {
   const [state, dispatch] = useReducer(policyReducer, initialState);
 
   const contextValue = useMemo(() => {
+    if (value) {
+      return {
+        state: {
+          ...state,
+          ...value.state,
+        },
+        dispatch: value.dispatch,
+      };
+    }
+
     return { state, dispatch };
   }, [state, dispatch]);
 
@@ -40,6 +50,7 @@ export const PoliciesProvider = ({ children }) => {
 };
 
 PoliciesProvider.propTypes = {
+  value: PropTypes.any,
   children: PropTypes.node.isRequired,
 };
 

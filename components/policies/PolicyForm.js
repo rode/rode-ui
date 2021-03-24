@@ -38,15 +38,13 @@ const getFormValuesFromType = (type, id) => {
     };
   }
 
-  if (type === "EDIT") {
-    return {
-      title: "Edit Policy",
-      method: "UPDATE",
-      endpoint: `/api/policies/${id}`,
-      verb: "update",
-      submitButtonText: "Update Policy",
-    };
-  }
+  return {
+    title: "Edit Policy",
+    method: "PATCH",
+    endpoint: `/api/policies/${id}`,
+    verb: "update",
+    submitButtonText: "Update Policy",
+  };
 };
 
 const PolicyForm = ({ type, defaultValues = {} }) => {
@@ -193,6 +191,7 @@ const PolicyForm = ({ type, defaultValues = {} }) => {
       <div className={styles.actionButtons}>
         <Button label={submitButtonText} type={"submit"} loading={loading} />
         <Button
+          type={"button"}
           label={"Cancel"}
           buttonType={"text"}
           onClick={router.back}

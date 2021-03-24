@@ -82,10 +82,16 @@ describe("Edit Policy", () => {
     jest.resetAllMocks();
   });
 
-  it("should fetch the policy data", () => {
+  it("should fetch the policy data for the id in the url", () => {
     expect(useFetch)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith(`/api/policies/${policy.id}`);
+  });
+
+  it("should not fetch the data if no id is present", () => {
+    router.query.id = null;
+    rerender(<EditPolicy />);
+    expect(useFetch).toHaveBeenCalledWith(null);
   });
 
   it("should render a loading indicator while the data is being fetched", () => {
@@ -126,7 +132,7 @@ describe("Edit Policy", () => {
       expect(fetch)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/api/policies/${policy.id}`, {
-          method: "UPDATE",
+          method: "PATCH",
           body: JSON.stringify({
             name: policy.name,
             description: policy.description,
