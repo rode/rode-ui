@@ -109,6 +109,52 @@ describe("/api/policies/validate", () => {
   });
 
   describe("failed calls to Rode", () => {
+    it("should return a bad request status when rego fails to compile", async () => {
+      const details = [
+        {
+          errors: chance.string(),
+        },
+      ];
+      rodeResponse.ok = false;
+      rodeResponse.json.mockResolvedValue({
+        details,
+        message: "failed to compile the provided policy",
+      });
+
+      await handler(request, response);
+
+      expect(response.status)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        errors: details[0].errors,
+        isValid: false,
+      });
+    });
+
+    it("should return a bad request status when rego fails to parse", async () => {
+      const details = [
+        {
+          errors: chance.string(),
+        },
+      ];
+      rodeResponse.ok = false;
+      rodeResponse.json.mockResolvedValue({
+        details,
+        message: "failed to parse the provided policy",
+      });
+
+      await handler(request, response);
+
+      expect(response.status)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        errors: details[0].errors,
+        isValid: false,
+      });
+    });
+
     it("should return an internal server error on a non-200 response from Rode", async () => {
       rodeResponse.ok = false;
 

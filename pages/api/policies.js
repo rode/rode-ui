@@ -82,7 +82,10 @@ export default async (req, res) => {
 
         const parsedResponse = await response.json();
 
-        if (parsedResponse?.message?.includes("failed to compile")) {
+        if (
+          parsedResponse?.message?.includes("failed to compile") ||
+          parsedResponse?.message?.includes("failed to parse")
+        ) {
           const validationError = {
             errors: parsedResponse.details[0].errors,
             isValid: false,
