@@ -19,13 +19,19 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import SearchResult from "components/shared/search/SearchResult";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const PolicySearchResult = ({ searchResult }) => {
   const { name, description, id } = searchResult;
   const router = useRouter();
+  const { dispatch } = usePolicies();
 
   const onClick = () => {
-    // TODO: save policy in state when chosen
+    dispatch({
+      type: policyActions.SET_CURRENT_POLICY,
+      data: searchResult,
+    });
     router.push(`/policies/${encodeURIComponent(id)}`);
   };
 

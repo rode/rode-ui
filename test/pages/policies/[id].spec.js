@@ -18,15 +18,15 @@ import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import { useFetch } from "hooks/useFetch";
+import { usePolicy } from "hooks/usePolicy";
 import Policy from "pages/policies/[id]";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePolicy");
 
 describe("Policy Details", () => {
-  let router, policy, mockUseFetch, rerender, dispatchMock;
+  let router, policy, mockUsePolicy, rerender, dispatchMock;
 
   beforeEach(() => {
     dispatchMock = jest.fn();
@@ -43,11 +43,11 @@ describe("Policy Details", () => {
       regoContent: chance.string(),
     };
 
-    mockUseFetch = {
-      data: policy,
+    mockUsePolicy = {
+      policy,
       loading: false,
     };
-    useFetch.mockReturnValue(mockUseFetch);
+    usePolicy.mockReturnValue(mockUsePolicy);
     useRouter.mockReturnValue(router);
     const utils = render(<Policy />, {
       policyState: { searchTerm: "test search term" },
@@ -61,21 +61,14 @@ describe("Policy Details", () => {
   });
 
   describe("fetching the policy", () => {
-    it("should not call when there is no id present", () => {
-      router.query.id = null;
-
-      rerender(<Policy />);
-      expect(useFetch).toHaveBeenCalledWith(null);
-    });
-
-    it("should call to fetch the policy when an id is present", () => {
-      expect(useFetch)
+    it("should call to get the policy", () => {
+      expect(usePolicy)
         .toHaveBeenCalledTimes(1)
-        .toHaveBeenLastCalledWith(`/api/policies/${router.query.id}`);
+        .toHaveBeenLastCalledWith(router.query.id);
     });
 
     it("should render the loading indicator", () => {
-      mockUseFetch.loading = true;
+      mockUsePolicy.loading = true;
 
       rerender(<Policy />);
       expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
@@ -94,10 +87,6 @@ describe("Policy Details", () => {
       expect(renderedButton).toBeInTheDocument();
       userEvent.click(renderedButton);
 
-      expect(dispatchMock).toHaveBeenCalledWith({
-        type: "SET_CURRENT_POLICY",
-        data: policy,
-      });
       expect(router.push)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/policies/${policy.id}/edit`);
@@ -106,7 +95,7 @@ describe("Policy Details", () => {
 
   describe("policy was not found", () => {
     beforeEach(() => {
-      mockUseFetch.data = null;
+      mockUsePolicy.policy = null;
       rerender(<Policy />);
     });
 

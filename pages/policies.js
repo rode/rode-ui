@@ -37,6 +37,8 @@ const createSearchFilter = (query) => {
   return null;
 };
 
+// TODO: handle flashing of not found on this and resource search page
+
 const Policies = () => {
   const { theme } = useTheme();
   const { state, dispatch } = usePolicies();

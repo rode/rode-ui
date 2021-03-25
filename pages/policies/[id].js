@@ -17,30 +17,22 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { usePolicy } from "hooks/usePolicy";
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const { dispatch } = usePolicies();
 
   const { id } = router.query;
 
-  const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
+  const { policy, loading } = usePolicy(id);
 
   const editPolicy = () => {
-    // TODO: does it make sense to do this with swr?
-    dispatch({
-      type: policyActions.SET_CURRENT_POLICY,
-      data: data,
-    });
     router.push(`/policies/${id}/edit`);
   };
 
@@ -49,17 +41,17 @@ const Policy = () => {
       <PolicyBreadcrumbs />
       <div className={styles.detailsContainer}>
         <Loading loading={loading}>
-          {data ? (
+          {policy ? (
             <>
               <div>
-                <p className={styles.policyName}>{data.name}</p>
-                <p className={styles.policyDescription}>{data.description}</p>
+                <p className={styles.policyName}>{policy.name}</p>
+                <p className={styles.policyDescription}>{policy.description}</p>
                 <Button label={"Edit Policy"} onClick={editPolicy} />
               </div>
               <div className={styles.regoContainer}>
                 <p>Rego Policy Code</p>
                 <pre>
-                  <code>{data.regoContent}</code>
+                  <code>{policy.regoContent}</code>
                 </pre>
               </div>
             </>

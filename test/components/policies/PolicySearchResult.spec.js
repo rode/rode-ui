@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { useRouter } from "next/router";
@@ -23,19 +23,23 @@ import { useRouter } from "next/router";
 jest.mock("next/router");
 
 describe("PolicySearchResult", () => {
-  let searchResult, pushMock;
+  let searchResult, pushMock, dispatchMock;
 
   beforeEach(() => {
     searchResult = {
       name: chance.string(),
       description: chance.sentence(),
       id: chance.guid(),
+      regoContent: chance.string(),
     };
     pushMock = jest.fn();
+    dispatchMock = jest.fn();
     useRouter.mockReturnValue({
       push: pushMock,
     });
-    render(<PolicySearchResult searchResult={searchResult} />);
+    render(<PolicySearchResult searchResult={searchResult} />, {
+      policyDispatch: dispatchMock,
+    });
   });
 
   it("should render the policy details", () => {
@@ -53,6 +57,10 @@ describe("PolicySearchResult", () => {
     expect(renderedButton).toBeInTheDocument();
 
     userEvent.click(renderedButton);
+    expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+      type: "SET_CURRENT_POLICY",
+      data: searchResult,
+    });
     expect(pushMock).toHaveBeenCalledWith(
       `/policies/${encodeURIComponent(searchResult.id)}`
     );
