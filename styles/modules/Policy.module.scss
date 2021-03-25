@@ -150,16 +150,35 @@
 
 .detailsContainer {
   min-height: fit-content;
-  margin-bottom: 2rem;
+  margin: 1rem auto 2rem;
   padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.detailsHeader {
+  display: flex;
+  flex-direction: column;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .policyName {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+.policyDescription {
+  margin-bottom: 0.5rem;
+
+  @include tabletAndLarger {
+    max-width: 90%;
+  }
 }
 
 .regoContainer {

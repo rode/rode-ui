@@ -43,9 +43,13 @@ const Policy = () => {
         <Loading loading={loading}>
           {policy ? (
             <>
-              <div>
-                <p className={styles.policyName}>{policy.name}</p>
-                <p className={styles.policyDescription}>{policy.description}</p>
+              <div className={styles.detailsHeader}>
+                <div>
+                  <p className={styles.policyName}>{policy.name}</p>
+                  <p className={styles.policyDescription}>
+                    {policy.description}
+                  </p>
+                </div>
                 <Button label={"Edit Policy"} onClick={editPolicy} />
               </div>
               <div className={styles.regoContainer}>
