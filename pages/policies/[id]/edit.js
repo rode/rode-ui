@@ -15,7 +15,14 @@ const EditPolicy = () => {
   return (
     <Loading loading={loading}>
       {policy ? (
-        <PolicyForm type={"EDIT"} defaultValues={policy} />
+        <PolicyForm
+          title={"Edit Policy"}
+          method={"PATCH"}
+          endpoint={`/api/policies/${id}`}
+          verb={"update"}
+          submitButtonText={"Update Policy"}
+          defaultValues={policy}
+        />
       ) : (
         <div className={styles.notFound}>
           <h1 className={styles.notFound}>No policy found under {`"${id}"`}</h1>

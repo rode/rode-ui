@@ -29,27 +29,14 @@ import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 
-const getFormValuesFromType = (type, id) => {
-  if (type === "CREATE") {
-    return {
-      title: "Create New Policy",
-      method: "POST",
-      endpoint: "/api/policies",
-      verb: "create",
-      submitButtonText: "Save Policy",
-    };
-  }
-
-  return {
-    title: "Edit Policy",
-    method: "PATCH",
-    endpoint: `/api/policies/${id}`,
-    verb: "update",
-    submitButtonText: "Update Policy",
-  };
-};
-
-const PolicyForm = ({ type, defaultValues = {} }) => {
+const PolicyForm = ({
+  title,
+  method,
+  endpoint,
+  verb,
+  submitButtonText,
+  defaultValues = {},
+}) => {
   const { theme } = useTheme();
   const router = useRouter();
   const { dispatch } = usePolicies();
@@ -66,14 +53,6 @@ const PolicyForm = ({ type, defaultValues = {} }) => {
   );
 
   const { isValid, validateField, errors } = useFormValidation(schema);
-
-  const {
-    title,
-    endpoint,
-    method,
-    verb,
-    submitButtonText,
-  } = getFormValuesFromType(type, defaultValues.id);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -209,7 +188,11 @@ const PolicyForm = ({ type, defaultValues = {} }) => {
 };
 
 PolicyForm.propTypes = {
-  type: PropTypes.oneOf(["CREATE", "EDIT"]),
+  title: PropTypes.string.isRequired,
+  method: PropTypes.oneOf(["POST", "PATCH"]).isRequired,
+  endpoint: PropTypes.string.isRequired,
+  verb: PropTypes.string.isRequired,
+  submitButtonText: PropTypes.string.isRequired,
   defaultValues: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,

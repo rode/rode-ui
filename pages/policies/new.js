@@ -17,7 +17,15 @@ import React from "react";
 import PolicyForm from "components/policies/PolicyForm";
 
 const NewPolicy = () => {
-  return <PolicyForm type={"CREATE"} />;
+  return (
+    <PolicyForm
+      title={"Create New Policy"}
+      method={"POST"}
+      endpoint={"/api/policies"}
+      verb={"create"}
+      submitButtonText={"Save Policy"}
+    />
+  );
 };
 
 export default NewPolicy;

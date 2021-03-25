@@ -32,9 +32,16 @@ describe("Policy Form", () => {
     isValid,
     validationErrors,
     validateField,
-    rerender;
+    formProps;
 
   beforeEach(() => {
+    formProps = {
+      title: chance.string(),
+      method: chance.pickone(["POST", "PATCH"]),
+      endpoint: chance.url(),
+      verb: chance.word(),
+      submitButtonText: chance.word(),
+    };
     router = {
       back: jest.fn(),
       push: jest.fn().mockResolvedValue({}),
@@ -58,26 +65,15 @@ describe("Policy Form", () => {
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    const utils = render(
-      <PolicyForm type={chance.pickone(["CREATE", "EDIT"])} />
-    );
-    rerender = utils.rerender;
+    render(<PolicyForm {...formProps} />);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should render the correct title for creating a policy", () => {
-    rerender(<PolicyForm type={"CREATE"} />);
-
-    expect(screen.getByText("Create New Policy")).toBeInTheDocument();
-  });
-
-  it("should render the correct title for editing a policy", () => {
-    rerender(<PolicyForm type={"EDIT"} />);
-
-    expect(screen.getByText("Edit Policy")).toBeInTheDocument();
+  it("should render the title for the form", () => {
+    expect(screen.getByText(formProps.title)).toBeInTheDocument();
   });
 
   it("should render the policy name input", () => {
