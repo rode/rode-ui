@@ -19,9 +19,9 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ThemeComponent from "test/testing-utils/hook-components/useThemeComponent";
 import { ThemeProvider } from "providers/theme";
-import { isServerSide } from "utils/theme-utils";
+import { isServerSide } from "utils/shared-utils";
 
-jest.mock("utils/theme-utils");
+jest.mock("utils/shared-utils");
 
 describe("theme provider", () => {
   let rerender;

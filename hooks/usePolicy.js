@@ -2,9 +2,7 @@ import React from "react";
 import { useFetch } from "./useFetch";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import { isServerSide } from "utils/theme-utils";
-
-// TODO: test this
+import { isServerSide } from "utils/shared-utils";
 
 export const usePolicy = (policyId) => {
   const [policy, setPolicy] = React.useState(null);

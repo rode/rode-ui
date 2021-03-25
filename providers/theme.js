@@ -16,8 +16,8 @@
 
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { LIGHT_THEME, DARK_THEME, isServerSide } from "utils/theme-utils";
-
+import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
+import { isServerSide } from "utils/shared-utils";
 const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
 
 const ThemeContext = React.createContext({
