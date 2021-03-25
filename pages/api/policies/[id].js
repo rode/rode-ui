@@ -75,6 +75,21 @@ export default async (req, res) => {
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
+
+        const parsedResponse = await response.json();
+
+        if (
+          parsedResponse?.message?.includes("failed to compile") ||
+          parsedResponse?.message?.includes("failed to parse")
+        ) {
+          const validationError = {
+            errors: parsedResponse.details[0].errors,
+            isValid: false,
+          };
+
+          return res.status(StatusCodes.BAD_REQUEST).json(validationError);
+        }
+
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
