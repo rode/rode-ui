@@ -21,13 +21,13 @@ import EditPolicy from "pages/policies/[id]/edit";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
-import { useFetch } from "hooks/useFetch";
+import { usePolicy } from "hooks/usePolicy";
 import { showError } from "utils/toast-utils";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePolicy");
 
 describe("Edit Policy", () => {
   let router,
@@ -36,7 +36,7 @@ describe("Edit Policy", () => {
     isValid,
     validationErrors,
     validateField,
-    mockUseFetch,
+    mockUsePolicy,
     rerender;
 
   beforeEach(() => {
@@ -66,11 +66,11 @@ describe("Edit Policy", () => {
       errors: validationErrors,
       validateField,
     });
-    mockUseFetch = {
-      data: policy,
+    mockUsePolicy = {
+      policy,
       loading: false,
     };
-    useFetch.mockReturnValue(mockUseFetch);
+    usePolicy.mockReturnValue(mockUsePolicy);
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
@@ -83,21 +83,20 @@ describe("Edit Policy", () => {
   });
 
   it("should fetch the policy data for the id in the url", () => {
-    expect(useFetch)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith(`/api/policies/${policy.id}`);
-  });
-
-  it("should not fetch the data if no id is present", () => {
-    router.query.id = null;
-    rerender(<EditPolicy />);
-    expect(useFetch).toHaveBeenCalledWith(null);
+    expect(usePolicy).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(policy.id);
   });
 
   it("should render a loading indicator while the data is being fetched", () => {
-    mockUseFetch.loading = true;
+    mockUsePolicy.loading = true;
     rerender(<EditPolicy />);
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+  });
+
+  it("should render a not found message if the policy does not exist", () => {
+    mockUsePolicy.policy = null;
+    rerender(<EditPolicy />);
+
+    expect(screen.getByText(/no policy found under/i)).toBeInTheDocument();
   });
 
   it("should prefill the inputs when the policy is loaded", () => {

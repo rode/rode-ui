@@ -1,19 +1,29 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useFetch } from "hooks/useFetch";
 import PolicyForm from "components/policies/PolicyForm";
 import Loading from "components/Loading";
+import { usePolicy } from "hooks/usePolicy";
+import styles from "styles/modules/Policy.module.scss";
+import Link from "next/link";
 
-// TODO: add some state checks in here to avoid pulling policy if it already exists locally??? does this make sense with SWR?
 const EditPolicy = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
+  const { policy, loading } = usePolicy(id);
 
   return (
     <Loading loading={loading}>
-      <PolicyForm type={"EDIT"} defaultValues={data} />
+      {policy ? (
+        <PolicyForm type={"EDIT"} defaultValues={policy} />
+      ) : (
+        <div className={styles.notFound}>
+          <h1 className={styles.notFound}>No policy found under {`"${id}"`}</h1>
+          <p>
+            Try <Link href={"/policies"}>searching for a policy</Link>.
+          </p>
+        </div>
+      )}
     </Loading>
   );
 };
