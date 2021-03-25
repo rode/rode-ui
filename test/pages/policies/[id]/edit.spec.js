@@ -37,6 +37,7 @@ describe("Edit Policy", () => {
     validationErrors,
     validateField,
     mockUsePolicy,
+    dispatchMock,
     rerender;
 
   beforeEach(() => {
@@ -54,6 +55,7 @@ describe("Edit Policy", () => {
       description: chance.sentence(),
       regoContent: chance.string(),
     };
+    dispatchMock = jest.fn();
     fetchResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue(policy),
@@ -74,7 +76,7 @@ describe("Edit Policy", () => {
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    const utils = render(<EditPolicy />);
+    const utils = render(<EditPolicy />, { policyDispatch: dispatchMock });
     rerender = utils.rerender;
   });
 
@@ -138,6 +140,13 @@ describe("Edit Policy", () => {
             regoContent: policy.regoContent,
           }),
         });
+    });
+
+    it("should save the updated policy in state", () => {
+      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: "SET_CURRENT_POLICY",
+        data: policy,
+      });
     });
 
     it("should redirect the user to the updated policy page", () => {

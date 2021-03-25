@@ -26,6 +26,8 @@ import { schema } from "schemas/policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
 import { showError } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const getFormValuesFromType = (type, id) => {
   if (type === "CREATE") {
@@ -50,6 +52,7 @@ const getFormValuesFromType = (type, id) => {
 const PolicyForm = ({ type, defaultValues = {} }) => {
   const { theme } = useTheme();
   const router = useRouter();
+  const { dispatch } = usePolicies();
 
   const [validationResults, setValidationResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -110,10 +113,13 @@ const PolicyForm = ({ type, defaultValues = {} }) => {
       return;
     }
 
-    // TODO: save policy in state so you don't have to pull it on the policy details screen
-    const { id } = await response.json();
+    const policy = await response.json();
 
-    router.push(`/policies/${id}`);
+    dispatch({
+      type: policyActions.SET_CURRENT_POLICY,
+      data: policy,
+    });
+    router.push(`/policies/${policy.id}`);
   };
 
   const onValidate = async (event) => {

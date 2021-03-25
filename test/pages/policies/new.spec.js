@@ -34,6 +34,7 @@ describe("New Policy", () => {
     isValid,
     validationErrors,
     validateField,
+    dispatchMock,
     rerender;
 
   beforeEach(() => {
@@ -49,6 +50,7 @@ describe("New Policy", () => {
       ok: true,
       json: jest.fn().mockResolvedValue(createdPolicy),
     };
+    dispatchMock = jest.fn();
     isValid = jest.fn().mockReturnValue(true);
     validateField = jest.fn().mockReturnValue({});
     validationErrors = {};
@@ -60,7 +62,7 @@ describe("New Policy", () => {
     useRouter.mockReturnValue(router);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    const utils = render(<NewPolicy />);
+    const utils = render(<NewPolicy />, { policyDispatch: dispatchMock });
     rerender = utils.rerender;
   });
 
@@ -109,6 +111,13 @@ describe("New Policy", () => {
           method: "POST",
           body: JSON.stringify(formData),
         });
+    });
+
+    it("should save the created policy in state", () => {
+      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: "SET_CURRENT_POLICY",
+        data: createdPolicy,
+      });
     });
 
     it("should redirect the user to the created policy page", () => {
