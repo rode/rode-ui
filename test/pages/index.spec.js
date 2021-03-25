@@ -24,7 +24,7 @@ import Home from "pages/index";
 jest.mock("next/router");
 
 describe("index", () => {
-  let searchTerm, pushMock, policyDispatch, resourceDispatch, rerender;
+  let searchTerm, pushMock, policyDispatch, resourceDispatch;
 
   beforeEach(() => {
     pushMock = jest.fn();
@@ -34,17 +34,6 @@ describe("index", () => {
     useRouter.mockReturnValue({
       push: pushMock,
     });
-    const utils = render(<Home />, {
-      resourceState: {
-        searchTerm: " ",
-      },
-      policyState: {
-        searchTerm,
-      },
-      policyDispatch,
-      resourceDispatch,
-    });
-    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -52,6 +41,16 @@ describe("index", () => {
   });
 
   it("should clear any saved search terms", () => {
+    render(<Home />, {
+      resourceState: {
+        searchTerm,
+      },
+      policyState: {
+        searchTerm,
+      },
+      policyDispatch,
+      resourceDispatch,
+    });
     expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
       type: "SET_SEARCH_TERM",
       data: "",
@@ -63,47 +62,70 @@ describe("index", () => {
     expect(screen.queryByText(searchTerm)).not.toBeInTheDocument();
   });
 
-  it("should render a card for resources", () => {
-    let renderedSearch = screen.getByLabelText(/search for a resource/i);
-    expect(renderedSearch).toBeInTheDocument();
+  describe("resource card", () => {
+    it("should render a card for resources and handle a valid search", () => {
+      render(<Home />, {
+        resourceState: {
+          searchTerm,
+        },
+      });
+      let renderedSearch = screen.getByLabelText(/search for a resource/i);
+      expect(renderedSearch).toBeInTheDocument();
 
-    let resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
+      const resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
 
-    userEvent.click(resourceSearchButton);
-    expect(pushMock).not.toHaveBeenCalled();
-
-    rerender(<Home />, {
-      resourceState: {
-        searchTerm,
-      },
-      policyState: {
-        searchTerm,
-      },
-      policyDispatch,
-      resourceDispatch,
+      userEvent.click(resourceSearchButton);
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
     });
 
-    console.log("searchTerm in test", searchTerm);
-    // TODO: figure out why this isn't working
-    // userEvent.type(renderedSearch, searchTerm);
-    // resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
+    it("should render a card for resources and handle an empty search", () => {
+      render(<Home />, {
+        resourceState: {
+          searchTerm: " ",
+        },
+      });
+      let renderedSearch = screen.getByLabelText(/search for a resource/i);
+      expect(renderedSearch).toBeInTheDocument();
 
-    // userEvent.click(resourceSearchButton);
-    // expect(pushMock)
-    //   .toHaveBeenCalledTimes(1)
-    //   .toHaveBeenCalledWith(`/resources?search=${searchTerm}`);
+      const resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
+
+      userEvent.click(resourceSearchButton);
+      expect(pushMock).not.toHaveBeenCalled();
+    });
   });
 
-  it("should render a card for policies", () => {
-    const renderedSearch = screen.getByLabelText(/search for a policy/i);
-    expect(renderedSearch).toBeInTheDocument();
+  describe("policy card", () => {
+    it("should render a card for policies and handle a valid search", () => {
+      render(<Home />, {
+        policyState: {
+          searchTerm,
+        },
+      });
+      const renderedSearch = screen.getByLabelText(/search for a policy/i);
+      expect(renderedSearch).toBeInTheDocument();
 
-    userEvent.type(renderedSearch, searchTerm);
+      const policySearchButton = screen.queryAllByTitle(/search/i)[1];
+      userEvent.click(policySearchButton);
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies?search=${searchTerm}`);
+    });
 
-    const policySearchButton = screen.queryAllByTitle(/search/i)[1];
-    userEvent.click(policySearchButton);
-    expect(pushMock)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith(`/policies?search=${searchTerm}`);
+    it("should render a card for policies and handle an empty search", () => {
+      render(<Home />, {
+        policyState: {
+          searchTerm: " ",
+        },
+      });
+      let renderedSearch = screen.getByLabelText(/search for a policy/i);
+      expect(renderedSearch).toBeInTheDocument();
+
+      const resourceSearchButton = screen.queryAllByTitle(/search/i)[1];
+
+      userEvent.click(resourceSearchButton);
+      expect(pushMock).not.toHaveBeenCalled();
+    });
   });
 });
