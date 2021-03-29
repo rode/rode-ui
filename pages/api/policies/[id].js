@@ -18,7 +18,7 @@ import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "pages/api/utils/api-utils";
 
-const ALLOWED_METHODS = ["GET", "PATCH"];
+const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
@@ -107,6 +107,32 @@ export default async (req, res) => {
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
       console.error("Error updating policy", error);
+
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+    }
+  }
+
+  if (req.method === "DELETE") {
+    try {
+      const { id } = req.query;
+
+      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      res.status(StatusCodes.OK).send(null);
+    } catch (error) {
+      console.error("Error deleting policy", error);
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
