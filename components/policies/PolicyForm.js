@@ -28,7 +28,7 @@ import { showError, showSuccess } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import Modal from "../Modal";
+import Modal from "components/Modal";
 
 const PolicyForm = ({
   title,
@@ -139,8 +139,14 @@ const PolicyForm = ({
 
   return (
     <>
-      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <p className={styles.confirmDeleteText}>Are you sure you want to delete this policy?</p>
+      <Modal
+        isVisible={showModal}
+        onClose={() => setShowModal(false)}
+        title={"Confirm Policy Deletion"}
+      >
+        <p className={styles.confirmDeleteText}>
+          Are you sure you want to delete this policy?
+        </p>
         <div className={styles.actionButtons}>
           <Button
             label={"Cancel"}

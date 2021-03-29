@@ -39,8 +39,18 @@ $PADDING: 0.5rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 3rem;
   overflow: auto;
+}
+
+.title {
+  text-align: center;
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+}
+
+.content {
+  padding: 3rem;
 }
 
 .closeButton {
@@ -58,7 +68,13 @@ $PADDING: 0.5rem;
   }
 
   .contentWrapper {
-    background-color: $DT_BACKGROUND_LIGHT
+    background-color: $DT_BACKGROUND_LIGHT;
+  }
+
+  .title {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    color: $DT_MAIN_TEXT;
+    box-shadow: $DT_BOX_SHADOW;
   }
 }
 
@@ -68,5 +84,11 @@ $PADDING: 0.5rem;
   }
   .contentWrapper {
     background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .title {
+    background-color: $LT_BACKGROUND_MEDIUM;
+    color: $LT_MAIN_TEXT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 }

@@ -15,14 +15,14 @@
  */
 
 import React from "react";
-import { render, screen, act } from "test/testing-utils/renderer";
+import { render, screen, act, within } from "test/testing-utils/renderer";
 
 import EditPolicy from "pages/policies/[id]/edit";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
 import { usePolicy } from "hooks/usePolicy";
-import { showError } from "utils/toast-utils";
+import { showError, showSuccess } from "utils/toast-utils";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -117,9 +117,126 @@ describe("Edit Policy", () => {
   it("should render a button to delete the policy", () => {
     const deleteButton = screen.getByText(/delete policy/i);
     expect(deleteButton).toBeInTheDocument();
+  });
 
-    userEvent.click(deleteButton);
-    // TODO: finish out the click event test
+  describe("deleting a policy", () => {
+    it("should show the modal to confirm deletion", () => {
+      const deleteButton = screen.getByText(/delete policy/i);
+      expect(deleteButton).toBeInTheDocument();
+
+      act(() => {
+        userEvent.click(deleteButton);
+      });
+
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      expect(renderedConfirmationModal).toBeInTheDocument();
+
+      expect(screen.getByText(/confirm policy deletion/i)).toBeInTheDocument();
+      expect(screen.getByText(/are you sure/i)).toBeInTheDocument();
+      expect(
+        within(renderedConfirmationModal).getByText(/cancel/i)
+      ).toBeInTheDocument();
+      expect(
+        within(renderedConfirmationModal).getByText(/delete policy/i)
+      ).toBeInTheDocument();
+    });
+
+    it("should allow the user to close out of the confirmation without taking action", () => {
+      const deleteButton = screen.getByText(/delete policy/i);
+
+      act(() => {
+        userEvent.click(deleteButton);
+      });
+
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const cancelButton = within(renderedConfirmationModal).getByLabelText(
+        /cancel/i
+      );
+      expect(cancelButton).toBeInTheDocument();
+
+      act(() => {
+        userEvent.click(cancelButton);
+      });
+
+      expect(renderedConfirmationModal).not.toBeInTheDocument();
+    });
+
+    it("should allow the user to close out of the confirmation by closing the modal", () => {
+      const deleteButton = screen.getByText(/delete policy/i);
+
+      act(() => {
+        userEvent.click(deleteButton);
+      });
+
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const modalCloseButton = within(renderedConfirmationModal).getByTitle(
+        /x circle/i
+      );
+      expect(modalCloseButton).toBeInTheDocument();
+
+      act(() => {
+        userEvent.click(modalCloseButton);
+      });
+
+      expect(renderedConfirmationModal).not.toBeInTheDocument();
+    });
+
+    it("should call to the correct endpoint when prompted to delete", () => {
+      act(() => {
+        userEvent.click(screen.getByText(/delete policy/i));
+      });
+
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const confirmDeleteButton = within(renderedConfirmationModal).getByText(
+        /delete policy/i
+      );
+      userEvent.click(confirmDeleteButton);
+      expect(fetch).toHaveBeenCalledWith(`/api/policies/${policy.id}`, {
+        method: "DELETE",
+      });
+    });
+
+    it("should show a success message and redirect when deletion was successful", async () => {
+      act(() => {
+        userEvent.click(screen.getByText(/delete policy/i));
+      });
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const confirmDeleteButton = within(renderedConfirmationModal).getByText(
+        /delete policy/i
+      );
+      await act(async () => {
+        await userEvent.click(confirmDeleteButton);
+      });
+
+      expect(showSuccess)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("Policy was successfully deleted.");
+      expect(router.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("/policies");
+    });
+
+    it("should show an error message when deletion failed to complete", async () => {
+      fetchResponse.ok = false;
+
+      act(() => {
+        userEvent.click(screen.getByText(/delete policy/i));
+      });
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const confirmDeleteButton = within(renderedConfirmationModal).getByText(
+        /delete policy/i
+      );
+      await act(async () => {
+        await userEvent.click(confirmDeleteButton);
+      });
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(
+          "An error occurred while deleting the policy. Please try again."
+        );
+      expect(router.push).not.toHaveBeenCalled();
+    });
   });
 
   describe("successful save", () => {
