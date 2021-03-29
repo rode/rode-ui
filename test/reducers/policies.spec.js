@@ -51,4 +51,16 @@ describe("policies reducer", () => {
       searchTerm: data,
     });
   });
+
+  it("should update state when the action type is 'SET_CURRENT_POLICY'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_CURRENT_POLICY,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      currentPolicy: data,
+    });
+  });
 });

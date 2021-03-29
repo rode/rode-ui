@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
-};
+import { isServerSide } from "utils/shared-utils";
 
-const setCurrentPolicy = (state, data) => {
-  return {
-    ...state,
-    currentPolicy: data,
-  };
-};
+describe("shared utils", () => {
+  /* eslint-disable no-undef*/
+  describe("isServerSide", () => {
+    it("should return true when on the server", () => {
+      delete global.window;
+      expect(isServerSide()).toBe(true);
+    });
 
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_CURRENT_POLICY: setCurrentPolicy,
-};
-
-export const policyReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const policyActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
-};
+    it("should return false when on the client", () => {
+      global.window = chance.string();
+      expect(isServerSide()).toBe(false);
+    });
+  });
+  /* eslint-enable no-undef */
+});

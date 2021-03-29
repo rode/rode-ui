@@ -18,7 +18,7 @@ import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "pages/api/utils/api-utils";
 
-const ALLOWED_METHODS = ["GET"];
+const ALLOWED_METHODS = ["GET", "PATCH"];
 
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
@@ -29,31 +29,88 @@ export default async (req, res) => {
 
   const rodeUrl = getRodeUrl();
 
-  try {
-    const { id } = req.query;
+  if (req.method === "GET") {
+    try {
+      const { id } = req.query;
 
-    const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`);
+      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`);
 
-    if (response.status === StatusCodes.NOT_FOUND) {
-      return res.status(StatusCodes.OK).send(null);
-    }
+      if (response.status === StatusCodes.NOT_FOUND) {
+        return res.status(StatusCodes.OK).send(null);
+      }
 
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      const getPolicyResponse = await response.json();
+      const policy = {
+        id,
+        name: getPolicyResponse.policy.name,
+        description: getPolicyResponse.policy.description,
+        regoContent: getPolicyResponse.policy.regoContent,
+      };
+
+      res.status(StatusCodes.OK).json(policy);
+    } catch (error) {
+      console.error("Error getting policy", error);
+
+      res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
+  }
 
-    const getPolicyResponse = await response.json();
-    const policy = getPolicyResponse.policy;
+  if (req.method === "PATCH") {
+    try {
+      const { id } = req.query;
 
-    res.status(StatusCodes.OK).json(policy);
-  } catch (error) {
-    console.error("Error getting policy", error);
+      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`, {
+        method: "PATCH",
+        body: req.body,
+      });
 
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+
+        const parsedResponse = await response.json();
+
+        if (
+          parsedResponse?.message?.includes("failed to compile") ||
+          parsedResponse?.message?.includes("failed to parse")
+        ) {
+          const validationError = {
+            errors: parsedResponse.details[0].errors,
+            isValid: false,
+          };
+
+          return res.status(StatusCodes.BAD_REQUEST).json(validationError);
+        }
+
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      const updatePolicyResponse = await response.json();
+
+      const policy = {
+        id,
+        name: updatePolicyResponse.policy.name,
+        description: updatePolicyResponse.policy.description,
+        regoContent: updatePolicyResponse.policy.regoContent,
+      };
+
+      res.status(StatusCodes.OK).json(policy);
+    } catch (error) {
+      console.error("Error updating policy", error);
+
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+    }
   }
 };

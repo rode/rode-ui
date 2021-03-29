@@ -43,13 +43,15 @@ describe("/api/policies/[id]", () => {
     };
 
     foundPolicy = {
-      [chance.string()]: chance.string(),
-      id,
+      name: chance.string(),
+      description: chance.string(),
+      regoContent: chance.string(),
     };
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
+        id,
         policy: foundPolicy,
       }),
     };
@@ -77,83 +79,222 @@ describe("/api/policies/[id]", () => {
     });
   });
 
-  describe("successful call to Rode", () => {
-    let rodeUrlEnv;
-
+  describe("GET", () => {
     beforeEach(() => {
-      rodeUrlEnv = process.env.RODE_URL;
-      delete process.env.RODE_URL;
+      request.method = "GET";
     });
 
-    afterEach(() => {
-      process.env.RODE_URL = rodeUrlEnv;
+    describe("successful call to Rode", () => {
+      let rodeUrlEnv;
+
+      beforeEach(() => {
+        rodeUrlEnv = process.env.RODE_URL;
+        delete process.env.RODE_URL;
+      });
+
+      afterEach(() => {
+        process.env.RODE_URL = rodeUrlEnv;
+      });
+
+      it("should hit the Rode API", async () => {
+        await handler(request, response);
+
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
+      });
+
+      it("should return the found policy", async () => {
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          id,
+          name: foundPolicy.name,
+          description: foundPolicy.description,
+          regoContent: foundPolicy.regoContent,
+        });
+      });
+
+      it("should return null when the policy is not found", async () => {
+        rodeResponse.status = 404;
+
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+        expect(response.send)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(null);
+      });
     });
 
-    it("should hit the Rode API", async () => {
-      await handler(request, response);
+    describe("call to Rode fails", () => {
+      const assertInternalServerError = () => {
+        expect(response.status)
+          .toBeCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
 
-      expect(fetch)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
-    });
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      };
 
-    it("should return the found policy", async () => {
-      await handler(request, response);
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
 
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.OK);
+        await handler(request, response);
 
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(foundPolicy);
-    });
+        assertInternalServerError();
+      });
 
-    it("should return null when the policy is not found", async () => {
-      rodeResponse.status = 404;
+      it("should return an internal server error on a network or other fetch error", async () => {
+        fetch.mockRejectedValue(new Error());
 
-      await handler(request, response);
+        await handler(request, response);
 
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.OK);
-      expect(response.send).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error when JSON is invalid", async () => {
+        rodeResponse.json.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
     });
   });
 
-  describe("call to Rode fails", () => {
-    const assertInternalServerError = () => {
-      expect(response.status)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    };
-
-    it("should return an internal server error on a non-200 response from Rode", async () => {
-      rodeResponse.ok = false;
-
-      await handler(request, response);
-
-      assertInternalServerError();
+  describe("PATCH", () => {
+    beforeEach(() => {
+      request.method = "PATCH";
+      request.body = foundPolicy;
     });
 
-    it("should return an internal server error on a network or other fetch error", async () => {
-      fetch.mockRejectedValue(new Error());
+    describe("successful call to Rode", () => {
+      let rodeUrlEnv;
 
-      await handler(request, response);
+      beforeEach(() => {
+        rodeUrlEnv = process.env.RODE_URL;
+        delete process.env.RODE_URL;
+      });
 
-      assertInternalServerError();
+      afterEach(() => {
+        process.env.RODE_URL = rodeUrlEnv;
+      });
+
+      it("should hit the Rode API", async () => {
+        await handler(request, response);
+
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
+            method: "PATCH",
+            body: request.body,
+          });
+      });
+
+      it("should return the updated policy", async () => {
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          id,
+          name: foundPolicy.name,
+          description: foundPolicy.description,
+          regoContent: foundPolicy.regoContent,
+        });
+      });
     });
 
-    it("should return an internal server error when JSON is invalid", async () => {
-      rodeResponse.json.mockRejectedValue(new Error());
+    describe("call to Rode fails", () => {
+      const assertInternalServerError = () => {
+        expect(response.status)
+          .toBeCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
 
-      await handler(request, response);
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      };
 
-      assertInternalServerError();
+      it("should return a bad request status when rego fails to compile", async () => {
+        const details = [
+          {
+            errors: chance.string(),
+          },
+        ];
+        rodeResponse.ok = false;
+        rodeResponse.json.mockResolvedValue({
+          details,
+          message: "failed to compile the provided policy",
+        });
+
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          errors: details[0].errors,
+          isValid: false,
+        });
+      });
+
+      it("should return a bad request status when rego fails to parse", async () => {
+        const details = [
+          {
+            errors: chance.string(),
+          },
+        ];
+        rodeResponse.ok = false;
+        rodeResponse.json.mockResolvedValue({
+          details,
+          message: "failed to parse the provided policy",
+        });
+
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          errors: details[0].errors,
+          isValid: false,
+        });
+      });
+
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error on a network or other fetch error", async () => {
+        fetch.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error when JSON is invalid", async () => {
+        rodeResponse.json.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
     });
   });
 });

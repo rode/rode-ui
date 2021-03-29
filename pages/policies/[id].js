@@ -17,11 +17,12 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
+import Button from "components/Button";
+import { usePolicy } from "hooks/usePolicy";
 
 const Policy = () => {
   const router = useRouter();
@@ -29,23 +30,32 @@ const Policy = () => {
 
   const { id } = router.query;
 
-  const { data, loading } = useFetch(id ? `/api/policies/${id}` : null);
+  const { policy, loading } = usePolicy(id);
+
+  const editPolicy = () => {
+    router.push(`/policies/${id}/edit`);
+  };
 
   return (
     <div className={`${styles[theme]} ${styles.pageContainer}`}>
       <PolicyBreadcrumbs />
       <div className={styles.detailsContainer}>
         <Loading loading={loading}>
-          {data ? (
+          {policy ? (
             <>
-              <div>
-                <p className={styles.policyName}>{data.name}</p>
-                <p className={styles.policyDescription}>{data.description}</p>
+              <div className={styles.detailsHeader}>
+                <div className={styles.detailsHeaderTextContainer}>
+                  <p className={styles.policyName}>{policy.name}</p>
+                  <p className={styles.policyDescription}>
+                    {policy.description}
+                  </p>
+                </div>
+                <Button label={"Edit Policy"} onClick={editPolicy} />
               </div>
               <div className={styles.regoContainer}>
                 <p>Rego Policy Code</p>
                 <pre>
-                  <code>{data.regoContent}</code>
+                  <code>{policy.regoContent}</code>
                 </pre>
               </div>
             </>

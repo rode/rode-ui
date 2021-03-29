@@ -14,32 +14,23 @@
  * limitations under the License.
  */
 
-const setSearchTerm = (state, data) => {
-  return {
-    ...state,
-    searchTerm: data,
-  };
+import React from "react";
+import PropTypes from "prop-types";
+import Loading from "components/Loading";
+import { usePolicy } from "hooks/usePolicy";
+
+const PolicyComponent = ({ id }) => {
+  const { policy, loading } = usePolicy(id);
+
+  return (
+    <Loading loading={loading}>
+      <p>{policy?.name}</p>
+    </Loading>
+  );
 };
 
-const setCurrentPolicy = (state, data) => {
-  return {
-    ...state,
-    currentPolicy: data,
-  };
+PolicyComponent.propTypes = {
+  id: PropTypes.string,
 };
 
-const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
-  SET_CURRENT_POLICY: setCurrentPolicy,
-};
-
-export const policyReducer = (state, action) => {
-  const { type, data } = action;
-
-  return actionMap[type](state, data);
-};
-
-export const policyActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
-  SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
-};
+export default PolicyComponent;

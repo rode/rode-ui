@@ -25,10 +25,20 @@ const initialState = {
   occurrenceDetails: null,
 };
 
-export const ResourcesProvider = ({ children }) => {
+export const ResourcesProvider = ({ value, children }) => {
   const [state, dispatch] = useReducer(resourceReducer, initialState);
 
   const contextValue = useMemo(() => {
+    if (value) {
+      return {
+        state: {
+          ...state,
+          ...value.state,
+        },
+        dispatch: value.dispatch,
+      };
+    }
+
     return { state, dispatch };
   }, [state, dispatch]);
 
@@ -40,6 +50,7 @@ export const ResourcesProvider = ({ children }) => {
 };
 
 ResourcesProvider.propTypes = {
+  value: PropTypes.any,
   children: PropTypes.node.isRequired,
 };
 
