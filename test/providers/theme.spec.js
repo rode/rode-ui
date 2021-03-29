@@ -15,38 +15,46 @@
  */
 
 import React from "react";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, act } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import ThemeComponent from "test/testing-utils/hook-components/useThemeComponent";
-import { ThemeProvider } from "providers/theme";
 import { isServerSide } from "utils/shared-utils";
 
 jest.mock("utils/shared-utils");
 
 describe("theme provider", () => {
-  let rerender;
+  let rerender, originalLocalStorage, getItemMock, setItemMock;
 
   beforeEach(() => {
+    originalLocalStorage = window.localStorage;
+    delete window.localStorage;
+    getItemMock = jest.fn().mockReturnValue("lightTheme");
+    setItemMock = jest.fn().mockReturnThis();
+
+    window.localStorage = {
+      setItem: setItemMock,
+      getItem: getItemMock,
+    };
+
     isServerSide.mockReturnValue(false);
     jest.spyOn(React, "useEffect");
     jest.spyOn(React, "useLayoutEffect");
 
-    const utils = render(
-      <ThemeProvider>
-        <ThemeComponent />
-      </ThemeProvider>
-    );
+    act(() => {
+      const utils = render(<ThemeComponent />);
 
-    rerender = utils.rerender;
+      rerender = utils.rerender;
+    });
   });
 
   afterEach(() => {
+    window.localStorage = originalLocalStorage;
     jest.resetAllMocks();
-    cleanup();
   });
 
   it("should render the default theme", () => {
     expect(screen.getByText(/light/i)).toBeInTheDocument();
+    expect(getItemMock).toHaveBeenCalledWith("rode-ui-theme");
   });
 
   it("should toggle the theme when prompted", () => {
@@ -54,20 +62,18 @@ describe("theme provider", () => {
 
     userEvent.click(toggleButton);
     expect(screen.getByText(/dark/i)).toBeInTheDocument();
+    expect(setItemMock).toHaveBeenCalledWith("rode-ui-theme", "darkTheme");
 
     userEvent.click(toggleButton);
     expect(screen.getByText(/light/i)).toBeInTheDocument();
+    expect(setItemMock).toHaveBeenCalledWith("rode-ui-theme", "lightTheme");
   });
 
   it("should use the correct effect hook when on the server", () => {
     expect(React.useLayoutEffect).toHaveBeenCalled();
 
     isServerSide.mockReturnValue(true);
-    rerender(
-      <ThemeProvider>
-        <ThemeComponent />
-      </ThemeProvider>
-    );
+    rerender(<ThemeComponent />);
 
     expect(React.useEffect).toHaveBeenCalled();
   });

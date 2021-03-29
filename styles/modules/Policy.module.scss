@@ -17,6 +17,14 @@
 @import "styles/constants";
 @import "styles/mixins";
 
+@mixin formWidth {
+  width: 100%;
+
+  @include desktopAndLarger {
+    width: 75%;
+  }
+}
+
 .form {
   width: 100%;
   height: 100%;
@@ -39,16 +47,15 @@
 }
 
 .policyInputsContainer {
-  width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 1rem;
+  @include formWidth;
 
   > * {
     margin: 0.5rem auto 0;
   }
 
   @include desktopAndLarger {
-    width: 75%;
     margin-right: auto;
 
     > * {
@@ -128,19 +135,43 @@
   text-align: right;
 }
 
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @include formWidth;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
 .actionButtons {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  > button:first-of-type {
-    margin-right: 1rem;
+  > button {
+    margin: 0.5rem auto;
   }
 
   @include tabletAndLarger {
     flex-direction: row;
     justify-content: flex-start;
+
+    > button {
+      margin: 0.5rem;
+    }
+
+    > button:first-of-type {
+      margin-left: 0;
+    }
+
+    > button:last-of-type {
+      margin-right: 0;
+    }
   }
 }
 
@@ -200,6 +231,10 @@
     font-weight: 600;
     margin: 1rem;
   }
+}
+
+.confirmDeleteText {
+  margin-bottom: 1.5rem;
 }
 
 .darkTheme {

@@ -35,7 +35,7 @@ export const ThemeProvider = (props) => {
     if (savedTheme) {
       setTheme(savedTheme);
     }
-  }, [theme]);
+  }, []);
 
   const toggleTheme = () => {
     if (theme === LIGHT_THEME) {

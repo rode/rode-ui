@@ -297,4 +297,73 @@ describe("/api/policies/[id]", () => {
       });
     });
   });
+
+  describe("DELETE", () => {
+    beforeEach(() => {
+      request.method = "DELETE";
+    });
+
+    describe("successful call to Rode", () => {
+      let rodeUrlEnv;
+
+      beforeEach(() => {
+        rodeUrlEnv = process.env.RODE_URL;
+        delete process.env.RODE_URL;
+      });
+
+      afterEach(() => {
+        process.env.RODE_URL = rodeUrlEnv;
+      });
+
+      it("should hit the Rode API", async () => {
+        await handler(request, response);
+
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
+            method: "DELETE",
+          });
+      });
+
+      it("should return null if the delete was successful", async () => {
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.send)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(null);
+      });
+    });
+
+    describe("call to Rode fails", () => {
+      const assertInternalServerError = () => {
+        expect(response.status)
+          .toBeCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
+
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      };
+
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error on a network or other fetch error", async () => {
+        fetch.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+    });
+  });
 });

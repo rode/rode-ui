@@ -37,7 +37,7 @@ const EditPolicy = () => {
           endpoint={`/api/policies/${id}`}
           verb={"update"}
           submitButtonText={"Update Policy"}
-          defaultValues={policy}
+          policy={policy}
         />
       ) : (
         <div className={styles.notFound}>
