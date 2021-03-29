@@ -24,19 +24,18 @@ import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";
 import { schema } from "schemas/policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
-import { showError } from "utils/toast-utils";
+import { showError, showSuccess } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 
-// TODO: test delete button
 const PolicyForm = ({
   title,
   method,
   endpoint,
   verb,
   submitButtonText,
-  defaultValues = {},
+  policy = {},
 }) => {
   const { theme } = useTheme();
   const router = useRouter();
@@ -45,13 +44,9 @@ const PolicyForm = ({
   const [validationResults, setValidationResults] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState(defaultValues.name || "");
-  const [description, setDescription] = useState(
-    defaultValues.description || ""
-  );
-  const [regoContent, setRegoContent] = useState(
-    defaultValues.regoContent || ""
-  );
+  const [name, setName] = useState(policy.name || "");
+  const [description, setDescription] = useState(policy.description || "");
+  const [regoContent, setRegoContent] = useState(policy.regoContent || "");
 
   const { isValid, validateField, errors } = useFormValidation(schema);
 
@@ -115,6 +110,27 @@ const PolicyForm = ({
     const result = await response.json();
 
     setValidationResults(result);
+  };
+
+  const onDelete = async (event) => {
+    event.preventDefault();
+
+    // show confirmation "are you sure you want to delete the policy?"
+    // if yes, delete
+    // if no, close confirmation, stay on same page.
+
+    const response = await fetch(`/api/policies/${policy.id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      showError(
+        "An error occurred while deleting the policy. Please try again."
+      );
+      return;
+    }
+
+    showSuccess("Policy was deleted.");
   };
 
   return (
@@ -190,7 +206,7 @@ const PolicyForm = ({
             type={"button"}
             label={"Delete Policy"}
             buttonType={"destructive"}
-            onClick={() => console.log("here clicking delete")}
+            onClick={onDelete}
           />
         )}
       </div>
@@ -204,7 +220,7 @@ PolicyForm.propTypes = {
   endpoint: PropTypes.string.isRequired,
   verb: PropTypes.string.isRequired,
   submitButtonText: PropTypes.string.isRequired,
-  defaultValues: PropTypes.shape({
+  policy: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,

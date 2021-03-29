@@ -85,7 +85,7 @@ describe("Edit Policy", () => {
   });
 
   it("should fetch the policy data for the id in the url", () => {
-    expect(usePolicy).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(policy.id);
+    expect(usePolicy).toHaveBeenCalledWith(policy.id);
   });
 
   it("should render a loading indicator while the data is being fetched", () => {
@@ -112,6 +112,14 @@ describe("Edit Policy", () => {
   it("should render the save button for the form", () => {
     const saveButton = screen.getByText(/update Policy/i);
     expect(saveButton).toBeInTheDocument();
+  });
+
+  it("should render a button to delete the policy", () => {
+    const deleteButton = screen.getByText(/delete policy/i);
+    expect(deleteButton).toBeInTheDocument();
+
+    userEvent.click(deleteButton);
+    // TODO: finish out the click event test
   });
 
   describe("successful save", () => {
