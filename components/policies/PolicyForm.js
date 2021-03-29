@@ -118,13 +118,11 @@ const PolicyForm = ({
   const onDelete = async (event) => {
     event.preventDefault();
 
-    // TODO: show confirmation "are you sure you want to delete the policy?"
-    // if yes, delete, redirect to /policies
-    // if no, close confirmation, stay on same page.
-
+    setLoading(true);
     const response = await fetch(`/api/policies/${policy.id}`, {
       method: "DELETE",
     });
+    setLoading(false);
 
     if (!response.ok) {
       showError(
@@ -133,7 +131,8 @@ const PolicyForm = ({
       return;
     }
 
-    showSuccess("Policy was deleted.");
+    showSuccess("Policy was successfully deleted.");
+    router.push("/policies");
   };
 
   const confirmDelete = () => setShowModal(true);
@@ -147,11 +146,13 @@ const PolicyForm = ({
             label={"Cancel"}
             buttonType={"text"}
             onClick={() => setShowModal(false)}
+            disabled={loading}
           />
           <Button
             label={"Delete Policy"}
             buttonType={"primaryDestructive"}
             onClick={onDelete}
+            loading={loading}
           />
         </div>
       </Modal>
