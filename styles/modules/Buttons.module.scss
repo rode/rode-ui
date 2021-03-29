@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@use "sass:color";
 @import "styles/constants";
 @import "styles/mixins";
 
@@ -66,7 +67,7 @@
     color: $DARK_GREY;
 
     &:hover {
-      background-color: $GREEN;
+      background-color: color.scale($GREEN, $lightness: -20%);
       color: $WHITE;
     }
 
@@ -81,7 +82,7 @@
     color: $WHITE;
 
     &:hover {
-      background-color: $GREEN;
+      background-color: color.scale($GREEN, $lightness: -20%);
     }
 
     &[disabled] {
@@ -100,7 +101,8 @@
     background-color: transparent;
 
     &:hover {
-      color: $WHITE;
+      color: $LAGOON;
+      background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
     }
 
     &[disabled] {
@@ -114,7 +116,8 @@
     background-color: transparent;
 
     &:hover {
-      color: $WHITE;
+      color: $DEEP_SEA;
+      background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -10%);
     }
 
     &[disabled] {
@@ -197,16 +200,122 @@
   }
 }
 
-.destructive {
-  @extend .text;
+.modalClose {
+  @extend .icon;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  padding: 0.25rem;
+
+  &.darkTheme {
+    svg {
+      color: $WHITE;
+      @include transition;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: transparent;
+
+      svg {
+        color: $LAGOON;
+      }
+    }
+
+    &[disabled] {
+      background-color: transparent;
+
+      svg {
+        color: $MEDIUM_GREY;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: transparent;
+
+        svg {
+          color: $MEDIUM_GREY;
+        }
+      }
+    }
+  }
+
+  &.lightTheme {
+    svg {
+      color: $WHITE;
+      @include transition;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: transparent;
+
+      svg {
+        color: $LAGOON;
+      }
+    }
+
+    &[disabled] {
+      background-color: transparent;
+
+      svg {
+        color: $SILVER;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: transparent;
+
+        svg {
+          color: $SILVER;
+        }
+      }
+    }
+  }
+}
+
+.primaryDestructive {
   @extend .primary;
+
+  &.darkTheme {
+    background-color: $HOT_RED;
+    color: $WHITE;
+
+    &:hover {
+      background-color: color.scale($HOT_RED, $lightness: -40%);
+      color: $WHITE;
+    }
+
+    &[disabled] {
+      background-color: transparent;
+      color: $MEDIUM_GREY;
+    }
+  }
+
+  &.lightTheme {
+    background-color: $HOT_RED;
+    color: $WHITE;
+
+    &:hover {
+      background-color: color.scale($HOT_RED, $lightness: -40%);
+      color: $WHITE;
+    }
+
+    &[disabled] {
+      background-color: transparent;
+      color: $MEDIUM_GREY;
+    }
+  }
+}
+
+.textDestructive {
+  @extend .text;
 
   &.darkTheme {
     color: $HOT_RED;
     background-color: transparent;
 
     &:hover {
-      background-color: $HOT_RED;
+      background-color: color.scale($HOT_RED, $lightness: -40%);
       color: $WHITE;
     }
 
@@ -221,7 +330,7 @@
     background-color: transparent;
 
     &:hover {
-      background-color: $HOT_RED;
+      background-color: color.scale($HOT_RED, $lightness: -40%);
       color: $WHITE;
     }
 

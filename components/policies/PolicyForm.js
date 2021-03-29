@@ -28,6 +28,7 @@ import { showError, showSuccess } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import Modal from "../Modal";
 
 const PolicyForm = ({
   title,
@@ -40,6 +41,8 @@ const PolicyForm = ({
   const { theme } = useTheme();
   const router = useRouter();
   const { dispatch } = usePolicies();
+
+  const [showModal, setShowModal] = useState(false);
 
   const [validationResults, setValidationResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -115,8 +118,8 @@ const PolicyForm = ({
   const onDelete = async (event) => {
     event.preventDefault();
 
-    // show confirmation "are you sure you want to delete the policy?"
-    // if yes, delete
+    // TODO: show confirmation "are you sure you want to delete the policy?"
+    // if yes, delete, redirect to /policies
     // if no, close confirmation, stay on same page.
 
     const response = await fetch(`/api/policies/${policy.id}`, {
@@ -133,84 +136,107 @@ const PolicyForm = ({
     showSuccess("Policy was deleted.");
   };
 
+  const confirmDelete = () => setShowModal(true);
+
   return (
-    <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
-      <h1 className={styles.heading}>{title}</h1>
-      <div className={styles.policyInputsContainer}>
-        <Input
-          name={"name"}
-          label={"Policy Name"}
-          onChange={(event) => setName(event.target.value)}
-          value={name}
-          error={errors.name}
-          horizontal
-          required
-          onBlur={validateField}
-        />
-        <Input
-          name={"description"}
-          label={"Description"}
-          onChange={(event) => setDescription(event.target.value)}
-          value={description}
-          error={errors.description}
-          horizontal
-          onBlur={validateField}
-        />
-        <TextArea
-          name={"regoContent"}
-          label={"Rego Policy Code"}
-          value={regoContent}
-          onChange={(event) => {
-            setValidationResults(null);
-            setRegoContent(event.target.value);
-          }}
-          error={errors.regoContent || validationResults?.isValid === false}
-          required
-          rows={10}
-          onBlur={validateField}
-        />
-        <p className={styles.documentation}>
-          Need help formulating? Check out the{" "}
-          <ExternalLink
-            href={
-              "https://www.openpolicyagent.org/docs/latest/policy-language/"
-            }
-            label={"Rego documentation"}
-          />
-          .
-        </p>
-        <div className={styles.policyValidationContainer}>
-          <Button
-            label={"Validate Policy"}
-            buttonType={"text"}
-            onClick={onValidate}
-            className={styles.validateButton}
-            disabled={loading || !regoContent.length}
-          />
-          <PolicyValidationResult validation={validationResults} />
-        </div>
-      </div>
-      <div className={styles.actionButtonsContainer}>
+    <>
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <p className={styles.confirmDeleteText}>Are you sure you want to delete this policy?</p>
         <div className={styles.actionButtons}>
-          <Button label={submitButtonText} type={"submit"} loading={loading} />
           <Button
-            type={"button"}
             label={"Cancel"}
             buttonType={"text"}
-            onClick={router.back}
-            disabled={loading}
+            onClick={() => setShowModal(false)}
           />
-        </div>
-        {method === "PATCH" && (
           <Button
-            type={"button"}
             label={"Delete Policy"}
-            buttonType={"destructive"}
+            buttonType={"primaryDestructive"}
             onClick={onDelete}
           />
-        )}
-      </div>
-    </form>
+        </div>
+      </Modal>
+      <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
+        <h1 className={styles.heading}>{title}</h1>
+        <div className={styles.policyInputsContainer}>
+          <Input
+            name={"name"}
+            label={"Policy Name"}
+            onChange={(event) => setName(event.target.value)}
+            value={name}
+            error={errors.name}
+            horizontal
+            required
+            onBlur={validateField}
+          />
+          <Input
+            name={"description"}
+            label={"Description"}
+            onChange={(event) => setDescription(event.target.value)}
+            value={description}
+            error={errors.description}
+            horizontal
+            onBlur={validateField}
+          />
+          <TextArea
+            name={"regoContent"}
+            label={"Rego Policy Code"}
+            value={regoContent}
+            onChange={(event) => {
+              setValidationResults(null);
+              setRegoContent(event.target.value);
+            }}
+            error={errors.regoContent || validationResults?.isValid === false}
+            required
+            rows={10}
+            onBlur={validateField}
+          />
+          <p className={styles.documentation}>
+            Need help formulating? Check out the{" "}
+            <ExternalLink
+              href={
+                "https://www.openpolicyagent.org/docs/latest/policy-language/"
+              }
+              label={"Rego documentation"}
+            />
+            .
+          </p>
+          <div className={styles.policyValidationContainer}>
+            <Button
+              label={"Validate Policy"}
+              buttonType={"text"}
+              onClick={onValidate}
+              className={styles.validateButton}
+              disabled={loading || !regoContent.length}
+            />
+            <PolicyValidationResult validation={validationResults} />
+          </div>
+        </div>
+        <div className={styles.actionButtonsContainer}>
+          <div className={styles.actionButtons}>
+            <Button
+              label={submitButtonText}
+              type={"submit"}
+              loading={loading}
+            />
+            <Button
+              type={"button"}
+              label={"Cancel"}
+              buttonType={"text"}
+              onClick={router.back}
+              disabled={loading}
+            />
+          </div>
+          {method === "PATCH" && (
+            <Button
+              type={"button"}
+              label={"Delete Policy"}
+              buttonType={"textDestructive"}
+              onClick={confirmDelete}
+            />
+          )}
+        </div>
+      </form>
+    </>
   );
 };
 

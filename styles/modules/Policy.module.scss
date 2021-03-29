@@ -57,7 +57,6 @@
 
   @include desktopAndLarger {
     margin-right: auto;
-    margin-bottom: 2rem;
 
     > * {
       margin: 1rem auto 0;
@@ -155,15 +154,23 @@
   align-items: center;
 
   > button {
-    margin-bottom: 0.5rem;
+    margin: 0.5rem auto;
   }
 
   @include tabletAndLarger {
     flex-direction: row;
     justify-content: flex-start;
 
+    > button {
+      margin: 0.5rem;
+    }
+
     > button:first-of-type {
-      margin-right: 0.5rem;
+      margin-left: 0;
+    }
+
+    > button:last-of-type {
+      margin-right: 0;
     }
   }
 }
@@ -224,6 +231,10 @@
     font-weight: 600;
     margin: 1rem;
   }
+}
+
+.confirmDeleteText {
+  margin-bottom: 1.5rem;
 }
 
 .darkTheme {
