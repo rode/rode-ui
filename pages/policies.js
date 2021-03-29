@@ -108,6 +108,11 @@ const Policies = () => {
             onClick={() => router.push("/policies/new")}
             label={"Create New Policy"}
           />
+          <Button
+            buttonType={"text"}
+            onClick={() => router.push("/playground")}
+            label={"Policy Evaluation Playground"}
+          />
         </>
       )}
     </div>
