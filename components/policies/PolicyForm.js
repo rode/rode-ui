@@ -29,6 +29,7 @@ import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 
+// TODO: test delete button
 const PolicyForm = ({
   title,
   method,
@@ -173,15 +174,25 @@ const PolicyForm = ({
           <PolicyValidationResult validation={validationResults} />
         </div>
       </div>
-      <div className={styles.actionButtons}>
-        <Button label={submitButtonText} type={"submit"} loading={loading} />
-        <Button
-          type={"button"}
-          label={"Cancel"}
-          buttonType={"text"}
-          onClick={router.back}
-          disabled={loading}
-        />
+      <div className={styles.actionButtonsContainer}>
+        <div className={styles.actionButtons}>
+          <Button label={submitButtonText} type={"submit"} loading={loading} />
+          <Button
+            type={"button"}
+            label={"Cancel"}
+            buttonType={"text"}
+            onClick={router.back}
+            disabled={loading}
+          />
+        </div>
+        {method === "PATCH" && (
+          <Button
+            type={"button"}
+            label={"Delete Policy"}
+            buttonType={"destructive"}
+            onClick={() => console.log("here clicking delete")}
+          />
+        )}
       </div>
     </form>
   );

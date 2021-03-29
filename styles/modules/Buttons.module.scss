@@ -197,6 +197,42 @@
   }
 }
 
+.destructive {
+  @extend .text;
+  @extend .primary;
+
+  &.darkTheme {
+    color: $HOT_RED;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $HOT_RED;
+      color: $WHITE;
+    }
+
+    &[disabled] {
+      background-color: transparent;
+      color: $MEDIUM_GREY;
+    }
+  }
+
+  &.lightTheme {
+    color: $HOT_RED;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $HOT_RED;
+      color: $WHITE;
+    }
+
+    &[disabled] {
+      background-color: transparent;
+      color: $MEDIUM_GREY;
+    }
+  }
+
+}
+
 .darkTheme {
   &:hover {
     box-shadow: $DT_HOVER_SHADOW;
