@@ -107,10 +107,11 @@
 
 .cardHeader {
   text-align: left;
-  @include ellipsis(calc(100vw - 5rem));
+  @include ellipsis(calc(100vw - 7rem));
+  white-space: pre-line;
 
   @include tabletAndLarger {
-    max-width: calc(100vw - 18rem);
+    max-width: calc(100vw - 24rem);
   }
 }
 

@@ -168,6 +168,15 @@
   }
 }
 
+.detailsHeaderTextContainer {
+  width: 100%;
+  flex: 1;
+
+  @include tabletAndLarger {
+    margin-right: 0.5rem;
+  }
+}
+
 .policyName {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
@@ -175,10 +184,7 @@
 
 .policyDescription {
   margin-bottom: 0.5rem;
-
-  @include tabletAndLarger {
-    max-width: 90%;
-  }
+  max-width: 100%;
 }
 
 .regoContainer {

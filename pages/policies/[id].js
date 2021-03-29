@@ -44,7 +44,7 @@ const Policy = () => {
           {policy ? (
             <>
               <div className={styles.detailsHeader}>
-                <div>
+                <div className={styles.detailsHeaderTextContainer}>
                   <p className={styles.policyName}>{policy.name}</p>
                   <p className={styles.policyDescription}>
                     {policy.description}
