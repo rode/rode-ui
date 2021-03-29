@@ -22,10 +22,8 @@ import Button from "./Button";
 import Icon from "./Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: test this
-
 const Modal = (props) => {
-  const { title, children, onClose, isVisible} = props;
+  const { title, children, onClose, isVisible } = props;
   const { theme } = useTheme();
 
   if (!isVisible) {
@@ -38,16 +36,14 @@ const Modal = (props) => {
       role={"dialog"}
       aria-labelledby={"modalTitle"}
     >
-      {onClose && (
-        <Button
-          buttonType={"modalClose"}
-          label={"Close Modal"}
-          className={styles.closeButton}
-          onClick={onClose}
-        >
-          <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
-        </Button>
-      )}
+      <Button
+        buttonType={"modalClose"}
+        label={"Close Modal"}
+        className={styles.closeButton}
+        onClick={onClose}
+      >
+        <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
+      </Button>
       <div className={styles.contentWrapper}>
         <h1 id={"modalTitle"} className={styles.title}>
           {title}
@@ -61,7 +57,7 @@ const Modal = (props) => {
 Modal.propTypes = {
   title: PropTypes.string.isRequired,
   isVisible: PropTypes.bool,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 
