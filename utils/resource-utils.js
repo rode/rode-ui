@@ -16,6 +16,7 @@
 
 const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
 const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
+const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";
 
 export const parseGeneric = (uri) => {
   // deb://dist(optional):arch:name:version
@@ -33,7 +34,7 @@ export const parseGeneric = (uri) => {
   };
 };
 
-export const parseDocker = (uri) => {
+const parseDocker = (uri) => {
   // https://Namespace/name@sha256:<Checksum>
   const [nameWithUrl, , version] = uri
     .split(new RegExp(DOCKER_REGEXP))
@@ -45,7 +46,7 @@ export const parseDocker = (uri) => {
   };
 };
 
-export const parseFile = (uri) => {
+const parseFile = (uri) => {
   // file://sha256:<Checksum>:name
 
   const [, checksumWithName] = uri
@@ -57,6 +58,18 @@ export const parseFile = (uri) => {
   return {
     name,
     version: checksum,
+  };
+};
+
+const parseGit = (uri) => {
+  // git://<host><path>@<commit>
+  const [, name, version] = uri
+    .split(new RegExp(GIT_REGEXP))
+    .filter((value) => value);
+
+  return {
+    name,
+    version,
   };
 };
 
@@ -94,6 +107,11 @@ const resourceUrlTypes = [
   {
     type: "RPM",
     regex: "^(rpm:/{2})",
+  },
+  {
+    type: "Git",
+    regex: GIT_REGEXP,
+    parse: parseGit,
   },
 ];
 

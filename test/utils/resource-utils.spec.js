@@ -142,5 +142,14 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
     });
+
+    it("should return the correct details for a Git Resource", () => {
+      const url = `git://${resourceName}@${resourceVersion}`;
+      const actual = getResourceDetails(url);
+
+      expect(actual.resourceType).toBe("Git");
+      expect(actual.resourceName).toBe(resourceName);
+      expect(actual.resourceVersion).toBe(resourceVersion);
+    });
   });
 });
