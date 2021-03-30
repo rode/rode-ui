@@ -22,23 +22,34 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  height: fit-content;
+
+  @include tabletAndLarger {
+    padding: 1rem;
+    margin: 1rem auto;
+    min-height: 90%;
+  }
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
 
   @include tabletAndLarger {
     flex-direction: row;
-    padding: 1rem 2rem;
-    margin: 1rem auto;
+    justify-content: space-evenly;
   }
 }
 
 .leftContainer {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin: 0 0.5rem;
+  height: fit-content;
 
   @include tabletAndLarger {
-    margin-right: 2rem;
-    max-width: 40%;
+    width: 50%;
   }
 }
 
@@ -53,9 +64,13 @@
 }
 
 .searchCard {
-  width: 100%;
+  width: 97%;
+  height: fit-content;
   padding: 1rem;
-  margin: 0.5rem auto;
+  margin: 0.5rem auto 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .cardHeader {
@@ -79,8 +94,65 @@
   }
 }
 
+.actionButton {
+  margin-top: 0.25rem;
+  align-self: flex-end;
+}
+
+.selectedButton {
+  @extend .actionButton;
+}
+
 .rightContainer {
-  flex: 1.5;
+  @extend .leftContainer;
+
+  @include tabletAndLarger {
+    width: 50%;
+  }
+}
+
+.selectedResource {
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.selectedPolicy {
+  @extend .selectedResource;
+}
+
+.searchContainer {
+  //flex: 1;
+  max-height: 50%;
+  width: 100%;
+}
+
+.selectionTitle {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.selectMessage {
+  text-align: center;
+}
+
+.selectionDetails {
+  @include ellipsis(calc(100vw - 10%));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 30%);
+  }
+}
+
+.label {
+  font-weight: 700;
+  padding: 0 0.5rem;
+}
+
+.break {
+  @include ellipsis(100%);
+  overflow-wrap: anywhere;
 }
 
 .pageTitle {
@@ -93,7 +165,7 @@
   margin: 1rem auto;
 
   @include tabletAndLarger {
-    width: 95%;
+    width: 65%;
   }
 }
 
@@ -106,9 +178,36 @@
     color: $LAGOON;
   }
 
+  .instructions {
+    color: $DT_SUB_TEXT;
+  }
+
   .searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
+  }
+
+  .selectedButton {
+    svg, p {
+      color: $BRIGHT_GREEN;
+    }
+  }
+
+  .selectMessage {
+    color: $DT_SUB_TEXT;
+  }
+
+  .selectionTitle {
+    color: $LAGOON;
+  }
+
+  .selectedResource, .selectedPolicy {
+    box-shadow: $DT_BOX_SHADOW;
+    background-color: $DT_BACKGROUND_MEDIUM;
   }
 }
 
@@ -121,8 +220,35 @@
     color: $DEEP_SEA;
   }
 
+  .instructions {
+    color: $LT_SUB_TEXT;
+  }
+
   .searchCard {
     background-color: $LT_BACKGROUND_MEDIUM;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
+  }
+
+  .selectedButton {
+    svg, p {
+      color: $GREEN;
+    }
+  }
+
+  .selectMessage {
+    color: $LT_SUB_TEXT;
+  }
+
+  .selectionTitle {
+    color: $DEEP_SEA;
+  }
+
+  .selectedResource, .selectedPolicy {
+    box-shadow: $LT_BOX_SHADOW;
+    background-color: $LT_BACKGROUND_MEDIUM;
   }
 }

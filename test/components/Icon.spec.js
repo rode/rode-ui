@@ -109,4 +109,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
   });
+
+  it("should render the check icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CHECK} />);
+
+    expect(screen.getByTitle(/check/i)).toBeInTheDocument();
+  });
 });

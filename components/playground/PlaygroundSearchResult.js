@@ -19,6 +19,8 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
+import Icon from "../Icon";
+import { ICON_NAMES } from "../../utils/icon-utils";
 
 const getDataForResultType = (searchResult, type) => {
   if (type === "policy") {
@@ -28,7 +30,9 @@ const getDataForResultType = (searchResult, type) => {
       buttonText: "Select Policy",
     };
   } else {
-    const { resourceName, resourceVersion } = getResourceDetails(searchResult.uri);
+    const { resourceName, resourceVersion } = getResourceDetails(
+      searchResult.uri
+    );
     return {
       main: `${resourceName}`,
       sub: `Version: ${resourceVersion}`,
@@ -46,7 +50,20 @@ const PlaygroundSearchResult = ({ searchResult, type, onClick, selected }) => {
         <p className={styles.cardHeader}>{main}</p>
         <p className={styles.cardText}>{sub}</p>
       </div>
-      <Button onClick={onClick} buttonType={"text"} label={selected ? "Selected" : buttonText} disabled={selected} />
+      <Button
+        onClick={onClick}
+        buttonType={"text"}
+        label={selected ? "Selected" : buttonText}
+        disabled={selected}
+        className={selected ? styles.selectedButton : styles.actionButton}
+      >
+        {selected && (
+          <>
+            <Icon name={ICON_NAMES.CHECK} />
+            <p>Selected</p>
+          </>
+        )}
+      </Button>
     </div>
   );
 };
@@ -55,7 +72,7 @@ PlaygroundSearchResult.propTypes = {
   searchResult: PropTypes.object.isRequired,
   type: PropTypes.oneOf(["policy", "resource"]),
   onClick: PropTypes.func.isRequired,
-  selected: PropTypes.bool.isRequired
+  selected: PropTypes.bool.isRequired,
 };
 
 export default PlaygroundSearchResult;

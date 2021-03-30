@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// TODO: show the selected policy and resource in the left container when searching?
+
 import React, { useState } from "react";
 import ResourceSearchBar from "../components/resources/ResourceSearchBar";
 import PolicySearchBar from "../components/policies/PolicySearchBar";
@@ -31,6 +33,8 @@ import { getResourceDetails } from "../utils/resource-utils";
 const PolicyEvaluationPlayground = () => {
   const [policySearch, setPolicySearch] = useState(false);
   const [resourceSearch, setResourceSearch] = useState(false);
+
+  // TODO: need to move this out in policy state so we can go from resource details to playground/policy details to playground
   const [policyToEvaluate, setPolicyToEvaluate] = useState("");
   const [resourceToEvaluate, setResourceToEvaluate] = useState("");
   const { theme } = useTheme();
@@ -50,98 +54,143 @@ const PolicyEvaluationPlayground = () => {
     }
   );
 
-  console.log('resourceResults', resourceResults);
-
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
-      <div className={styles.leftContainer}>
-        <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
-        <p>Select a policy, select a resource, and evaluate.</p>
-          <PolicySearchBar
-            onSubmit={(event) => {
-              event.preventDefault();
-              setPolicySearch(true);
-            }}
-            // onChange={() => setPolicySearch(false)}
-          />
-        <div className={styles.policySearch}>
-          {policySearch && (
-            <Loading loading={policyLoading}>
-              {policyResults?.length > 0 ? (
-                policyResults.map((result) => (
-                  <PlaygroundSearchResult
-                    searchResult={result}
-                    type={"policy"}
-                    onClick={() => {
-                      setPolicyToEvaluate(result);
-                    }}
-                    key={result.id}
-                    selected={result.id === policyToEvaluate?.id}
-                  />
-                ))
-              ) : (
-                <p>No policies found</p>
+      <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
+      <p className={styles.instructions}>
+        Select a policy, select a resource, and evaluate.
+      </p>
+      <div className={styles.contentContainer}>
+        <div className={styles.leftContainer}>
+          <div className={styles.searchContainer}>
+            <ResourceSearchBar
+              onSubmit={(event) => {
+                event.preventDefault();
+
+                setResourceSearch(true);
+              }}
+              // onChange={() => setResourceSearch(false)}
+            />
+            <div className={styles.resourceSearch}>
+              {resourceSearch && (
+                <Loading loading={resourceLoading}>
+                  {resourceResults?.length > 0 ? (
+                    resourceResults.map((result) => (
+                      <PlaygroundSearchResult
+                        searchResult={result}
+                        type={"resource"}
+                        onClick={() => {
+                          const {
+                            resourceName,
+                            resourceVersion,
+                          } = getResourceDetails(result.uri);
+
+                          setResourceToEvaluate({
+                            resource: result,
+                            name: resourceName,
+                            version: resourceVersion,
+                          });
+                          setResourceSearch(false);
+                        }}
+                        key={result.uri}
+                        selected={
+                          result.uri === resourceToEvaluate?.resource?.uri
+                        }
+                      />
+                    ))
+                  ) : (
+                    <p>No resources found</p>
+                  )}
+                </Loading>
               )}
-            </Loading>
-          )}
+            </div>
+          </div>
+          <div className={styles.selectedResource}>
+            <h2 className={styles.selectionTitle}>Selected Resource</h2>
+            {resourceToEvaluate ? (
+              <>
+                <p className={styles.selectionDetails}>
+                  <span className={styles.label}>Name</span>
+                  <span>{resourceToEvaluate.name}</span>
+                </p>
+                <p className={styles.selectionDetails}>
+                  <span className={styles.label}>Version</span>
+                  <span className={styles.break}>
+                    {resourceToEvaluate.version}
+                  </span>
+                </p>
+              </>
+            ) : (
+              <p className={styles.selectMessage}>
+                Select a resource to evaluate.
+              </p>
+            )}
+          </div>
         </div>
-          <ResourceSearchBar
-            onSubmit={(event) => {
-              event.preventDefault();
-
-              setResourceSearch(true)
-            }}
-          />
-        <div className={styles.resourceSearch}>
-          {resourceSearch && (
-            <Loading loading={resourceLoading}>
-              {resourceResults?.length > 0 ? (
-                resourceResults.map((result) => (
-                  <PlaygroundSearchResult
-                    searchResult={result}
-                    type={"resource"}
-                    onClick={() => {
-                      const {resourceName, resourceVersion} = getResourceDetails(result.uri);
-
-                      setResourceToEvaluate({
-                        resource: result,
-                        name: resourceName,
-                        version: resourceVersion
-                      });
-                    }}
-                    key={result.uri}
-                    selected={result.uri === resourceToEvaluate?.resource?.uri}
-                  />
-                ))
-              ) : (
-                <p>No resources found</p>
+        <div className={styles.rightContainer}>
+          <div className={styles.searchContainer}>
+            <PolicySearchBar
+              onSubmit={(event) => {
+                event.preventDefault();
+                setPolicySearch(true);
+              }}
+              // onChange={() => setPolicySearch(false)}
+            />
+            <div className={styles.policySearch}>
+              {policySearch && (
+                <Loading loading={policyLoading}>
+                  {policyResults?.length > 0 ? (
+                    policyResults.map((result) => (
+                      <PlaygroundSearchResult
+                        searchResult={result}
+                        type={"policy"}
+                        onClick={() => {
+                          setPolicyToEvaluate(result);
+                          setPolicySearch(false);
+                        }}
+                        key={result.id}
+                        selected={result.id === policyToEvaluate?.id}
+                      />
+                    ))
+                  ) : (
+                    <p>No policies found</p>
+                  )}
+                </Loading>
               )}
-            </Loading>
-          )}
+            </div>
+          </div>
+          <div className={styles.selectedPolicy}>
+            <h2 className={styles.selectionTitle}>Selected Policy</h2>
+            {policyToEvaluate ? (
+              <>
+                <p className={styles.selectionDetails}>
+                  <span className={styles.label}>Name</span>
+                  <span>{policyToEvaluate.name}</span>
+                </p>
+                <TextArea
+                  name={"regoContent"}
+                  label={"Rego Policy Code"}
+                  onChange={() => {}}
+                  disabled
+                  value={policyToEvaluate.regoContent}
+                />
+              </>
+            ) : (
+              <p className={styles.selectMessage}>
+                Select a policy to evaluate against.
+              </p>
+            )}
+          </div>
         </div>
       </div>
-      <div className={styles.rightContainer}>
-        <p>{`Resource: ${resourceToEvaluate?.name || "not selected"}`}</p>
-        {resourceToEvaluate?.version && (
-          <p>{`Version: ${resourceToEvaluate.version}`}</p>
-        )}
-
-        <p>{`Policy: ${policyToEvaluate?.name || "not selected"}`}</p>
-        <TextArea
-          name={"regoContent"}
-          label={"Rego Policy Code"}
-          onChange={() => {}}
-          disabled
-          value={policyToEvaluate.regoContent}
-        />
-        <Button
-          label={"Evaluate"}
-          onClick={() => {
-            console.log("here evaluating policy");
-          }}
-          className={styles.evaluateButton}
-        />
-      </div>
+      <Button
+        label={"Evaluate"}
+        onClick={() => {
+          console.log("here evaluating policy");
+        }}
+        className={styles.evaluateButton}
+        disabled={!resourceToEvaluate || !policyToEvaluate}
+      />
     </div>
   );
 };
