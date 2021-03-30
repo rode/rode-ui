@@ -1,0 +1,47 @@
+@import "styles/constants";
+@import "styles/mixins";
+
+.pageContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
+}
+
+.leftContainer {
+  flex: 1;
+
+  @include tabletAndLarger {
+    margin-right: 1rem;
+  }
+}
+
+.rightContainer {
+  flex: 2;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.evaluateButton {
+  width: 95%;
+  margin: 1rem auto;
+}
+
+.darkTheme {
+  .pageTitle {
+    color: $LAGOON;
+  }
+}
+
+.lightTheme {
+  .pageTitle {
+    color: $DEEP_SEA;
+  }
+}
