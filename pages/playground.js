@@ -14,45 +14,114 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import ResourceSearchBar from "../components/resources/ResourceSearchBar";
 import PolicySearchBar from "../components/policies/PolicySearchBar";
 import TextArea from "../components/TextArea";
 import Button from "../components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "../providers/theme";
+import { useFetch } from "../hooks/useFetch";
+import { usePolicies } from "../providers/policies";
+import Loading from "../components/Loading";
+import PlaygroundSearchResult from "../components/playground/PlaygroundSearchResult";
+import { useResources } from "../providers/resources";
 
 const PolicyEvaluationPlayground = () => {
-  const {theme} = useTheme();
+  const [policySearch, setPolicySearch] = useState(false);
+  const [resourceSearch, setResourceSearch] = useState(false);
+  const [policyToEvaluate, setPolicyToEvaluate] = useState("");
+  const [resourceToEvaluate, setResourceToEvaluate] = useState("");
+  const { theme } = useTheme();
+  const { state: policyState, dispatch: policyDispatch } = usePolicies();
+  const { state: resourceState, dispatch: resourceDispatch } = useResources();
+
+  const { data: policyResults, loading: policyLoading } = useFetch(
+    policySearch ? "/api/policies" : null,
+    {
+      filter: policyState.searchTerm,
+    }
+  );
+  const { data: resourceResults, loading: resourceLoading } = useFetch(
+    resourceSearch ? "/api/policies" : null,
+    {
+      filter: resourceState.searchTerm,
+    }
+  );
 
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
       <div className={styles.leftContainer}>
         <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
         <p>Select a policy, select a resource and version, and evaluate.</p>
-        <div>
           <PolicySearchBar
-            onSubmit={() => {
-              console.log("policy search");
+            onSubmit={(event) => {
+              event.preventDefault();
+              setPolicySearch(true);
             }}
+            // onChange={() => setPolicySearch(false)}
           />
+        <div className={styles.policySearch}>
+          {policySearch && (
+            <Loading loading={policyLoading}>
+              {policyResults?.length > 0 ? (
+                policyResults.map((result) => (
+                  <PlaygroundSearchResult
+                    searchResult={result}
+                    type={"policy"}
+                    onClick={() => {
+                      setPolicyToEvaluate(result);
+
+                    }}
+                    key={result.id}
+                  />
+                ))
+              ) : (
+                <p>No policies found</p>
+              )}
+            </Loading>
+          )}
         </div>
-        <div>
           <ResourceSearchBar
-            onSubmit={() => {
-              console.log("resource search");
+            onSubmit={(event) => {
+              event.preventDefault();
+
+              setResourceSearch(true)
             }}
           />
+        <div className={styles.resourceSearch}>
+          {resourceSearch && (
+            <Loading loading={resourceLoading}>
+              {resourceResults?.length > 0 ? (
+                resourceResults.map((result) => (
+                  <PlaygroundSearchResult
+                    searchResult={result}
+                    type={"resource"}
+                    onClick={() => {
+                      setResourceToEvaluate(result);
+
+                    }}
+                    key={result.id}
+                  />
+                ))
+              ) : (
+                <p>No resources found</p>
+              )}
+            </Loading>
+          )}
         </div>
       </div>
       <div className={styles.rightContainer}>
-        <p>{"Resource: <resource name goes here>"}</p>
+        <p>{`Resource: ${resourceToEvaluate?.name || "not selected"}`}</p>
+        {resourceToEvaluate?.version && (
+          <p>{`Version: ${resourceToEvaluate.version}`}</p>
+        )}
         <TextArea
           name={"regoContent"}
           label={"Rego Policy Code"}
-          onChange={(event) =>
-            console.log("here changing text", event.target.value)
-          }
+          onChange={() => {}}
+          disabled
+          value={policyToEvaluate.regoContent}
         />
         <Button
           label={"Evaluate"}

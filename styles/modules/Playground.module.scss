@@ -30,14 +30,55 @@
 
 .leftContainer {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   @include tabletAndLarger {
     margin-right: 1rem;
+    max-width: 40%;
+  }
+}
+
+.policySearch {
+  flex: 1;
+  max-height: 30vh;
+  overflow: auto;
+}
+
+.resourceSearch {
+  @extend .policySearch;
+}
+
+.searchCard {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.25rem auto;
+}
+
+.cardHeader {
+  text-align: left;
+  @include ellipsis(calc(100vw - 7rem));
+  white-space: pre-line;
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.75rem;
+  text-indent: 0.5rem;
+  @include ellipsis(calc(100vw - 7rem));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
   }
 }
 
 .rightContainer {
-  flex: 2;
+  flex: 1.5;
 }
 
 .pageTitle {
@@ -54,10 +95,20 @@
   .pageTitle {
     color: $LAGOON;
   }
+
+  .searchCard {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
+  }
 }
 
 .lightTheme {
   .pageTitle {
     color: $DEEP_SEA;
+  }
+
+  .searchCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 }

@@ -20,10 +20,14 @@ import SearchBar from "components/shared/search/SearchBar";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 
-const PolicySearchBar = ({ onSubmit, helpText }) => {
+const PolicySearchBar = ({ onSubmit, helpText, onChange }) => {
   const { state, dispatch } = usePolicies();
 
-  const onChange = (event) => {
+  const onSearchChange = (event) => {
+    if (onChange) {
+      onChange();
+    }
+
     dispatch({
       type: policyActions.SET_SEARCH_TERM,
       data: event.target.value,
@@ -33,7 +37,7 @@ const PolicySearchBar = ({ onSubmit, helpText }) => {
   return (
     <SearchBar
       onSubmit={onSubmit}
-      onChange={onChange}
+      onChange={onSearchChange}
       label={"Search for a policy"}
       name={"policySearch"}
       searchTerm={state.searchTerm}
@@ -46,6 +50,7 @@ const PolicySearchBar = ({ onSubmit, helpText }) => {
 PolicySearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  onChange: PropTypes.func
 };
 
 export default PolicySearchBar;
