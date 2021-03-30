@@ -26,6 +26,7 @@ import { usePolicies } from "../providers/policies";
 import Loading from "../components/Loading";
 import PlaygroundSearchResult from "../components/playground/PlaygroundSearchResult";
 import { useResources } from "../providers/resources";
+import { getResourceDetails } from "../utils/resource-utils";
 
 const PolicyEvaluationPlayground = () => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -43,17 +44,19 @@ const PolicyEvaluationPlayground = () => {
     }
   );
   const { data: resourceResults, loading: resourceLoading } = useFetch(
-    resourceSearch ? "/api/policies" : null,
+    resourceSearch ? "/api/resources" : null,
     {
       filter: resourceState.searchTerm,
     }
   );
 
+  console.log('resourceResults', resourceResults);
+
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
       <div className={styles.leftContainer}>
         <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
-        <p>Select a policy, select a resource and version, and evaluate.</p>
+        <p>Select a policy, select a resource, and evaluate.</p>
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();
@@ -71,9 +74,9 @@ const PolicyEvaluationPlayground = () => {
                     type={"policy"}
                     onClick={() => {
                       setPolicyToEvaluate(result);
-
                     }}
                     key={result.id}
+                    selected={result.id === policyToEvaluate?.id}
                   />
                 ))
               ) : (
@@ -98,10 +101,16 @@ const PolicyEvaluationPlayground = () => {
                     searchResult={result}
                     type={"resource"}
                     onClick={() => {
-                      setResourceToEvaluate(result);
+                      const {resourceName, resourceVersion} = getResourceDetails(result.uri);
 
+                      setResourceToEvaluate({
+                        resource: result,
+                        name: resourceName,
+                        version: resourceVersion
+                      });
                     }}
-                    key={result.id}
+                    key={result.uri}
+                    selected={result.uri === resourceToEvaluate?.resource?.uri}
                   />
                 ))
               ) : (
@@ -116,6 +125,8 @@ const PolicyEvaluationPlayground = () => {
         {resourceToEvaluate?.version && (
           <p>{`Version: ${resourceToEvaluate.version}`}</p>
         )}
+
+        <p>{`Policy: ${policyToEvaluate?.name || "not selected"}`}</p>
         <TextArea
           name={"regoContent"}
           label={"Rego Policy Code"}

@@ -25,6 +25,8 @@
 
   @include tabletAndLarger {
     flex-direction: row;
+    padding: 1rem 2rem;
+    margin: 1rem auto;
   }
 }
 
@@ -35,7 +37,7 @@
   justify-content: flex-start;
 
   @include tabletAndLarger {
-    margin-right: 1rem;
+    margin-right: 2rem;
     max-width: 40%;
   }
 }
@@ -53,7 +55,7 @@
 .searchCard {
   width: 100%;
   padding: 1rem;
-  margin: 0.25rem auto;
+  margin: 0.5rem auto;
 }
 
 .cardHeader {
@@ -87,28 +89,40 @@
 }
 
 .evaluateButton {
-  width: 95%;
+  width: 85%;
   margin: 1rem auto;
+
+  @include tabletAndLarger {
+    width: 95%;
+  }
 }
 
 .darkTheme {
+  &.pageContainer {
+    background-color: $DT_BACKGROUND_LIGHT;
+  }
+
   .pageTitle {
     color: $LAGOON;
   }
 
   .searchCard {
-    background-color: $DT_BACKGROUND_DARK;
+    background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
   }
 }
 
 .lightTheme {
+  &.pageContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+
   .pageTitle {
     color: $DEEP_SEA;
   }
 
   .searchCard {
-    background-color: $LT_BACKGROUND_LIGHT;
+    background-color: $LT_BACKGROUND_MEDIUM;
     box-shadow: $LT_BOX_SHADOW;
   }
 }

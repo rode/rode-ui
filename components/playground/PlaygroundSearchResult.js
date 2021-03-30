@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
+import { getResourceDetails } from "utils/resource-utils";
 
 const getDataForResultType = (searchResult, type) => {
   if (type === "policy") {
@@ -27,16 +28,17 @@ const getDataForResultType = (searchResult, type) => {
       buttonText: "Select Policy",
     };
   } else {
+    const { resourceName, resourceVersion } = getResourceDetails(searchResult.uri);
     return {
-      main: `${searchResult.name}`,
-      sub: `Version: ${searchResult.version}`,
+      main: `${resourceName}`,
+      sub: `Version: ${resourceVersion}`,
       buttonText: "Select Resource",
     };
   }
 };
 
-const PlaygroundSearchResult = ({ searchResult, type, onClick }) => {
-  const {main, sub, buttonText} = getDataForResultType(searchResult, type);
+const PlaygroundSearchResult = ({ searchResult, type, onClick, selected }) => {
+  const { main, sub, buttonText } = getDataForResultType(searchResult, type);
 
   return (
     <div className={`${styles.searchCard}`}>
@@ -44,7 +46,7 @@ const PlaygroundSearchResult = ({ searchResult, type, onClick }) => {
         <p className={styles.cardHeader}>{main}</p>
         <p className={styles.cardText}>{sub}</p>
       </div>
-      <Button onClick={onClick} buttonType={"text"} label={buttonText} />
+      <Button onClick={onClick} buttonType={"text"} label={selected ? "Selected" : buttonText} disabled={selected} />
     </div>
   );
 };
@@ -53,6 +55,7 @@ PlaygroundSearchResult.propTypes = {
   searchResult: PropTypes.object.isRequired,
   type: PropTypes.oneOf(["policy", "resource"]),
   onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool.isRequired
 };
 
 export default PlaygroundSearchResult;
