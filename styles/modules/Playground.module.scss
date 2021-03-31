@@ -45,9 +45,9 @@
 .leftContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin: 0 0.5rem;
-  height: fit-content;
+  height: 100%;
 
   @include tabletAndLarger {
     width: 48%;
@@ -168,6 +168,28 @@
   }
 }
 
+.evaluationResults {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.failedEvaluationResults {
+  @extend .evaluationResults;
+}
+
+.evaluationResultsContainer {
+  padding: 1rem;
+
+  pre {
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
 .darkTheme {
   &.pageContainer {
     background-color: $DT_BACKGROUND_LIGHT;
@@ -205,6 +227,20 @@
   .selectedPolicy {
     box-shadow: $DT_BOX_SHADOW;
     background-color: $DT_BACKGROUND_MEDIUM;
+  }
+
+  .evaluationResults {
+    color: $BRIGHT_GREEN
+  }
+
+  .failedEvaluationResults {
+    color: $HOT_RED;
+  }
+
+  .evaluationResultsContainer {
+    pre {
+      background-color: $DT_BACKGROUND_DARK;
+    }
   }
 }
 
@@ -245,5 +281,13 @@
   .selectedPolicy {
     box-shadow: $LT_BOX_SHADOW;
     background-color: $LT_BACKGROUND_MEDIUM;
+  }
+
+  .evaluationResults {
+    color: $GREEN;
+  }
+
+  .failedEvaluationResults {
+    color: $HOT_RED;
   }
 }
