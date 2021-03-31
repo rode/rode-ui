@@ -20,8 +20,6 @@ import styles from "styles/modules/Playground.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: tests
-
 const EvaluationResult = ({ results }) => {
   if (!results) {
     return null;

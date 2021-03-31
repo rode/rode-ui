@@ -34,8 +34,8 @@ describe("/api/policies/[id]/attest", () => {
         id,
       },
       body: {
-        [chance.string()]: chance.string()
-      }
+        [chance.string()]: chance.string(),
+      },
     };
     getRodeUrl.mockReturnValue(expectedRodeUrl);
 
@@ -85,10 +85,13 @@ describe("/api/policies/[id]/attest", () => {
 
         expect(fetch)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}:attest`, {
-            method: "POST",
-            body: request.body
-          });
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policies/${id}:attest`,
+            {
+              method: "POST",
+              body: request.body,
+            }
+          );
       });
 
       it("should return the policy evaluation", async () => {
@@ -98,7 +101,9 @@ describe("/api/policies/[id]/attest", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(evalResponse);
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(evalResponse);
       });
     });
 

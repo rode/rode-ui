@@ -22,8 +22,6 @@ import { getResourceDetails } from "utils/resource-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: tests
-
 const getDataForResultType = (searchResult, type) => {
   if (type === "policy") {
     return {
@@ -72,7 +70,7 @@ const PlaygroundSearchResult = ({ searchResult, type, onClick, selected }) => {
 
 PlaygroundSearchResult.propTypes = {
   searchResult: PropTypes.object.isRequired,
-  type: PropTypes.oneOf(["policy", "resource"]),
+  type: PropTypes.oneOf(["policy", "resource"]).isRequired,
   onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
 };
