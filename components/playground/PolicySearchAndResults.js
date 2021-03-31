@@ -24,19 +24,14 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 
-// TODO: tests
-
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const { state, dispatch } = usePolicies();
 
-  const { data: policyResults, loading: policyLoading } = useFetch(
-    policySearch ? "/api/policies" : null,
-    {
-      filter: state.searchTerm,
-    }
-  );
+  const { data, loading } = useFetch(policySearch ? "/api/policies" : null, {
+    filter: state.searchTerm,
+  });
 
   useEffect(() => {
     clearEvaluation();
@@ -53,9 +48,9 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
       />
       <div className={styles.searchResultsContainer}>
         {policySearch && (
-          <Loading loading={policyLoading} type={"button"}>
-            {policyResults?.length > 0 ? (
-              policyResults.map((result) => (
+          <Loading loading={loading} type={"button"}>
+            {data?.length > 0 ? (
+              data.map((result) => (
                 <PlaygroundSearchResult
                   searchResult={result}
                   type={"policy"}

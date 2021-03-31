@@ -25,8 +25,6 @@ import { resourceActions } from "reducers/resources";
 import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
 
-// TODO: tests
-
 const ResourceSearchAndResults = ({
   resource,
   setResource,
@@ -71,7 +69,7 @@ const ResourceSearchAndResults = ({
                     } = getResourceDetails(result.uri);
 
                     setResource({
-                      resource: result,
+                      uri: result.uri,
                       name: resourceName,
                       version: resourceVersion,
                     });
@@ -82,7 +80,7 @@ const ResourceSearchAndResults = ({
                     });
                   }}
                   key={result.uri}
-                  selected={result.uri === resource?.resource?.uri}
+                  selected={result.uri === resource?.uri}
                 />
               ))
             ) : (

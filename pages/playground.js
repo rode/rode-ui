@@ -38,7 +38,7 @@ const PolicyEvaluationPlayground = () => {
   const evaluatePolicy = async (event) => {
     event.preventDefault();
     const requestBody = {
-      resourceUri: resourceToEvaluate.resource.resourceUri,
+      resourceUri: resourceToEvaluate.uri,
     };
 
     setEvaluationLoading(true);
@@ -56,7 +56,6 @@ const PolicyEvaluationPlayground = () => {
     console.log("parsedResponse", parsedResponse);
 
     if (!response.ok) {
-      console.log("response not ok");
       showError("An error occurred while evaluating. Please try again.");
     }
 
