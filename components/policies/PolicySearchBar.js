@@ -50,7 +50,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange }) => {
 PolicySearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default PolicySearchBar;

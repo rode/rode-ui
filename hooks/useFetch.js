@@ -24,7 +24,8 @@ export const useFetch = (url, query) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
-  const urlWithQuery = query ? `${url}?${new URLSearchParams(query)}` : url;
+  const urlWithQuery =
+    query && url ? `${url}?${new URLSearchParams(query)}` : url;
 
   const { data: swrData, error: swrError } = useSWR(urlWithQuery, fetcher);
 

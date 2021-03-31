@@ -32,6 +32,7 @@
 }
 
 .contentContainer {
+  flex: 1;
   display: flex;
   flex-direction: column;
 
@@ -49,7 +50,7 @@
   height: fit-content;
 
   @include tabletAndLarger {
-    width: 50%;
+    width: 48%;
   }
 }
 
@@ -105,16 +106,16 @@
 
 .rightContainer {
   @extend .leftContainer;
-
-  @include tabletAndLarger {
-    width: 50%;
-  }
 }
 
 .selectedResource {
-  padding: 1rem;
+  padding: 1rem 0.75rem;
   margin-top: 1rem;
   width: 100%;
+
+  > button {
+    margin: 1rem auto 0;
+  }
 }
 
 .selectedPolicy {
@@ -122,7 +123,6 @@
 }
 
 .searchContainer {
-  //flex: 1;
   max-height: 50%;
   width: 100%;
 }
@@ -133,12 +133,10 @@
   font-size: 1.25rem;
 }
 
-.selectMessage {
-  text-align: center;
-}
-
 .selectionDetails {
+  margin: 0.5rem 0;
   @include ellipsis(calc(100vw - 10%));
+  white-space: pre-line;
 
   @include tabletAndLarger {
     max-width: calc(100vw - 30%);
@@ -166,6 +164,7 @@
 
   @include tabletAndLarger {
     width: 65%;
+    align-self: flex-end;
   }
 }
 
@@ -192,20 +191,18 @@
   }
 
   .selectedButton {
-    svg, p {
+    svg,
+    p {
       color: $BRIGHT_GREEN;
     }
-  }
-
-  .selectMessage {
-    color: $DT_SUB_TEXT;
   }
 
   .selectionTitle {
     color: $LAGOON;
   }
 
-  .selectedResource, .selectedPolicy {
+  .selectedResource,
+  .selectedPolicy {
     box-shadow: $DT_BOX_SHADOW;
     background-color: $DT_BACKGROUND_MEDIUM;
   }
@@ -234,20 +231,18 @@
   }
 
   .selectedButton {
-    svg, p {
+    svg,
+    p {
       color: $GREEN;
     }
-  }
-
-  .selectMessage {
-    color: $LT_SUB_TEXT;
   }
 
   .selectionTitle {
     color: $DEEP_SEA;
   }
 
-  .selectedResource, .selectedPolicy {
+  .selectedResource,
+  .selectedPolicy {
     box-shadow: $LT_BOX_SHADOW;
     background-color: $LT_BACKGROUND_MEDIUM;
   }

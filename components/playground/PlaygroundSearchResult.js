@@ -19,8 +19,8 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
-import Icon from "../Icon";
-import { ICON_NAMES } from "../../utils/icon-utils";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const getDataForResultType = (searchResult, type) => {
   if (type === "policy") {

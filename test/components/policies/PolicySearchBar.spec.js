@@ -60,7 +60,7 @@ describe("PolicySearchBar", () => {
 
   it("should handle any additional onChange events that are passed", () => {
     const onChangeMock = jest.fn();
-    rerender(<PolicySearchBar onSubmit={onSubmit} onChange={onChangeMock}/>);
+    rerender(<PolicySearchBar onSubmit={onSubmit} onChange={onChangeMock} />);
 
     const renderedInput = screen.getByText(/search for a policy/i);
     const searchTerm = chance.string();

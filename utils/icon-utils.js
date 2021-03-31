@@ -64,7 +64,7 @@ export const ICON_COMPONENTS = {
   [EXCLAMATION]: Exclamation,
   [EXTERNAL_LINK]: ExternalLink,
   [X_CIRCLE]: XCircle,
-  [CHECK]: Check
+  [CHECK]: Check,
 };
 
 export const ICON_NAMES = {

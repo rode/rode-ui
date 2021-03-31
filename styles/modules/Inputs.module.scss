@@ -64,7 +64,8 @@ $PADDING: 0.5rem;
   &[disabled] {
     cursor: not-allowed;
 
-    &:focus, &:active {
+    &:focus,
+    &:active {
       outline: none;
       box-shadow: none;
     }

@@ -58,6 +58,23 @@ describe("ResourceSearchBar", () => {
       });
   });
 
+  it("should handle any additional onChange events that are passed", () => {
+    const onChangeMock = jest.fn();
+    rerender(<ResourceSearchBar onSubmit={onSubmit} onChange={onChangeMock} />);
+
+    const renderedInput = screen.getByText(/search for a resource/i);
+    const searchTerm = chance.string();
+
+    userEvent.type(renderedInput, searchTerm);
+    expect(dispatchMock)
+      .toHaveBeenCalledTimes(searchTerm.length)
+      .toHaveBeenNthCalledWith(searchTerm.length, {
+        type: "SET_SEARCH_TERM",
+        data: expect.any(String),
+      });
+    expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
+  });
+
   it("should render the button to perform a search", () => {
     const renderedSearchButton = screen.getByLabelText("Search");
     expect(renderedSearchButton).toBeInTheDocument();
