@@ -20,8 +20,6 @@ import { getRodeUrl } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["POST"];
 
-// TODO: tests
-
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
