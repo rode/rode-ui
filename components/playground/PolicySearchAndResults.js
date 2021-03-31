@@ -15,7 +15,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PlaygroundSearchResult from "./PlaygroundSearchResult";
@@ -23,6 +23,8 @@ import { useFetch } from "hooks/useFetch";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
+
+// TODO: tests
 
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -49,7 +51,7 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
         }}
         onChange={() => setPolicySearch(false)}
       />
-      <div className={styles.policySearch}>
+      <div className={styles.searchResultsContainer}>
         {policySearch && (
           <Loading loading={policyLoading} type={"button"}>
             {policyResults?.length > 0 ? (
@@ -82,7 +84,7 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
 PolicySearchAndResults.propTypes = {
   policy: PropTypes.object,
   setPolicy: PropTypes.func.isRequired,
-  clearEvaluation: PropTypes.func.isRequired
-}
+  clearEvaluation: PropTypes.func.isRequired,
+};
 
 export default PolicySearchAndResults;

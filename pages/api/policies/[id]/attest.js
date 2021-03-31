@@ -20,6 +20,8 @@ import { getRodeUrl } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["POST"];
 
+// TODO: tests
+
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
@@ -30,7 +32,7 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const {id} = req.query;
+    const { id } = req.query;
     const requestBody = req.body;
 
     const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}:attest`, {
@@ -48,12 +50,12 @@ export default async (req, res) => {
 
     const evaluatePolicyResponse = await response.json();
 
-    console.log('evaluatePolicyResponse', evaluatePolicyResponse);
+    console.log("evaluatePolicyResponse", evaluatePolicyResponse);
 
     const result = {
       pass: evaluatePolicyResponse.pass,
       result: evaluatePolicyResponse.result,
-      explanation: evaluatePolicyResponse.explanation
+      explanation: evaluatePolicyResponse.explanation,
     };
 
     res.status(StatusCodes.OK).json(result);

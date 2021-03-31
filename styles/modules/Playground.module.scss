@@ -54,14 +54,10 @@
   }
 }
 
-.policySearch {
+.searchResultsContainer {
   flex: 1;
   max-height: 30vh;
   overflow: auto;
-}
-
-.resourceSearch {
-  @extend .policySearch;
 }
 
 .searchCard {
@@ -108,7 +104,7 @@
   @extend .leftContainer;
 }
 
-.selectedResource {
+.selectionContainer {
   padding: 1rem 0.75rem;
   margin-top: 1rem;
   width: 100%;
@@ -116,10 +112,6 @@
   > button {
     margin: 1rem auto 0;
   }
-}
-
-.selectedPolicy {
-  @extend .selectedResource;
 }
 
 .searchContainer {
@@ -223,14 +215,13 @@
     color: $LAGOON;
   }
 
-  .selectedResource,
-  .selectedPolicy {
+  .selectionContainer {
     box-shadow: $DT_BOX_SHADOW;
     background-color: $DT_BACKGROUND_MEDIUM;
   }
 
   .evaluationResults {
-    color: $BRIGHT_GREEN
+    color: $BRIGHT_GREEN;
   }
 
   .failedEvaluationResults {
@@ -277,8 +268,7 @@
     color: $DEEP_SEA;
   }
 
-  .selectedResource,
-  .selectedPolicy {
+  .selectionContainer {
     box-shadow: $LT_BOX_SHADOW;
     background-color: $LT_BACKGROUND_MEDIUM;
   }

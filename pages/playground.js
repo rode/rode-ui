@@ -77,7 +77,7 @@ const PolicyEvaluationPlayground = () => {
             clearEvaluation={() => setEvaluationResults(null)}
           />
           {resourceToEvaluate && (
-            <div className={styles.selectedResource}>
+            <div className={styles.selectionContainer}>
               <h2 className={styles.selectionTitle}>Selected Resource</h2>
               <p className={styles.selectionDetails}>
                 <span className={styles.label}>Name</span>
@@ -107,7 +107,7 @@ const PolicyEvaluationPlayground = () => {
             clearEvaluation={() => setEvaluationResults(null)}
           />
           {policyToEvaluate && (
-            <div className={styles.selectedPolicy}>
+            <div className={styles.selectionContainer}>
               <h2 className={styles.selectionTitle}>Selected Policy</h2>
               <p className={styles.selectionDetails}>
                 <span className={styles.label}>Name</span>
@@ -139,7 +139,7 @@ const PolicyEvaluationPlayground = () => {
         loading={evaluationLoading}
         disabled={!resourceToEvaluate || !policyToEvaluate}
       />
-      <EvaluationResult results={evaluationResults}/>
+      <EvaluationResult results={evaluationResults} />
     </div>
   );
 };

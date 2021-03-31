@@ -22,6 +22,8 @@ import { getResourceDetails } from "utils/resource-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
+// TODO: tests
+
 const getDataForResultType = (searchResult, type) => {
   if (type === "policy") {
     return {

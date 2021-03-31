@@ -27,9 +27,13 @@ import { useResources } from "providers/resources";
 
 // TODO: tests
 
-const ResourceSearchAndResults = ({resource, setResource, clearEvaluation}) => {
+const ResourceSearchAndResults = ({
+  resource,
+  setResource,
+  clearEvaluation,
+}) => {
   const [resourceSearch, setResourceSearch] = useState(false);
-  const {state, dispatch} = useResources();
+  const { state, dispatch } = useResources();
 
   const { data: resourceResults, loading: resourceLoading } = useFetch(
     resourceSearch ? "/api/resources" : null,
@@ -52,7 +56,7 @@ const ResourceSearchAndResults = ({resource, setResource, clearEvaluation}) => {
         }}
         onChange={() => setResourceSearch(false)}
       />
-      <div className={styles.resourceSearch}>
+      <div className={styles.searchResultsContainer}>
         {resourceSearch && (
           <Loading loading={resourceLoading} type={"button"}>
             {resourceResults?.length > 0 ? (
@@ -78,25 +82,23 @@ const ResourceSearchAndResults = ({resource, setResource, clearEvaluation}) => {
                     });
                   }}
                   key={result.uri}
-                  selected={
-                    result.uri === resource?.resource?.uri
-                  }
+                  selected={result.uri === resource?.resource?.uri}
                 />
               ))
             ) : (
-              <p>{ `No resources found matching "${state.searchTerm}"` }</p>
+              <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
         )}
       </div>
     </div>
-  )
+  );
 };
 
 ResourceSearchAndResults.propTypes = {
   resource: PropTypes.object,
   setResource: PropTypes.func.isRequired,
-  clearEvaluation: PropTypes.func.isRequired
-}
+  clearEvaluation: PropTypes.func.isRequired,
+};
 
-export default ResourceSearchAndResults
+export default ResourceSearchAndResults;
