@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// TODO: show the selected policy and resource in the left container when searching?
-
 import React, { useState } from "react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import PolicySearchBar from "components/policies/PolicySearchBar";
@@ -31,10 +29,14 @@ import { useResources } from "providers/resources";
 import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
 import { policyActions } from "reducers/policies";
+import { showError } from "utils/toast-utils";
+import { ICON_NAMES } from "../utils/icon-utils";
+import Icon from "../components/Icon";
 
 const PolicyEvaluationPlayground = () => {
   const [policySearch, setPolicySearch] = useState(false);
   const [resourceSearch, setResourceSearch] = useState(false);
+  const [evaluationResults, setEvaluationResults] = useState(null);
 
   // TODO: need to move this out in policy state so we can go from resource details to playground/policy details to playground
   const [policyToEvaluate, setPolicyToEvaluate] = useState("");
@@ -55,6 +57,30 @@ const PolicyEvaluationPlayground = () => {
       filter: resourceState.searchTerm,
     }
   );
+
+  const evaluatePolicy = async (event) => {
+    event.preventDefault();
+    const requestBody = {
+      resourceUri: resourceToEvaluate.resource.resourceUri
+    };
+
+    const response = await fetch(`/api/policies/${policyToEvaluate.id}/attest`, {
+      method: "POST",
+      body: JSON.stringify(requestBody)
+    });
+
+    const parsedResponse = await response.json();
+
+    console.log('parsedResponse', parsedResponse);
+
+    if (!response.ok) {
+
+      console.log('response not ok');
+      showError("An error occurred while evaluating. Please try again.");
+    }
+
+    setEvaluationResults(parsedResponse);
+  }
 
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
@@ -193,12 +219,30 @@ const PolicyEvaluationPlayground = () => {
       </div>
       <Button
         label={"Evaluate"}
-        onClick={() => {
-          console.log("here evaluating policy");
-        }}
+        onClick={evaluatePolicy}
         className={styles.evaluateButton}
         disabled={!resourceToEvaluate || !policyToEvaluate}
       />
+      {
+        evaluationResults &&
+          <div>
+            {
+              evaluationResults.pass ?
+                <>
+                  <Icon name={ICON_NAMES.BADGE_CHECK} />
+                <p>The resource passed the policy.</p>
+                </>
+                :
+                <div>
+                  <Icon name={ICON_NAMES.EXCLAMATION} />
+                  <p>The resource failed the policy.</p>
+                  <pre>
+                    <code>{evaluationResults.explanation}</code>
+                  </pre>
+                  </div>
+            }
+          </div>
+      }
     </div>
   );
 };
