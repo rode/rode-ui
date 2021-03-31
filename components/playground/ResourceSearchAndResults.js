@@ -58,31 +58,33 @@ const ResourceSearchAndResults = ({
         {resourceSearch && (
           <Loading loading={resourceLoading} type={"button"}>
             {resourceResults?.length > 0 ? (
-              resourceResults.map((result) => (
-                <PlaygroundSearchResult
-                  searchResult={result}
-                  type={"resource"}
-                  onClick={() => {
-                    const {
-                      resourceName,
-                      resourceVersion,
-                    } = getResourceDetails(result.uri);
+              resourceResults.map((result) => {
+                const { resourceName, resourceVersion } = getResourceDetails(
+                  result.uri
+                );
 
-                    setResource({
-                      uri: result.uri,
-                      name: resourceName,
-                      version: resourceVersion,
-                    });
-                    setResourceSearch(false);
-                    dispatch({
-                      type: resourceActions.SET_SEARCH_TERM,
-                      data: "",
-                    });
-                  }}
-                  key={result.uri}
-                  selected={result.uri === resource?.uri}
-                />
-              ))
+                return (
+                  <PlaygroundSearchResult
+                    mainText={resourceName}
+                    subText={`Version: ${resourceVersion}`}
+                    buttonText={"Select Resource"}
+                    onClick={() => {
+                      setResource({
+                        uri: result.uri,
+                        name: resourceName,
+                        version: resourceVersion,
+                      });
+                      setResourceSearch(false);
+                      dispatch({
+                        type: resourceActions.SET_SEARCH_TERM,
+                        data: "",
+                      });
+                    }}
+                    key={result.uri}
+                    selected={result.uri === resource?.uri}
+                  />
+                );
+              })
             ) : (
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}

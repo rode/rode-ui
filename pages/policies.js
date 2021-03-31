@@ -38,6 +38,7 @@ const createSearchFilter = (query) => {
 };
 
 // TODO: handle flashing of not found on this and resource search page
+// TODO: better styling with eval playground button
 
 const Policies = () => {
   const { theme } = useTheme();

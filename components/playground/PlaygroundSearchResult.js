@@ -18,37 +18,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
-import { getResourceDetails } from "utils/resource-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-const getDataForResultType = (searchResult, type) => {
-  if (type === "policy") {
-    return {
-      main: `${searchResult.name}`,
-      sub: `${searchResult.description}`,
-      buttonText: "Select Policy",
-    };
-  } else {
-    const { resourceName, resourceVersion } = getResourceDetails(
-      searchResult.uri
-    );
-    return {
-      main: `${resourceName}`,
-      sub: `Version: ${resourceVersion}`,
-      buttonText: "Select Resource",
-    };
-  }
-};
-
-const PlaygroundSearchResult = ({ searchResult, type, onClick, selected }) => {
-  const { main, sub, buttonText } = getDataForResultType(searchResult, type);
-
+const PlaygroundSearchResult = ({
+  mainText,
+  subText,
+  buttonText,
+  onClick,
+  selected,
+}) => {
   return (
     <div className={`${styles.searchCard}`}>
       <div>
-        <p className={styles.cardHeader}>{main}</p>
-        <p className={styles.cardText}>{sub}</p>
+        <p className={styles.cardHeader}>{mainText}</p>
+        <p className={styles.cardText}>{subText}</p>
       </div>
       <Button
         onClick={onClick}
@@ -69,8 +53,9 @@ const PlaygroundSearchResult = ({ searchResult, type, onClick, selected }) => {
 };
 
 PlaygroundSearchResult.propTypes = {
-  searchResult: PropTypes.object.isRequired,
-  type: PropTypes.oneOf(["policy", "resource"]).isRequired,
+  mainText: PropTypes.string.isRequired,
+  subText: PropTypes.string.isRequired,
+  buttonText: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
 };

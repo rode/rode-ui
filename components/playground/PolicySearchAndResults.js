@@ -52,8 +52,9 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
             {data?.length > 0 ? (
               data.map((result) => (
                 <PlaygroundSearchResult
-                  searchResult={result}
-                  type={"policy"}
+                  mainText={result.name}
+                  subText={result.description}
+                  buttonText={"Select Policy"}
                   onClick={() => {
                     setPolicy(result);
                     setPolicySearch(false);
