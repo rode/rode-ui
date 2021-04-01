@@ -17,7 +17,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Button from "components/Button";
-import styles from "styles/modules/Policy.module.scss"
+import styles from "styles/modules/Policy.module.scss";
 
 const PolicyDashboardButtons = () => {
   const router = useRouter();
