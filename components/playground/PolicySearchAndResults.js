@@ -23,15 +23,18 @@ import { useFetch } from "hooks/useFetch";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
+import Button from "components/Button";
+import { createSearchFilter } from "utils/shared-utils";
 
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const { state, dispatch } = usePolicies();
 
-  const { data, loading } = useFetch(policySearch ? "/api/policies" : null, {
-    filter: state.searchTerm,
-  });
+  const { data, loading } = useFetch(
+    policySearch ? "/api/policies" : null,
+    createSearchFilter(state.searchTerm)
+  );
 
   useEffect(() => {
     clearEvaluation();
@@ -45,6 +48,19 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
           setPolicySearch(true);
         }}
         onChange={() => setPolicySearch(false)}
+        helpText={
+          <Button
+            className={styles.viewAllPoliciesButton}
+            buttonType={"text"}
+            label={"View all policies"}
+            onClick={() =>
+              dispatch({
+                type: policyActions.SET_SEARCH_TERM,
+                data: "all",
+              })
+            }
+          />
+        }
       />
       <div className={styles.searchResultsContainer}>
         {policySearch && (

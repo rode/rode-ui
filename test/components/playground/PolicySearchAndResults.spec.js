@@ -29,6 +29,7 @@ describe("PolicySearchAndResults", () => {
     state,
     dispatch,
     fetchResponse,
+    fetchedPolicies,
     rerender;
 
   beforeEach(() => {
@@ -39,8 +40,16 @@ describe("PolicySearchAndResults", () => {
       searchTerm: chance.string(),
     };
     dispatch = jest.fn();
+    fetchedPolicies = chance.n(
+      () => ({
+        id: chance.guid(),
+        name: chance.string(),
+        description: chance.sentence(),
+      }),
+      chance.d4()
+    );
     fetchResponse = {
-      data: chance.string(),
+      data: fetchedPolicies,
       loading: false,
     };
 
@@ -66,6 +75,16 @@ describe("PolicySearchAndResults", () => {
 
   it("should render the search bar", () => {
     expect(screen.getByText(/search for a policy/i)).toBeInTheDocument();
+
+    const renderedViewAllPoliciesButton = screen.getByRole("button", {
+      name: "View all policies",
+    });
+    expect(renderedViewAllPoliciesButton).toBeInTheDocument();
+    userEvent.click(renderedViewAllPoliciesButton);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_SEARCH_TERM",
+      data: "all",
+    });
   });
 
   it("should render the loading indicator when searching for a policy", () => {
@@ -81,44 +100,26 @@ describe("PolicySearchAndResults", () => {
   });
 
   it("should render a search result for each policy found", () => {
-    let policies = chance.n(
-      () => ({
-        id: chance.guid,
-        name: chance.string(),
-        description: chance.sentence(),
-      }),
-      chance.d4()
-    );
-
     fetchResponse.loading = false;
-    fetchResponse.data = policies;
+    fetchResponse.data = fetchedPolicies;
 
     searchForPolicy();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    policies.forEach((policy) => {
+    fetchedPolicies.forEach((policy) => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
     });
   });
 
   it("should select the policy when prompted", () => {
-    let policies = chance.n(
-      () => ({
-        id: chance.guid,
-        name: chance.string(),
-        description: chance.sentence(),
-      }),
-      chance.d4()
-    );
-
     fetchResponse.loading = false;
-    fetchResponse.data = policies;
+    fetchResponse.data = fetchedPolicies;
 
     searchForPolicy();
 
     userEvent.click(screen.getAllByText("Select Policy")[0]);
-    expect(setPolicy).toHaveBeenCalledWith(policies[0]);
+    expect(setPolicy).toHaveBeenCalledWith(fetchedPolicies[0]);
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_SEARCH_TERM",
       data: "",
@@ -126,23 +127,14 @@ describe("PolicySearchAndResults", () => {
   });
 
   it("should render a policy as selected if it is the current policy to evaluate", () => {
-    let policies = chance.n(
-      () => ({
-        id: chance.guid(),
-        name: chance.string(),
-        description: chance.sentence(),
-      }),
-      chance.d4()
-    );
-
     fetchResponse.loading = false;
-    fetchResponse.data = policies;
+    fetchResponse.data = fetchedPolicies;
 
     rerender(
       <PolicySearchAndResults
         setPolicy={setPolicy}
         clearEvaluation={clearEvaluation}
-        policy={policies[0]}
+        policy={fetchedPolicies[0]}
       />
     );
 

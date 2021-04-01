@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { isServerSide } from "utils/shared-utils";
+import { createSearchFilter, isServerSide } from "utils/shared-utils";
 
 describe("shared utils", () => {
   /* eslint-disable no-undef*/
@@ -30,4 +30,28 @@ describe("shared utils", () => {
     });
   });
   /* eslint-enable no-undef */
+
+  describe("createSearchFilter", () => {
+    let searchTerm;
+
+    it("should return the filter if the search term is present and not returning all results", () => {
+      searchTerm = chance.string();
+
+      expect(createSearchFilter(searchTerm)).toEqual({
+        filter: searchTerm,
+      });
+    });
+
+    it("should return null when the search is returning all results", () => {
+      searchTerm = "all";
+
+      expect(createSearchFilter(searchTerm)).toBeNull();
+    });
+
+    it("should return null when there is no searchTerm", () => {
+      searchTerm = null;
+
+      expect(createSearchFilter(searchTerm)).toBeNull();
+    });
+  });
 });

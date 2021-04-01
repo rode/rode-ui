@@ -15,3 +15,13 @@
  */
 
 export const isServerSide = () => typeof window === "undefined";
+
+export const createSearchFilter = (searchTerm) => {
+  if (searchTerm && searchTerm !== "all") {
+    return {
+      filter: searchTerm,
+    };
+  }
+
+  return null;
+};

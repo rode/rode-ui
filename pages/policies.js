@@ -26,16 +26,7 @@ import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import Button from "components/Button";
-
-const createSearchFilter = (query) => {
-  if (query && query !== "all") {
-    return {
-      filter: query,
-    };
-  }
-
-  return null;
-};
+import { createSearchFilter } from "utils/shared-utils";
 
 // TODO: handle flashing of not found on this and resource search page
 // TODO: better styling with eval playground button
