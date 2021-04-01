@@ -17,6 +17,8 @@
 @import "styles/constants";
 @import "styles/mixins";
 
+$CARD_WIDTH: 97%;
+
 .pageContainer {
   width: 100%;
   display: flex;
@@ -80,7 +82,7 @@
 }
 
 .searchCard {
-  width: 97%;
+  width: $CARD_WIDTH;
   height: fit-content;
   padding: 1rem;
   margin: 0.5rem auto 0.5rem 0;
@@ -126,7 +128,7 @@
 .selectionContainer {
   padding: 1rem 0.75rem;
   margin-top: 1rem;
-  width: 100%;
+  width: $CARD_WIDTH;
 
   > button {
     margin: 1rem auto 0;
