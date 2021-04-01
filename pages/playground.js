@@ -66,6 +66,18 @@ const PolicyEvaluationPlayground = () => {
     setEvaluationResults(parsedResponse);
   };
 
+  const resetPlayground = () => {
+    policyDispatch({
+      type: policyActions.SET_EVALUATION_RESOURCE,
+      data: null,
+    });
+    policyDispatch({
+      type: policyActions.SET_EVALUATION_POLICY,
+      data: null,
+    });
+    setEvaluationResults(null);
+  };
+
   useEffect(() => {
     resourceDispatch({
       type: resourceActions.SET_SEARCH_TERM,
@@ -75,15 +87,23 @@ const PolicyEvaluationPlayground = () => {
       type: policyActions.SET_SEARCH_TERM,
       data: "",
     });
-  }),
-    [];
+  }, []);
 
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
-      <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
-      <p className={styles.instructions}>
-        Choose a resource, pick a policy, and evaluate.
-      </p>
+      <div className={styles.playgroundHeader}>
+        <div>
+          <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
+          <p className={styles.instructions}>
+            Choose a resource, pick a policy, and evaluate.
+          </p>
+        </div>
+        <Button
+          buttonType={"text"}
+          label={"Reset Playground"}
+          onClick={resetPlayground}
+        />
+      </div>
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
           <ResourceSearchAndResults

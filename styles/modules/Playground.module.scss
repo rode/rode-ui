@@ -31,6 +31,25 @@
   }
 }
 
+.playgroundHeader {
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    align-self: flex-end;
+  }
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    > button {
+      align-self: flex-start;
+    }
+  }
+}
+
 .contentContainer {
   flex: 1;
   display: flex;

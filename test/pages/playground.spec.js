@@ -138,6 +138,7 @@ describe("PolicyEvaluationPlayground", () => {
 
   describe("Resource and Policy have been selected for evaluation", () => {
     let selectedResource, selectedPolicy;
+
     beforeEach(() => {
       selectedResource = {
         uri: chance.string(),
@@ -252,6 +253,42 @@ describe("PolicyEvaluationPlayground", () => {
           .toHaveBeenCalledWith(
             "An error occurred while evaluating. Please try again."
           );
+      });
+
+      it("should clear the playground when the Reset Playground button is pressed", async () => {
+        const renderedEvaluateButton = screen.getByRole("button", {
+          name: "Evaluate",
+        });
+
+        await act(async () => {
+          await userEvent.click(renderedEvaluateButton);
+        });
+
+        expect(
+          screen.getByText(/^the resource (?:passed|failed) the policy./i)
+        ).toBeInTheDocument();
+
+        const resetPlaygroundButton = screen.getByRole("button", {
+          name: "Reset Playground",
+        });
+
+        expect(resetPlaygroundButton).toBeInTheDocument();
+        act(() => {
+          userEvent.click(resetPlaygroundButton);
+        });
+
+        expect(
+          screen.queryByText(/^the resource (?:passed|failed) the policy./i)
+        ).not.toBeInTheDocument();
+        expect(policyDispatch)
+          .toHaveBeenCalledWith({
+            type: "SET_EVALUATION_RESOURCE",
+            data: null,
+          })
+          .toHaveBeenCalledWith({
+            type: "SET_EVALUATION_POLICY",
+            data: null,
+          });
       });
     });
   });
