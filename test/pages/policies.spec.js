@@ -63,30 +63,14 @@ describe("Policies", () => {
     expect(screen.getByText(/search for a policy/i)).toBeInTheDocument();
   });
 
-  it("should render a button to create a new policy", () => {
+  it("should render the policy dashboard buttons", () => {
     render(<Policies />);
 
     const renderedNewPolicyButton = screen.getByText(/create new policy/i);
     expect(renderedNewPolicyButton).toBeInTheDocument();
 
-    userEvent.click(renderedNewPolicyButton);
-
-    expect(pushMock)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith("/policies/new");
-  });
-
-  it("should render a button to go to the policy evaluation playground", () => {
-    render(<Policies />);
-
     const renderedPlaygroundButton = screen.getByText(/playground/i);
     expect(renderedPlaygroundButton).toBeInTheDocument();
-
-    userEvent.click(renderedPlaygroundButton);
-
-    expect(pushMock)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith("/playground");
   });
 
   describe("searching for policies", () => {
