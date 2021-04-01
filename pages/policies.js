@@ -25,11 +25,10 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
+import PolicyDashboardButtons from "components/policies/PolicyDashboardButtons";
 
 // TODO: handle flashing of not found on this and resource search page
-// TODO: better styling with eval playground button
 
 const Policies = () => {
   const { theme } = useTheme();
@@ -95,17 +94,7 @@ const Policies = () => {
           )}
         </Loading>
       ) : (
-        <>
-          <Button
-            onClick={() => router.push("/policies/new")}
-            label={"Create New Policy"}
-          />
-          <Button
-            buttonType={"text"}
-            onClick={() => router.push("/playground")}
-            label={"Policy Evaluation Playground"}
-          />
-        </>
+        <PolicyDashboardButtons />
       )}
     </div>
   );
