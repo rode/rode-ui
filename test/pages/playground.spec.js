@@ -4,26 +4,29 @@ import userEvent from "@testing-library/user-event";
 import PolicyEvaluationPlayground from "pages/playground";
 import { useFetch } from "hooks/useFetch";
 import { createMockResourceUri } from "test/testing-utils/mocks";
+import { showError } from "utils/toast-utils";
 
 jest.mock("hooks/useFetch");
+jest.mock("utils/toast-utils");
 
 describe("PolicyEvaluationPlayground", () => {
   let policyState,
     policyDispatch,
     resourceState,
+    resourceDispatch,
     fetchResponse,
     useFetchResponse,
-    evaluationResults,
-    rerender;
+    evaluationResults;
 
   beforeEach(() => {
     policyState = {
-      searchTerm: chance.string()
+      searchTerm: chance.string(),
     };
     policyDispatch = jest.fn();
     resourceState = {
-      searchTerm: chance.string()
+      searchTerm: chance.string(),
     };
+    resourceDispatch = jest.fn();
     evaluationResults = {
       pass: chance.bool(),
       explanation: chance.string(),
@@ -33,8 +36,8 @@ describe("PolicyEvaluationPlayground", () => {
       ok: true,
     };
     useFetchResponse = {
-      data: null,
-      loading: null,
+      data: [],
+      loading: false,
     };
     useFetch.mockReturnValue(useFetchResponse);
     // eslint-disable-next-line no-undef
@@ -47,13 +50,23 @@ describe("PolicyEvaluationPlayground", () => {
 
   describe("Empty Evaluation Screen", () => {
     beforeEach(() => {
-      const utils = render(<PolicyEvaluationPlayground />, {
+      render(<PolicyEvaluationPlayground />, {
         policyState,
         policyDispatch,
-        resourceState
+        resourceState,
+        resourceDispatch,
       });
+    });
 
-      rerender = utils.rerender;
+    it("should clear any search terms set by other searches", () => {
+      expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: "SET_SEARCH_TERM",
+        data: "",
+      });
+      expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: "SET_SEARCH_TERM",
+        data: "",
+      });
     });
 
     it("should render the title and instructions", () => {
@@ -68,9 +81,11 @@ describe("PolicyEvaluationPlayground", () => {
     it("should render a search bar for resources", () => {
       const resourceName = chance.string();
       const resourceVersion = chance.string();
-      useFetchResponse.data = [ {
-        uri: createMockResourceUri(resourceName, resourceVersion),
-      }];
+      useFetchResponse.data = [
+        {
+          uri: createMockResourceUri(resourceName, resourceVersion),
+        },
+      ];
       useFetchResponse.loading = false;
 
       const renderedSearch = screen.getByLabelText(/search for a resource/i);
@@ -79,13 +94,13 @@ describe("PolicyEvaluationPlayground", () => {
       act(() => {
         userEvent.type(renderedSearch, "{enter}");
       });
-      userEvent.click(screen.getByRole("button", {name: "Select Resource"}));
+      userEvent.click(screen.getByRole("button", { name: "Select Resource" }));
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
         data: {
           uri: useFetchResponse.data[0].uri,
           name: resourceName,
-          version: resourceVersion
+          version: resourceVersion,
         },
       });
     });
@@ -93,13 +108,15 @@ describe("PolicyEvaluationPlayground", () => {
     it("should render a search bar for policies", () => {
       const policyName = chance.string();
       const description = chance.string();
-      const regoContent = chance.string()
-      useFetchResponse.data = [ {
-        id: chance.guid(),
-        name: policyName,
-        description,
-        regoContent
-      }];
+      const regoContent = chance.string();
+      useFetchResponse.data = [
+        {
+          id: chance.guid(),
+          name: policyName,
+          description,
+          regoContent,
+        },
+      ];
       useFetchResponse.loading = false;
       const renderedSearch = screen.getByLabelText(/search for a policy/i);
 
@@ -107,7 +124,7 @@ describe("PolicyEvaluationPlayground", () => {
       act(() => {
         userEvent.type(renderedSearch, "{enter}");
       });
-      userEvent.click(screen.getByRole("button", {name: "Select Policy"}));
+      userEvent.click(screen.getByRole("button", { name: "Select Policy" }));
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_POLICY",
         data: useFetchResponse.data[0],
@@ -176,19 +193,66 @@ describe("PolicyEvaluationPlayground", () => {
     it("should render the evaluate button as enabled", () => {
       expect(screen.getByRole("button", { name: "Evaluate" })).toBeEnabled();
     });
-  });
 
-  describe("Evaluation", () => {
-    it("should call to the correct endpoint", () => {
-      // TODO: finish these tests out
-    });
+    describe("Evaluation", () => {
+      it("should call to the correct endpoint", async () => {
+        const renderedEvaluateButton = screen.getByRole("button", {
+          name: "Evaluate",
+        });
 
-    it("should show the evaluation results that are returned", () => {
+        await act(async () => {
+          await userEvent.click(renderedEvaluateButton);
+        });
 
-    });
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(
+            `/api/policies/${policyState.evaluationPolicy.id}/attest`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                resourceUri: policyState.evaluationResource.uri,
+              }),
+            }
+          );
 
-    it("should show an error if the call to evaluate was not successful", () => {
+        expect(fetchResponse.json).toHaveBeenCalledTimes(1);
+      });
 
+      it("should show the evaluation results that are returned", async () => {
+        const renderedEvaluateButton = screen.getByRole("button", {
+          name: "Evaluate",
+        });
+
+        await act(async () => {
+          await userEvent.click(renderedEvaluateButton);
+        });
+
+        expect(
+          screen.getByText(/^the resource (?:passed|failed) the policy./i)
+        ).toBeInTheDocument();
+      });
+
+      it("should show an error if the call to evaluate was not successful", async () => {
+        fetchResponse.ok = false;
+
+        const renderedEvaluateButton = screen.getByRole("button", {
+          name: "Evaluate",
+        });
+
+        await act(async () => {
+          await userEvent.click(renderedEvaluateButton);
+        });
+
+        expect(
+          screen.queryByText(/^the resource (?:passed|failed) the policy./i)
+        ).not.toBeInTheDocument();
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(
+            "An error occurred while evaluating. Please try again."
+          );
+      });
     });
   });
 });

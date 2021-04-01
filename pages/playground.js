@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextArea from "components/TextArea";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
@@ -25,14 +25,16 @@ import PolicySearchAndResults from "components/playground/PolicySearchAndResults
 import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
-// TODO: clear values when they're leftover from other searches
 // TODO: manually test changes to double check they're okay, make some passing policies to see what's up
 // TODO: wait for Ahmed's additional changes to rode branch and make sure things are handled correctly
 
 const PolicyEvaluationPlayground = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch: policyDispatch } = usePolicies();
+  const { dispatch: resourceDispatch } = useResources();
 
   const [evaluationResults, setEvaluationResults] = useState(null);
   const [evaluationLoading, setEvaluationLoading] = useState(false);
@@ -55,14 +57,26 @@ const PolicyEvaluationPlayground = () => {
     const parsedResponse = await response.json();
 
     setEvaluationLoading(false);
-    console.log("parsedResponse", parsedResponse);
 
     if (!response.ok) {
       showError("An error occurred while evaluating. Please try again.");
+      return;
     }
 
     setEvaluationResults(parsedResponse);
   };
+
+  useEffect(() => {
+    resourceDispatch({
+      type: resourceActions.SET_SEARCH_TERM,
+      data: "",
+    });
+    policyDispatch({
+      type: policyActions.SET_SEARCH_TERM,
+      data: "",
+    });
+  }),
+    [];
 
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
@@ -75,7 +89,7 @@ const PolicyEvaluationPlayground = () => {
           <ResourceSearchAndResults
             resource={state.evaluationResource}
             setResource={(data) =>
-              dispatch({
+              policyDispatch({
                 type: policyActions.SET_EVALUATION_RESOURCE,
                 data,
               })
@@ -99,7 +113,7 @@ const PolicyEvaluationPlayground = () => {
                 buttonType={"textDestructive"}
                 label={"Clear Resource"}
                 onClick={() => {
-                  dispatch({
+                  policyDispatch({
                     type: policyActions.SET_EVALUATION_RESOURCE,
                     data: null,
                   });
@@ -113,7 +127,7 @@ const PolicyEvaluationPlayground = () => {
           <PolicySearchAndResults
             policy={state.evaluationPolicy}
             setPolicy={(data) =>
-              dispatch({
+              policyDispatch({
                 type: policyActions.SET_EVALUATION_POLICY,
                 data,
               })
@@ -141,7 +155,7 @@ const PolicyEvaluationPlayground = () => {
                 buttonType={"textDestructive"}
                 label={"Clear Policy"}
                 onClick={() => {
-                  dispatch({
+                  policyDispatch({
                     type: policyActions.SET_EVALUATION_POLICY,
                     data: null,
                   });
