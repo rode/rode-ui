@@ -26,7 +26,7 @@ import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 
-// TODO: tests
+// TODO: clear values when they're leftover from other searches
 // TODO: manually test changes to double check they're okay, make some passing policies to see what's up
 // TODO: wait for Ahmed's additional changes to rode branch and make sure things are handled correctly
 
@@ -127,10 +127,13 @@ const PolicyEvaluationPlayground = () => {
                 <span className={styles.label}>Name</span>
                 <span>{state.evaluationPolicy.name}</span>
               </p>
+              <p className={styles.selectionDetails}>
+                <span className={styles.label}>Description</span>
+                <span>{state.evaluationPolicy.description}</span>
+              </p>
               <TextArea
                 name={"regoContent"}
                 label={"Rego Policy Code"}
-                onChange={() => {}}
                 disabled
                 value={state.evaluationPolicy.regoContent}
               />

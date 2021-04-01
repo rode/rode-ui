@@ -52,7 +52,7 @@ const Button = (props) => {
 Button.propTypes = {
   onClick: function (props) {
     if (props.type !== "submit" && !props.onClick) {
-      throw new Error(
+      return new Error(
         "The prop `onClick` is required in `Button` for those not of type `submit`"
       );
     }
