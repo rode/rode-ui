@@ -22,7 +22,7 @@ import { isServerSide } from "utils/shared-utils";
 
 jest.mock("utils/shared-utils");
 
-describe("theme provider", () => {
+describe.only("theme provider", () => {
   let rerender, originalLocalStorage, getItemMock, setItemMock;
 
   beforeEach(() => {
