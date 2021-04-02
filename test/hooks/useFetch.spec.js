@@ -55,6 +55,12 @@ describe("useFetch", () => {
     expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function));
   });
 
+  it("should pass null as the URL when it is not specified but a query is provided", () => {
+    render(<FetchComponent url={null} query={query} />);
+
+    expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function));
+  });
+
   it("should return the data if the call was successful", () => {
     render(<FetchComponent url={url} query={query} />);
 
