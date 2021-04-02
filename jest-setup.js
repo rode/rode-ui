@@ -23,3 +23,5 @@ const chance = new Chance();
 
 // suppress logs
 console.error = jest.fn();
+
+window.matchMedia = () => ({ matches: false });
