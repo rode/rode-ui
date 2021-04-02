@@ -48,8 +48,6 @@ export default async (req, res) => {
 
     const evaluatePolicyResponse = await response.json();
 
-    console.log("evaluatePolicyResponse", evaluatePolicyResponse);
-
     const result = {
       pass: evaluatePolicyResponse.pass,
       result: evaluatePolicyResponse.result,

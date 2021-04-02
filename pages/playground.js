@@ -28,9 +28,6 @@ import { policyActions } from "reducers/policies";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 
-// TODO: manually test changes to double check they're okay, make some passing policies to see what's up
-// TODO: wait for Ahmed's additional changes to rode branch and make sure things are handled correctly
-
 const PolicyEvaluationPlayground = () => {
   const { theme } = useTheme();
   const { state, dispatch: policyDispatch } = usePolicies();
@@ -87,6 +84,9 @@ const PolicyEvaluationPlayground = () => {
       type: policyActions.SET_SEARCH_TERM,
       data: "",
     });
+
+    // TODO: this will need to change when we go from resource/policy details to here
+    resetPlayground();
   }, []);
 
   return (
