@@ -25,15 +25,31 @@ const ThemeContext = React.createContext({
   toggleTheme: () => {},
 });
 
+const getInitialTheme = () => {
+  if (isServerSide()) {
+    return LIGHT_THEME;
+  }
+
+  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)")
+    .matches;
+  if (prefersDarkScheme) {
+    return DARK_THEME;
+  }
+
+  return LIGHT_THEME;
+};
+
 export const ThemeProvider = (props) => {
-  const [theme, setTheme] = React.useState(LIGHT_THEME);
   const useEffect = isServerSide() ? React.useEffect : React.useLayoutEffect;
+  const [theme, setTheme] = React.useState(LIGHT_THEME);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
 
     if (savedTheme) {
       setTheme(savedTheme);
+    } else {
+      setTheme(getInitialTheme());
     }
   }, []);
 
