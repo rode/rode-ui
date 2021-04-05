@@ -84,6 +84,7 @@ $PADDING: 0.5rem;
 
 .textArea {
   @extend .input;
+  resize: vertical;
 }
 
 .textAreaError {
