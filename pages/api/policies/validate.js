@@ -44,7 +44,8 @@ export default async (req, res) => {
 
       if (
         parsedResponse?.message?.includes("failed to compile") ||
-        parsedResponse?.message?.includes("failed to parse")
+        parsedResponse?.message?.includes("failed to parse") ||
+        parsedResponse?.message?.includes("missing Rode required fields")
       ) {
         const validationError = {
           errors: parsedResponse.details[0].errors,
