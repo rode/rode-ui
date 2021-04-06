@@ -164,7 +164,8 @@ describe("/api/policies/validate", () => {
       rodeResponse.ok = false;
       rodeResponse.json.mockResolvedValue({
         details,
-        message: "policy compiled successfully but is missing Rode required fields",
+        message:
+          "policy compiled successfully but is missing Rode required fields",
       });
 
       await handler(request, response);
