@@ -155,6 +155,29 @@ describe("/api/policies/validate", () => {
       });
     });
 
+    it("should return a bad request status when rego is missing rode required fields", async () => {
+      const details = [
+        {
+          errors: chance.string(),
+        },
+      ];
+      rodeResponse.ok = false;
+      rodeResponse.json.mockResolvedValue({
+        details,
+        message: "policy compiled successfully but is missing Rode required fields",
+      });
+
+      await handler(request, response);
+
+      expect(response.status)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        errors: details[0].errors,
+        isValid: false,
+      });
+    });
+
     it("should return an internal server error on a non-200 response from Rode", async () => {
       rodeResponse.ok = false;
 
