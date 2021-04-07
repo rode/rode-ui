@@ -32,7 +32,7 @@ describe("Resource Details page", () => {
       query: {
         resourceUri: createMockResourceUri(),
       },
-      push: jest.fn()
+      push: jest.fn(),
     };
     state = {
       searchTerm: chance.string(),
@@ -42,13 +42,17 @@ describe("Resource Details page", () => {
     resourceDispatch = jest.fn();
 
     useRouter.mockReturnValue(router);
-    render(<Resource />, { resourceState: state, resourceDispatch, policyDispatch });
+    render(<Resource />, {
+      resourceState: state,
+      resourceDispatch,
+      policyDispatch,
+    });
   });
 
   it("should clear the occurrence details on load", () => {
     expect(resourceDispatch).toHaveBeenCalledWith({
-      type: 'SET_OCCURRENCE_DETAILS',
-      data: null
+      type: "SET_OCCURRENCE_DETAILS",
+      data: null,
     });
   });
 
@@ -67,21 +71,26 @@ describe("Resource Details page", () => {
       router.query.resourceUri
     );
 
-    const renderedButton = screen.getByRole("button", {name: "Evaluate in Policy Playground"});
+    const renderedButton = screen.getByRole("button", {
+      name: "Evaluate in Policy Playground",
+    });
 
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
 
-    expect(policyDispatch).toHaveBeenCalledTimes(1)
+    expect(policyDispatch)
+      .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith({
-        type: 'SET_EVALUATION_RESOURCE',
+        type: "SET_EVALUATION_RESOURCE",
         data: {
           uri: router.query.resourceUri,
           name: resourceName,
-          version: resourceVersion
-        }
+          version: resourceVersion,
+        },
       });
 
-    expect(router.push).toHaveBeenCalledTimes(1).toHaveBeenCalledWith("/playground");
+    expect(router.push)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith("/playground");
   });
 });

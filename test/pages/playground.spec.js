@@ -79,7 +79,7 @@ describe("PolicyEvaluationPlayground", () => {
         type: "SET_SEARCH_TERM",
         data: "",
       });
-      expect(policyDispatch).toHaveBeenCalledTimes(3).toHaveBeenCalledWith({
+      expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
         type: "SET_SEARCH_TERM",
         data: "",
       });
