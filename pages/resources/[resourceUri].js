@@ -84,6 +84,7 @@ const Resource = () => {
           label={"Evaluate in Policy Playground"}
           onClick={evaluateInPlayground}
           className={styles.playgroundButton}
+          buttonType={"text"}
         />
       </div>
       <ResourceOccurrences resourceUri={resourceUri} />

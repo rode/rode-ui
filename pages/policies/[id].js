@@ -23,10 +23,13 @@ import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const { dispatch } = usePolicies();
 
   const { id } = router.query;
 
@@ -34,6 +37,14 @@ const Policy = () => {
 
   const editPolicy = () => {
     router.push(`/policies/${id}/edit`);
+  };
+
+  const evaluateInPlayground = () => {
+    dispatch({
+      type: policyActions.SET_EVALUATION_POLICY,
+      data: policy,
+    });
+    router.push("/playground");
   };
 
   return (
@@ -52,6 +63,12 @@ const Policy = () => {
                 </div>
                 <Button label={"Edit Policy"} onClick={editPolicy} />
               </div>
+              <Button
+                label={"Evaluate in Policy Playground"}
+                buttonType={"text"}
+                onClick={evaluateInPlayground}
+                className={styles.playgroundButton}
+              />
               <div className={styles.regoContainer}>
                 <p>Rego Policy Code</p>
                 <pre>
