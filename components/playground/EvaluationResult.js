@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import Button from "components/Button";
 
 const EvaluationResult = ({ results }) => {
+  const [showCode, setShowCode] = useState(false);
+
   if (!results) {
     return null;
   }
+
+  const toggle = () => {
+    setShowCode(!showCode);
+  };
 
   return (
     <div className={styles.evaluationResultsContainer}>
@@ -33,14 +40,21 @@ const EvaluationResult = ({ results }) => {
           <p>The resource passed the policy.</p>
         </div>
       ) : (
-        <div>
+        <div className={styles.failedEvaluationResultsContainer}>
           <div className={styles.failedEvaluationResults}>
             <Icon name={ICON_NAMES.EXCLAMATION} />
             <p>The resource failed the policy.</p>
           </div>
-          <pre>
-            <code>{results.explanation}</code>
-          </pre>
+          <Button
+            onClick={toggle}
+            label={showCode ? "Hide Failures" : "Show Failures"}
+            buttonType={"text"}
+          />
+          {showCode && (
+            <pre data-testid="codeBlock">
+              <code>{JSON.stringify(results.explanation, null, 2)}</code>
+            </pre>
+          )}
         </div>
       )}
     </div>

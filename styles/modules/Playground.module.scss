@@ -201,13 +201,18 @@ $CARD_WIDTH: 97%;
   @extend .evaluationResults;
 }
 
+.failedEvaluationResultsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > button {
+    margin: 0.5rem auto;
+  }
+}
+
 .evaluationResultsContainer {
   padding: 1rem;
-
-  pre {
-    width: 75%;
-    margin: 0 auto;
-  }
 }
 
 .darkTheme {

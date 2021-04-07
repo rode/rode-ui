@@ -17,6 +17,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import EvaluationResult from "components/playground/EvaluationResult";
+import userEvent from "@testing-library/user-event";
 
 describe("EvaluationResult", () => {
   it("should return null when there are no results", () => {
@@ -48,6 +49,20 @@ describe("EvaluationResult", () => {
       screen.getByText(/the resource failed the policy/i)
     ).toBeInTheDocument();
     expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
-    expect(screen.getByText(failedResult.explanation)).toBeInTheDocument();
+
+    const renderedToggleCodeButton = screen.getByRole("button", {
+      name: "Show Failures",
+    });
+    expect(renderedToggleCodeButton).toBeInTheDocument();
+
+    userEvent.click(renderedToggleCodeButton);
+
+    expect(screen.getByTestId("codeBlock")).toBeInTheDocument();
+    expect(
+      screen.getByText(JSON.stringify(failedResult.explanation, null, 2))
+    ).toBeInTheDocument();
+    userEvent.click(screen.getByRole("button", { name: "Hide Failures" }));
+
+    expect(screen.queryByTestId("codeBlock")).not.toBeInTheDocument();
   });
 });
