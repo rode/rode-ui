@@ -1,0 +1,311 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+$CARD_WIDTH: 97%;
+
+.pageContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  height: fit-content;
+
+  @include tabletAndLarger {
+    padding: 1rem;
+    margin: 1rem auto;
+    min-height: 90%;
+  }
+}
+
+.playgroundHeader {
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    align-self: flex-end;
+  }
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    > button {
+      align-self: flex-start;
+    }
+  }
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+}
+
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 0.5rem;
+  height: 100%;
+
+  @include tabletAndLarger {
+    width: 48%;
+  }
+}
+
+.searchResultsContainer {
+  flex: 1;
+  max-height: 30vh;
+  overflow: auto;
+}
+
+.searchCard {
+  width: $CARD_WIDTH;
+  height: fit-content;
+  padding: 1rem;
+  margin: 0.5rem auto 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardHeader {
+  text-align: left;
+  @include ellipsis(calc(100vw - 7rem));
+  white-space: pre-line;
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.75rem;
+  text-indent: 0.5rem;
+  @include ellipsis(calc(100vw - 7rem));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.actionButton {
+  margin-top: 0.25rem;
+  align-self: flex-end;
+}
+
+.selectedButton {
+  @extend .actionButton;
+}
+
+.rightContainer {
+  @extend .leftContainer;
+}
+
+.selectionContainer {
+  padding: 1rem 0.75rem;
+  margin-top: 1rem;
+  width: $CARD_WIDTH;
+
+  > button {
+    margin: 1rem auto 0;
+  }
+}
+
+.searchContainer {
+  max-height: 50%;
+  width: 100%;
+}
+
+.viewAllPoliciesButton {
+  font-size: 0.85rem;
+  min-height: fit-content;
+  padding: 0.25rem;
+  margin-left: auto;
+}
+
+.selectionTitle {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.selectionDetails {
+  margin: 0.5rem 0;
+  @include ellipsis(calc(100vw - 10%));
+  white-space: pre-line;
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 30%);
+  }
+}
+
+.label {
+  font-weight: 700;
+  padding: 0 0.5rem;
+}
+
+.break {
+  @include ellipsis(100%);
+  overflow-wrap: anywhere;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.evaluateButton {
+  width: 85%;
+  margin: 1rem auto;
+
+  @include tabletAndLarger {
+    width: 65%;
+    align-self: flex-end;
+  }
+}
+
+.evaluationResults {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.failedEvaluationResults {
+  @extend .evaluationResults;
+}
+
+.evaluationResultsContainer {
+  padding: 1rem;
+
+  pre {
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
+.darkTheme {
+  &.pageContainer {
+    background-color: $DT_BACKGROUND_LIGHT;
+  }
+
+  .pageTitle {
+    color: $LAGOON;
+  }
+
+  .instructions {
+    color: $DT_SUB_TEXT;
+  }
+
+  .searchCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
+  }
+
+  .selectedButton {
+    svg,
+    p {
+      color: $BRIGHT_GREEN;
+    }
+  }
+
+  .selectionTitle {
+    color: $LAGOON;
+  }
+
+  .selectionContainer {
+    box-shadow: $DT_BOX_SHADOW;
+    background-color: $DT_BACKGROUND_MEDIUM;
+  }
+
+  .evaluationResults {
+    color: $BRIGHT_GREEN;
+  }
+
+  .failedEvaluationResults {
+    color: $HOT_RED;
+  }
+
+  .evaluationResultsContainer {
+    pre {
+      background-color: $DT_BACKGROUND_DARK;
+    }
+  }
+}
+
+.lightTheme {
+  &.pageContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .pageTitle {
+    color: $DEEP_SEA;
+  }
+
+  .instructions {
+    color: $LT_SUB_TEXT;
+  }
+
+  .searchCard {
+    background-color: $LT_BACKGROUND_MEDIUM;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
+  }
+
+  .selectedButton {
+    svg,
+    p {
+      color: $GREEN;
+    }
+  }
+
+  .selectionTitle {
+    color: $DEEP_SEA;
+  }
+
+  .selectionContainer {
+    box-shadow: $LT_BOX_SHADOW;
+    background-color: $LT_BACKGROUND_MEDIUM;
+  }
+
+  .evaluationResults {
+    color: $GREEN;
+  }
+
+  .failedEvaluationResults {
+    color: $HOT_RED;
+  }
+}

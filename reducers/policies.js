@@ -28,9 +28,25 @@ const setCurrentPolicy = (state, data) => {
   };
 };
 
+const setEvaluationPolicy = (state, data) => {
+  return {
+    ...state,
+    evaluationPolicy: data,
+  };
+};
+
+const setEvaluationResource = (state, data) => {
+  return {
+    ...state,
+    evaluationResource: data,
+  };
+};
+
 const actionMap = {
   SET_SEARCH_TERM: setSearchTerm,
   SET_CURRENT_POLICY: setCurrentPolicy,
+  SET_EVALUATION_POLICY: setEvaluationPolicy,
+  SET_EVALUATION_RESOURCE: setEvaluationResource,
 };
 
 export const policyReducer = (state, action) => {
@@ -42,4 +58,6 @@ export const policyReducer = (state, action) => {
 export const policyActions = {
   SET_SEARCH_TERM: "SET_SEARCH_TERM",
   SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
+  SET_EVALUATION_POLICY: "SET_EVALUATION_POLICY",
+  SET_EVALUATION_RESOURCE: "SET_EVALUATION_RESOURCE",
 };

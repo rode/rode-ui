@@ -63,4 +63,28 @@ describe("policies reducer", () => {
       currentPolicy: data,
     });
   });
+
+  it("should update state when the action type is 'SET_EVALUATION_POLICY'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_EVALUATION_POLICY,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      evaluationPolicy: data,
+    });
+  });
+
+  it("should update state when the action type is 'SET_EVALUATION_RESOURCE'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_EVALUATION_RESOURCE,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      evaluationResource: data,
+    });
+  });
 });

@@ -25,16 +25,7 @@ import Loading from "components/Loading";
 import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
 import Link from "next/link";
-
-const createSearchFilter = (query) => {
-  if (query && query !== "all") {
-    return {
-      filter: query,
-    };
-  }
-
-  return null;
-};
+import { createSearchFilter } from "utils/shared-utils";
 
 const Resources = () => {
   const { theme } = useTheme();

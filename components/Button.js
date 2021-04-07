@@ -52,14 +52,20 @@ const Button = (props) => {
 Button.propTypes = {
   onClick: function (props) {
     if (props.type !== "submit" && !props.onClick) {
-      throw new Error(
+      return new Error(
         "The prop `onClick` is required in `Button` for those not of type `submit`"
       );
     }
   },
   label: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-  buttonType: PropTypes.oneOf(["primary", "icon", "text"]),
+  buttonType: PropTypes.oneOf([
+    "primary",
+    "icon",
+    "text",
+    "textDestructive",
+    "primaryDestructive",
+  ]),
   children: PropTypes.node,
   className: PropTypes.string,
   loading: PropTypes.bool,

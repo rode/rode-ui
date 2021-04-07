@@ -25,17 +25,8 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import Button from "components/Button";
-
-const createSearchFilter = (query) => {
-  if (query && query !== "all") {
-    return {
-      filter: query,
-    };
-  }
-
-  return null;
-};
+import { createSearchFilter } from "utils/shared-utils";
+import PolicyDashboardButtons from "components/policies/PolicyDashboardButtons";
 
 // TODO: handle flashing of not found on this and resource search page
 
@@ -103,12 +94,7 @@ const Policies = () => {
           )}
         </Loading>
       ) : (
-        <>
-          <Button
-            onClick={() => router.push("/policies/new")}
-            label={"Create New Policy"}
-          />
-        </>
+        <PolicyDashboardButtons />
       )}
     </div>
   );

@@ -30,46 +30,33 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const policy = req.body;
+    const { id } = req.query;
+    const requestBody = req.body;
 
-    const response = await fetch(`${rodeUrl}/v1alpha1/policies:validate`, {
+    const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}:attest`, {
       method: "POST",
-      body: policy,
+      body: requestBody,
     });
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-      const parsedResponse = await response.json();
-
-      if (
-        parsedResponse?.message?.includes("failed to compile") ||
-        parsedResponse?.message?.includes("failed to parse") ||
-        parsedResponse?.message?.includes("missing Rode required fields")
-      ) {
-        const validationError = {
-          errors: parsedResponse.details[0].errors,
-          isValid: false,
-        };
-
-        return res.status(StatusCodes.BAD_REQUEST).json(validationError);
-      }
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
 
-    const validatePolicyResponse = await response.json();
+    const evaluatePolicyResponse = await response.json();
 
     const result = {
-      errors: validatePolicyResponse.errors,
-      isValid: validatePolicyResponse.compile,
+      pass: evaluatePolicyResponse.pass,
+      result: evaluatePolicyResponse.result,
+      explanation: evaluatePolicyResponse.explanation,
     };
 
     res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    console.error("Error validating policy", error);
+    console.error("Error evaluating policy", error);
 
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

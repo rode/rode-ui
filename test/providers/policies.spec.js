@@ -40,6 +40,8 @@ describe("policies provider", () => {
   it("should render the default state keys", () => {
     expect(screen.getByText(/searchTerm/i)).toBeInTheDocument();
     expect(screen.getByText(/currentPolicy/i)).toBeInTheDocument();
+    expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
+    expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {

@@ -61,12 +61,18 @@ const TextArea = (props) => {
 TextArea.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string,
   rows: PropTypes.number,
   required: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  onChange: function (props) {
+    if (!props.disabled && !props.onClick) {
+      return new Error(
+        "The prop `onChange` is required in `TextArea` when the component is not disabled"
+      );
+    }
+  },
 };
 
 export default TextArea;
