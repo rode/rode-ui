@@ -115,4 +115,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/check/i)).toBeInTheDocument();
   });
+
+  it("should render the menu icon when specified", () => {
+    render(<Icon name={ICON_NAMES.MENU} />);
+
+    expect(screen.getByTitle(/menu/i)).toBeInTheDocument();
+  });
 });
