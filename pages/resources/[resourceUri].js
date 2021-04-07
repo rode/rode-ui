@@ -23,10 +23,14 @@ import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import Button from "components/Button";
+import { policyActions } from "reducers/policies";
+import { usePolicies } from "providers/policies";
 
 const Resource = () => {
   const { theme } = useTheme();
   const { dispatch } = useResources();
+  const { dispatch: policyDispatch } = usePolicies();
   const router = useRouter();
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
@@ -51,6 +55,18 @@ const Resource = () => {
     setResourceType(type);
   }, [resourceUri]);
 
+  const evaluateInPlayground = () => {
+    policyDispatch({
+      type: policyActions.SET_EVALUATION_RESOURCE,
+      data: {
+        uri: resourceUri,
+        name: resourceName,
+        version: resourceVersion,
+      },
+    });
+    router.push("/playground");
+  };
+
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
       <ResourceBreadcrumbs />
@@ -63,7 +79,13 @@ const Resource = () => {
           <p className={styles.version}>Version: {resourceVersion}</p>
         </div>
       </div>
-
+      <div className={styles.playgroundContainer}>
+        <Button
+          label={"Evaluate in Policy Playground"}
+          onClick={evaluateInPlayground}
+          className={styles.playgroundButton}
+        />
+      </div>
       <ResourceOccurrences resourceUri={resourceUri} />
     </div>
   );

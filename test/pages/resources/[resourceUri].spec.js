@@ -20,24 +20,36 @@ import Resource from "pages/resources/[resourceUri]";
 import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
 
 describe("Resource Details page", () => {
-  let state, router;
+  let state, router, policyDispatch, resourceDispatch;
 
   beforeEach(() => {
     router = {
       query: {
         resourceUri: createMockResourceUri(),
       },
+      push: jest.fn()
     };
     state = {
       searchTerm: chance.string(),
     };
 
+    policyDispatch = jest.fn();
+    resourceDispatch = jest.fn();
+
     useRouter.mockReturnValue(router);
-    render(<Resource />, { resourceState: state });
+    render(<Resource />, { resourceState: state, resourceDispatch, policyDispatch });
+  });
+
+  it("should clear the occurrence details on load", () => {
+    expect(resourceDispatch).toHaveBeenCalledWith({
+      type: 'SET_OCCURRENCE_DETAILS',
+      data: null
+    });
   });
 
   it("should render the resource header information", () => {
@@ -48,5 +60,28 @@ describe("Resource Details page", () => {
     expect(screen.getByText(resourceName)).toBeInTheDocument();
     expect(screen.getByText(`Type: ${resourceType}`)).toBeInTheDocument();
     expect(screen.getByText(`Version: ${resourceVersion}`)).toBeInTheDocument();
+  });
+
+  it("should render a button to use the resource in the policy playground", () => {
+    const { resourceName, resourceVersion } = getResourceDetails(
+      router.query.resourceUri
+    );
+
+    const renderedButton = screen.getByRole("button", {name: "Evaluate in Policy Playground"});
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(policyDispatch).toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith({
+        type: 'SET_EVALUATION_RESOURCE',
+        data: {
+          uri: router.query.resourceUri,
+          name: resourceName,
+          version: resourceVersion
+        }
+      });
+
+    expect(router.push).toHaveBeenCalledTimes(1).toHaveBeenCalledWith("/playground");
   });
 });
