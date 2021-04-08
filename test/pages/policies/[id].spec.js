@@ -91,6 +91,22 @@ describe("Policy Details", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/policies/${policy.id}/edit`);
     });
+
+    it("should render a button to evaluate the policy in the playground", () => {
+      const renderedButton = screen.getByRole("button", {
+        name: "Evaluate in Policy Playground",
+      });
+
+      expect(renderedButton).toBeInTheDocument();
+      userEvent.click(renderedButton);
+      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        type: "SET_EVALUATION_POLICY",
+        data: policy,
+      });
+      expect(router.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("/playground");
+    });
   });
 
   describe("policy was not found", () => {

@@ -21,7 +21,7 @@ const chance = new Chance();
 const createBuiltArtifacts = () => ({
   checksum: chance.natural(),
   id: chance.guid(),
-  names: [chance.word({ syllable: chance.d10() + 3 })],
+  names: [chance.word({ syllables: chance.d10() + 3 })],
 });
 
 const createDiscoveryDetails = () => ({

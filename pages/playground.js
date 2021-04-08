@@ -85,8 +85,7 @@ const PolicyEvaluationPlayground = () => {
       data: "",
     });
 
-    // TODO: this will need to change when we go from resource/policy details to here
-    resetPlayground();
+    setEvaluationResults(null);
   }, []);
 
   return (

@@ -60,6 +60,22 @@
   }
 }
 
+.playgroundContainer {
+  height: 0.25rem;
+  width: 100%;
+  position: relative;
+}
+.playgroundButton {
+  margin: 1rem auto;
+
+  @include tabletAndLarger {
+    margin: 0 0 0 auto;
+    position: relative;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
 .darkTheme {
   .resourceHeader {
     background-color: $DEEP_SEA;
