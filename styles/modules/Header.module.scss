@@ -16,103 +16,168 @@
 
 @import "styles/constants";
 @import "styles/mixins";
+//
+//.container {
+//  z-index: 1;
+//  width: 100%;
+//  display: grid;
+//  grid-template-columns: 5rem 1fr max-content;
+//  padding: 0 0.25rem;
+//  overflow-x: auto;
+//  overflow-y: hidden;
+//
+//  @include tabletAndLarger {
+//    padding: 0 1rem;
+//    overflow-x: unset;
+//  }
+//}
+//
+//.scrollContainer {
+//  display: flex;
+//  flex-direction: row;
+//  justify-content: flex-start;
+//  align-items: center;
+//  overflow-y: auto;
+//
+//  @include tabletAndLarger {
+//    overflow-y: unset;
+//  }
+//}
+//
+//.links {
+//  padding: 0.5rem;
+//  flex: 1;
+//  display: flex;
+//  flex-direction: row;
+//  align-items: center;
+//  justify-content: flex-start;
+//}
+//
+//.link {
+//  text-transform: uppercase;
+//  margin: 0 1.5rem;
+//  font-weight: 600;
+//  border-bottom: solid 0.15rem transparent;
+//  @include transition;
+//
+//  &:hover {
+//    text-decoration: none;
+//    border-bottom-color: $GREEN;
+//  }
+//}
+//
+//.active {
+//  @extend .link;
+//  font-weight: 700;
+//}
+
+//.darkTheme {
+  //&.container {
+  //  background-color: $DT_BACKGROUND_MEDIUM;
+  //  box-shadow: $DT_BOX_SHADOW;
+  //}
+  //
+  //.link {
+  //  color: $DT_LINK;
+  //
+  //  &:visited {
+  //    color: $DT_LINK;
+  //  }
+  //}
+  //
+  //.active {
+  //  border-bottom-color: $DT_LINK;
+  //
+  //  &:hover {
+  //    border-bottom-color: $GREEN;
+  //  }
+  //}
+//}
+
+//.lightTheme {
+  //&.container {
+  //  background-color: $LT_BACKGROUND_LIGHT;
+  //  box-shadow: $LT_BOX_SHADOW;
+  //}
+  //
+  //.link {
+  //  color: $LT_LINK;
+  //
+  //  &:visited {
+  //    color: $LT_LINK;
+  //  }
+  //}
+  //
+  //.active {
+  //  border-bottom-color: $LT_LINK;
+  //
+  //  &:hover {
+  //    border-bottom-color: $GREEN;
+  //  }
+  //}
+//}
 
 .container {
-  z-index: 1;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 5rem 1fr max-content;
-  padding: 0 0.25rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  @include tabletAndLarger {
-    padding: 0 1rem;
-    overflow-x: unset;
-  }
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
 }
 
-.scrollContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  overflow-y: auto;
-
-  @include tabletAndLarger {
-    overflow-y: unset;
-  }
-}
-
-.links {
-  padding: 0.5rem;
-  flex: 1;
+.logoContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  padding: 0.25rem 1rem;
+  z-index: 3;
 }
 
-.link {
-  text-transform: uppercase;
-  margin: 0 1.5rem;
-  font-weight: 600;
-  border-bottom: solid 0.15rem transparent;
+.logo {
+  max-width: 6rem;
+  display: inline-block;
+}
+
+.expandedNavigation {
+  position: absolute;
+  top: 7rem;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 30vw;
   @include transition;
 
-  &:hover {
-    text-decoration: none;
-    border-bottom-color: $GREEN;
+  a, p {
+    color: white;
   }
 }
 
-.active {
-  @extend .link;
-  font-weight: 700;
+.hiddenNavigation {
+  @extend .expandedNavigation;
+  @include transition;
+  transform: translateX(-30vw);
+}
+
+
+.expandedToggle {
+  @include transition;
+  transform: translateX(15vw);
+}
+
+.hiddenToggle {
+  margin-left: 1rem;
+  @include transition;
+  transform: translateX(0);
 }
 
 .darkTheme {
-  &.container {
-    background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .link {
-    color: $DT_LINK;
-
-    &:visited {
-      color: $DT_LINK;
-    }
-  }
-
-  .active {
-    border-bottom-color: $DT_LINK;
-
-    &:hover {
-      border-bottom-color: $GREEN;
-    }
+  .expandedNavigation {
+    background-color: $DT_BACKGROUND_DARK;
   }
 }
 
 .lightTheme {
-  &.container {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .link {
-    color: $LT_LINK;
-
-    &:visited {
-      color: $LT_LINK;
-    }
-  }
-
-  .active {
-    border-bottom-color: $LT_LINK;
-
-    &:hover {
-      border-bottom-color: $GREEN;
-    }
+  .expandedNavigation {
+    background-color: $LT_BACKGROUND_LIGHT
   }
 }
