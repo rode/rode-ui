@@ -207,6 +207,13 @@ $CARD_WIDTH: 97%;
   > button {
     margin: 0.5rem auto;
   }
+
+  > pre {
+    @include tabletAndLarger {
+      width: 75%;
+      margin: 0 auto;
+    }
+  }
 }
 
 .evaluationResultsContainer {
@@ -267,10 +274,6 @@ $CARD_WIDTH: 97%;
 }
 
 .lightTheme {
-  &.pageContainer {
-    background-color: $LT_BACKGROUND_LIGHT;
-  }
-
   .pageTitle {
     color: $DEEP_SEA;
   }
@@ -280,7 +283,7 @@ $CARD_WIDTH: 97%;
   }
 
   .searchCard {
-    background-color: $LT_BACKGROUND_MEDIUM;
+    background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
   }
 
@@ -301,13 +304,18 @@ $CARD_WIDTH: 97%;
 
   .selectionContainer {
     box-shadow: $LT_BOX_SHADOW;
-    background-color: $LT_BACKGROUND_MEDIUM;
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .evaluationResults {
     color: $GREEN;
   }
 
+  .failedEvaluationResultsContainer {
+    > pre {
+      background-color: $LT_BACKGROUND_DARK;
+    }
+  }
   .failedEvaluationResults {
     color: $HOT_RED;
   }
