@@ -44,12 +44,13 @@ body {
       "footer footer footer footer footer footer footer footer footer footer footer footer";
   }
 
-  header {
-    grid-row: header / auto;
-    grid-column: header;
-  }
+  //header {
+  //  grid-row: header / auto;
+  //  grid-column: header;
+  //}
 
   main {
+    padding-top: 6rem;
     grid-row: main / auto;
     grid-column: main;
 

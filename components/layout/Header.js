@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
@@ -23,6 +23,7 @@ import { useTheme } from "providers/theme";
 import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import { useRouter } from "next/router";
 
 const resourceLinks = [
   {
@@ -57,13 +58,20 @@ const navigationSections = [
   },
 ];
 
+// TODO: clicking outside of the expanded navigation window should close the navigation
+
 const Header = () => {
   const { theme } = useTheme();
+  const router = useRouter();
   const [showNavigation, setShowNavigation] = useState(false);
 
   const toggleNavigation = () => {
     setShowNavigation(!showNavigation);
   };
+
+  useEffect(() => {
+    setShowNavigation(false);
+  }, [router]);
 
   return (
     <header className={`${styles.container} ${styles[theme]}`}>

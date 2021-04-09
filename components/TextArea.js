@@ -67,7 +67,7 @@ TextArea.propTypes = {
   required: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: function (props) {
-    if (!props.disabled && !props.onClick) {
+    if (!props.disabled && !props.onChange) {
       return new Error(
         "The prop `onChange` is required in `TextArea` when the component is not disabled"
       );

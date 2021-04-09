@@ -136,6 +136,19 @@ $DESKTOP_NAV_WIDTH: 30vw;
   margin: 1rem 1rem 1rem auto;
 }
 
+.pageHeader {
+  position: absolute;
+  top: 0;
+  width: fit-content;
+  max-width: 75vw;
+  margin-left: 10rem;
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .darkTheme {
   .expandedNavigation {
     background-color: $DT_BACKGROUND_DARK;
