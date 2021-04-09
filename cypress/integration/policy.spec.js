@@ -21,13 +21,14 @@ import {
 } from "../mock-responses/policy-responses";
 
 context("Policies", () => {
-  beforeEach(() => {
-    cy.visit("/");
-    cy.get('a[href="/policies"]').click();
-    cy.url().should("match", /\/policies$/);
-  });
-
   context("Policy Search", () => {
+    beforeEach(() => {
+      cy.visit("/");
+      cy.get('[aria-label="Toggle Navigation"]').click();
+      cy.get('a[href="/policies"]').click();
+      cy.url().should("match", /\/policies$/);
+    });
+
     it("should search for a policy that does not exist", () => {
       cy.mockRequest("**/api/policies*", []);
 
@@ -60,7 +61,9 @@ context("Policies", () => {
 
   context("Policy Creation", () => {
     beforeEach(() => {
-      cy.contains("Create New Policy").click();
+      cy.visit("/");
+      cy.get('[aria-label="Toggle Navigation"]').click();
+      cy.get('a[href="/policies/new"]').click();
       cy.url().should("match", /\/policies\/new/);
     });
 
