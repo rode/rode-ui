@@ -20,10 +20,9 @@ import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "providers/theme";
-import { useRouter } from "next/router";
-import Button from "../Button";
-import Icon from "../Icon";
-import { ICON_NAMES } from "../../utils/icon-utils";
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const resourceLinks = [
   {
@@ -60,7 +59,6 @@ const navigationSections = [
 
 const Header = () => {
   const { theme } = useTheme();
-  const router = useRouter();
   const [showNavigation, setShowNavigation] = useState(false);
 
   const toggleNavigation = () => {
@@ -108,7 +106,11 @@ const Header = () => {
             );
           })}
         </div>
-        <div className={showNavigation ? styles.themeToggleContainer : styles.hidden}>
+        <div
+          className={
+            showNavigation ? styles.themeToggleContainer : styles.hidden
+          }
+        >
           <ThemeToggle />
         </div>
       </div>

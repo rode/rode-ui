@@ -15,46 +15,43 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Header from "components/layout/Header";
-import { useRouter } from "next/router";
-
-jest.mock("next/router");
 
 describe("Header", () => {
-  let rerender;
-
   beforeEach(() => {
-    useRouter.mockReturnValue({
-      pathname: chance.string(),
-    });
-    const utils = render(<Header />);
-    rerender = utils.rerender;
+    render(<Header />);
   });
 
   it("should render the Rode logo", () => {
     expect(screen.getByTitle(/rode logo/i)).toBeInTheDocument();
   });
 
-  it("should render a link for Resources", () => {
-    expect(screen.getByText(/resources/i)).toBeInTheDocument();
-  });
+  it("should render a button to toggle the navigation", () => {
+    const toggleButton = screen.getByTitle(/menu/i);
 
-  it("should render a link for Policies", () => {
-    expect(screen.getByText(/policies/i)).toBeInTheDocument();
-  });
+    expect(toggleButton).toBeInTheDocument();
 
-  it("should render the active link correctly", () => {
-    const activeLink = chance.pickone(["resources", "policies"]);
-
-    useRouter.mockReturnValue({
-      pathname: `/${activeLink}`,
+    act(() => {
+      userEvent.click(toggleButton);
     });
-    rerender(<Header />);
 
-    expect(screen.getByText(activeLink, { exact: false })).toHaveClass(
-      "active",
-      { exact: false }
-    );
+    expect(screen.getByText("Resources")).toBeVisible();
+  });
+
+  it("should render the section and links for Resources", () => {
+    userEvent.click(screen.getByTitle(/menu/i));
+
+    expect(screen.getByText("Resources")).toBeInTheDocument();
+    expect(screen.getByText("Resource Search")).toBeInTheDocument();
+  });
+
+  it("should render the section and links for Policies", () => {
+    userEvent.click(screen.getByTitle(/menu/i));
+
+    expect(screen.getByText("Policies")).toBeInTheDocument();
+    expect(screen.getByText("Policy Playground")).toBeInTheDocument();
+    expect(screen.getByText("Create New Policy")).toBeInTheDocument();
   });
 });
