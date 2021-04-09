@@ -27,8 +27,9 @@ import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import PageHeader from "components/layout/PageHeader";
 
-const PolicyEvaluationPlayground = () => {
+const PolicyPlayground = () => {
   const { theme } = useTheme();
   const { state, dispatch: policyDispatch } = usePolicies();
   const { dispatch: resourceDispatch } = useResources();
@@ -90,13 +91,13 @@ const PolicyEvaluationPlayground = () => {
 
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
+      <PageHeader>
+        <h1 className={styles.pageTitle}>Policy Playground</h1>
+        <p className={styles.instructions}>
+          Choose a resource, pick a policy, and evaluate.
+        </p>
+      </PageHeader>
       <div className={styles.playgroundHeader}>
-        <div>
-          <h1 className={styles.pageTitle}>Policy Evaluation Playground</h1>
-          <p className={styles.instructions}>
-            Choose a resource, pick a policy, and evaluate.
-          </p>
-        </div>
         <Button
           buttonType={"text"}
           label={"Reset Playground"}
@@ -197,4 +198,4 @@ const PolicyEvaluationPlayground = () => {
   );
 };
 
-export default PolicyEvaluationPlayground;
+export default PolicyPlayground;

@@ -140,7 +140,7 @@ $DESKTOP_NAV_WIDTH: 30vw;
   position: absolute;
   top: 0;
   width: fit-content;
-  max-width: 75vw;
+  max-width: calc(100vw - calc(#{$LOGO_WIDTH} * 2));
   margin-left: 10rem;
   height: 6rem;
   display: flex;
