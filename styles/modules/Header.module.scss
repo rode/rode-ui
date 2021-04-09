@@ -32,18 +32,6 @@
 //  }
 //}
 //
-//.scrollContainer {
-//  display: flex;
-//  flex-direction: row;
-//  justify-content: flex-start;
-//  align-items: center;
-//  overflow-y: auto;
-//
-//  @include tabletAndLarger {
-//    overflow-y: unset;
-//  }
-//}
-//
 //.links {
 //  padding: 0.5rem;
 //  flex: 1;
@@ -117,11 +105,15 @@
   //}
 //}
 
+// TODO: handle resizing of screen and mobile sizes
+// style the menu for both color themes
+
 .container {
   width: fit-content;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
   background-color: transparent;
 }
 
@@ -130,41 +122,59 @@
   flex-direction: row;
   align-items: center;
   padding: 0.25rem 1rem;
-  z-index: 3;
 }
 
 .logo {
+  z-index: 3;
   max-width: 6rem;
+  min-width: 3rem;
+  // set a min width?
   display: inline-block;
 }
 
 .expandedNavigation {
   position: absolute;
-  top: 7rem;
+  top: 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 30vw;
+  width: 100vw;
+  padding-top: 7rem;
   @include transition;
+  transform: translateX(0);
 
   a, p {
     color: white;
+  }
+
+  @include tabletAndLarger {
+    width: 50vw;
+  }
+
+  @include desktopAndLarger {
+    width: 30vw;
   }
 }
 
 .hiddenNavigation {
   @extend .expandedNavigation;
   @include transition;
-  transform: translateX(-30vw);
+  transform: translateX(-100vw);
+
+  @include tabletAndLarger {
+    //width: 50vw;
+  }
 }
 
 
 .expandedToggle {
+  z-index: 3;
   @include transition;
   transform: translateX(15vw);
 }
 
 .hiddenToggle {
+  z-index: 3;
   margin-left: 1rem;
   @include transition;
   transform: translateX(0);

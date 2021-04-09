@@ -58,17 +58,6 @@ const navigationSections = [
   },
 ];
 
-// const navigationLinks = [
-//   {
-//     href: "/resources",
-//     label: "Resources",
-//   },
-//   {
-//     href: "/policies",
-//     label: "Policies",
-//   },
-// ];
-
 const Header = () => {
   const { theme } = useTheme();
   const router = useRouter();
@@ -77,36 +66,6 @@ const Header = () => {
   const toggleNavigation = () => {
     setShowNavigation(!showNavigation);
   };
-
-  console.log("showNavigation", showNavigation);
-
-  // return (
-  //   <header className={`${styles.container} ${styles[theme]}`}>
-  //     <Link href={"/"}>
-  //       <a href={"/"}>
-  //         <RodeLogo theme={theme} />
-  //       </a>
-  //     </Link>
-  //     <div className={styles.links}>
-  //       {navigationLinks.map((link) => {
-  //         return (
-  //           <Link href={link.href} key={link.label}>
-  //             <a
-  //               className={
-  //                 router.pathname.startsWith(link.href)
-  //                   ? styles.active
-  //                   : styles.link
-  //               }
-  //             >
-  //               {link.label}
-  //             </a>
-  //           </Link>
-  //         );
-  //       })}
-  //     </div>
-  //     <ThemeToggle />
-  //   </header>
-  // );
 
   return (
     <header className={`${styles.container} ${styles[theme]}`}>
@@ -119,7 +78,7 @@ const Header = () => {
         <Button label={"Toggle Navigation"} buttonType={"icon"} onClick={toggleNavigation} className={showNavigation ? styles.expandedToggle : styles.hiddenToggle}>
           <Icon
             name={ICON_NAMES.MENU}
-            size={"xlarge"}
+            size={"large"}
           />
         </Button>
       </div>
