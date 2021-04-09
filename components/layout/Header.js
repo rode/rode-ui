@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
@@ -58,23 +58,38 @@ const navigationSections = [
   },
 ];
 
-// TODO: clicking outside of the expanded navigation window should close the navigation
-
 const Header = () => {
   const { theme } = useTheme();
   const router = useRouter();
+  const ref = useRef(null);
   const [showNavigation, setShowNavigation] = useState(false);
 
   const toggleNavigation = () => {
     setShowNavigation(!showNavigation);
   };
 
+  const closeNavigationWhenClickingOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowNavigation(false);
+    }
+  };
+
   useEffect(() => {
     setShowNavigation(false);
   }, [router]);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", closeNavigationWhenClickingOutside);
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        closeNavigationWhenClickingOutside
+      );
+    };
+  }, []);
+
   return (
-    <header className={`${styles.container} ${styles[theme]}`}>
+    <header className={`${styles.container} ${styles[theme]}`} ref={ref}>
       <div className={styles.logoContainer}>
         <Link href={"/"}>
           <a href={"/"} className={styles.logo}>
@@ -98,7 +113,10 @@ const Header = () => {
         >
           <Icon name={ICON_NAMES.MENU} size={"large"} />
         </Button>
-        <div className={showNavigation ? "" : styles.hidden}>
+        <div
+          className={showNavigation ? "" : styles.hidden}
+          data-testid={"navigationContainer"}
+        >
           {navigationSections.map((section) => {
             return (
               <div key={section.title} className={styles.section}>

@@ -20,8 +20,43 @@ import userEvent from "@testing-library/user-event";
 import Header from "components/layout/Header";
 
 describe("Header", () => {
+  let unmount;
   beforeEach(() => {
-    render(<Header />);
+    jest.spyOn(document, "addEventListener");
+    jest.spyOn(document, "removeEventListener");
+    const utils = render(
+      <div>
+        <Header />
+        <p>Trigger</p>
+      </div>
+    );
+
+    unmount = utils.unmount;
+  });
+
+  it("should add an event listener to listen to clicks outside of the nav menu", () => {
+    expect(document.addEventListener).toHaveBeenCalledWith(
+      "mousedown",
+      expect.any(Function)
+    );
+    const navigationContainer = screen.getByTestId("navigationContainer");
+    expect(navigationContainer).toHaveClass("hidden");
+
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
+    expect(navigationContainer).not.toHaveClass("hidden");
+
+    act(() => {
+      userEvent.click(screen.getByText("Trigger"));
+    });
+    expect(navigationContainer).toHaveClass("hidden");
+
+    unmount();
+    expect(document.removeEventListener).toHaveBeenCalledWith(
+      "mousedown",
+      expect.any(Function)
+    );
   });
 
   it("should render the Rode logo", () => {
@@ -30,25 +65,31 @@ describe("Header", () => {
 
   it("should render a button to toggle the navigation", () => {
     const toggleButton = screen.getByTitle(/menu/i);
-
     expect(toggleButton).toBeInTheDocument();
+
+    const navigationContainer = screen.getByTestId("navigationContainer");
+    expect(navigationContainer).toHaveClass("hidden");
 
     act(() => {
       userEvent.click(toggleButton);
     });
 
-    expect(screen.getByText("Resources")).toBeVisible();
+    expect(navigationContainer).not.toHaveClass("hidden");
   });
 
   it("should render the section and links for Resources", () => {
-    userEvent.click(screen.getByTitle(/menu/i));
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
 
     expect(screen.getByText("Resources")).toBeInTheDocument();
     expect(screen.getByText("Resource Search")).toBeInTheDocument();
   });
 
   it("should render the section and links for Policies", () => {
-    userEvent.click(screen.getByTitle(/menu/i));
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
 
     expect(screen.getByText("Policies")).toBeInTheDocument();
     expect(screen.getByText("Policy Playground")).toBeInTheDocument();
