@@ -67,7 +67,7 @@ export const ICON_COMPONENTS = {
   [EXTERNAL_LINK]: ExternalLink,
   [X_CIRCLE]: XCircle,
   [CHECK]: Check,
-  [MENU]: Menu
+  [MENU]: Menu,
 };
 
 export const ICON_NAMES = {

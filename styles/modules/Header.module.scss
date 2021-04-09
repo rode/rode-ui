@@ -16,96 +16,6 @@
 
 @import "styles/constants";
 @import "styles/mixins";
-//
-//.container {
-//  z-index: 1;
-//  width: 100%;
-//  display: grid;
-//  grid-template-columns: 5rem 1fr max-content;
-//  padding: 0 0.25rem;
-//  overflow-x: auto;
-//  overflow-y: hidden;
-//
-//  @include tabletAndLarger {
-//    padding: 0 1rem;
-//    overflow-x: unset;
-//  }
-//}
-//
-//.links {
-//  padding: 0.5rem;
-//  flex: 1;
-//  display: flex;
-//  flex-direction: row;
-//  align-items: center;
-//  justify-content: flex-start;
-//}
-//
-//.link {
-//  text-transform: uppercase;
-//  margin: 0 1.5rem;
-//  font-weight: 600;
-//  border-bottom: solid 0.15rem transparent;
-//  @include transition;
-//
-//  &:hover {
-//    text-decoration: none;
-//    border-bottom-color: $GREEN;
-//  }
-//}
-//
-//.active {
-//  @extend .link;
-//  font-weight: 700;
-//}
-
-//.darkTheme {
-//&.container {
-//  background-color: $DT_BACKGROUND_MEDIUM;
-//  box-shadow: $DT_BOX_SHADOW;
-//}
-//
-//.link {
-//  color: $DT_LINK;
-//
-//  &:visited {
-//    color: $DT_LINK;
-//  }
-//}
-//
-//.active {
-//  border-bottom-color: $DT_LINK;
-//
-//  &:hover {
-//    border-bottom-color: $GREEN;
-//  }
-//}
-//}
-
-//.lightTheme {
-//&.container {
-//  background-color: $LT_BACKGROUND_LIGHT;
-//  box-shadow: $LT_BOX_SHADOW;
-//}
-//
-//.link {
-//  color: $LT_LINK;
-//
-//  &:visited {
-//    color: $LT_LINK;
-//  }
-//}
-//
-//.active {
-//  border-bottom-color: $LT_LINK;
-//
-//  &:hover {
-//    border-bottom-color: $GREEN;
-//  }
-//}
-//}
-
-// style the menu for both color themes
 
 $LOGO_WIDTH: 6rem;
 $MOBILE_NAV_WIDTH: 100vw;
@@ -140,15 +50,12 @@ $DESKTOP_NAV_WIDTH: 30vw;
   top: 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 100vh;
   width: 100vw;
-  padding-top: 7rem;
+  padding-top: calc(#{$LOGO_WIDTH} + 1rem);
   @include transition;
   transform: translateX(0);
-
-  a, p {
-    color: white;
-  }
 
   @include tabletAndLarger {
     width: 50vw;
@@ -163,6 +70,10 @@ $DESKTOP_NAV_WIDTH: 30vw;
   @extend .expandedNavigation;
   @include transition;
   transform: translateX(-100vw);
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .toggle {
@@ -189,17 +100,76 @@ $DESKTOP_NAV_WIDTH: 30vw;
   @extend .toggle;
 
   @include transition;
-  transform: translate(calc(#{$MOBILE_NAV_WIDTH} + #{$LOGO_WIDTH} + 1rem), -50%);
+  transform: translate(
+    calc(#{$MOBILE_NAV_WIDTH} + #{$LOGO_WIDTH} + 1.5rem),
+    -50%
+  );
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem 0 1.5rem;
+  margin: 1.5rem auto;
+  width: 100%;
+}
+
+.sectionTitle {
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.link {
+  width: fit-content;
+  margin: 0.5rem 0 0 1rem;
+  border-bottom: solid 0.15rem transparent;
+  @include transition;
+
+  &:hover {
+    text-decoration: none;
+    border-bottom-color: $GREEN;
+  }
+}
+
+.themeToggleContainer {
+  margin: 1rem 1rem 1rem auto;
 }
 
 .darkTheme {
   .expandedNavigation {
     background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .sectionTitle {
+    color: $DT_LINK;
+  }
+
+  .link {
+    color: $DT_MAIN_TEXT;
+
+    &:visited {
+      color: $DT_MAIN_TEXT;
+    }
   }
 }
 
 .lightTheme {
   .expandedNavigation {
-    background-color: $LT_BACKGROUND_LIGHT
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .sectionTitle {
+    color: $LT_LINK;
+  }
+
+  .link {
+    color: $LT_MAIN_TEXT;
+
+    &:visited {
+      color: $LT_MAIN_TEXT;
+    }
   }
 }

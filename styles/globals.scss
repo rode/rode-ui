@@ -38,10 +38,7 @@ body {
     //  "header header header header header header header header header header header header"
     //  "main main main main main main main main main main main main"
     //  "footer footer footer footer footer footer footer footer footer footer footer footer";
-     grid-template-rows: 1fr minmax(
-        min-content,
-        4rem
-      );
+    grid-template-rows: 1fr minmax(min-content, 4rem);
     grid-template-areas:
       "main main main main main main main main main main main main"
       "footer footer footer footer footer footer footer footer footer footer footer footer";

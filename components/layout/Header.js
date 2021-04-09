@@ -28,7 +28,7 @@ import { ICON_NAMES } from "../../utils/icon-utils";
 const resourceLinks = [
   {
     href: "/resources",
-    label: "Resources",
+    label: "Resource Search",
   },
 ];
 
@@ -77,35 +77,40 @@ const Header = () => {
         </Link>
       </div>
 
-      <div className={showNavigation ? styles.expandedNavigation : styles.hiddenNavigation}>
-        <Button label={"Toggle Navigation"} buttonType={"icon"} onClick={toggleNavigation} className={showNavigation ? styles.expandedToggle : styles.hiddenToggle}>
-          <Icon
-            name={ICON_NAMES.MENU}
-            size={"large"}
-          />
+      <div
+        className={
+          showNavigation ? styles.expandedNavigation : styles.hiddenNavigation
+        }
+      >
+        <Button
+          label={"Toggle Navigation"}
+          buttonType={"icon"}
+          onClick={toggleNavigation}
+          className={
+            showNavigation ? styles.expandedToggle : styles.hiddenToggle
+          }
+        >
+          <Icon name={ICON_NAMES.MENU} size={"large"} />
         </Button>
-        {navigationSections.map((section) => {
-          return (
-            <React.Fragment key={section.title}>
-              <p>{section.title}</p>
-              {section.links.map((link) => {
-                return (
-                  <Link href={link.href} key={link.label}>
-                    <a
-                      className={
-                        router.pathname.startsWith(link.href)
-                          ? styles.active
-                          : styles.link
-                      }
-                    >
-                      {link.label}
-                    </a>
-                  </Link>
-                );
-              })}
-            </React.Fragment>
-          );
-        })}
+        <div className={showNavigation ? "" : styles.hidden}>
+          {navigationSections.map((section) => {
+            return (
+              <div key={section.title} className={styles.section}>
+                <p className={styles.sectionTitle}>{section.title}</p>
+                {section.links.map((link) => {
+                  return (
+                    <Link href={link.href} key={link.label}>
+                      <a className={styles.link}>{link.label}</a>
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+        <div className={showNavigation ? styles.themeToggleContainer : styles.hidden}>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
