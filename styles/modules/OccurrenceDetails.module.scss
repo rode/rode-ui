@@ -22,6 +22,10 @@ $SIDE_SPACING: 1rem;
 .detailContainer {
   height: 100%;
   flex: 1;
+
+  @include tabletAndLarger {
+    padding-top: 2rem;
+  }
 }
 
 .detailSummary {
