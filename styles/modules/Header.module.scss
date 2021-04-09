@@ -60,53 +60,57 @@
 //}
 
 //.darkTheme {
-  //&.container {
-  //  background-color: $DT_BACKGROUND_MEDIUM;
-  //  box-shadow: $DT_BOX_SHADOW;
-  //}
-  //
-  //.link {
-  //  color: $DT_LINK;
-  //
-  //  &:visited {
-  //    color: $DT_LINK;
-  //  }
-  //}
-  //
-  //.active {
-  //  border-bottom-color: $DT_LINK;
-  //
-  //  &:hover {
-  //    border-bottom-color: $GREEN;
-  //  }
-  //}
+//&.container {
+//  background-color: $DT_BACKGROUND_MEDIUM;
+//  box-shadow: $DT_BOX_SHADOW;
+//}
+//
+//.link {
+//  color: $DT_LINK;
+//
+//  &:visited {
+//    color: $DT_LINK;
+//  }
+//}
+//
+//.active {
+//  border-bottom-color: $DT_LINK;
+//
+//  &:hover {
+//    border-bottom-color: $GREEN;
+//  }
+//}
 //}
 
 //.lightTheme {
-  //&.container {
-  //  background-color: $LT_BACKGROUND_LIGHT;
-  //  box-shadow: $LT_BOX_SHADOW;
-  //}
-  //
-  //.link {
-  //  color: $LT_LINK;
-  //
-  //  &:visited {
-  //    color: $LT_LINK;
-  //  }
-  //}
-  //
-  //.active {
-  //  border-bottom-color: $LT_LINK;
-  //
-  //  &:hover {
-  //    border-bottom-color: $GREEN;
-  //  }
-  //}
+//&.container {
+//  background-color: $LT_BACKGROUND_LIGHT;
+//  box-shadow: $LT_BOX_SHADOW;
+//}
+//
+//.link {
+//  color: $LT_LINK;
+//
+//  &:visited {
+//    color: $LT_LINK;
+//  }
+//}
+//
+//.active {
+//  border-bottom-color: $LT_LINK;
+//
+//  &:hover {
+//    border-bottom-color: $GREEN;
+//  }
+//}
 //}
 
-// TODO: handle resizing of screen and mobile sizes
 // style the menu for both color themes
+
+$LOGO_WIDTH: 6rem;
+$MOBILE_NAV_WIDTH: 100vw;
+$TABLET_NAV_WIDTH: 50vw;
+$DESKTOP_NAV_WIDTH: 30vw;
 
 .container {
   width: fit-content;
@@ -128,7 +132,6 @@
   z-index: 3;
   max-width: 6rem;
   min-width: 3rem;
-  // set a min width?
   display: inline-block;
 }
 
@@ -160,24 +163,33 @@
   @extend .expandedNavigation;
   @include transition;
   transform: translateX(-100vw);
+}
+
+.toggle {
+  z-index: 3;
+  position: absolute;
+  top: calc(6rem / 2);
+}
+
+.expandedToggle {
+  @extend .toggle;
+
+  @include transition;
+  transform: translate(calc(#{$MOBILE_NAV_WIDTH} - 4rem), -50%);
 
   @include tabletAndLarger {
-    //width: 50vw;
+    transform: translate(calc(#{$TABLET_NAV_WIDTH} - 4rem), -50%);
+  }
+  @include desktopAndLarger {
+    transform: translate(calc(#{$DESKTOP_NAV_WIDTH} - 4rem), -50%);
   }
 }
 
-
-.expandedToggle {
-  z-index: 3;
-  @include transition;
-  transform: translateX(15vw);
-}
-
 .hiddenToggle {
-  z-index: 3;
-  margin-left: 1rem;
+  @extend .toggle;
+
   @include transition;
-  transform: translateX(0);
+  transform: translate(calc(#{$MOBILE_NAV_WIDTH} + #{$LOGO_WIDTH} + 1rem), -50%);
 }
 
 .darkTheme {

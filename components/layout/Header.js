@@ -75,15 +75,15 @@ const Header = () => {
             <RodeLogo theme={theme} />
           </a>
         </Link>
+      </div>
+
+      <div className={showNavigation ? styles.expandedNavigation : styles.hiddenNavigation}>
         <Button label={"Toggle Navigation"} buttonType={"icon"} onClick={toggleNavigation} className={showNavigation ? styles.expandedToggle : styles.hiddenToggle}>
           <Icon
             name={ICON_NAMES.MENU}
             size={"large"}
           />
         </Button>
-      </div>
-
-      <div className={showNavigation ? styles.expandedNavigation : styles.hiddenNavigation}>
         {navigationSections.map((section) => {
           return (
             <React.Fragment key={section.title}>
