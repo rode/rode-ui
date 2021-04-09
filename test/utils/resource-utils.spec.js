@@ -74,11 +74,10 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for a Maven Resource", () => {
-      const url = createGenericResourceUrl(
-        resourceName,
-        resourceVersion,
-        "gav://"
-      );
+      const groupId = chance.word();
+      const artifactId = chance.word();
+      const url = `gav://${groupId}:${artifactId}:${resourceVersion}`;
+      const resourceName = `${groupId}:${artifactId}`;
       const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("Maven");
