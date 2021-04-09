@@ -21,7 +21,6 @@ const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";
 export const parseGeneric = (uri) => {
   // deb://dist(optional):arch:name:version
   // rpm://dist(optional):arch:name:version
-  // gav://group:artifact:version
   // npm://package:version
   // nuget://module:version
   // pip://package:version
@@ -31,6 +30,16 @@ export const parseGeneric = (uri) => {
   return {
     name: uriParts[uriParts.length - 2],
     version: uriParts[uriParts.length - 1],
+  };
+};
+
+const parseMaven = (uri) => {
+  // gav://group:artifact:version
+  const [groupId, artifactId, version] = uri.slice("gav://".length).split(":");
+
+  return {
+    name: `${groupId}:${artifactId}`,
+    version: version,
   };
 };
 
@@ -91,6 +100,7 @@ const resourceUrlTypes = [
   {
     type: "Maven",
     regex: "^(gav:/{2})",
+    parse: parseMaven,
   },
   {
     type: "NPM",
