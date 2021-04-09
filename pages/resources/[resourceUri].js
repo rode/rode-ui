@@ -26,6 +26,7 @@ import { resourceActions } from "reducers/resources";
 import Button from "components/Button";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
+import PageHeader from "components/layout/PageHeader";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -68,27 +69,31 @@ const Resource = () => {
   };
 
   return (
-    <div className={`${styles[theme]} ${styles.container}`}>
-      <ResourceBreadcrumbs />
-      <div className={styles.resourceHeader}>
-        <div>
-          <p className={styles.resourceName}>{resourceName}</p>
-          <p>Type: {resourceType}</p>
+    <>
+      <PageHeader>
+        <ResourceBreadcrumbs />
+      </PageHeader>
+      <div className={`${styles[theme]} ${styles.container}`}>
+        <div className={styles.resourceHeader}>
+          <div>
+            <p className={styles.resourceName}>{resourceName}</p>
+            <p>Type: {resourceType}</p>
+          </div>
+          <div>
+            <p className={styles.version}>Version: {resourceVersion}</p>
+          </div>
         </div>
-        <div>
-          <p className={styles.version}>Version: {resourceVersion}</p>
+        <div className={styles.playgroundContainer}>
+          <Button
+            label={"Evaluate in Policy Playground"}
+            onClick={evaluateInPlayground}
+            className={styles.playgroundButton}
+            buttonType={"text"}
+          />
         </div>
+        <ResourceOccurrences resourceUri={resourceUri} />
       </div>
-      <div className={styles.playgroundContainer}>
-        <Button
-          label={"Evaluate in Policy Playground"}
-          onClick={evaluateInPlayground}
-          className={styles.playgroundButton}
-          buttonType={"text"}
-        />
-      </div>
-      <ResourceOccurrences resourceUri={resourceUri} />
-    </div>
+    </>
   );
 };
 

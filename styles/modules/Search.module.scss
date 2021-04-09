@@ -47,6 +47,14 @@
   }
 }
 
+.rootCrumb {
+  display: none;
+
+  @include tabletAndLarger {
+    display: unset;
+  }
+}
+
 .showResults {
   @extend .container;
   justify-content: flex-start;

@@ -25,6 +25,7 @@ import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import PageHeader from "components/layout/PageHeader";
 
 const Policy = () => {
   const router = useRouter();
@@ -48,47 +49,51 @@ const Policy = () => {
   };
 
   return (
-    <div className={`${styles[theme]} ${styles.pageContainer}`}>
-      <PolicyBreadcrumbs />
-      <div className={styles.detailsContainer}>
-        <Loading loading={loading}>
-          {policy ? (
-            <>
-              <div className={styles.detailsHeader}>
-                <div className={styles.detailsHeaderTextContainer}>
-                  <p className={styles.policyName}>{policy.name}</p>
-                  <p className={styles.policyDescription}>
-                    {policy.description}
-                  </p>
+    <>
+      <PageHeader>
+        <PolicyBreadcrumbs />
+      </PageHeader>
+      <div className={`${styles[theme]} ${styles.pageContainer}`}>
+        <div className={styles.detailsContainer}>
+          <Loading loading={loading}>
+            {policy ? (
+              <>
+                <div className={styles.detailsHeader}>
+                  <div className={styles.detailsHeaderTextContainer}>
+                    <p className={styles.policyName}>{policy.name}</p>
+                    <p className={styles.policyDescription}>
+                      {policy.description}
+                    </p>
+                  </div>
+                  <Button label={"Edit Policy"} onClick={editPolicy} />
                 </div>
-                <Button label={"Edit Policy"} onClick={editPolicy} />
+                <Button
+                  label={"Evaluate in Policy Playground"}
+                  buttonType={"text"}
+                  onClick={evaluateInPlayground}
+                  className={styles.playgroundButton}
+                />
+                <div className={styles.regoContainer}>
+                  <p>Rego Policy Code</p>
+                  <pre>
+                    <code>{policy.regoContent}</code>
+                  </pre>
+                </div>
+              </>
+            ) : (
+              <div className={styles.notFound}>
+                <h1 className={styles.notFound}>
+                  No policy found under {`"${id}"`}
+                </h1>
+                <p>
+                  Try <Link href={"/policies"}>searching for a policy</Link>.
+                </p>
               </div>
-              <Button
-                label={"Evaluate in Policy Playground"}
-                buttonType={"text"}
-                onClick={evaluateInPlayground}
-                className={styles.playgroundButton}
-              />
-              <div className={styles.regoContainer}>
-                <p>Rego Policy Code</p>
-                <pre>
-                  <code>{policy.regoContent}</code>
-                </pre>
-              </div>
-            </>
-          ) : (
-            <div className={styles.notFound}>
-              <h1 className={styles.notFound}>
-                No policy found under {`"${id}"`}
-              </h1>
-              <p>
-                Try <Link href={"/policies"}>searching for a policy</Link>.
-              </p>
-            </div>
-          )}
-        </Loading>
+            )}
+          </Loading>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

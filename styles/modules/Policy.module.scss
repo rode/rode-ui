@@ -231,7 +231,9 @@
 }
 
 .playgroundButton {
-  align-self: flex-end;
+  @include tabletAndLarger {
+    align-self: flex-end;
+  }
 }
 
 .regoContainer {

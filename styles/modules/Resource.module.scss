@@ -61,12 +61,17 @@
 }
 
 .playgroundContainer {
-  height: 0.25rem;
+  height: fit-content;
   width: 100%;
-  position: relative;
+
+  @include tabletAndLarger {
+    height: 0.25rem;
+    position: relative;
+  }
 }
+
 .playgroundButton {
-  margin: 1rem auto;
+  margin: 0.25rem auto 0;
 
   @include tabletAndLarger {
     margin: 0 0 0 auto;
