@@ -215,7 +215,9 @@ export const createMockMappedOccurrences = () => {
 };
 
 export const createMockResourceUri = (
-  name = chance.word({ syllables: chance.d20() }),
+  name = `${chance.word({ syllables: chance.d20() })}-${chance.word({
+    syllables: chance.d10(),
+  })}`,
   version = chance.natural()
 ) => {
   return `${name}@sha256:${version}`;
