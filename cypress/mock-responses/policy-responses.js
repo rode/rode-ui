@@ -32,3 +32,7 @@ export const mockSuccessPolicyValidation = {
   isValid: true,
   errors: null,
 };
+
+export const mockFailedPatchPolicyResponse = {
+  errors: ["Invalid rego code"],
+};

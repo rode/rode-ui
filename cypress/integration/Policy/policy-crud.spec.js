@@ -15,6 +15,7 @@
  */
 
 import {
+  mockFailedPatchPolicyResponse,
   mockFailedPolicyValidation,
   mockMappedPolicy,
   mockSuccessPolicyValidation,
@@ -89,22 +90,14 @@ context("Policy CRUD", () => {
     });
   });
 
-  context("Edit a Policy", () => {
+  context.only("Edit a Policy", () => {
     beforeEach(() => {
-      cy.visit("/");
-      cy.get('[aria-label="Toggle Navigation"]').click();
-      cy.get('a[href="/policies"]').click();
-      cy.url().should("match", /\/policies$/);
-
-      cy.mockRequest({ url: "**/api/policies*" }, mockMappedPolicy);
-      cy.mockRequest({ url: "**/api/policies/*" }, mockMappedPolicy[0]);
-
-      cy.searchForPolicy("policy");
-      cy.contains("View Policy").click();
-      cy.url().should(
-        "match",
-        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
+      cy.mockRequest(
+        { url: "**/api/policies/*", method: "GET" },
+        mockMappedPolicy[0]
       );
+
+      cy.visit(`/policies/${mockMappedPolicy[0].id}`);
       cy.contains("Edit Policy").click();
 
       cy.url().should(
@@ -113,11 +106,53 @@ context("Policy CRUD", () => {
       );
     });
 
+    it("should not update the policy if the rego is invalid", () => {
+      cy.mockRequest(
+        { url: "**/api/policies/*", method: "PATCH", status: 500 },
+        mockFailedPatchPolicyResponse
+      );
+      cy.get("#regoContent").type(" this is invalid rego code");
+      cy.contains("Update Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
+      );
+      cy.contains(
+        "Failed to update the policy due to invalid Rego code."
+      ).should("be.visible");
+      cy.contains("This policy failed validation").should("be.visible");
+    });
+
+    it("should show an error if the update failed", () => {
+      cy.mockRequest(
+        { url: "**/api/policies/*", method: "PATCH", status: 500 },
+        {}
+      );
+      cy.get("#regoContent").type(" this is invalid rego code");
+      cy.contains("Update Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
+      );
+      cy.contains("Failed to update the policy.").should("be.visible");
+    });
+
     it("should allow the user to edit any field in the policy", () => {
+      cy.mockRequest(
+        { url: "**/api/policies/*", method: "PATCH" },
+        mockMappedPolicy[0]
+      );
       cy.get("#name").clear().type("My Updated Policy Name");
       cy.get("#description").type("This is an updated policy description");
       cy.get("#regoContent").type("package play");
       cy.contains("Update Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
+      );
     });
   });
 });
