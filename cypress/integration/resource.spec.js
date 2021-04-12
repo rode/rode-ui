@@ -28,13 +28,13 @@ context("Resources", () => {
   });
 
   it("should search for a resource that does not exist", () => {
-    cy.mockRequest("**/api/resources*", []);
+    cy.mockRequest({ url: "**/api/resources*" }, []);
     cy.searchForResource("not a match");
     cy.contains("No resources found");
   });
 
   it("should search for a resource that does exist", () => {
-    cy.mockRequest("**/api/resources*", mockMappedResource);
+    cy.mockRequest({ url: "**/api/resources*" }, mockMappedResource);
 
     cy.searchForResource("alpine");
     cy.url().should("contain", "search=alpine");
@@ -43,8 +43,8 @@ context("Resources", () => {
   });
 
   it("should show resource details when a resource is selected", () => {
-    cy.mockRequest("**/api/resources*", mockMappedResource);
-    cy.mockRequest("**/api/occurrences*", mockMappedOccurrences);
+    cy.mockRequest({ url: "**/api/resources*" }, mockMappedResource);
+    cy.mockRequest({ url: "**/api/occurrences*" }, mockMappedOccurrences);
 
     cy.searchForResource("nginx");
     cy.contains("View Resource").click();

@@ -24,8 +24,8 @@ Cypress.Commands.add("searchForPolicy", (searchTerm) => {
   cy.get('button[aria-label="Search"]').click();
 });
 
-Cypress.Commands.add("mockRequest", (requestToMock, returnValue) => {
+Cypress.Commands.add("mockRequest", ({ url, method = "GET" }, returnValue) => {
   if (!Cypress.env("local_rode_api") === true) {
-    cy.intercept(requestToMock, returnValue);
+    cy.intercept(method, url, returnValue);
   }
 });

@@ -18,47 +18,9 @@ import {
   mockFailedPolicyValidation,
   mockMappedPolicy,
   mockSuccessPolicyValidation,
-} from "../mock-responses/policy-responses";
+} from "../../mock-responses/policy-responses";
 
-context("Policies", () => {
-  context("Policy Search", () => {
-    beforeEach(() => {
-      cy.visit("/");
-      cy.get('[aria-label="Toggle Navigation"]').click();
-      cy.get('a[href="/policies"]').click();
-      cy.url().should("match", /\/policies$/);
-    });
-
-    it("should search for a policy that does not exist", () => {
-      cy.mockRequest("**/api/policies*", []);
-
-      cy.searchForPolicy("not a match");
-      cy.contains("No policies found");
-    });
-
-    it("should search for a policy that does exist", () => {
-      cy.mockRequest("**/api/policies*", mockMappedPolicy);
-
-      cy.searchForPolicy("policy");
-      cy.url().should("contain", "search=policy");
-
-      cy.contains("View Policy");
-    });
-
-    it("should show policy details when a policy is selected", () => {
-      const { name, description, regoContent } = mockMappedPolicy[0];
-      cy.mockRequest("**/api/policies*", mockMappedPolicy);
-      cy.mockRequest("**/api/policies/*", mockMappedPolicy[0]);
-
-      cy.searchForPolicy("policy");
-      cy.contains("View Policy").click();
-
-      cy.contains(name).should("be.visible");
-      cy.contains(description).should("be.visible");
-      cy.contains(regoContent).should("be.visible");
-    });
-  });
-
+context("Policy CRUD", () => {
   context("Policy Creation", () => {
     beforeEach(() => {
       cy.visit("/");
@@ -84,7 +46,11 @@ context("Policies", () => {
     });
 
     it("should display an error when the rego code is invalid", () => {
-      cy.mockRequest("**/api/policies/validate", mockFailedPolicyValidation);
+      cy.mockRequest(
+        { url: "**/api/policies/validate", method: "POST" },
+        mockFailedPolicyValidation
+      );
+
       cy.get("#regoContent").type("RegoRegoRego");
       cy.contains("Validate Policy").click();
 
@@ -93,7 +59,10 @@ context("Policies", () => {
     });
 
     it("should display a message when the rego code is valid", () => {
-      cy.mockRequest("**/api/policies/validate", mockSuccessPolicyValidation);
+      cy.mockRequest(
+        { url: "**/api/policies/validate", method: "POST" },
+        mockSuccessPolicyValidation
+      );
 
       cy.get("#regoContent").type("package play");
       cy.contains("Validate Policy").click();
@@ -102,8 +71,11 @@ context("Policies", () => {
     });
 
     it("should redirect you to the created policy page when creation is successful", () => {
-      cy.mockRequest("**/api/policies", mockMappedPolicy[0]);
-      cy.mockRequest("**/api/policies/*", mockMappedPolicy[0]);
+      cy.mockRequest(
+        { url: "**/api/policies", method: "POST" },
+        mockMappedPolicy[0]
+      );
+      cy.mockRequest({ url: "**/api/policies/*" }, mockMappedPolicy[0]);
 
       cy.get("#name").type("Test Policy");
       cy.get("#description").type("Testing policy creation through Cypress");
@@ -114,6 +86,38 @@ context("Policies", () => {
         "match",
         new RegExp(`/policies/${mockMappedPolicy[0].id}`)
       );
+    });
+  });
+
+  context("Edit a Policy", () => {
+    beforeEach(() => {
+      cy.visit("/");
+      cy.get('[aria-label="Toggle Navigation"]').click();
+      cy.get('a[href="/policies"]').click();
+      cy.url().should("match", /\/policies$/);
+
+      cy.mockRequest({ url: "**/api/policies*" }, mockMappedPolicy);
+      cy.mockRequest({ url: "**/api/policies/*" }, mockMappedPolicy[0]);
+
+      cy.searchForPolicy("policy");
+      cy.contains("View Policy").click();
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
+      );
+      cy.contains("Edit Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
+      );
+    });
+
+    it("should allow the user to edit any field in the policy", () => {
+      cy.get("#name").clear().type("My Updated Policy Name");
+      cy.get("#description").type("This is an updated policy description");
+      cy.get("#regoContent").type("package play");
+      cy.contains("Update Policy").click();
     });
   });
 });
