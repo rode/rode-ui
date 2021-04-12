@@ -90,7 +90,7 @@ context("Policy CRUD", () => {
     });
   });
 
-  context.only("Edit a Policy", () => {
+  context("Edit a Policy", () => {
     beforeEach(() => {
       cy.mockRequest(
         { url: "**/api/policies/*", method: "GET" },
@@ -153,6 +153,63 @@ context("Policy CRUD", () => {
         "match",
         new RegExp(`/policies/${mockMappedPolicy[0].id}`)
       );
+    });
+  });
+
+  context.only("Delete a Policy", () => {
+    beforeEach(() => {
+      cy.mockRequest(
+        { url: "**/api/policies/*", method: "GET" },
+        mockMappedPolicy[0]
+      );
+
+      cy.visit(`/policies/${mockMappedPolicy[0].id}`);
+      cy.contains("Edit Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
+      );
+    });
+
+    it("should allow for a successful deletion", () => {
+      cy.mockRequest(
+        {
+          url: "**/api/policies/*",
+          method: "DELETE",
+        },
+        {}
+      );
+      cy.contains("Delete Policy").click();
+
+      cy.contains("Are you sure you want to delete this policy?");
+      cy.contains("Delete Policy").click();
+
+      cy.url().should("match", /\/policies$/);
+      cy.contains("Policy was successfully deleted.").should("be.visible");
+    });
+
+    it("should show an error if the delete failed", () => {
+      cy.mockRequest(
+        {
+          url: "**/api/policies/*",
+          method: "DELETE",
+          status: 500,
+        },
+        {}
+      );
+      cy.contains("Delete Policy").click();
+
+      cy.contains("Are you sure you want to delete this policy?");
+      cy.contains("Delete Policy").click();
+
+      cy.url().should(
+        "match",
+        new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
+      );
+      cy.contains(
+        "An error occurred while deleting the policy. Please try again."
+      ).should("be.visible");
     });
   });
 });
