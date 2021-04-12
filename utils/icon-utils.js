@@ -30,6 +30,7 @@ import XCircle from "components/icons/XCircle";
 import BadgeCheck from "components/icons/BadgeCheck";
 import Exclamation from "components/icons/Exclamation";
 import Check from "components/icons/Check";
+import Menu from "components/icons/Menu";
 
 const SEARCH = "Search";
 const COG = "Cog";
@@ -47,6 +48,7 @@ const CHECK = "CHECK";
 const LIATRIO = "Liatrio";
 const GITHUB = "Github";
 const TWITTER = "Twitter";
+const MENU = "Menu";
 
 export const ICON_COMPONENTS = {
   [SEARCH]: Search,
@@ -65,6 +67,7 @@ export const ICON_COMPONENTS = {
   [EXTERNAL_LINK]: ExternalLink,
   [X_CIRCLE]: XCircle,
   [CHECK]: Check,
+  [MENU]: Menu,
 };
 
 export const ICON_NAMES = {
@@ -81,6 +84,7 @@ export const ICON_NAMES = {
   BADGE_CHECK,
   EXCLAMATION,
   CHECK,
+  MENU,
   LIATRIO,
   GITHUB,
   TWITTER,

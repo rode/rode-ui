@@ -17,46 +17,112 @@
 @import "styles/constants";
 @import "styles/mixins";
 
+$LOGO_WIDTH: 6rem;
+$MOBILE_NAV_WIDTH: 100vw;
+$TABLET_NAV_WIDTH: 50vw;
+$DESKTOP_NAV_WIDTH: 30vw;
+
 .container {
-  z-index: 1;
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background-color: transparent;
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.25rem 1rem;
+}
+
+.logo {
+  z-index: 3;
+  max-width: 6rem;
+  min-width: 3rem;
+  display: inline-block;
+}
+
+.expandedNavigation {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  padding-top: calc(#{$LOGO_WIDTH} + 1rem);
+  @include transition;
+  transform: translateX(0);
+
+  @include tabletAndLarger {
+    width: 50vw;
+  }
+
+  @include desktopAndLarger {
+    width: 30vw;
+  }
+}
+
+.hiddenNavigation {
+  @extend .expandedNavigation;
+  @include transition;
+  transform: translateX(-100vw);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.toggle {
+  z-index: 3;
+  position: absolute;
+  top: calc(6rem / 2);
+}
+
+.expandedToggle {
+  @extend .toggle;
+
+  @include transition;
+  transform: translate(calc(#{$MOBILE_NAV_WIDTH} - 4rem), -50%);
+
+  @include tabletAndLarger {
+    transform: translate(calc(#{$TABLET_NAV_WIDTH} - 4rem), -50%);
+  }
+  @include desktopAndLarger {
+    transform: translate(calc(#{$DESKTOP_NAV_WIDTH} - 4rem), -50%);
+  }
+}
+
+.hiddenToggle {
+  @extend .toggle;
+
+  @include transition;
+  transform: translate(
+    calc(#{$MOBILE_NAV_WIDTH} + #{$LOGO_WIDTH} + 1.5rem),
+    -50%
+  );
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem 0 1.5rem;
+  margin: 1.5rem auto;
   width: 100%;
-  display: grid;
-  grid-template-columns: 5rem 1fr max-content;
-  padding: 0 0.25rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  @include tabletAndLarger {
-    padding: 0 1rem;
-    overflow-x: unset;
-  }
 }
 
-.scrollContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  overflow-y: auto;
-
-  @include tabletAndLarger {
-    overflow-y: unset;
-  }
-}
-
-.links {
-  padding: 0.5rem;
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+.sectionTitle {
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .link {
-  text-transform: uppercase;
-  margin: 0 1.5rem;
-  font-weight: 600;
+  width: fit-content;
+  margin: 0.5rem 0 0 1rem;
   border-bottom: solid 0.15rem transparent;
   @include transition;
 
@@ -66,53 +132,57 @@
   }
 }
 
-.active {
-  @extend .link;
-  font-weight: 700;
+.themeToggleContainer {
+  margin: 1rem 1rem 1rem auto;
+}
+
+.pageHeader {
+  position: absolute;
+  top: 0;
+  width: fit-content;
+  max-width: calc(100vw - calc(#{$LOGO_WIDTH} * 2));
+  margin-left: 10rem;
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .darkTheme {
-  &.container {
-    background-color: $DT_BACKGROUND_MEDIUM;
+  .expandedNavigation {
+    background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
   }
 
-  .link {
+  .sectionTitle {
     color: $DT_LINK;
-
-    &:visited {
-      color: $DT_LINK;
-    }
   }
 
-  .active {
-    border-bottom-color: $DT_LINK;
+  .link {
+    color: $DT_MAIN_TEXT;
 
-    &:hover {
-      border-bottom-color: $GREEN;
+    &:visited {
+      color: $DT_MAIN_TEXT;
     }
   }
 }
 
 .lightTheme {
-  &.container {
+  .expandedNavigation {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
   }
 
-  .link {
+  .sectionTitle {
     color: $LT_LINK;
-
-    &:visited {
-      color: $LT_LINK;
-    }
   }
 
-  .active {
-    border-bottom-color: $LT_LINK;
+  .link {
+    color: $LT_MAIN_TEXT;
 
-    &:hover {
-      border-bottom-color: $GREEN;
+    &:visited {
+      color: $LT_MAIN_TEXT;
     }
   }
 }

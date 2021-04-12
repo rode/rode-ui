@@ -38,8 +38,8 @@ const PolicyBreadcrumbs = () => {
 
   return (
     <div className={styles.breadcrumbs}>
-      <p>Policy Search</p>
-      <p>/</p>
+      <p className={styles.rootCrumb}>Policy Search</p>
+      <p className={styles.rootCrumb}>/</p>
       <Link href={`/policies?search=${encodeURIComponent(searchTerm)}`}>
         <a>{getSearchTermText(searchTerm)}</a>
       </Link>

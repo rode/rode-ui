@@ -38,8 +38,8 @@ const ResourceBreadcrumbs = () => {
 
   return (
     <div className={styles.breadcrumbs}>
-      <p>Resource Search</p>
-      <p>/</p>
+      <p className={styles.rootCrumb}>Resource Search</p>
+      <p className={styles.rootCrumb}>/</p>
       <Link href={`/resources?search=${encodeURIComponent(searchTerm)}`}>
         <a>{getSearchTermText(searchTerm)}</a>
       </Link>

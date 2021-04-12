@@ -29,6 +29,7 @@ import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
+import PageHeader from "components/layout/PageHeader";
 
 const PolicyForm = ({
   title,
@@ -163,7 +164,9 @@ const PolicyForm = ({
         </div>
       </Modal>
       <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
-        <h1 className={styles.heading}>{title}</h1>
+        <PageHeader>
+          <h1 className={styles.heading}>{title}</h1>
+        </PageHeader>
         <div className={styles.policyInputsContainer}>
           <Input
             name={"name"}

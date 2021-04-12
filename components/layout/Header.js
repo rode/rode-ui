@@ -14,54 +14,132 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "providers/theme";
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
 
-const navigationLinks = [
+const resourceLinks = [
   {
     href: "/resources",
-    label: "Resources",
+    label: "Resource Search",
   },
+];
+
+const policyLinks = [
   {
     href: "/policies",
-    label: "Policies",
+    label: "Policy Search",
+  },
+  {
+    href: "/playground",
+    label: "Policy Playground",
+  },
+  {
+    href: "/policies/new",
+    label: "Create New Policy",
+  },
+];
+
+const navigationSections = [
+  {
+    title: "Resources",
+    links: resourceLinks,
+  },
+  {
+    title: "Policies",
+    links: policyLinks,
   },
 ];
 
 const Header = () => {
   const { theme } = useTheme();
   const router = useRouter();
+  const ref = useRef(null);
+  const [showNavigation, setShowNavigation] = useState(false);
+
+  const toggleNavigation = () => {
+    setShowNavigation(!showNavigation);
+  };
+
+  const closeNavigationWhenClickingOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowNavigation(false);
+    }
+  };
+
+  useEffect(() => {
+    setShowNavigation(false);
+  }, [router]);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", closeNavigationWhenClickingOutside);
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        closeNavigationWhenClickingOutside
+      );
+    };
+  }, []);
 
   return (
-    <header className={`${styles.container} ${styles[theme]}`}>
-      <Link href={"/"}>
-        <a href={"/"}>
-          <RodeLogo theme={theme} />
-        </a>
-      </Link>
-      <div className={styles.links}>
-        {navigationLinks.map((link) => {
-          return (
-            <Link href={link.href} key={link.label}>
-              <a
-                className={
-                  router.pathname.startsWith(link.href)
-                    ? styles.active
-                    : styles.link
-                }
-              >
-                {link.label}
-              </a>
-            </Link>
-          );
-        })}
+    <header className={`${styles.container} ${styles[theme]}`} ref={ref}>
+      <div className={styles.logoContainer}>
+        <Link href={"/"}>
+          <a href={"/"} className={styles.logo}>
+            <RodeLogo theme={theme} />
+          </a>
+        </Link>
       </div>
-      <ThemeToggle />
+
+      <div
+        className={
+          showNavigation ? styles.expandedNavigation : styles.hiddenNavigation
+        }
+      >
+        <Button
+          label={"Toggle Navigation"}
+          buttonType={"icon"}
+          onClick={toggleNavigation}
+          className={
+            showNavigation ? styles.expandedToggle : styles.hiddenToggle
+          }
+        >
+          <Icon name={ICON_NAMES.MENU} size={"large"} />
+        </Button>
+        <div
+          className={showNavigation ? "" : styles.hidden}
+          data-testid={"navigationContainer"}
+        >
+          {navigationSections.map((section) => {
+            return (
+              <div key={section.title} className={styles.section}>
+                <p className={styles.sectionTitle}>{section.title}</p>
+                {section.links.map((link) => {
+                  return (
+                    <Link href={link.href} key={link.label}>
+                      <a className={styles.link}>{link.label}</a>
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+        <div
+          className={
+            showNavigation ? styles.themeToggleContainer : styles.hidden
+          }
+        >
+          <ThemeToggle />
+        </div>
+      </div>
     </header>
   );
 };

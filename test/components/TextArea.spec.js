@@ -91,6 +91,17 @@ describe("TextArea", () => {
     expect(screen.getByText(label)).toHaveClass("required", { exact: false });
   });
 
+  it("should allow the user to specify the text area as disabled", () => {
+    render(<TextArea name={name} label={label} disabled />);
+    expect(screen.getByLabelText(label)).toBeDisabled();
+  });
+
+  it("should require an onChange event if the text area is not disabled", () => {
+    console.error = jest.fn();
+    render(<TextArea name={name} label={label} />);
+    expect(console.error).toHaveBeenCalled();
+  });
+
   it("should render an error if specified", () => {
     const error = chance.string();
     render(

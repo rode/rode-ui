@@ -22,6 +22,7 @@ import {
 context("Resources", () => {
   beforeEach(() => {
     cy.visit("/");
+    cy.get('[aria-label="Toggle Navigation"]').click();
     cy.get('a[href="/resources"]').click();
     cy.url().should("match", /\/resources$/);
   });

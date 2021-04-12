@@ -15,46 +15,84 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Header from "components/layout/Header";
-import { useRouter } from "next/router";
-
-jest.mock("next/router");
 
 describe("Header", () => {
-  let rerender;
-
+  let unmount;
   beforeEach(() => {
-    useRouter.mockReturnValue({
-      pathname: chance.string(),
+    jest.spyOn(document, "addEventListener");
+    jest.spyOn(document, "removeEventListener");
+    const utils = render(
+      <div>
+        <Header />
+        <p>Trigger</p>
+      </div>
+    );
+
+    unmount = utils.unmount;
+  });
+
+  it("should add an event listener to listen to clicks outside of the nav menu", () => {
+    expect(document.addEventListener).toHaveBeenCalledWith(
+      "mousedown",
+      expect.any(Function)
+    );
+    const navigationContainer = screen.getByTestId("navigationContainer");
+    expect(navigationContainer).toHaveClass("hidden");
+
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
     });
-    const utils = render(<Header />);
-    rerender = utils.rerender;
+    expect(navigationContainer).not.toHaveClass("hidden");
+
+    act(() => {
+      userEvent.click(screen.getByText("Trigger"));
+    });
+    expect(navigationContainer).toHaveClass("hidden");
+
+    unmount();
+    expect(document.removeEventListener).toHaveBeenCalledWith(
+      "mousedown",
+      expect.any(Function)
+    );
   });
 
   it("should render the Rode logo", () => {
     expect(screen.getByTitle(/rode logo/i)).toBeInTheDocument();
   });
 
-  it("should render a link for Resources", () => {
-    expect(screen.getByText(/resources/i)).toBeInTheDocument();
-  });
+  it("should render a button to toggle the navigation", () => {
+    const toggleButton = screen.getByTitle(/menu/i);
+    expect(toggleButton).toBeInTheDocument();
 
-  it("should render a link for Policies", () => {
-    expect(screen.getByText(/policies/i)).toBeInTheDocument();
-  });
+    const navigationContainer = screen.getByTestId("navigationContainer");
+    expect(navigationContainer).toHaveClass("hidden");
 
-  it("should render the active link correctly", () => {
-    const activeLink = chance.pickone(["resources", "policies"]);
-
-    useRouter.mockReturnValue({
-      pathname: `/${activeLink}`,
+    act(() => {
+      userEvent.click(toggleButton);
     });
-    rerender(<Header />);
 
-    expect(screen.getByText(activeLink, { exact: false })).toHaveClass(
-      "active",
-      { exact: false }
-    );
+    expect(navigationContainer).not.toHaveClass("hidden");
+  });
+
+  it("should render the section and links for Resources", () => {
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
+
+    expect(screen.getByText("Resources")).toBeInTheDocument();
+    expect(screen.getByText("Resource Search")).toBeInTheDocument();
+  });
+
+  it("should render the section and links for Policies", () => {
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
+
+    expect(screen.getByText("Policies")).toBeInTheDocument();
+    expect(screen.getByText("Policy Playground")).toBeInTheDocument();
+    expect(screen.getByText("Create New Policy")).toBeInTheDocument();
   });
 });

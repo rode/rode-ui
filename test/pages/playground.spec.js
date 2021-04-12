@@ -17,7 +17,7 @@
 import React from "react";
 import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
-import PolicyEvaluationPlayground from "pages/playground";
+import PolicyPlayground from "pages/playground";
 import { useFetch } from "hooks/useFetch";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
@@ -25,7 +25,7 @@ import { showError } from "utils/toast-utils";
 jest.mock("hooks/useFetch");
 jest.mock("utils/toast-utils");
 
-describe("PolicyEvaluationPlayground", () => {
+describe("PolicyPlayground", () => {
   let policyState,
     policyDispatch,
     resourceState,
@@ -66,7 +66,7 @@ describe("PolicyEvaluationPlayground", () => {
 
   describe("Empty Evaluation Screen", () => {
     beforeEach(() => {
-      render(<PolicyEvaluationPlayground />, {
+      render(<PolicyPlayground />, {
         policyState,
         policyDispatch,
         resourceState,
@@ -86,9 +86,7 @@ describe("PolicyEvaluationPlayground", () => {
     });
 
     it("should render the title and instructions", () => {
-      expect(
-        screen.getByText("Policy Evaluation Playground")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Policy Playground")).toBeInTheDocument();
       expect(
         screen.getByText("Choose a resource, pick a policy, and evaluate.")
       ).toBeInTheDocument();
@@ -168,7 +166,7 @@ describe("PolicyEvaluationPlayground", () => {
       };
       policyState.evaluationResource = selectedResource;
       policyState.evaluationPolicy = selectedPolicy;
-      render(<PolicyEvaluationPlayground />, {
+      render(<PolicyPlayground />, {
         policyState: policyState,
         policyDispatch: policyDispatch,
       });

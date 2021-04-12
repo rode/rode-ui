@@ -23,32 +23,22 @@ $CARD_WIDTH: 97%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0 1rem;
   height: fit-content;
 
   @include tabletAndLarger {
-    padding: 1rem;
-    margin: 1rem auto;
+    margin: 0 auto;
     min-height: 90%;
   }
 }
 
 .playgroundHeader {
   display: flex;
-  flex-direction: column;
-
-  > button {
-    align-self: flex-end;
-  }
+  flex-direction: row;
+  justify-content: center;
 
   @include tabletAndLarger {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    > button {
-      align-self: flex-start;
-    }
+    justify-content: flex-end;
   }
 }
 
@@ -174,8 +164,16 @@ $CARD_WIDTH: 97%;
 }
 
 .pageTitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
+}
+
+.instructions {
+  display: none;
+
+  @include tabletAndLarger {
+    display: unset;
+  }
 }
 
 .evaluateButton {
@@ -208,6 +206,13 @@ $CARD_WIDTH: 97%;
 
   > button {
     margin: 0.5rem auto;
+  }
+
+  > pre {
+    @include tabletAndLarger {
+      width: 75%;
+      margin: 0 auto;
+    }
   }
 }
 
@@ -269,10 +274,6 @@ $CARD_WIDTH: 97%;
 }
 
 .lightTheme {
-  &.pageContainer {
-    background-color: $LT_BACKGROUND_LIGHT;
-  }
-
   .pageTitle {
     color: $DEEP_SEA;
   }
@@ -282,7 +283,7 @@ $CARD_WIDTH: 97%;
   }
 
   .searchCard {
-    background-color: $LT_BACKGROUND_MEDIUM;
+    background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
   }
 
@@ -303,13 +304,18 @@ $CARD_WIDTH: 97%;
 
   .selectionContainer {
     box-shadow: $LT_BOX_SHADOW;
-    background-color: $LT_BACKGROUND_MEDIUM;
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .evaluationResults {
     color: $GREEN;
   }
 
+  .failedEvaluationResultsContainer {
+    > pre {
+      background-color: $LT_BACKGROUND_DARK;
+    }
+  }
   .failedEvaluationResults {
     color: $HOT_RED;
   }
