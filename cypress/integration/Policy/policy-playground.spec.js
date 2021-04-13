@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { mockMappedPolicy } from "../../mock-responses/policy-responses";
+import {
+  mockFailedPolicyEvaluation,
+  mockMappedPolicy,
+  mockSuccessPolicyEvaluation,
+} from "../../mock-responses/policy-responses";
 import { mockMappedResource } from "../../mock-responses/resource-responses";
 
 context("Policy Playground", () => {
@@ -25,7 +29,7 @@ context("Policy Playground", () => {
     cy.url().should("match", /\/playground/);
   });
 
-  it("should allow the user to do an evaluation", () => {
+  it("should allow the user to do a successful evaluation", () => {
     cy.mockRequest(
       { url: "**/api/resources*", method: "GET" },
       mockMappedResource
@@ -33,6 +37,10 @@ context("Policy Playground", () => {
     cy.mockRequest(
       { url: "**/api/policies*", method: "GET" },
       mockMappedPolicy
+    );
+    cy.mockRequest(
+      { url: "**/api/policies/**/attest", method: "POST" },
+      mockSuccessPolicyEvaluation
     );
 
     cy.searchForResource("hello");
@@ -42,8 +50,42 @@ context("Policy Playground", () => {
 
     cy.contains("Evaluate").click();
 
-    cy.contains(/^the resource (?:passed|failed) the policy./i).should(
-      "be.visible"
+    cy.contains(/^the resource passed the policy./i).should("be.visible");
+
+    cy.contains("Reset Playground").click();
+    cy.contains("The resource passed the policy.").should("not.exist");
+  });
+
+  it("should allow the user to do a failed evaluation", () => {
+    cy.mockRequest(
+      { url: "**/api/resources*", method: "GET" },
+      mockMappedResource
     );
+    cy.mockRequest(
+      { url: "**/api/policies*", method: "GET" },
+      mockMappedPolicy
+    );
+    cy.mockRequest(
+      { url: "**/api/policies/**/attest", method: "POST" },
+      mockFailedPolicyEvaluation
+    );
+
+    cy.searchForResource("hello");
+    cy.contains("Select Resource").click();
+    cy.searchForPolicy("policy name");
+    cy.contains("Select Policy").click();
+
+    cy.contains("Evaluate").click();
+
+    cy.contains(/^the resource failed the policy./i).should("be.visible");
+
+    cy.contains("Show Failures").click();
+    cy.contains(
+      JSON.stringify(mockFailedPolicyEvaluation.explanation, null, 2)
+    ).should("be.visible");
+    cy.contains("Hide Failures").click();
+    cy.contains(
+      JSON.stringify(mockFailedPolicyEvaluation.explanation, null, 2)
+    ).should("not.exist");
   });
 });

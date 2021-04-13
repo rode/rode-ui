@@ -36,3 +36,14 @@ export const mockSuccessPolicyValidation = {
 export const mockFailedPatchPolicyResponse = {
   errors: ["Invalid rego code"],
 };
+
+export const mockSuccessPolicyEvaluation = {
+  pass: true,
+};
+
+export const mockFailedPolicyEvaluation = {
+  pass: false,
+  explanation: {
+    0: "This is a failed evaluation explanation",
+  },
+};
