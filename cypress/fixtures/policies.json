@@ -1,0 +1,8 @@
+{
+  "Existing": {
+    "id": "12345678910",
+    "name": "My Policy Name",
+    "description": "This is a policy description",
+    "regoContent": "RegoRegoRego"
+  }
+}
