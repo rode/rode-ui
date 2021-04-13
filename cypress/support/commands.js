@@ -16,12 +16,12 @@
 
 Cypress.Commands.add("searchForResource", (searchTerm) => {
   cy.get("#resourceSearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
+  cy.get('button[aria-label="Search Resources"]').click();
 });
 
 Cypress.Commands.add("searchForPolicy", (searchTerm) => {
   cy.get("#policySearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
+  cy.get('button[aria-label="Search Policies"]').click();
 });
 
 Cypress.Commands.add(

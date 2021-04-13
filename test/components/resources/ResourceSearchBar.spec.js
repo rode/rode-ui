@@ -76,7 +76,7 @@ describe("ResourceSearchBar", () => {
   });
 
   it("should render the button to perform a search", () => {
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Resources");
     expect(renderedSearchButton).toBeInTheDocument();
     expect(renderedSearchButton).toBeDisabled();
   });
@@ -96,7 +96,7 @@ describe("ResourceSearchBar", () => {
 
     rerender(<ResourceSearchBar onSubmit={onSubmit} />);
 
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Resources");
     expect(renderedSearchButton).not.toBeDisabled();
   });
 
@@ -121,7 +121,7 @@ describe("ResourceSearchBar", () => {
       dispatch: jest.fn(),
     });
     rerender(<ResourceSearchBar onSubmit={onSubmit} />);
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Resources");
 
     userEvent.click(renderedSearchButton);
 

@@ -156,7 +156,7 @@ context("Policy CRUD", () => {
     });
   });
 
-  context.only("Delete a Policy", () => {
+  context("Delete a Policy", () => {
     beforeEach(() => {
       cy.mockRequest(
         { url: "**/api/policies/*", method: "GET" },

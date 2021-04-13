@@ -103,4 +103,20 @@ describe("SearchBar", () => {
 
     expect(screen.getByText(helpText)).toBeInTheDocument();
   });
+
+  it("should allow the user to override the search button label", () => {
+    const buttonLabel = chance.string();
+    rerender(
+      <SearchBar
+        onSubmit={onSubmit}
+        onChange={onChange}
+        label={label}
+        name={name}
+        buttonLabel={buttonLabel}
+      />
+    );
+    const renderedButton = screen.getByLabelText(buttonLabel);
+    expect(renderedButton).toBeInTheDocument();
+    expect(renderedButton.type).toBe("submit");
+  });
 });

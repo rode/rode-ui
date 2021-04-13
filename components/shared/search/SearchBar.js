@@ -31,6 +31,7 @@ const SearchBar = (props) => {
     name,
     placeholder,
     helpText,
+    buttonLabel,
   } = props;
 
   return (
@@ -44,7 +45,7 @@ const SearchBar = (props) => {
           value={searchTerm}
         />
         <Button
-          label={"Search"}
+          label={buttonLabel || "Search"}
           buttonType={"icon"}
           disabled={!searchTerm?.length}
           type={"submit"}
@@ -65,6 +66,7 @@ SearchBar.propTypes = {
   searchTerm: PropTypes.string,
   placeholder: PropTypes.string,
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  buttonLabel: PropTypes.string,
 };
 
 export default SearchBar;
