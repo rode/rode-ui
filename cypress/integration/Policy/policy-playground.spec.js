@@ -88,4 +88,29 @@ context("Policy Playground", () => {
       JSON.stringify(mockFailedPolicyEvaluation.explanation, null, 2)
     ).should("not.exist");
   });
+
+  it("should show an error if the evaluation failed in an unexpected way", () => {
+    cy.mockRequest(
+      { url: "**/api/resources*", method: "GET" },
+      mockMappedResource
+    );
+    cy.mockRequest(
+      { url: "**/api/policies*", method: "GET" },
+      mockMappedPolicy
+    );
+    cy.mockRequest(
+      { url: "**/api/policies/**/attest", method: "POST", status: 500 },
+      mockFailedPolicyEvaluation
+    );
+
+    cy.searchForResource("hello");
+    cy.contains("Select Resource").click();
+    cy.searchForPolicy("policy name");
+    cy.contains("Select Policy").click();
+
+    cy.contains("Evaluate").click();
+    cy.contains("An error occurred while evaluating. Please try again.").should(
+      "be.visible"
+    );
+  });
 });
