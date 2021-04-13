@@ -22,74 +22,6 @@ import {
 } from "../../mock-responses/policy-responses";
 
 context("Policy CRUD", () => {
-  context("Policy Creation", () => {
-    beforeEach(() => {
-      cy.visit("/");
-      cy.get('[aria-label="Toggle Navigation"]').click();
-      cy.get('a[href="/policies/new"]').click();
-      cy.url().should("match", /\/policies\/new/);
-    });
-
-    it("should show validation errors when you submit an empty form", () => {
-      cy.contains("Save Policy").click();
-
-      cy.contains("Policy Name is a required field").should("be.visible");
-      cy.contains("Rego Policy Code is a required field").should("be.visible");
-    });
-
-    it("should remove the errors while you fill out the fields", () => {
-      cy.get("#name").type("Policy Name");
-      cy.get("#regoContent").type("RegoRegoRego");
-      cy.get("#description").focus();
-
-      cy.contains("Policy Name is a required field").should("not.exist");
-      cy.contains("Rego Policy Code is a required field").should("not.exist");
-    });
-
-    it("should display an error when the rego code is invalid", () => {
-      cy.mockRequest(
-        { url: "**/api/policies/validate", method: "POST" },
-        mockFailedPolicyValidation
-      );
-
-      cy.get("#regoContent").type("RegoRegoRego");
-      cy.contains("Validate Policy").click();
-
-      cy.contains("This policy failed validation").should("be.visible");
-      cy.contains("Invalid rego code").should("be.visible");
-    });
-
-    it("should display a message when the rego code is valid", () => {
-      cy.mockRequest(
-        { url: "**/api/policies/validate", method: "POST" },
-        mockSuccessPolicyValidation
-      );
-
-      cy.get("#regoContent").type("package play");
-      cy.contains("Validate Policy").click();
-
-      cy.contains("This policy passes validation").should("be.visible");
-    });
-
-    it("should redirect you to the created policy page when creation is successful", () => {
-      cy.mockRequest(
-        { url: "**/api/policies", method: "POST" },
-        mockMappedPolicy[0]
-      );
-      cy.mockRequest({ url: "**/api/policies/*" }, mockMappedPolicy[0]);
-
-      cy.get("#name").type("Test Policy");
-      cy.get("#description").type("Testing policy creation through Cypress");
-      cy.get("#regoContent").type("package play");
-      cy.contains("Save Policy").click();
-
-      cy.url().should(
-        "match",
-        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
-      );
-    });
-  });
-
   context("Edit a Policy", () => {
     beforeEach(() => {
       cy.mockRequest(
@@ -138,22 +70,6 @@ context("Policy CRUD", () => {
       );
       cy.contains("Failed to update the policy.").should("be.visible");
     });
-
-    it("should allow the user to edit any field in the policy", () => {
-      cy.mockRequest(
-        { url: "**/api/policies/*", method: "PATCH" },
-        mockMappedPolicy[0]
-      );
-      cy.get("#name").clear().type("My Updated Policy Name");
-      cy.get("#description").type("This is an updated policy description");
-      cy.get("#regoContent").type("package play");
-      cy.contains("Update Policy").click();
-
-      cy.url().should(
-        "match",
-        new RegExp(`/policies/${mockMappedPolicy[0].id}`)
-      );
-    });
   });
 
   context("Delete a Policy", () => {
@@ -170,23 +86,6 @@ context("Policy CRUD", () => {
         "match",
         new RegExp(`/policies/${mockMappedPolicy[0].id}/edit`)
       );
-    });
-
-    it("should allow for a successful deletion", () => {
-      cy.mockRequest(
-        {
-          url: "**/api/policies/*",
-          method: "DELETE",
-        },
-        {}
-      );
-      cy.contains("Delete Policy").click();
-
-      cy.contains("Are you sure you want to delete this policy?");
-      cy.contains("Delete Policy").click();
-
-      cy.url().should("match", /\/policies$/);
-      cy.contains("Policy was successfully deleted.").should("be.visible");
     });
 
     it("should show an error if the delete failed", () => {
