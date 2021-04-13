@@ -1,8 +1,8 @@
 const POLICY_SEARCH = {
   label: "Policy Search",
-  href: "/policies"
+  href: "/policies",
 };
 
 export default {
-  PolicySearch: POLICY_SEARCH
-}
+  PolicySearch: POLICY_SEARCH,
+};

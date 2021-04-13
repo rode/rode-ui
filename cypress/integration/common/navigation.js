@@ -1,7 +1,7 @@
-import {When, Given} from "cypress-cucumber-preprocessor/steps";
+import { When, Given } from "cypress-cucumber-preprocessor/steps";
 import * as navigation from "../../pages/navigation";
 
-Given('I open the application', () => {
+Given("I open the application", () => {
   cy.visit("/");
 });
 
