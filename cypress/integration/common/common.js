@@ -44,7 +44,7 @@ When(/^I type "([^"]*)" into "([^"]*)" input$/, (text, inputName) => {
   cy.get(selectors[input]).type(text);
 });
 
-When(/^I search for "([^"]*)" policy$/, (searchTerm) => {
+When(/^I search for (?:a|an) "([^"]*)" policy$/, (searchTerm) => {
   if (policies[searchTerm]) {
     cy.mockRequest({ url: "**/api/policies*", method: "GET" }, [
       policies[searchTerm],

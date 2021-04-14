@@ -46,28 +46,15 @@ Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
   cy.visit(`/policies/${policies[policyName].id}`);
 });
 
-When(/^I test invalid rego policy code$/, () => {
+When(/^I test (?:(valid|invalid)) Rego policy code$/, (validity) => {
   cy.mockRequest(
     {
       url: "**/api/policies/validate",
       method: "POST",
     },
-    mockFailedPolicyValidation
-  );
-
-  cy.get(selectors.PolicyRegoContentInput)
-    .clear()
-    .type(`Package ${chance.word()}`);
-  cy.get(selectors.ValidatePolicyButton).click();
-});
-
-When(/^I test valid rego policy code$/, () => {
-  cy.mockRequest(
-    {
-      url: "**/api/policies/validate",
-      method: "POST",
-    },
-    mockSuccessPolicyValidation
+    validity === "invalid"
+      ? mockFailedPolicyValidation
+      : mockSuccessPolicyValidation
   );
 
   cy.get(selectors.PolicyRegoContentInput)

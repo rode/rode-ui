@@ -29,18 +29,12 @@ When(/^I select "([^"]*)" resource for evaluation$/, () => {
   cy.get(selectors.SelectResourceButton).click();
 });
 
-When("the resource passes the policy", () => {
+When(/^the resource (?:(passes|fails)) the policy$/i, (passOrFail) => {
   cy.mockRequest(
     { url: "**/api/policies/**/attest", method: "POST" },
-    mockSuccessPolicyEvaluation
-  );
-  cy.get(selectors.EvaluatePlaygroundButton).click();
-});
-
-When("the resource fails the policy", () => {
-  cy.mockRequest(
-    { url: "**/api/policies/**/attest", method: "POST" },
-    mockFailedPolicyEvaluation
+    passOrFail === "passes"
+      ? mockSuccessPolicyEvaluation
+      : mockFailedPolicyEvaluation
   );
   cy.get(selectors.EvaluatePlaygroundButton).click();
 });

@@ -7,13 +7,13 @@ Feature: Policies
 
   Scenario: Search for a non-existent policy
     Given I am on the "PolicySearch" page
-    When I search for "NonExistent" policy
+    When I search for a "NonExistent" policy
     Then I see "NoPoliciesFound" message
 
     @smoke
   Scenario: Search for an existing policy
     Given I am on the "PolicySearch" page
-    When I search for "Existing" policy
+    When I search for an "Existing" policy
     Then I see "Existing" policy search result
     When I click the "ViewPolicy" button
     Then I see "Existing" policy details
@@ -40,7 +40,7 @@ Feature: Policies
 
   Scenario Outline: Create policy - validating rego code
     Given I am on the "CreatePolicy" page
-    When I test <validity> rego policy code
+    When I test <validity> Rego policy code
     Then I see "<message>" message
     Scenarios:
     | validity | message |
