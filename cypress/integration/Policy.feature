@@ -38,7 +38,7 @@ Feature: Policies
     Given I am on the "CreatePolicy" page
     When I click the "SavePolicy" button
     Then I see "PolicyRegoRequired" message
-    When I type "rego" into "PolicyRego" input
+    When I type "rego" into "PolicyRegoContent" input
     And I click the "SavePolicy" button
     Then I no longer see "PolicyRegoRequired" message
 

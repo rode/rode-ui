@@ -44,7 +44,7 @@ When(/^I test invalid rego policy code$/, () => {
       url: "**/api/policies/validate", method: "POST"
     }, mockFailedPolicyValidation);
 
-  cy.get(selectors.PolicyRegoInput).clear().type(`Package ${chance.word()}`);
+  cy.get(selectors.PolicyRegoContentInput).clear().type(`Package ${chance.word()}`);
   cy.get(selectors.ValidatePolicyButton).click();
 });
 
@@ -53,7 +53,7 @@ When(/^I test valid rego policy code$/, () => {
       url: "**/api/policies/validate", method: "POST"
     }, mockSuccessPolicyValidation);
 
-  cy.get(selectors.PolicyRegoInput).clear().type(`Package ${chance.word()}`);
+  cy.get(selectors.PolicyRegoContentInput).clear().type(`Package ${chance.word()}`);
   cy.get(selectors.ValidatePolicyButton).click();
 });
 
@@ -70,7 +70,6 @@ When(/^I create the "([^"]*)" policy$/, (policyName) => {
 });
 
 When(/^I update and save the "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
-  console.log('field', field);
   const policy = policies[policyName];
   const updatedPolicy = {
     ...policy,
