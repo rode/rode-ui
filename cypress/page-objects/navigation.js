@@ -1,3 +1,8 @@
+const RESOURCE_SEARCH = {
+  label: "Resource Search",
+  href: "/resources",
+};
+
 const POLICY_SEARCH = {
   label: "Policy Search",
   href: "/policies",
@@ -14,6 +19,7 @@ const CREATE_POLICY = {
 };
 
 export default {
+  ResourceSearch: RESOURCE_SEARCH,
   PolicySearch: POLICY_SEARCH,
   PolicyPlayground: POLICY_PLAYGROUND,
   CreatePolicy: CREATE_POLICY,

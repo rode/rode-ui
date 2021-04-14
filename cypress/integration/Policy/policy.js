@@ -1,5 +1,5 @@
 import { Before, Given, When, Then } from "cypress-cucumber-preprocessor/steps";
-import * as selectors from "../../pages/policy";
+import * as selectors from "../../page-objects/policy";
 import policies from "../../fixtures/policies.json";
 import Chance from "chance";
 import {
@@ -7,14 +7,11 @@ import {
   mockFailedPolicyValidation,
   mockSuccessPolicyValidation,
 } from "../../mock-responses/policy-responses";
+import { capitalize } from "../../page-objects/utils";
 
 const chance = new Chance();
 
 let updatedValues;
-
-const capitalize = (string) => {
-  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
-};
 
 Before({ tags: "@updatePolicy" }, () => {
   updatedValues = {
@@ -31,16 +28,6 @@ Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
     policies[policyName]
   );
   cy.visit(`/policies/${policies[policyName].id}`);
-});
-
-When(/^I search for "([^"]*)" policy$/, (searchTerm) => {
-  if (policies[searchTerm]) {
-    cy.mockRequest({ url: "**/api/policies*", method: "GET" }, [
-      policies[searchTerm],
-    ]);
-  }
-  cy.get(selectors.PolicySearchInput).focus().clear().type(searchTerm);
-  cy.get(selectors.SearchPolicyButton).click();
 });
 
 When(/^I test invalid rego policy code$/, () => {
@@ -150,7 +137,7 @@ Then(/^I see "([^"]*)" policy details$/, (policyName) => {
   cy.contains(policy.description).should("be.visible");
   cy.contains(policy.regoContent).should("be.visible");
   cy.get(selectors.EditPolicyButton).should("be.visible");
-  cy.get(selectors.EvaluatePlaygroundButton).should("be.visible");
+  cy.get(selectors.EvaluatePolicyInPlaygroundButton).should("be.visible");
 });
 
 Then(/^I see the updated "([^"]*)" policy ([^"]*)$/, (policyName, field) => {

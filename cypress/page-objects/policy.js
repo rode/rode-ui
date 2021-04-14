@@ -1,6 +1,7 @@
-const createButtonSelector = (label) => `button[aria-label="${label}"]`;
 
 //MESSAGES
+import { createButtonSelector } from "./utils";
+
 export const NoPoliciesFoundMessage = "No policies found";
 export const DeletePolicyConfirmMessage =
   "Are you sure you want to delete this policy?";
@@ -19,7 +20,7 @@ export const PolicyFailedDeleteMessage =
 export const SearchPolicyButton = createButtonSelector("Search Policies");
 export const EditPolicyButton = createButtonSelector("Edit Policy");
 export const ViewPolicyButton = createButtonSelector("View Policy");
-export const EvaluatePlaygroundButton = createButtonSelector(
+export const EvaluatePolicyInPlaygroundButton = createButtonSelector(
   "Evaluate in Policy Playground"
 );
 export const UpdatePolicyButton = createButtonSelector("Update Policy");

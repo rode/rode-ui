@@ -1,6 +1,8 @@
 import { When, Given, Then } from "cypress-cucumber-preprocessor/steps";
-import * as navigation from "../../pages/navigation";
-import * as selectors from "../../pages/index";
+import * as navigation from "../../page-objects/navigation";
+import * as selectors from "../../page-objects/index";
+import policies from "../../fixtures/policies.json";
+import resources from "../../fixtures/resources.json";
 
 Given("I open the application", () => {
   cy.visit("/");
@@ -24,6 +26,26 @@ When(/^I click the "([^"]*)" button$/, (buttonName) => {
 When(/^I type "([^"]*)" into "([^"]*)" input$/, (text, inputName) => {
   const input = `${inputName}Input`;
   cy.get(selectors[input]).type(text);
+});
+
+When(/^I search for "([^"]*)" policy$/, (searchTerm) => {
+  if (policies[searchTerm]) {
+    cy.mockRequest({ url: "**/api/policies*", method: "GET" }, [
+      policies[searchTerm],
+    ]);
+  }
+  cy.get(selectors.PolicySearchInput).focus().clear().type(searchTerm);
+  cy.get(selectors.SearchPolicyButton).click();
+});
+
+When(/^I search for "([^"]*)" resource$/, (searchTerm) => {
+  if (resources[searchTerm]) {
+    cy.mockRequest({ url: "**/api/resources*", method: "GET" }, [
+      resources[searchTerm],
+    ]);
+  }
+  cy.get(selectors.ResourceSearchInput).focus().clear().type(searchTerm);
+  cy.get(selectors.SearchResourceButton).click();
 });
 
 Then(/^I see "([^"]*)"$/, (element) => {
