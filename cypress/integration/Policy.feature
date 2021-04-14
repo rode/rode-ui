@@ -1,17 +1,17 @@
 Feature: Policies
 
-  Scenario: Opening the policy search page
+  Scenario: Open the policy search page
     Given I open the application
     When I navigate to the "PolicySearch" page
     Then I see "PolicySearchInput"
 
-  Scenario: Searching for a non-existent policy
+  Scenario: Search for a non-existent policy
     Given I am on the "PolicySearch" page
     When I search for "NonExistent" policy
     Then I see "NoPoliciesFound" message
 
     @smoke
-  Scenario: Searching for an existing policy
+  Scenario: Search for an existing policy
     Given I am on the "PolicySearch" page
     When I search for "Existing" policy
     Then I see "Existing" policy search result
@@ -19,14 +19,14 @@ Feature: Policies
     Then I see "Existing" policy details
 
     @smoke
-  Scenario: Creating policy
+  Scenario: Create policy
     Given I open the application
     When I navigate to the "CreatePolicy" page
     Then I see the "CreatePolicy" form
     When I create the "New" policy
     Then I see "New" policy details
 
-  Scenario Outline: Creating policy - required fields
+  Scenario Outline: Create policy - required fields
     Given I am on the "CreatePolicy" page
     When I click the "SavePolicy" button
     Then I see "<message>" message
@@ -38,7 +38,7 @@ Feature: Policies
     | PolicyNameRequired | name | PolicyName |
     | PolicyRegoRequired | rego | PolicyRegoContent |
 
-  Scenario Outline: Creating policy - validating rego code
+  Scenario Outline: Create policy - validating rego code
     Given I am on the "CreatePolicy" page
     When I test <validity> rego policy code
     Then I see "<message>" message
@@ -48,7 +48,7 @@ Feature: Policies
     | valid    | PolicyPassedValidation |
 
     @updatePolicy
-  Scenario Outline: Editing policy - update fields
+  Scenario Outline: Edit policy - update fields
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
     Then I see the Edit Policy form for "Existing" policy
@@ -60,11 +60,32 @@ Feature: Policies
       | description |
       | regoContent |
 
-  Scenario: Deleting policy
+  Scenario: Edit policy - invalid rego
+    Given I am on the "Existing" policy details page
+    When I click the "EditPolicy" button
+    Then I see the Edit Policy form for "Existing" policy
+    When I save invalid rego code
+    Then I see "PolicyFailedUpdateInvalidRego" message
+    Then I see "PolicyFailedValidation" message
+
+  Scenario: Edit policy - unexpected failure
+    Given I am on the "Existing" policy details page
+    When I click the "EditPolicy" button
+    And I save the Edit Policy form and an error occurs
+    Then I see "PolicyFailedUpdate" message
+
+  Scenario: Delete policy
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
     And I click the "DeletePolicy" button
     And I confirm to delete the policy
     Then I see "DeleteSuccess" message
+
+  Scenario: Delete policy - unexpected failure
+    Given I am on the "Existing" policy details page
+    When I click the "EditPolicy" button
+    And I click the "DeletePolicy" button
+    And I confirm to delete the policy and an error occurs
+    Then I see "PolicyFailedDelete" message
 
 

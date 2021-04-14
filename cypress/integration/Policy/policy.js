@@ -2,7 +2,11 @@ import { Before, Given, When, Then } from "cypress-cucumber-preprocessor/steps";
 import * as selectors from "../../pages/policy";
 import policies from "../../fixtures/policies.json";
 import Chance from "chance";
-import { mockFailedPolicyValidation, mockSuccessPolicyValidation } from "../../mock-responses/policy-responses";
+import {
+  mockFailedPatchPolicyResponse,
+  mockFailedPolicyValidation,
+  mockSuccessPolicyValidation
+} from "../../mock-responses/policy-responses";
 
 const chance = new Chance();
 
@@ -84,9 +88,37 @@ When(/^I update and save the "([^"]*)" policy ([^"]*)$/, (policyName, field) => 
   cy.get(selectors.UpdatePolicyButton).click();
 });
 
+When("I save the Edit Policy form and an error occurs", () => {
+  cy.mockRequest(
+    { url: `**/api/policies/**`, method: "PATCH", status: 500 },
+    {}
+  );
+  cy.get(selectors.UpdatePolicyButton).click();
+});
+
+When("I save invalid rego code", () => {
+  cy.mockRequest(
+    { url: `**/api/policies/**`, method: "PATCH", status: 500 },
+    mockFailedPatchPolicyResponse
+  );
+  cy.get(selectors.PolicyRegoContentInput).clear().type(chance.string());
+  cy.get(selectors.UpdatePolicyButton).click();
+});
+
 When("I confirm to delete the policy", () => {
   cy.mockRequest(
     { url: `**/api/policies/*`, method: "DELETE"},
+    {}
+  )
+  cy.contains(selectors.DeletePolicyConfirmMessage).should("be.visible");
+  cy.get(selectors.DeletePolicyModal).within(() => {
+    cy.get(selectors.DeletePolicyButton).click()
+  });
+});
+
+When("I confirm to delete the policy and an error occurs", () => {
+  cy.mockRequest(
+    { url: `**/api/policies/*`, method: "DELETE", status: 500},
     {}
   )
   cy.contains(selectors.DeletePolicyConfirmMessage).should("be.visible");

@@ -9,6 +9,9 @@ export const PolicyNameRequiredMessage = "Policy Name is a required field";
 export const PolicyRegoRequiredMessage = "Rego Policy Code is a required field";
 export const PolicyFailedValidationMessage = "This policy failed validation";
 export const PolicyPassedValidationMessage = "This policy passes validation";
+export const PolicyFailedUpdateInvalidRegoMessage = "Failed to update the policy due to invalid Rego code.";
+export const PolicyFailedUpdateMessage = "Failed to update the policy.";
+export const PolicyFailedDeleteMessage = "An error occurred while deleting the policy. Please try again.";
 
 // BUTTONS
 export const SearchPolicyButton = createButtonSelector('Search Policies');
