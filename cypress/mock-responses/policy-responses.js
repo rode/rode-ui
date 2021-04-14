@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-export const mockMappedPolicy = [
-  {
-    id: "12345678910",
-    name: "My Policy Name",
-    description: "This is a policy description",
-    regoContent: "RegoRegoRego",
-  },
-];
-
 export const mockFailedPolicyValidation = {
   isValid: false,
   errors: ["Invalid rego code"],

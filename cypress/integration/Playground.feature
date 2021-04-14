@@ -1,5 +1,6 @@
 Feature: Policy Playground
 
+  @smoke
   Scenario: Successful Policy Evaluation
     Given I am on the "PolicyPlayground" page
     When I search for "Existing" policy

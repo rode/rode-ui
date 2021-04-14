@@ -68,7 +68,7 @@ Feature: Policies
     Then I see "PolicyFailedUpdateInvalidRego" message
     Then I see "PolicyFailedValidation" message
 
-  Scenario: Edit policy - unexpected failure
+  Scenario: Edit policy - unexpected errors
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
     And I save the Edit Policy form and an error occurs
@@ -81,7 +81,7 @@ Feature: Policies
     And I confirm to delete the policy
     Then I see "DeleteSuccess" message
 
-  Scenario: Delete policy - unexpected failure
+  Scenario: Delete policy - unexpected errors
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
     And I click the "DeletePolicy" button

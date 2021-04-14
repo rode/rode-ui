@@ -133,6 +133,8 @@ Then(/^I see "([^"]*)" policy search result$/, (policyName) => {
 
 Then(/^I see "([^"]*)" policy details$/, (policyName) => {
   const policy = policies[policyName];
+  cy.url().should("contain", `/policies/${encodeURIComponent(policy.id)}`);
+
   cy.contains(policy.name).should("be.visible");
   cy.contains(policy.description).should("be.visible");
   cy.contains(policy.regoContent).should("be.visible");
