@@ -26,7 +26,6 @@ import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
-import PolicyDashboardButtons from "components/policies/PolicyDashboardButtons";
 
 // TODO: handle flashing of not found on this and resource search page
 
@@ -93,9 +92,7 @@ const Policies = () => {
             <span className={styles.noResults}>No policies found</span>
           )}
         </Loading>
-      ) : (
-        <PolicyDashboardButtons />
-      )}
+      ) : null}
     </div>
   );
 };
