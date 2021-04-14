@@ -42,25 +42,28 @@ Feature: Policies
     And I click the "SavePolicy" button
     Then I no longer see "PolicyRegoRequired" message
 
-    @focus
   Scenario: Creating policy - validating invalid rego code
     Given I am on the "CreatePolicy" page
     When I test invalid rego policy code
     Then I see "PolicyFailedValidation" message
 
-    @focus
   Scenario: Creating policy - validating valid rego code
     Given I am on the "CreatePolicy" page
     When I test valid rego policy code
     Then I see "PolicyPassedValidation" message
 
-  @smoke @updatePolicy
-  Scenario: Editing policy - update name
+    @updatePolicy
+  Scenario Outline: Editing policy - update fields
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
     Then I see the Edit Policy form for "Existing" policy
-    When I update and save the "Existing" policy name
-    Then I see the updated "Existing" policy name
+    When I update and save the "Existing" policy <field>
+    Then I see the updated "Existing" policy <field>
+    Scenarios:
+      | field   |
+      | name        |
+      | description |
+      | regoContent |
 
   Scenario: Deleting policy
     Given I am on the "Existing" policy details page

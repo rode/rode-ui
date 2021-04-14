@@ -6,10 +6,18 @@ import { mockFailedPolicyValidation, mockSuccessPolicyValidation } from "../../m
 
 const chance = new Chance();
 
-let updatedPolicyName;
+let updatedValues;
+
+const capitalize = (string) => {
+  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`
+}
 
 Before({ tags: "@updatePolicy" }, () => {
-  updatedPolicyName = chance.string();
+  updatedValues = {
+    name: chance.string(),
+    description: chance.sentence(),
+    regoContent: "package testPackage\npass = true\n\nviolations[result] {\n    result:={\n        \"pass\": true\n        }\n}"
+  }
 });
 
 Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
@@ -27,7 +35,7 @@ When(/^I search for "([^"]*)" policy$/, (searchTerm) => {
     ]);
   }
   cy.get(selectors.PolicySearchInput).focus().clear().type(searchTerm);
-  cy.get(selectors.PolicySearchButton).click();
+  cy.get(selectors.SearchPolicyButton).click();
 });
 
 
@@ -57,21 +65,23 @@ When(/^I create the "([^"]*)" policy$/, (policyName) => {
   );
   cy.get(selectors.PolicyNameInput).clear().type(policy.name);
   cy.get(selectors.PolicyDescriptionInput).clear().type(policy.description);
-  cy.get(selectors.PolicyRegoInput).clear().type(policy.regoContent);
+  cy.get(selectors.PolicyRegoContentInput).clear().type(policy.regoContent);
   cy.get(selectors.SavePolicyButton).click();
 });
 
-When(/^I update and save the "([^"]*)" policy name$/, (policyName) => {
+When(/^I update and save the "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
+  console.log('field', field);
   const policy = policies[policyName];
   const updatedPolicy = {
     ...policy,
-    name: updatedPolicyName,
+    [field]: updatedValues[field],
   };
   cy.mockRequest(
     { url: `**/api/policies/${policy.id}`, method: "PATCH" },
     updatedPolicy
   );
-  cy.get(selectors.PolicyNameInput).clear().type(updatedPolicyName);
+  const selectorName = `Policy${capitalize(field)}Input`;
+  cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
   cy.get(selectors.UpdatePolicyButton).click();
 });
 
@@ -103,12 +113,12 @@ Then(/^I see "([^"]*)" policy details$/, (policyName) => {
   cy.get(selectors.EvaluatePlaygroundButton).should("be.visible");
 });
 
-Then(/^I see the updated "([^"]*)" policy name$/, (policyName) => {
+Then(/^I see the updated "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
   const policy = policies[policyName];
   cy.url().should("match", new RegExp(`/policies/${policy.id}`));
 
-  cy.contains(policy.name).should("not.exist");
-  cy.contains(updatedPolicyName).should("be.visible");
+  cy.contains(policy[field]).should("not.exist");
+  cy.contains(updatedValues[field]).should("be.visible");
 });
 
 Then(

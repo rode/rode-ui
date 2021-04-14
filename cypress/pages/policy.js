@@ -11,7 +11,7 @@ export const PolicyFailedValidationMessage = "This policy failed validation";
 export const PolicyPassedValidationMessage = "This policy passes validation";
 
 // BUTTONS
-export const PolicySearchButton = createButtonSelector('Search Policies');
+export const SearchPolicyButton = createButtonSelector('Search Policies');
 export const EditPolicyButton = createButtonSelector('Edit Policy');
 export const ViewPolicyButton = createButtonSelector('View Policy');
 export const EvaluatePlaygroundButton = createButtonSelector('Evaluate in Policy Playground');
@@ -25,14 +25,14 @@ export const DeletePolicyButton = createButtonSelector('Delete Policy');
 export const PolicySearchInput = "#policySearch";
 export const PolicyNameInput = "#name";
 export const PolicyDescriptionInput = "#description";
-export const PolicyRegoInput = "#regoContent";
+export const PolicyRegoContentInput = "#regoContent";
 
 // MODALS
 export const DeletePolicyModal = "div[role='dialog']";
 
 // FORMS
 export const EditPolicyForm = {
-  fields: [PolicyNameInput, PolicyDescriptionInput, PolicyRegoInput],
+  fields: [PolicyNameInput, PolicyDescriptionInput, PolicyRegoContentInput],
   buttons: [
     ValidatePolicyButton,
     UpdatePolicyButton,
@@ -42,7 +42,7 @@ export const EditPolicyForm = {
 };
 
 export const CreatePolicyForm = {
-  fields: [PolicyNameInput, PolicyDescriptionInput, PolicyRegoInput],
+  fields: [PolicyNameInput, PolicyDescriptionInput, PolicyRegoContentInput],
   buttons: [
     ValidatePolicyButton,
     SavePolicyButton,
