@@ -26,31 +26,26 @@ Feature: Policies
     When I create the "New" policy
     Then I see "New" policy details
 
-  Scenario: Creating policy - require policy name
+  Scenario Outline: Creating policy - required fields
     Given I am on the "CreatePolicy" page
     When I click the "SavePolicy" button
-    Then I see "PolicyNameRequired" message
-    When I type "name" into "PolicyName" input
+    Then I see "<message>" message
+    When I type "<text>" into "<input>" input
     And I click the "SavePolicy" button
-    Then I no longer see "PolicyNameRequired" message
+    Then I no longer see "<message>" message
+    Scenarios:
+    | message | text | input |
+    | PolicyNameRequired | name | PolicyName |
+    | PolicyRegoRequired | rego | PolicyRegoContent |
 
-  Scenario: Creating policy - required rego code
+  Scenario Outline: Creating policy - validating rego code
     Given I am on the "CreatePolicy" page
-    When I click the "SavePolicy" button
-    Then I see "PolicyRegoRequired" message
-    When I type "rego" into "PolicyRegoContent" input
-    And I click the "SavePolicy" button
-    Then I no longer see "PolicyRegoRequired" message
-
-  Scenario: Creating policy - validating invalid rego code
-    Given I am on the "CreatePolicy" page
-    When I test invalid rego policy code
-    Then I see "PolicyFailedValidation" message
-
-  Scenario: Creating policy - validating valid rego code
-    Given I am on the "CreatePolicy" page
-    When I test valid rego policy code
-    Then I see "PolicyPassedValidation" message
+    When I test <validity> rego policy code
+    Then I see "<message>" message
+    Scenarios:
+    | validity | message |
+    | invalid  | PolicyFailedValidation |
+    | valid    | PolicyPassedValidation |
 
     @updatePolicy
   Scenario Outline: Editing policy - update fields
