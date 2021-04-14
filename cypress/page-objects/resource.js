@@ -7,4 +7,4 @@ export const NoResourcesFoundMessage = "No resources found";
 export const SearchResourceButton = createButtonSelector("Search Resources");
 
 // INPUTS
-export const ResourceSearchInput = "#policySearch";
+export const ResourceSearchInput = "#resourceSearch";
