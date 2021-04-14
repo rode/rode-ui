@@ -5,7 +5,7 @@ import Chance from "chance";
 import {
   mockFailedPatchPolicyResponse,
   mockFailedPolicyValidation,
-  mockSuccessPolicyValidation
+  mockSuccessPolicyValidation,
 } from "../../mock-responses/policy-responses";
 
 const chance = new Chance();
@@ -13,15 +13,16 @@ const chance = new Chance();
 let updatedValues;
 
 const capitalize = (string) => {
-  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`
-}
+  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
+};
 
 Before({ tags: "@updatePolicy" }, () => {
   updatedValues = {
     name: chance.string(),
     description: chance.sentence(),
-    regoContent: "package testPackage\npass = true\n\nviolations[result] {\n    result:={\n        \"pass\": true\n        }\n}"
-  }
+    regoContent:
+      'package testPackage\npass = true\n\nviolations[result] {\n    result:={\n        "pass": true\n        }\n}',
+  };
 });
 
 Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
@@ -42,51 +43,62 @@ When(/^I search for "([^"]*)" policy$/, (searchTerm) => {
   cy.get(selectors.SearchPolicyButton).click();
 });
 
-
 When(/^I test invalid rego policy code$/, () => {
-    cy.mockRequest({
-      url: "**/api/policies/validate", method: "POST"
-    }, mockFailedPolicyValidation);
+  cy.mockRequest(
+    {
+      url: "**/api/policies/validate",
+      method: "POST",
+    },
+    mockFailedPolicyValidation
+  );
 
-  cy.get(selectors.PolicyRegoContentInput).clear().type(`Package ${chance.word()}`);
+  cy.get(selectors.PolicyRegoContentInput)
+    .clear()
+    .type(`Package ${chance.word()}`);
   cy.get(selectors.ValidatePolicyButton).click();
 });
 
 When(/^I test valid rego policy code$/, () => {
-    cy.mockRequest({
-      url: "**/api/policies/validate", method: "POST"
-    }, mockSuccessPolicyValidation);
+  cy.mockRequest(
+    {
+      url: "**/api/policies/validate",
+      method: "POST",
+    },
+    mockSuccessPolicyValidation
+  );
 
-  cy.get(selectors.PolicyRegoContentInput).clear().type(`Package ${chance.word()}`);
+  cy.get(selectors.PolicyRegoContentInput)
+    .clear()
+    .type(`Package ${chance.word()}`);
   cy.get(selectors.ValidatePolicyButton).click();
 });
 
 When(/^I create the "([^"]*)" policy$/, (policyName) => {
   const policy = policies[policyName];
-  cy.mockRequest(
-    { url: `**/api/policies`, method: "POST" },
-    policy
-  );
+  cy.mockRequest({ url: `**/api/policies`, method: "POST" }, policy);
   cy.get(selectors.PolicyNameInput).clear().type(policy.name);
   cy.get(selectors.PolicyDescriptionInput).clear().type(policy.description);
   cy.get(selectors.PolicyRegoContentInput).clear().type(policy.regoContent);
   cy.get(selectors.SavePolicyButton).click();
 });
 
-When(/^I update and save the "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
-  const policy = policies[policyName];
-  const updatedPolicy = {
-    ...policy,
-    [field]: updatedValues[field],
-  };
-  cy.mockRequest(
-    { url: `**/api/policies/${policy.id}`, method: "PATCH" },
-    updatedPolicy
-  );
-  const selectorName = `Policy${capitalize(field)}Input`;
-  cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
-  cy.get(selectors.UpdatePolicyButton).click();
-});
+When(
+  /^I update and save the "([^"]*)" policy ([^"]*)$/,
+  (policyName, field) => {
+    const policy = policies[policyName];
+    const updatedPolicy = {
+      ...policy,
+      [field]: updatedValues[field],
+    };
+    cy.mockRequest(
+      { url: `**/api/policies/${policy.id}`, method: "PATCH" },
+      updatedPolicy
+    );
+    const selectorName = `Policy${capitalize(field)}Input`;
+    cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
+    cy.get(selectors.UpdatePolicyButton).click();
+  }
+);
 
 When("I save the Edit Policy form and an error occurs", () => {
   cy.mockRequest(
@@ -106,24 +118,21 @@ When("I save invalid rego code", () => {
 });
 
 When("I confirm to delete the policy", () => {
-  cy.mockRequest(
-    { url: `**/api/policies/*`, method: "DELETE"},
-    {}
-  )
+  cy.mockRequest({ url: `**/api/policies/*`, method: "DELETE" }, {});
   cy.contains(selectors.DeletePolicyConfirmMessage).should("be.visible");
   cy.get(selectors.DeletePolicyModal).within(() => {
-    cy.get(selectors.DeletePolicyButton).click()
+    cy.get(selectors.DeletePolicyButton).click();
   });
 });
 
 When("I confirm to delete the policy and an error occurs", () => {
   cy.mockRequest(
-    { url: `**/api/policies/*`, method: "DELETE", status: 500},
+    { url: `**/api/policies/*`, method: "DELETE", status: 500 },
     {}
-  )
+  );
   cy.contains(selectors.DeletePolicyConfirmMessage).should("be.visible");
   cy.get(selectors.DeletePolicyModal).within(() => {
-    cy.get(selectors.DeletePolicyButton).click()
+    cy.get(selectors.DeletePolicyButton).click();
   });
 });
 
@@ -152,19 +161,16 @@ Then(/^I see the updated "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
   cy.contains(updatedValues[field]).should("be.visible");
 });
 
-Then(
-  /^I see the Edit Policy form for "([^"]*)" policy$/,
-  (policyName) => {
-    const form = selectors.EditPolicyForm;
-    const policy = policies[policyName];
+Then(/^I see the Edit Policy form for "([^"]*)" policy$/, (policyName) => {
+  const form = selectors.EditPolicyForm;
+  const policy = policies[policyName];
 
-    cy.url().should("match", new RegExp(`/policies/${policy.id}/edit`));
+  cy.url().should("match", new RegExp(`/policies/${policy.id}/edit`));
 
-    form.fields.forEach((field) => {
-      cy.get(field).should("have.value", policy[field.slice(1)]);
-    });
-    form.buttons.forEach((button) => {
-      cy.get(button).should("be.visible");
-    });
-  }
-);
+  form.fields.forEach((field) => {
+    cy.get(field).should("have.value", policy[field.slice(1)]);
+  });
+  form.buttons.forEach((button) => {
+    cy.get(button).should("be.visible");
+  });
+});

@@ -5,16 +5,16 @@ const POLICY_SEARCH = {
 
 const POLICY_PLAYGROUND = {
   label: "Policy Playground",
-  href: "/playground"
+  href: "/playground",
 };
 
 const CREATE_POLICY = {
   label: "Create New Policy",
-  href: "/policies/new"
+  href: "/policies/new",
 };
 
 export default {
   PolicySearch: POLICY_SEARCH,
   PolicyPlayground: POLICY_PLAYGROUND,
-  CreatePolicy: CREATE_POLICY
+  CreatePolicy: CREATE_POLICY,
 };

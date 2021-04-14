@@ -40,16 +40,13 @@ Then(/^I no longer see "([^"]*)" message$/, (messageName) => {
   cy.contains(selectors[message]).should("not.exist");
 });
 
-Then(
-  /^I see the "([^"]*)" form$/,
-  (formName) => {
-    const form = selectors[`${formName}Form`];
+Then(/^I see the "([^"]*)" form$/, (formName) => {
+  const form = selectors[`${formName}Form`];
 
-    form.fields.forEach((field) => {
-      cy.get(field).should("be.visible");
-    });
-    form.buttons.forEach((button) => {
-      cy.get(button).should("be.visible");
-    });
-  }
-);
+  form.fields.forEach((field) => {
+    cy.get(field).should("be.visible");
+  });
+  form.buttons.forEach((button) => {
+    cy.get(button).should("be.visible");
+  });
+});
