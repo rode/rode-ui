@@ -9,6 +9,7 @@
     "e2e-local": "yarn run e2e --env local_rode_api=true",
     "fmt": "prettier --write .",
     "lint": "eslint --max-warnings=0 .",
+    "smoke": "./node_modules/.bin/cypress-tags run -e TAGS='@smoke'",
     "start": "next start",
     "test": "jest",
     "verify": "prettier --check . && yarn lint && yarn test"
