@@ -18,6 +18,7 @@ import React from "react";
 import { render, screen } from "test/testing-utils/renderer";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
 import { createMockMappedVulnerabilityOccurrence } from "test/testing-utils/mocks";
+import { getVulnerabilityBreakdown } from "utils/occurrence-utils";
 
 describe("SecureOccurrenceSection", () => {
   let occurrences;
@@ -47,6 +48,15 @@ describe("SecureOccurrenceSection", () => {
         expect(
           screen.queryAllByText("Vulnerability Scan")[index]
         ).toBeInTheDocument();
+
+        if (occurrence.vulnerabilities.length) {
+          const breakdown = getVulnerabilityBreakdown(
+            occurrence.vulnerabilities
+          );
+          const renderedBreakdown = screen.queryAllByText(breakdown);
+
+          expect(renderedBreakdown[0]).toBeInTheDocument();
+        }
 
         const renderedVulnerabilityCount = screen.queryAllByText(
           /vulnerabilities found/i

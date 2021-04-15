@@ -118,6 +118,12 @@ $INDENTATION: 1rem;
   @extend .previewSubText;
 }
 
+.previewBreakdown {
+  @extend .previewSubText;
+  line-height: 1rem;
+  margin-left: 0;
+}
+
 .sectionContainer {
   width: 100%;
   margin-top: 1rem;
