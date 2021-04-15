@@ -89,8 +89,6 @@ const PolicyPlayground = () => {
     setEvaluationResults(null);
   }, []);
 
-  console.log("state.evaluationResource", state.evaluationResource);
-
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
       <PageHeader>

@@ -41,13 +41,13 @@ const SecureOccurrenceSection = ({ occurrences }) => {
           timestamp={occurrence.completed}
           subText={
             <>
-              <p>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</p>
+              <span>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</span>
               {!!occurrence.vulnerabilities.length && (
-                <p
+                <span
                   className={styles.previewBreakdown}
                 >{`${getVulnerabilityBreakdown(
                   occurrence.vulnerabilities
-                )}`}</p>
+                )}`}</span>
               )}
             </>
           }
