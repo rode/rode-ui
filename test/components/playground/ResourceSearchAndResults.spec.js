@@ -97,12 +97,17 @@ describe("ResourceSearchAndResults", () => {
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
     resources.forEach((resource) => {
-      const { resourceName, resourceVersion } = getResourceDetails(
-        resource.uri
-      );
+      const {
+        resourceName,
+        resourceVersion,
+        resourceType,
+      } = getResourceDetails(resource.uri);
       expect(screen.getByText(resourceName)).toBeInTheDocument();
       expect(
         screen.getByText(`Version: ${resourceVersion}`)
+      ).toBeInTheDocument();
+      expect(
+        screen.getAllByText(`Type: ${resourceType}`)[0]
       ).toBeInTheDocument();
     });
   });

@@ -65,6 +65,22 @@ describe("PlaygroundSearchResult", () => {
     expect(screen.getByText(subText)).toBeInTheDocument();
   });
 
+  it("should render the additional text if specified", () => {
+    const additionalText = chance.string();
+    rerender(
+      <PlaygroundSearchResult
+        mainText={mainText}
+        subText={subText}
+        additionalText={additionalText}
+        buttonText={buttonText}
+        onClick={onClick}
+        selected={false}
+      />
+    );
+
+    expect(screen.getByText(additionalText)).toBeInTheDocument();
+  });
+
   it("should render the button text when the result is not selected for evaluation", () => {
     rerender(
       <PlaygroundSearchResult

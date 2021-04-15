@@ -24,6 +24,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 const PlaygroundSearchResult = ({
   mainText,
   subText,
+  additionalText,
   buttonText,
   onClick,
   selected,
@@ -33,6 +34,7 @@ const PlaygroundSearchResult = ({
       <div>
         <p className={styles.cardHeader}>{mainText}</p>
         <p className={styles.cardText}>{subText}</p>
+        {additionalText && <p className={styles.cardText}>{additionalText}</p>}
       </div>
       <Button
         onClick={onClick}
@@ -55,6 +57,7 @@ const PlaygroundSearchResult = ({
 PlaygroundSearchResult.propTypes = {
   mainText: PropTypes.string.isRequired,
   subText: PropTypes.string.isRequired,
+  additionalText: PropTypes.string,
   buttonText: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
