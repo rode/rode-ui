@@ -19,19 +19,20 @@ import { render, screen } from "@testing-library/react";
 import SearchResult from "components/shared/search/SearchResult";
 
 describe("SearchBar", () => {
-  let mainText, subText, actionButtonText;
+  let mainText, subText, actionButtonText, rerender;
 
   beforeEach(() => {
     mainText = chance.sentence();
     subText = chance.sentence();
     actionButtonText = chance.string();
-    render(
+    const utils = render(
       <SearchResult
         mainText={mainText}
         subText={subText}
         actionButton={<button type={"button"}>{actionButtonText}</button>}
       />
     );
+    rerender = utils.rerender;
   });
 
   it("should render the main text", () => {
@@ -48,5 +49,19 @@ describe("SearchBar", () => {
     const renderedButton = screen.getByText(actionButtonText);
     expect(renderedButton).toBeInTheDocument();
     expect(renderedButton.type).toBe("button");
+  });
+
+  it("should render the additional text if specified", () => {
+    const additionalText = chance.string();
+    rerender(
+      <SearchResult
+        mainText={mainText}
+        subText={subText}
+        additionalText={additionalText}
+        actionButton={<button type={"button"}>{actionButtonText}</button>}
+      />
+    );
+    const renderedText = screen.getByText(additionalText);
+    expect(renderedText).toBeInTheDocument();
   });
 });

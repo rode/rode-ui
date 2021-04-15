@@ -20,7 +20,7 @@ import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
 
 const SearchResult = (props) => {
-  const { mainText, subText, actionButton } = props;
+  const { mainText, subText, additionalText, actionButton } = props;
   const { theme } = useTheme();
 
   return (
@@ -28,6 +28,7 @@ const SearchResult = (props) => {
       <div>
         <p className={styles.cardHeader}>{mainText}</p>
         <p className={styles.cardText}>{subText}</p>
+        {additionalText && <p className={styles.cardText}>{additionalText}</p>}
       </div>
       {actionButton}
     </div>
@@ -37,6 +38,7 @@ const SearchResult = (props) => {
 SearchResult.propTypes = {
   mainText: PropTypes.string.isRequired,
   subText: PropTypes.string.isRequired,
+  additionalText: PropTypes.string,
   actionButton: PropTypes.node.isRequired,
 };
 
