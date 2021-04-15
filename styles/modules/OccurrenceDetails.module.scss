@@ -53,6 +53,19 @@ $SIDE_SPACING: 1rem;
   margin-right: 0.75rem;
 }
 
+.rightDetails {
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    margin: 0.5rem;
+  }
+
+  @include desktopAndLarger {
+    align-items: flex-end;
+  }
+}
+
 .timestamps {
   text-align: left;
 

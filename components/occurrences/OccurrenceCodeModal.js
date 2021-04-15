@@ -17,7 +17,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
-import styles from "styles/modules/OccurrenceDetails.module.scss";
+// import styles from "styles/modules/OccurrenceDetails.module.scss";
 import Modal from "components/Modal";
 
 const OccurrenceCodeModal = ({ json }) => {

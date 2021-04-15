@@ -20,6 +20,7 @@ import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
 import ExternalLink from "components/ExternalLink";
+import OccurrenceCodeModal from "./OccurrenceCodeModal";
 
 const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
@@ -35,11 +36,14 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
           <ExternalLink href={occurrence.logsUri} label={"View logs"} />
           <p>Created by {occurrence.creator}</p>
         </div>
-        <div className={styles.timestamps}>
-          <p>Started {dayjs(occurrence.started).format(DATE_TIME_FORMAT)}</p>
-          <p>
+        <div className={styles.rightDetails}>
+          <p className={styles.timestamps}>
+            Started {dayjs(occurrence.started).format(DATE_TIME_FORMAT)}
+          </p>
+          <p className={styles.timestamps}>
             Completed {dayjs(occurrence.completed).format(DATE_TIME_FORMAT)}
           </p>
+          <OccurrenceCodeModal json={occurrence.originals} />
         </div>
       </div>
       <div className={styles.detailContentContainer}>
