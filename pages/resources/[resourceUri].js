@@ -77,7 +77,7 @@ const Resource = () => {
         <div className={styles.resourceHeader}>
           <div>
             <p className={styles.resourceName}>{resourceName}</p>
-            <p>Type: {resourceType}</p>
+            <p className={styles.resourceDetails}>Type: {resourceType}</p>
           </div>
           <div>
             <p className={styles.version}>Version: {resourceVersion}</p>

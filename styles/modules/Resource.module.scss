@@ -34,6 +34,8 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
 
   @include tabletAndLarger {
     flex-direction: row;
@@ -42,12 +44,22 @@
 }
 
 .resourceName {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   @include ellipsis(calc(100vw - 5rem));
 
   @include tabletAndLarger {
+    font-size: 1.5rem;
     max-width: calc(48vw - 2rem);
+  }
+}
+
+.resourceDetails {
+  display: none;
+
+  @include tabletAndLarger {
+    display: unset;
+    max-width: calc(50vw - 5rem);
   }
 }
 
