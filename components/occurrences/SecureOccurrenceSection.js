@@ -20,6 +20,7 @@ import React from "react";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import { getVulnerabilityBreakdown } from "utils/occurrence-utils";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -38,7 +39,18 @@ const SecureOccurrenceSection = ({ occurrences }) => {
           currentOccurrence={occurrence}
           mainText={"Vulnerability Scan"}
           timestamp={occurrence.completed}
-          subText={`${occurrence.vulnerabilities.length} vulnerabilities found`}
+          subText={
+            <>
+              <span>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</span>
+              {!!occurrence.vulnerabilities.length && (
+                <span
+                  className={styles.previewBreakdown}
+                >{`${getVulnerabilityBreakdown(
+                  occurrence.vulnerabilities
+                )}`}</span>
+              )}
+            </>
+          }
         />
       ))}
     </div>

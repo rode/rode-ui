@@ -59,20 +59,24 @@ const ResourceSearchAndResults = ({
           <Loading loading={resourceLoading} type={"button"}>
             {resourceResults?.length > 0 ? (
               resourceResults.map((result) => {
-                const { resourceName, resourceVersion } = getResourceDetails(
-                  result.uri
-                );
+                const {
+                  resourceName,
+                  resourceVersion,
+                  resourceType,
+                } = getResourceDetails(result.uri);
 
                 return (
                   <PlaygroundSearchResult
                     mainText={resourceName}
                     subText={`Version: ${resourceVersion}`}
+                    additionalText={`Type: ${resourceType}`}
                     buttonText={"Select Resource"}
                     onClick={() => {
                       setResource({
                         uri: result.uri,
                         name: resourceName,
                         version: resourceVersion,
+                        type: resourceType,
                       });
                       setResourceSearch(false);
                       dispatch({

@@ -22,7 +22,7 @@ import { getResourceDetails } from "utils/resource-utils";
 import SearchResult from "components/shared/search/SearchResult";
 
 const ResourceSearchResult = ({ searchResult }) => {
-  const { resourceName, resourceVersion } = getResourceDetails(
+  const { resourceName, resourceVersion, resourceType } = getResourceDetails(
     searchResult.uri
   );
   const router = useRouter();
@@ -35,6 +35,7 @@ const ResourceSearchResult = ({ searchResult }) => {
     <SearchResult
       mainText={`Resource Name: ${resourceName}`}
       subText={`Version: ${resourceVersion}`}
+      additionalText={`Type: ${resourceType}`}
       actionButton={<Button onClick={onClick} label={"View Resource"} />}
     />
   );

@@ -32,7 +32,9 @@ export default async (req, res) => {
     const resourceUri = req.query.resourceUri;
     const filter = `"resource.uri"=="${resourceUri}"`;
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/occurrences?filter=${encodeURIComponent(filter)}`
+      `${rodeUrl}/v1alpha1/occurrences?filter=${encodeURIComponent(
+        filter
+      )}&pageSize=1000`
     );
 
     if (!response.ok) {

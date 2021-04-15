@@ -20,6 +20,16 @@ describe("occurrence-utils", () => {
   describe("getVulnerabilityBreakdown", () => {
     let vulnerabilities;
 
+    it("should return the correct count for any critical severity vulnerabilities", () => {
+      vulnerabilities = chance.n(
+        () => ({ effectiveSeverity: "CRITICAL" }),
+        chance.d4()
+      );
+      const actual = getVulnerabilityBreakdown(vulnerabilities);
+
+      expect(actual).toBe(`${vulnerabilities.length} critical`);
+    });
+
     it("should return the correct count for any high severity vulnerabilities", () => {
       vulnerabilities = chance.n(
         () => ({ effectiveSeverity: "HIGH" }),

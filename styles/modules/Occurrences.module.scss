@@ -28,10 +28,17 @@ $INDENTATION: 1rem;
   align-items: flex-start;
 
   > div {
-    flex: 1;
     height: 100%;
     width: 100%;
     margin-bottom: 2rem;
+  }
+
+  .occurrencePreviewsContainer {
+    flex: 1;
+  }
+
+  .occurrenceDetailsContainer {
+    flex: 2;
   }
 
   @include tabletAndLarger {
@@ -109,6 +116,13 @@ $INDENTATION: 1rem;
 
 .previewTimestamp {
   @extend .previewSubText;
+}
+
+.previewBreakdown {
+  @extend .previewSubText;
+  line-height: 1rem;
+  margin-left: 0;
+  display: block;
 }
 
 .sectionContainer {

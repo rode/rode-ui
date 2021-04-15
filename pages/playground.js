@@ -129,6 +129,12 @@ const PolicyPlayground = () => {
                   {state.evaluationResource.version}
                 </span>
               </p>
+              <p className={styles.selectionDetails}>
+                <span className={styles.label}>Type</span>
+                <span className={styles.break}>
+                  {state.evaluationResource.type}
+                </span>
+              </p>
               <Button
                 buttonType={"textDestructive"}
                 label={"Clear Resource"}

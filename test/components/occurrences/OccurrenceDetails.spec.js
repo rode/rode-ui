@@ -30,6 +30,36 @@ describe("OccurrenceDetails", () => {
     });
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should scroll to the details when on a mobile device", () => {
+    window.innerWidth = 767;
+    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
+    render(
+      <OccurrenceDetails
+        occurrence={mappedOccurrences[randomOccurrenceType][0]}
+      />
+    );
+
+    expect(scrollMock)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith({ behavior: "smooth" });
+  });
+
+  it("should not scroll to the details when on a tablet or larger screened device", () => {
+    window.innerWidth = 768;
+    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
+    render(
+      <OccurrenceDetails
+        occurrence={mappedOccurrences[randomOccurrenceType][0]}
+      />
+    );
+
+    expect(scrollMock).not.toHaveBeenCalled();
+  });
+
   it("should render the occurrence code block button on any occurrence type", () => {
     const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
     render(
@@ -39,9 +69,6 @@ describe("OccurrenceDetails", () => {
     );
 
     expect(screen.getByText(/show json/i)).toBeInTheDocument();
-    expect(scrollMock)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith({ behavior: "smooth" });
   });
 
   it("should show the build occurrence details if a build occurrence is selected", () => {

@@ -24,7 +24,7 @@ import { createMockResourceUri } from "test/testing-utils/mocks";
 jest.mock("next/router");
 
 describe("ResourceSearchResult", () => {
-  let searchResult, resourceName, version, pushMock;
+  let searchResult, resourceName, version, type, pushMock;
 
   beforeEach(() => {
     resourceName = chance.word();
@@ -32,6 +32,7 @@ describe("ResourceSearchResult", () => {
     searchResult = {
       uri: createMockResourceUri(resourceName, version),
     };
+    type = "Docker";
     pushMock = jest.fn();
     useRouter.mockReturnValue({
       push: pushMock,
@@ -44,6 +45,7 @@ describe("ResourceSearchResult", () => {
       screen.getByText(`Resource Name: ${resourceName}`)
     ).toBeInTheDocument();
     expect(screen.getByText(`Version: ${version}`)).toBeInTheDocument();
+    expect(screen.getByText(`Type: ${type}`)).toBeInTheDocument();
   });
 
   it("should render a view resources button ", () => {

@@ -97,12 +97,17 @@ describe("ResourceSearchAndResults", () => {
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
     resources.forEach((resource) => {
-      const { resourceName, resourceVersion } = getResourceDetails(
-        resource.uri
-      );
+      const {
+        resourceName,
+        resourceVersion,
+        resourceType,
+      } = getResourceDetails(resource.uri);
       expect(screen.getByText(resourceName)).toBeInTheDocument();
       expect(
         screen.getByText(`Version: ${resourceVersion}`)
+      ).toBeInTheDocument();
+      expect(
+        screen.getAllByText(`Type: ${resourceType}`)[0]
       ).toBeInTheDocument();
     });
   });
@@ -120,7 +125,7 @@ describe("ResourceSearchAndResults", () => {
 
     searchForResource();
 
-    const { resourceName, resourceVersion } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
       resources[0].uri
     );
 
@@ -129,6 +134,7 @@ describe("ResourceSearchAndResults", () => {
       uri: resources[0].uri,
       name: resourceName,
       version: resourceVersion,
+      type: resourceType,
     });
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_SEARCH_TERM",
@@ -146,7 +152,7 @@ describe("ResourceSearchAndResults", () => {
 
     fetchResponse.loading = false;
     fetchResponse.data = resources;
-    const { resourceName, resourceVersion } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
       resources[0].uri
     );
 
@@ -158,6 +164,7 @@ describe("ResourceSearchAndResults", () => {
           uri: resources[0].uri,
           name: resourceName,
           version: resourceVersion,
+          type: resourceType,
         }}
       />
     );

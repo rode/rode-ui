@@ -92,7 +92,7 @@ describe("/api/resources", () => {
 
       return `${baseUrl}/v1alpha1/occurrences?filter=${encodeURIComponent(
         expectedFilter
-      )}`;
+      )}&pageSize=1000`;
     };
 
     it("should hit the Rode API", async () => {
