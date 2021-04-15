@@ -17,13 +17,15 @@
 import { toast } from "react-toastify";
 import styles from "styles/modules/Toasts.module.scss";
 
-export const showSuccess = (message) => {
+export const showSuccess = (message, options = {}) => {
   toast(message, {
     className: styles.success,
+    ...options,
   });
 };
-export const showError = (message) => {
+export const showError = (message, options = {}) => {
   toast(message, {
     className: styles.error,
+    ...options,
   });
 };

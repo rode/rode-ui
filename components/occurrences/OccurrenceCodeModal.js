@@ -17,11 +17,29 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
-// import styles from "styles/modules/OccurrenceDetails.module.scss";
+import styles from "styles/modules/Modal.module.scss";
 import Modal from "components/Modal";
+import { showSuccess } from "utils/toast-utils";
 
 const OccurrenceCodeModal = ({ json }) => {
   const [showCode, setShowCode] = useState(false);
+
+  const stringifiedJson = JSON.stringify(json, null, 2);
+
+  const copyJson = () => {
+    const el = document.createElement("textarea");
+    el.value = stringifiedJson;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+
+    showSuccess("Copied!", {
+      autoClose: 1500,
+      closeButton: false,
+      pauseOnFocusLoss: false,
+    });
+  };
 
   return (
     <>
@@ -30,8 +48,14 @@ const OccurrenceCodeModal = ({ json }) => {
         title={"Occurrence JSON"}
         isVisible={showCode}
       >
-        <pre data-testid="occurrenceJson">
-          <code>{JSON.stringify(json, null, 2)}</code>
+        <Button
+          onClick={copyJson}
+          label={"Copy to Clipboard"}
+          buttonType={"text"}
+          className={styles.copyButton}
+        />
+        <pre data-testid="occurrenceJson" className={styles.jsonContainer}>
+          <code id={"occurrenceData"}>{stringifiedJson}</code>
         </pre>
       </Modal>
       <Button onClick={() => setShowCode(true)} label={"Show JSON"} />

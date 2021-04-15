@@ -20,8 +20,10 @@ import userEvent from "@testing-library/user-event";
 import { createMockOccurrence } from "test/testing-utils/mocks";
 import OccurrenceCodeModal from "components/occurrences/OccurrenceCodeModal";
 import { useResources } from "providers/resources";
+import { showSuccess } from "utils/toast-utils";
 
 jest.mock("providers/resources");
+jest.mock("utils/toast-utils");
 
 describe("OccurrenceCodeModal", () => {
   let occurrence, scrollMock;
@@ -29,9 +31,12 @@ describe("OccurrenceCodeModal", () => {
   beforeEach(() => {
     occurrence = createMockOccurrence();
     scrollMock = jest.fn();
+
+    jest.spyOn(document, "createElement");
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
     });
+    document.execCommand = jest.fn();
 
     useResources.mockReturnValue({
       state: {},
@@ -48,9 +53,25 @@ describe("OccurrenceCodeModal", () => {
     userEvent.click(screen.getByText(/show json/i));
     expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
     expect(screen.getByText("Occurrence JSON")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Copy to Clipboard" })
+    ).toBeInTheDocument();
 
     userEvent.click(screen.getByLabelText(/close modal/i));
     expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
     expect(screen.queryByTestId("Occurrence JSON")).not.toBeInTheDocument();
+  });
+
+  it("should copy the text to the clipboard when prompted", () => {
+    userEvent.click(screen.getByText(/show json/i));
+    userEvent.click(screen.getByRole("button", { name: "Copy to Clipboard" }));
+
+    expect(document.createElement).toHaveBeenCalledWith("textarea");
+    expect(document.execCommand).toHaveBeenCalledWith("copy");
+    expect(showSuccess).toHaveBeenCalledWith("Copied!", {
+      autoClose: 1500,
+      closeButton: false,
+      pauseOnFocusLoss: false,
+    });
   });
 });

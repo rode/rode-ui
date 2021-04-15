@@ -15,6 +15,7 @@
  */
 
 @import "styles/constants";
+@import "styles/mixins";
 
 $PADDING: 0.5rem;
 
@@ -36,8 +37,8 @@ $PADDING: 0.5rem;
   align-items: center;
   height: fit-content;
   width: fit-content;
-  max-width: 90%;
-  max-height: 80%;
+  max-width: 90vw;
+  max-height: 80vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, calc(-50% - 2rem));
@@ -47,13 +48,22 @@ $PADDING: 0.5rem;
 .title {
   text-align: center;
   width: 100%;
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
+  padding: 0.5rem;
+  font-size: 1.15rem;
+
+  @include tabletAndLarger {
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+  }
 }
 
 .content {
-  padding: 3rem;
+  padding: 1rem;
   width: 100%;
+
+  @include tabletAndLarger {
+    padding: 1rem 3rem;
+  }
 }
 
 .closeButton {
@@ -63,6 +73,13 @@ $PADDING: 0.5rem;
   width: fit-content;
   margin: 0;
   transform: translate(-150%, 50%);
+}
+
+.copyButton {
+  margin: 0 auto;
+}
+.jsonContainer {
+  max-height: 60vh;
 }
 
 .darkTheme {
