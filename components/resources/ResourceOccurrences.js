@@ -41,14 +41,14 @@ const ResourceOccurrences = (props) => {
       <Loading loading={loading}>
         {data ? (
           <>
-            <div>
+            <div className={styles.occurrencePreviewsContainer}>
               <BuildOccurrenceSection occurrences={data.build} />
               <SecureOccurrenceSection occurrences={data.secure} />
               <DeploymentOccurrenceSection occurrences={data.deploy} />
               <OtherOccurrenceSection occurrences={data.other} />
             </div>
             {state.occurrenceDetails && (
-              <div>
+              <div className={styles.occurrenceDetailsContainer}>
                 <OccurrenceDetails occurrence={state.occurrenceDetails} />
               </div>
             )}
