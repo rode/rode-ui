@@ -18,6 +18,7 @@ export const getVulnerabilityBreakdown = (vulnerabilities) => {
   let low = 0;
   let medium = 0;
   let high = 0;
+  let critical = 0;
   let unknown = 0;
 
   vulnerabilities.forEach((vuln) => {
@@ -27,12 +28,15 @@ export const getVulnerabilityBreakdown = (vulnerabilities) => {
       medium++;
     } else if (vuln.effectiveSeverity === "HIGH") {
       high++;
+    } else if (vuln.effectiveSeverity === "CRITICAL") {
+      critical++;
     } else {
       unknown++;
     }
   });
 
   const values = [
+    critical && `${critical} critical`,
     high && `${high} high`,
     medium && `${medium} medium`,
     low && `${low} low`,
