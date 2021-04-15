@@ -115,6 +115,7 @@ describe("PolicyPlayground", () => {
           uri: useFetchResponse.data[0].uri,
           name: resourceName,
           version: resourceVersion,
+          type: "Docker",
         },
       });
     });
@@ -158,6 +159,7 @@ describe("PolicyPlayground", () => {
         uri: chance.string(),
         name: chance.string(),
         version: chance.string(),
+        type: chance.string(),
       };
       selectedPolicy = {
         name: chance.string(),
@@ -175,6 +177,7 @@ describe("PolicyPlayground", () => {
     it("should render the selected resource details", () => {
       expect(screen.getByText(selectedResource.name)).toBeInTheDocument();
       expect(screen.getByText(selectedResource.version)).toBeInTheDocument();
+      expect(screen.getByText(selectedResource.type)).toBeInTheDocument();
 
       const renderedClearResourceButton = screen.getByRole("button", {
         name: "Clear Resource",

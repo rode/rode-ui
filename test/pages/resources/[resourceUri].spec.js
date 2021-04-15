@@ -67,7 +67,7 @@ describe("Resource Details page", () => {
   });
 
   it("should render a button to use the resource in the policy playground", () => {
-    const { resourceName, resourceVersion } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
       router.query.resourceUri
     );
 
@@ -86,6 +86,7 @@ describe("Resource Details page", () => {
           uri: router.query.resourceUri,
           name: resourceName,
           version: resourceVersion,
+          type: resourceType,
         },
       });
 

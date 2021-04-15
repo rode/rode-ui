@@ -89,6 +89,8 @@ const PolicyPlayground = () => {
     setEvaluationResults(null);
   }, []);
 
+  console.log("state.evaluationResource", state.evaluationResource);
+
   return (
     <div className={`${styles.pageContainer} ${styles[theme]}`}>
       <PageHeader>
@@ -127,6 +129,12 @@ const PolicyPlayground = () => {
                 <span className={styles.label}>Version</span>
                 <span className={styles.break}>
                   {state.evaluationResource.version}
+                </span>
+              </p>
+              <p className={styles.selectionDetails}>
+                <span className={styles.label}>Type</span>
+                <span className={styles.break}>
+                  {state.evaluationResource.type}
                 </span>
               </p>
               <Button

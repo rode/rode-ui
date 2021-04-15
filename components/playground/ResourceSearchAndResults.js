@@ -76,6 +76,7 @@ const ResourceSearchAndResults = ({
                         uri: result.uri,
                         name: resourceName,
                         version: resourceVersion,
+                        type: resourceType,
                       });
                       setResourceSearch(false);
                       dispatch({

@@ -125,7 +125,7 @@ describe("ResourceSearchAndResults", () => {
 
     searchForResource();
 
-    const { resourceName, resourceVersion } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
       resources[0].uri
     );
 
@@ -134,6 +134,7 @@ describe("ResourceSearchAndResults", () => {
       uri: resources[0].uri,
       name: resourceName,
       version: resourceVersion,
+      type: resourceType,
     });
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_SEARCH_TERM",
@@ -151,7 +152,7 @@ describe("ResourceSearchAndResults", () => {
 
     fetchResponse.loading = false;
     fetchResponse.data = resources;
-    const { resourceName, resourceVersion } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
       resources[0].uri
     );
 
@@ -163,6 +164,7 @@ describe("ResourceSearchAndResults", () => {
           uri: resources[0].uri,
           name: resourceName,
           version: resourceVersion,
+          type: resourceType,
         }}
       />
     );

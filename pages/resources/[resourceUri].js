@@ -63,6 +63,7 @@ const Resource = () => {
         uri: resourceUri,
         name: resourceName,
         version: resourceVersion,
+        type: resourceType,
       },
     });
     router.push("/playground");
