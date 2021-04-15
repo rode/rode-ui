@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-export const mockFailedPolicyValidation = {
-  isValid: false,
-  errors: ["Invalid rego code"],
+const RESOURCE_SEARCH = {
+  label: "Resource Search",
+  href: "/resources",
 };
 
-export const mockSuccessPolicyValidation = {
-  isValid: true,
-  errors: null,
+const POLICY_SEARCH = {
+  label: "Policy Search",
+  href: "/policies",
 };
 
-export const mockFailedPatchPolicyResponse = {
-  errors: ["Invalid rego code"],
+const POLICY_PLAYGROUND = {
+  label: "Policy Playground",
+  href: "/playground",
 };
 
-export const mockSuccessPolicyEvaluation = {
-  pass: true,
+const CREATE_POLICY = {
+  label: "Create New Policy",
+  href: "/policies/new",
 };
 
-export const mockFailedPolicyEvaluation = {
-  pass: false,
-  explanation: {
-    0: "This is a failed evaluation explanation",
-  },
+export default {
+  ResourceSearch: RESOURCE_SEARCH,
+  PolicySearch: POLICY_SEARCH,
+  PolicyPlayground: POLICY_PLAYGROUND,
+  CreatePolicy: CREATE_POLICY,
 };

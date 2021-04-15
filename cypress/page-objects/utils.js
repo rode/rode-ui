@@ -14,27 +14,8 @@
  * limitations under the License.
  */
 
-export const mockFailedPolicyValidation = {
-  isValid: false,
-  errors: ["Invalid rego code"],
-};
+export const createButtonSelector = (label) => `button[aria-label="${label}"]`;
 
-export const mockSuccessPolicyValidation = {
-  isValid: true,
-  errors: null,
-};
-
-export const mockFailedPatchPolicyResponse = {
-  errors: ["Invalid rego code"],
-};
-
-export const mockSuccessPolicyEvaluation = {
-  pass: true,
-};
-
-export const mockFailedPolicyEvaluation = {
-  pass: false,
-  explanation: {
-    0: "This is a failed evaluation explanation",
-  },
+export const capitalize = (string) => {
+  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
 };

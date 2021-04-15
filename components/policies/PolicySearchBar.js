@@ -43,6 +43,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange }) => {
       searchTerm={state.searchTerm}
       placeholder={"Ex: max-severe-vulnerabilities"}
       helpText={helpText}
+      buttonLabel={"Search Policies"}
     />
   );
 };

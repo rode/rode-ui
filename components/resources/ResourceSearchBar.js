@@ -43,6 +43,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange }) => {
       searchTerm={state.searchTerm}
       placeholder={"ex: alpine@sha256:etcetcetc"}
       helpText={helpText}
+      buttonLabel={"Search Resources"}
     />
   );
 };

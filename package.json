@@ -9,6 +9,7 @@
     "e2e-local": "yarn run e2e --env local_rode_api=true",
     "fmt": "prettier --write .",
     "lint": "eslint --max-warnings=0 .",
+    "smoke": "./node_modules/.bin/cypress-tags run -e TAGS='@smoke'",
     "start": "next start",
     "test": "jest",
     "verify": "prettier --check . && yarn lint && yarn test"
@@ -33,6 +34,7 @@
     "@testing-library/user-event": "^12.7.1",
     "chance": "^1.1.7",
     "cypress": "^6.6.0",
+    "cypress-cucumber-preprocessor": "^4.0.3",
     "eslint": "^7.20.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jest": "^24.1.3",
@@ -69,5 +71,8 @@
     "testPathIgnorePatterns": [
       "<rootDir>/cypress"
     ]
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
   }
 }

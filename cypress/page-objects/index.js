@@ -14,27 +14,6 @@
  * limitations under the License.
  */
 
-export const mockFailedPolicyValidation = {
-  isValid: false,
-  errors: ["Invalid rego code"],
-};
-
-export const mockSuccessPolicyValidation = {
-  isValid: true,
-  errors: null,
-};
-
-export const mockFailedPatchPolicyResponse = {
-  errors: ["Invalid rego code"],
-};
-
-export const mockSuccessPolicyEvaluation = {
-  pass: true,
-};
-
-export const mockFailedPolicyEvaluation = {
-  pass: false,
-  explanation: {
-    0: "This is a failed evaluation explanation",
-  },
-};
+export * from "./policy";
+export * from "./playground";
+export * from "./resource";

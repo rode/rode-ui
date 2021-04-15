@@ -76,7 +76,7 @@ describe("PolicySearchBar", () => {
   });
 
   it("should render the button to perform a search", () => {
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Policies");
     expect(renderedSearchButton).toBeInTheDocument();
     expect(renderedSearchButton).toBeDisabled();
   });
@@ -95,7 +95,7 @@ describe("PolicySearchBar", () => {
 
     rerender(<PolicySearchBar onSubmit={onSubmit} />);
 
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Policies");
     expect(renderedSearchButton).not.toBeDisabled();
   });
 
@@ -120,7 +120,7 @@ describe("PolicySearchBar", () => {
       dispatch: jest.fn(),
     });
     rerender(<PolicySearchBar onSubmit={onSubmit} />);
-    const renderedSearchButton = screen.getByLabelText("Search");
+    const renderedSearchButton = screen.getByLabelText("Search Policies");
 
     userEvent.click(renderedSearchButton);
 

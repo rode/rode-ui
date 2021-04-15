@@ -1,0 +1,14 @@
+{
+  "Existing": {
+    "id": "12345678910",
+    "name": "My Policy Name",
+    "description": "This is a policy description",
+    "regoContent": "package RegoRegoRego"
+  },
+  "New": {
+    "id": "9876543210",
+    "name": "My Brand New Policy",
+    "description": "This policy was just created",
+    "regoContent": "package new"
+  }
+}

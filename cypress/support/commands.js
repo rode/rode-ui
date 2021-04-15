@@ -16,16 +16,22 @@
 
 Cypress.Commands.add("searchForResource", (searchTerm) => {
   cy.get("#resourceSearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
+  cy.get('button[aria-label="Search Resources"]').click();
 });
 
 Cypress.Commands.add("searchForPolicy", (searchTerm) => {
   cy.get("#policySearch").focus().clear().type(searchTerm);
-  cy.get('button[aria-label="Search"]').click();
+  cy.get('button[aria-label="Search Policies"]').click();
 });
 
-Cypress.Commands.add("mockRequest", (requestToMock, returnValue) => {
-  if (!Cypress.env("local_rode_api") === true) {
-    cy.intercept(requestToMock, returnValue);
+Cypress.Commands.add(
+  "mockRequest",
+  ({ url, method = "GET", status = 200 }, returnValue) => {
+    if (!Cypress.env("local_rode_api") === true) {
+      cy.intercept(method, url, {
+        statusCode: status,
+        body: returnValue,
+      });
+    }
   }
-});
+);
