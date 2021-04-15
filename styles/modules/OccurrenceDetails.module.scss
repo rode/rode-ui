@@ -140,31 +140,8 @@ $SIDE_SPACING: 1rem;
   color: $MEDIUM_GREY;
 }
 
-.codeBlockContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.codeContainer {
   width: 100%;
-  margin: 0 auto;
-
-  @include tabletAndLarger {
-    align-items: flex-end;
-    max-width: 64vw;
-  }
-}
-
-.fullWidthCodeBlockContainer {
-  @extend .codeBlockContainer;
-  width: 100%;
-
-  @include tabletAndLarger {
-    max-width: 97vw;
-  }
-
-  .codeBlock {
-    width: 100%;
-    border: solid 1px $SILVER;
-  }
 }
 
 .darkTheme {

@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
+import OccurrenceCodeModal from "./OccurrenceCodeModal";
 import styles from "styles/modules/OccurrenceDetails.module.scss";
 import BuildOccurrenceDetails from "./BuildOccurrenceDetails";
 import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
@@ -50,7 +50,7 @@ const OccurrenceDetails = ({ occurrence }) => {
       id={"occurrenceDetails"}
     >
       <DetailComponent occurrence={occurrence} />
-      <OccurrenceCodeBlock json={occurrence.originals} />
+      <OccurrenceCodeModal json={occurrence.originals} />
     </div>
   );
 };

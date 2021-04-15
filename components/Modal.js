@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Modal.module.scss";
 import { useTheme } from "providers/theme";
@@ -26,6 +26,12 @@ const Modal = (props) => {
   const { title, children, onClose, isVisible } = props;
   const { theme } = useTheme();
 
+  useLayoutEffect(() => {
+    if (isVisible) {
+      document.getElementById("modalWrapper").scrollIntoView();
+    }
+  }, [isVisible]);
+
   if (!isVisible) {
     return null;
   }
@@ -35,6 +41,7 @@ const Modal = (props) => {
       className={`${styles[theme]} ${styles.outerWrapper}`}
       role={"dialog"}
       aria-labelledby={"modalTitle"}
+      id={"modalWrapper"}
     >
       <Button
         buttonType={"modalClose"}

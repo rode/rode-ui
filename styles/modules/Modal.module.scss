@@ -24,6 +24,7 @@ $PADDING: 0.5rem;
   height: 100vh;
   width: 100vw;
   top: 0;
+  left: 0;
   backdrop-filter: blur(0.5rem);
 }
 
@@ -52,6 +53,7 @@ $PADDING: 0.5rem;
 
 .content {
   padding: 3rem;
+  width: 100%;
 }
 
 .closeButton {

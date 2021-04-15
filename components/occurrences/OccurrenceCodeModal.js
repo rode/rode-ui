@@ -14,48 +14,33 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/OccurrenceDetails.module.scss";
-import { useResources } from "providers/resources";
+import Modal from "components/Modal";
 
-const OccurrenceCodeBlock = ({ json, fullWidth = false }) => {
+const OccurrenceCodeModal = ({ json }) => {
   const [showCode, setShowCode] = useState(false);
 
-  const { state } = useResources();
-
-  useEffect(() => {
-    if (state.occurrenceDetails) {
-      setShowCode(false);
-    }
-  }, [state.occurrenceDetails]);
-
-  const toggle = () => {
-    setShowCode(!showCode);
-  };
-
   return (
-    <div
-      className={
-        fullWidth
-          ? styles.fullWidthCodeBlockContainer
-          : styles.codeBlockContainer
-      }
-    >
-      <Button onClick={toggle} label={showCode ? "Hide JSON" : "Show JSON"} />
-      {showCode && (
-        <pre className={styles.codeBlock} data-testid="occurrenceJson">
+    <>
+      <Modal
+        onClose={() => setShowCode(false)}
+        title={"Occurrence JSON"}
+        isVisible={showCode}
+      >
+        <pre data-testid="occurrenceJson">
           <code>{JSON.stringify(json, null, 2)}</code>
         </pre>
-      )}
-    </div>
+      </Modal>
+      <Button onClick={() => setShowCode(true)} label={"Show JSON"} />
+    </>
   );
 };
 
-OccurrenceCodeBlock.propTypes = {
+OccurrenceCodeModal.propTypes = {
   json: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
-  fullWidth: PropTypes.bool,
 };
 
-export default OccurrenceCodeBlock;
+export default OccurrenceCodeModal;
