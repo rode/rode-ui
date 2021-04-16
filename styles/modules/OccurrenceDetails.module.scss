@@ -108,12 +108,33 @@ $SIDE_SPACING: 1rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    .cardTitle {
+      text-decoration: underline;
+    }
+  }
 }
 
 .vulnerabilityBreakdown {
   @include desktopAndLarger {
     text-indent: 1rem;
   }
+}
+
+.toggleIcon {
+  @include transition;
+  transform: rotate(0deg);
+}
+
+.toggleIconExpanded {
+  @include transition;
+  transform: rotate(90deg);
 }
 
 .severity {
@@ -166,9 +187,20 @@ $SIDE_SPACING: 1rem;
     color: $DT_SUB_TEXT;
   }
 
-  .card {
+  .card,
+  .vulnerabilityCardHeader {
     background-color: $DT_BACKGROUND_LIGHT;
     color: $DT_MAIN_TEXT;
+  }
+
+  .vulnerabilityCardHeader:hover, .vulnerabilityCardHeader:focus {
+    .cardTitle {
+      color: $DT_SUB_TEXT;
+    }
+
+    .toggleIcon {
+      color: $DT_LINK;
+    }
   }
 
   .link {
@@ -191,9 +223,20 @@ $SIDE_SPACING: 1rem;
     color: $LT_SUB_TEXT;
   }
 
-  .card {
+  .card,
+  .vulnerabilityCardHeader {
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
+  }
+
+  .vulnerabilityCardHeader:hover, .vulnerabilityCardHeader:focus {
+    .cardTitle {
+      color: $LT_SUB_TEXT;
+    }
+
+    .toggleIcon {
+      color: $LT_LINK;
+    }
   }
 
   .link {

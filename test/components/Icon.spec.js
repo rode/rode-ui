@@ -20,6 +20,15 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
 describe("Icon", () => {
+  it("should allow the user to pass additional classes", () => {
+    const className = chance.string();
+    render(<Icon name={ICON_NAMES.SEARCH} className={className} />);
+
+    const renderedIcon = screen.getByTitle(/search/i);
+    expect(renderedIcon).toBeInTheDocument();
+    expect(renderedIcon.closest("span")).toHaveClass(className);
+  });
+
   it("should render the search icon when specified", () => {
     render(<Icon name={ICON_NAMES.SEARCH} />);
 
