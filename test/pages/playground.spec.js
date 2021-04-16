@@ -152,7 +152,7 @@ describe("PolicyPlayground", () => {
   });
 
   describe("Resource and Policy have been selected for evaluation", () => {
-    let selectedResource, selectedPolicy;
+    let selectedResource, selectedPolicy, unmount;
 
     beforeEach(() => {
       selectedResource = {
@@ -168,10 +168,12 @@ describe("PolicyPlayground", () => {
       };
       policyState.evaluationResource = selectedResource;
       policyState.evaluationPolicy = selectedPolicy;
-      render(<PolicyPlayground />, {
+      const utils = render(<PolicyPlayground />, {
         policyState: policyState,
         policyDispatch: policyDispatch,
       });
+
+      unmount = utils.unmount;
     });
 
     it("should render the selected resource details", () => {
@@ -307,6 +309,19 @@ describe("PolicyPlayground", () => {
             data: null,
           });
       });
+    });
+
+    it("should clear the selected policy and resource when you leave the playground", () => {
+      unmount();
+      expect(policyDispatch)
+        .toHaveBeenCalledWith({
+          type: "SET_EVALUATION_RESOURCE",
+          data: null,
+        })
+        .toHaveBeenCalledWith({
+          type: "SET_EVALUATION_POLICY",
+          data: null,
+        });
     });
   });
 });
