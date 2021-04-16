@@ -31,7 +31,8 @@ const detailComponentMap = {
 
 const OccurrenceDetails = ({ occurrence }) => {
   const { theme } = useTheme();
-  const DetailComponent = detailComponentMap[occurrence.originals[0].kind];
+  const DetailComponent =
+    detailComponentMap[occurrence.originals.occurrences[0].kind];
 
   React.useLayoutEffect(() => {
     // only scroll to the details if you are on a mobile device

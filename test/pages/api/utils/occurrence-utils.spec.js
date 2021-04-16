@@ -69,9 +69,13 @@ describe("occurrence-utils", () => {
           expect(secure).toHaveLength(1);
           expect(secure[0].started).toEqual(startScanOccurrence.createTime);
           expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
-          expect(secure[0].originals).toContain(startScanOccurrence);
-          expect(secure[0].originals).toContain(endScanOccurrence);
-          expect(secure[0].originals).toContain(matchingVulnerability);
+          expect(secure[0].originals.occurrences).toContain(
+            startScanOccurrence
+          );
+          expect(secure[0].originals.occurrences).toContain(endScanOccurrence);
+          expect(secure[0].originals.occurrences).toContain(
+            matchingVulnerability
+          );
         });
 
         it("should correctly map the vulnerabilities", () => {
@@ -170,7 +174,7 @@ describe("occurrence-utils", () => {
         expect(build[0].logsUri).toEqual(
           buildOccurrence.build.provenance.logsUri
         );
-        expect(build[0].originals).toContain(buildOccurrence);
+        expect(build[0].originals.occurrences).toContain(buildOccurrence);
       });
 
       it("should correctly map builds without source urls", () => {
@@ -199,7 +203,7 @@ describe("occurrence-utils", () => {
       expect(deploy[0].platform).toEqual(
         deploymentOccurrence.deployment.deployment.platform
       );
-      expect(deploy[0].originals).toContain(deploymentOccurrence);
+      expect(deploy[0].originals.occurrences).toContain(deploymentOccurrence);
     });
 
     it("should correctly map any unknown occurrences", () => {

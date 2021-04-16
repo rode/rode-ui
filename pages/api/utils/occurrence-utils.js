@@ -86,18 +86,20 @@ const matchAndMapVulnerabilities = (occurrences) => {
         started: startScan.createTime,
         completed: matchingScanEndOccurrence.createTime,
         vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
-        originals: [
-          startScan,
-          matchingScanEndOccurrence,
-          ...matchingVulnerabilityOccurrences,
-        ],
+        originals: {
+          occurrences: [
+            startScan,
+            matchingScanEndOccurrence,
+            ...matchingVulnerabilityOccurrences,
+          ],
+        },
       };
     })
     .filter((val) => val);
 
   completedScans.forEach((endScan) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
-      occurrence.originals.find((occ) => occ.name === endScan.name)
+      occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)
     );
     if (!matchingScan) {
       unmatchedOccurrences.push(endScan);
@@ -106,7 +108,9 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
   vulnerabilityOccurrences.forEach((vulnerability) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
-      occurrence.originals.find((occ) => occ.name === vulnerability.name)
+      occurrence.originals.occurrences.find(
+        (occ) => occ.name === vulnerability.name
+      )
     );
     if (!matchingScan) {
       unmatchedOccurrences.push(vulnerability);
@@ -131,7 +135,7 @@ const mapBuilds = (occurrences) => {
         ? `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`
         : null,
       logsUri: occ.build.provenance.logsUri,
-      originals: [occ],
+      originals: { occurrences: [occ] },
     };
   });
 };
@@ -144,7 +148,7 @@ const mapDeployments = (occurrences) => {
       deploymentEnd: occ.deployment.deployment.undeployTime,
       resourceUris: occ.deployment.deployment.resourceUri,
       platform: occ.deployment.deployment.platform,
-      originals: [occ],
+      originals: { occurrences: [occ] },
     };
   });
 };

@@ -148,7 +148,7 @@ export const createMockMappedBuildOccurrence = () => {
     artifacts: chance.n(createBuiltArtifacts, chance.d4()),
     sourceUri: chance.url(),
     logsUri: chance.url(),
-    originals: [createMockOccurrence("BUILD")],
+    originals: { occurrences: [createMockOccurrence("BUILD")] },
   };
 };
 
@@ -186,11 +186,13 @@ export const createMockMappedVulnerabilityOccurrence = () => {
       }),
       chance.d4()
     ),
-    originals: [
-      createMockOccurrence("DISCOVERY", sharedTimestamp - 2),
-      createMockOccurrence("DISCOVERY", sharedTimestamp),
-      createMockOccurrence("VULNERABILITY", sharedTimestamp),
-    ],
+    originals: {
+      occurrences: [
+        createMockOccurrence("DISCOVERY", sharedTimestamp - 2),
+        createMockOccurrence("DISCOVERY", sharedTimestamp),
+        createMockOccurrence("VULNERABILITY", sharedTimestamp),
+      ],
+    },
   };
 };
 
@@ -201,7 +203,7 @@ export const createMockMappedDeploymentOccurrence = () => {
     deploymentEnd: chance.timestamp(),
     resourceUris: chance.n(createMockResourceUri, chance.d4()),
     platform: chance.string({ alpha: true }),
-    originals: [createMockOccurrence("DEPLOYMENT")],
+    originals: { occurrences: [createMockOccurrence("DEPLOYMENT")] },
   };
 };
 

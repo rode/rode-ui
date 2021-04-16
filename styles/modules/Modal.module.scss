@@ -78,6 +78,7 @@ $PADDING: 0.5rem;
 .copyButton {
   margin: 0 auto;
 }
+
 .jsonContainer {
   max-height: 60vh;
 }
@@ -95,6 +96,10 @@ $PADDING: 0.5rem;
     background-color: $DT_BACKGROUND_MEDIUM;
     color: $DT_MAIN_TEXT;
     box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .jsonContainer {
+    background-color: $DT_BACKGROUND_DARK;
   }
 }
 
