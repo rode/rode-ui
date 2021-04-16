@@ -57,9 +57,6 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
 
     scan.vulnerabilities.forEach((vulnerability) => {
       cy.contains(`Package: ${vulnerability.packageName}`).should("be.visible");
-      cy.contains(`Description: ${vulnerability.description}`).should(
-        "be.visible"
-      );
       if (vulnerability.effectiveSeverity === "SEVERITY_UNSPECIFIED") {
         cy.contains("Severity N/A").should("be.visible");
       } else {
@@ -67,6 +64,12 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
           "be.visible"
         );
       }
+
+      cy.contains(`Package: ${vulnerability.packageName}`).click();
+
+      cy.contains(`Description: ${vulnerability.description}`).should(
+        "be.visible"
+      );
     });
   });
 });
