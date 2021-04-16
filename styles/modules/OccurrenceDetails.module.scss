@@ -114,7 +114,8 @@ $SIDE_SPACING: 1rem;
   border: none;
   cursor: pointer;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     .cardTitle {
       text-decoration: underline;
     }
@@ -193,7 +194,8 @@ $SIDE_SPACING: 1rem;
     color: $DT_MAIN_TEXT;
   }
 
-  .vulnerabilityCardHeader:hover, .vulnerabilityCardHeader:focus {
+  .vulnerabilityCardHeader:hover,
+  .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $DT_SUB_TEXT;
     }
@@ -229,7 +231,8 @@ $SIDE_SPACING: 1rem;
     color: $LT_MAIN_TEXT;
   }
 
-  .vulnerabilityCardHeader:hover, .vulnerabilityCardHeader:focus {
+  .vulnerabilityCardHeader:hover,
+  .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $LT_SUB_TEXT;
     }
