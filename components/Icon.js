@@ -21,14 +21,14 @@ import styles from "styles/modules/Icons.module.scss";
 import { useTheme } from "providers/theme";
 
 const Icon = (props) => {
-  const { name, size = "medium" } = props;
+  const { name, size = "medium", className = "" } = props;
 
   const { theme } = useTheme();
 
   const IconComponent = ICON_COMPONENTS[name];
 
   return (
-    <span className={styles[size]}>
+    <span className={`${styles[size]} ${className}`}>
       <IconComponent theme={theme} />
     </span>
   );
@@ -37,6 +37,7 @@ const Icon = (props) => {
 Icon.propTypes = {
   name: PropTypes.oneOf(Object.values(ICON_NAMES)).isRequired,
   size: PropTypes.oneOf(["small", "medium", "large", "xlarge"]),
+  className: PropTypes.string,
 };
 
 export default Icon;

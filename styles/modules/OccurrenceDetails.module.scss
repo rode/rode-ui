@@ -53,6 +53,19 @@ $SIDE_SPACING: 1rem;
   margin-right: 0.75rem;
 }
 
+.rightDetails {
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    margin: 0.5rem;
+  }
+
+  @include desktopAndLarger {
+    align-items: flex-end;
+  }
+}
+
 .timestamps {
   text-align: left;
 
@@ -95,12 +108,34 @@ $SIDE_SPACING: 1rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    .cardTitle {
+      text-decoration: underline;
+    }
+  }
 }
 
 .vulnerabilityBreakdown {
   @include desktopAndLarger {
     text-indent: 1rem;
   }
+}
+
+.toggleIcon {
+  @include transition;
+  transform: rotate(0deg);
+}
+
+.toggleIconExpanded {
+  @include transition;
+  transform: rotate(90deg);
 }
 
 .severity {
@@ -132,39 +167,12 @@ $SIDE_SPACING: 1rem;
 
 .critical {
   @extend .severity;
-  color: #f02719;
+  color: #d31b0d;
 }
 
 .severity_unspecified {
   @extend .severity;
   color: $MEDIUM_GREY;
-}
-
-.codeBlockContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto;
-
-  @include tabletAndLarger {
-    align-items: flex-end;
-    max-width: 64vw;
-  }
-}
-
-.fullWidthCodeBlockContainer {
-  @extend .codeBlockContainer;
-  width: 100%;
-
-  @include tabletAndLarger {
-    max-width: 97vw;
-  }
-
-  .codeBlock {
-    width: 100%;
-    border: solid 1px $SILVER;
-  }
 }
 
 .darkTheme {
@@ -180,9 +188,21 @@ $SIDE_SPACING: 1rem;
     color: $DT_SUB_TEXT;
   }
 
-  .card {
+  .card,
+  .vulnerabilityCardHeader {
     background-color: $DT_BACKGROUND_LIGHT;
     color: $DT_MAIN_TEXT;
+  }
+
+  .vulnerabilityCardHeader:hover,
+  .vulnerabilityCardHeader:focus {
+    .cardTitle {
+      color: $DT_SUB_TEXT;
+    }
+
+    .toggleIcon {
+      color: $DT_LINK;
+    }
   }
 
   .link {
@@ -205,9 +225,21 @@ $SIDE_SPACING: 1rem;
     color: $LT_SUB_TEXT;
   }
 
-  .card {
+  .card,
+  .vulnerabilityCardHeader {
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
+  }
+
+  .vulnerabilityCardHeader:hover,
+  .vulnerabilityCardHeader:focus {
+    .cardTitle {
+      color: $LT_SUB_TEXT;
+    }
+
+    .toggleIcon {
+      color: $LT_LINK;
+    }
   }
 
   .link {

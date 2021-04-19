@@ -90,7 +90,11 @@ const Header = () => {
 
   return (
     <header className={`${styles.container} ${styles[theme]}`} ref={ref}>
-      <div className={styles.logoContainer}>
+      <div
+        className={
+          showNavigation ? styles.fixedLogoContainer : styles.logoContainer
+        }
+      >
         <Link href={"/"}>
           <a href={"/"} className={styles.logo}>
             <RodeLogo theme={theme} />

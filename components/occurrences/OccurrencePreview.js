@@ -35,8 +35,8 @@ const OccurrencePreview = ({
 
   useEffect(() => {
     setIsActive(
-      state.occurrenceDetails?.originals[0].name ===
-        currentOccurrence?.originals[0].name
+      state.occurrenceDetails?.originals.occurrences[0].name ===
+        currentOccurrence?.originals.occurrences[0].name
     );
   }, [state.occurrenceDetails]);
 

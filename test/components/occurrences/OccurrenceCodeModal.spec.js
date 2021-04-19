@@ -18,23 +18,31 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMockOccurrence } from "test/testing-utils/mocks";
-import OccurrenceCodeBlock from "components/occurrences/OccurrenceCodeBlock";
+import OccurrenceCodeModal from "components/occurrences/OccurrenceCodeModal";
 import { useResources } from "providers/resources";
+import { showSuccess } from "utils/toast-utils";
 
 jest.mock("providers/resources");
+jest.mock("utils/toast-utils");
 
-describe("OccurrenceCodeBlock", () => {
-  let occurrence, rerender;
+describe("OccurrenceCodeModal", () => {
+  let occurrence, scrollMock;
 
   beforeEach(() => {
     occurrence = createMockOccurrence();
+    scrollMock = jest.fn();
+
+    jest.spyOn(document, "createElement");
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
+    document.execCommand = jest.fn();
 
     useResources.mockReturnValue({
       state: {},
     });
 
-    const utils = render(<OccurrenceCodeBlock json={occurrence} />);
-    rerender = utils.rerender;
+    render(<OccurrenceCodeModal json={occurrence} />);
   });
 
   it("should render the button to toggle the code block", () => {
@@ -44,22 +52,26 @@ describe("OccurrenceCodeBlock", () => {
   it("should show the code block when appropriate", () => {
     userEvent.click(screen.getByText(/show json/i));
     expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
+    expect(screen.getByText("Occurrence JSON")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Copy to Clipboard" })
+    ).toBeInTheDocument();
 
-    userEvent.click(screen.getByText(/hide json/i));
+    userEvent.click(screen.getByLabelText(/close modal/i));
     expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("Occurrence JSON")).not.toBeInTheDocument();
   });
 
-  it("should hide the code block when the selected occurrence changes", () => {
+  it("should copy the text to the clipboard when prompted", () => {
     userEvent.click(screen.getByText(/show json/i));
-    expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
+    userEvent.click(screen.getByRole("button", { name: "Copy to Clipboard" }));
 
-    useResources.mockReturnValue({
-      state: {
-        occurrenceDetails: true,
-      },
+    expect(document.createElement).toHaveBeenCalledWith("textarea");
+    expect(document.execCommand).toHaveBeenCalledWith("copy");
+    expect(showSuccess).toHaveBeenCalledWith("Copied!", {
+      autoClose: 1500,
+      closeButton: false,
+      pauseOnFocusLoss: false,
     });
-
-    rerender(<OccurrenceCodeBlock json={occurrence} />);
-    expect(screen.queryByTestId("occurrenceJson")).not.toBeInTheDocument();
   });
 });

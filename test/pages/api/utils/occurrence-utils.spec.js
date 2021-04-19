@@ -38,11 +38,14 @@ describe("occurrence-utils", () => {
 
     describe("vulnerabilities", () => {
       describe("happy path", () => {
-        let startScanOccurrence, endScanOccurrence, matchingVulnerability;
+        let startScanOccurrence,
+          endScanOccurrence,
+          matchingVulnerability,
+          scanEndTime;
 
         beforeEach(() => {
           let scanStartTime = chance.timestamp();
-          let scanEndTime = scanStartTime + 2;
+          scanEndTime = scanStartTime + 2;
 
           startScanOccurrence = createMockOccurrence(
             "DISCOVERY",
@@ -69,9 +72,13 @@ describe("occurrence-utils", () => {
           expect(secure).toHaveLength(1);
           expect(secure[0].started).toEqual(startScanOccurrence.createTime);
           expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
-          expect(secure[0].originals).toContain(startScanOccurrence);
-          expect(secure[0].originals).toContain(endScanOccurrence);
-          expect(secure[0].originals).toContain(matchingVulnerability);
+          expect(secure[0].originals.occurrences).toContain(
+            startScanOccurrence
+          );
+          expect(secure[0].originals.occurrences).toContain(endScanOccurrence);
+          expect(secure[0].originals.occurrences).toContain(
+            matchingVulnerability
+          );
         });
 
         it("should correctly map the vulnerabilities", () => {
@@ -117,6 +124,25 @@ describe("occurrence-utils", () => {
             matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
               .version
           );
+        });
+
+        it("should sort the vulnerabilities by their severity level", () => {
+          const lowSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          lowSev.vulnerability.effectiveSeverity = "LOW";
+          const medSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          medSev.vulnerability.effectiveSeverity = "MEDIUM";
+          const highSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          highSev.vulnerability.effectiveSeverity = "HIGH";
+
+          const { secure } = mapOccurrencesToSections([
+            startScanOccurrence,
+            endScanOccurrence,
+            ...chance.shuffle([lowSev, medSev, highSev]),
+          ]);
+
+          expect(secure[0].vulnerabilities[0].effectiveSeverity).toBe("HIGH");
+          expect(secure[0].vulnerabilities[1].effectiveSeverity).toBe("MEDIUM");
+          expect(secure[0].vulnerabilities[2].effectiveSeverity).toBe("LOW");
         });
       });
 
@@ -170,7 +196,7 @@ describe("occurrence-utils", () => {
         expect(build[0].logsUri).toEqual(
           buildOccurrence.build.provenance.logsUri
         );
-        expect(build[0].originals).toContain(buildOccurrence);
+        expect(build[0].originals.occurrences).toContain(buildOccurrence);
       });
 
       it("should correctly map builds without source urls", () => {
@@ -199,7 +225,7 @@ describe("occurrence-utils", () => {
       expect(deploy[0].platform).toEqual(
         deploymentOccurrence.deployment.deployment.platform
       );
-      expect(deploy[0].originals).toContain(deploymentOccurrence);
+      expect(deploy[0].originals.occurrences).toContain(deploymentOccurrence);
     });
 
     it("should correctly map any unknown occurrences", () => {

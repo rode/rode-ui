@@ -34,6 +34,19 @@ describe("toast utils", () => {
         className: expect.stringContaining("success"),
       });
     });
+
+    it("should show the toast with the additional options passed", () => {
+      const otherOptions = {
+        [chance.string()]: chance.string(),
+      };
+
+      showSuccess(message, otherOptions);
+
+      expect(toast).toHaveBeenCalledWith(message, {
+        className: expect.stringContaining("success"),
+        ...otherOptions,
+      });
+    });
   });
 
   describe("showError", () => {
@@ -42,6 +55,19 @@ describe("toast utils", () => {
 
       expect(toast).toHaveBeenCalledWith(message, {
         className: expect.stringContaining("error"),
+      });
+    });
+
+    it("should show the toast with the additional options passed", () => {
+      const otherOptions = {
+        [chance.string()]: chance.string(),
+      };
+
+      showError(message, otherOptions);
+
+      expect(toast).toHaveBeenCalledWith(message, {
+        className: expect.stringContaining("error"),
+        ...otherOptions,
       });
     });
   });

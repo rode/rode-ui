@@ -87,6 +87,8 @@ const PolicyPlayground = () => {
     });
 
     setEvaluationResults(null);
+
+    return () => resetPlayground();
   }, []);
 
   return (

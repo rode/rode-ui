@@ -50,6 +50,9 @@ describe("DeploymentOccurrenceDetails", () => {
     expect(
       screen.getByText(`Deployment End ${occurrence.deploymentEnd}`)
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Show JSON" })
+    ).toBeInTheDocument();
   });
 
   it("should show the list of all resources that were deployed", () => {

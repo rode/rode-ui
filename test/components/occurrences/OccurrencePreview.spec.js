@@ -39,13 +39,15 @@ describe("OccurrencePreview", () => {
     timestamp = chance.timestamp();
     subText = chance.string();
     expectedOccurrenceName = chance.string();
-    currentOccurrence = { originals: [{ name: expectedOccurrenceName }] };
+    currentOccurrence = {
+      originals: { occurrences: [{ name: expectedOccurrenceName }] },
+    };
     dispatchMock = jest.fn();
 
     useResources.mockReturnValue({
       state: {
         occurrenceDetails: {
-          originals: [{ name: chance.string() }],
+          originals: { occurrences: [{ name: chance.string() }] },
         },
       },
       dispatch: dispatchMock,
@@ -88,7 +90,7 @@ describe("OccurrencePreview", () => {
     useResources.mockReturnValue({
       state: {
         occurrenceDetails: {
-          originals: [{ name: expectedOccurrenceName }],
+          originals: { occurrences: [{ name: expectedOccurrenceName }] },
         },
       },
       dispatch: dispatchMock,

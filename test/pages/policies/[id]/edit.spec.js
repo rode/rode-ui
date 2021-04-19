@@ -38,6 +38,7 @@ describe("Edit Policy", () => {
     validateField,
     mockUsePolicy,
     dispatchMock,
+    scrollMock,
     rerender;
 
   beforeEach(() => {
@@ -74,6 +75,10 @@ describe("Edit Policy", () => {
     };
     usePolicy.mockReturnValue(mockUsePolicy);
     useRouter.mockReturnValue(router);
+    scrollMock = jest.fn();
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     const utils = render(<EditPolicy />, { policyDispatch: dispatchMock });

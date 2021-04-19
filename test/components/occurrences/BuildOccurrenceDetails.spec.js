@@ -55,6 +55,9 @@ describe("BuildOccurrenceDetails", () => {
     expect(
       screen.getByText(`Completed ${occurrence.completed}`)
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Show JSON" })
+    ).toBeInTheDocument();
   });
 
   it("should show the list of artifacts produced from the build", () => {

@@ -20,12 +20,21 @@ import userEvent from "@testing-library/user-event";
 import Modal from "components/Modal";
 
 describe("Modal", () => {
-  let title, onClose, children;
+  let title, onClose, children, scrollMock;
 
   beforeEach(() => {
     title = chance.string();
     onClose = jest.fn();
     children = chance.string();
+
+    scrollMock = jest.fn();
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it("should return null when the modal should not be showing", () => {
@@ -35,6 +44,7 @@ describe("Modal", () => {
       </Modal>
     );
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(scrollMock).not.toHaveBeenCalled();
   });
 
   describe("modal should show", () => {
@@ -45,6 +55,11 @@ describe("Modal", () => {
         </Modal>
       );
     });
+
+    it("should put the modal into view", () => {
+      expect(scrollMock).toHaveBeenCalledTimes(1);
+    });
+
     it("should render the title", () => {
       expect(screen.getByText(title)).toBeInTheDocument();
     });

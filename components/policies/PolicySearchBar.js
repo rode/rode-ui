@@ -41,7 +41,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange }) => {
       label={"Search for a policy"}
       name={"policySearch"}
       searchTerm={state.searchTerm}
-      placeholder={"Ex: max-severe-vulnerabilities"}
+      placeholder={"ex: max-severe-vulnerabilities"}
       helpText={helpText}
       buttonLabel={"Search Policies"}
     />

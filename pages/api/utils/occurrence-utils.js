@@ -18,8 +18,23 @@ import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
 
+const severityLevels = {
+  CRITICAL: 0,
+  HIGH: 1,
+  MEDIUM: 2,
+  LOW: 3,
+  SEVERITY_UNSPECIFIED: 4,
+};
+
+const sortByVulnerability = (occurrences) =>
+  occurrences.sort(
+    (first, second) =>
+      severityLevels[first.effectiveSeverity] -
+      severityLevels[second.effectiveSeverity]
+  );
+
 const mapVulnerabilities = (occurrences) => {
-  return occurrences.map((occurrence) => ({
+  const mapped = occurrences.map((occurrence) => ({
     name: occurrence.name,
     type: occurrence.vulnerability.type,
     cvssScore: occurrence.vulnerability.cvssScore,
@@ -32,6 +47,8 @@ const mapVulnerabilities = (occurrences) => {
       occurrence.vulnerability.packageIssue[0].affectedLocation.package,
     version: occurrence.vulnerability.packageIssue[0].affectedLocation.version,
   }));
+
+  return sortByVulnerability(mapped);
 };
 
 const matchAndMapVulnerabilities = (occurrences) => {
@@ -86,18 +103,20 @@ const matchAndMapVulnerabilities = (occurrences) => {
         started: startScan.createTime,
         completed: matchingScanEndOccurrence.createTime,
         vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
-        originals: [
-          startScan,
-          matchingScanEndOccurrence,
-          ...matchingVulnerabilityOccurrences,
-        ],
+        originals: {
+          occurrences: [
+            startScan,
+            matchingScanEndOccurrence,
+            ...matchingVulnerabilityOccurrences,
+          ],
+        },
       };
     })
     .filter((val) => val);
 
   completedScans.forEach((endScan) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
-      occurrence.originals.find((occ) => occ.name === endScan.name)
+      occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)
     );
     if (!matchingScan) {
       unmatchedOccurrences.push(endScan);
@@ -106,7 +125,9 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
   vulnerabilityOccurrences.forEach((vulnerability) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
-      occurrence.originals.find((occ) => occ.name === vulnerability.name)
+      occurrence.originals.occurrences.find(
+        (occ) => occ.name === vulnerability.name
+      )
     );
     if (!matchingScan) {
       unmatchedOccurrences.push(vulnerability);
@@ -131,7 +152,7 @@ const mapBuilds = (occurrences) => {
         ? `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`
         : null,
       logsUri: occ.build.provenance.logsUri,
-      originals: [occ],
+      originals: { occurrences: [occ] },
     };
   });
 };
@@ -144,7 +165,7 @@ const mapDeployments = (occurrences) => {
       deploymentEnd: occ.deployment.deployment.undeployTime,
       resourceUris: occ.deployment.deployment.resourceUri,
       platform: occ.deployment.deployment.platform,
-      originals: [occ],
+      originals: { occurrences: [occ] },
     };
   });
 };

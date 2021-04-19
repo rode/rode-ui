@@ -21,7 +21,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
-import OccurrenceCodeBlock from "./OccurrenceCodeBlock";
+import OccurrenceCodeModal from "./OccurrenceCodeModal";
 
 const OtherOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -42,7 +42,7 @@ const OtherOccurrenceSection = ({ occurrences }) => {
               occurrence.createTime
             ).format(DATE_TIME_FORMAT)}`}</p>
           )}
-          <OccurrenceCodeBlock json={occurrence} fullWidth={true} />
+          <OccurrenceCodeModal json={occurrence} fullWidth={true} />
         </div>
       ))}
     </div>
