@@ -5,19 +5,22 @@ The Rode UI provides a user-focused experience for interacting with metadata and
 ## Features
 
 ### Resources
-The metadata collected by Rode is surfaced in the UI through a resource. A **resource** can represent a variety of subjects, determined by the [collectors](https://github.com/rode/rode/blob/main/docs/collectors.md) used in your instance of Rode. 
+
+The metadata collected by Rode is surfaced in the UI through a resource. A **resource** can represent a variety of subjects, determined by the [collectors](https://github.com/rode/rode/blob/main/docs/collectors.md) used in your instance of Rode.
 
 #### Resource Search
-**Resources** can be found by searching for the resource name. The name does not have to be an exact match, but it must include the appropriate delimiters. 
+
+**Resources** can be found by searching for the resource name. The name does not have to be an exact match, but it must include the appropriate delimiters.
+
 > **Example**  
 > Given a resource named `harbor.rode.lead.prod.liatr.io/rode-demo/rode-demo-node-app`  
-> Valid searches: `"demo"`, `"rode-demo-node-app"`, `"rode-demo"`  , `"rode-demo/rode-demo-node-app"`  
+> Valid searches: `"demo"`, `"rode-demo-node-app"`, `"rode-demo"` , `"rode-demo/rode-demo-node-app"`  
 > Failed searches: `"rode demo"`, `"harbor demo"`
 
 ![Resource Search Demo](./docs/images/ResourceSearch.gif)
 
-
 #### Resource Occurrences
+
 The metadata of a given resource is sent to Rode in the form of **occurrences**, a structured piece of data that corresponds with the type of metadata that is being collected. When viewing a specific resource, you will see a list of occurrences that have been collected. Some occurrences will be grouped with others, like the case of a vulnerability scan, to help give a clear picture of related occurrences. You can click on an occurrence to learn more and to see the original metadata that was sent to Rode.
 
 ![Resource Details Demo](./docs/images/ResourceDetails.gif)
@@ -25,38 +28,43 @@ The metadata of a given resource is sent to Rode in the form of **occurrences**,
 ### Policies
 
 #### Policy Search
+
 **Policies** can be found by searching for the policy name. Similar to searching for a resource, the name does not have to be an exact match but must include the appropriate delimiters.
+
 > **Example**  
 > Given a resource named `Max Vulnerability Policy`  
-> Valid searches: `"max"`, `"max vulnerability policy"`, `"vulnerability"`  , `"policy"`  
-> Failed searches: `"max policy"`, `"vulnerability-policy"`  
-
+> Valid searches: `"max"`, `"max vulnerability policy"`, `"vulnerability"` , `"policy"`  
+> Failed searches: `"max policy"`, `"vulnerability-policy"`
 
 #### Policy Creation and Validation
+
 **Policies** can be created using the Rode UI. To assist you in building valid Rego code, you can validate the code before you save. Validating the Rego code will give you feedback on issues that will prevent your policy from compiling. This validation will also run when you save the policy, so you will not be able to create an unusable policy through the Rode UI.
 
 ![Create Policy Demo](./docs/images/CreatePolicy.gif)
 
 #### Policy Edit and Delete
+
 Once a policy has been created, you can view the policy and it's Rego code at any time. When viewing the policy details screen, you can also edit or delete a policy that was created through the UI.
 
 ![Edit or Delete Policy Demo](./docs/images/EditDeletePolicy.gif)
 
 ### Policy Playground
+
 The Policy Playground can be used to evaluate a resource against a policy. This can be useful when testing policy logic or seeing if a resource meets a set of requirements. Within the policy playground, you can search for a resource or policy to evaluate. If you are viewing the details of a specific resource or policy, there is a button to `Evaluate In Policy Playground` that will populate the resource or policy in the playground for you.
 
 Once a policy and a resource have been selected, you can evaluate to see how the resource faired against the policy. If a resource fails against a policy, an explanation of the failures will be available to view.
 
 ![Policy Playground Demo](./docs/images/PolicyPlayground.gif)
 
-
 ### Dark Mode
+
 To provide the best user experience possible the Rode UI has a dark mode, which you can find in the main navigation. Your preference will be remembered between sessions.
 ![Dark Mode Demo](./docs/images/DarkMode.gif)
 
 ## Development
 
 ### Local Development
+
 To run `rode-ui` locally, you'll need Node.js, [`yarn`](https://yarnpkg.com/), and, optionally, [`nvm`](https://github.com/nvm-sh/nvm).
 
 You'll also need to have [Rode](https://github.com/rode/rode) running -- by default the application expects Rode to be on `http://localhost:50051`.
