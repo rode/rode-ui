@@ -93,7 +93,7 @@ describe("/api/resources", () => {
     };
 
     it("should hit the Rode API", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50052", {
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
         filter: `"resource.uri".contains("${filterParam}")`,
       });
 
@@ -103,7 +103,7 @@ describe("/api/resources", () => {
     });
 
     it("should hit the Rode API when no filter is specified", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50052");
+      const expectedUrl = createExpectedUrl("http://localhost:50051");
 
       request.query.filter = null;
       await handler(request, response);
