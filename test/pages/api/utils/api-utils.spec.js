@@ -31,7 +31,7 @@ describe("api-utils", () => {
       delete process.env.RODE_URL;
       const actual = getRodeUrl();
 
-      expect(actual).toEqual("http://localhost:50052");
+      expect(actual).toEqual("http://localhost:50051");
     });
   });
 });

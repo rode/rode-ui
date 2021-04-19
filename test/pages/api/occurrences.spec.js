@@ -96,7 +96,7 @@ describe("/api/resources", () => {
     };
 
     it("should hit the Rode API", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50052");
+      const expectedUrl = createExpectedUrl("http://localhost:50051");
 
       await handler(request, response);
 

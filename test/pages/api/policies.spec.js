@@ -107,7 +107,7 @@ describe("/api/policies", () => {
       };
 
       it("should hit the Rode API", async () => {
-        const expectedUrl = createExpectedUrl("http://localhost:50052", {
+        const expectedUrl = createExpectedUrl("http://localhost:50051", {
           filter: `"policy.name".contains("${filterParam}")`,
         });
 
@@ -119,7 +119,7 @@ describe("/api/policies", () => {
       });
 
       it("should hit the Rode API when no filter is specified", async () => {
-        const expectedUrl = createExpectedUrl("http://localhost:50052");
+        const expectedUrl = createExpectedUrl("http://localhost:50051");
 
         request.query.filter = null;
         await handler(request, response);
@@ -211,7 +211,7 @@ describe("/api/policies", () => {
 
         expect(fetch)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith("http://localhost:50052/v1alpha1/policies", {
+          .toHaveBeenCalledWith("http://localhost:50051/v1alpha1/policies", {
             body: formData,
             method: "POST",
           });
