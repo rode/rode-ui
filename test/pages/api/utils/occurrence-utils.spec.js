@@ -38,11 +38,14 @@ describe("occurrence-utils", () => {
 
     describe("vulnerabilities", () => {
       describe("happy path", () => {
-        let startScanOccurrence, endScanOccurrence, matchingVulnerability;
+        let startScanOccurrence,
+          endScanOccurrence,
+          matchingVulnerability,
+          scanEndTime;
 
         beforeEach(() => {
           let scanStartTime = chance.timestamp();
-          let scanEndTime = scanStartTime + 2;
+          scanEndTime = scanStartTime + 2;
 
           startScanOccurrence = createMockOccurrence(
             "DISCOVERY",
@@ -121,6 +124,25 @@ describe("occurrence-utils", () => {
             matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
               .version
           );
+        });
+
+        it("should sort the vulnerabilities by their severity level", () => {
+          const lowSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          lowSev.vulnerability.effectiveSeverity = "LOW";
+          const medSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          medSev.vulnerability.effectiveSeverity = "MEDIUM";
+          const highSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          highSev.vulnerability.effectiveSeverity = "HIGH";
+
+          const { secure } = mapOccurrencesToSections([
+            startScanOccurrence,
+            endScanOccurrence,
+            ...chance.shuffle([lowSev, medSev, highSev]),
+          ]);
+
+          expect(secure[0].vulnerabilities[0].effectiveSeverity).toBe("HIGH");
+          expect(secure[0].vulnerabilities[1].effectiveSeverity).toBe("MEDIUM");
+          expect(secure[0].vulnerabilities[2].effectiveSeverity).toBe("LOW");
         });
       });
 

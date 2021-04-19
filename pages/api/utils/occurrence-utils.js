@@ -18,8 +18,23 @@ import dayjs from "dayjs";
 
 dayjs.extend(isSameOrAfter);
 
+const severityLevels = {
+  CRITICAL: 0,
+  HIGH: 1,
+  MEDIUM: 2,
+  LOW: 3,
+  SEVERITY_UNSPECIFIED: 4,
+};
+
+const sortByVulnerability = (occurrences) =>
+  occurrences.sort(
+    (first, second) =>
+      severityLevels[first.effectiveSeverity] -
+      severityLevels[second.effectiveSeverity]
+  );
+
 const mapVulnerabilities = (occurrences) => {
-  return occurrences.map((occurrence) => ({
+  const mapped = occurrences.map((occurrence) => ({
     name: occurrence.name,
     type: occurrence.vulnerability.type,
     cvssScore: occurrence.vulnerability.cvssScore,
@@ -32,6 +47,8 @@ const mapVulnerabilities = (occurrences) => {
       occurrence.vulnerability.packageIssue[0].affectedLocation.package,
     version: occurrence.vulnerability.packageIssue[0].affectedLocation.version,
   }));
+
+  return sortByVulnerability(mapped);
 };
 
 const matchAndMapVulnerabilities = (occurrences) => {
