@@ -23,6 +23,10 @@ import Button from "components/Button";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
 
+// TODO: tests
+// TODO: improve styling of results
+// TODO: double check how this looks with passing eval
+
 const EvaluationResult = ({ results }) => {
   const [showCode, setShowCode] = useState(false);
 
@@ -41,27 +45,27 @@ const EvaluationResult = ({ results }) => {
             <p>The resource passed the policy.</p>
           </div>
         ) : (
-          <div className={styles.failedEvaluationResultsContainer}>
-            <div className={styles.failedEvaluationResults}>
-              <Icon name={ICON_NAMES.EXCLAMATION} />
-              <p>The resource failed the policy.</p>
-            </div>
-            {results.result[0].violations.map((violation) => {
-              console.log("violation", violation);
-              return (
-                <div key={violation.id}>
-                  <p>{violation.pass.toString()}</p>
-                  <p>{violation.message}</p>
-                </div>
-              );
-            })}
-            <Button
-              onClick={() => setShowCode(true)}
-              label={"Show Full Evaluation"}
-              buttonType={"text"}
-            />
+          <div className={styles.failedEvaluationResults}>
+            <Icon name={ICON_NAMES.EXCLAMATION} />
+            <p>The resource failed the policy.</p>
           </div>
         )}
+        <div className={styles.violations}>
+          {results.result[0].violations.map((violation) => {
+            console.log("violation", violation);
+            return (
+              <React.Fragment key={violation.id}>
+                <p className={styles.violationResult}>{violation.pass ? "pass" : "fail"}</p>
+                <p>{violation.message}</p>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <Button
+          onClick={() => setShowCode(true)}
+          label={"Show Full Evaluation"}
+          buttonType={"text"}
+        />
       </div>
       <Modal
         title={"Evaluation Explanation"}

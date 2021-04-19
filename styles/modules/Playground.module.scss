@@ -186,6 +186,17 @@ $CARD_WIDTH: 97%;
   }
 }
 
+.evaluationResultsContainer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > button {
+    margin: 0.5rem auto;
+  }
+}
+
 .evaluationResults {
   display: flex;
   flex-direction: row;
@@ -199,20 +210,22 @@ $CARD_WIDTH: 97%;
   @extend .evaluationResults;
 }
 
-.failedEvaluationResultsContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.violations {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-gap: 0.5rem;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1rem;
 
-  > button {
-    margin: 0.5rem auto;
+  > p {
+    white-space: normal;
   }
 
-  > pre {
-    @include tabletAndLarger {
-      width: 75%;
-      margin: 0 auto;
-    }
+  .violationResult {
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
   }
 }
 
@@ -222,10 +235,6 @@ $CARD_WIDTH: 97%;
 
 .copyButton {
   margin: 0 auto;
-}
-
-.evaluationResultsContainer {
-  padding: 1rem;
 }
 
 .darkTheme {
@@ -274,13 +283,11 @@ $CARD_WIDTH: 97%;
     color: $HOT_RED;
   }
 
-  .evaluationResultsContainer {
-    pre {
-      background-color: $DT_BACKGROUND_DARK;
-    }
+  .explanationJson {
+    background-color: $DT_BACKGROUND_DARK;
   }
 
-  .explanationJson {
+  .violations {
     background-color: $DT_BACKGROUND_DARK;
   }
 }
@@ -323,13 +330,11 @@ $CARD_WIDTH: 97%;
     color: $GREEN;
   }
 
-  .failedEvaluationResultsContainer {
-    > pre {
-      background-color: $LT_BACKGROUND_DARK;
-    }
-  }
-
   .failedEvaluationResults {
     color: $HOT_RED;
+  }
+
+  .violations {
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 }
