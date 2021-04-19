@@ -24,6 +24,7 @@ import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
 import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
+import { createSearchFilter } from "utils/shared-utils";
 
 const ResourceSearchAndResults = ({
   resource,
@@ -35,9 +36,7 @@ const ResourceSearchAndResults = ({
 
   const { data: resourceResults, loading: resourceLoading } = useFetch(
     resourceSearch ? "/api/resources" : null,
-    {
-      filter: state.searchTerm,
-    }
+    createSearchFilter(state.searchTerm)
   );
 
   useEffect(() => {

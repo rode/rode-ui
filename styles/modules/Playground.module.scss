@@ -216,6 +216,14 @@ $CARD_WIDTH: 97%;
   }
 }
 
+.explanationJson {
+  max-height: 60vh;
+}
+
+.copyButton {
+  margin: 0 auto;
+}
+
 .evaluationResultsContainer {
   padding: 1rem;
 }
@@ -271,6 +279,10 @@ $CARD_WIDTH: 97%;
       background-color: $DT_BACKGROUND_DARK;
     }
   }
+
+  .explanationJson {
+    background-color: $DT_BACKGROUND_DARK;
+  }
 }
 
 .lightTheme {
@@ -316,6 +328,7 @@ $CARD_WIDTH: 97%;
       background-color: $LT_BACKGROUND_DARK;
     }
   }
+
   .failedEvaluationResults {
     color: $HOT_RED;
   }
