@@ -30,10 +30,33 @@ export const mockFailedPatchPolicyResponse = {
 
 export const mockSuccessPolicyEvaluation = {
   pass: true,
+  result: [
+    {
+      violations: [
+        {
+          pass: true,
+          message: "This rule passed.",
+        },
+      ],
+    },
+  ],
+  explanation: {
+    0: "This is a passing evaluation explanation",
+  },
 };
 
 export const mockFailedPolicyEvaluation = {
   pass: false,
+  result: [
+    {
+      violations: [
+        {
+          pass: false,
+          message: "This rule failed.",
+        },
+      ],
+    },
+  ],
   explanation: {
     0: "This is a failed evaluation explanation",
   },
