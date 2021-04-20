@@ -26,7 +26,6 @@ const Modal = (props) => {
   const { title, children, onClose, isVisible } = props;
   const { theme } = useTheme();
 
-  // TODO: create a useSafeLayoutEffect hook to look for serverSide?
   useLayoutEffect(() => {
     if (isVisible) {
       document.getElementById("modalWrapper").scrollIntoView();
