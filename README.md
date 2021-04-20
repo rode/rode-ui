@@ -54,7 +54,7 @@ The Policy Playground can be used to evaluate a resource against a policy. This 
 
 Once a policy and a resource have been selected, you can evaluate to see how the resource faired against the policy. If a resource fails against a policy, an explanation of the failures will be available to view.
 
-![Policy Playground Demo](./docs/images/PolicyPlayground.gif)
+![Policy Playground Demo](./docs/images/PolicyPlaygroundv2.gif)
 
 ### Dark Mode
 
