@@ -20,12 +20,13 @@ import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
 import Loading from "components/Loading";
-import { useFetch } from "hooks/useFetch";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
+import Button from "components/Button";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
 // TODO: handle flashing of not found on this and resource search page
 
@@ -34,9 +35,10 @@ const Policies = () => {
   const { state, dispatch } = usePolicies();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
-  const { data, loading } = useFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/policies" : null,
-    createSearchFilter(router.query.search)
+    createSearchFilter(router.query.search),
+    3
   );
 
   const onSubmit = (event) => {
@@ -83,11 +85,17 @@ const Policies = () => {
       {showSearchResults ? (
         <Loading loading={loading}>
           {data?.length > 0 ? (
+            <>
+            {
+
             data.map((result) => {
               return (
                 <PolicySearchResult key={result.id} searchResult={result} />
               );
             })
+            }
+              <Button buttonType="text" onClick={goToNextPage} label={'Load More'}/>
+            </>
           ) : (
             <span className={styles.noResults}>No policies found</span>
           )}
