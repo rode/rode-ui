@@ -25,6 +25,8 @@ import { resourceActions } from "reducers/resources";
 import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
 import { createSearchFilter } from "utils/shared-utils";
+import { usePaginatedFetch } from "../../hooks/usePaginatedFetch";
+import Button from "../Button";
 
 const ResourceSearchAndResults = ({
   resource,
@@ -34,9 +36,10 @@ const ResourceSearchAndResults = ({
   const [resourceSearch, setResourceSearch] = useState(false);
   const { state, dispatch } = useResources();
 
-  const { data: resourceResults, loading: resourceLoading } = useFetch(
+  const { data: resourceResults, loading: resourceLoading, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
-    createSearchFilter(state.searchTerm)
+    createSearchFilter(state.searchTerm),
+    1
   );
 
   useEffect(() => {
@@ -57,37 +60,42 @@ const ResourceSearchAndResults = ({
         {resourceSearch && (
           <Loading loading={resourceLoading} type={"button"}>
             {resourceResults?.length > 0 ? (
-              resourceResults.map((result) => {
-                const {
-                  resourceName,
-                  resourceVersion,
-                  resourceType,
-                } = getResourceDetails(result.uri);
+              <>
+                {
+                  resourceResults.map((result) => {
+                    const {
+                      resourceName,
+                      resourceVersion,
+                      resourceType,
+                    } = getResourceDetails(result.uri);
 
-                return (
-                  <PlaygroundSearchResult
-                    mainText={resourceName}
-                    subText={`Version: ${resourceVersion}`}
-                    additionalText={`Type: ${resourceType}`}
-                    buttonText={"Select Resource"}
-                    onClick={() => {
-                      setResource({
-                        uri: result.uri,
-                        name: resourceName,
-                        version: resourceVersion,
-                        type: resourceType,
-                      });
-                      setResourceSearch(false);
-                      dispatch({
-                        type: resourceActions.SET_SEARCH_TERM,
-                        data: "",
-                      });
-                    }}
-                    key={result.uri}
-                    selected={result.uri === resource?.uri}
-                  />
-                );
-              })
+                    return (
+                      <PlaygroundSearchResult
+                        mainText={ resourceName }
+                        subText={ `Version: ${ resourceVersion }` }
+                        additionalText={ `Type: ${ resourceType }` }
+                        buttonText={ "Select Resource" }
+                        onClick={ () => {
+                          setResource({
+                            uri: result.uri,
+                            name: resourceName,
+                            version: resourceVersion,
+                            type: resourceType,
+                          });
+                          setResourceSearch(false);
+                          dispatch({
+                            type: resourceActions.SET_SEARCH_TERM,
+                            data: "",
+                          });
+                        } }
+                        key={ result.uri }
+                        selected={ result.uri === resource?.uri }
+                      />
+                    );
+                  })
+                }
+                <Button buttonType={"text"} label={'See more resources'} onClick={goToNextPage}/>
+              </>
             ) : (
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
