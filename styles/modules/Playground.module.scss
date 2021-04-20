@@ -187,13 +187,21 @@ $CARD_WIDTH: 97%;
 }
 
 .evaluationResultsContainer {
+  margin: 1rem auto;
   padding: 1rem;
+  width: fit-content;
+  max-width: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
   > button {
     margin: 0.5rem auto;
+    font-size: 0.85rem;
+  }
+
+  @include tabletAndLarger {
+    max-width: 75%;
   }
 }
 
@@ -203,7 +211,8 @@ $CARD_WIDTH: 97%;
   justify-content: flex-start;
   align-items: center;
   width: fit-content;
-  margin: 0 auto;
+  margin: 0 auto 0.5rem;
+  font-weight: 600;
 }
 
 .failedEvaluationResults {
@@ -214,6 +223,7 @@ $CARD_WIDTH: 97%;
   display: grid;
   grid-template-columns: 4rem 1fr;
   grid-gap: 0.5rem;
+  grid-template-areas: "outcome message";
   width: fit-content;
   margin: 0 auto;
   padding: 1rem;
@@ -234,7 +244,7 @@ $CARD_WIDTH: 97%;
 }
 
 .copyButton {
-  margin: 0 auto;
+  margin: 0 auto 0.5rem;
 }
 
 .darkTheme {
@@ -275,11 +285,13 @@ $CARD_WIDTH: 97%;
     background-color: $DT_BACKGROUND_MEDIUM;
   }
 
-  .evaluationResults {
+  .evaluationResults,
+  .violationResult.pass {
     color: $BRIGHT_GREEN;
   }
 
-  .failedEvaluationResults {
+  .failedEvaluationResults,
+  .violationResult.fail {
     color: $HOT_RED;
   }
 
@@ -287,7 +299,7 @@ $CARD_WIDTH: 97%;
     background-color: $DT_BACKGROUND_DARK;
   }
 
-  .violations {
+  .evaluationResultsContainer {
     background-color: $DT_BACKGROUND_DARK;
   }
 }
@@ -326,15 +338,17 @@ $CARD_WIDTH: 97%;
     background-color: $LT_BACKGROUND_LIGHT;
   }
 
-  .evaluationResults {
+  .evaluationResults,
+  .violationResult.pass {
     color: $GREEN;
   }
 
-  .failedEvaluationResults {
+  .failedEvaluationResults,
+  .violationResult.fail {
     color: $HOT_RED;
   }
 
-  .violations {
+  .evaluationResultsContainer {
     background-color: $LT_BACKGROUND_LIGHT;
   }
 }

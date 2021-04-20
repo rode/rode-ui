@@ -23,10 +23,6 @@ import Button from "components/Button";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
 
-// TODO: tests
-// TODO: improve styling of results
-// TODO: double check how this looks with passing eval
-
 const EvaluationResult = ({ results }) => {
   const [showCode, setShowCode] = useState(false);
 
@@ -41,22 +37,26 @@ const EvaluationResult = ({ results }) => {
       <div className={styles.evaluationResultsContainer}>
         {results.pass ? (
           <div className={styles.evaluationResults}>
-            <Icon name={ICON_NAMES.BADGE_CHECK} />
+            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
             <p>The resource passed the policy.</p>
           </div>
         ) : (
           <div className={styles.failedEvaluationResults}>
-            <Icon name={ICON_NAMES.EXCLAMATION} />
+            <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
             <p>The resource failed the policy.</p>
           </div>
         )}
         <div className={styles.violations}>
           {results.result[0].violations.map((violation) => {
-            console.log("violation", violation);
+            const outcome = violation.pass ? "pass" : "fail";
             return (
               <React.Fragment key={violation.id}>
-                <p className={styles.violationResult}>{violation.pass ? "pass" : "fail"}</p>
-                <p>{violation.message}</p>
+                <p className={`${styles.violationResult} ${styles[outcome]}`}>
+                  {outcome}
+                </p>
+                <p>
+                  {violation.message || "Rule message not specified in policy"}
+                </p>
               </React.Fragment>
             );
           })}
