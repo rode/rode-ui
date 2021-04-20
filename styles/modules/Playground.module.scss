@@ -186,38 +186,65 @@ $CARD_WIDTH: 97%;
   }
 }
 
-.evaluationResults {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+.evaluationResultsContainer {
+  margin: 1rem auto;
+  padding: 1rem;
   width: fit-content;
-  margin: 0 auto;
-}
-
-.failedEvaluationResults {
-  @extend .evaluationResults;
-}
-
-.failedEvaluationResultsContainer {
+  max-width: 95%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
   > button {
     margin: 0.5rem auto;
+    font-size: 0.85rem;
   }
 
-  > pre {
-    @include tabletAndLarger {
-      width: 75%;
-      margin: 0 auto;
-    }
+  @include tabletAndLarger {
+    max-width: 75%;
   }
 }
 
-.evaluationResultsContainer {
+.evaluationResults {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto 0.5rem;
+  font-weight: 600;
+}
+
+.failedEvaluationResults {
+  @extend .evaluationResults;
+}
+
+.violations {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-gap: 0.5rem;
+  grid-template-areas: "outcome message";
+  width: fit-content;
+  margin: 0 auto;
   padding: 1rem;
+
+  > p {
+    white-space: normal;
+  }
+
+  .violationResult {
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+  }
+}
+
+.explanationJson {
+  max-height: 60vh;
+}
+
+.copyButton {
+  margin: 0 auto 0.5rem;
 }
 
 .darkTheme {
@@ -258,18 +285,22 @@ $CARD_WIDTH: 97%;
     background-color: $DT_BACKGROUND_MEDIUM;
   }
 
-  .evaluationResults {
+  .evaluationResults,
+  .violationResult.pass {
     color: $BRIGHT_GREEN;
   }
 
-  .failedEvaluationResults {
+  .failedEvaluationResults,
+  .violationResult.fail {
     color: $HOT_RED;
   }
 
+  .explanationJson {
+    background-color: $DT_BACKGROUND_DARK;
+  }
+
   .evaluationResultsContainer {
-    pre {
-      background-color: $DT_BACKGROUND_DARK;
-    }
+    background-color: $DT_BACKGROUND_DARK;
   }
 }
 
@@ -307,16 +338,17 @@ $CARD_WIDTH: 97%;
     background-color: $LT_BACKGROUND_LIGHT;
   }
 
-  .evaluationResults {
+  .evaluationResults,
+  .violationResult.pass {
     color: $GREEN;
   }
 
-  .failedEvaluationResultsContainer {
-    > pre {
-      background-color: $LT_BACKGROUND_DARK;
-    }
-  }
-  .failedEvaluationResults {
+  .failedEvaluationResults,
+  .violationResult.fail {
     color: $HOT_RED;
+  }
+
+  .evaluationResultsContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 }

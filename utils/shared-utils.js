@@ -1,3 +1,5 @@
+import { showSuccess } from "./toast-utils";
+
 /**
  * Copyright 2021 The Rode Authors
  *
@@ -24,4 +26,19 @@ export const createSearchFilter = (searchTerm) => {
   }
 
   return null;
+};
+
+export const copy = (textToCopy) => {
+  const el = document.createElement("textarea");
+  el.value = textToCopy;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+
+  showSuccess("Copied!", {
+    autoClose: 1500,
+    closeButton: false,
+    pauseOnFocusLoss: false,
+  });
 };

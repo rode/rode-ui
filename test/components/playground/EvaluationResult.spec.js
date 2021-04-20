@@ -18,8 +18,17 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import EvaluationResult from "components/playground/EvaluationResult";
 import userEvent from "@testing-library/user-event";
+import { copy } from "utils/shared-utils";
+import { createMockEvaluationResult } from "test/testing-utils/mocks";
+
+jest.mock("utils/shared-utils");
 
 describe("EvaluationResult", () => {
+  beforeEach(() => {
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: jest.fn(),
+    });
+  });
   it("should return null when there are no results", () => {
     render(<EvaluationResult results={null} />);
 
@@ -27,9 +36,8 @@ describe("EvaluationResult", () => {
   });
 
   it("should render the success message if the resource passed evaluation", () => {
-    const successResult = {
-      pass: true,
-    };
+    const successResult = createMockEvaluationResult(true);
+
     render(<EvaluationResult results={successResult} />);
 
     expect(
@@ -39,30 +47,79 @@ describe("EvaluationResult", () => {
   });
 
   it("should render the failure message and the explanation if the resource failed evaluation", () => {
-    const failedResult = {
-      pass: false,
-      explanation: chance.string(),
-    };
+    const failedResult = createMockEvaluationResult(false);
+
     render(<EvaluationResult results={failedResult} />);
 
     expect(
       screen.getByText(/the resource failed the policy/i)
     ).toBeInTheDocument();
     expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
+  });
 
-    const renderedToggleCodeButton = screen.getByRole("button", {
-      name: "Show Failures",
-    });
-    expect(renderedToggleCodeButton).toBeInTheDocument();
+  it("should render the evaluation table regardless of outcome", () => {
+    const result = {
+      pass: chance.bool(),
+      result: [
+        {
+          violations: [
+            {
+              pass: true,
+              message: chance.string(),
+            },
+            {
+              pass: false,
+              message: null,
+            },
+          ],
+        },
+      ],
+      explanation: chance.string(),
+    };
+    render(<EvaluationResult results={result} />);
 
-    userEvent.click(renderedToggleCodeButton);
-
-    expect(screen.getByTestId("codeBlock")).toBeInTheDocument();
     expect(
-      screen.getByText(JSON.stringify(failedResult.explanation, null, 2))
+      screen.getByText(/the resource (?:passed|failed) the policy/i)
     ).toBeInTheDocument();
-    userEvent.click(screen.getByRole("button", { name: "Hide Failures" }));
 
-    expect(screen.queryByTestId("codeBlock")).not.toBeInTheDocument();
+    expect(screen.getByText(/^pass$/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(result.result[0].violations[0].message)
+    ).toBeInTheDocument();
+
+    expect(screen.getByText(/^fail$/i)).toBeInTheDocument();
+    expect(
+      screen.getByText("Rule message not specified in policy")
+    ).toBeInTheDocument();
+  });
+
+  it("should render the button to show the full explanation of the evaluation", () => {
+    const result = createMockEvaluationResult();
+    render(<EvaluationResult results={result} />);
+
+    const renderedButton = screen.getByRole("button", {
+      name: "Show Full Evaluation",
+    });
+    expect(renderedButton).toBeInTheDocument();
+
+    userEvent.click(renderedButton);
+
+    expect(screen.getByText("Evaluation Explanation")).toBeInTheDocument();
+    expect(
+      screen.getByText(JSON.stringify(result.explanation, null, 2))
+    ).toBeInTheDocument();
+
+    const renderedCopyButton = screen.getByRole("button", {
+      name: "Copy to Clipboard",
+    });
+    userEvent.click(renderedCopyButton);
+    expect(copy)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(JSON.stringify(result.explanation, null, 2));
+    userEvent.click(screen.getByLabelText("Close Modal"));
+
+    expect(
+      screen.queryByText("Evaluation Explanation")
+    ).not.toBeInTheDocument();
   });
 });

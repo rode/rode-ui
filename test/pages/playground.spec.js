@@ -19,7 +19,10 @@ import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicyPlayground from "pages/playground";
 import { useFetch } from "hooks/useFetch";
-import { createMockResourceUri } from "test/testing-utils/mocks";
+import {
+  createMockEvaluationResult,
+  createMockResourceUri,
+} from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
 
 jest.mock("hooks/useFetch");
@@ -43,10 +46,7 @@ describe("PolicyPlayground", () => {
       searchTerm: chance.string(),
     };
     resourceDispatch = jest.fn();
-    evaluationResults = {
-      pass: chance.bool(),
-      explanation: chance.string(),
-    };
+    evaluationResults = createMockEvaluationResult();
     fetchResponse = {
       json: jest.fn().mockResolvedValue(evaluationResults),
       ok: true,

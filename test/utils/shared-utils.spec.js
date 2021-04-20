@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-import { createSearchFilter, isServerSide } from "utils/shared-utils";
+import { copy, createSearchFilter, isServerSide } from "utils/shared-utils";
+import { showSuccess } from "utils/toast-utils";
+
+jest.mock("utils/toast-utils");
 
 describe("shared utils", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   /* eslint-disable no-undef*/
   describe("isServerSide", () => {
     it("should return true when on the server", () => {
@@ -52,6 +59,24 @@ describe("shared utils", () => {
       searchTerm = null;
 
       expect(createSearchFilter(searchTerm)).toBeNull();
+    });
+  });
+
+  describe("copy", () => {
+    beforeEach(() => {
+      jest.spyOn(document, "createElement");
+      document.execCommand = jest.fn();
+    });
+
+    it("should copy the specified text and show a toast", () => {
+      copy(chance.string());
+      expect(document.createElement).toHaveBeenCalledWith("textarea");
+      expect(document.execCommand).toHaveBeenCalledWith("copy");
+      expect(showSuccess).toHaveBeenCalledWith("Copied!", {
+        autoClose: 1500,
+        closeButton: false,
+        pauseOnFocusLoss: false,
+      });
     });
   });
 });

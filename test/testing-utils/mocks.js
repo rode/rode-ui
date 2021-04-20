@@ -224,3 +224,19 @@ export const createMockResourceUri = (
 ) => {
   return `${name}@sha256:${version}`;
 };
+
+export const createMockEvaluationResult = (pass = chance.bool()) => ({
+  pass,
+  explanation: chance.string(),
+  result: [
+    {
+      violations: chance.n(
+        () => ({
+          pass: chance.bool(),
+          message: chance.pickone([null, chance.string()]),
+        }),
+        chance.d4()
+      ),
+    },
+  ],
+});
