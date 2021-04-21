@@ -35,7 +35,7 @@ const Resources = () => {
   const { state, dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
-  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
+  const { data, loading, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/resources" : null,
     createSearchFilter(router.query.search),
     3
@@ -92,7 +92,7 @@ const Resources = () => {
                 );
               })
               }
-              <Button buttonType="text" onClick={goToNextPage} label={'Load More'}/>
+              <Button buttonType="text" onClick={goToNextPage} label={'View More'} className={styles.viewMoreResultsButton}/>
             </>
           ) : (
             <span className={styles.noResults}>No resources found</span>

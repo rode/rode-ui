@@ -91,7 +91,7 @@
 .searchCard {
   width: 90%;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -101,7 +101,11 @@
     flex-direction: row;
     align-items: center;
     padding: 2rem;
-    margin-bottom: 2rem;
+    margin: 1rem auto;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 
   button {
@@ -132,6 +136,10 @@
   @include tabletAndLarger {
     max-width: calc(100vw - 24rem);
   }
+}
+
+.viewMoreResultsButton {
+  margin: 1rem auto;
 }
 
 .darkTheme {

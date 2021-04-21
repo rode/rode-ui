@@ -35,7 +35,7 @@ const Policies = () => {
   const { state, dispatch } = usePolicies();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
-  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
+  const { data, loading, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/policies" : null,
     createSearchFilter(router.query.search),
     3
@@ -94,7 +94,7 @@ const Policies = () => {
               );
             })
             }
-              <Button buttonType="text" onClick={goToNextPage} label={'Load More'}/>
+              <Button buttonType="text" onClick={goToNextPage} label={'View More'} className={styles.viewMoreResultsButton}/>
             </>
           ) : (
             <span className={styles.noResults}>No policies found</span>
