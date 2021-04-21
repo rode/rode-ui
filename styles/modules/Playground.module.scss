@@ -67,7 +67,7 @@ $CARD_WIDTH: 97%;
 
 .searchResultsContainer {
   flex: 1;
-  max-height: 30vh;
+  max-height: 25rem;
   overflow: auto;
 }
 
@@ -135,6 +135,10 @@ $CARD_WIDTH: 97%;
   min-height: fit-content;
   padding: 0.25rem;
   margin-left: auto;
+}
+
+.viewMoreButton {
+  margin: 0.5rem auto;
 }
 
 .selectionTitle {

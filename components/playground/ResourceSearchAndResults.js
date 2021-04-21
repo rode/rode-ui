@@ -22,11 +22,10 @@ import Loading from "components/Loading";
 import PlaygroundSearchResult from "./PlaygroundSearchResult";
 import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
-import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
 import { createSearchFilter } from "utils/shared-utils";
-import { usePaginatedFetch } from "../../hooks/usePaginatedFetch";
-import Button from "../Button";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import Button from "components/Button";
 
 const ResourceSearchAndResults = ({
   resource,
@@ -36,7 +35,7 @@ const ResourceSearchAndResults = ({
   const [resourceSearch, setResourceSearch] = useState(false);
   const { state, dispatch } = useResources();
 
-  const { data: resourceResults, loading: resourceLoading, goToNextPage } = usePaginatedFetch(
+  const { data, loading, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
     createSearchFilter(state.searchTerm),
     1
@@ -45,6 +44,14 @@ const ResourceSearchAndResults = ({
   useEffect(() => {
     clearEvaluation();
   }, [resourceSearch]);
+
+  useEffect(() => {
+    if (data) {
+      document
+        .getElementById("viewMoreResourcesButton")
+        .scrollIntoView({ behavior: "smooth" });
+    }
+  }, [data]);
 
   return (
     <div className={styles.searchContainer}>
@@ -58,11 +65,11 @@ const ResourceSearchAndResults = ({
       />
       <div className={styles.searchResultsContainer}>
         {resourceSearch && (
-          <Loading loading={resourceLoading} type={"button"}>
-            {resourceResults?.length > 0 ? (
+          <Loading loading={loading} type={"button"}>
+            {data?.length > 0 ? (
               <>
                 {
-                  resourceResults.map((result) => {
+                  data.map((result) => {
                     const {
                       resourceName,
                       resourceVersion,
@@ -94,7 +101,9 @@ const ResourceSearchAndResults = ({
                     );
                   })
                 }
-                <Button buttonType={"text"} label={'See more resources'} onClick={goToNextPage}/>
+                <Button buttonType={"text"} label={'See more resources'} onClick={goToNextPage}
+                        id={"viewMoreResourcesButton"}
+                        className={styles.viewMoreButton}/>
               </>
             ) : (
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
