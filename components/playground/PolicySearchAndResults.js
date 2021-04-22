@@ -25,6 +25,7 @@ import { usePolicies } from "providers/policies";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -34,7 +35,7 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     policySearch ? "/api/policies" : null,
     createSearchFilter(state.searchTerm),
-    1
+    PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
   useEffect(() => {
@@ -73,8 +74,8 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
           />
         }
       />
-        {policySearch && (
-      <div className={styles.searchResultsContainer}>
+      {policySearch && (
+        <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
               <>
@@ -109,8 +110,8 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
               <p>{`No policies found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-      </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

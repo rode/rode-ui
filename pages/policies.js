@@ -65,7 +65,7 @@ const Policies = () => {
     }
   }, [router.query]);
 
-  console.log('isLastPage', isLastPage);
+  console.log("isLastPage", isLastPage);
 
   return (
     <div
@@ -88,18 +88,19 @@ const Policies = () => {
         <Loading loading={loading}>
           {data?.length > 0 ? (
             <>
-            {
-
-            data.map((result) => {
-              return (
-                <PolicySearchResult key={result.id} searchResult={result} />
-              );
-            })
-            }
-              {
-                !isLastPage &&
-                <Button buttonType="text" onClick={goToNextPage} label={'View More'} className={styles.viewMoreResultsButton}/>
-              }
+              {data.map((result) => {
+                return (
+                  <PolicySearchResult key={result.id} searchResult={result} />
+                );
+              })}
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                  className={styles.viewMoreResultsButton}
+                />
+              )}
             </>
           ) : (
             <span className={styles.noResults}>No policies found</span>

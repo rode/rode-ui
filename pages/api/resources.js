@@ -60,7 +60,7 @@ export default async (req, res) => {
 
     res.status(StatusCodes.OK).json({
       data: resources,
-      pageToken: listResourcesResponse.nextPageToken
+      pageToken: listResourcesResponse.nextPageToken,
     });
   } catch (error) {
     console.error("Error listing resources", error);

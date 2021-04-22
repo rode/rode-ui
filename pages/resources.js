@@ -86,16 +86,22 @@ const Resources = () => {
         <Loading loading={loading}>
           {data?.length > 0 ? (
             <>
-              { data.map((result) => {
+              {data.map((result) => {
                 return (
-                  <ResourceSearchResult key={ result.uri } searchResult={ result } />
+                  <ResourceSearchResult
+                    key={result.uri}
+                    searchResult={result}
+                  />
                 );
-              })
-              }
-              {
-                !isLastPage &&
-                <Button buttonType="text" onClick={goToNextPage} label={'View More'} className={styles.viewMoreResultsButton}/>
-              }
+              })}
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                  className={styles.viewMoreResultsButton}
+                />
+              )}
             </>
           ) : (
             <span className={styles.noResults}>No resources found</span>

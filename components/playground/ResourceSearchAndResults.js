@@ -26,6 +26,7 @@ import { useResources } from "providers/resources";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
+import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const ResourceSearchAndResults = ({
   resource,
@@ -38,7 +39,7 @@ const ResourceSearchAndResults = ({
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
     createSearchFilter(state.searchTerm),
-    1
+    PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
   useEffect(() => {
@@ -60,13 +61,12 @@ const ResourceSearchAndResults = ({
       <ResourceSearchBar
         onSubmit={(event) => {
           event.preventDefault();
-
           setResourceSearch(true);
         }}
         onChange={() => setResourceSearch(false)}
       />
-        {resourceSearch && (
-      <div className={styles.searchResultsContainer}>
+      {resourceSearch && (
+        <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
               <>
@@ -104,7 +104,7 @@ const ResourceSearchAndResults = ({
                 {!isLastPage && (
                   <Button
                     buttonType={"text"}
-                    label={"See more resources"}
+                    label={"See More Resources"}
                     onClick={goToNextPage}
                     id={"viewMoreResourcesButton"}
                     className={styles.viewMoreButton}
@@ -115,8 +115,8 @@ const ResourceSearchAndResults = ({
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-      </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

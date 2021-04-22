@@ -65,7 +65,7 @@ export default async (req, res) => {
 
       res.status(StatusCodes.OK).json({
         data: policies,
-        pageToken: listPoliciesResponse.nextPageToken
+        pageToken: listPoliciesResponse.nextPageToken,
       });
     } catch (error) {
       console.error("Error listing policies", error);
