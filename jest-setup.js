@@ -25,3 +25,7 @@ const chance = new Chance();
 console.error = jest.fn();
 
 window.matchMedia = () => ({ matches: false });
+
+document.getElementById = jest.fn().mockReturnValue({
+  scrollIntoView: jest.fn(),
+});

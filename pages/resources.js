@@ -27,8 +27,7 @@ import Link from "next/link";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-
-// TODO: make constant for search results size, use here and pages/policies
+import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -38,7 +37,7 @@ const Resources = () => {
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/resources" : null,
     createSearchFilter(router.query.search),
-    3
+    DEFAULT_SEARCH_PAGE_SIZE
   );
 
   const onSubmit = (event) => {

@@ -27,6 +27,7 @@ import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
 
 // TODO: handle flashing of not found on this and resource search page
 
@@ -38,7 +39,7 @@ const Policies = () => {
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/policies" : null,
     createSearchFilter(router.query.search),
-    3
+    DEFAULT_SEARCH_PAGE_SIZE
   );
 
   const onSubmit = (event) => {
@@ -64,8 +65,6 @@ const Policies = () => {
       });
     }
   }, [router.query]);
-
-  console.log("isLastPage", isLastPage);
 
   return (
     <div
