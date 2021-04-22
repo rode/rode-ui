@@ -36,10 +36,7 @@ const createUrlWithQueryAndPages = (url, query, pageSize, pageToken) => {
 
 export const usePaginatedFetch = (url, query, pageSize) => {
   const getKey = (pageIndex, previousPageData) => {
-    // console.log('previousPageData', previousPageData);
-
     if (previousPageData && !previousPageData.pageToken.length) {
-      console.log("here last page");
       return null;
     }
 
