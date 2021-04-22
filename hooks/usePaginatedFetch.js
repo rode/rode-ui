@@ -15,7 +15,6 @@
  */
 
 // TODO: test this
-// TODO: improvements for last page stuff
 
 import { useSWRInfinite } from "swr";
 
@@ -25,42 +24,52 @@ const createUrlWithQueryAndPages = (url, query, pageSize, pageToken) => {
   const allParams = {
     ...query,
     pageSize,
-    pageToken
+    pageToken,
   };
 
-  Object.keys(allParams).forEach((param) => !allParams[param] ? delete allParams[param] : null);
+  Object.keys(allParams).forEach((param) =>
+    !allParams[param] ? delete allParams[param] : null
+  );
   const formattedUrl = `${url}?${new URLSearchParams(allParams)}`;
   return url ? formattedUrl : null;
-}
+};
 
 export const usePaginatedFetch = (url, query, pageSize) => {
   const getKey = (pageIndex, previousPageData) => {
-    console.log('previousPageData', previousPageData);
+    // console.log('previousPageData', previousPageData);
 
-    if (previousPageData && !previousPageData.pageToken) {
-      console.log('here last page');
-      return null
+    if (previousPageData && !previousPageData.pageToken.length) {
+      console.log("here last page");
+      return null;
     }
 
     if (!previousPageData) {
-      console.log('here first page');
       return createUrlWithQueryAndPages(url, query, pageSize);
     }
 
-    console.log('here middle page')
-    return createUrlWithQueryAndPages(url, query, pageSize, previousPageData.pageToken);
-  }
+    return createUrlWithQueryAndPages(
+      url,
+      query,
+      pageSize,
+      previousPageData.pageToken
+    );
+  };
 
   const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher);
 
   const loading = !data && !error;
 
-  const isLastPage = !loading && !data.pageToken;
+  const isLastPage =
+    !loading && data?.length && !data[data.length - 1].pageToken?.length;
 
   const goToNextPage = () => setSize(size + 1);
 
   const formattedData = data?.reduce((accum, pageData) => {
-    return accum.concat(...pageData.data)
+    if (pageData.data) {
+      return accum.concat(...pageData.data);
+    }
+
+    return accum;
   }, []);
 
   return {
@@ -68,6 +77,6 @@ export const usePaginatedFetch = (url, query, pageSize) => {
     loading,
     error,
     isLastPage,
-    goToNextPage
+    goToNextPage,
   };
 };

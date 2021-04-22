@@ -58,6 +58,7 @@
 .showResults {
   @extend .container;
   justify-content: flex-start;
+  margin-bottom: 1rem;
 
   .searchBarContainer {
     width: 90%;

@@ -35,7 +35,7 @@ const ResourceSearchAndResults = ({
   const [resourceSearch, setResourceSearch] = useState(false);
   const { state, dispatch } = useResources();
 
-  const { data, loading, goToNextPage } = usePaginatedFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
     createSearchFilter(state.searchTerm),
     1
@@ -47,9 +47,11 @@ const ResourceSearchAndResults = ({
 
   useEffect(() => {
     if (data) {
-      document
-        .getElementById("viewMoreResourcesButton")
-        .scrollIntoView({ behavior: "smooth" });
+      const button = document.getElementById("viewMoreResourcesButton");
+
+      if (button) {
+        button.scrollIntoView({ block: "end", behavior: "smooth" });
+      }
     }
   }, [data]);
 
@@ -63,54 +65,58 @@ const ResourceSearchAndResults = ({
         }}
         onChange={() => setResourceSearch(false)}
       />
-      <div className={styles.searchResultsContainer}>
         {resourceSearch && (
+      <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
               <>
-                {
-                  data.map((result) => {
-                    const {
-                      resourceName,
-                      resourceVersion,
-                      resourceType,
-                    } = getResourceDetails(result.uri);
+                {data.map((result) => {
+                  const {
+                    resourceName,
+                    resourceVersion,
+                    resourceType,
+                  } = getResourceDetails(result.uri);
 
-                    return (
-                      <PlaygroundSearchResult
-                        mainText={ resourceName }
-                        subText={ `Version: ${ resourceVersion }` }
-                        additionalText={ `Type: ${ resourceType }` }
-                        buttonText={ "Select Resource" }
-                        onClick={ () => {
-                          setResource({
-                            uri: result.uri,
-                            name: resourceName,
-                            version: resourceVersion,
-                            type: resourceType,
-                          });
-                          setResourceSearch(false);
-                          dispatch({
-                            type: resourceActions.SET_SEARCH_TERM,
-                            data: "",
-                          });
-                        } }
-                        key={ result.uri }
-                        selected={ result.uri === resource?.uri }
-                      />
-                    );
-                  })
-                }
-                <Button buttonType={"text"} label={'See more resources'} onClick={goToNextPage}
-                        id={"viewMoreResourcesButton"}
-                        className={styles.viewMoreButton}/>
+                  return (
+                    <PlaygroundSearchResult
+                      mainText={resourceName}
+                      subText={`Version: ${resourceVersion}`}
+                      additionalText={`Type: ${resourceType}`}
+                      buttonText={"Select Resource"}
+                      onClick={() => {
+                        setResource({
+                          uri: result.uri,
+                          name: resourceName,
+                          version: resourceVersion,
+                          type: resourceType,
+                        });
+                        setResourceSearch(false);
+                        dispatch({
+                          type: resourceActions.SET_SEARCH_TERM,
+                          data: "",
+                        });
+                      }}
+                      key={result.uri}
+                      selected={result.uri === resource?.uri}
+                    />
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType={"text"}
+                    label={"See more resources"}
+                    onClick={goToNextPage}
+                    id={"viewMoreResourcesButton"}
+                    className={styles.viewMoreButton}
+                  />
+                )}
               </>
             ) : (
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-        )}
       </div>
+        )}
     </div>
   );
 };

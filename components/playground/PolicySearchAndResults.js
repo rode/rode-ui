@@ -26,14 +26,12 @@ import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
-// TODO: clean up styling here and in ResourceSearchAndResults
-
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const { state, dispatch } = usePolicies();
 
-  const { data, loading, goToNextPage } = usePaginatedFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     policySearch ? "/api/policies" : null,
     createSearchFilter(state.searchTerm),
     1
@@ -45,9 +43,11 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
 
   useEffect(() => {
     if (data) {
-      document
-        .getElementById("viewMorePoliciesButton")
-        .scrollIntoView({ behavior: "smooth" });
+      const button = document.getElementById("viewMorePoliciesButton");
+
+      if (button) {
+        button.scrollIntoView({ block: "end", behavior: "smooth" });
+      }
     }
   }, [data]);
 
@@ -73,8 +73,8 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
           />
         }
       />
-      <div className={styles.searchResultsContainer}>
         {policySearch && (
+      <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
               <>
@@ -95,20 +95,22 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
                     selected={result.id === policy?.id}
                   />
                 ))}
-                <Button
-                  buttonType="text"
-                  onClick={goToNextPage}
-                  label={"See More Policies"}
-                  className={styles.viewMoreButton}
-                  id={"viewMorePoliciesButton"}
-                />
+                {!isLastPage && (
+                  <Button
+                    buttonType="text"
+                    onClick={goToNextPage}
+                    label={"See More Policies"}
+                    className={styles.viewMoreButton}
+                    id={"viewMorePoliciesButton"}
+                  />
+                )}
               </>
             ) : (
               <p>{`No policies found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-        )}
       </div>
+        )}
     </div>
   );
 };

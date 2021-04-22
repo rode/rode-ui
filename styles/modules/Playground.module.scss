@@ -67,6 +67,7 @@ $CARD_WIDTH: 97%;
 
 .searchResultsContainer {
   flex: 1;
+  min-height: 3rem;
   max-height: 25rem;
   overflow: auto;
 }
