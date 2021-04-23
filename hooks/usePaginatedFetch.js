@@ -14,45 +14,15 @@
  * limitations under the License.
  */
 
-// TODO: test this
-
 import { useSWRInfinite } from "swr";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
-const createUrlWithQueryAndPages = (url, query, pageSize, pageToken) => {
-  const allParams = {
-    ...query,
-    pageSize,
-    pageToken,
-  };
-
-  Object.keys(allParams).forEach((param) =>
-    !allParams[param] ? delete allParams[param] : null
-  );
-  const formattedUrl = `${url}?${new URLSearchParams(allParams)}`;
-  return url ? formattedUrl : null;
-};
+import { fetcher, getPaginatedUrlKey } from "utils/hook-utils";
 
 export const usePaginatedFetch = (url, query, pageSize) => {
-  const getKey = (pageIndex, previousPageData) => {
-    if (previousPageData && !previousPageData.pageToken.length) {
-      return null;
-    }
-
-    if (!previousPageData) {
-      return createUrlWithQueryAndPages(url, query, pageSize);
-    }
-
-    return createUrlWithQueryAndPages(
-      url,
-      query,
-      pageSize,
-      previousPageData.pageToken
-    );
-  };
-
-  const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher);
+  const { data, error, size, setSize } = useSWRInfinite(
+    (_, previousPageData) =>
+      getPaginatedUrlKey(previousPageData, url, query, pageSize),
+    fetcher
+  );
 
   const loading = !data && !error;
 

@@ -16,8 +16,7 @@
 
 import useSWR from "swr";
 import { useState, useEffect } from "react";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import { fetcher } from "utils/hook-utils";
 
 export const useFetch = (url, query) => {
   const [loading, setLoading] = useState(false);

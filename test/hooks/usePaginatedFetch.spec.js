@@ -19,11 +19,13 @@ import { render, screen } from "@testing-library/react";
 import PaginatedFetchComponent from "test/testing-utils/hook-components/usePaginatedFetchComponent";
 import { useSWRInfinite } from "swr";
 import userEvent from "@testing-library/user-event";
+import { fetcher, getPaginatedUrlKey } from "utils/hook-utils";
 
 jest.mock("swr");
+jest.mock("utils/hook-utils");
 
 describe("usePaginatedFetch", () => {
-  let url, query, pageSize, data, size, setSizeMock;
+  let url, query, pageSize, data, size, setSizeMock, expectedKey;
 
   beforeEach(() => {
     url = chance.url();
@@ -39,9 +41,15 @@ describe("usePaginatedFetch", () => {
         ),
         pageToken: chance.string(),
       },
+      {
+        [chance.string()]: chance.string(),
+        pageToken: chance.string(),
+      },
     ];
     size = chance.d4();
     setSizeMock = jest.fn();
+
+    getPaginatedUrlKey.mockReturnValue(expectedKey);
 
     useSWRInfinite.mockReturnValue({
       data,
@@ -60,10 +68,7 @@ describe("usePaginatedFetch", () => {
       <PaginatedFetchComponent url={url} query={query} pageSize={pageSize} />
     );
 
-    expect(useSWRInfinite).toHaveBeenCalledWith(
-      expect.any(Function),
-      expect.any(Function)
-    );
+    expect(useSWRInfinite).toHaveBeenCalledWith(expect.any(Function), fetcher);
   });
 
   it("should return the formatted data if the call was successful", () => {
