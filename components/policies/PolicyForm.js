@@ -202,7 +202,6 @@ const PolicyForm = ({
             required
             rows={10}
             onBlur={validateField}
-            highlight={(value) => value}
           />
           <p className={styles.documentation}>
             Need help formulating? Check out the{" "}

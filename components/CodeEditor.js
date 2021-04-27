@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
+import Prism from "prism/prism";
 
 const CodeEditor = (props) => {
   const {
@@ -30,7 +31,6 @@ const CodeEditor = (props) => {
     rows = 5,
     required = false,
     error,
-    highlight,
     ...otherProps
   } = props;
   const { theme } = useTheme();
@@ -52,9 +52,9 @@ const CodeEditor = (props) => {
           value={value}
           tabSize={4}
           textareaClassName={`${error ? styles.textAreaError : styles.textArea}`}
-          preClassName={`${error ? styles.textAreaError : styles.textArea}`}
+          // preClassName={`${error ? styles.textAreaError : styles.textArea}`}
           rows={rows}
-          highlight={highlight}
+          highlight={(code) => Prism.highlight(code, Prism.languages.rego)}
           padding={16}
           {...otherProps}
         />
@@ -79,7 +79,6 @@ CodeEditor.propTypes = {
       );
     }
   },
-  highlight: PropTypes.func.isRequired
 };
 
 export default CodeEditor;
