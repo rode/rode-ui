@@ -22,6 +22,7 @@ import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
 
 // TODO: tests
+// TODO: exclude prism file from coverage
 
 const CodeEditor = (props) => {
   const {
@@ -30,7 +31,6 @@ const CodeEditor = (props) => {
     onChange,
     placeholder,
     value = "",
-    rows = 5,
     required = false,
     error,
     ...otherProps
@@ -56,7 +56,6 @@ const CodeEditor = (props) => {
           tabSize={4}
           className={className}
           textareaClassName={className}
-          rows={rows}
           highlight={(code) => Prism.highlight(code, Prism.languages.rego)}
           padding={16}
           {...otherProps}
@@ -72,7 +71,6 @@ CodeEditor.propTypes = {
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string,
-  rows: PropTypes.number,
   required: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: function (props) {
