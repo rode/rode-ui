@@ -30,6 +30,8 @@ import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
+import Editor from "react-simple-code-editor";
+import CodeEditor from "../CodeEditor";
 
 const PolicyForm = ({
   title,
@@ -187,18 +189,20 @@ const PolicyForm = ({
             horizontal
             onBlur={validateField}
           />
-          <TextArea
+          <CodeEditor
+            textareaId={"regoContent"}
             name={"regoContent"}
             label={"Rego Policy Code"}
             value={regoContent}
-            onChange={(event) => {
+            onChange={(value) => {
               setValidationResults(null);
-              setRegoContent(event.target.value);
+              setRegoContent(value);
             }}
             error={errors.regoContent || validationResults?.isValid === false}
             required
             rows={10}
             onBlur={validateField}
+            highlight={(value) => value}
           />
           <p className={styles.documentation}>
             Need help formulating? Check out the{" "}
