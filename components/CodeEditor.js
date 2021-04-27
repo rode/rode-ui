@@ -21,6 +21,8 @@ import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
 
+// TODO: tests
+
 const CodeEditor = (props) => {
   const {
     name,
@@ -34,6 +36,7 @@ const CodeEditor = (props) => {
     ...otherProps
   } = props;
   const { theme } = useTheme();
+  const className = error ? styles.textAreaError : styles.textArea;
 
   return (
     <div className={styles.outerWrapper}>
@@ -51,8 +54,8 @@ const CodeEditor = (props) => {
           placeholder={placeholder || label}
           value={value}
           tabSize={4}
-          textareaClassName={`${error ? styles.textAreaError : styles.textArea}`}
-          // preClassName={`${error ? styles.textAreaError : styles.textArea}`}
+          className={className}
+          textareaClassName={className}
           rows={rows}
           highlight={(code) => Prism.highlight(code, Prism.languages.rego)}
           padding={16}
