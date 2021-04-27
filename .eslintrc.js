@@ -26,4 +26,5 @@ module.exports = {
   rules: {
     "no-restricted-imports": [2, { patterns: ["../*"] }],
   },
+  ignorePatterns: ["prism/prism.js"],
 };

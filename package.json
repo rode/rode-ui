@@ -57,7 +57,8 @@
       "!**/.jest/**",
       "!**test/**",
       "!coverage/**",
-      "!cypress/**"
+      "!cypress/**",
+      "!prism/prism.js"
     ],
     "moduleNameMapper": {
       "\\.(css|scss|sass)$": "identity-obj-proxy"
