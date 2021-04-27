@@ -21,9 +21,6 @@ import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
 
-// TODO: tests
-// TODO: exclude prism file from coverage
-
 const CodeEditor = (props) => {
   const {
     name,
