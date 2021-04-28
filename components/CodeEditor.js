@@ -21,9 +21,6 @@ import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
 
-// TODO: finish issue
-// TODO: use syntax highlighting on code previews in policy details and playground
-
 const CodeEditor = (props) => {
   const {
     name,
