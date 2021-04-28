@@ -40,7 +40,10 @@ code,
 }
 
 .darkTheme {
-  .token.comment,
+  .token.comment {
+    color: $MEDIUM_GREY;
+  }
+
   .token.prolog,
   .token.doctype,
   .token.cdata {
@@ -97,7 +100,10 @@ code,
 }
 
 .lightTheme {
-  .token.comment,
+  .token.comment {
+    color: $LT_SUB_TEXT;
+  }
+
   .token.prolog,
   .token.doctype,
   .token.cdata {

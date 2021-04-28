@@ -25,8 +25,6 @@ describe("Code", () => {
 
   beforeEach(() => {
     code = chance.string();
-
-    Prism.highlightAll = jest.fn();
   });
 
   afterEach(() => {

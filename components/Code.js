@@ -25,7 +25,7 @@ const Code = (props) => {
 
   useEffect(() => {
     Prism.highlightAll();
-  }, []);
+  }, [code, language]);
 
   return (
     <pre className={`${styles.codeContainer} ${className}`} {...otherProps}>
