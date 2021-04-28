@@ -39,7 +39,7 @@ const OccurrenceCodeModal = ({ json }) => {
           buttonType={"text"}
           className={styles.copyButton}
         />
-        <pre data-testid="occurrenceJson" className={styles.jsonContainer}>
+        <pre data-testid="occurrenceJson" className={`codeContainer ${styles.jsonContainer}`}>
           <code id={"occurrenceData"}>{stringifiedJson}</code>
         </pre>
       </Modal>

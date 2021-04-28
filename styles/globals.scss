@@ -71,18 +71,13 @@ a {
   }
 }
 
-pre {
+.codeContainer {
   overflow: auto;
+  padding: 1rem;
   width: 100%;
 
   code {
-    padding: 1rem;
     font-family: monospace;
-    margin-top: 0.5rem;
-    display: inline-flex;
-    width: 100%;
-    height: fit-content;
-    max-height: 32rem;
   }
 }
 

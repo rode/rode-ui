@@ -78,7 +78,7 @@ const EvaluationResult = ({ results }) => {
           buttonType={"text"}
           className={styles.copyButton}
         />
-        <pre data-testid="codeBlock" className={styles.explanationJson}>
+        <pre data-testid="codeBlock" className={`${styles.explanationJson} codeContainer`}>
           <code>{formattedExplanation}</code>
         </pre>
       </Modal>

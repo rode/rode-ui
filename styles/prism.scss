@@ -17,6 +17,10 @@
 /* PrismJS 1.23.0
 https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript+rego */
 
+pre, code, .token {
+  font-family: monospace;
+}
+
 .token.important,
 .token.bold {
   font-weight: bold;

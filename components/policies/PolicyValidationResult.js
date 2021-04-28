@@ -39,7 +39,7 @@ const PolicyValidationResult = ({ validation }) => {
             <p>This policy failed validation.</p>
           </div>
           {validation.errors?.length ? (
-            <pre>
+            <pre className={"codeContainer"}>
               <code>{validation.errors}</code>
             </pre>
           ) : null}

@@ -26,6 +26,7 @@ import { usePolicy } from "hooks/usePolicy";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
+import RegoCode from "components/policies/RegoCode";
 
 const Policy = () => {
   const router = useRouter();
@@ -75,9 +76,7 @@ const Policy = () => {
                 />
                 <div className={styles.regoContainer}>
                   <p>Rego Policy Code</p>
-                  <pre>
-                    <code>{policy.regoContent}</code>
-                  </pre>
+                  <RegoCode code={policy.regoContent}/>
                 </div>
               </>
             ) : (
