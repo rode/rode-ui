@@ -26,17 +26,22 @@ Feature: Policies
     When I create the "New" policy
     Then I see "New" policy details
 
-  Scenario Outline: Create policy - required fields
+  Scenario: Create policy - require name field
     Given I am on the "CreatePolicy" page
     When I click the "SavePolicy" button
-    Then I see "<message>" message
-    When I type "<text>" into "<input>" input
+    Then I see "PolicyNameRequired" message
+    When I type "name" into "PolicyName" input
     And I click the "SavePolicy" button
-    Then I no longer see "<message>" message
-    Scenarios:
-    | message | text | input |
-    | PolicyNameRequired | name | PolicyName |
-    | PolicyRegoRequired | rego | PolicyRegoContent |
+    Then I no longer see "PolicyNameRequired" message
+
+  Scenario: Create policy - require rego content field
+    Given I am on the "CreatePolicy" page
+    When I clear the "PolicyRegoContent" input
+    When I click the "SavePolicy" button
+    Then I see "PolicyRegoRequired" message
+    When I type "text" into "PolicyRegoContent" input
+    And I click the "SavePolicy" button
+    Then I no longer see "PolicyRegoRequired" message
 
   Scenario Outline: Create policy - validating rego code
     Given I am on the "CreatePolicy" page
