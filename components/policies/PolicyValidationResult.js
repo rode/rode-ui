@@ -40,7 +40,10 @@ const PolicyValidationResult = ({ validation }) => {
             <p>This policy failed validation.</p>
           </div>
           {validation.errors?.length ? (
-            <Code code={validation.errors} language={"json"} />
+            <Code
+              code={validation.errors.filter((error) => error.length)}
+              language={"json"}
+            />
           ) : null}
         </div>
       )}
