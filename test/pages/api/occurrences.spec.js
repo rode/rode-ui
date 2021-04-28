@@ -88,10 +88,8 @@ describe("/api/resources", () => {
     });
 
     const createExpectedUrl = (baseUrl) => {
-      const expectedFilter = `"resource.uri"=="${resourceUriParam}"`;
-
-      return `${baseUrl}/v1alpha1/occurrences?filter=${encodeURIComponent(
-        expectedFilter
+      return `${baseUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
+        resourceUriParam
       )}&pageSize=1000`;
     };
 
