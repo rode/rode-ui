@@ -32,7 +32,7 @@ export default async (req, res) => {
     let filter = {};
     if (searchTerm) {
       filter = {
-        filter: `"resource.uri".contains("${searchTerm}")`,
+        filter: `resource.uri.contains("${searchTerm}")`,
       };
     }
     const response = await fetch(
