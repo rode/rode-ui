@@ -162,9 +162,9 @@ describe("New Policy", () => {
           "Failed to create the policy due to invalid Rego code. See error(s) below for details."
         );
 
-      expectedError.errors.forEach((error) => {
-        expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
-      });
+      expect(
+        screen.getByText(/this policy failed validation/i)
+      ).toBeInTheDocument();
     });
 
     it("should show an error when the call to create failed", async () => {

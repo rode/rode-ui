@@ -23,7 +23,9 @@
   width: fit-content;
 }
 
-.regoContainer {
+.codeContainer {
+  width: 100%;
+  overflow: auto;
   padding: 1rem;
   font-family: monospace;
 }

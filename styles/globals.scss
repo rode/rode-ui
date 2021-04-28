@@ -71,16 +71,6 @@ a {
   }
 }
 
-.codeContainer {
-  overflow: auto;
-  padding: 1rem;
-  width: 100%;
-
-  code {
-    font-family: monospace;
-  }
-}
-
 .required {
   &::after {
     content: "*";

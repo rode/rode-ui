@@ -20,6 +20,7 @@ import Button from "components/Button";
 import styles from "styles/modules/Modal.module.scss";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
+import Code from "components/Code";
 
 const OccurrenceCodeModal = ({ json }) => {
   const [showCode, setShowCode] = useState(false);
@@ -39,9 +40,12 @@ const OccurrenceCodeModal = ({ json }) => {
           buttonType={"text"}
           className={styles.copyButton}
         />
-        <pre data-testid="occurrenceJson" className={`codeContainer ${styles.jsonContainer}`}>
-          <code id={"occurrenceData"}>{stringifiedJson}</code>
-        </pre>
+        <Code
+          code={stringifiedJson}
+          language={"json"}
+          className={styles.jsonContainer}
+          data-testid={"occurrenceJson"}
+        />
       </Modal>
       <Button onClick={() => setShowCode(true)} label={"Show JSON"} />
     </>

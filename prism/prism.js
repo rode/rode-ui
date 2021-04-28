@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /* PrismJS 1.23.0
-https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript+rego */
+https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript+json+rego */
 var _self =
     "undefined" != typeof window
       ? window
@@ -715,6 +714,25 @@ Prism.languages.clike = {
       "javascript"
     )),
   (Prism.languages.js = Prism.languages.javascript);
+(Prism.languages.json = {
+  property: {
+    pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
+    lookbehind: !0,
+    greedy: !0,
+  },
+  string: {
+    pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+    lookbehind: !0,
+    greedy: !0,
+  },
+  comment: { pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/, greedy: !0 },
+  number: /-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,
+  punctuation: /[{}[\],]/,
+  operator: /:/,
+  boolean: /\b(?:true|false)\b/,
+  null: { pattern: /\bnull\b/, alias: "keyword" },
+}),
+  (Prism.languages.webmanifest = Prism.languages.json);
 Prism.languages.rego = {
   comment: /#.*/,
   property: {
