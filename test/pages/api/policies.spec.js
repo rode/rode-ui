@@ -110,7 +110,7 @@ describe("/api/policies", () => {
 
       it("should hit the Rode API", async () => {
         const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `"policy.name".contains("${filterParam}")`,
+          filter: `policy.name.contains("${filterParam}")`,
         });
 
         await handler(request, response);
@@ -134,7 +134,7 @@ describe("/api/policies", () => {
       it("should pass the pageSize as a query param when a pageSize is specified", async () => {
         const pageSize = chance.d10();
         const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `"policy.name".contains("${filterParam}")`,
+          filter: `policy.name.contains("${filterParam}")`,
           pageSize,
         });
 
@@ -148,7 +148,7 @@ describe("/api/policies", () => {
       it("should pass the pageToken as a query param when a pageToken is specified", async () => {
         const pageToken = chance.string();
         const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `"policy.name".contains("${filterParam}")`,
+          filter: `policy.name.contains("${filterParam}")`,
           pageToken,
         });
 

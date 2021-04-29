@@ -35,7 +35,7 @@ export default async (req, res) => {
       let filter = {};
       if (searchTerm) {
         filter = {
-          filter: `"policy.name".contains("${searchTerm}")`,
+          filter: `policy.name.contains("${searchTerm}")`,
         };
       }
       if (req.query.pageSize) {
