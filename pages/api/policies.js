@@ -38,6 +38,12 @@ export default async (req, res) => {
           filter: `policy.name.contains("${searchTerm}")`,
         };
       }
+      if (req.query.pageSize) {
+        filter.pageSize = req.query.pageSize;
+      }
+      if (req.query.pageToken) {
+        filter.pageToken = req.query.pageToken;
+      }
       const response = await fetch(
         `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
       );
@@ -57,7 +63,10 @@ export default async (req, res) => {
         regoContent: policy.regoContent,
       }));
 
-      res.status(StatusCodes.OK).json(policies);
+      res.status(StatusCodes.OK).json({
+        data: policies,
+        pageToken: listPoliciesResponse.nextPageToken,
+      });
     } catch (error) {
       console.error("Error listing policies", error);
 

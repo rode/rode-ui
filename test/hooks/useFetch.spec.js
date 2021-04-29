@@ -18,8 +18,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import FetchComponent from "test/testing-utils/hook-components/useFetchComponent";
 import useSWR from "swr";
+import { fetcher } from "utils/hook-utils";
 
 jest.mock("swr");
+jest.mock("utils/hook-utils");
 
 describe("useFetch", () => {
   let url, query;
@@ -37,7 +39,7 @@ describe("useFetch", () => {
   it("should use SWR to fetch data with no query", () => {
     render(<FetchComponent url={url} query={null} />);
 
-    expect(useSWR).toHaveBeenCalledWith(url, expect.any(Function));
+    expect(useSWR).toHaveBeenCalledWith(url, fetcher);
   });
 
   it("should use SWR to fetch data with a specified query", () => {
@@ -45,20 +47,20 @@ describe("useFetch", () => {
 
     expect(useSWR).toHaveBeenCalledWith(
       `${url}?${new URLSearchParams(query)}`,
-      expect.any(Function)
+      fetcher
     );
   });
 
   it("should pass null as the URL when it is not specified", () => {
     render(<FetchComponent url={null} query={null} />);
 
-    expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function));
+    expect(useSWR).toHaveBeenCalledWith(null, fetcher);
   });
 
   it("should pass null as the URL when it is not specified but a query is provided", () => {
     render(<FetchComponent url={null} query={query} />);
 
-    expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function));
+    expect(useSWR).toHaveBeenCalledWith(null, fetcher);
   });
 
   it("should return the data if the call was successful", () => {

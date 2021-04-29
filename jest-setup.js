@@ -29,3 +29,7 @@ window.matchMedia = () => ({ matches: false });
 
 jest.mock("prism/prism");
 Prism.highlightAll = jest.fn();
+
+document.getElementById = jest.fn().mockReturnValue({
+  scrollIntoView: jest.fn(),
+});

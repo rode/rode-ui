@@ -21,7 +21,7 @@ import handler from "pages/api/resources";
 jest.mock("node-fetch");
 
 describe("/api/resources", () => {
-  let request, response, allResources, rodeResponse, filterParam;
+  let request, response, allResources, rodeResponse, filterParam, pageToken;
 
   beforeEach(() => {
     filterParam = chance.word();
@@ -31,6 +31,7 @@ describe("/api/resources", () => {
         filter: filterParam,
       },
     };
+    pageToken = chance.string();
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -50,6 +51,7 @@ describe("/api/resources", () => {
       ok: true,
       json: jest.fn().mockResolvedValue({
         resources: allResources,
+        nextPageToken: pageToken,
       }),
     };
 
@@ -111,16 +113,27 @@ describe("/api/resources", () => {
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
-    it("should take the Rode URL from the environment if set", async () => {
-      const rodeUrl = chance.url();
-      const expectedUrl = createExpectedUrl(rodeUrl, {
+    it("should pass the pageSize as a query param when a pageSize is specified", async () => {
+      const pageSize = chance.d10();
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
         filter: `resource.uri.contains("${filterParam}")`,
+        pageSize,
       });
-      process.env.RODE_URL = rodeUrl;
 
+      request.query.pageSize = pageSize;
       await handler(request, response);
+      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+    });
 
-      delete process.env.RODE_URL;
+    it("should pass the pageToken as a query param when a pageToken is specified", async () => {
+      const pageToken = chance.string();
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+        filter: `resource.uri.contains("${filterParam}")`,
+        pageToken,
+      });
+
+      request.query.pageToken = pageToken;
+      await handler(request, response);
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
@@ -136,9 +149,10 @@ describe("/api/resources", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(StatusCodes.OK);
 
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(expectedResources);
+      expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+        data: expectedResources,
+        pageToken,
+      });
     });
   });
 

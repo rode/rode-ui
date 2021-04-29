@@ -19,26 +19,38 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PlaygroundSearchResult from "./PlaygroundSearchResult";
-import { useFetch } from "hooks/useFetch";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const { state, dispatch } = usePolicies();
 
-  const { data, loading } = useFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     policySearch ? "/api/policies" : null,
-    createSearchFilter(state.searchTerm)
+    createSearchFilter(state.searchTerm),
+    PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
   useEffect(() => {
     clearEvaluation();
   }, [policySearch]);
+
+  useEffect(() => {
+    if (data) {
+      const button = document.getElementById("viewMorePoliciesButton");
+
+      if (button) {
+        button.scrollIntoView({ block: "end", behavior: "smooth" });
+      }
+    }
+  }, [data]);
 
   return (
     <div className={styles.searchContainer}>
@@ -62,33 +74,44 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
           />
         }
       />
-      <div className={styles.searchResultsContainer}>
-        {policySearch && (
+      {policySearch && (
+        <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
-              data.map((result) => (
-                <PlaygroundSearchResult
-                  mainText={result.name}
-                  subText={result.description}
-                  buttonText={"Select Policy"}
-                  onClick={() => {
-                    setPolicy(result);
-                    setPolicySearch(false);
-                    dispatch({
-                      type: policyActions.SET_SEARCH_TERM,
-                      data: "",
-                    });
-                  }}
-                  key={result.id}
-                  selected={result.id === policy?.id}
-                />
-              ))
+              <>
+                {data.map((result) => (
+                  <PlaygroundSearchResult
+                    mainText={result.name}
+                    subText={result.description}
+                    buttonText={"Select Policy"}
+                    onClick={() => {
+                      setPolicy(result);
+                      setPolicySearch(false);
+                      dispatch({
+                        type: policyActions.SET_SEARCH_TERM,
+                        data: "",
+                      });
+                    }}
+                    key={result.id}
+                    selected={result.id === policy?.id}
+                  />
+                ))}
+                {!isLastPage && (
+                  <Button
+                    buttonType="text"
+                    onClick={goToNextPage}
+                    label={"See More Policies"}
+                    className={styles.viewMoreButton}
+                    id={"viewMorePoliciesButton"}
+                  />
+                )}
+              </>
             ) : (
               <p>{`No policies found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

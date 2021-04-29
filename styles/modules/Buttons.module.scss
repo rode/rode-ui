@@ -67,7 +67,7 @@
     color: $DARK_GREY;
 
     &:hover {
-      background-color: color.scale($GREEN, $lightness: -20%);
+      background-color: color.scale($LAGOON, $lightness: -20%);
       color: $WHITE;
     }
 
@@ -82,7 +82,7 @@
     color: $WHITE;
 
     &:hover {
-      background-color: color.scale($GREEN, $lightness: -20%);
+      background-color: color.scale($DEEP_SEA, $lightness: -20%);
     }
 
     &[disabled] {
@@ -101,7 +101,7 @@
     background-color: transparent;
 
     &:hover {
-      color: $LAGOON;
+      color: $WHITE;
       background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
     }
 
@@ -116,7 +116,7 @@
     background-color: transparent;
 
     &:hover {
-      color: $DEEP_SEA;
+      color: color.scale($DEEP_SEA, $lightness: -20%);
       background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -10%);
     }
 

@@ -67,7 +67,7 @@ describe("/api/policies", () => {
   });
 
   describe("GET", () => {
-    let filterParam, allPolicies;
+    let filterParam, allPolicies, pageToken;
 
     beforeEach(() => {
       filterParam = chance.word();
@@ -77,6 +77,7 @@ describe("/api/policies", () => {
           filter: filterParam,
         },
       };
+      pageToken = chance.string();
 
       allPolicies = chance.n(
         () => ({
@@ -95,6 +96,7 @@ describe("/api/policies", () => {
         ok: true,
         json: jest.fn().mockResolvedValue({
           policies: allPolicies,
+          nextPageToken: pageToken,
         }),
       };
 
@@ -129,6 +131,34 @@ describe("/api/policies", () => {
           .toHaveBeenCalledWith(expectedUrl);
       });
 
+      it("should pass the pageSize as a query param when a pageSize is specified", async () => {
+        const pageSize = chance.d10();
+        const expectedUrl = createExpectedUrl("http://localhost:50051", {
+          filter: `policy.name.contains("${filterParam}")`,
+          pageSize,
+        });
+
+        request.query.pageSize = pageSize;
+        await handler(request, response);
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl);
+      });
+
+      it("should pass the pageToken as a query param when a pageToken is specified", async () => {
+        const pageToken = chance.string();
+        const expectedUrl = createExpectedUrl("http://localhost:50051", {
+          filter: `policy.name.contains("${filterParam}")`,
+          pageToken,
+        });
+
+        request.query.pageToken = pageToken;
+        await handler(request, response);
+        expect(fetch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl);
+      });
+
       it("should return the mapped policies", async () => {
         const expectedPolicies = allPolicies.map(({ id, policy }) => ({
           id,
@@ -143,9 +173,10 @@ describe("/api/policies", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(expectedPolicies);
+        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+          data: expectedPolicies,
+          pageToken,
+        });
       });
     });
 

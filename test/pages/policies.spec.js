@@ -17,14 +17,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
-import { getResourceDetails } from "utils/resource-utils";
-import { useFetch } from "hooks/useFetch";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { usePolicies } from "providers/policies";
 import Policies from "pages/policies";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePaginatedFetch");
 jest.mock("providers/policies");
 
 describe("Policies", () => {
@@ -37,7 +36,9 @@ describe("Policies", () => {
     };
     mockFetchResponse = {
       data: null,
-      loading: null,
+      loading: chance.bool(),
+      isLastPage: chance.bool(),
+      goToNextPage: jest.fn(),
     };
     mockRouter = {
       query: {},
@@ -50,7 +51,7 @@ describe("Policies", () => {
       state: mockState,
     });
 
-    useFetch.mockReturnValue(mockFetchResponse);
+    usePaginatedFetch.mockReturnValue(mockFetchResponse);
   });
 
   afterEach(() => {
@@ -67,12 +68,20 @@ describe("Policies", () => {
     let policies, expectedSearch;
 
     beforeEach(() => {
-      policies = chance.n(chance.string, chance.d4());
+      policies = chance.n(
+        () => ({
+          name: chance.string(),
+          description: chance.string(),
+          id: chance.guid(),
+        }),
+        chance.d4()
+      );
       expectedSearch = chance.word();
       mockRouter.query = {
         search: expectedSearch,
       };
       mockFetchResponse.data = policies;
+      mockFetchResponse.loading = false;
     });
 
     it("should do nothing if a search term does not exist", () => {
@@ -109,31 +118,43 @@ describe("Policies", () => {
     it("should pass the search term through as a filter", () => {
       render(<Policies />);
 
-      expect(useFetch)
-        .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/policies", {
+      expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
+        "/api/policies",
+        {
           filter: expectedSearch,
-        });
+        },
+        10
+      );
     });
 
     it("should handle viewing all policies", () => {
       mockRouter.query.search = "all";
       render(<Policies />);
 
-      expect(useFetch)
+      expect(usePaginatedFetch)
         .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/policies", null);
+        .toHaveBeenCalledWith("/api/policies", null, 10);
     });
 
-    it("should render all of the search results", () => {
+    it("should render all of the returned search results", () => {
       render(<Policies />);
 
       policies.forEach((policy) => {
-        const { policyName } = getResourceDetails(policy.uri);
+        const { name } = policy;
         expect(
-          screen.getAllByText(`Policy Name: ${policyName}`, { exact: false })[0]
+          screen.getAllByText(`Policy Name: ${name}`, { exact: false })[0]
         ).toBeInTheDocument();
       });
+    });
+
+    it("should render a button to view more results if the user is not at the end of the found results", () => {
+      mockFetchResponse.isLastPage = false;
+      render(<Policies />);
+
+      const viewMoreButton = screen.getByRole("button", { name: "View More" });
+      expect(viewMoreButton).toBeInTheDocument();
+      userEvent.click(viewMoreButton);
+      expect(mockFetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
     });
 
     it("should render a message when there are no results", () => {

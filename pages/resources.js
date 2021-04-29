@@ -22,19 +22,22 @@ import { useTheme } from "providers/theme";
 import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
-import { useFetch } from "hooks/useFetch";
 import { resourceActions } from "reducers/resources";
 import Link from "next/link";
 import { createSearchFilter } from "utils/shared-utils";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import Button from "components/Button";
+import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const Resources = () => {
   const { theme } = useTheme();
   const { state, dispatch } = useResources();
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
-  const { data, loading } = useFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/resources" : null,
-    createSearchFilter(router.query.search)
+    createSearchFilter(router.query.search),
+    DEFAULT_SEARCH_PAGE_SIZE
   );
 
   const onSubmit = (event) => {
@@ -81,11 +84,24 @@ const Resources = () => {
       {showSearchResults && (
         <Loading loading={loading}>
           {data?.length > 0 ? (
-            data.map((result) => {
-              return (
-                <ResourceSearchResult key={result.uri} searchResult={result} />
-              );
-            })
+            <>
+              {data.map((result) => {
+                return (
+                  <ResourceSearchResult
+                    key={result.uri}
+                    searchResult={result}
+                  />
+                );
+              })}
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                  className={styles.viewMoreResultsButton}
+                />
+              )}
+            </>
           ) : (
             <span className={styles.noResults}>No resources found</span>
           )}

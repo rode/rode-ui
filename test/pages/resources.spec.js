@@ -20,12 +20,12 @@ import Resources from "pages/resources";
 import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
-import { useFetch } from "hooks/useFetch";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { useResources } from "providers/resources";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePaginatedFetch");
 jest.mock("providers/resources");
 
 describe("Resources", () => {
@@ -42,7 +42,9 @@ describe("Resources", () => {
     };
     mockFetchResponse = {
       data: null,
-      loading: null,
+      loading: chance.bool(),
+      isLastPage: chance.bool(),
+      goToNextPage: jest.fn(),
     };
     useRouter.mockReturnValue(mockRouter);
 
@@ -51,7 +53,7 @@ describe("Resources", () => {
       state: mockState,
     });
 
-    useFetch.mockReturnValue(mockFetchResponse);
+    usePaginatedFetch.mockReturnValue(mockFetchResponse);
   });
 
   afterEach(() => {
@@ -77,6 +79,7 @@ describe("Resources", () => {
       expectedSearch = chance.word();
       mockRouter.query.search = expectedSearch;
       mockFetchResponse.data = resources;
+      mockFetchResponse.loading = false;
     });
 
     it("should do nothing if a search term does not exist", () => {
@@ -112,20 +115,22 @@ describe("Resources", () => {
     it("should pass the search term through as a filter", () => {
       render(<Resources />);
 
-      expect(useFetch)
-        .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/resources", {
+      expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
+        "/api/resources",
+        {
           filter: expectedSearch,
-        });
+        },
+        10
+      );
     });
 
     it("should handle viewing all resources", () => {
       mockRouter.query.search = "all";
       render(<Resources />);
 
-      expect(useFetch)
+      expect(usePaginatedFetch)
         .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/resources", null);
+        .toHaveBeenCalledWith("/api/resources", null, 10);
     });
 
     it("should render all of the search results", () => {
@@ -139,8 +144,18 @@ describe("Resources", () => {
       });
     });
 
+    it("should render a button to view more results if the user is not at the end of the found results", () => {
+      mockFetchResponse.isLastPage = false;
+
+      render(<Resources />);
+      const viewMoreButton = screen.getByRole("button", { name: "View More" });
+      expect(viewMoreButton).toBeInTheDocument();
+      userEvent.click(viewMoreButton);
+      expect(mockFetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
+    });
+
     it("should render a message when there are no results", () => {
-      useFetch.mockReturnValue({ data: [] });
+      mockFetchResponse.data = [];
 
       render(<Resources />);
 

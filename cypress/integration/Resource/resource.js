@@ -21,9 +21,11 @@ import * as selectors from "../../page-objects/resource";
 Given(/^I am on the "([^"]*)" resource details page$/, (resourceName) => {
   cy.mockRequest(
     { url: "**/api/occurrences*", method: "GET" },
-    resources[resourceName].occurrences
+    resources[resourceName].data[0].occurrences
   );
-  cy.visit(`/resources/${encodeURIComponent(resources[resourceName].uri)}`);
+  cy.visit(
+    `/resources/${encodeURIComponent(resources[resourceName].data[0].uri)}`
+  );
 });
 
 When(/^I click on ([^"]*) occurrence$/, (occurrenceType) => {
@@ -34,7 +36,7 @@ When(/^I click on ([^"]*) occurrence$/, (occurrenceType) => {
 Then(/^I see "([^"]*)" Build occurrence details$/, (resourceName) => {
   cy.get(selectors.ShowJsonButton).should("be.visible");
 
-  const resource = resources[resourceName];
+  const resource = resources[resourceName].data[0];
   resource.occurrences.build.forEach((build) => {
     cy.contains(build.creator).should("be.visible");
 
@@ -49,7 +51,7 @@ Then(/^I see "([^"]*)" Build occurrence details$/, (resourceName) => {
 Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
   cy.get(selectors.ShowJsonButton).should("be.visible");
 
-  const resource = resources[resourceName];
+  const resource = resources[resourceName].data[0];
   resource.occurrences.secure.forEach((scan) => {
     cy.contains(`${scan.vulnerabilities.length} vulnerabilities found`).should(
       "be.visible"
@@ -77,7 +79,7 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
 Then(/^I see "([^"]*)" Deployment occurrence details$/, (resourceName) => {
   cy.get(selectors.ShowJsonButton).should("be.visible");
 
-  const resource = resources[resourceName];
+  const resource = resources[resourceName].data[0];
   resource.occurrences.deploy.forEach((deployment) => {
     cy.contains(`Deployed to ${deployment.platform}`).should("be.visible");
     cy.contains(
@@ -87,7 +89,7 @@ Then(/^I see "([^"]*)" Deployment occurrence details$/, (resourceName) => {
 });
 
 Then(/^I see "([^"]*)" resource search result$/, (resourceName) => {
-  const resource = resources[resourceName];
+  const resource = resources[resourceName].data[0];
 
   cy.contains(`Resource Name: ${resource.resourceName}`).should("be.visible");
   cy.contains(`Version: ${resource.resourceVersion}`).should("be.visible");
@@ -95,7 +97,7 @@ Then(/^I see "([^"]*)" resource search result$/, (resourceName) => {
 });
 
 Then(/^I see "([^"]*)" resource details$/, (resourceName) => {
-  const resource = resources[resourceName];
+  const resource = resources[resourceName].data[0];
 
   cy.url().should("contain", `/resources/${encodeURIComponent(resource.uri)}`);
   cy.contains(resource.resourceName).should("be.visible");

@@ -22,9 +22,11 @@ import Loading from "components/Loading";
 import PlaygroundSearchResult from "./PlaygroundSearchResult";
 import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
-import { useFetch } from "hooks/useFetch";
 import { useResources } from "providers/resources";
 import { createSearchFilter } from "utils/shared-utils";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import Button from "components/Button";
+import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
 const ResourceSearchAndResults = ({
   resource,
@@ -34,66 +36,87 @@ const ResourceSearchAndResults = ({
   const [resourceSearch, setResourceSearch] = useState(false);
   const { state, dispatch } = useResources();
 
-  const { data: resourceResults, loading: resourceLoading } = useFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
-    createSearchFilter(state.searchTerm)
+    createSearchFilter(state.searchTerm),
+    PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
   useEffect(() => {
     clearEvaluation();
   }, [resourceSearch]);
 
+  useEffect(() => {
+    if (data) {
+      const button = document.getElementById("viewMoreResourcesButton");
+
+      if (button) {
+        button.scrollIntoView({ block: "end", behavior: "smooth" });
+      }
+    }
+  }, [data]);
+
   return (
     <div className={styles.searchContainer}>
       <ResourceSearchBar
         onSubmit={(event) => {
           event.preventDefault();
-
           setResourceSearch(true);
         }}
         onChange={() => setResourceSearch(false)}
       />
-      <div className={styles.searchResultsContainer}>
-        {resourceSearch && (
-          <Loading loading={resourceLoading} type={"button"}>
-            {resourceResults?.length > 0 ? (
-              resourceResults.map((result) => {
-                const {
-                  resourceName,
-                  resourceVersion,
-                  resourceType,
-                } = getResourceDetails(result.uri);
+      {resourceSearch && (
+        <div className={styles.searchResultsContainer}>
+          <Loading loading={loading} type={"button"}>
+            {data?.length > 0 ? (
+              <>
+                {data.map((result) => {
+                  const {
+                    resourceName,
+                    resourceVersion,
+                    resourceType,
+                  } = getResourceDetails(result.uri);
 
-                return (
-                  <PlaygroundSearchResult
-                    mainText={resourceName}
-                    subText={`Version: ${resourceVersion}`}
-                    additionalText={`Type: ${resourceType}`}
-                    buttonText={"Select Resource"}
-                    onClick={() => {
-                      setResource({
-                        uri: result.uri,
-                        name: resourceName,
-                        version: resourceVersion,
-                        type: resourceType,
-                      });
-                      setResourceSearch(false);
-                      dispatch({
-                        type: resourceActions.SET_SEARCH_TERM,
-                        data: "",
-                      });
-                    }}
-                    key={result.uri}
-                    selected={result.uri === resource?.uri}
+                  return (
+                    <PlaygroundSearchResult
+                      mainText={resourceName}
+                      subText={`Version: ${resourceVersion}`}
+                      additionalText={`Type: ${resourceType}`}
+                      buttonText={"Select Resource"}
+                      onClick={() => {
+                        setResource({
+                          uri: result.uri,
+                          name: resourceName,
+                          version: resourceVersion,
+                          type: resourceType,
+                        });
+                        setResourceSearch(false);
+                        dispatch({
+                          type: resourceActions.SET_SEARCH_TERM,
+                          data: "",
+                        });
+                      }}
+                      key={result.uri}
+                      selected={result.uri === resource?.uri}
+                    />
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType={"text"}
+                    label={"See More Resources"}
+                    onClick={goToNextPage}
+                    id={"viewMoreResourcesButton"}
+                    className={styles.viewMoreButton}
                   />
-                );
-              })
+                )}
+              </>
             ) : (
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
