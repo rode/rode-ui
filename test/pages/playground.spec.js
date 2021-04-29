@@ -18,14 +18,14 @@ import React from "react";
 import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicyPlayground from "pages/playground";
-import { useFetch } from "hooks/useFetch";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import {
   createMockEvaluationResult,
   createMockResourceUri,
 } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
 
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePaginatedFetch");
 jest.mock("utils/toast-utils");
 
 describe("PolicyPlayground", () => {
@@ -34,7 +34,7 @@ describe("PolicyPlayground", () => {
     resourceState,
     resourceDispatch,
     fetchResponse,
-    useFetchResponse,
+    usePaginatedFetchResponse,
     evaluationResults;
 
   beforeEach(() => {
@@ -51,11 +51,13 @@ describe("PolicyPlayground", () => {
       json: jest.fn().mockResolvedValue(evaluationResults),
       ok: true,
     };
-    useFetchResponse = {
+    usePaginatedFetchResponse = {
       data: [],
       loading: false,
+      isLastPage: chance.bool(),
+      goToNextPage: jest.fn(),
     };
-    useFetch.mockReturnValue(useFetchResponse);
+    usePaginatedFetch.mockReturnValue(usePaginatedFetchResponse);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
   });
@@ -95,12 +97,12 @@ describe("PolicyPlayground", () => {
     it("should render a search bar for resources", () => {
       const resourceName = chance.string();
       const resourceVersion = chance.string();
-      useFetchResponse.data = [
+      usePaginatedFetchResponse.data = [
         {
           uri: createMockResourceUri(resourceName, resourceVersion),
         },
       ];
-      useFetchResponse.loading = false;
+      usePaginatedFetchResponse.loading = false;
 
       const renderedSearch = screen.getByLabelText(/search for a resource/i);
 
@@ -112,7 +114,7 @@ describe("PolicyPlayground", () => {
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
         data: {
-          uri: useFetchResponse.data[0].uri,
+          uri: usePaginatedFetchResponse.data[0].uri,
           name: resourceName,
           version: resourceVersion,
           type: "Docker",
@@ -124,7 +126,7 @@ describe("PolicyPlayground", () => {
       const policyName = chance.string();
       const description = chance.string();
       const regoContent = chance.string();
-      useFetchResponse.data = [
+      usePaginatedFetchResponse.data = [
         {
           id: chance.guid(),
           name: policyName,
@@ -132,7 +134,7 @@ describe("PolicyPlayground", () => {
           regoContent,
         },
       ];
-      useFetchResponse.loading = false;
+      usePaginatedFetchResponse.loading = false;
       const renderedSearch = screen.getByLabelText(/search for a policy/i);
 
       expect(renderedSearch).toBeInTheDocument();
@@ -142,7 +144,7 @@ describe("PolicyPlayground", () => {
       userEvent.click(screen.getByRole("button", { name: "Select Policy" }));
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_POLICY",
-        data: useFetchResponse.data[0],
+        data: usePaginatedFetchResponse.data[0],
       });
     });
 

@@ -35,6 +35,12 @@ export default async (req, res) => {
         filter: `resource.uri.contains("${searchTerm}")`,
       };
     }
+    if (req.query.pageSize) {
+      filter.pageSize = req.query.pageSize;
+    }
+    if (req.query.pageToken) {
+      filter.pageToken = req.query.pageToken;
+    }
     const response = await fetch(
       `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
     );
@@ -52,7 +58,10 @@ export default async (req, res) => {
       uri,
     }));
 
-    res.status(StatusCodes.OK).json(resources);
+    res.status(StatusCodes.OK).json({
+      data: resources,
+      pageToken: listResourcesResponse.nextPageToken,
+    });
   } catch (error) {
     console.error("Error listing resources", error);
 

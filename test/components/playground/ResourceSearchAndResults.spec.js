@@ -18,11 +18,11 @@ import React from "react";
 import { render, screen, act } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
-import { useFetch } from "hooks/useFetch";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
 
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSearchAndResults", () => {
   let resource,
@@ -31,6 +31,8 @@ describe("ResourceSearchAndResults", () => {
     state,
     dispatch,
     fetchResponse,
+    fetchedResources,
+    scrollMock,
     rerender;
 
   beforeEach(() => {
@@ -41,16 +43,29 @@ describe("ResourceSearchAndResults", () => {
       searchTerm: chance.string(),
     };
     dispatch = jest.fn();
+    fetchedResources = chance.n(
+      () => ({
+        uri: createMockResourceUri(),
+      }),
+      chance.d4()
+    );
+    scrollMock = jest.fn();
     fetchResponse = {
-      data: chance.string(),
+      data: fetchedResources,
+      isLastPage: chance.bool(),
+      goToNextPage: jest.fn(),
       loading: false,
     };
 
-    useFetch.mockReturnValue(fetchResponse);
+    usePaginatedFetch.mockReturnValue(fetchResponse);
+
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
 
     const utils = render(
       <ResourceSearchAndResults
-        policy={resource}
+        resource={resource}
         setResource={setResource}
         clearEvaluation={clearEvaluation}
       />,
@@ -76,27 +91,21 @@ describe("ResourceSearchAndResults", () => {
 
     searchForResource();
 
-    expect(useFetch).toHaveBeenCalledWith("/api/resources", {
-      filter: state.searchTerm,
-    });
+    expect(usePaginatedFetch).toHaveBeenCalledWith(
+      "/api/resources",
+      {
+        filter: state.searchTerm,
+      },
+      1
+    );
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
   it("should render a search result for each resource found", () => {
-    let resources = chance.n(
-      () => ({
-        uri: createMockResourceUri(),
-      }),
-      chance.d4()
-    );
-
-    fetchResponse.loading = false;
-    fetchResponse.data = resources;
-
     searchForResource();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    resources.forEach((resource) => {
+    fetchedResources.forEach((resource) => {
       const {
         resourceName,
         resourceVersion,
@@ -113,25 +122,15 @@ describe("ResourceSearchAndResults", () => {
   });
 
   it("should select the resource when prompted", () => {
-    let resources = chance.n(
-      () => ({
-        uri: createMockResourceUri(),
-      }),
-      chance.d4()
-    );
-
-    fetchResponse.loading = false;
-    fetchResponse.data = resources;
-
     searchForResource();
 
     const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-      resources[0].uri
+      fetchedResources[0].uri
     );
 
     userEvent.click(screen.getAllByText("Select Resource")[0]);
     expect(setResource).toHaveBeenCalledWith({
-      uri: resources[0].uri,
+      uri: fetchedResources[0].uri,
       name: resourceName,
       version: resourceVersion,
       type: resourceType,
@@ -143,17 +142,8 @@ describe("ResourceSearchAndResults", () => {
   });
 
   it("should render a resource as selected if it is the current resource to evaluate", () => {
-    let resources = chance.n(
-      () => ({
-        uri: createMockResourceUri(),
-      }),
-      chance.d4()
-    );
-
-    fetchResponse.loading = false;
-    fetchResponse.data = resources;
     const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-      resources[0].uri
+      fetchedResources[0].uri
     );
 
     rerender(
@@ -161,7 +151,7 @@ describe("ResourceSearchAndResults", () => {
         setResource={setResource}
         clearEvaluation={clearEvaluation}
         resource={{
-          uri: resources[0].uri,
+          uri: fetchedResources[0].uri,
           name: resourceName,
           version: resourceVersion,
           type: resourceType,
@@ -174,6 +164,27 @@ describe("ResourceSearchAndResults", () => {
     expect(
       screen.getByRole("button", { name: "Selected" })
     ).toBeInTheDocument();
+  });
+
+  it("should render a View More button when there are more resources to fetch", () => {
+    fetchResponse.isLastPage = false;
+
+    searchForResource();
+
+    const renderedShowMoreButton = screen.getByRole("button", {
+      name: "See More Resources",
+    });
+
+    expect(renderedShowMoreButton).toBeInTheDocument();
+    userEvent.click(renderedShowMoreButton);
+    expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
+    expect(document.getElementById).toHaveBeenCalledWith(
+      "viewMoreResourcesButton"
+    );
+    expect(scrollMock).toHaveBeenCalledWith({
+      block: "end",
+      behavior: "smooth",
+    });
   });
 
   it("should render the no resource found message if no resources were found", () => {
@@ -194,7 +205,7 @@ describe("ResourceSearchAndResults", () => {
 
 const searchForResource = () => {
   const renderedSearch = screen.getByText(/search for a resource/i);
-  const renderedSearchButton = screen.getByTitle(/search/i);
+  const renderedSearchButton = screen.getByLabelText(/search resources/i);
 
   act(() => {
     userEvent.type(renderedSearch, chance.string());

@@ -18,9 +18,9 @@ import React from "react";
 import { render, screen, act } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
-import { useFetch } from "hooks/useFetch";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
-jest.mock("hooks/useFetch");
+jest.mock("hooks/usePaginatedFetch");
 
 describe("PolicySearchAndResults", () => {
   let policy,
@@ -30,6 +30,7 @@ describe("PolicySearchAndResults", () => {
     dispatch,
     fetchResponse,
     fetchedPolicies,
+    scrollMock,
     rerender;
 
   beforeEach(() => {
@@ -51,9 +52,15 @@ describe("PolicySearchAndResults", () => {
     fetchResponse = {
       data: fetchedPolicies,
       loading: false,
+      isLastPage: chance.bool(),
+      goToNextPage: jest.fn(),
     };
+    scrollMock = jest.fn();
+    document.getElementById = jest.fn().mockReturnValue({
+      scrollIntoView: scrollMock,
+    });
 
-    useFetch.mockReturnValue(fetchResponse);
+    usePaginatedFetch.mockReturnValue(fetchResponse);
 
     const utils = render(
       <PolicySearchAndResults
@@ -93,16 +100,17 @@ describe("PolicySearchAndResults", () => {
 
     searchForPolicy();
 
-    expect(useFetch).toHaveBeenCalledWith("/api/policies", {
-      filter: state.searchTerm,
-    });
+    expect(usePaginatedFetch).toHaveBeenCalledWith(
+      "/api/policies",
+      {
+        filter: state.searchTerm,
+      },
+      1
+    );
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
   it("should render a search result for each policy found", () => {
-    fetchResponse.loading = false;
-    fetchResponse.data = fetchedPolicies;
-
     searchForPolicy();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
@@ -113,9 +121,6 @@ describe("PolicySearchAndResults", () => {
   });
 
   it("should select the policy when prompted", () => {
-    fetchResponse.loading = false;
-    fetchResponse.data = fetchedPolicies;
-
     searchForPolicy();
 
     userEvent.click(screen.getAllByText("Select Policy")[0]);
@@ -127,9 +132,6 @@ describe("PolicySearchAndResults", () => {
   });
 
   it("should render a policy as selected if it is the current policy to evaluate", () => {
-    fetchResponse.loading = false;
-    fetchResponse.data = fetchedPolicies;
-
     rerender(
       <PolicySearchAndResults
         setPolicy={setPolicy}
@@ -143,6 +145,27 @@ describe("PolicySearchAndResults", () => {
     expect(
       screen.getByRole("button", { name: "Selected" })
     ).toBeInTheDocument();
+  });
+
+  it("should render a View More button when there are more policies to fetch", () => {
+    fetchResponse.isLastPage = false;
+
+    searchForPolicy();
+
+    const renderedShowMoreButton = screen.getByRole("button", {
+      name: "See More Policies",
+    });
+
+    expect(renderedShowMoreButton).toBeInTheDocument();
+    userEvent.click(renderedShowMoreButton);
+    expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
+    expect(document.getElementById).toHaveBeenCalledWith(
+      "viewMorePoliciesButton"
+    );
+    expect(scrollMock).toHaveBeenCalledWith({
+      block: "end",
+      behavior: "smooth",
+    });
   });
 
   it("should render the no policies found message if no policies were found", () => {
@@ -163,7 +186,7 @@ describe("PolicySearchAndResults", () => {
 
 const searchForPolicy = () => {
   const renderedSearch = screen.getByText(/search for a policy/i);
-  const renderedSearchButton = screen.getByTitle(/search/i);
+  const renderedSearchButton = screen.getByLabelText(/search policies/i);
 
   act(() => {
     userEvent.type(renderedSearch, chance.string());

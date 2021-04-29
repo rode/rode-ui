@@ -41,9 +41,9 @@ Before({ tags: "@updatePolicy" }, () => {
 Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
   cy.mockRequest(
     { url: "**/api/policies/*", method: "GET" },
-    policies[policyName]
+    policies[policyName].data[0]
   );
-  cy.visit(`/policies/${policies[policyName].id}`);
+  cy.visit(`/policies/${policies[policyName].data[0].id}`);
 });
 
 When(/^I test (?:(valid|invalid)) Rego policy code$/, (validity) => {
@@ -64,7 +64,7 @@ When(/^I test (?:(valid|invalid)) Rego policy code$/, (validity) => {
 });
 
 When(/^I create the "([^"]*)" policy$/, (policyName) => {
-  const policy = policies[policyName];
+  const policy = policies[policyName].data[0];
   cy.mockRequest({ url: `**/api/policies`, method: "POST" }, policy);
   cy.get(selectors.PolicyNameInput).clear().type(policy.name);
   cy.get(selectors.PolicyDescriptionInput).clear().type(policy.description);
@@ -75,7 +75,7 @@ When(/^I create the "([^"]*)" policy$/, (policyName) => {
 When(
   /^I update and save the "([^"]*)" policy ([^"]*)$/,
   (policyName, field) => {
-    const policy = policies[policyName];
+    const policy = policies[policyName].data[0];
     const updatedPolicy = {
       ...policy,
       [field]: updatedValues[field],
@@ -127,7 +127,7 @@ When("I confirm to delete the policy and an error occurs", () => {
 });
 
 Then(/^I see "([^"]*)" policy search result$/, (policyName) => {
-  const policy = policies[policyName];
+  const policy = policies[policyName].data[0];
 
   cy.contains(`Policy Name: ${policy.name}`).should("be.visible");
   cy.contains(`Description: ${policy.description}`).should("be.visible");
@@ -135,7 +135,7 @@ Then(/^I see "([^"]*)" policy search result$/, (policyName) => {
 });
 
 Then(/^I see "([^"]*)" policy details$/, (policyName) => {
-  const policy = policies[policyName];
+  const policy = policies[policyName].data[0];
   cy.url().should("contain", `/policies/${encodeURIComponent(policy.id)}`);
 
   cy.contains(policy.name).should("be.visible");
@@ -146,7 +146,7 @@ Then(/^I see "([^"]*)" policy details$/, (policyName) => {
 });
 
 Then(/^I see the updated "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
-  const policy = policies[policyName];
+  const policy = policies[policyName].data[0];
   cy.url().should("match", new RegExp(`/policies/${policy.id}`));
 
   cy.contains(policy[field]).should("not.exist");
@@ -155,7 +155,7 @@ Then(/^I see the updated "([^"]*)" policy ([^"]*)$/, (policyName, field) => {
 
 Then(/^I see the Edit Policy form for "([^"]*)" policy$/, (policyName) => {
   const form = selectors.EditPolicyForm;
-  const policy = policies[policyName];
+  const policy = policies[policyName].data[0];
 
   cy.url().should("match", new RegExp(`/policies/${policy.id}/edit`));
 

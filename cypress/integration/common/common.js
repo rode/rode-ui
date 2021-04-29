@@ -51,9 +51,10 @@ When(/^I type "([^"]*)" into "([^"]*)" input$/, (text, inputName) => {
 
 When(/^I search for (?:a|an) "([^"]*)" policy$/, (searchTerm) => {
   if (policies[searchTerm]) {
-    cy.mockRequest({ url: "**/api/policies*", method: "GET" }, [
-      policies[searchTerm],
-    ]);
+    cy.mockRequest(
+      { url: "**/api/policies*", method: "GET" },
+      policies[searchTerm]
+    );
   }
   cy.get(selectors.PolicySearchInput).focus().clear().type(searchTerm);
   cy.get(selectors.SearchPolicyButton).click();
@@ -61,9 +62,10 @@ When(/^I search for (?:a|an) "([^"]*)" policy$/, (searchTerm) => {
 
 When(/^I search for "([^"]*)" resource$/, (searchTerm) => {
   if (resources[searchTerm]) {
-    cy.mockRequest({ url: "**/api/resources*", method: "GET" }, [
-      resources[searchTerm],
-    ]);
+    cy.mockRequest(
+      { url: "**/api/resources*", method: "GET" },
+      resources[searchTerm]
+    );
   }
   cy.get(selectors.ResourceSearchInput).focus().clear().type(searchTerm);
   cy.get(selectors.SearchResourceButton).click();
