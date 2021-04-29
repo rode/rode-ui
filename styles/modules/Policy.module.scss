@@ -127,16 +127,6 @@
   .validationResults {
     color: $HOT_RED;
   }
-
-  pre {
-    margin: 0 1rem;
-    width: 100%;
-    overflow: auto;
-
-    code {
-      max-height: 12rem;
-    }
-  }
 }
 
 .documentation {

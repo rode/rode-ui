@@ -16,7 +16,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Input from "components/Input";
-import TextArea from "components/TextArea";
 import Button from "components/Button";
 import styles from "styles/modules/Policy.module.scss";
 import { useTheme } from "providers/theme";
@@ -30,6 +29,7 @@ import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
+import CodeEditor from "components/CodeEditor";
 
 const PolicyForm = ({
   title,
@@ -187,13 +187,13 @@ const PolicyForm = ({
             horizontal
             onBlur={validateField}
           />
-          <TextArea
+          <CodeEditor
             name={"regoContent"}
             label={"Rego Policy Code"}
             value={regoContent}
-            onChange={(event) => {
+            onChange={(value) => {
               setValidationResults(null);
-              setRegoContent(event.target.value);
+              setRegoContent(value);
             }}
             error={errors.regoContent || validationResults?.isValid === false}
             required

@@ -15,6 +15,7 @@
  */
 
 @import "constants";
+@import "prism.scss";
 
 * {
   padding: 0;
@@ -70,21 +71,6 @@ a {
   }
 }
 
-pre {
-  overflow: auto;
-  width: 100%;
-
-  code {
-    padding: 1rem;
-    font-family: monospace;
-    margin-top: 0.5rem;
-    display: inline-flex;
-    width: 100%;
-    height: fit-content;
-    max-height: 32rem;
-  }
-}
-
 .required {
   &::after {
     content: "*";
@@ -105,7 +91,7 @@ pre {
 
   pre {
     background-color: $LT_BACKGROUND_MEDIUM;
-    color: $LT_SUB_TEXT;
+    color: $DARK_GREY;
   }
 }
 

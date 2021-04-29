@@ -15,7 +15,6 @@
  */
 
 import React, { useState, useEffect } from "react";
-import TextArea from "components/TextArea";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
@@ -28,6 +27,7 @@ import { policyActions } from "reducers/policies";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
+import Code from "components/Code";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -173,11 +173,9 @@ const PolicyPlayground = () => {
                 <span className={styles.label}>Description</span>
                 <span>{state.evaluationPolicy.description}</span>
               </p>
-              <TextArea
-                name={"regoContent"}
-                label={"Rego Policy Code"}
-                disabled
-                value={state.evaluationPolicy.regoContent}
+              <Code
+                code={state.evaluationPolicy.regoContent}
+                language={"rego"}
               />
               <Button
                 buttonType={"textDestructive"}

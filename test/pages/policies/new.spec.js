@@ -75,6 +75,14 @@ describe("New Policy", () => {
     expect(saveButton).toBeInTheDocument();
   });
 
+  it("should auto-populate an example policy", () => {
+    const examplePolicy = screen.getByText(/This is an example policy./i, {
+      exact: false,
+    });
+
+    expect(examplePolicy).toBeInTheDocument();
+  });
+
   describe("successful save", () => {
     let formData;
 
@@ -90,10 +98,10 @@ describe("New Policy", () => {
         screen.getByLabelText(/description/i),
         formData.description
       );
-      userEvent.type(
-        screen.getByLabelText(/rego policy code/i),
-        formData.regoContent
-      );
+
+      const rego = screen.getByLabelText(/rego policy code/i);
+      userEvent.clear(rego);
+      userEvent.type(rego, formData.regoContent);
 
       await act(async () => {
         await userEvent.click(screen.getByText(/save policy/i));
@@ -162,9 +170,9 @@ describe("New Policy", () => {
           "Failed to create the policy due to invalid Rego code. See error(s) below for details."
         );
 
-      expectedError.errors.forEach((error) => {
-        expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
-      });
+      expect(
+        screen.getByText(/this policy failed validation/i)
+      ).toBeInTheDocument();
     });
 
     it("should show an error when the call to create failed", async () => {

@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Policy.module.scss";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
+import Code from "components/Code";
 
 const PolicyValidationResult = ({ validation }) => {
   if (!validation) {
@@ -39,9 +40,10 @@ const PolicyValidationResult = ({ validation }) => {
             <p>This policy failed validation.</p>
           </div>
           {validation.errors?.length ? (
-            <pre>
-              <code>{validation.errors}</code>
-            </pre>
+            <Code
+              code={validation.errors.filter((error) => error.length)}
+              language={"json"}
+            />
           ) : null}
         </div>
       )}

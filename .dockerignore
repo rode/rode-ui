@@ -5,6 +5,7 @@
 !hooks
 !package.json
 !pages
+!prism
 !providers
 !public
 !reducers

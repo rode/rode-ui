@@ -79,7 +79,9 @@ describe("Policy Details", () => {
     it("should render the policy details once they have been fetched", () => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
-      expect(screen.getByText(policy.regoContent)).toBeInTheDocument();
+      expect(
+        screen.getByText(policy.regoContent, { selector: "code", exact: false })
+      ).toBeInTheDocument();
     });
 
     it("should render a button to edit the policy", () => {

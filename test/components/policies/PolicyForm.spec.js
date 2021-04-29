@@ -100,7 +100,7 @@ describe("Policy Form", () => {
 
     expect(renderedTextArea).toBeInTheDocument();
     userEvent.type(renderedTextArea, chance.character());
-    userEvent.tab();
+    userEvent.click(screen.getByLabelText("Policy Name"));
     expect(validateField).toHaveBeenCalled();
   });
 
