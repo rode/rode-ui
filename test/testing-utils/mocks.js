@@ -199,8 +199,8 @@ export const createMockMappedVulnerabilityOccurrence = () => {
 export const createMockMappedDeploymentOccurrence = () => {
   return {
     name: chance.string(),
-    deploymentStart: chance.timestamp(),
-    deploymentEnd: chance.timestamp(),
+    deploymentStart: chance.hammertime(),
+    deploymentEnd: chance.hammertime(),
     resourceUris: chance.n(createMockResourceUri, chance.d4()),
     platform: chance.string({ alpha: true }),
     originals: { occurrences: [createMockOccurrence("DEPLOYMENT")] },

@@ -20,6 +20,8 @@ import React from "react";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import dayjs from "dayjs";
+import { DATE_TIME_FORMAT } from "utils/constants";
 
 const DeploymentOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -37,7 +39,9 @@ const DeploymentOccurrenceSection = ({ occurrences }) => {
           key={occurrence.name}
           currentOccurrence={occurrence}
           mainText={`Deployment to ${occurrence.platform}`}
-          timestamp={occurrence.deploymentStart}
+          timestamp={`Deployed at ${dayjs(occurrence.deploymentStart).format(
+            DATE_TIME_FORMAT
+          )}`}
           subText={`Deployed ${occurrence.resourceUris.length} Resource${
             occurrence.resourceUris.length > 1 ? "s" : ""
           }`}

@@ -29,13 +29,18 @@ describe("SecureOccurrenceSection", () => {
 
     expect(screen.queryByText(/secure/i)).not.toBeInTheDocument();
   });
+
   describe("vulnerability or discovery occurrences exist", () => {
+    let rerender;
     beforeEach(() => {
       occurrences = chance.n(
         createMockMappedVulnerabilityOccurrence,
         chance.d4()
       );
-      render(<SecureOccurrenceSection occurrences={occurrences} />);
+      const utils = render(
+        <SecureOccurrenceSection occurrences={occurrences} />
+      );
+      rerender = utils.rerender;
     });
 
     it("should render the section title", () => {
@@ -58,6 +63,9 @@ describe("SecureOccurrenceSection", () => {
           expect(renderedBreakdown[0]).toBeInTheDocument();
         }
 
+        const renderedTimestamps = screen.queryAllByText(/^completed at/i);
+        expect(renderedTimestamps).toHaveLength(occurrences.length);
+
         const renderedVulnerabilityCount = screen.queryAllByText(
           /vulnerabilities found/i
         );
@@ -69,6 +77,18 @@ describe("SecureOccurrenceSection", () => {
           )
         );
       });
+    });
+
+    it("should render the preview as 'In Progress' when a scan has not completed", () => {
+      occurrences[0].completed = null;
+
+      rerender(<SecureOccurrenceSection occurrences={occurrences} />);
+
+      expect(screen.getByText("In Progress")).toBeInTheDocument();
+      const renderedVulnerabilityCount = screen.queryAllByText(
+        /vulnerabilities found/i
+      );
+      expect(renderedVulnerabilityCount).toHaveLength(occurrences.length - 1);
     });
   });
 });
