@@ -46,10 +46,16 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v1.7.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          configuration: release.json
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{steps.github_release.outputs.changelog}}
+          body: |
+            ${{steps.github_release.outputs.changelog}}
+            ## Docker images
+            ghcr.io/rode/ui:latest
+            ghcr.io/rode/ui:${{ steps.gitextra.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
