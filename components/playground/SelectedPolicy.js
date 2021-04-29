@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
@@ -23,23 +23,35 @@ import Code from "components/Code";
 const SelectedPolicy = (props) => {
   const { policy, clearPolicy } = props;
 
+  const [showDetails, setShowDetails] = useState(false);
+  const toggleDetails = () => setShowDetails(!showDetails);
+
   return (
     <div className={styles.selectionContainer}>
-      <h2 className={styles.selectionTitle}>Selected Policy</h2>
-      <p className={styles.selectionDetails}>
-        <span className={styles.label}>Name</span>
-        <span>{policy.name}</span>
-      </p>
-      <p className={styles.selectionDetails}>
-        <span className={styles.label}>Description</span>
-        <span>{policy.description}</span>
-      </p>
-      <Code code={policy.regoContent} language={"rego"} />
-      <Button
-        buttonType={"textDestructive"}
-        label={"Clear Policy"}
-        onClick={clearPolicy}
-      />
+      <h2 className={styles.selectionTitle}>
+        Selected Policy: <span>{policy.name}</span>
+      </h2>
+      <div>
+        <Button
+          buttonType={"text"}
+          label={showDetails ? "Hide Policy Details" : "Show Policy Details"}
+          onClick={toggleDetails}
+        />
+        <Button
+          buttonType={"textDestructive"}
+          label={"Clear Policy"}
+          onClick={clearPolicy}
+        />
+      </div>
+      {showDetails && (
+        <>
+          <p className={styles.selectionDetails}>
+            <span className={styles.label}>Description</span>
+            <span>{policy.description}</span>
+          </p>
+          <Code code={policy.regoContent} language={"rego"} />
+        </>
+      )}
     </div>
   );
 };

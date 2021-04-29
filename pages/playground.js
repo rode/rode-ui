@@ -109,17 +109,7 @@ const PolicyPlayground = () => {
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
-          <ResourceSearchAndResults
-            resource={state.evaluationResource}
-            setResource={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_RESOURCE,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          {state.evaluationResource && (
+          {state.evaluationResource ? (
             <SelectedResource
               resource={state.evaluationResource}
               clearResource={() => {
@@ -130,20 +120,21 @@ const PolicyPlayground = () => {
                 setEvaluationResults(null);
               }}
             />
+          ) : (
+            <ResourceSearchAndResults
+              resource={state.evaluationResource}
+              setResource={(data) =>
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_RESOURCE,
+                  data,
+                })
+              }
+              clearEvaluation={() => setEvaluationResults(null)}
+            />
           )}
         </div>
         <div className={styles.rightContainer}>
-          <PolicySearchAndResults
-            policy={state.evaluationPolicy}
-            setPolicy={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_POLICY,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          {state.evaluationPolicy && (
+          {state.evaluationPolicy ? (
             <SelectedPolicy
               policy={state.evaluationPolicy}
               clearPolicy={() => {
@@ -153,6 +144,17 @@ const PolicyPlayground = () => {
                 });
                 setEvaluationResults(null);
               }}
+            />
+          ) : (
+            <PolicySearchAndResults
+              policy={state.evaluationPolicy}
+              setPolicy={(data) =>
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_POLICY,
+                  data,
+                })
+              }
+              clearEvaluation={() => setEvaluationResults(null)}
             />
           )}
         </div>

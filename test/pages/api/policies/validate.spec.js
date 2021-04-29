@@ -17,7 +17,7 @@
 import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/validate";
-import {getRodeUrl} from "pages/api/utils/api-utils";
+import { getRodeUrl } from "pages/api/utils/api-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
@@ -49,7 +49,7 @@ describe("/api/policies/validate", () => {
     };
 
     fetch.mockResolvedValue(rodeResponse);
-    getRodeUrl.mockReturnValue("http://localhost:50051")
+    getRodeUrl.mockReturnValue("http://localhost:50051");
   });
 
   afterEach(() => {

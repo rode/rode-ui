@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 
 describe("SelectedPolicy", () => {
-  let policy, clearPolicy, rerender;
+  let policy, clearPolicy;
 
   beforeEach(() => {
     policy = {
@@ -31,19 +31,11 @@ describe("SelectedPolicy", () => {
 
     clearPolicy = jest.fn();
 
-    const utils = render(
-      <SelectedPolicy policy={policy} clearPolicy={clearPolicy} />
-    );
-
-    rerender = utils.rerender;
+    render(<SelectedPolicy policy={policy} clearPolicy={clearPolicy} />);
   });
 
-  it("should render the policy details", () => {
+  it("should render the policy name", () => {
     expect(screen.getByText(policy.name)).toBeInTheDocument();
-    expect(screen.getByText(policy.description)).toBeInTheDocument();
-    expect(
-      screen.getByText(policy.regoContent, { exact: false })
-    ).toBeInTheDocument();
   });
 
   it("should render the button to clear the policy", () => {
@@ -52,5 +44,19 @@ describe("SelectedPolicy", () => {
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
     expect(clearPolicy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should render a button to toggle the policy details", () => {
+    const renderedButton = screen.getByRole("button", {
+      name: "Show Policy Details",
+    });
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(screen.getByText(policy.description)).toBeInTheDocument();
+    expect(
+      screen.getByText(policy.regoContent, { exact: false })
+    ).toBeInTheDocument();
   });
 });

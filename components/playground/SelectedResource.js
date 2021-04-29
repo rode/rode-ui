@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
@@ -22,26 +22,39 @@ import styles from "styles/modules/Playground.module.scss";
 const SelectedResource = (props) => {
   const { resource, clearResource } = props;
 
+  const [showDetails, setShowDetails] = useState(false);
+  const toggleDetails = () => setShowDetails(!showDetails);
   return (
     <div className={styles.selectionContainer}>
-      <h2 className={styles.selectionTitle}>Selected Resource</h2>
-      <p className={styles.selectionDetails}>
-        <span className={styles.label}>Name</span>
-        <span>{resource.name}</span>
-      </p>
-      <p className={styles.selectionDetails}>
-        <span className={styles.label}>Version</span>
-        <span className={styles.break}>{resource.version}</span>
-      </p>
-      <p className={styles.selectionDetails}>
-        <span className={styles.label}>Type</span>
-        <span className={styles.break}>{resource.type}</span>
-      </p>
-      <Button
-        buttonType={"textDestructive"}
-        label={"Clear Resource"}
-        onClick={clearResource}
-      />
+      <h2 className={styles.selectionTitle}>
+        Selected Resource: <span>{resource.name}</span>
+      </h2>
+      {showDetails && (
+        <>
+          <p className={styles.selectionDetails}>
+            <span className={styles.label}>Version</span>
+            <span className={styles.break}>{resource.version}</span>
+          </p>
+          <p className={styles.selectionDetails}>
+            <span className={styles.label}>Type</span>
+            <span className={styles.break}>{resource.type}</span>
+          </p>
+        </>
+      )}
+      <div>
+        <Button
+          buttonType={"text"}
+          label={
+            showDetails ? "Hide Resource Details" : "Show Resource Details"
+          }
+          onClick={toggleDetails}
+        />
+        <Button
+          buttonType={"textDestructive"}
+          label={"Clear Resource"}
+          onClick={clearResource}
+        />
+      </div>
     </div>
   );
 };

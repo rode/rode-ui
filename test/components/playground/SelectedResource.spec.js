@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import SelectedResource from "components/playground/SelectedResource";
 
 describe("SelectedResource", () => {
-  let resource, clearResource, rerender;
+  let resource, clearResource;
 
   beforeEach(() => {
     resource = {
@@ -31,17 +31,13 @@ describe("SelectedResource", () => {
 
     clearResource = jest.fn();
 
-    const utils = render(
+    render(
       <SelectedResource resource={resource} clearResource={clearResource} />
     );
-
-    rerender = utils.rerender;
   });
 
-  it("should render the resource details", () => {
+  it("should render the resource name", () => {
     expect(screen.getByText(resource.name)).toBeInTheDocument();
-    expect(screen.getByText(resource.version)).toBeInTheDocument();
-    expect(screen.getByText(resource.type)).toBeInTheDocument();
   });
 
   it("should render the button to clear the resource", () => {
@@ -52,5 +48,17 @@ describe("SelectedResource", () => {
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
     expect(clearResource).toHaveBeenCalledTimes(1);
+  });
+
+  it("should render a button to toggle the resource details", () => {
+    const renderedButton = screen.getByRole("button", {
+      name: "Show Resource Details",
+    });
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(screen.getByText(resource.version)).toBeInTheDocument();
+    expect(screen.getByText(resource.type)).toBeInTheDocument();
   });
 });
