@@ -23,6 +23,13 @@
   width: fit-content;
 }
 
+.codeContainer {
+  width: 100%;
+  overflow: auto;
+  padding: 1rem;
+  font-family: monospace;
+}
+
 .darkTheme {
   color: $DT_LINK;
 }

@@ -15,6 +15,7 @@
  */
 import React from "react";
 import PolicyForm from "components/policies/PolicyForm";
+import { EXAMPLE_POLICY } from "utils/constants";
 
 const NewPolicy = () => {
   return (
@@ -24,6 +25,7 @@ const NewPolicy = () => {
       endpoint={"/api/policies"}
       verb={"create"}
       submitButtonText={"Save Policy"}
+      policy={{ regoContent: EXAMPLE_POLICY }}
     />
   );
 };

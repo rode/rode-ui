@@ -96,6 +96,21 @@ $PADDING: 0.5rem;
     border-bottom: solid 1px $HOT_RED;
   }
 }
+.codeEditor {
+  @extend .textArea;
+  resize: vertical;
+  font-family: monospace;
+}
+
+.codeEditorError {
+  @extend .codeEditor;
+  border-bottom: solid 1px $HOT_RED;
+
+  &:focus {
+    outline: none;
+    border-bottom: solid 1px $HOT_RED;
+  }
+}
 
 .errorMessage {
   display: block;

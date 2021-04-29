@@ -39,6 +39,11 @@ When(/^I click the "([^"]*)" button$/, (buttonName) => {
   cy.get(selectors[button]).click();
 });
 
+When(/^I clear the "([^"]*)" input$/, (inputName) => {
+  const input = `${inputName}Input`;
+  cy.get(selectors[input]).clear();
+});
+
 When(/^I type "([^"]*)" into "([^"]*)" input$/, (text, inputName) => {
   const input = `${inputName}Input`;
   cy.get(selectors[input]).type(text);

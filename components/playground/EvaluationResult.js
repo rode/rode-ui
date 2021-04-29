@@ -22,6 +22,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
+import Code from "components/Code";
 
 const EvaluationResult = ({ results }) => {
   const [showCode, setShowCode] = useState(false);
@@ -78,9 +79,12 @@ const EvaluationResult = ({ results }) => {
           buttonType={"text"}
           className={styles.copyButton}
         />
-        <pre data-testid="codeBlock" className={styles.explanationJson}>
-          <code>{formattedExplanation}</code>
-        </pre>
+        <Code
+          code={formattedExplanation}
+          language={"json"}
+          className={styles.explanationJson}
+          data-testid="codeBlock"
+        />
       </Modal>
     </>
   );

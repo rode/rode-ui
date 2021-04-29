@@ -198,7 +198,10 @@ describe("PolicyPlayground", () => {
       expect(screen.getByText(selectedPolicy.name)).toBeInTheDocument();
       expect(screen.getByText(selectedPolicy.description)).toBeInTheDocument();
       expect(
-        screen.getByDisplayValue(selectedPolicy.regoContent)
+        screen.getByText(selectedPolicy.regoContent, {
+          selector: "code",
+          exact: false,
+        })
       ).toBeInTheDocument();
 
       const renderedClearPolicyButton = screen.getByRole("button", {

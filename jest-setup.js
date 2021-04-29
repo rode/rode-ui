@@ -17,6 +17,7 @@
 import "@testing-library/jest-dom";
 import "jest-chain";
 import Chance from "chance";
+import Prism from "prism/prism";
 
 // eslint-disable-next-line no-unused-vars
 const chance = new Chance();
@@ -25,6 +26,9 @@ const chance = new Chance();
 console.error = jest.fn();
 
 window.matchMedia = () => ({ matches: false });
+
+jest.mock("prism/prism");
+Prism.highlightAll = jest.fn();
 
 document.getElementById = jest.fn().mockReturnValue({
   scrollIntoView: jest.fn(),

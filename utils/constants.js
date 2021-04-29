@@ -17,3 +17,35 @@
 export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
 export const DEFAULT_SEARCH_PAGE_SIZE = 10;
 export const PLAYGROUND_SEARCH_PAGE_SIZE = 1;
+export const EXAMPLE_POLICY = `
+# This is an example policy. Use this as a template to incorporate your own policy logic. Any required fields are noted below.
+
+# package is required
+package fail_high_vulnerabilities
+
+# pass is required
+pass = true {
+    count(violation_count) == 0
+}
+
+violation_count[v] {
+    violations[v].pass == false
+}
+
+# violations set is required
+violations[result] {
+    maxViolations := 0
+    
+    # result is required and must contain the properties "id", "pass", "name", and "message"
+    result := {
+        "id": "fail_high_vulnerabilities",
+        "name": "High Severity Vulnerability Count",
+        "pass": count(high_vulnerabilities) <= maxViolations,
+        "message": sprintf("Scan found %v high severity vulnerabilities (max: %v)", [count(high_vulnerabilities),maxViolations])
+    }
+}
+
+high_vulnerabilities[o] {
+    input.occurrences[i].vulnerability.effectiveSeverity == "HIGH"
+    o := input.occurrences[i]
+}`;
