@@ -100,13 +100,12 @@ const PolicyPlayground = () => {
           Choose a resource, pick a policy, and evaluate.
         </p>
       </PageHeader>
-      <div className={styles.playgroundHeader}>
-        <Button
-          buttonType={"text"}
-          label={"Reset Playground"}
-          onClick={resetPlayground}
-        />
-      </div>
+      <Button
+        buttonType={"text"}
+        label={"Reset Playground"}
+        onClick={resetPlayground}
+        className={styles.resetButton}
+      />
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
           {state.evaluationResource ? (

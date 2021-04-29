@@ -31,15 +31,8 @@ $CARD_WIDTH: 97%;
     min-height: 90%;
   }
 }
-
-.playgroundHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-
-  @include tabletAndLarger {
-    justify-content: flex-end;
-  }
+.resetButton {
+  margin: 0.5rem 0 0.5rem auto;
 }
 
 .contentContainer {
@@ -53,21 +46,23 @@ $CARD_WIDTH: 97%;
   }
 }
 
-.leftContainer {
+.leftContainer,
+.rightContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0 0.5rem;
+  margin: 0.5rem;
   height: 100%;
 
   @include tabletAndLarger {
     width: 48%;
+    margin: 0 0.5rem;
   }
 }
 
 .searchResultsContainer {
   flex: 1;
-  max-height: 30vh;
+  max-height: 45vh;
   overflow: auto;
 }
 
@@ -102,27 +97,15 @@ $CARD_WIDTH: 97%;
   }
 }
 
-.actionButton {
+.actionButton,
+.selectedButton {
   margin-top: 0.25rem;
   align-self: flex-end;
 }
 
-.selectedButton {
-  @extend .actionButton;
-}
-
-.rightContainer {
-  @extend .leftContainer;
-}
-
 .selectionContainer {
   padding: 1rem 0.75rem;
-  margin-top: 1rem;
   width: $CARD_WIDTH;
-
-  > button {
-    margin: 1rem auto 0;
-  }
 }
 
 .searchContainer {
@@ -137,9 +120,23 @@ $CARD_WIDTH: 97%;
   margin-left: auto;
 }
 
+.selectionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .selectionTitle {
   text-align: center;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.selectionName {
+  display: block;
+  font-weight: 600;
+  text-transform: initial;
   font-size: 1.25rem;
 }
 
@@ -182,7 +179,6 @@ $CARD_WIDTH: 97%;
 
   @include tabletAndLarger {
     width: 65%;
-    align-self: flex-end;
   }
 }
 
@@ -205,7 +201,8 @@ $CARD_WIDTH: 97%;
   }
 }
 
-.evaluationResults {
+.evaluationResults,
+.failedEvaluationResults {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -214,11 +211,6 @@ $CARD_WIDTH: 97%;
   margin: 0 auto 0.5rem;
   font-weight: 600;
 }
-
-.failedEvaluationResults {
-  @extend .evaluationResults;
-}
-
 .violations {
   display: grid;
   grid-template-columns: 4rem 1fr;
@@ -276,10 +268,6 @@ $CARD_WIDTH: 97%;
     }
   }
 
-  .selectionTitle {
-    color: $LAGOON;
-  }
-
   .selectionContainer {
     box-shadow: $DT_BOX_SHADOW;
     background-color: $DT_BACKGROUND_MEDIUM;
@@ -327,10 +315,6 @@ $CARD_WIDTH: 97%;
     p {
       color: $GREEN;
     }
-  }
-
-  .selectionTitle {
-    color: $DEEP_SEA;
   }
 
   .selectionContainer {

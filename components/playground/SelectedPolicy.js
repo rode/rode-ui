@@ -29,9 +29,10 @@ const SelectedPolicy = (props) => {
   return (
     <div className={styles.selectionContainer}>
       <h2 className={styles.selectionTitle}>
-        Selected Policy: <span>{policy.name}</span>
+        Selected Policy
+        <span className={styles.selectionName}>{policy.name}</span>
       </h2>
-      <div>
+      <div className={styles.selectionButtonContainer}>
         <Button
           buttonType={"text"}
           label={showDetails ? "Hide Policy Details" : "Show Policy Details"}
@@ -45,9 +46,14 @@ const SelectedPolicy = (props) => {
       </div>
       {showDetails && (
         <>
+          {policy.description && (
+            <p className={styles.selectionDetails}>
+              <span className={styles.label}>Description</span>
+              <span>{policy.description}</span>
+            </p>
+          )}
           <p className={styles.selectionDetails}>
-            <span className={styles.label}>Description</span>
-            <span>{policy.description}</span>
+            <span className={styles.label}>Rego Policy Code</span>
           </p>
           <Code code={policy.regoContent} language={"rego"} />
         </>
@@ -55,7 +61,6 @@ const SelectedPolicy = (props) => {
     </div>
   );
 };
-
 SelectedPolicy.propTypes = {
   policy: PropTypes.object.isRequired,
   clearPolicy: PropTypes.func.isRequired,

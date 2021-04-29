@@ -27,21 +27,10 @@ const SelectedResource = (props) => {
   return (
     <div className={styles.selectionContainer}>
       <h2 className={styles.selectionTitle}>
-        Selected Resource: <span>{resource.name}</span>
+        Selected Resource
+        <span className={styles.selectionName}>{resource.name}</span>
       </h2>
-      {showDetails && (
-        <>
-          <p className={styles.selectionDetails}>
-            <span className={styles.label}>Version</span>
-            <span className={styles.break}>{resource.version}</span>
-          </p>
-          <p className={styles.selectionDetails}>
-            <span className={styles.label}>Type</span>
-            <span className={styles.break}>{resource.type}</span>
-          </p>
-        </>
-      )}
-      <div>
+      <div className={styles.selectionButtonContainer}>
         <Button
           buttonType={"text"}
           label={
@@ -55,6 +44,18 @@ const SelectedResource = (props) => {
           onClick={clearResource}
         />
       </div>
+      {showDetails && (
+        <>
+          <p className={styles.selectionDetails}>
+            <span className={styles.label}>Version</span>
+            <span className={styles.break}>{resource.version}</span>
+          </p>
+          <p className={styles.selectionDetails}>
+            <span className={styles.label}>Type</span>
+            <span className={styles.break}>{resource.type}</span>
+          </p>
+        </>
+      )}
     </div>
   );
 };

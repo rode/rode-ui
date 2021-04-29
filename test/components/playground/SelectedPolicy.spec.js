@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 
 describe("SelectedPolicy", () => {
-  let policy, clearPolicy;
+  let policy, clearPolicy, rerender;
 
   beforeEach(() => {
     policy = {
@@ -31,7 +31,10 @@ describe("SelectedPolicy", () => {
 
     clearPolicy = jest.fn();
 
-    render(<SelectedPolicy policy={policy} clearPolicy={clearPolicy} />);
+    const utils = render(
+      <SelectedPolicy policy={policy} clearPolicy={clearPolicy} />
+    );
+    rerender = utils.rerender;
   });
 
   it("should render the policy name", () => {
@@ -58,5 +61,22 @@ describe("SelectedPolicy", () => {
     expect(
       screen.getByText(policy.regoContent, { exact: false })
     ).toBeInTheDocument();
+  });
+
+  it("should not render a policy description if it doesn't exist", () => {
+    policy = {
+      name: chance.string(),
+      regoContent: chance.string(),
+    };
+
+    rerender(<SelectedPolicy policy={policy} clearPolicy={clearPolicy} />);
+    const renderedButton = screen.getByRole("button", {
+      name: "Show Policy Details",
+    });
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(screen.queryByText("Description")).not.toBeInTheDocument();
   });
 });
