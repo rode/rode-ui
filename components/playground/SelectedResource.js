@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
+import ResourceVersion from "components/resources/ResourceVersion";
 
 const SelectedResource = (props) => {
   const { resource, clearResource } = props;
@@ -45,16 +46,20 @@ const SelectedResource = (props) => {
         />
       </div>
       {showDetails && (
-        <>
+        <div className={styles.selectionDetailsContainer}>
           <p className={styles.selectionDetails}>
             <span className={styles.label}>Version</span>
-            <span className={styles.break}>{resource.version}</span>
+            <ResourceVersion
+              version={resource.version}
+              copy={true}
+              buttonClassName={styles.copyVersionButton}
+            />
           </p>
           <p className={styles.selectionDetails}>
             <span className={styles.label}>Type</span>
             <span className={styles.break}>{resource.type}</span>
           </p>
-        </>
+        </div>
       )}
     </div>
   );

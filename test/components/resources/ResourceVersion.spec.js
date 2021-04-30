@@ -49,4 +49,19 @@ describe("ResourceVersion", () => {
     userEvent.click(renderedButton);
     expect(copy).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(version);
   });
+
+  it("should allow the user to specify a button classname", () => {
+    version = chance.string();
+    const buttonClass = chance.string();
+    render(
+      <ResourceVersion
+        version={version}
+        buttonClassName={buttonClass}
+        copy={true}
+      />
+    );
+
+    const renderedIcon = screen.getByTitle(/clipboard copy/i);
+    expect(renderedIcon.closest("button")).toHaveClass(buttonClass);
+  });
 });

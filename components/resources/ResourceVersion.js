@@ -6,7 +6,7 @@ import { copy as copyText } from "utils/shared-utils";
 import styles from "styles/modules/Resource.module.scss";
 
 const ResourceVersion = (props) => {
-  const { version, copy } = props;
+  const { version, copy, buttonClassName = "" } = props;
 
   const shortenedVersion =
     version.length > 12 ? version.substring(0, 12) : version;
@@ -17,7 +17,7 @@ const ResourceVersion = (props) => {
         {shortenedVersion}
         {copy && (
           <button
-            className={styles.copyButton}
+            className={`${styles.copyButton} ${buttonClassName}`}
             onClick={() => copyText(version)}
           >
             <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
@@ -30,6 +30,7 @@ const ResourceVersion = (props) => {
 ResourceVersion.propTypes = {
   version: PropTypes.string.isRequired,
   copy: PropTypes.bool,
+  buttonClassName: PropTypes.string,
 };
 
 export default ResourceVersion;
