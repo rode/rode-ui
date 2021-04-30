@@ -17,7 +17,7 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-$LOGO_WIDTH: 4rem;
+$LOGO_WIDTH: 4.5rem;
 $MOBILE_NAV_WIDTH: 100vw;
 $TABLET_NAV_WIDTH: 50vw;
 $DESKTOP_NAV_WIDTH: 30vw;
@@ -35,7 +35,7 @@ $DESKTOP_NAV_WIDTH: 30vw;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 1.25rem;
 }
 
 .fixedLogoContainer {
@@ -149,7 +149,7 @@ $DESKTOP_NAV_WIDTH: 30vw;
   top: 0;
   width: fit-content;
   max-width: calc(100vw - calc(#{$LOGO_WIDTH} * 2));
-  margin-left: 10rem;
+  margin-left: calc(#{$LOGO_WIDTH} * 2);
   height: 6rem;
   display: flex;
   flex-direction: column;
