@@ -75,7 +75,7 @@ describe("OccurrencePreview", () => {
 
   it("should render the occurrence details", () => {
     expect(screen.getByText(mainText)).toBeInTheDocument();
-    expect(screen.getByText(`Completed at ${timestamp}`)).toBeInTheDocument();
+    expect(screen.getByText(timestamp)).toBeInTheDocument();
     expect(screen.getByText(subText)).toBeInTheDocument();
   });
 

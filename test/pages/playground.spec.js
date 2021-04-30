@@ -180,8 +180,6 @@ describe("PolicyPlayground", () => {
 
     it("should render the selected resource details", () => {
       expect(screen.getByText(selectedResource.name)).toBeInTheDocument();
-      expect(screen.getByText(selectedResource.version)).toBeInTheDocument();
-      expect(screen.getByText(selectedResource.type)).toBeInTheDocument();
 
       const renderedClearResourceButton = screen.getByRole("button", {
         name: "Clear Resource",
@@ -196,13 +194,6 @@ describe("PolicyPlayground", () => {
 
     it("should render the selected policy details", () => {
       expect(screen.getByText(selectedPolicy.name)).toBeInTheDocument();
-      expect(screen.getByText(selectedPolicy.description)).toBeInTheDocument();
-      expect(
-        screen.getByText(selectedPolicy.regoContent, {
-          selector: "code",
-          exact: false,
-        })
-      ).toBeInTheDocument();
 
       const renderedClearPolicyButton = screen.getByRole("button", {
         name: "Clear Policy",

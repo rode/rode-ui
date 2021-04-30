@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import dayjs from "dayjs";
 import styles from "styles/modules/Occurrences.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
-import { DATE_TIME_FORMAT } from "utils/constants";
 
 const OccurrencePreview = ({
   mainText,
@@ -54,9 +52,7 @@ const OccurrencePreview = ({
     >
       <div className={styles.previewDetails}>
         <p className={styles.previewMainText}>{mainText}</p>
-        <p className={styles.previewTimestamp}>{`Completed at ${dayjs(
-          timestamp
-        ).format(DATE_TIME_FORMAT)}`}</p>
+        <p className={styles.previewTimestamp}>{timestamp}</p>
         <p className={styles.previewSubText}>{subText}</p>
       </div>
       <Icon

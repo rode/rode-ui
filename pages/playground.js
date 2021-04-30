@@ -27,7 +27,8 @@ import { policyActions } from "reducers/policies";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
-import Code from "components/Code";
+import SelectedPolicy from "components/playground/SelectedPolicy";
+import SelectedResource from "components/playground/SelectedResource";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -99,96 +100,61 @@ const PolicyPlayground = () => {
           Choose a resource, pick a policy, and evaluate.
         </p>
       </PageHeader>
-      <div className={styles.playgroundHeader}>
-        <Button
-          buttonType={"text"}
-          label={"Reset Playground"}
-          onClick={resetPlayground}
-        />
-      </div>
+      <Button
+        buttonType={"text"}
+        label={"Reset Playground"}
+        onClick={resetPlayground}
+        className={styles.resetButton}
+      />
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
-          <ResourceSearchAndResults
-            resource={state.evaluationResource}
-            setResource={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_RESOURCE,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          {state.evaluationResource && (
-            <div className={styles.selectionContainer}>
-              <h2 className={styles.selectionTitle}>Selected Resource</h2>
-              <p className={styles.selectionDetails}>
-                <span className={styles.label}>Name</span>
-                <span>{state.evaluationResource.name}</span>
-              </p>
-              <p className={styles.selectionDetails}>
-                <span className={styles.label}>Version</span>
-                <span className={styles.break}>
-                  {state.evaluationResource.version}
-                </span>
-              </p>
-              <p className={styles.selectionDetails}>
-                <span className={styles.label}>Type</span>
-                <span className={styles.break}>
-                  {state.evaluationResource.type}
-                </span>
-              </p>
-              <Button
-                buttonType={"textDestructive"}
-                label={"Clear Resource"}
-                onClick={() => {
-                  policyDispatch({
-                    type: policyActions.SET_EVALUATION_RESOURCE,
-                    data: null,
-                  });
-                  setEvaluationResults(null);
-                }}
-              />
-            </div>
+          {state.evaluationResource ? (
+            <SelectedResource
+              resource={state.evaluationResource}
+              clearResource={() => {
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_RESOURCE,
+                  data: null,
+                });
+                setEvaluationResults(null);
+              }}
+            />
+          ) : (
+            <ResourceSearchAndResults
+              resource={state.evaluationResource}
+              setResource={(data) =>
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_RESOURCE,
+                  data,
+                })
+              }
+              clearEvaluation={() => setEvaluationResults(null)}
+            />
           )}
         </div>
         <div className={styles.rightContainer}>
-          <PolicySearchAndResults
-            policy={state.evaluationPolicy}
-            setPolicy={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_POLICY,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          {state.evaluationPolicy && (
-            <div className={styles.selectionContainer}>
-              <h2 className={styles.selectionTitle}>Selected Policy</h2>
-              <p className={styles.selectionDetails}>
-                <span className={styles.label}>Name</span>
-                <span>{state.evaluationPolicy.name}</span>
-              </p>
-              <p className={styles.selectionDetails}>
-                <span className={styles.label}>Description</span>
-                <span>{state.evaluationPolicy.description}</span>
-              </p>
-              <Code
-                code={state.evaluationPolicy.regoContent}
-                language={"rego"}
-              />
-              <Button
-                buttonType={"textDestructive"}
-                label={"Clear Policy"}
-                onClick={() => {
-                  policyDispatch({
-                    type: policyActions.SET_EVALUATION_POLICY,
-                    data: null,
-                  });
-                  setEvaluationResults(null);
-                }}
-              />
-            </div>
+          {state.evaluationPolicy ? (
+            <SelectedPolicy
+              policy={state.evaluationPolicy}
+              clearPolicy={() => {
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_POLICY,
+                  data: null,
+                });
+                setEvaluationResults(null);
+              }}
+            />
+          ) : (
+            <PolicySearchAndResults
+              policy={state.evaluationPolicy}
+              setPolicy={(data) =>
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_POLICY,
+                  data,
+                })
+              }
+              clearEvaluation={() => setEvaluationResults(null)}
+            />
           )}
         </div>
       </div>

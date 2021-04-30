@@ -159,7 +159,7 @@ describe("occurrence-utils", () => {
         expect(other).toHaveLength(2);
       });
 
-      it("should not return vulnerabilities if there is no associated scan end", () => {
+      it("should return starting scans with no matching end scan as In Progress", () => {
         const startScanOccurrence = createMockOccurrence("DISCOVERY");
         startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
         const { secure, other } = mapOccurrencesToSections([
@@ -167,8 +167,10 @@ describe("occurrence-utils", () => {
           createMockOccurrence("VULNERABILITY"),
         ]);
 
-        expect(secure).toHaveLength(0);
-        expect(other).toHaveLength(2);
+        expect(secure).toHaveLength(1);
+        expect(secure[0].completed).toBeNull();
+        expect(secure[0].vulnerabilities).toHaveLength(0);
+        expect(other).toHaveLength(1);
       });
     });
 

@@ -41,21 +41,23 @@ describe("DeploymentOccurrenceSection", () => {
 
     it("should render a preview for each deployment occurrence", () => {
       occurrences.forEach((occurrence, index) => {
-        const renderedDeployedToText = screen.queryAllByText(/deployment to/i);
+        const renderedDeployedToText = screen.queryAllByText(
+          /^deployment to \w+/i
+        );
         expect(renderedDeployedToText[index]).toBeInTheDocument();
         expect(renderedDeployedToText[index]).toHaveTextContent(
-          new RegExp("Deployment to " + occurrence.platform, "i")
+          /^deployment to \w+/i
         );
 
+        const renderedDeployedAtText = screen.queryAllByText(/^deployed at/i);
+        expect(renderedDeployedAtText).toHaveLength(occurrences.length);
+
         const renderedDeployedResourcesText = screen.queryAllByText(
-          /deployed/i
+          /deployed (\d)/i
         );
         expect(renderedDeployedResourcesText[index]).toBeInTheDocument();
         expect(renderedDeployedResourcesText[index]).toHaveTextContent(
-          new RegExp(
-            "Deployed " + occurrence.resourceUris.length + " Resource",
-            "i"
-          )
+          /^deployed (\d) resources?$/i
         );
       });
     });

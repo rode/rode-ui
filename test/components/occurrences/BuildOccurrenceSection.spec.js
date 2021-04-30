@@ -50,6 +50,9 @@ describe("BuildOccurrenceSection", () => {
           )
         );
 
+        const renderedTimestamp = screen.queryAllByText(/^completed at/i);
+        expect(renderedTimestamp).toHaveLength(occurrences.length);
+
         const renderedSourceLinks = screen.queryAllByText(/view source/i);
         expect(renderedSourceLinks[index]).toBeInTheDocument();
         expect(renderedSourceLinks[index]).toHaveAttribute(

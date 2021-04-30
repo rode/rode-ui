@@ -21,6 +21,8 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { getVulnerabilityBreakdown } from "utils/occurrence-utils";
+import dayjs from "dayjs";
+import { DATE_TIME_FORMAT } from "utils/constants";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -38,18 +40,26 @@ const SecureOccurrenceSection = ({ occurrences }) => {
           key={occurrence.name}
           currentOccurrence={occurrence}
           mainText={"Vulnerability Scan"}
-          timestamp={occurrence.completed}
+          timestamp={
+            occurrence.completed
+              ? `Completed at ${dayjs(occurrence.completed).format(
+                  DATE_TIME_FORMAT
+                )}`
+              : "In Progress"
+          }
           subText={
-            <>
-              <span>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</span>
-              {!!occurrence.vulnerabilities.length && (
-                <span
-                  className={styles.previewBreakdown}
-                >{`${getVulnerabilityBreakdown(
-                  occurrence.vulnerabilities
-                )}`}</span>
-              )}
-            </>
+            occurrence.completed ? (
+              <>
+                <span>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</span>
+                {!!occurrence.vulnerabilities.length && (
+                  <span
+                    className={styles.previewBreakdown}
+                  >{`${getVulnerabilityBreakdown(
+                    occurrence.vulnerabilities
+                  )}`}</span>
+                )}
+              </>
+            ) : null
           }
         />
       ))}
