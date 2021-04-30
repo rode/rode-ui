@@ -27,6 +27,7 @@ import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import ResourceVersion from "components/resources/ResourceVersion";
 
 // TODO: add view all resources button
 const ResourceSearchAndResults = ({
@@ -84,7 +85,11 @@ const ResourceSearchAndResults = ({
                   return (
                     <PlaygroundSearchResult
                       mainText={resourceName}
-                      subText={`Version: ${resourceVersion}`}
+                      subText={
+                        <>
+                          Version: <ResourceVersion version={resourceVersion} />
+                        </>
+                      }
                       additionalText={`Type: ${resourceType}`}
                       buttonText={"Select Resource"}
                       onClick={() => {

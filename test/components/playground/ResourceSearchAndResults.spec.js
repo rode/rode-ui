@@ -115,15 +115,16 @@ describe("ResourceSearchAndResults", () => {
     searchForResource();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    fetchedResources.forEach((resource) => {
+    fetchedResources.forEach((resource, index) => {
       const {
         resourceName,
         resourceVersion,
         resourceType,
       } = getResourceDetails(resource.uri);
       expect(screen.getByText(resourceName)).toBeInTheDocument();
+      expect(screen.queryAllByText("Version:")[index]).toBeInTheDocument();
       expect(
-        screen.getByText(`Version: ${resourceVersion}`)
+        screen.getByText(resourceVersion.substring(0, 12))
       ).toBeInTheDocument();
       expect(
         screen.getAllByText(`Type: ${resourceType}`)[0]

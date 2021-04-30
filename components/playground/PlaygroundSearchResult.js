@@ -56,7 +56,7 @@ const PlaygroundSearchResult = ({
 
 PlaygroundSearchResult.propTypes = {
   mainText: PropTypes.string.isRequired,
-  subText: PropTypes.string.isRequired,
+  subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   additionalText: PropTypes.string,
   buttonText: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
