@@ -87,8 +87,16 @@ const matchAndMapVulnerabilities = (occurrences) => {
       );
 
       if (!matchingScanEndOccurrence) {
-        unmatchedOccurrences.push(startScan);
-        return null;
+        // if no end scan is found, return as "In Progress"
+        return {
+          name: startScan.name,
+          started: startScan.createTime,
+          completed: null,
+          vulnerabilities: [],
+          originals: {
+            occurrences: [startScan],
+          },
+        };
       }
 
       // get vulnerabilities with the same createTime as the end scan occurrence
@@ -114,6 +122,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
     })
     .filter((val) => val);
 
+  // get unmatched end scans occurrences
   completedScans.forEach((endScan) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
       occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)

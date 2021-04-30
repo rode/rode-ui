@@ -21,6 +21,8 @@ import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import ExternalLink from "components/ExternalLink";
+import dayjs from "dayjs";
+import { DATE_TIME_FORMAT } from "utils/constants";
 
 const BuildOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -41,7 +43,9 @@ const BuildOccurrenceSection = ({ occurrences }) => {
             mainText={`Produced ${occurrence.artifacts.length} Artifact${
               occurrence.artifacts.length > 1 ? "s" : ""
             } `}
-            timestamp={occurrence.completed}
+            timestamp={`Completed at ${dayjs(occurrence.completed).format(
+              DATE_TIME_FORMAT
+            )}`}
             subText={
               <>
                 <ExternalLink
