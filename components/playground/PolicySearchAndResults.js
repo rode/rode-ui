@@ -42,16 +42,6 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
     clearEvaluation();
   }, [policySearch]);
 
-  useEffect(() => {
-    if (data) {
-      const button = document.getElementById("viewMorePoliciesButton");
-
-      if (button) {
-        button.scrollIntoView({ block: "end", behavior: "smooth" });
-      }
-    }
-  }, [data]);
-
   return (
     <div className={styles.searchContainer}>
       <PolicySearchBar
@@ -62,7 +52,7 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
         onChange={() => setPolicySearch(false)}
         helpText={
           <Button
-            className={styles.viewAllPoliciesButton}
+            className={styles.viewAllButton}
             buttonType={"text"}
             label={"View all policies"}
             onClick={() =>

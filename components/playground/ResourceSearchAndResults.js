@@ -28,6 +28,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
+// TODO: add view all resources button
 const ResourceSearchAndResults = ({
   resource,
   setResource,
@@ -46,16 +47,6 @@ const ResourceSearchAndResults = ({
     clearEvaluation();
   }, [resourceSearch]);
 
-  useEffect(() => {
-    if (data) {
-      const button = document.getElementById("viewMoreResourcesButton");
-
-      if (button) {
-        button.scrollIntoView({ block: "end", behavior: "smooth" });
-      }
-    }
-  }, [data]);
-
   return (
     <div className={styles.searchContainer}>
       <ResourceSearchBar
@@ -64,6 +55,19 @@ const ResourceSearchAndResults = ({
           setResourceSearch(true);
         }}
         onChange={() => setResourceSearch(false)}
+        helpText={
+          <Button
+            className={styles.viewAllButton}
+            buttonType={"text"}
+            label={"View all resources"}
+            onClick={() =>
+              dispatch({
+                type: resourceActions.SET_SEARCH_TERM,
+                data: "all",
+              })
+            }
+          />
+        }
       />
       {resourceSearch && (
         <div className={styles.searchResultsContainer}>
