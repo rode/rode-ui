@@ -92,7 +92,7 @@ Then(/^I see "([^"]*)" resource search result$/, (resourceName) => {
   const resource = resources[resourceName].data[0];
 
   cy.contains(`Resource Name: ${resource.resourceName}`).should("be.visible");
-  cy.contains(`Version: ${resource.resourceVersion}`).should("be.visible");
+  cy.contains(`Version: ${resource.resourceVersion.substring(0, 12)}`).should("be.visible");
   cy.get(selectors.ViewResourceButton).should("be.visible");
 });
 
@@ -101,6 +101,6 @@ Then(/^I see "([^"]*)" resource details$/, (resourceName) => {
 
   cy.url().should("contain", `/resources/${encodeURIComponent(resource.uri)}`);
   cy.contains(resource.resourceName).should("be.visible");
-  cy.contains(resource.resourceVersion).should("be.visible");
+  cy.contains(resource.resourceVersion.substring(0, 12)).should("be.visible");
   cy.get(selectors.EvaluateResourceInPlaygroundButton).should("be.visible");
 });
