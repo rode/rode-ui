@@ -1,0 +1,5 @@
+{
+  "categories": [],
+  "template": "## Changelog\n${{UNCATEGORIZED}}",
+  "pr_template": "- ${{TITLE}} (#${{NUMBER}})"
+}
