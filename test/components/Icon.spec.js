@@ -130,4 +130,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/menu/i)).toBeInTheDocument();
   });
+
+  it("should render the clipboard copy icon when specified", () => {
+    render(<Icon name={ICON_NAMES.CLIPBOARD_COPY} />);
+
+    expect(screen.getByTitle(/clipboard copy/i)).toBeInTheDocument();
+  });
 });

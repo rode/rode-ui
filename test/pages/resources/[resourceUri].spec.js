@@ -63,7 +63,9 @@ describe("Resource Details page", () => {
 
     expect(screen.getByText(resourceName)).toBeInTheDocument();
     expect(screen.getByText(`Type: ${resourceType}`)).toBeInTheDocument();
-    expect(screen.getByText(`Version: ${resourceVersion}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(resourceVersion.substring(0, 12))
+    ).toBeInTheDocument();
   });
 
   it("should render a button to use the resource in the policy playground", () => {
