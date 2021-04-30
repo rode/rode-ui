@@ -274,7 +274,8 @@
 .primaryDestructive {
   @extend .primary;
 
-  &.darkTheme, &.lightTheme {
+  &.darkTheme,
+  &.lightTheme {
     background-color: $HOT_RED;
     color: $WHITE;
 
@@ -293,7 +294,8 @@
 .textDestructive {
   @extend .text;
 
-  &.darkTheme, &.lightTheme {
+  &.darkTheme,
+  &.lightTheme {
     color: $HOT_RED;
     background-color: transparent;
 
