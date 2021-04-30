@@ -16,7 +16,7 @@
 
 export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
 export const DEFAULT_SEARCH_PAGE_SIZE = 10;
-export const PLAYGROUND_SEARCH_PAGE_SIZE = 1;
+export const PLAYGROUND_SEARCH_PAGE_SIZE = 5;
 export const EXAMPLE_POLICY = `
 # This is an example policy. Use this as a template to incorporate your own policy logic. Any required fields are noted below.
 
