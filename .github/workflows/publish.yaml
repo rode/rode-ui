@@ -55,7 +55,7 @@ jobs:
           body: |
             ${{steps.github_release.outputs.changelog}}
             ## Docker images
-            ghcr.io/rode/ui:latest
-            ghcr.io/rode/ui:${{ steps.gitextra.outputs.version }}
+            - `ghcr.io/rode/ui:latest`
+            - `ghcr.io/rode/ui:${{ steps.gitextra.outputs.version }}`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
