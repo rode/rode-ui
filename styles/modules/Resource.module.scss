@@ -68,6 +68,8 @@
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+  width: fit-content;
+  text-indent: 0;
 }
 
 .copyButton {
