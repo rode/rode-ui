@@ -40,7 +40,6 @@ describe("DeploymentOccurrenceSection", () => {
     });
 
     it("should render a preview for each deployment occurrence", () => {
-      console.log("occurrences", occurrences);
       occurrences.forEach((occurrence, index) => {
         const renderedDeployedToText = screen.queryAllByText(
           /^deployment to \w+/i
