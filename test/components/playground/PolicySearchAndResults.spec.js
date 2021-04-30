@@ -105,7 +105,7 @@ describe("PolicySearchAndResults", () => {
       {
         filter: state.searchTerm,
       },
-      1
+      5
     );
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
