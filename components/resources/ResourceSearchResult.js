@@ -20,6 +20,7 @@ import Button from "components/Button";
 import { useRouter } from "next/router";
 import { getResourceDetails } from "utils/resource-utils";
 import SearchResult from "components/shared/search/SearchResult";
+import ResourceVersion from "./ResourceVersion";
 
 const ResourceSearchResult = ({ searchResult }) => {
   const { resourceName, resourceVersion, resourceType } = getResourceDetails(
@@ -34,7 +35,11 @@ const ResourceSearchResult = ({ searchResult }) => {
   return (
     <SearchResult
       mainText={`Resource Name: ${resourceName}`}
-      subText={`Version: ${resourceVersion}`}
+      subText={
+        <>
+          Version: <ResourceVersion version={resourceVersion} />
+        </>
+      }
       additionalText={`Type: ${resourceType}`}
       actionButton={<Button onClick={onClick} label={"View Resource"} />}
     />

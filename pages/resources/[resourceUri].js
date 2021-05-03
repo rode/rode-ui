@@ -27,6 +27,7 @@ import Button from "components/Button";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 import PageHeader from "components/layout/PageHeader";
+import ResourceVersion from "components/resources/ResourceVersion";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -76,12 +77,12 @@ const Resource = () => {
       </PageHeader>
       <div className={`${styles[theme]} ${styles.container}`}>
         <div className={styles.resourceHeader}>
+          <p className={styles.resourceName}>{resourceName}</p>
           <div>
-            <p className={styles.resourceName}>{resourceName}</p>
             <p className={styles.resourceDetails}>Type: {resourceType}</p>
-          </div>
-          <div>
-            <p className={styles.version}>Version: {resourceVersion}</p>
+            <p>
+              Version: <ResourceVersion version={resourceVersion} copy={true} />
+            </p>
           </div>
         </div>
         <div className={styles.playgroundContainer}>

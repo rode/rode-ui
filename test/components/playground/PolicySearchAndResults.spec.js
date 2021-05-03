@@ -159,13 +159,6 @@ describe("PolicySearchAndResults", () => {
     expect(renderedShowMoreButton).toBeInTheDocument();
     userEvent.click(renderedShowMoreButton);
     expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
-    expect(document.getElementById).toHaveBeenCalledWith(
-      "viewMorePoliciesButton"
-    );
-    expect(scrollMock).toHaveBeenCalledWith({
-      block: "end",
-      behavior: "smooth",
-    });
   });
 
   it("should render the no policies found message if no policies were found", () => {

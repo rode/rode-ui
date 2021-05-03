@@ -25,7 +25,7 @@ describe("SelectedResource", () => {
   beforeEach(() => {
     resource = {
       name: chance.string(),
-      version: chance.string(),
+      version: chance.string({ min: 12 }),
       type: chance.string(),
     };
 
@@ -58,7 +58,9 @@ describe("SelectedResource", () => {
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
 
-    expect(screen.getByText(resource.version)).toBeInTheDocument();
+    expect(
+      screen.getByText(resource.version.substring(0, 12))
+    ).toBeInTheDocument();
     expect(screen.getByText(resource.type)).toBeInTheDocument();
   });
 });

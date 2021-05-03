@@ -44,7 +44,10 @@ describe("ResourceSearchResult", () => {
     expect(
       screen.getByText(`Resource Name: ${resourceName}`)
     ).toBeInTheDocument();
-    expect(screen.getByText(`Version: ${version}`)).toBeInTheDocument();
+    expect(screen.getByText(`Version:`, { exact: false })).toBeInTheDocument();
+    expect(
+      screen.getByText(version.substring(0, 12), { exact: false })
+    ).toBeInTheDocument();
     expect(screen.getByText(`Type: ${type}`)).toBeInTheDocument();
   });
 

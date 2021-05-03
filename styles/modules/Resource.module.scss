@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@use "sass:color";
 @import "styles/constants";
 @import "styles/mixins";
 
@@ -51,7 +52,7 @@
 
   @include tabletAndLarger {
     font-size: 1.5rem;
-    max-width: calc(48vw - 2rem);
+    max-width: calc(70vw - 2rem);
   }
 }
 
@@ -60,16 +61,27 @@
 
   @include tabletAndLarger {
     display: unset;
-    max-width: calc(50vw - 5rem);
   }
 }
 
 .version {
-  text-align: right;
-  @include ellipsis(calc(100vw - 5rem));
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  text-indent: 0;
+}
 
-  @include tabletAndLarger {
-    max-width: calc(50vw - 5rem);
+.copyButton {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    @include transition;
   }
 }
 
@@ -103,6 +115,14 @@
       color: $DARK_GREY;
     }
   }
+
+  .copyButton {
+    color: $DARK_GREY;
+
+    &:hover {
+      color: color.scale($DARK_GREY, $lightness: 20%);
+    }
+  }
 }
 
 .lightTheme {
@@ -112,6 +132,14 @@
 
     > * {
       color: $SOFT_WHITE;
+    }
+  }
+
+  .copyButton {
+    color: $SOFT_WHITE;
+
+    &:hover {
+      color: color.scale($SOFT_WHITE, $lightness: -20%);
     }
   }
 }

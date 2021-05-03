@@ -35,7 +35,7 @@ const Code = (props) => {
 };
 
 Code.propTypes = {
-  code: PropTypes.string.isRequired,
+  code: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   language: PropTypes.oneOf(["rego", "json"]).isRequired,
   className: PropTypes.string,
 };

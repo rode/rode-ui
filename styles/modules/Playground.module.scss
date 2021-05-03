@@ -31,6 +31,7 @@ $CARD_WIDTH: 97%;
     min-height: 90%;
   }
 }
+
 .resetButton {
   margin: 0.5rem 0 0.5rem auto;
 }
@@ -114,7 +115,7 @@ $CARD_WIDTH: 97%;
   width: 100%;
 }
 
-.viewAllPoliciesButton {
+.viewAllButton {
   font-size: 0.85rem;
   min-height: fit-content;
   padding: 0.25rem;
@@ -129,6 +130,12 @@ $CARD_WIDTH: 97%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.selectionDetailsContainer {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: solid 1px transparent;
 }
 
 .selectionTitle {
@@ -216,6 +223,7 @@ $CARD_WIDTH: 97%;
   margin: 0 auto 0.5rem;
   font-weight: 600;
 }
+
 .violations {
   display: grid;
   grid-template-columns: 4rem 1fr;
@@ -273,6 +281,10 @@ $CARD_WIDTH: 97%;
     }
   }
 
+  .selectionDetailsContainer {
+    border-top-color: $MEDIUM_GREY;
+  }
+
   .selectionContainer {
     box-shadow: $DT_BOX_SHADOW;
     background-color: $DT_BACKGROUND_MEDIUM;
@@ -294,6 +306,16 @@ $CARD_WIDTH: 97%;
 
   .evaluationResultsContainer {
     background-color: $DT_BACKGROUND_DARK;
+  }
+
+  .copyVersionButton {
+    @include transition;
+    color: $WHITE;
+
+    &:hover {
+      @include transition;
+      color: $LAGOON;
+    }
   }
 }
 
@@ -322,6 +344,10 @@ $CARD_WIDTH: 97%;
     }
   }
 
+  .selectionDetailsContainer {
+    border-top-color: $SILVER;
+  }
+
   .selectionContainer {
     box-shadow: $LT_BOX_SHADOW;
     background-color: $LT_BACKGROUND_LIGHT;
@@ -339,5 +365,15 @@ $CARD_WIDTH: 97%;
 
   .evaluationResultsContainer {
     background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .copyVersionButton {
+    @include transition;
+    color: $DARK_GREY;
+
+    &:hover {
+      @include transition;
+      color: $DEEP_SEA;
+    }
   }
 }

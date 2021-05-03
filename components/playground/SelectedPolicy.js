@@ -45,7 +45,7 @@ const SelectedPolicy = (props) => {
         />
       </div>
       {showDetails && (
-        <>
+        <div className={styles.selectionDetailsContainer}>
           {policy.description && (
             <p className={styles.selectionDetails}>
               <span className={styles.label}>Description</span>
@@ -56,7 +56,7 @@ const SelectedPolicy = (props) => {
             <span className={styles.label}>Rego Policy Code</span>
           </p>
           <Code code={policy.regoContent} language={"rego"} />
-        </>
+        </div>
       )}
     </div>
   );

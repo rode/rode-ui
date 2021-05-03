@@ -83,6 +83,16 @@ describe("ResourceSearchAndResults", () => {
 
   it("should render the search bar", () => {
     expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
+
+    const renderedViewAllResourcesButton = screen.getByRole("button", {
+      name: "View all resources",
+    });
+    expect(renderedViewAllResourcesButton).toBeInTheDocument();
+    userEvent.click(renderedViewAllResourcesButton);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_SEARCH_TERM",
+      data: "all",
+    });
   });
 
   it("should render the loading indicator when searching for a resource", () => {
@@ -105,15 +115,16 @@ describe("ResourceSearchAndResults", () => {
     searchForResource();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    fetchedResources.forEach((resource) => {
+    fetchedResources.forEach((resource, index) => {
       const {
         resourceName,
         resourceVersion,
         resourceType,
       } = getResourceDetails(resource.uri);
       expect(screen.getByText(resourceName)).toBeInTheDocument();
+      expect(screen.queryAllByText("Version:")[index]).toBeInTheDocument();
       expect(
-        screen.getByText(`Version: ${resourceVersion}`)
+        screen.getByText(resourceVersion.substring(0, 12))
       ).toBeInTheDocument();
       expect(
         screen.getAllByText(`Type: ${resourceType}`)[0]
@@ -178,13 +189,6 @@ describe("ResourceSearchAndResults", () => {
     expect(renderedShowMoreButton).toBeInTheDocument();
     userEvent.click(renderedShowMoreButton);
     expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
-    expect(document.getElementById).toHaveBeenCalledWith(
-      "viewMoreResourcesButton"
-    );
-    expect(scrollMock).toHaveBeenCalledWith({
-      block: "end",
-      behavior: "smooth",
-    });
   });
 
   it("should render the no resource found message if no resources were found", () => {

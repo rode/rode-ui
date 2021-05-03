@@ -37,7 +37,7 @@ const SearchResult = (props) => {
 
 SearchResult.propTypes = {
   mainText: PropTypes.string.isRequired,
-  subText: PropTypes.string.isRequired,
+  subText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   additionalText: PropTypes.string,
   actionButton: PropTypes.node.isRequired,
 };

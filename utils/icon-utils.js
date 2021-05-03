@@ -31,13 +31,14 @@ import BadgeCheck from "components/icons/BadgeCheck";
 import Exclamation from "components/icons/Exclamation";
 import Check from "components/icons/Check";
 import Menu from "components/icons/Menu";
+import ClipboardCopy from "components/icons/ClipboardCopy";
 
-const SEARCH = "Search";
-const COG = "Cog";
-const SHIELD_CHECK = "ShieldCheck";
-const SERVER = "Server";
-const CHEVRON_RIGHT = "ChevronRight";
-const CHEVRON_DOUBLE_RIGHT = "ChevronDoubleRight";
+const SEARCH = "SEARCH";
+const COG = "COG";
+const SHIELD_CHECK = "SHIELDCHECK";
+const SERVER = "SERVER";
+const CHEVRON_RIGHT = "CHEVRONRIGHT";
+const CHEVRON_DOUBLE_RIGHT = "CHEVRONDOUBLERIGHT";
 const FIRE = "FIRE";
 const FLAG = "FLAG";
 const EXTERNAL_LINK = "EXTERNAL_LINK";
@@ -45,10 +46,11 @@ const X_CIRCLE = "X_CIRCLE";
 const BADGE_CHECK = "BADGE_CHECK";
 const EXCLAMATION = "EXCLAMATION";
 const CHECK = "CHECK";
-const LIATRIO = "Liatrio";
-const GITHUB = "Github";
-const TWITTER = "Twitter";
-const MENU = "Menu";
+const LIATRIO = "LIATRIO";
+const GITHUB = "GITHUB";
+const TWITTER = "TWITTER";
+const MENU = "MENU";
+const CLIPBOARD_COPY = "CLIPBOARDCOPY";
 
 export const ICON_COMPONENTS = {
   [SEARCH]: Search,
@@ -68,6 +70,7 @@ export const ICON_COMPONENTS = {
   [X_CIRCLE]: XCircle,
   [CHECK]: Check,
   [MENU]: Menu,
+  [CLIPBOARD_COPY]: ClipboardCopy,
 };
 
 export const ICON_NAMES = {
@@ -85,6 +88,7 @@ export const ICON_NAMES = {
   EXCLAMATION,
   CHECK,
   MENU,
+  CLIPBOARD_COPY,
   LIATRIO,
   GITHUB,
   TWITTER,

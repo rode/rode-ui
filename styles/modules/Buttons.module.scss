@@ -67,8 +67,7 @@
     color: $DARK_GREY;
 
     &:hover {
-      background-color: color.scale($LAGOON, $lightness: -20%);
-      color: $WHITE;
+      background-color: $DT_HOVER_GREEN;
     }
 
     &[disabled] {
@@ -82,7 +81,7 @@
     color: $WHITE;
 
     &:hover {
-      background-color: color.scale($DEEP_SEA, $lightness: -20%);
+      background-color: $LT_HOVER_GREEN;
     }
 
     &[disabled] {
@@ -101,7 +100,6 @@
     background-color: transparent;
 
     &:hover {
-      color: $WHITE;
       background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
     }
 
@@ -116,8 +114,8 @@
     background-color: transparent;
 
     &:hover {
-      color: color.scale($DEEP_SEA, $lightness: -20%);
-      background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -10%);
+      color: color.scale($DEEP_SEA, $lightness: -10%);
+      background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -15%);
     }
 
     &[disabled] {
@@ -141,10 +139,10 @@
 
     &:hover,
     &:focus {
-      background-color: $GREEN;
+      background-color: $DT_HOVER_GREEN;
 
       svg {
-        color: $WHITE;
+        color: $DARK_GREY;
       }
     }
 
@@ -174,7 +172,7 @@
 
     &:hover,
     &:focus {
-      background-color: $GREEN;
+      background-color: $LT_HOVER_GREEN;
 
       svg {
         color: $WHITE;
@@ -276,21 +274,7 @@
 .primaryDestructive {
   @extend .primary;
 
-  &.darkTheme {
-    background-color: $HOT_RED;
-    color: $WHITE;
-
-    &:hover {
-      background-color: color.scale($HOT_RED, $lightness: -40%);
-      color: $WHITE;
-    }
-
-    &[disabled] {
-      background-color: transparent;
-      color: $MEDIUM_GREY;
-    }
-  }
-
+  &.darkTheme,
   &.lightTheme {
     background-color: $HOT_RED;
     color: $WHITE;
@@ -310,21 +294,7 @@
 .textDestructive {
   @extend .text;
 
-  &.darkTheme {
-    color: $HOT_RED;
-    background-color: transparent;
-
-    &:hover {
-      background-color: color.scale($HOT_RED, $lightness: -40%);
-      color: $WHITE;
-    }
-
-    &[disabled] {
-      background-color: transparent;
-      color: $MEDIUM_GREY;
-    }
-  }
-
+  &.darkTheme,
   &.lightTheme {
     color: $HOT_RED;
     background-color: transparent;
