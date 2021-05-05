@@ -21,6 +21,7 @@ import BuildOccurrenceDetails from "./BuildOccurrenceDetails";
 import VulnerabilityOccurrenceDetails from "./VulnerabilityOccurrenceDetails";
 import DeploymentOccurrenceDetails from "./DeploymentOccurrenceDetails";
 import { useTheme } from "providers/theme";
+import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 
 const detailComponentMap = {
   BUILD: BuildOccurrenceDetails,
@@ -34,7 +35,7 @@ const OccurrenceDetails = ({ occurrence }) => {
   const DetailComponent =
     detailComponentMap[occurrence.originals.occurrences[0].kind];
 
-  React.useLayoutEffect(() => {
+  useSafeLayoutEffect(() => {
     // only scroll to the details if you are on a mobile device
     if (window.innerWidth < 768) {
       document
