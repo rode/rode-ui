@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 jest.mock("dayjs");
 
 describe("BuildOccurrenceDetails", () => {
-  let occurrence;
+  let occurrence, rerender;
 
   beforeEach(() => {
     occurrence = createMockMappedBuildOccurrence();
@@ -34,7 +34,8 @@ describe("BuildOccurrenceDetails", () => {
         .mockReturnValue(occurrence.completed),
     });
 
-    render(<BuildOccurrenceDetails occurrence={occurrence} />);
+    const utils = render(<BuildOccurrenceDetails occurrence={occurrence} />);
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -58,6 +59,20 @@ describe("BuildOccurrenceDetails", () => {
     expect(
       screen.getByRole("button", { name: "Show JSON" })
     ).toBeInTheDocument();
+  });
+
+  it("should show source not available if there are is not a source uri", () => {
+    occurrence.sourceUri = null;
+    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
+
+    expect(screen.getByText("Source not available")).toBeInTheDocument();
+  });
+
+  it("should show logs not available if there are is not logs uri", () => {
+    occurrence.logsUri = null;
+    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
+
+    expect(screen.getByText("Logs not available")).toBeInTheDocument();
   });
 
   it("should show the list of artifacts produced from the build", () => {
