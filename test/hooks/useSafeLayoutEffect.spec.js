@@ -28,9 +28,6 @@ describe("useSafeLayoutEffect", () => {
 
   beforeEach(() => {
     policy = {
-      name: chance.string(),
-      description: chance.string(),
-      regoContent: chance.string(),
       id: chance.guid(),
     };
 
