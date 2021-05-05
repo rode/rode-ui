@@ -18,6 +18,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
 import { isServerSide } from "utils/shared-utils";
+import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
 
 const ThemeContext = React.createContext({
@@ -40,10 +41,9 @@ const getInitialTheme = () => {
 };
 
 export const ThemeProvider = (props) => {
-  const useEffect = isServerSide() ? React.useEffect : React.useLayoutEffect;
   const [theme, setTheme] = React.useState(LIGHT_THEME);
 
-  useEffect(() => {
+  useSafeLayoutEffect(() => {
     const savedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
 
     if (savedTheme) {

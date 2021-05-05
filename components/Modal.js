@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Modal.module.scss";
 import { useTheme } from "providers/theme";
 import Button from "./Button";
 import Icon from "./Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 
 const Modal = (props) => {
   const { title, children, onClose, isVisible } = props;
   const { theme } = useTheme();
 
-  useLayoutEffect(() => {
+  useSafeLayoutEffect(() => {
     if (isVisible) {
       document.getElementById("modalWrapper").scrollIntoView();
     }

@@ -23,7 +23,7 @@ import { isServerSide } from "utils/shared-utils";
 jest.mock("utils/shared-utils");
 
 describe("theme provider", () => {
-  let rerender, originalLocalStorage, getItemMock, setItemMock;
+  let originalLocalStorage, getItemMock, setItemMock;
 
   beforeEach(() => {
     originalLocalStorage = window.localStorage;
@@ -41,9 +41,7 @@ describe("theme provider", () => {
     jest.spyOn(React, "useLayoutEffect");
 
     act(() => {
-      const utils = render(<ThemeComponent />);
-
-      rerender = utils.rerender;
+      render(<ThemeComponent />);
     });
   });
 
@@ -67,14 +65,5 @@ describe("theme provider", () => {
     userEvent.click(toggleButton);
     expect(screen.getByText(/light/i)).toBeInTheDocument();
     expect(setItemMock).toHaveBeenCalledWith("rode-ui-theme", "lightTheme");
-  });
-
-  it("should use the correct effect hook when on the server", () => {
-    expect(React.useLayoutEffect).toHaveBeenCalled();
-
-    isServerSide.mockReturnValue(true);
-    rerender(<ThemeComponent />);
-
-    expect(React.useEffect).toHaveBeenCalled();
   });
 });

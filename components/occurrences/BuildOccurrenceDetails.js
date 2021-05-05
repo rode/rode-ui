@@ -32,8 +32,13 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
             href={occurrence.sourceUri}
             label={"View source"}
             className={styles.rightMargin}
+            fallback={<p className={styles.subtext}>Source not available</p>}
           />
-          <ExternalLink href={occurrence.logsUri} label={"View logs"} />
+          <ExternalLink
+            href={occurrence.logsUri}
+            label={"View logs"}
+            fallback={<p className={styles.subtext}>Logs not available</p>}
+          />
           <p>Created by {occurrence.creator}</p>
         </div>
         <div className={styles.rightDetails}>

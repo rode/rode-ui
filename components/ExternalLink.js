@@ -23,10 +23,10 @@ import { useTheme } from "providers/theme";
 
 const ExternalLink = (props) => {
   const { theme } = useTheme();
-  const { href, label, className = "" } = props;
+  const { href, label, className = "", fallback = null } = props;
 
   if (!href) {
-    return null;
+    return fallback;
   }
 
   return (
@@ -46,6 +46,7 @@ ExternalLink.propTypes = {
   href: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   className: PropTypes.string,
+  fallback: PropTypes.node,
 };
 
 export default ExternalLink;

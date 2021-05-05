@@ -18,7 +18,7 @@ import React from "react";
 import { useFetch } from "./useFetch";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import { isServerSide } from "utils/shared-utils";
+import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 
 export const usePolicy = (policyId) => {
   const [policy, setPolicy] = React.useState(null);
@@ -31,9 +31,7 @@ export const usePolicy = (policyId) => {
     policyId !== currentPolicy?.id ? `/api/policies/${policyId}` : null
   );
 
-  const useEffect = isServerSide() ? React.useEffect : React.useLayoutEffect;
-
-  useEffect(() => {
+  useSafeLayoutEffect(() => {
     if (policyId === currentPolicy?.id) {
       setPolicy(currentPolicy);
     } else if (data) {

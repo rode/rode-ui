@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor } from "test/testing-utils/renderer";
+import { render, screen } from "test/testing-utils/renderer";
 import { useFetch } from "hooks/useFetch";
 import { isServerSide } from "utils/shared-utils";
 import PolicyComponent from "test/testing-utils/hook-components/usePolicyComponent";
@@ -43,9 +43,6 @@ describe("usePolicy", () => {
       loading: false,
     };
 
-    jest.spyOn(React, "useEffect");
-    jest.spyOn(React, "useLayoutEffect");
-
     useFetch.mockReturnValue(fetchResponse);
     isServerSide.mockReturnValue(true);
   });
@@ -65,9 +62,7 @@ describe("usePolicy", () => {
     render(<PolicyComponent id={policy.id} />, { policyState: policyState });
 
     expect(useFetch).not.toHaveBeenCalledWith(`/api/policies/${policy.id}`);
-    waitFor(() => {
-      expect(screen.getByText(policy.name)).toBeInTheDocument();
-    });
+    expect(screen.getByText(policy.name)).toBeInTheDocument();
   });
 
   it("should fetch the policy if it is not saved in state", () => {
@@ -77,25 +72,20 @@ describe("usePolicy", () => {
     });
 
     expect(useFetch).toHaveBeenCalledWith(`/api/policies/${policy.id}`);
-    waitFor(() => {
-      expect(dispatchMock).toHaveBeenCalledWith({
-        type: "SET_CURRENT_POLICY",
-        data: policy,
-      });
+    expect(dispatchMock).toHaveBeenCalledWith({
+      type: "SET_CURRENT_POLICY",
+      data: policy,
     });
   });
 
-  it("should use the correct effect hook when on the server", () => {
-    isServerSide.mockReturnValue(true);
-    render(<PolicyComponent id={policy.id} />);
+  it("should return nothing if the policy has not yet been fetched", () => {
+    fetchResponse.data = null;
+    render(<PolicyComponent id={policy.id} />, {
+      policyState: {},
+      policyDispatch: dispatchMock,
+    });
 
-    expect(React.useEffect).toHaveBeenCalled();
-  });
-
-  it("should use the correct effect hook when on the client", () => {
-    isServerSide.mockReturnValue(false);
-    render(<PolicyComponent id={policy.id} />);
-
-    expect(React.useLayoutEffect).toHaveBeenCalled();
+    expect(useFetch).toHaveBeenCalledWith(`/api/policies/${policy.id}`);
+    expect(dispatchMock).not.toHaveBeenCalled();
   });
 });

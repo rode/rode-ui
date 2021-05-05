@@ -193,20 +193,12 @@ describe("occurrence-utils", () => {
           buildOccurrence.build.provenance.builtArtifacts
         );
         expect(build[0].sourceUri).toEqual(
-          `${buildOccurrence.build.provenance.sourceProvenance.context.git.url}/tree/${buildOccurrence.build.provenance.sourceProvenance.context.git.revisionId}`
+          buildOccurrence.build.provenance.sourceProvenance.context.git.url
         );
         expect(build[0].logsUri).toEqual(
           buildOccurrence.build.provenance.logsUri
         );
         expect(build[0].originals.occurrences).toContain(buildOccurrence);
-      });
-
-      it("should correctly map builds without source urls", () => {
-        const buildOccurrence = createMockOccurrence("BUILD");
-        buildOccurrence.build.provenance.sourceProvenance.context.git.url = null;
-        const { build } = mapOccurrencesToSections([buildOccurrence]);
-
-        expect(build[0].sourceUri).toBeNull();
       });
     });
 

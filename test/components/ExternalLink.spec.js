@@ -27,8 +27,21 @@ describe("ExternalLink", () => {
     rerender = utils.rerender;
   });
 
-  it("should return null when no href is present", () => {
+  it("should return null when no href is present and no fallback component is specified", () => {
     expect(screen.queryByText(label)).not.toBeInTheDocument();
+  });
+
+  it("should return the fallback component when no href is present", () => {
+    const fallbackText = chance.string();
+    rerender(
+      <ExternalLink
+        href={null}
+        label={label}
+        fallback={<p>{fallbackText}</p>}
+      />
+    );
+
+    expect(screen.getByText(fallbackText)).toBeInTheDocument();
   });
 
   describe("link exists and should show", () => {

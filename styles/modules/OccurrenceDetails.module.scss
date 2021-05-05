@@ -66,6 +66,14 @@ $SIDE_SPACING: 1rem;
   }
 }
 
+.subtext {
+  margin-right: 1rem;
+
+  @include desktopAndLarger {
+    display: inline;
+  }
+}
+
 .timestamps {
   text-align: left;
 
@@ -180,7 +188,8 @@ $SIDE_SPACING: 1rem;
     background-color: $DT_BACKGROUND_DARK;
   }
 
-  .timestamps {
+  .timestamps,
+  .subtext {
     color: $DT_SUB_TEXT;
   }
 
@@ -217,7 +226,8 @@ $SIDE_SPACING: 1rem;
     background-color: $LT_BACKGROUND_DARK;
   }
 
-  .timestamps {
+  .timestamps,
+  .subtext {
     color: $LT_SUB_TEXT;
   }
 

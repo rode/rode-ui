@@ -27,8 +27,8 @@ describe("ResourceSearchResult", () => {
   let searchResult, resourceName, version, type, pushMock;
 
   beforeEach(() => {
-    resourceName = chance.word();
-    version = chance.word();
+    resourceName = chance.string();
+    version = chance.string({ min: 12 });
     searchResult = {
       uri: createMockResourceUri(resourceName, version),
     };
