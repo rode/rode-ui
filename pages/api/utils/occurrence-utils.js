@@ -157,9 +157,7 @@ const mapBuilds = (occurrences) => {
       completed: occ.build.provenance.endTime,
       creator: occ.build.provenance.creator,
       artifacts: occ.build.provenance.builtArtifacts,
-      sourceUri: occ.build.provenance.sourceProvenance.context.git.url
-        ? `${occ.build.provenance.sourceProvenance.context.git.url}/tree/${occ.build.provenance.sourceProvenance.context.git.revisionId}`
-        : null,
+      sourceUri: occ.build.provenance.sourceProvenance.context.git.url,
       logsUri: occ.build.provenance.logsUri,
       originals: { occurrences: [occ] },
     };
