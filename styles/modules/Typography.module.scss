@@ -30,6 +30,20 @@
   font-family: monospace;
 }
 
+.labelWithValueContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  font-weight: 700;
+  padding-right: 0.5rem;
+}
+
+.value {
+  font-weight: 400;
+}
+
 .darkTheme {
   color: $DT_LINK;
 }

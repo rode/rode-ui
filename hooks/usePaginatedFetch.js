@@ -17,6 +17,7 @@
 import { useSWRInfinite } from "swr";
 import { fetcher, getPaginatedUrlKey } from "utils/hook-utils";
 
+// TODO: handle errors here - data will have array with object error property in it
 export const usePaginatedFetch = (url, query, pageSize) => {
   const { data, error, size, setSize } = useSWRInfinite(
     (_, previousPageData) =>
@@ -42,7 +43,7 @@ export const usePaginatedFetch = (url, query, pageSize) => {
   return {
     data: formattedData,
     loading,
-    error,
+    error, // TODO: change this to be whatever lives in data[0].error if it exists
     isLastPage,
     goToNextPage,
   };
