@@ -49,6 +49,8 @@ $DESKTOP_NAV_WIDTH: 30vw;
   max-width: 4rem;
   min-width: 3rem;
   display: inline-block;
+  border-bottom: solid 3px transparent;
+  @include transition;
 }
 
 .expandedNavigation {
@@ -174,6 +176,14 @@ $DESKTOP_NAV_WIDTH: 30vw;
       color: $DT_MAIN_TEXT;
     }
   }
+
+  .logo {
+    &:focus,
+    &:hover {
+      @include transition;
+      border-bottom-color: $DT_LINK;
+    }
+  }
 }
 
 .lightTheme {
@@ -191,6 +201,14 @@ $DESKTOP_NAV_WIDTH: 30vw;
 
     &:visited {
       color: $LT_MAIN_TEXT;
+    }
+  }
+
+  .logo {
+    &:focus,
+    &:hover {
+      @include transition;
+      border-bottom-color: $LT_LINK;
     }
   }
 }

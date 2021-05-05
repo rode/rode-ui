@@ -32,9 +32,7 @@ $SOFT_WHITE: #f8f8f8;
 $WHITE: #ffffff;
 
 // shadows
-$FOCUS_SHADOW: 0 0 0 3px rgba(0, 193, 219, 0.35);
-$HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
-  2px 4px 6px -2px rgba(0, 0, 0, 0.05);
+$FOCUS_SHADOW: 0 0 0 3px rgba(0, 193, 219, 0.45);
 
 // breakpoints
 $SCREEN_PHONE: 640px;
@@ -43,7 +41,7 @@ $SCREEN_DESKTOP: 1024px;
 
 // DARK theme
 $DT_BOX_SHADOW: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-$DT_HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.3),
+$DT_HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.4),
   2px 4px 6px -2px rgba(0, 0, 0, 0.15);
 $DT_BACKGROUND_DARK: $DARKEST_GREY;
 $DT_BACKGROUND_MEDIUM: $DARK_GREY;
@@ -56,7 +54,7 @@ $DT_HOVER_GREEN: #23ae20;
 // LIGHT theme
 $LT_BOX_SHADOW: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 $LT_HOVER_SHADOW: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
-  2px 4px 6px -2px rgba(50, 50, 50, 0.05);
+  2px 4px 6px -2px rgba(50, 50, 50, 0.15);
 $LT_BACKGROUND_DARK: $WHITE_SMOKE;
 $LT_BACKGROUND_MEDIUM: $SOFT_WHITE;
 $LT_BACKGROUND_LIGHT: $WHITE;

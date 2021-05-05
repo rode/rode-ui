@@ -60,14 +60,18 @@ body {
 a {
   text-decoration: none;
 
-  &:hover {
+  &:hover,
+  &:focus {
     text-decoration: underline;
   }
 
   &:focus,
   &:active {
-    box-shadow: $FOCUS_SHADOW;
     outline: none;
+  }
+
+  &:active {
+    box-shadow: $FOCUS_SHADOW;
   }
 }
 
