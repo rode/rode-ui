@@ -20,9 +20,11 @@ import PaginatedFetchComponent from "test/testing-utils/hook-components/usePagin
 import { useSWRInfinite } from "swr";
 import userEvent from "@testing-library/user-event";
 import { fetcher, getPaginatedUrlKey } from "utils/hook-utils";
+import { showError } from "utils/toast-utils";
 
 jest.mock("swr");
 jest.mock("utils/hook-utils");
+jest.mock("utils/toast-utils");
 
 describe("usePaginatedFetch", () => {
   let url, query, pageSize, data, size, setSizeMock, expectedKey;
@@ -115,13 +117,16 @@ describe("usePaginatedFetch", () => {
 
   it("should return the error if an error occurs during the call", () => {
     useSWRInfinite.mockReturnValue({
-      error: chance.string(),
+      data: [{ error: chance.string() }],
     });
 
     render(
       <PaginatedFetchComponent url={url} query={query} pageSize={pageSize} />
     );
 
+    expect(showError)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith("An unexpected error has occurred.");
     expect(screen.getByText(/error:/i)).toBeInTheDocument();
   });
 

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import { useEffect } from "react";
 import { useSWRInfinite } from "swr";
 import { fetcher, getPaginatedUrlKey } from "utils/hook-utils";
+import { showError } from "utils/toast-utils";
 
-// TODO: handle errors here - data will have array with object error property in it
 export const usePaginatedFetch = (url, query, pageSize) => {
   const { data, error, size, setSize } = useSWRInfinite(
     (_, previousPageData) =>
@@ -26,6 +27,8 @@ export const usePaginatedFetch = (url, query, pageSize) => {
   );
 
   const loading = !data && !error;
+
+  const hasError = data?.length && data[0].error;
 
   const isLastPage =
     !loading && data?.length && !data[data.length - 1].pageToken?.length;
@@ -40,10 +43,16 @@ export const usePaginatedFetch = (url, query, pageSize) => {
     return accum;
   }, []);
 
+  useEffect(() => {
+    if (hasError) {
+      showError("An unexpected error has occurred.");
+    }
+  }, [hasError]);
+
   return {
-    data: formattedData,
+    data: hasError ? null : formattedData,
     loading,
-    error, // TODO: change this to be whatever lives in data[0].error if it exists
+    error: hasError ? data[0].error : null,
     isLastPage,
     goToNextPage,
   };
