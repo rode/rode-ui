@@ -62,7 +62,9 @@ describe("Resource Details page", () => {
     );
 
     expect(screen.getByText(resourceName)).toBeInTheDocument();
-    expect(screen.getByText(`Type: ${resourceType}`)).toBeInTheDocument();
+    expect(screen.getByText("Type")).toBeInTheDocument();
+    expect(screen.getByText(resourceType)).toBeInTheDocument();
+    expect(screen.getByText("Version")).toBeInTheDocument();
     expect(
       screen.getByText(resourceVersion.substring(0, 12))
     ).toBeInTheDocument();
