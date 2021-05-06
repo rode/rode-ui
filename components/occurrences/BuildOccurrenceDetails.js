@@ -21,6 +21,7 @@ import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
 import ExternalLink from "components/ExternalLink";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
+import LabelWithValue from "components/LabelWithValue";
 
 const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
@@ -39,7 +40,7 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
             label={"View logs"}
             fallback={<p className={styles.subtext}>Logs not available</p>}
           />
-          <p>Created by {occurrence.creator}</p>
+          <LabelWithValue label={"Created By"} value={occurrence.creator} />
         </div>
         <div className={styles.rightDetails}>
           <p className={styles.timestamps}>

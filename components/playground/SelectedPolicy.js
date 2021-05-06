@@ -18,7 +18,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
+import typeStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
+import LabelWithValue from "components/LabelWithValue";
 
 const SelectedPolicy = (props) => {
   const { policy, clearPolicy } = props;
@@ -46,14 +48,13 @@ const SelectedPolicy = (props) => {
       </div>
       {showDetails && (
         <div className={styles.selectionDetailsContainer}>
-          {policy.description && (
-            <p className={styles.selectionDetails}>
-              <span className={styles.label}>Description</span>
-              <span>{policy.description}</span>
-            </p>
-          )}
+          <LabelWithValue
+            label={"Description"}
+            value={policy.description}
+            className={styles.selectionDetails}
+          />
           <p className={styles.selectionDetails}>
-            <span className={styles.label}>Rego Policy Code</span>
+            <span className={typeStyles.label}>Rego Policy Code</span>
           </p>
           <Code code={policy.regoContent} language={"rego"} />
         </div>

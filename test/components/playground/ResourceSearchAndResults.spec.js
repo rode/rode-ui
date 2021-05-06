@@ -25,8 +25,7 @@ import { getResourceDetails } from "utils/resource-utils";
 jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSearchAndResults", () => {
-  let resource,
-    setResource,
+  let setResource,
     clearEvaluation,
     state,
     dispatch,
@@ -36,7 +35,6 @@ describe("ResourceSearchAndResults", () => {
     rerender;
 
   beforeEach(() => {
-    resource = {};
     setResource = jest.fn();
     clearEvaluation = jest.fn();
     state = {
@@ -65,7 +63,6 @@ describe("ResourceSearchAndResults", () => {
 
     const utils = render(
       <ResourceSearchAndResults
-        resource={resource}
         setResource={setResource}
         clearEvaluation={clearEvaluation}
       />,
@@ -122,13 +119,12 @@ describe("ResourceSearchAndResults", () => {
         resourceType,
       } = getResourceDetails(resource.uri);
       expect(screen.getByText(resourceName)).toBeInTheDocument();
-      expect(screen.queryAllByText("Version:")[index]).toBeInTheDocument();
+      expect(screen.queryAllByText("Version")[index]).toBeInTheDocument();
       expect(
         screen.getByText(resourceVersion.substring(0, 12))
       ).toBeInTheDocument();
-      expect(
-        screen.getAllByText(`Type: ${resourceType}`)[0]
-      ).toBeInTheDocument();
+      expect(screen.queryAllByText("Type")[index]).toBeInTheDocument();
+      expect(screen.getAllByText(resourceType)[index]).toBeInTheDocument();
     });
   });
 
@@ -150,31 +146,6 @@ describe("ResourceSearchAndResults", () => {
       type: "SET_SEARCH_TERM",
       data: "",
     });
-  });
-
-  it("should render a resource as selected if it is the current resource to evaluate", () => {
-    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-      fetchedResources[0].uri
-    );
-
-    rerender(
-      <ResourceSearchAndResults
-        setResource={setResource}
-        clearEvaluation={clearEvaluation}
-        resource={{
-          uri: fetchedResources[0].uri,
-          name: resourceName,
-          version: resourceVersion,
-          type: resourceType,
-        }}
-      />
-    );
-
-    searchForResource();
-
-    expect(
-      screen.getByRole("button", { name: "Selected" })
-    ).toBeInTheDocument();
   });
 
   it("should render a View More button when there are more resources to fetch", () => {

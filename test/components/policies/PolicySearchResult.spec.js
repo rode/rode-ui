@@ -43,12 +43,9 @@ describe("PolicySearchResult", () => {
   });
 
   it("should render the policy details", () => {
-    expect(
-      screen.getByText(`Policy Name: ${searchResult.name}`)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(`Description: ${searchResult.description}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText("Policy Name")).toBeInTheDocument();
+    expect(screen.getByText(searchResult.name)).toBeInTheDocument();
+    expect(screen.getByText(searchResult.description)).toBeInTheDocument();
   });
 
   it("should render a view policy button ", () => {

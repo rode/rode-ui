@@ -41,14 +41,14 @@ describe("ResourceSearchResult", () => {
   });
 
   it("should render the resource details", () => {
-    expect(
-      screen.getByText(`Resource Name: ${resourceName}`)
-    ).toBeInTheDocument();
-    expect(screen.getByText(`Version:`, { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("Resource Name")).toBeInTheDocument();
+    expect(screen.getByText(resourceName)).toBeInTheDocument();
+    expect(screen.getByText("Version")).toBeInTheDocument();
     expect(
       screen.getByText(version.substring(0, 12), { exact: false })
     ).toBeInTheDocument();
-    expect(screen.getByText(`Type: ${type}`)).toBeInTheDocument();
+    expect(screen.getByText("Type")).toBeInTheDocument();
+    expect(screen.getByText(type)).toBeInTheDocument();
   });
 
   it("should render a view resources button ", () => {

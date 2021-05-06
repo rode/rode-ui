@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
+import textStyles from "styles/modules/Typography.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
@@ -75,7 +76,7 @@ const Policy = () => {
                   className={styles.playgroundButton}
                 />
                 <div className={styles.regoContainer}>
-                  <p>Rego Policy Code</p>
+                  <p className={textStyles.label}>Rego Policy Code</p>
                   <Code code={policy.regoContent} language={"rego"} />
                 </div>
               </>

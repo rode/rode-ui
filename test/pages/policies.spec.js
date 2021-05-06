@@ -139,11 +139,10 @@ describe("Policies", () => {
     it("should render all of the returned search results", () => {
       render(<Policies />);
 
-      policies.forEach((policy) => {
+      policies.forEach((policy, index) => {
         const { name } = policy;
-        expect(
-          screen.getAllByText(`Policy Name: ${name}`, { exact: false })[0]
-        ).toBeInTheDocument();
+        expect(screen.getAllByText("Policy Name")[index]).toBeInTheDocument();
+        expect(screen.getAllByText(name)[0]).toBeInTheDocument();
       });
     });
 

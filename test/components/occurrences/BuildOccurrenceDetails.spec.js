@@ -59,6 +59,8 @@ describe("BuildOccurrenceDetails", () => {
     expect(
       screen.getByRole("button", { name: "Show JSON" })
     ).toBeInTheDocument();
+    expect(screen.getByText("Created By")).toBeInTheDocument();
+    expect(screen.getByText(occurrence.creator)).toBeInTheDocument();
   });
 
   it("should show source not available if there are is not a source uri", () => {

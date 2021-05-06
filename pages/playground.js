@@ -121,7 +121,6 @@ const PolicyPlayground = () => {
             />
           ) : (
             <ResourceSearchAndResults
-              resource={state.evaluationResource}
               setResource={(data) =>
                 policyDispatch({
                   type: policyActions.SET_EVALUATION_RESOURCE,
@@ -146,7 +145,6 @@ const PolicyPlayground = () => {
             />
           ) : (
             <PolicySearchAndResults
-              policy={state.evaluationPolicy}
               setPolicy={(data) =>
                 policyDispatch({
                   type: policyActions.SET_EVALUATION_POLICY,

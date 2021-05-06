@@ -23,8 +23,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 jest.mock("hooks/usePaginatedFetch");
 
 describe("PolicySearchAndResults", () => {
-  let policy,
-    setPolicy,
+  let setPolicy,
     clearEvaluation,
     state,
     dispatch,
@@ -34,7 +33,6 @@ describe("PolicySearchAndResults", () => {
     rerender;
 
   beforeEach(() => {
-    policy = {};
     setPolicy = jest.fn();
     clearEvaluation = jest.fn();
     state = {
@@ -64,7 +62,6 @@ describe("PolicySearchAndResults", () => {
 
     const utils = render(
       <PolicySearchAndResults
-        policy={policy}
         setPolicy={setPolicy}
         clearEvaluation={clearEvaluation}
       />,
@@ -129,22 +126,6 @@ describe("PolicySearchAndResults", () => {
       type: "SET_SEARCH_TERM",
       data: "",
     });
-  });
-
-  it("should render a policy as selected if it is the current policy to evaluate", () => {
-    rerender(
-      <PolicySearchAndResults
-        setPolicy={setPolicy}
-        clearEvaluation={clearEvaluation}
-        policy={fetchedPolicies[0]}
-      />
-    );
-
-    searchForPolicy();
-
-    expect(
-      screen.getByRole("button", { name: "Selected" })
-    ).toBeInTheDocument();
   });
 
   it("should render a View More button when there are more policies to fetch", () => {

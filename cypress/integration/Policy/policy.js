@@ -129,8 +129,8 @@ When("I confirm to delete the policy and an error occurs", () => {
 Then(/^I see "([^"]*)" policy search result$/, (policyName) => {
   const policy = policies[policyName].data[0];
 
-  cy.contains(`Policy Name: ${policy.name}`).should("be.visible");
-  cy.contains(`Description: ${policy.description}`).should("be.visible");
+  cy.contains(policy.name).should("be.visible");
+  cy.contains(policy.description).should("be.visible");
   cy.get(selectors.ViewPolicyButton).should("be.visible");
 });
 

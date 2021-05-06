@@ -90,8 +90,8 @@ $CARD_WIDTH: 97%;
 
 .cardText {
   @extend .cardHeader;
-  font-size: 0.75rem;
-  text-indent: 0.5rem;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
   @include ellipsis(calc(100vw - 7rem));
 
   @include tabletAndLarger {
@@ -160,16 +160,6 @@ $CARD_WIDTH: 97%;
   @include tabletAndLarger {
     max-width: calc(100vw - 30%);
   }
-}
-
-.label {
-  font-weight: 700;
-  padding: 0 0.5rem;
-}
-
-.break {
-  @include ellipsis(100%);
-  overflow-wrap: anywhere;
 }
 
 .pageTitle {
@@ -270,8 +260,12 @@ $CARD_WIDTH: 97%;
     box-shadow: $DT_BOX_SHADOW;
   }
 
+  .cardHeader {
+    color: $DT_MAIN_TEXT;
+  }
+
   .cardText {
-    color: $LT_SUB_TEXT;
+    color: $DT_SUB_TEXT;
   }
 
   .selectedButton {
@@ -331,6 +325,10 @@ $CARD_WIDTH: 97%;
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardHeader {
+    color: $LT_MAIN_TEXT;
   }
 
   .cardText {

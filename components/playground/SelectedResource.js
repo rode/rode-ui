@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceVersion from "components/resources/ResourceVersion";
+import LabelWithValue from "components/LabelWithValue";
 
 const SelectedResource = (props) => {
   const { resource, clearResource } = props;
@@ -47,18 +48,22 @@ const SelectedResource = (props) => {
       </div>
       {showDetails && (
         <div className={styles.selectionDetailsContainer}>
-          <p className={styles.selectionDetails}>
-            <span className={styles.label}>Version</span>
-            <ResourceVersion
-              version={resource.version}
-              copy={true}
-              buttonClassName={styles.copyVersionButton}
-            />
-          </p>
-          <p className={styles.selectionDetails}>
-            <span className={styles.label}>Type</span>
-            <span className={styles.break}>{resource.type}</span>
-          </p>
+          <LabelWithValue
+            label={"Version"}
+            value={
+              <ResourceVersion
+                version={resource.version}
+                copy={true}
+                buttonClassName={styles.copyVersionButton}
+              />
+            }
+            className={styles.selectionDetails}
+          />
+          <LabelWithValue
+            label={"Type"}
+            value={resource.type}
+            className={styles.selectionDetails}
+          />
         </div>
       )}
     </div>

@@ -136,11 +136,10 @@ describe("Resources", () => {
     it("should render all of the search results", () => {
       render(<Resources />);
 
-      resources.forEach((resource) => {
+      resources.forEach((resource, index) => {
         const { resourceName } = getResourceDetails(resource.uri);
-        expect(
-          screen.getByText(`Resource Name: ${resourceName}`, { exact: false })
-        ).toBeInTheDocument();
+        expect(screen.getAllByText("Resource Name")[index]).toBeInTheDocument();
+        expect(screen.getByText(resourceName)).toBeInTheDocument();
       });
     });
 

@@ -18,14 +18,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
-import SearchResult from "components/shared/search/SearchResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import styles from "styles/modules/Search.module.scss";
+import LabelWithValue from "components/LabelWithValue";
+import { useTheme } from "providers/theme";
 
 const PolicySearchResult = ({ searchResult }) => {
   const { name, description, id } = searchResult;
   const router = useRouter();
   const { dispatch } = usePolicies();
+  const { theme } = useTheme();
 
   const onClick = () => {
     dispatch({
@@ -36,11 +39,17 @@ const PolicySearchResult = ({ searchResult }) => {
   };
 
   return (
-    <SearchResult
-      mainText={`Policy Name: ${name}`}
-      subText={`Description: ${description}`}
-      actionButton={<Button onClick={onClick} label={"View Policy"} />}
-    />
+    <div className={`${styles[theme]} ${styles.searchCard}`}>
+      <div>
+        <LabelWithValue
+          label={"Policy Name"}
+          value={name}
+          className={styles.cardHeader}
+        />
+        <p className={styles.cardText}>{description}</p>
+      </div>
+      <Button onClick={onClick} label={"View Policy"} />
+    </div>
   );
 };
 

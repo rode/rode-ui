@@ -18,7 +18,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
-import PlaygroundSearchResult from "./PlaygroundSearchResult";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
@@ -27,7 +26,7 @@ import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 
-const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
+const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const { state, dispatch } = usePolicies();
@@ -70,21 +69,25 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
             {data?.length > 0 ? (
               <>
                 {data.map((result) => (
-                  <PlaygroundSearchResult
-                    mainText={result.name}
-                    subText={result.description}
-                    buttonText={"Select Policy"}
-                    onClick={() => {
-                      setPolicy(result);
-                      setPolicySearch(false);
-                      dispatch({
-                        type: policyActions.SET_SEARCH_TERM,
-                        data: "",
-                      });
-                    }}
-                    key={result.id}
-                    selected={result.id === policy?.id}
-                  />
+                  <div className={`${styles.searchCard}`} key={result.id}>
+                    <div>
+                      <p className={styles.cardHeader}>{result.name}</p>
+                      <p className={styles.cardText}>{result.description}</p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setPolicy(result);
+                        setPolicySearch(false);
+                        dispatch({
+                          type: policyActions.SET_SEARCH_TERM,
+                          data: "",
+                        });
+                      }}
+                      buttonType={"text"}
+                      label={"Select Policy"}
+                      className={styles.actionButton}
+                    />
+                  </div>
                 ))}
                 {!isLastPage && (
                   <Button
@@ -107,7 +110,6 @@ const PolicySearchAndResults = ({ policy, setPolicy, clearEvaluation }) => {
 };
 
 PolicySearchAndResults.propTypes = {
-  policy: PropTypes.object,
   setPolicy: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
