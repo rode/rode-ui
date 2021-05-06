@@ -29,6 +29,7 @@ import { usePolicies } from "providers/policies";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
+import Drawer from "../../components/Drawer";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -38,6 +39,7 @@ const Resource = () => {
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
   const [resourceType, setResourceType] = useState("");
+  const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;
 
   useEffect(() => {
@@ -71,6 +73,8 @@ const Resource = () => {
     router.push("/playground");
   };
 
+  const openDrawer = () => setShowVersionDrawer(true);
+
   return (
     <>
       <PageHeader>
@@ -79,16 +83,19 @@ const Resource = () => {
       <div className={`${styles[theme]} ${styles.container}`}>
         <div className={styles.resourceHeader}>
           <p className={styles.resourceName}>{resourceName}</p>
-          <div>
-            <LabelWithValue
-              label={"Type"}
-              value={resourceType}
-              className={styles.resourceDetails}
-            />
-            <LabelWithValue
-              label={"Version"}
-              value={<ResourceVersion version={resourceVersion} copy={true} />}
-            />
+          <div className={styles.resourceDetailsContainer}>
+            <div>
+              <LabelWithValue
+                label={"Type"}
+                value={resourceType}
+                className={styles.resourceDetails}
+              />
+              <LabelWithValue
+                label={"Version"}
+                value={<ResourceVersion version={resourceVersion} copy={true} />}
+              />
+            </div>
+            <Button type={"text"} onClick={openDrawer} label={"Change Version"}/>
           </div>
         </div>
         <div className={styles.playgroundContainer}>
@@ -101,6 +108,9 @@ const Resource = () => {
         </div>
         <ResourceOccurrences resourceUri={resourceUri} />
       </div>
+      <Drawer isOpen={showVersionDrawer} onClose={() => setShowVersionDrawer(false)}>
+        <p>Here is a drawer</p>
+      </Drawer>
     </>
   );
 };

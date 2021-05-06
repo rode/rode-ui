@@ -65,7 +65,7 @@ Button.propTypes = {
     "text",
     "textDestructive",
     "primaryDestructive",
-    "modalClose",
+    "close",
   ]),
   children: PropTypes.node,
   className: PropTypes.string,

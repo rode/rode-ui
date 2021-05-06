@@ -45,7 +45,7 @@ const Modal = (props) => {
       id={"modalWrapper"}
     >
       <Button
-        buttonType={"modalClose"}
+        buttonType={"close"}
         label={"Close Modal"}
         className={styles.closeButton}
         onClick={onClose}
