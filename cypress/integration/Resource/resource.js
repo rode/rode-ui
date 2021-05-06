@@ -58,7 +58,7 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
     );
 
     scan.vulnerabilities.forEach((vulnerability) => {
-      cy.contains(`Package: ${vulnerability.packageName}`).should("be.visible");
+      cy.contains(vulnerability.packageName).should("be.visible");
       if (vulnerability.effectiveSeverity === "SEVERITY_UNSPECIFIED") {
         cy.contains("Severity N/A").should("be.visible");
       } else {
@@ -67,11 +67,9 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
         );
       }
 
-      cy.contains(`Package: ${vulnerability.packageName}`).click();
+      cy.contains(vulnerability.packageName).click();
 
-      cy.contains(`Description: ${vulnerability.description}`).should(
-        "be.visible"
-      );
+      cy.contains(vulnerability.description).should("be.visible");
     });
   });
 });
@@ -81,20 +79,16 @@ Then(/^I see "([^"]*)" Deployment occurrence details$/, (resourceName) => {
 
   const resource = resources[resourceName].data[0];
   resource.occurrences.deploy.forEach((deployment) => {
-    cy.contains(`Deployed to ${deployment.platform}`).should("be.visible");
-    cy.contains(
-      `Resources Deployed: ${deployment.resourceUris.join(", ")}`
-    ).should("be.visible");
+    cy.contains(deployment.platform).should("be.visible");
+    cy.contains(deployment.resourceUris.join(", ")).should("be.visible");
   });
 });
 
 Then(/^I see "([^"]*)" resource search result$/, (resourceName) => {
   const resource = resources[resourceName].data[0];
 
-  cy.contains(`Resource Name: ${resource.resourceName}`).should("be.visible");
-  cy.contains(`Version: ${resource.resourceVersion.substring(0, 12)}`).should(
-    "be.visible"
-  );
+  cy.contains(resource.resourceName).should("be.visible");
+  cy.contains(resource.resourceVersion.substring(0, 12)).should("be.visible");
   cy.get(selectors.ViewResourceButton).should("be.visible");
 });
 
