@@ -18,7 +18,7 @@
 @import "styles/mixins";
 
 .openDrawer {
-  z-index: 2;
+  z-index: 4;
   position: fixed;
   top: 0;
   right: 0;
@@ -70,10 +70,14 @@
   &.openDrawer {
     background-color: $DT_BACKGROUND_DARK;
   }
+
+  color: $DT_MAIN_TEXT;
 }
 
 .lightTheme {
   &.openDrawer {
     background-color: $LT_BACKGROUND_MEDIUM;
   }
+
+  color: $LT_MAIN_TEXT;
 }

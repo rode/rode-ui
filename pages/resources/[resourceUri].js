@@ -29,7 +29,7 @@ import { usePolicies } from "providers/policies";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
-import Drawer from "../../components/Drawer";
+import ChangeVersionDrawer from "components/resources/ChangeVersionDrawer";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -39,7 +39,6 @@ const Resource = () => {
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
   const [resourceType, setResourceType] = useState("");
-  const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;
 
   useEffect(() => {
@@ -73,8 +72,6 @@ const Resource = () => {
     router.push("/playground");
   };
 
-  const openDrawer = () => setShowVersionDrawer(true);
-
   return (
     <>
       <PageHeader>
@@ -95,7 +92,7 @@ const Resource = () => {
                 value={<ResourceVersion version={resourceVersion} copy={true} />}
               />
             </div>
-            <Button type={"text"} onClick={openDrawer} label={"Change Version"}/>
+            <ChangeVersionDrawer/>
           </div>
         </div>
         <div className={styles.playgroundContainer}>
@@ -108,9 +105,6 @@ const Resource = () => {
         </div>
         <ResourceOccurrences resourceUri={resourceUri} />
       </div>
-      <Drawer isOpen={showVersionDrawer} onClose={() => setShowVersionDrawer(false)}>
-        <p>Here is a drawer</p>
-      </Drawer>
     </>
   );
 };
