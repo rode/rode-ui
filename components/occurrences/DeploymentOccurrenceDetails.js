@@ -20,6 +20,7 @@ import styles from "styles/modules/OccurrenceDetails.module.scss";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
+import LabelWithValue from "components/LabelWithValue";
 
 const DeploymentOccurrenceDetails = ({ occurrence }) => {
   return (
@@ -42,7 +43,10 @@ const DeploymentOccurrenceDetails = ({ occurrence }) => {
         </div>
       </div>
       <div className={styles.detailContentContainer}>
-        <p>Resources Deployed: {occurrence.resourceUris.join(", ")}</p>
+        <LabelWithValue
+          label={"Resources Deployed"}
+          value={occurrence.resourceUris.join(", ")}
+        />
       </div>
     </div>
   );

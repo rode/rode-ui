@@ -49,9 +49,20 @@ describe("LabelWithValue", () => {
 
   it("should allow the user to specify additional classes to the paragraph container", () => {
     const className = chance.string();
-    rerender(<LabelWithValue label={label} value={value} className={className}/>)
+    rerender(
+      <LabelWithValue label={label} value={value} className={className} />
+    );
 
     const renderedLabel = screen.getByText(label);
     expect(renderedLabel.closest("p")).toHaveClass(className);
+  });
+
+  it("should allow the user to specify a vertical layout of the component", () => {
+    rerender(<LabelWithValue label={label} value={value} vertical />);
+
+    const renderedLabel = screen.getByText(label);
+    expect(renderedLabel.closest("p")).toHaveClass(
+      "verticalLabelWithValueContainer"
+    );
   });
 });

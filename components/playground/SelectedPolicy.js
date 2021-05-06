@@ -48,7 +48,11 @@ const SelectedPolicy = (props) => {
       </div>
       {showDetails && (
         <div className={styles.selectionDetailsContainer}>
-          <LabelWithValue label={"Description"} value={policy.description} className={styles.selectionDetails}/>
+          <LabelWithValue
+            label={"Description"}
+            value={policy.description}
+            className={styles.selectionDetails}
+          />
           <p className={styles.selectionDetails}>
             <span className={typeStyles.label}>Rego Policy Code</span>
           </p>

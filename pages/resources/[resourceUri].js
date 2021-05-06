@@ -28,7 +28,7 @@ import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
-import LabelWithValue from "../../components/LabelWithValue";
+import LabelWithValue from "components/LabelWithValue";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -80,8 +80,15 @@ const Resource = () => {
         <div className={styles.resourceHeader}>
           <p className={styles.resourceName}>{resourceName}</p>
           <div>
-            <LabelWithValue label={"Type"} value={resourceType} className={styles.resourceDetails}/>
-            <LabelWithValue label={"Version"} value={ <ResourceVersion version={resourceVersion} copy={true} />}/>
+            <LabelWithValue
+              label={"Type"}
+              value={resourceType}
+              className={styles.resourceDetails}
+            />
+            <LabelWithValue
+              label={"Version"}
+              value={<ResourceVersion version={resourceVersion} copy={true} />}
+            />
           </div>
         </div>
         <div className={styles.playgroundContainer}>

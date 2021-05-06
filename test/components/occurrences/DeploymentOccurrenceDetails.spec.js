@@ -56,10 +56,9 @@ describe("DeploymentOccurrenceDetails", () => {
   });
 
   it("should show the list of all resources that were deployed", () => {
-    const renderedDeployedResources = screen.getByText(/resources deployed:/i);
-    expect(renderedDeployedResources).toBeInTheDocument();
-    expect(renderedDeployedResources).toHaveTextContent(
-      `Resources Deployed: ${occurrence.resourceUris.join(", ")}`
-    );
+    expect(screen.getByText("Resources Deployed")).toBeInTheDocument();
+    expect(
+      screen.getByText(occurrence.resourceUris.join(", "))
+    ).toBeInTheDocument();
   });
 });

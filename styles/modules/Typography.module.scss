@@ -35,6 +35,15 @@
   flex-direction: row;
 }
 
+.verticalLabelWithValueContainer {
+  display: flex;
+  flex-direction: column;
+
+  .value {
+    margin-left: 0.5rem;
+  }
+}
+
 .label {
   font-weight: 700;
   padding-right: 0.5rem;
