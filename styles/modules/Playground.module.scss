@@ -162,16 +162,6 @@ $CARD_WIDTH: 97%;
   }
 }
 
-.label {
-  font-weight: 700;
-  padding: 0 0.5rem;
-}
-
-.break {
-  @include ellipsis(100%);
-  overflow-wrap: anywhere;
-}
-
 .pageTitle {
   font-size: 1.25rem;
   font-weight: 600;
