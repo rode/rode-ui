@@ -46,11 +46,7 @@ const PolicySearchResult = ({ searchResult }) => {
           value={name}
           className={styles.cardHeader}
         />
-        <LabelWithValue
-          label={"Description"}
-          value={description}
-          className={styles.cardText}
-        />
+        <p className={styles.cardText}>{description}</p>
       </div>
       <Button onClick={onClick} label={"View Policy"} />
     </div>

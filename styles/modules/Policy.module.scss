@@ -228,6 +228,10 @@
 
 .regoContainer {
   margin: 2rem 0 0;
+
+  > * {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .notFound {

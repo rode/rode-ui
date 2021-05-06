@@ -25,7 +25,6 @@ import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
-import LabelWithValue from "components/LabelWithValue";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -73,11 +72,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                   <div className={`${styles.searchCard}`} key={result.id}>
                     <div>
                       <p className={styles.cardHeader}>{result.name}</p>
-                      <LabelWithValue
-                        label={"Description"}
-                        value={result.description}
-                        className={styles.cardText}
-                      />
+                      <p className={styles.cardText}>{result.description}</p>
                     </div>
                     <Button
                       onClick={() => {

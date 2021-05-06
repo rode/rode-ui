@@ -111,9 +111,8 @@ describe("PolicySearchAndResults", () => {
     searchForPolicy();
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    fetchedPolicies.forEach((policy, index) => {
+    fetchedPolicies.forEach((policy) => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
-      expect(screen.getAllByText("Description")[index]).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
     });
   });

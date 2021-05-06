@@ -130,7 +130,7 @@
 
 .cardText {
   @extend .cardHeader;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   margin-left: 1rem;
   @include ellipsis(calc(100vw - 7rem));
 

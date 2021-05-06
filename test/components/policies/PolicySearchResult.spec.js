@@ -45,7 +45,6 @@ describe("PolicySearchResult", () => {
   it("should render the policy details", () => {
     expect(screen.getByText("Policy Name")).toBeInTheDocument();
     expect(screen.getByText(searchResult.name)).toBeInTheDocument();
-    expect(screen.getByText("Description")).toBeInTheDocument();
     expect(screen.getByText(searchResult.description)).toBeInTheDocument();
   });
 
