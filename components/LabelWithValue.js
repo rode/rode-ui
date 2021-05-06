@@ -8,6 +8,11 @@ const LabelWithValue = (props) => {
   const { label, value, className = "", as = "p" } = props;
 
   const Text = as;
+
+  if (!value) {
+    return null;
+  }
+
   return (
     <Text className={` ${styles.labelWithValueContainer} ${className}`}>
       <span className={styles.label}>{label}</span>

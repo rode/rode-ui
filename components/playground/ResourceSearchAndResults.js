@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
-import PlaygroundSearchResult from "./PlaygroundSearchResult";
 import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
@@ -28,13 +27,9 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 import ResourceVersion from "components/resources/ResourceVersion";
+import LabelWithValue from "components/LabelWithValue";
 
-// TODO: add view all resources button
-const ResourceSearchAndResults = ({
-  resource,
-  setResource,
-  clearEvaluation,
-}) => {
+const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
   const [resourceSearch, setResourceSearch] = useState(false);
   const { state, dispatch } = useResources();
 
@@ -83,31 +78,39 @@ const ResourceSearchAndResults = ({
                   } = getResourceDetails(result.uri);
 
                   return (
-                    <PlaygroundSearchResult
-                      mainText={resourceName}
-                      subText={
-                        <>
-                          Version: <ResourceVersion version={resourceVersion} />
-                        </>
-                      }
-                      additionalText={`Type: ${resourceType}`}
-                      buttonText={"Select Resource"}
-                      onClick={() => {
-                        setResource({
-                          uri: result.uri,
-                          name: resourceName,
-                          version: resourceVersion,
-                          type: resourceType,
-                        });
-                        setResourceSearch(false);
-                        dispatch({
-                          type: resourceActions.SET_SEARCH_TERM,
-                          data: "",
-                        });
-                      }}
-                      key={result.uri}
-                      selected={result.uri === resource?.uri}
-                    />
+                    <div className={`${styles.searchCard}`} key={result.uri}>
+                      <div>
+                        <p className={styles.cardHeader}>{resourceName}</p>
+                        <LabelWithValue
+                          label={"Version"}
+                          value={<ResourceVersion version={resourceVersion} />}
+                          className={styles.cardText}
+                        />
+                        <LabelWithValue
+                          label={"Type"}
+                          value={resourceType}
+                          className={styles.cardText}
+                        />
+                      </div>
+                      <Button
+                        onClick={() => {
+                          setResource({
+                            uri: result.uri,
+                            name: resourceName,
+                            version: resourceVersion,
+                            type: resourceType,
+                          });
+                          setResourceSearch(false);
+                          dispatch({
+                            type: resourceActions.SET_SEARCH_TERM,
+                            data: "",
+                          });
+                        }}
+                        buttonType={"text"}
+                        label={"Select Resource"}
+                        className={styles.actionButton}
+                      />
+                    </div>
                   );
                 })}
                 {!isLastPage && (
@@ -131,7 +134,6 @@ const ResourceSearchAndResults = ({
 };
 
 ResourceSearchAndResults.propTypes = {
-  resource: PropTypes.object,
   setResource: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
