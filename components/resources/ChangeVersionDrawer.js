@@ -27,15 +27,21 @@ import { ICON_NAMES } from "utils/icon-utils";
 import {useRouter} from "next/router";
 import { useResources } from "../../providers/resources";
 import { resourceActions } from "../../reducers/resources";
+import { getResourceDetails } from "../../utils/resource-utils";
 
 const ChangeVersionDrawer = (props) => {
-  const { resourceName, resourceType, currentVersion, isOpen, closeDrawer } = props;
+  const { resourceUri, isOpen, closeDrawer } = props;
   const router = useRouter();
   const {dispatch} = useResources();
+  const {
+    resourceName,
+    resourceVersion: currentVersion,
+    searchableName
+  } = getResourceDetails(resourceUri);
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
-    resourceName ? "/api/resource-versions" : null,
-    { resource: resourceName, type: resourceType },
+    searchableName ? "/api/resource-versions" : null,
+    { resource: searchableName },
     10
   );
 
@@ -47,6 +53,7 @@ const ChangeVersionDrawer = (props) => {
     });
     closeDrawer();
   }
+
   return (
     <>
       <Drawer

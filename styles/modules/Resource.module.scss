@@ -34,13 +34,14 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   position: sticky;
   top: 0;
 
   @include tabletAndLarger {
     flex-direction: row;
     align-items: center;
+    padding: 1rem 2rem;
   }
 }
 
@@ -66,14 +67,6 @@
   @include tabletAndLarger {
     flex-direction: row;
     margin: 0;
-  }
-}
-
-.resourceDetails {
-  display: none;
-
-  @include tabletAndLarger {
-    display: unset;
   }
 }
 

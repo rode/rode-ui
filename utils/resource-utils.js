@@ -86,42 +86,51 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2})",
+    getSearchableName: (name) => `deb://${name}`
   },
   {
     type: "Docker",
     regex: DOCKER_REGEXP,
     parse: parseDocker,
+    getSearchableName: (name) => name
   },
   {
     type: "File",
     regex: FILE_REGEXP,
     parse: parseFile,
+    getSearchableName: (name) => `file://${name}`
   },
   {
     type: "Maven",
     regex: "^(gav:/{2})",
     parse: parseMaven,
+    getSearchableName: (name) => `gav://${name}`
   },
   {
     type: "NPM",
     regex: "^(npm:/{2})",
+    getSearchableName: (name) => `npm://${name}`
   },
   {
     type: "NuGet",
     regex: "^(nuget:/{2})",
+    getSearchableName: (name) => `nuget://${name}`
   },
   {
     type: "Python",
     regex: "^(pip:/{2})",
+    getSearchableName: (name) => `pip://${name}`
   },
   {
     type: "RPM",
     regex: "^(rpm:/{2})",
+    getSearchableName: (name) => `rpm://${name}`
   },
   {
     type: "Git",
     regex: GIT_REGEXP,
     parse: parseGit,
+    getSearchableName: (name) => `git://${name}`
   },
 ];
 
@@ -143,9 +152,13 @@ export const getResourceDetails = (uri) => {
     ? resourceMatch.parse(uri)
     : parseGeneric(uri);
 
+  const searchableName = resourceMatch.getSearchableName ? resourceMatch.getSearchableName(name) : name;
+
   return {
     resourceType: resourceMatch.type,
     resourceName: name,
     resourceVersion: version,
+    searchableName,
+    uri
   };
 };

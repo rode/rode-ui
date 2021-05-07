@@ -49,6 +49,7 @@ const Resource = () => {
     });
   }, []);
 
+  // TODO: set this in state so no need to get resource details a billion times, remove upon leaving the page
   useEffect(() => {
     const {
       resourceName: name,
@@ -75,7 +76,7 @@ const Resource = () => {
 
   return (
     <>
-      <ChangeVersionDrawer resourceName={resourceName} resourceType={resourceType} currentVersion={resourceVersion} isOpen={showVersionDrawer} closeDrawer={() => setShowVersionDrawer(false)}/>
+      <ChangeVersionDrawer resourceUri={resourceUri} isOpen={showVersionDrawer} closeDrawer={() => setShowVersionDrawer(false)}/>
       <PageHeader>
         <ResourceBreadcrumbs />
       </PageHeader>
@@ -87,7 +88,6 @@ const Resource = () => {
               <LabelWithValue
                 label={"Type"}
                 value={resourceType}
-                className={styles.resourceDetails}
               />
               <LabelWithValue
                 label={"Version"}

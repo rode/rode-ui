@@ -88,9 +88,13 @@
   margin: 0.25rem auto;
   padding: 0.5rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
 }
 
 .versionSelectionButton {
