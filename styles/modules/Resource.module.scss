@@ -146,6 +146,10 @@
   align-items: center;
 }
 
+.versionSelectionButton {
+  min-width: fit-content;
+}
+
 .darkTheme {
   .resourceHeader {
     background-color: $LAGOON;

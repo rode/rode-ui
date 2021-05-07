@@ -54,7 +54,10 @@ export default async (req, res) => {
     const listResourceVersionsResponse = await response.json();
     const resources = listResourceVersionsResponse.resources.map(({uri}) => {
       const {resourceVersion} = getResourceDetails(uri);
-      return resourceVersion;
+      return {
+        resourceVersion,
+        uri
+      };
     });
 
     res.status(StatusCodes.OK).json({

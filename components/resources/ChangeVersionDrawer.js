@@ -21,11 +21,18 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import ResourceVersion from "./ResourceVersion";
 import styles from "styles/modules/Resource.module.scss"
-
+import LabelWithValue from "../LabelWithValue";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import {useRouter} from "next/router";
+import { useResources } from "../../providers/resources";
+import { resourceActions } from "../../reducers/resources";
 
 const ChangeVersionDrawer = (props) => {
   const { resourceName, currentVersion } = props;
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
+  const router = useRouter();
+  const {dispatch} = useResources();
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     resourceName ? "/api/resource-versions" : null,
@@ -37,7 +44,16 @@ const ChangeVersionDrawer = (props) => {
     setShowVersionDrawer(true);
   };
 
-  // TODO: hide the change version button when there are no other versions that the currently viewed one
+  const selectVersion = (uri) => {
+    router.push(`/resources/${encodeURIComponent(uri)}`);
+    setShowVersionDrawer(false);
+    dispatch({
+      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      data: null
+    });
+  }
+
+  // TODO: hide the change version button when there are no other versions than the currently viewed one
   return (
     <>
       <Button type={"text"} onClick={openDrawer} label={"Change Version"} />
@@ -52,12 +68,32 @@ const ChangeVersionDrawer = (props) => {
           </div>
           {
             data?.length > 0 ?
-                  data.map((version) => (
-                    <div key={version} className={styles.versionCard}>
-                      <ResourceVersion version={version}/>
-                      <Button buttonType={"text"} label={'Select'} onClick={() => {}}/>
-                    </div>
-                    )
+                  data.map(({resourceVersion, uri}) => {
+                    const isCurrentVersion = resourceVersion === currentVersion;
+
+                    return (
+                        <div key={resourceVersion} className={styles.versionCard}>
+                          <div>
+                            <LabelWithValue label={"Version"} value={<ResourceVersion version={resourceVersion}/>}/>
+                          </div>
+                          <Button
+                            buttonType={"text"}
+                            label={isCurrentVersion ? "Selected" : 'Select'}
+                            disabled={isCurrentVersion}
+                            className={styles.versionSelectionButton}
+                            onClick={() => selectVersion(uri)}
+                          >
+                            {
+                              isCurrentVersion &&
+                              <>
+                                <Icon name={ICON_NAMES.CHECK}/>
+                                <p>Selected</p>
+                              </>
+                            }
+                          </Button>
+                        </div>
+                      )
+                    }
                   )
               :
               <p>{ `No versions found matching the resource "${resourceName}"` }</p>
