@@ -19,6 +19,7 @@ import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
 import { getResourceDetails } from "../../utils/resource-utils";
 
+// TODO: need to reconstruct the resource name for non-docker images
 export default async (req, res) => {
   if (req.method !== "GET") {
     return res

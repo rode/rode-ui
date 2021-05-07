@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import Button from "components/Button";
 import Drawer from "components/Drawer";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import ResourceVersion from "./ResourceVersion";
-import styles from "styles/modules/Resource.module.scss"
+import styles from "styles/modules/Drawer.module.scss"
 import LabelWithValue from "../LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -29,37 +29,29 @@ import { useResources } from "../../providers/resources";
 import { resourceActions } from "../../reducers/resources";
 
 const ChangeVersionDrawer = (props) => {
-  const { resourceName, currentVersion } = props;
-  const [showVersionDrawer, setShowVersionDrawer] = useState(false);
+  const { resourceName, resourceType, currentVersion, isOpen, closeDrawer } = props;
   const router = useRouter();
   const {dispatch} = useResources();
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     resourceName ? "/api/resource-versions" : null,
-    { resource: resourceName },
+    { resource: resourceName, type: resourceType },
     10
   );
 
-  const openDrawer = () => {
-    setShowVersionDrawer(true);
-  };
-
   const selectVersion = (uri) => {
     router.push(`/resources/${encodeURIComponent(uri)}`);
-    setShowVersionDrawer(false);
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,
       data: null
     });
+    closeDrawer();
   }
-
-  // TODO: hide the change version button when there are no other versions than the currently viewed one
   return (
     <>
-      <Button type={"text"} onClick={openDrawer} label={"Change Version"} />
       <Drawer
-        isOpen={showVersionDrawer}
-        onClose={() => setShowVersionDrawer(false)}
+        isOpen={isOpen}
+        onClose={closeDrawer}
       >
         <Loading loading={loading}>
           <div className={styles.versionSelectionHeader}>

@@ -39,6 +39,7 @@ const Resource = () => {
   const [resourceName, setResourceName] = useState("");
   const [resourceVersion, setResourceVersion] = useState("");
   const [resourceType, setResourceType] = useState("");
+  const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Resource = () => {
 
   return (
     <>
+      <ChangeVersionDrawer resourceName={resourceName} resourceType={resourceType} currentVersion={resourceVersion} isOpen={showVersionDrawer} closeDrawer={() => setShowVersionDrawer(false)}/>
       <PageHeader>
         <ResourceBreadcrumbs />
       </PageHeader>
@@ -92,7 +94,7 @@ const Resource = () => {
                 value={<ResourceVersion version={resourceVersion} copy={true} />}
               />
             </div>
-            <ChangeVersionDrawer resourceName={resourceName} currentVersion={resourceVersion}/>
+            <Button type={"text"} onClick={() => setShowVersionDrawer(true)} label={"Change Version"} />
           </div>
         </div>
         <div className={styles.playgroundContainer}>

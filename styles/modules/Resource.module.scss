@@ -37,7 +37,6 @@
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
-  z-index: 2;
 
   @include tabletAndLarger {
     flex-direction: row;
@@ -120,36 +119,6 @@
   }
 }
 
-.versionSelectionHeader {
-  margin-bottom: 1rem;
-  width: 100%;
-  padding: 1rem 0.5rem;
-  text-align: center;
-}
-
-.versionSelectionName {
-  font-weight: 600;
-}
-
-.versionSelectionInstructions {
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-}
-
-.versionCard {
-  width: 90%;
-  margin: 0.25rem auto;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.versionSelectionButton {
-  min-width: fit-content;
-}
-
 .darkTheme {
   .resourceHeader {
     background-color: $LAGOON;
@@ -166,16 +135,6 @@
     &:hover {
       color: color.scale($DARK_GREY, $lightness: 20%);
     }
-  }
-
-  .versionSelectionHeader {
-    background-color: $LAGOON;
-    color: $DARKEST_GREY;
-  }
-
-  .versionCard {
-    background-color: $DT_BACKGROUND_LIGHT;
-    box-shadow: $DT_BOX_SHADOW;
   }
 }
 
@@ -195,15 +154,5 @@
     &:hover {
       color: color.scale($SOFT_WHITE, $lightness: -20%);
     }
-  }
-
-  .versionSelectionHeader {
-    background-color: $DEEP_SEA;
-    color: $WHITE;
-  }
-
-  .versionCard {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
   }
 }
