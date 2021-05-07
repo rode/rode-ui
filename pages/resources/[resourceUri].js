@@ -92,7 +92,7 @@ const Resource = () => {
                 value={<ResourceVersion version={resourceVersion} copy={true} />}
               />
             </div>
-            <ChangeVersionDrawer/>
+            <ChangeVersionDrawer resourceName={resourceName} currentVersion={resourceVersion}/>
           </div>
         </div>
         <div className={styles.playgroundContainer}>

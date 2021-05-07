@@ -17,14 +17,27 @@
 import React, { useState } from "react";
 import Button from "components/Button";
 import Drawer from "components/Drawer";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import Loading from "components/Loading";
+import ResourceVersion from "./ResourceVersion";
+import styles from "styles/modules/Resource.module.scss"
 
-const Resource = () => {
+
+const ChangeVersionDrawer = (props) => {
+  const { resourceName, currentVersion } = props;
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
+
+  const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
+    resourceName ? "/api/resource-versions" : null,
+    { resource: resourceName },
+    10
+  );
 
   const openDrawer = () => {
     setShowVersionDrawer(true);
   };
 
+  // TODO: hide the change version button when there are no other versions that the currently viewed one
   return (
     <>
       <Button type={"text"} onClick={openDrawer} label={"Change Version"} />
@@ -32,10 +45,27 @@ const Resource = () => {
         isOpen={showVersionDrawer}
         onClose={() => setShowVersionDrawer(false)}
       >
-        <p>Here is a drawer</p>
+        <Loading loading={loading}>
+          <div className={styles.versionSelectionHeader}>
+            <p className={styles.versionSelectionName}>{ resourceName }</p>
+            <p className={styles.versionSelectionInstructions}>Select from the list below to see occurrences related to that version</p>
+          </div>
+          {
+            data?.length > 0 ?
+                  data.map((version) => (
+                    <div key={version} className={styles.versionCard}>
+                      <ResourceVersion version={version}/>
+                      <Button buttonType={"text"} label={'Select'} onClick={() => {}}/>
+                    </div>
+                    )
+                  )
+              :
+              <p>{ `No versions found matching the resource "${resourceName}"` }</p>
+          }
+        </Loading>
       </Drawer>
     </>
   );
 };
 
-export default Resource;
+export default ChangeVersionDrawer;

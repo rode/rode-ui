@@ -17,6 +17,7 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
+import { getResourceDetails } from "../../utils/resource-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -30,7 +31,7 @@ export default async (req, res) => {
   try {
     const genericResourceName = req.query.resource;
     const filter = {
-      filter: `resource.uri.startsWith("${genericResourceName}@")`,
+      filter: `resource.uri.startsWith("${genericResourceName}")`,
     };
 
     if (req.query.pageSize) {
@@ -51,11 +52,10 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
-    // TODO: need to parse the version from the name
-    const resources = listResourceVersionsResponse.resources.map(({ name, uri }) => ({
-      name,
-      uri,
-    }));
+    const resources = listResourceVersionsResponse.resources.map(({uri}) => {
+      const {resourceVersion} = getResourceDetails(uri);
+      return resourceVersion;
+    });
 
     res.status(StatusCodes.OK).json({
       data: resources,

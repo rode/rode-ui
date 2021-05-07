@@ -18,7 +18,7 @@
 @import "styles/mixins";
 
 .openDrawer {
-  z-index: 4;
+  z-index: 1;
   position: fixed;
   top: 0;
   right: 0;
@@ -29,9 +29,10 @@
   width: 100vw;
   @include transition;
   transform: translateX(0);
+  overflow-y: auto;
 
   @include tabletAndLarger {
-    width: 50vw;
+    width: 60vw;
   }
 
   @include desktopAndLarger {
@@ -69,6 +70,7 @@
 .darkTheme {
   &.openDrawer {
     background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   color: $DT_MAIN_TEXT;
@@ -76,7 +78,8 @@
 
 .lightTheme {
   &.openDrawer {
-    background-color: $LT_BACKGROUND_MEDIUM;
+    background-color: $LT_BACKGROUND_DARK;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   color: $LT_MAIN_TEXT;
