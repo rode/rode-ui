@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "styles/modules/Drawer.module.scss";
 import PropTypes from "prop-types";
 import Button from "./Button";
@@ -9,11 +9,15 @@ import { useTheme } from "providers/theme";
 // TODO: test this
 
 const Drawer = (props) => {
-  const {isOpen, onClose, children} = props;
-  const {theme} = useTheme();
+  const { isOpen, onClose, children } = props;
+  const { theme } = useTheme();
 
   return (
-    <div className={`${styles[theme]} ${isOpen ? styles.openDrawer : styles.closedDrawer}`}>
+    <div
+      className={`${styles[theme]} ${
+        isOpen ? styles.openDrawer : styles.closedDrawer
+      }`}
+    >
       <Button
         buttonType={"close"}
         label={"Close Drawer"}
@@ -30,7 +34,7 @@ const Drawer = (props) => {
 Drawer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Drawer;

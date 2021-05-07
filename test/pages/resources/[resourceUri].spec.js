@@ -25,34 +25,46 @@ import userEvent from "@testing-library/user-event";
 jest.mock("next/router");
 
 describe("Resource Details page", () => {
-  let state, router, policyDispatch, resourceDispatch;
+  let resourceState, router, policyDispatch, resourceDispatch, unmount;
 
   beforeEach(() => {
+    const resourceUri = createMockResourceUri();
     router = {
       query: {
-        resourceUri: createMockResourceUri(),
+        resourceUri
       },
       push: jest.fn(),
     };
-    state = {
-      searchTerm: chance.string(),
-    };
+
+    resourceState = {
+      currentResource: {
+        ...getResourceDetails(resourceUri)
+      }
+    }
 
     policyDispatch = jest.fn();
     resourceDispatch = jest.fn();
 
     useRouter.mockReturnValue(router);
-    render(<Resource />, {
-      resourceState: state,
+    const utils = render(<Resource />, {
+      resourceState,
       resourceDispatch,
       policyDispatch,
     });
+    unmount = utils.unmount;
   });
 
   it("should clear the occurrence details on load", () => {
     expect(resourceDispatch).toHaveBeenCalledWith({
       type: "SET_OCCURRENCE_DETAILS",
       data: null,
+    });
+  });
+  it("should clear the current resource on unmount", () => {
+    unmount();
+    expect(resourceDispatch).toHaveBeenCalledWith({
+      type: "SET_CURRENT_RESOURCE",
+      data: null
     });
   });
 
@@ -68,6 +80,15 @@ describe("Resource Details page", () => {
     expect(
       screen.getByText(resourceVersion.substring(0, 12))
     ).toBeInTheDocument();
+  });
+
+  it("should render the button to change the resource version", () => {
+    const renderedButton = screen.getByRole("button", {name: "Change Version"});
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(screen.getByText(/no versions found matching the resource/i)).toBeInTheDocument();
   });
 
   it("should render a button to use the resource in the policy playground", () => {

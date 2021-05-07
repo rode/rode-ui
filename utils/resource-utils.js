@@ -15,7 +15,7 @@
  */
 
 // TODO: tests
-  // TODO: add character to end of searchable name to avoid issues with `my-image` and `my-image-2`
+// TODO: add character to end of searchable name to avoid issues with `my-image` and `my-image-2`
 const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
 const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
 const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";
@@ -88,51 +88,51 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2})",
-    getSearchableName: (name) => `deb://${name}`
+    getSearchableName: (name) => `deb://${name}`,
   },
   {
     type: "Docker",
     regex: DOCKER_REGEXP,
     parse: parseDocker,
-    getSearchableName: (name) => name
+    getSearchableName: (name) => name,
   },
   {
     type: "File",
     regex: FILE_REGEXP,
     parse: parseFile,
-    getSearchableName: (name) => `file://${name}`
+    getSearchableName: (name) => `file://${name}`,
   },
   {
     type: "Maven",
     regex: "^(gav:/{2})",
     parse: parseMaven,
-    getSearchableName: (name) => `gav://${name}`
+    getSearchableName: (name) => `gav://${name}`,
   },
   {
     type: "NPM",
     regex: "^(npm:/{2})",
-    getSearchableName: (name) => `npm://${name}`
+    getSearchableName: (name) => `npm://${name}`,
   },
   {
     type: "NuGet",
     regex: "^(nuget:/{2})",
-    getSearchableName: (name) => `nuget://${name}`
+    getSearchableName: (name) => `nuget://${name}`,
   },
   {
     type: "Python",
     regex: "^(pip:/{2})",
-    getSearchableName: (name) => `pip://${name}`
+    getSearchableName: (name) => `pip://${name}`,
   },
   {
     type: "RPM",
     regex: "^(rpm:/{2})",
-    getSearchableName: (name) => `rpm://${name}`
+    getSearchableName: (name) => `rpm://${name}`,
   },
   {
     type: "Git",
     regex: GIT_REGEXP,
     parse: parseGit,
-    getSearchableName: (name) => `git://${name}`
+    getSearchableName: (name) => `git://${name}`,
   },
 ];
 
@@ -154,13 +154,15 @@ export const getResourceDetails = (uri) => {
     ? resourceMatch.parse(uri)
     : parseGeneric(uri);
 
-  const searchableName = resourceMatch.getSearchableName ? resourceMatch.getSearchableName(name) : name;
+  const searchableName = resourceMatch.getSearchableName
+    ? resourceMatch.getSearchableName(name)
+    : name;
 
   return {
     resourceType: resourceMatch.type,
     resourceName: name,
     resourceVersion: version,
     searchableName,
-    uri
+    uri,
   };
 };

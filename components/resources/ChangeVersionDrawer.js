@@ -15,24 +15,29 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 import Button from "components/Button";
 import Drawer from "components/Drawer";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import ResourceVersion from "./ResourceVersion";
-import styles from "styles/modules/Drawer.module.scss"
+import styles from "styles/modules/Drawer.module.scss";
 import LabelWithValue from "../LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
-import {useRouter} from "next/router";
-import { useResources } from "../../providers/resources";
-import { resourceActions } from "../../reducers/resources";
+import { useRouter } from "next/router";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();
-  const {state, dispatch} = useResources();
-  const {resourceName, resourceVersion: currentVersion, searchableName} = state.currentResource;
+  const { state, dispatch } = useResources();
+  const {
+    resourceName,
+    resourceVersion: currentVersion,
+    searchableName,
+  } = state.currentResource;
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     searchableName ? "/api/resource-versions" : null,
@@ -44,58 +49,65 @@ const ChangeVersionDrawer = (props) => {
     router.push(`/resources/${encodeURIComponent(uri)}`);
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,
-      data: null
+      data: null,
     });
     closeDrawer();
-  }
+  };
 
   return (
     <>
-      <Drawer
-        isOpen={isOpen}
-        onClose={closeDrawer}
-      >
+      <Drawer isOpen={isOpen} onClose={closeDrawer}>
         <Loading loading={loading}>
-          <div className={styles.versionSelectionHeader}>
-            <p className={styles.versionSelectionName}>{ resourceName }</p>
-            <p className={styles.versionSelectionInstructions}>Select from the list below to see occurrences related to that version</p>
-          </div>
-          {
-            data?.length > 0 ?
-                  data.map(({resourceVersion, uri}) => {
-                    const isCurrentVersion = resourceVersion === currentVersion;
+          {data?.length > 0 ? (
+            <>
+              <div className={styles.versionSelectionHeader}>
+                <p className={styles.versionSelectionName}>{resourceName}</p>
+                <p className={styles.versionSelectionInstructions}>
+                  Select from the list below to see occurrences related to that
+                  version
+                </p>
+              </div>
+              {data.map(({ resourceVersion, uri }) => {
+                const isCurrentVersion = resourceVersion === currentVersion;
 
-                    return (
-                        <div key={resourceVersion} className={styles.versionCard}>
-                          <div>
-                            <LabelWithValue label={"Version"} value={<ResourceVersion version={resourceVersion}/>}/>
-                          </div>
-                          <Button
-                            buttonType={"text"}
-                            label={isCurrentVersion ? "Selected" : 'Select'}
-                            disabled={isCurrentVersion}
-                            className={styles.versionSelectionButton}
-                            onClick={() => selectVersion(uri)}
-                          >
-                            {
-                              isCurrentVersion &&
-                              <>
-                                <Icon name={ICON_NAMES.CHECK}/>
-                                <p>Selected</p>
-                              </>
-                            }
-                          </Button>
-                        </div>
-                      )
-                    }
-                  )
-              :
-              <p>{ `No versions found matching the resource "${resourceName}"` }</p>
-          }
+                return (
+                  <div key={resourceVersion} className={styles.versionCard}>
+                    <div>
+                      <LabelWithValue
+                        label={"Version"}
+                        value={<ResourceVersion version={resourceVersion} />}
+                      />
+                    </div>
+                    <Button
+                      buttonType={"text"}
+                      label={isCurrentVersion ? "Selected" : "Select"}
+                      disabled={isCurrentVersion}
+                      className={styles.versionSelectionButton}
+                      onClick={() => selectVersion(uri)}
+                    >
+                      {isCurrentVersion && (
+                        <>
+                          <Icon name={ICON_NAMES.CHECK} />
+                          <p>Selected</p>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <p>{`No versions found matching the resource "${resourceName}"`}</p>
+          )}
         </Loading>
       </Drawer>
     </>
   );
+};
+
+ChangeVersionDrawer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
 };
 
 export default ChangeVersionDrawer;

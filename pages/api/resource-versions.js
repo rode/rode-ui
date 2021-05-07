@@ -17,8 +17,9 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
-import { getResourceDetails } from "../../utils/resource-utils";
+import { getResourceDetails } from "utils/resource-utils";
 
+// TODO: tests
 export default async (req, res) => {
   if (req.method !== "GET") {
     return res
@@ -52,11 +53,11 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
-    const resources = listResourceVersionsResponse.resources.map(({uri}) => {
-      const {resourceVersion} = getResourceDetails(uri);
+    const resources = listResourceVersionsResponse.resources.map(({ uri }) => {
+      const { resourceVersion } = getResourceDetails(uri);
       return {
         resourceVersion,
-        uri
+        uri,
       };
     });
 

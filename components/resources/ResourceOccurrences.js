@@ -32,6 +32,7 @@ const ResourceOccurrences = (props) => {
   const { state } = useResources();
   const { theme } = useTheme();
 
+  // TODO: move this logic to [resourceUri], handle the no resource found logic at that level
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });

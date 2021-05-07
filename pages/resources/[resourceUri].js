@@ -48,16 +48,16 @@ const Resource = () => {
     return () => {
       dispatch({
         type: resourceActions.SET_CURRENT_RESOURCE,
-        data: null
+        data: null,
       });
-    }
+    };
   }, []);
 
   useEffect(() => {
     dispatch({
       type: resourceActions.SET_CURRENT_RESOURCE,
-      data: getResourceDetails(resourceUri)
-    })
+      data: getResourceDetails(resourceUri),
+    });
   }, [resourceUri]);
 
   const evaluateInPlayground = () => {
@@ -75,13 +75,18 @@ const Resource = () => {
 
   return (
     <>
-      <ChangeVersionDrawer resourceUri={resourceUri} isOpen={showVersionDrawer} closeDrawer={() => setShowVersionDrawer(false)}/>
+      <ChangeVersionDrawer
+        isOpen={showVersionDrawer}
+        closeDrawer={() => setShowVersionDrawer(false)}
+      />
       <PageHeader>
         <ResourceBreadcrumbs />
       </PageHeader>
       <div className={`${styles[theme]} ${styles.container}`}>
         <div className={styles.resourceHeader}>
-          <p className={styles.resourceName}>{state.currentResource.resourceName}</p>
+          <p className={styles.resourceName}>
+            {state.currentResource.resourceName}
+          </p>
           <div className={styles.resourceDetailsContainer}>
             <div>
               <LabelWithValue
@@ -90,10 +95,19 @@ const Resource = () => {
               />
               <LabelWithValue
                 label={"Version"}
-                value={<ResourceVersion version={state.currentResource.resourceVersion} copy={true} />}
+                value={
+                  <ResourceVersion
+                    version={state.currentResource.resourceVersion}
+                    copy={true}
+                  />
+                }
               />
             </div>
-            <Button type={"text"} onClick={() => setShowVersionDrawer(true)} label={"Change Version"} />
+            <Button
+              type={"text"}
+              onClick={() => setShowVersionDrawer(true)}
+              label={"Change Version"}
+            />
           </div>
         </div>
         <div className={styles.playgroundContainer}>
