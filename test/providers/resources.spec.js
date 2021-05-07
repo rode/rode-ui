@@ -40,6 +40,7 @@ describe("resources provider", () => {
   it("should render the default state keys", () => {
     expect(screen.getByText(/searchTerm/i)).toBeInTheDocument();
     expect(screen.getByText(/occurrenceDetails/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentResource/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {

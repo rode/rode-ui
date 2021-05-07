@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// TODO: tests
+  // TODO: add character to end of searchable name to avoid issues with `my-image` and `my-image-2`
 const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
 const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
 const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";

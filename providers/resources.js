@@ -23,6 +23,7 @@ const ResourceContext = createContext();
 const initialState = {
   searchTerm: "",
   occurrenceDetails: null,
+  currentResource: { },
 };
 
 export const ResourcesProvider = ({ value, children }) => {
