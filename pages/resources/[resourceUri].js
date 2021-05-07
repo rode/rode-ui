@@ -33,12 +33,9 @@ import ChangeVersionDrawer from "components/resources/ChangeVersionDrawer";
 
 const Resource = () => {
   const { theme } = useTheme();
-  const { dispatch } = useResources();
+  const { state, dispatch } = useResources();
   const { dispatch: policyDispatch } = usePolicies();
   const router = useRouter();
-  const [resourceName, setResourceName] = useState("");
-  const [resourceVersion, setResourceVersion] = useState("");
-  const [resourceType, setResourceType] = useState("");
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;
 
@@ -47,18 +44,20 @@ const Resource = () => {
       type: resourceActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
+
+    return () => {
+      dispatch({
+        type: resourceActions.SET_CURRENT_RESOURCE,
+        data: null
+      });
+    }
   }, []);
 
-  // TODO: set this in state so no need to get resource details a billion times, remove upon leaving the page
   useEffect(() => {
-    const {
-      resourceName: name,
-      resourceVersion: version,
-      resourceType: type,
-    } = getResourceDetails(resourceUri);
-    setResourceName(name);
-    setResourceVersion(version);
-    setResourceType(type);
+    dispatch({
+      type: resourceActions.SET_CURRENT_RESOURCE,
+      data: getResourceDetails(resourceUri)
+    })
   }, [resourceUri]);
 
   const evaluateInPlayground = () => {
@@ -66,9 +65,9 @@ const Resource = () => {
       type: policyActions.SET_EVALUATION_RESOURCE,
       data: {
         uri: resourceUri,
-        name: resourceName,
-        version: resourceVersion,
-        type: resourceType,
+        name: state.currentResource.resourceName,
+        version: state.currentResource.resourceVersion,
+        type: state.currentResource.resourceType,
       },
     });
     router.push("/playground");
@@ -82,16 +81,16 @@ const Resource = () => {
       </PageHeader>
       <div className={`${styles[theme]} ${styles.container}`}>
         <div className={styles.resourceHeader}>
-          <p className={styles.resourceName}>{resourceName}</p>
+          <p className={styles.resourceName}>{state.currentResource.resourceName}</p>
           <div className={styles.resourceDetailsContainer}>
             <div>
               <LabelWithValue
                 label={"Type"}
-                value={resourceType}
+                value={state.currentResource.resourceType}
               />
               <LabelWithValue
                 label={"Version"}
-                value={<ResourceVersion version={resourceVersion} copy={true} />}
+                value={<ResourceVersion version={state.currentResource.resourceVersion} copy={true} />}
               />
             </div>
             <Button type={"text"} onClick={() => setShowVersionDrawer(true)} label={"Change Version"} />
