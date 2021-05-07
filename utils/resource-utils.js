@@ -88,51 +88,51 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2})",
-    getSearchableName: (name) => `deb://${name}`,
+    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "Docker",
     regex: DOCKER_REGEXP,
     parse: parseDocker,
-    getSearchableName: (name) => name,
+    getSearchableName: ({ name }) => name,
   },
   {
     type: "File",
     regex: FILE_REGEXP,
     parse: parseFile,
-    getSearchableName: (name) => `file://${name}`,
+    getSearchableName: (name) => `file://sha256:${name}`, // how to do this when the version is in the middle of the file name? cannot use starts with
   },
   {
     type: "Maven",
     regex: "^(gav:/{2})",
     parse: parseMaven,
-    getSearchableName: (name) => `gav://${name}`,
+    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "NPM",
     regex: "^(npm:/{2})",
-    getSearchableName: (name) => `npm://${name}`,
+    getSearchableName: ({ name }) => `npm://${name}`,
   },
   {
     type: "NuGet",
     regex: "^(nuget:/{2})",
-    getSearchableName: (name) => `nuget://${name}`,
+    getSearchableName: ({ name }) => `nuget://${name}`,
   },
   {
     type: "Python",
     regex: "^(pip:/{2})",
-    getSearchableName: (name) => `pip://${name}`,
+    getSearchableName: ({ name }) => `pip://${name}`,
   },
   {
     type: "RPM",
     regex: "^(rpm:/{2})",
-    getSearchableName: (name) => `rpm://${name}`,
+    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "Git",
     regex: GIT_REGEXP,
     parse: parseGit,
-    getSearchableName: (name) => `git://${name}`,
+    getSearchableName: ({ name }) => `git://${name}`,
   },
 ];
 
@@ -147,6 +147,8 @@ export const getResourceDetails = (uri) => {
       resourceType: "Unknown",
       resourceName: uri,
       resourceVersion: "N/A",
+      searchableName: null,
+      uri
     };
   }
 
@@ -155,7 +157,7 @@ export const getResourceDetails = (uri) => {
     : parseGeneric(uri);
 
   const searchableName = resourceMatch.getSearchableName
-    ? resourceMatch.getSearchableName(name)
+    ? resourceMatch.getSearchableName({ name, version, uri })
     : name;
 
   return {
