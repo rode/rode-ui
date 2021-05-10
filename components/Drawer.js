@@ -6,8 +6,6 @@ import Icon from "./Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useTheme } from "providers/theme";
 
-// TODO: test this
-
 const Drawer = (props) => {
   const { isOpen, onClose, children } = props;
   const { theme } = useTheme();

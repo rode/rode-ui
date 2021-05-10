@@ -29,8 +29,6 @@ import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 
-// TODO: tests
-
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();
@@ -57,61 +55,59 @@ const ChangeVersionDrawer = (props) => {
   };
 
   return (
-    <>
-      <Drawer isOpen={isOpen} onClose={closeDrawer}>
-        <Loading loading={loading}>
-          {data?.length > 0 ? (
-            <>
-              <div className={styles.versionSelectionHeader}>
-                <p className={styles.versionSelectionName}>{resourceName}</p>
-                <p className={styles.versionSelectionInstructions}>
-                  Select from the list below to see occurrences related to that
-                  version
-                </p>
-              </div>
-              {data.map(({ resourceVersion, uri }) => {
-                const isCurrentVersion = resourceVersion === currentVersion;
+    <Drawer isOpen={isOpen} onClose={closeDrawer}>
+      <Loading loading={loading}>
+        {data?.length > 0 ? (
+          <>
+            <div className={styles.versionSelectionHeader}>
+              <p className={styles.versionSelectionName}>{resourceName}</p>
+              <p className={styles.versionSelectionInstructions}>
+                Select from the list below to see occurrences related to that
+                version
+              </p>
+            </div>
+            {data.map(({ resourceVersion, uri }) => {
+              const isCurrentVersion = resourceVersion === currentVersion;
 
-                return (
-                  <div key={resourceVersion} className={styles.versionCard}>
-                    <div>
-                      <LabelWithValue
-                        label={"Version"}
-                        value={<ResourceVersion version={resourceVersion} />}
-                      />
-                    </div>
-                    <Button
-                      buttonType={"text"}
-                      label={isCurrentVersion ? "Selected" : "Select"}
-                      disabled={isCurrentVersion}
-                      className={styles.versionSelectionButton}
-                      onClick={() => selectVersion(uri)}
-                    >
-                      {isCurrentVersion && (
-                        <>
-                          <Icon name={ICON_NAMES.CHECK} />
-                          <p>Selected</p>
-                        </>
-                      )}
-                    </Button>
+              return (
+                <div key={resourceVersion} className={styles.versionCard}>
+                  <div>
+                    <LabelWithValue
+                      label={"Version"}
+                      value={<ResourceVersion version={resourceVersion} />}
+                    />
                   </div>
-                );
-              })}
-              {!isLastPage && (
-                <Button
-                  buttonType="text"
-                  onClick={goToNextPage}
-                  label={"View More"}
-                  className={styles.viewMoreResultsButton}
-                />
-              )}
-            </>
-          ) : (
-            <p>{`No versions found matching the resource "${resourceName}"`}</p>
-          )}
-        </Loading>
-      </Drawer>
-    </>
+                  <Button
+                    buttonType={"text"}
+                    label={isCurrentVersion ? "Selected" : "Select"}
+                    disabled={isCurrentVersion}
+                    className={styles.versionSelectionButton}
+                    onClick={() => selectVersion(uri)}
+                  >
+                    {isCurrentVersion && (
+                      <>
+                        <Icon name={ICON_NAMES.CHECK} />
+                        <p>Selected</p>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              );
+            })}
+            {!isLastPage && (
+              <Button
+                buttonType="text"
+                onClick={goToNextPage}
+                label={"View More"}
+                className={styles.viewMoreResultsButton}
+              />
+            )}
+          </>
+        ) : (
+          <p>{`No versions found matching the resource "${resourceName}"`}</p>
+        )}
+      </Loading>
+    </Drawer>
   );
 };
 
