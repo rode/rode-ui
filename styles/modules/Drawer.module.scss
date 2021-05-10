@@ -56,7 +56,7 @@
   position: absolute;
   @include transition;
   transform: translateX(100vw);
-  //width: 0;
+  width: 0;
 
   > * {
     visibility: hidden;
@@ -108,7 +108,7 @@
 }
 
 .viewMoreResultsButton {
-  margin: 0 auto;
+  margin: 0 auto 1rem;
 }
 
 .darkTheme {

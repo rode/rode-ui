@@ -113,6 +113,13 @@
   }
 }
 
+.notFound {
+  text-align: center;
+  align-self: center;
+  margin-top: 30vh;
+  @include ellipsis(calc(90vw - 3rem));
+}
+
 .darkTheme {
   .resourceHeader {
     background-color: $LAGOON;

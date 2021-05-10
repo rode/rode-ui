@@ -64,7 +64,7 @@ describe("Resource Details page", () => {
     unmount();
     expect(resourceDispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_RESOURCE",
-      data: null,
+      data: {},
     });
   });
 

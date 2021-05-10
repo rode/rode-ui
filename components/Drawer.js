@@ -17,15 +17,12 @@ const Drawer = (props) => {
     if (ref.current && !ref.current.contains(event.target)) {
       onClose();
     }
-  }
+  };
 
   useEffect(() => {
     document.addEventListener("mousedown", closeDrawerWhenClickingOutside);
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        closeDrawerWhenClickingOutside
-      );
+      document.removeEventListener("mousedown", closeDrawerWhenClickingOutside);
     };
   }, []);
 
