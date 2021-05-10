@@ -95,10 +95,18 @@
   @include tabletAndLarger {
     flex-direction: row;
   }
+
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
 }
 
 .versionSelectionButton {
   min-width: fit-content;
+}
+
+.viewMoreResultsButton {
+  margin: 0 auto;
 }
 
 .darkTheme {

@@ -31,16 +31,16 @@ describe("Resource Details page", () => {
     const resourceUri = createMockResourceUri();
     router = {
       query: {
-        resourceUri
+        resourceUri,
       },
       push: jest.fn(),
     };
 
     resourceState = {
       currentResource: {
-        ...getResourceDetails(resourceUri)
-      }
-    }
+        ...getResourceDetails(resourceUri),
+      },
+    };
 
     policyDispatch = jest.fn();
     resourceDispatch = jest.fn();
@@ -64,7 +64,7 @@ describe("Resource Details page", () => {
     unmount();
     expect(resourceDispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_RESOURCE",
-      data: null
+      data: null,
     });
   });
 
@@ -83,12 +83,16 @@ describe("Resource Details page", () => {
   });
 
   it("should render the button to change the resource version", () => {
-    const renderedButton = screen.getByRole("button", {name: "Change Version"});
+    const renderedButton = screen.getByRole("button", {
+      name: "Change Version",
+    });
 
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
 
-    expect(screen.getByText(/no versions found matching the resource/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/no versions found matching the resource/i)
+    ).toBeInTheDocument();
   });
 
   it("should render a button to use the resource in the policy playground", () => {

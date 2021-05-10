@@ -19,7 +19,6 @@ import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
 import { getResourceDetails } from "utils/resource-utils";
 
-// TODO: tests
 export default async (req, res) => {
   if (req.method !== "GET") {
     return res
@@ -31,6 +30,13 @@ export default async (req, res) => {
 
   try {
     const genericResourceName = req.query.resource;
+
+    if (!genericResourceName) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Generic resource name must be provided" });
+    }
+
     const filter = {
       filter: `resource.uri.startsWith("${genericResourceName}")`,
     };

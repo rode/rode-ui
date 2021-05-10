@@ -22,12 +22,14 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import ResourceVersion from "./ResourceVersion";
 import styles from "styles/modules/Drawer.module.scss";
-import LabelWithValue from "../LabelWithValue";
+import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+
+// TODO: tests
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -95,6 +97,14 @@ const ChangeVersionDrawer = (props) => {
                   </div>
                 );
               })}
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                  className={styles.viewMoreResultsButton}
+                />
+              )}
             </>
           ) : (
             <p>{`No versions found matching the resource "${resourceName}"`}</p>

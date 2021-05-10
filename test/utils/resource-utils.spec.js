@@ -63,7 +63,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(url.replace(resourceVersion, ""));
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for an RPM Resource", () => {
@@ -78,7 +78,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(url.replace(resourceVersion, ""));
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a Maven Resource", () => {
@@ -92,7 +92,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(url.replace(resourceVersion, ""));
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for an NPM Resource", () => {
@@ -107,7 +107,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(`npm://${resourceName}`);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a NuGet Resource", () => {
@@ -122,7 +122,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(`nuget://${resourceName}`);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a Python Resource", () => {
@@ -137,7 +137,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(`pip://${resourceName}`);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a File Resource", () => {
@@ -149,7 +149,7 @@ describe("resource utils", () => {
       expect(actual.resourceVersion).toBe(resourceVersion);
       // ?????
       expect(actual.searchableName).toBe(`file://sha256:${resourceName}`);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a Docker Resource", () => {
@@ -160,7 +160,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(resourceName);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
 
     it("should return the correct details for a Git Resource", () => {
@@ -171,7 +171,7 @@ describe("resource utils", () => {
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.searchableName).toBe(`git://${resourceName}`);
-      expect(actual.uri).toBe(url)
+      expect(actual.uri).toBe(url);
     });
   });
 });

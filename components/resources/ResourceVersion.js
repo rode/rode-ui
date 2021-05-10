@@ -25,7 +25,7 @@ const ResourceVersion = (props) => {
   const { version, copy, buttonClassName = "" } = props;
 
   const shortenedVersion =
-    version.length > 12 ? version.substring(0, 12) : version;
+    version?.length > 12 ? version.substring(0, 12) : version;
 
   return (
     <>

@@ -100,7 +100,7 @@ const resourceUrlTypes = [
     type: "File",
     regex: FILE_REGEXP,
     parse: parseFile,
-    getSearchableName: (name) => `file://sha256:${name}`, // how to do this when the version is in the middle of the file name? cannot use starts with
+    getSearchableName: ({ name }) => `file://sha256:${name}`, // not correct, need to change search filter to `endsWith(<name>)`
   },
   {
     type: "Maven",
@@ -148,7 +148,7 @@ export const getResourceDetails = (uri) => {
       resourceName: uri,
       resourceVersion: "N/A",
       searchableName: null,
-      uri
+      uri,
     };
   }
 
@@ -156,9 +156,7 @@ export const getResourceDetails = (uri) => {
     ? resourceMatch.parse(uri)
     : parseGeneric(uri);
 
-  const searchableName = resourceMatch.getSearchableName
-    ? resourceMatch.getSearchableName({ name, version, uri })
-    : name;
+  const searchableName = resourceMatch.getSearchableName({ name, version, uri });
 
   return {
     resourceType: resourceMatch.type,
