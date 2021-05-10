@@ -86,7 +86,7 @@
       margin: 0.25rem;
     }
 
-    &:hover {
+    &:hover, &:focus {
       @include transition;
 
       .liatrioOuter {

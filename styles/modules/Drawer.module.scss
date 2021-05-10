@@ -30,6 +30,7 @@
   @include transition;
   transform: translateX(0);
   overflow-y: auto;
+  overflow-x: hidden;
 
   @include tabletAndLarger {
     width: 60vw;
@@ -54,11 +55,12 @@
   @extend .openDrawer;
   position: absolute;
   @include transition;
-  transform: translateX(10vw);
-  width: 0;
+  transform: translateX(100vw);
+  //width: 0;
 
   > * {
-    display: none;
+    visibility: hidden;
+    overflow: hidden;
   }
 
   .closeButton {

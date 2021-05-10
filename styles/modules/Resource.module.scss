@@ -86,7 +86,7 @@
   cursor: pointer;
   @include transition;
 
-  &:hover {
+  &:hover, &:focus {
     @include transition;
   }
 }
@@ -125,7 +125,7 @@
   .copyButton {
     color: $DARK_GREY;
 
-    &:hover {
+    &:hover, &:focus {
       color: color.scale($DARK_GREY, $lightness: 20%);
     }
   }
@@ -144,7 +144,7 @@
   .copyButton {
     color: $SOFT_WHITE;
 
-    &:hover {
+    &:hover, &:focus {
       color: color.scale($SOFT_WHITE, $lightness: -20%);
     }
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import Drawer from "components/Drawer";
@@ -56,6 +56,12 @@ const ChangeVersionDrawer = (props) => {
     closeDrawer();
   };
 
+  useEffect(() => {
+    if (data && isOpen) {
+      document.getElementById("firstVersion")?.focus();
+    }
+  }, [data, isOpen]);
+
   return (
     <>
       <Drawer isOpen={isOpen} onClose={closeDrawer}>
@@ -69,8 +75,9 @@ const ChangeVersionDrawer = (props) => {
                   version
                 </p>
               </div>
-              {data.map(({ resourceVersion, uri }) => {
+              {data.map(({ resourceVersion, uri }, index) => {
                 const isCurrentVersion = resourceVersion === currentVersion;
+                const versionId = index === 0 ? "firstVersion" : "";
 
                 return (
                   <div key={resourceVersion} className={styles.versionCard}>
@@ -86,6 +93,7 @@ const ChangeVersionDrawer = (props) => {
                       disabled={isCurrentVersion}
                       className={styles.versionSelectionButton}
                       onClick={() => selectVersion(uri)}
+                      id={versionId}
                     >
                       {isCurrentVersion && (
                         <>

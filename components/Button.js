@@ -34,6 +34,8 @@ const Button = (props) => {
 
   const { theme } = useTheme();
 
+  console.log('otherProps', otherProps);
+
   return (
     <button
       className={`${styles[buttonType]} ${styles[theme]} ${className}`}
@@ -63,6 +65,7 @@ Button.propTypes = {
     "primary",
     "icon",
     "text",
+    "textOnAccent",
     "textDestructive",
     "primaryDestructive",
     "close",
