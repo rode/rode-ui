@@ -149,11 +149,6 @@ $INDENTATION: 1rem;
   margin-right: 0.75rem;
 }
 
-//.notFound {
-//  align-self: center;
-//  @include ellipsis(calc(90vw - 3rem));
-//}
-
 .darkTheme {
   $ACCENT: $LAGOON;
   .sectionTitle {

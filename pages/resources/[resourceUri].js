@@ -114,7 +114,6 @@ const Resource = () => {
                     />
                   </div>
                   <Button
-                    buttonType={"textOnAccent"}
                     onClick={() => setShowVersionDrawer(true)}
                     label={"Change Version"}
                   />

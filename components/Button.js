@@ -63,7 +63,6 @@ Button.propTypes = {
     "primary",
     "icon",
     "text",
-    "textOnAccent",
     "textDestructive",
     "primaryDestructive",
     "close",

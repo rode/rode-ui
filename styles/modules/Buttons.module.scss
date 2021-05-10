@@ -129,34 +129,6 @@
   }
 }
 
-.textOnAccent {
-  @extend .text;
-
-  &.darkTheme {
-    color: $DARKEST_GREY;
-    background-color: transparent;
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: $LAGOON;
-      background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
-    }
-  }
-
-  &.lightTheme {
-    color: $WHITE;
-    background-color: transparent;
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: color.scale($DEEP_SEA, $lightness: -10%);
-      background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -15%);
-    }
-  }
-}
-
 .icon {
   @extend .button;
   background-color: transparent;
