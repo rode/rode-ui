@@ -156,7 +156,11 @@ export const getResourceDetails = (uri) => {
     ? resourceMatch.parse(uri)
     : parseGeneric(uri);
 
-  const searchableName = resourceMatch.getSearchableName({ name, version, uri });
+  const searchableName = resourceMatch.getSearchableName({
+    name,
+    version,
+    uri,
+  });
 
   return {
     resourceType: resourceMatch.type,

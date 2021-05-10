@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "styles/modules/Drawer.module.scss";
 import PropTypes from "prop-types";
 import Button from "./Button";
@@ -11,18 +11,37 @@ import { useTheme } from "providers/theme";
 const Drawer = (props) => {
   const { isOpen, onClose, children } = props;
   const { theme } = useTheme();
+  const ref = useRef(null);
+
+  const closeDrawerWhenClickingOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      onClose();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", closeDrawerWhenClickingOutside);
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        closeDrawerWhenClickingOutside
+      );
+    };
+  }, []);
 
   return (
     <div
       className={`${styles[theme]} ${
         isOpen ? styles.openDrawer : styles.closedDrawer
       }`}
+      ref={ref}
     >
       <Button
         buttonType={"close"}
         label={"Close Drawer"}
         className={styles.closeButton}
         onClick={onClose}
+        id={"drawerClose"}
       >
         <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
       </Button>

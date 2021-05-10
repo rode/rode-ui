@@ -34,8 +34,6 @@ const Button = (props) => {
 
   const { theme } = useTheme();
 
-  console.log('otherProps', otherProps);
-
   return (
     <button
       className={`${styles[buttonType]} ${styles[theme]} ${className}`}
