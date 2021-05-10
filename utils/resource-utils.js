@@ -92,7 +92,7 @@ const resourceUrlTypes = [
     type: "Docker",
     regex: DOCKER_REGEXP,
     parse: parseDocker,
-    getSearchableName: ({ name }) => name,
+    getSearchableName: ({ name }) => `${name}@`,
   },
   {
     type: "File",

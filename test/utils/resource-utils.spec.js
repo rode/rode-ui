@@ -147,7 +147,6 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("File");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      // ?????
       expect(actual.searchableName).toBe(`file://sha256:${resourceName}`);
       expect(actual.uri).toBe(url);
     });
@@ -159,7 +158,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Docker");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.searchableName).toBe(resourceName);
+      expect(actual.searchableName).toBe(`${resourceName}@`);
       expect(actual.uri).toBe(url);
     });
 
