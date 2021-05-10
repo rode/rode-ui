@@ -32,13 +32,13 @@ const Drawer = (props) => {
         isOpen ? styles.openDrawer : styles.closedDrawer
       }`}
       ref={ref}
+      data-testid={"drawer"}
     >
       <Button
         buttonType={"close"}
         label={"Close Drawer"}
         className={styles.closeButton}
         onClick={onClose}
-        id={"drawerClose"}
       >
         <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
       </Button>

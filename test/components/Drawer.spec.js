@@ -15,91 +15,66 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import Prism from "prism/prism";
+import { render, screen } from "test/testing-utils/renderer";
+import Drawer from "components/Drawer";
+import userEvent from "@testing-library/user-event";
 
-import Code from "components/Code";
-
-describe("Code", () => {
-  let code;
+describe("Drawer", () => {
+  let isOpen, onClose, children, unmount, rerender;
 
   beforeEach(() => {
-    code = chance.string();
+    jest.spyOn(document, "addEventListener");
+    jest.spyOn(document, "removeEventListener");
+    isOpen = true;
+    onClose = jest.fn();
+    children = chance.string();
+
+    const utils = render(
+      <>
+        <p>trigger</p>
+        <Drawer isOpen={isOpen} onClose={onClose}>
+          <p>{children}</p>
+        </Drawer>
+      </>
+    );
+    unmount = utils.unmount;
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should highlight the code syntax when rego is specified", () => {
-    render(<Code code={code} language={"rego"} />);
+  it("should render the close drawer button", () => {
+    const renderedCloseButton = screen.getByLabelText("Close Drawer");
 
-    expect(Prism.highlightAll).toHaveBeenCalledTimes(1);
-    const renderedComponent = screen.getByText(code, {
-      selector: "code",
-      exact: false,
-    });
-
-    expect(renderedComponent).toBeInTheDocument();
-    expect(renderedComponent).toHaveClass("language-rego");
-    expect(renderedComponent.closest("pre")).toHaveClass("codeContainer");
+    expect(renderedCloseButton).toBeInTheDocument();
+    userEvent.click(renderedCloseButton);
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("should highlight the code syntax when json is specified", () => {
-    render(<Code code={code} language={"json"} />);
+  it("should render the contents of an open drawer", () => {
+    expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
+    expect(screen.getByText(children)).toBeInTheDocument();
 
-    expect(Prism.highlightAll).toHaveBeenCalledTimes(1);
-    const renderedComponent = screen.getByText(code, {
-      selector: "code",
-      exact: false,
-    });
-
-    expect(renderedComponent).toBeInTheDocument();
-    expect(renderedComponent).toHaveClass("language-json");
-    expect(renderedComponent.closest("pre")).toHaveClass("codeContainer");
-  });
-
-  it("should allow the user to specify additional class names", () => {
-    const className = chance.string();
-    render(
-      <Code
-        code={code}
-        language={chance.pickone(["rego", "json"])}
-        className={className}
-      />
+    rerender(
+      <Drawer isOpen={false} onClose={onClose}>
+        <p>{children}</p>
+      </Drawer>
     );
 
-    const renderedComponent = screen.getByText(code, {
-      selector: "code",
-      exact: false,
-    });
-
-    expect(renderedComponent).toBeInTheDocument();
-    expect(renderedComponent.closest("pre")).toHaveClass("codeContainer");
-    expect(renderedComponent.closest("pre")).toHaveClass(className);
+    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
   });
 
-  it("should allow the user to specify additional props", () => {
-    const extraProp = {
-      id: chance.string(),
-    };
-    render(
-      <Code
-        code={code}
-        language={chance.pickone(["rego", "json"])}
-        {...extraProp}
-      />
-    );
+  it("should register a listener for click events outside of the drawer", () => {
+    expect(document.addEventListener)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith("mousedown", expect.any(Function));
 
-    const renderedComponent = screen.getByText(code, {
-      selector: "code",
-      exact: false,
-    });
-
-    expect(renderedComponent).toBeInTheDocument();
-    expect(renderedComponent.closest("pre")).toHaveAttribute(
-      "id",
-      extraProp.id
+    unmount();
+    expect(document.removeEventListener).toHaveBeenCalledWith(
+      "mousedown",
+      expect.any(Function)
     );
   });
 });
