@@ -15,66 +15,34 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { useFetch } from "hooks/useFetch";
+import { render, screen } from "test/testing-utils/renderer";
 import { createMockMappedOccurrences } from "test/testing-utils/mocks";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
-import { useResources } from "providers/resources";
 
 jest.mock("hooks/useFetch");
-jest.mock("providers/resources");
 
 describe("ResourceOccurrences", () => {
-  let resourceUri;
+  let occurrences, resourceState;
 
   beforeEach(() => {
-    useResources.mockReturnValue({
-      state: {},
-    });
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: jest.fn(),
     });
-    resourceUri = chance.string();
+    occurrences = createMockMappedOccurrences();
   });
 
-  it("should not make the fetch call if there is no resource uri specified", () => {
-    useFetch.mockReturnValue({});
-    render(<ResourceOccurrences resourceUri={null} />);
-    expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null, {
-      resourceUri: null,
-    });
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
-  it("should call to fetch the occurrences is a uri is specified", () => {
-    useFetch.mockReturnValue({});
-    render(<ResourceOccurrences resourceUri={resourceUri} />);
-    expect(useFetch)
-      .toHaveBeenCalledTimes(2)
-      .toHaveBeenCalledWith("/api/occurrences", {
-        resourceUri,
-      });
-  });
-
-  it("should show a loading indicator while fetching the data", () => {
-    useFetch.mockReturnValue({
-      loading: true,
-    });
-
-    render(<ResourceOccurrences resourceUri={resourceUri} />);
-
-    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
-  });
-
-  describe("when data has been fetched", () => {
-    let rerender, data;
-
+  describe("showing occurrence previews", () => {
     beforeEach(() => {
-      data = createMockMappedOccurrences();
-      useFetch.mockReturnValue({
-        data,
+      resourceState = {
+        occurrenceDetails: null,
+      };
+      render(<ResourceOccurrences occurrences={occurrences} />, {
+        resourceState,
       });
-      const utils = render(<ResourceOccurrences resourceUri={resourceUri} />);
-      rerender = utils.rerender;
     });
 
     it("should render the build occurrence section", () => {
@@ -92,27 +60,18 @@ describe("ResourceOccurrences", () => {
       expect(screen.getByTitle("Server")).toBeInTheDocument();
     });
 
-    it("should render the occurrence details if they should be shown", () => {
+    it("should not render the occurrence details", () => {
       expect(screen.queryByTestId("occurrenceDetails")).not.toBeInTheDocument();
-
-      useResources.mockReturnValue({
-        state: {
-          occurrenceDetails: data.build[0],
-        },
-      });
-
-      rerender(<ResourceOccurrences resourceUri={resourceUri} />);
-
-      expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
     });
   });
 
-  it("should display a message if the resource doesn't exist", () => {
-    useFetch.mockReturnValue({
-      data: null,
-    });
-    render(<ResourceOccurrences resourceUri={resourceUri} />);
+  it("should render the occurrence details if they should be shown", () => {
+    resourceState.occurrenceDetails = occurrences.build[0];
 
-    expect(screen.getByText(/no resource found/i)).toBeInTheDocument();
+    render(<ResourceOccurrences occurrences={occurrences} />, {
+      resourceState,
+    });
+
+    expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
   });
 });
