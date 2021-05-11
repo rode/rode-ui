@@ -27,15 +27,15 @@ describe("/api/resource-versions", () => {
     response,
     allResources,
     rodeResponse,
-    genericResourceName,
+    versionSearchFilter,
     pageToken;
 
   beforeEach(() => {
-    genericResourceName = chance.word();
+    versionSearchFilter = chance.word();
     request = {
       method: "GET",
       query: {
-        resource: genericResourceName,
+        filter: versionSearchFilter,
       },
     };
     pageToken = chance.string();
@@ -91,7 +91,7 @@ describe("/api/resource-versions", () => {
 
   describe("missing resource name", () => {
     it("should return bad request when the resource name is not provided", async () => {
-      request.query.resource = null;
+      request.query.filter = null;
       await handler(request, response);
 
       expect(response.status)
@@ -99,7 +99,7 @@ describe("/api/resource-versions", () => {
         .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
 
       expect(response.json).toBeCalledTimes(1).toHaveBeenCalledWith({
-        error: "Generic resource name must be provided",
+        error: "Generic resource name and search filter must be provided",
       });
     });
   });
@@ -122,7 +122,7 @@ describe("/api/resource-versions", () => {
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.startsWith("${genericResourceName}")`,
+        filter: versionSearchFilter,
       });
 
       await handler(request, response);
@@ -133,7 +133,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.startsWith("${genericResourceName}")`,
+        filter: versionSearchFilter,
         pageSize,
       });
 
@@ -145,7 +145,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.startsWith("${genericResourceName}")`,
+        filter: versionSearchFilter,
         pageToken,
       });
 

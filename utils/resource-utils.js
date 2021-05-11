@@ -18,7 +18,10 @@ const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
 const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
 const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";
 
-export const parseGeneric = (uri) => {
+const createStartsWithFilter = (genericResourceName) =>
+  `resource.uri.startsWith("${genericResourceName}")`;
+
+const parseGeneric = (uri) => {
   // deb://dist(optional):arch:name:version
   // rpm://dist(optional):arch:name:version
   // npm://package:version
@@ -86,51 +89,54 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2})",
-    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
+    getVersionFilter: ({ version, uri }) =>
+      createStartsWithFilter(uri.replace(version, "")),
   },
   {
     type: "Docker",
     regex: DOCKER_REGEXP,
     parse: parseDocker,
-    getSearchableName: ({ name }) => `${name}@`,
+    getVersionFilter: ({ name }) => createStartsWithFilter(`${name}@`),
   },
   {
     type: "File",
     regex: FILE_REGEXP,
     parse: parseFile,
-    getSearchableName: ({ name }) => `file://sha256:${name}`, // not correct, need to change search filter to `endsWith(<name>)`
+    getVersionFilter: ({ name }) => `resource.uri.endsWith("${name}")`,
   },
   {
     type: "Maven",
     regex: "^(gav:/{2})",
     parse: parseMaven,
-    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
+    getVersionFilter: ({ version, uri }) =>
+      createStartsWithFilter(uri.replace(version, "")),
   },
   {
     type: "NPM",
     regex: "^(npm:/{2})",
-    getSearchableName: ({ name }) => `npm://${name}`,
+    getVersionFilter: ({ name }) => createStartsWithFilter(`npm://${name}`),
   },
   {
     type: "NuGet",
     regex: "^(nuget:/{2})",
-    getSearchableName: ({ name }) => `nuget://${name}`,
+    getVersionFilter: ({ name }) => createStartsWithFilter(`nuget://${name}`),
   },
   {
     type: "Python",
     regex: "^(pip:/{2})",
-    getSearchableName: ({ name }) => `pip://${name}`,
+    getVersionFilter: ({ name }) => createStartsWithFilter(`pip://${name}`),
   },
   {
     type: "RPM",
     regex: "^(rpm:/{2})",
-    getSearchableName: ({ version, uri }) => uri.replace(version, ""),
+    getVersionFilter: ({ version, uri }) =>
+      createStartsWithFilter(uri.replace(version, "")),
   },
   {
     type: "Git",
     regex: GIT_REGEXP,
     parse: parseGit,
-    getSearchableName: ({ name }) => `git://${name}`,
+    getVersionFilter: ({ name }) => createStartsWithFilter(`git://${name}`),
   },
 ];
 
@@ -145,7 +151,7 @@ export const getResourceDetails = (uri) => {
       resourceType: "Unknown",
       resourceName: uri,
       resourceVersion: "N/A",
-      searchableName: null,
+      versionFilter: null,
       uri,
     };
   }
@@ -154,7 +160,7 @@ export const getResourceDetails = (uri) => {
     ? resourceMatch.parse(uri)
     : parseGeneric(uri);
 
-  const searchableName = resourceMatch.getSearchableName({
+  const versionFilter = resourceMatch.getVersionFilter({
     name,
     version,
     uri,
@@ -164,7 +170,7 @@ export const getResourceDetails = (uri) => {
     resourceType: resourceMatch.type,
     resourceName: name,
     resourceVersion: version,
-    searchableName,
+    versionFilter,
     uri,
   };
 };

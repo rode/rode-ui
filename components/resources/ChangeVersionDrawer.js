@@ -36,12 +36,12 @@ const ChangeVersionDrawer = (props) => {
   const {
     resourceName,
     resourceVersion: currentVersion,
-    searchableName,
+    versionFilter,
   } = state.currentResource;
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
-    searchableName ? "/api/resource-versions" : null,
-    { resource: searchableName },
+    versionFilter ? "/api/resource-versions" : null,
+    { filter: versionFilter },
     10
   );
 

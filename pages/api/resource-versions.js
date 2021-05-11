@@ -29,16 +29,16 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const genericResourceName = req.query.resource;
+    const searchFilter = req.query.filter;
 
-    if (!genericResourceName) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "Generic resource name must be provided" });
+    if (!searchFilter) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        error: "Generic resource name and search filter must be provided",
+      });
     }
 
     const filter = {
-      filter: `resource.uri.startsWith("${genericResourceName}")`,
+      filter: searchFilter,
     };
 
     if (req.query.pageSize) {

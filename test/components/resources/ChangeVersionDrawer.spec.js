@@ -39,7 +39,7 @@ describe("ChangeVersionDrawer", () => {
       currentResource: {
         resourceName: chance.string(),
         resourceVersion: chance.string(),
-        searchableName: chance.string(),
+        versionFilter: chance.string(),
       },
     };
     resourceDispatch = jest.fn();
@@ -66,7 +66,7 @@ describe("ChangeVersionDrawer", () => {
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       null,
-      { resource: undefined },
+      { filter: undefined },
       10
     );
   });
@@ -78,7 +78,7 @@ describe("ChangeVersionDrawer", () => {
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
-      { resource: resourceState.currentResource.searchableName },
+      { filter: resourceState.currentResource.versionFilter },
       10
     );
   });
