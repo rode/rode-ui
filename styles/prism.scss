@@ -17,9 +17,14 @@
 /* PrismJS 1.23.0
 https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript+rego */
 
+
+.line-numbers {
+  //margin-right: 1rem;
+}
+
 pre,
 code,
-.token {
+.token, .line-numbers {
   font-family: monospace;
 }
 
@@ -40,7 +45,7 @@ code,
 }
 
 .darkTheme {
-  .token.comment {
+  .token.comment, .line-numbers {
     color: $MEDIUM_GREY;
   }
 
@@ -100,7 +105,7 @@ code,
 }
 
 .lightTheme {
-  .token.comment {
+  .token.comment, .line-numbers {
     color: $LT_SUB_TEXT;
   }
 
