@@ -31,6 +31,7 @@ export const useFetch = (url, query) => {
   useEffect(() => {
     if (url) {
       setLoading(true);
+      setData(null);
     }
   }, [url]);
 

@@ -63,4 +63,16 @@ describe("resources reducer", () => {
       occurrenceDetails: data,
     });
   });
+
+  it("should update state when the action type is 'SET_CURRENT_RESOURCE'", () => {
+    const actual = resourceReducer(state, {
+      type: resourceActions.SET_CURRENT_RESOURCE,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      currentResource: data,
+    });
+  });
 });

@@ -41,7 +41,7 @@ $INDENTATION: 1rem;
     flex: 2;
   }
 
-  @include tabletAndLarger {
+  @include desktopAndLarger {
     flex-direction: row;
   }
 }
@@ -147,11 +147,6 @@ $INDENTATION: 1rem;
 
 .rightMargin {
   margin-right: 0.75rem;
-}
-
-.notFound {
-  align-self: center;
-  @include ellipsis(calc(90vw - 3rem));
 }
 
 .darkTheme {

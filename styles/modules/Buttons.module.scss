@@ -99,7 +99,9 @@
     color: $LAGOON;
     background-color: transparent;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
       background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
     }
 
@@ -113,7 +115,9 @@
     color: $DEEP_SEA;
     background-color: transparent;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
       color: color.scale($DEEP_SEA, $lightness: -10%);
       background-color: color.scale($LT_BACKGROUND_MEDIUM, $lightness: -15%);
     }
@@ -198,24 +202,25 @@
   }
 }
 
-.modalClose {
+.close {
   @extend .icon;
-  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   padding: 0.25rem;
 
   &.darkTheme {
+    background-color: $DARKEST_GREY;
+
     svg {
-      color: $WHITE;
+      color: $LAGOON;
       @include transition;
     }
 
     &:hover,
     &:focus {
-      background-color: transparent;
+      background-color: $DARKEST_GREY;
 
       svg {
-        color: $LAGOON;
+        color: $DT_HOVER_GREEN;
       }
     }
 
@@ -238,17 +243,19 @@
   }
 
   &.lightTheme {
+    background-color: $WHITE;
+
     svg {
-      color: $WHITE;
+      color: $DEEP_SEA;
       @include transition;
     }
 
     &:hover,
     &:focus {
-      background-color: transparent;
+      background-color: $WHITE;
 
       svg {
-        color: $LAGOON;
+        color: $LT_HOVER_GREEN;
       }
     }
 
@@ -256,7 +263,7 @@
       background-color: transparent;
 
       svg {
-        color: $SILVER;
+        color: $MEDIUM_GREY;
       }
 
       &:hover,
@@ -264,7 +271,7 @@
         background-color: transparent;
 
         svg {
-          color: $SILVER;
+          color: $MEDIUM_GREY;
         }
       }
     }

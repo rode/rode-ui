@@ -21,32 +21,54 @@ import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { getResourceDetails } from "utils/resource-utils";
 import userEvent from "@testing-library/user-event";
+import { useFetch } from "hooks/useFetch";
 
 jest.mock("next/router");
+jest.mock("hooks/useFetch");
 
 describe("Resource Details page", () => {
-  let state, router, policyDispatch, resourceDispatch;
+  let resourceState,
+    router,
+    policyDispatch,
+    resourceDispatch,
+    unmount,
+    rerender;
 
   beforeEach(() => {
+    const resourceUri = createMockResourceUri();
     router = {
       query: {
-        resourceUri: createMockResourceUri(),
+        resourceUri,
       },
       push: jest.fn(),
     };
-    state = {
-      searchTerm: chance.string(),
+
+    resourceState = {
+      currentResource: {
+        ...getResourceDetails(resourceUri),
+      },
     };
+
+    useFetch.mockReturnValue({
+      data: [],
+      loading: false,
+    });
 
     policyDispatch = jest.fn();
     resourceDispatch = jest.fn();
 
     useRouter.mockReturnValue(router);
-    render(<Resource />, {
-      resourceState: state,
+    const utils = render(<Resource />, {
+      resourceState,
       resourceDispatch,
       policyDispatch,
     });
+    rerender = utils.rerender;
+    unmount = utils.unmount;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it("should clear the occurrence details on load", () => {
@@ -54,6 +76,55 @@ describe("Resource Details page", () => {
       type: "SET_OCCURRENCE_DETAILS",
       data: null,
     });
+  });
+
+  it("should clear the current resource on unmount", () => {
+    unmount();
+    expect(resourceDispatch).toHaveBeenCalledWith({
+      type: "SET_CURRENT_RESOURCE",
+      data: {},
+    });
+  });
+
+  it("should not make the fetch call if there is no resource uri specified", () => {
+    useFetch.mockClear();
+    router.query.resourceUri = null;
+    rerender(<Resource />, {
+      resourceState,
+      resourceDispatch,
+      policyDispatch,
+    });
+    expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null, {
+      resourceUri: null,
+    });
+  });
+
+  it("should call to fetch the occurrences if a uri is specified", () => {
+    useFetch.mockReturnValue({});
+    render(<Resource />, {
+      resourceState,
+      resourceDispatch,
+      policyDispatch,
+    });
+    expect(useFetch)
+      .toHaveBeenCalledTimes(2)
+      .toHaveBeenCalledWith("/api/occurrences", {
+        resourceUri: router.query.resourceUri,
+      });
+  });
+
+  it("should show a loading indicator while fetching the occurrence data", () => {
+    useFetch.mockReturnValue({
+      loading: true,
+    });
+
+    rerender(<Resource />, {
+      resourceState,
+      resourceDispatch,
+      policyDispatch,
+    });
+
+    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
   it("should render the resource header information", () => {
@@ -67,6 +138,19 @@ describe("Resource Details page", () => {
     expect(screen.getByText("Version")).toBeInTheDocument();
     expect(
       screen.getByText(resourceVersion.substring(0, 12))
+    ).toBeInTheDocument();
+  });
+
+  it("should render the button to change the resource version", () => {
+    const renderedButton = screen.getByRole("button", {
+      name: "Change Version",
+    });
+
+    expect(renderedButton).toBeInTheDocument();
+    userEvent.click(renderedButton);
+
+    expect(
+      screen.getByText(/no versions found matching the resource/i)
     ).toBeInTheDocument();
   });
 

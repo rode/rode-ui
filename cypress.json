@@ -2,5 +2,6 @@
   "baseUrl": "http://localhost:3000",
   "screenshotOnRunFailure": false,
   "video": false,
-  "testFiles": "**/**.feature"
+  "testFiles": "**/**.feature",
+  "defaultCommandTimeout": 6000
 }

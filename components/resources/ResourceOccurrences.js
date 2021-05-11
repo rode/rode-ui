@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-import Loading from "components/Loading";
 import React from "react";
 import PropTypes from "prop-types";
-import { useFetch } from "hooks/useFetch";
 import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
 import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
@@ -28,43 +26,29 @@ import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
 
 const ResourceOccurrences = (props) => {
-  const { resourceUri } = props;
+  const { occurrences } = props;
   const { state } = useResources();
   const { theme } = useTheme();
 
-  const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
-    resourceUri,
-  });
-
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
-      <Loading loading={loading}>
-        {data ? (
-          <>
-            <div className={styles.occurrencePreviewsContainer}>
-              <BuildOccurrenceSection occurrences={data.build} />
-              <SecureOccurrenceSection occurrences={data.secure} />
-              <DeploymentOccurrenceSection occurrences={data.deploy} />
-              <OtherOccurrenceSection occurrences={data.other} />
-            </div>
-            {state.occurrenceDetails && (
-              <div className={styles.occurrenceDetailsContainer}>
-                <OccurrenceDetails occurrence={state.occurrenceDetails} />
-              </div>
-            )}
-          </>
-        ) : (
-          <p className={styles.notFound}>
-            No resource found for {`"${resourceUri}"`}
-          </p>
-        )}
-      </Loading>
+      <div className={styles.occurrencePreviewsContainer}>
+        <BuildOccurrenceSection occurrences={occurrences.build} />
+        <SecureOccurrenceSection occurrences={occurrences.secure} />
+        <DeploymentOccurrenceSection occurrences={occurrences.deploy} />
+        <OtherOccurrenceSection occurrences={occurrences.other} />
+      </div>
+      {state.occurrenceDetails && (
+        <div className={styles.occurrenceDetailsContainer}>
+          <OccurrenceDetails occurrence={state.occurrenceDetails} />
+        </div>
+      )}
     </div>
   );
 };
 
 ResourceOccurrences.propTypes = {
-  resourceUri: PropTypes.string,
+  occurrences: PropTypes.object.isRequired,
 };
 
 export default ResourceOccurrences;

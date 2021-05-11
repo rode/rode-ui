@@ -14,59 +14,57 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import styles from "styles/modules/Drawer.module.scss";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Modal.module.scss";
-import { useTheme } from "providers/theme";
 import Button from "./Button";
 import Icon from "./Icon";
 import { ICON_NAMES } from "utils/icon-utils";
-import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
+import { useTheme } from "providers/theme";
 
-const Modal = (props) => {
-  const { title, children, onClose, isVisible } = props;
+const Drawer = (props) => {
+  const { isOpen, onClose, children } = props;
   const { theme } = useTheme();
+  const ref = useRef(null);
 
-  useSafeLayoutEffect(() => {
-    if (isVisible) {
-      document.getElementById("modalWrapper").scrollIntoView();
+  const closeDrawerWhenClickingOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      onClose();
     }
-  }, [isVisible]);
+  };
 
-  if (!isVisible) {
-    return null;
-  }
+  useEffect(() => {
+    document.addEventListener("mousedown", closeDrawerWhenClickingOutside);
+    return () => {
+      document.removeEventListener("mousedown", closeDrawerWhenClickingOutside);
+    };
+  }, []);
 
   return (
     <div
-      className={`${styles[theme]} ${styles.outerWrapper}`}
-      role={"dialog"}
-      aria-labelledby={"modalTitle"}
-      id={"modalWrapper"}
+      className={`${styles[theme]} ${
+        isOpen ? styles.openDrawer : styles.closedDrawer
+      }`}
+      ref={ref}
+      data-testid={"drawer"}
     >
       <Button
         buttonType={"close"}
-        label={"Close Modal"}
+        label={"Close Drawer"}
         className={styles.closeButton}
         onClick={onClose}
       >
         <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
       </Button>
-      <div className={styles.contentWrapper}>
-        <h1 id={"modalTitle"} className={styles.title}>
-          {title}
-        </h1>
-        <div className={styles.content}>{children}</div>
-      </div>
+      {children}
     </div>
   );
 };
 
-Modal.propTypes = {
-  title: PropTypes.string.isRequired,
-  isVisible: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
+Drawer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
-export default Modal;
+export default Drawer;
