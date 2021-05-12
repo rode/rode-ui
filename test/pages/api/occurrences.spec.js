@@ -121,7 +121,9 @@ describe("/api/resources", () => {
 
       expect(response.json)
         .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(mapOccurrencesToSections(allOccurrences));
+        .toHaveBeenCalledWith(
+          mapOccurrencesToSections(allOccurrences, resourceUriParam)
+        );
     });
 
     it("should return null if no resources are found for the given uri", async () => {

@@ -50,7 +50,8 @@ export default async (req, res) => {
     }
 
     const occurrences = mapOccurrencesToSections(
-      listOccurrencesResponse.occurrences
+      listOccurrencesResponse.occurrences,
+      resourceUri
     );
 
     res.status(StatusCodes.OK).json(occurrences);
