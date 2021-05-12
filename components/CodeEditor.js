@@ -20,6 +20,7 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
+import Highlight, { defaultProps } from "prism-react-renderer";
 
 const CodeEditor = (props) => {
   const {
@@ -59,6 +60,7 @@ const CodeEditor = (props) => {
           tabSize={4}
           className={className}
           textareaClassName={className}
+          preClassName={className}
           highlight={(code) => hightlightWithLineNumbers(code)}
           padding={16}
           {...otherProps}

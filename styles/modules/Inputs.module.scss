@@ -98,6 +98,7 @@ $PADDING: 0.5rem;
 }
 .codeEditor {
   @extend .textArea;
+  counter-reset: line;
   resize: vertical;
   font-family: monospace;
 }

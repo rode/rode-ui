@@ -19,12 +19,14 @@ https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clik
 
 
 .line-numbers {
-  //margin-right: 1rem;
+  position: absolute;
+  left: 0;
+  width: 1rem;
 }
 
 pre,
 code,
-.token, .line-numbers {
+.token, .line-numbers, {
   font-family: monospace;
 }
 
