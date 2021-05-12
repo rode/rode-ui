@@ -30,8 +30,7 @@ describe("CodeEditor", () => {
     name = chance.string();
     label = chance.string();
     onChange = jest.fn();
-
-    Prism.highlight = jest.fn();
+    Prism.highlight = jest.fn().mockReturnValue(`\n ${chance.string()} \n`);
   });
 
   it("should render the code editor with default values", () => {

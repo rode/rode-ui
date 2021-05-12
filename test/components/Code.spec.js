@@ -20,6 +20,8 @@ import Prism from "prism/prism";
 
 import Code from "components/Code";
 
+jest.mock("prism/prism");
+
 describe("Code", () => {
   let code;
 

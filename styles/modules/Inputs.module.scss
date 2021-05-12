@@ -30,6 +30,7 @@ $PADDING: 0.5rem;
   flex-direction: column;
   height: fit-content;
   width: 100%;
+  padding-right: 1rem;
 }
 
 .horizontalContainer {
@@ -96,10 +97,18 @@ $PADDING: 0.5rem;
     border-bottom: solid 1px $HOT_RED;
   }
 }
+
+.codeInEditor {
+  width: 100%;
+  margin: 0 1rem !important;
+}
+
 .codeEditor {
   @extend .textArea;
+  counter-reset: line;
   resize: vertical;
   font-family: monospace;
+  @extend .codeInEditor;
 }
 
 .codeEditorError {

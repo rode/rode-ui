@@ -34,7 +34,7 @@ describe("PolicyValidationResult", () => {
     beforeEach(() => {
       validation = {
         isValid: chance.bool(),
-        errors: chance.n(chance.string, chance.d4()),
+        errors: chance.n(() => chance.word({ syllables: 4 }), chance.d4()),
       };
     });
 

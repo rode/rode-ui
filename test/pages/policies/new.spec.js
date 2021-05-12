@@ -78,6 +78,7 @@ describe("New Policy", () => {
   it("should auto-populate an example policy", () => {
     const examplePolicy = screen.getByText(/This is an example policy./i, {
       exact: false,
+      selector: "textarea",
     });
 
     expect(examplePolicy).toBeInTheDocument();
