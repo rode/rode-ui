@@ -35,7 +35,7 @@ const CodeEditor = (props) => {
   const { theme } = useTheme();
   const className = error ? styles.codeEditorError : styles.codeEditor;
 
-  const hightlightWithLineNumbers = (input) =>
+  const highlightWithLineNumbers = (input) =>
     Prism.highlight(input, Prism.languages.rego)
       .split("\n")
       .map((line, i) => `<span class='line-numbers'>${i + 1}</span>${line}`)
@@ -60,7 +60,7 @@ const CodeEditor = (props) => {
           className={className}
           textareaClassName={className}
           preClassName={styles.codeInEditor}
-          highlight={hightlightWithLineNumbers}
+          highlight={highlightWithLineNumbers}
           padding={16}
           {...otherProps}
         />
