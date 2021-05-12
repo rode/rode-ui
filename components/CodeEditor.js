@@ -60,7 +60,7 @@ const CodeEditor = (props) => {
           className={className}
           textareaClassName={className}
           preClassName={styles.codeInEditor}
-          highlight={(code) => hightlightWithLineNumbers(code)}
+          highlight={hightlightWithLineNumbers}
           padding={16}
           {...otherProps}
         />

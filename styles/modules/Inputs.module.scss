@@ -17,7 +17,6 @@
 @import "styles/constants";
 
 $PADDING: 0.5rem;
-$CODE_EDITOR_MARGIN: 0 1rem !important;
 
 .outerWrapper {
   display: flex;
@@ -98,14 +97,18 @@ $CODE_EDITOR_MARGIN: 0 1rem !important;
     border-bottom: solid 1px $HOT_RED;
   }
 }
+
+.codeInEditor {
+  width: 100%;
+  margin: 0 1rem !important;
+}
+
 .codeEditor {
   @extend .textArea;
   counter-reset: line;
   resize: vertical;
   font-family: monospace;
-  width: 100%;
-  margin: $CODE_EDITOR_MARGIN;
-  //border: dashed 1px blue;
+  @extend .codeInEditor;
 }
 
 .codeEditorError {
@@ -116,12 +119,6 @@ $CODE_EDITOR_MARGIN: 0 1rem !important;
     outline: none;
     border-bottom: solid 1px $HOT_RED;
   }
-}
-
-.codeInEditor {
-  width: 100%;
-  margin: $CODE_EDITOR_MARGIN;
-  //border: dotted 2px red !important;
 }
 
 .errorMessage {
