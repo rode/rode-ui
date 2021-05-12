@@ -30,7 +30,9 @@ const detailComponentMap = {
   DEPLOYMENT: DeploymentOccurrenceDetails,
 };
 
-const OccurrenceDetails = ({ occurrence }) => {
+// TODO: pass resource uri to here to use in build occurrence?
+
+const OccurrenceDetails = ({ occurrence, resource }) => {
   const { theme } = useTheme();
   const DetailComponent =
     detailComponentMap[occurrence.originals.occurrences[0].kind];
@@ -50,7 +52,7 @@ const OccurrenceDetails = ({ occurrence }) => {
       data-testid={"occurrenceDetails"}
       id={"occurrenceDetails"}
     >
-      <DetailComponent occurrence={occurrence} />
+      <DetailComponent occurrence={occurrence} resource={resource}/>
     </div>
   );
 };
