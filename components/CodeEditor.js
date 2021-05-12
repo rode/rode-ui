@@ -39,7 +39,7 @@ const CodeEditor = (props) => {
   const hightlightWithLineNumbers = (input) =>
     Prism.highlight(input, Prism.languages.rego)
       .split("\n")
-      .map((line, i) => `<span class='line-numbers match-braces'>${i + 1}</span>${line}`)
+      .map((line, i) => `<span class='line-numbers'>${i + 1}</span>${line}`)
       .join("\n");
 
   return (
@@ -60,7 +60,7 @@ const CodeEditor = (props) => {
           tabSize={4}
           className={className}
           textareaClassName={className}
-          preClassName={className}
+          preClassName={styles.codeInEditor}
           highlight={(code) => hightlightWithLineNumbers(code)}
           padding={16}
           {...otherProps}
