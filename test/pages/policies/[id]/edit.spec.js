@@ -23,11 +23,13 @@ import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
 import { usePolicy } from "hooks/usePolicy";
 import { showError, showSuccess } from "utils/toast-utils";
+import Prism from "prism/prism";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
 jest.mock("hooks/usePolicy");
+jest.mock("prism/prism");
 
 describe("Edit Policy", () => {
   let router,
@@ -79,6 +81,8 @@ describe("Edit Policy", () => {
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
     });
+
+    Prism.highlight = jest.fn().mockReturnValue(`\n ${chance.string()} \n`);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     const utils = render(<EditPolicy />, { policyDispatch: dispatchMock });

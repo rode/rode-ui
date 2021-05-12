@@ -19,7 +19,6 @@
     "http-status-codes": "^2.1.4",
     "next": "10.0.8",
     "node-fetch": "^2.6.1",
-    "prism-react-renderer": "^1.2.0",
     "prop-types": "^15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",

@@ -17,7 +17,6 @@
 /* PrismJS 1.23.0
 https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript+rego */
 
-
 .line-numbers {
   position: absolute;
   left: -1rem;
@@ -25,7 +24,8 @@ https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clik
 
 pre,
 code,
-.token, .line-numbers, {
+.token,
+.line-numbers {
   font-family: monospace;
 }
 
@@ -46,7 +46,8 @@ code,
 }
 
 .darkTheme {
-  .token.comment, .line-numbers {
+  .token.comment,
+  .line-numbers {
     color: $MEDIUM_GREY;
   }
 
@@ -106,7 +107,8 @@ code,
 }
 
 .lightTheme {
-  .token.comment, .line-numbers {
+  .token.comment,
+  .line-numbers {
     color: $LT_SUB_TEXT;
   }
 

@@ -40,7 +40,7 @@ describe("Policy Details", () => {
       id: router.query.id,
       name: chance.string(),
       description: chance.string(),
-      regoContent: chance.string(),
+      regoContent: chance.word({ syllables: 4 }),
     };
 
     mockUsePolicy = {
@@ -80,7 +80,7 @@ describe("Policy Details", () => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
       expect(
-        screen.getByText(policy.regoContent, { selector: "code", exact: false })
+        screen.getByText(policy.regoContent, { exact: false })
       ).toBeInTheDocument();
     });
 
