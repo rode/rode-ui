@@ -22,18 +22,8 @@ import dayjs from "dayjs";
 import ExternalLink from "components/ExternalLink";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
 import LabelWithValue from "components/LabelWithValue";
-import Link from "next/link";
 
-// TODO: ask about build artifacts - the only built artifact should be the resource being shown, correct?
-// Should the "View Git Resource" link live in the build artifact card if that is the case?
-
-const BuildOccurrenceDetails = ({ occurrence, resource }) => {
-  const occurrenceResourceUri =
-    occurrence.originals.occurrences[0].resource.uri;
-
-  const resourceConnectsToGitOccurrence =
-    resource.resourceType !== "Git" && occurrenceResourceUri !== resource.uri;
-
+const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
       <div className={styles.detailSummary}>
@@ -51,13 +41,6 @@ const BuildOccurrenceDetails = ({ occurrence, resource }) => {
             fallback={<p className={styles.subtext}>Logs not available</p>}
           />
           <LabelWithValue label={"Created By"} value={occurrence.creator} />
-          {resourceConnectsToGitOccurrence && (
-            <Link
-              href={`/resources/${encodeURIComponent(occurrenceResourceUri)}`}
-            >
-              <a>View Git Resource</a>
-            </Link>
-          )}
         </div>
         <div className={styles.rightDetails}>
           <p className={styles.timestamps}>
@@ -93,7 +76,6 @@ const BuildOccurrenceDetails = ({ occurrence, resource }) => {
 
 BuildOccurrenceDetails.propTypes = {
   occurrence: PropTypes.object.isRequired,
-  resource: PropTypes.object.isRequired,
 };
 
 export default BuildOccurrenceDetails;

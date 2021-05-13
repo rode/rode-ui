@@ -30,7 +30,7 @@ const detailComponentMap = {
   DEPLOYMENT: DeploymentOccurrenceDetails,
 };
 
-const OccurrenceDetails = ({ occurrence, resource }) => {
+const OccurrenceDetails = ({ occurrence }) => {
   const { theme } = useTheme();
   const DetailComponent =
     detailComponentMap[occurrence.originals.occurrences[0].kind];
@@ -50,14 +50,13 @@ const OccurrenceDetails = ({ occurrence, resource }) => {
       data-testid={"occurrenceDetails"}
       id={"occurrenceDetails"}
     >
-      <DetailComponent occurrence={occurrence} resource={resource} />
+      <DetailComponent occurrence={occurrence} />
     </div>
   );
 };
 
 OccurrenceDetails.propTypes = {
   occurrence: PropTypes.object.isRequired,
-  resource: PropTypes.object.isRequired,
 };
 
 export default OccurrenceDetails;

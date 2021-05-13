@@ -20,15 +20,10 @@ import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import { createMockMappedOccurrences } from "test/testing-utils/mocks";
 
 describe("OccurrenceDetails", () => {
-  let mappedOccurrences, resource, scrollMock;
+  let mappedOccurrences, scrollMock;
 
   beforeEach(() => {
     mappedOccurrences = createMockMappedOccurrences();
-    resource = {
-      resourceName: chance.string(),
-      resourceVersion: chance.string(),
-      resourceType: chance.pickone(["Git", "Docker"]),
-    };
     scrollMock = jest.fn();
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
@@ -45,7 +40,6 @@ describe("OccurrenceDetails", () => {
     render(
       <OccurrenceDetails
         occurrence={mappedOccurrences[randomOccurrenceType][0]}
-        resource={resource}
       />
     );
 
@@ -60,7 +54,6 @@ describe("OccurrenceDetails", () => {
     render(
       <OccurrenceDetails
         occurrence={mappedOccurrences[randomOccurrenceType][0]}
-        resource={resource}
       />
     );
 
@@ -72,7 +65,6 @@ describe("OccurrenceDetails", () => {
     render(
       <OccurrenceDetails
         occurrence={mappedOccurrences[randomOccurrenceType][0]}
-        resource={resource}
       />
     );
 
@@ -80,34 +72,19 @@ describe("OccurrenceDetails", () => {
   });
 
   it("should show the build occurrence details if a build occurrence is selected", () => {
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences.build[0]}
-        resource={resource}
-      />
-    );
+    render(<OccurrenceDetails occurrence={mappedOccurrences.build[0]} />);
 
     expect(screen.getByText(/view source/i)).toBeInTheDocument();
   });
 
   it("should show the vulnerability occurrence details if a vulnerability scan is selected", () => {
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences.secure[0]}
-        resource={resource}
-      />
-    );
+    render(<OccurrenceDetails occurrence={mappedOccurrences.secure[0]} />);
 
     expect(screen.getByText(/vulnerabilities/i)).toBeInTheDocument();
   });
 
   it("should show the deployment occurrence details if a deployment occurrence is selected", () => {
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences.deploy[0]}
-        resource={resource}
-      />
-    );
+    render(<OccurrenceDetails occurrence={mappedOccurrences.deploy[0]} />);
 
     expect(screen.queryAllByText(/deployment/i)[0]).toBeInTheDocument();
   });

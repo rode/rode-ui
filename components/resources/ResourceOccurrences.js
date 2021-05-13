@@ -40,10 +40,7 @@ const ResourceOccurrences = (props) => {
       </div>
       {state.occurrenceDetails && (
         <div className={styles.occurrenceDetailsContainer}>
-          <OccurrenceDetails
-            occurrence={state.occurrenceDetails}
-            resource={state.currentResource}
-          />
+          <OccurrenceDetails occurrence={state.occurrenceDetails} />
         </div>
       )}
     </div>

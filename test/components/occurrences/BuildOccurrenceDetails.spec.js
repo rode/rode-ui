@@ -69,41 +69,6 @@ describe("BuildOccurrenceDetails", () => {
     expect(screen.getByText(occurrence.creator)).toBeInTheDocument();
   });
 
-  describe("showing the related git resource", () => {
-    it("should show a link to the git resource that originated the build occurrence", () => {
-      const renderedLink = screen.getByText("View Git Resource");
-      expect(renderedLink).toBeInTheDocument();
-      expect(renderedLink).toHaveAttribute(
-        "href",
-        `/resources/${encodeURIComponent(
-          occurrence.originals.occurrences[0].resource.uri
-        )}`
-      );
-    });
-
-    it("should not show a link when viewing a git resource", () => {
-      resource.resourceType = "Git";
-
-      rerender(
-        <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
-      );
-
-      const renderedLink = screen.queryByText("View Git Resource");
-      expect(renderedLink).not.toBeInTheDocument();
-    });
-
-    it("should not show a link when the build occurrence is associated with the request resource", () => {
-      resource.uri = occurrence.originals.occurrences[0].resource.uri;
-
-      rerender(
-        <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
-      );
-
-      const renderedLink = screen.queryByText("View Git Resource");
-      expect(renderedLink).not.toBeInTheDocument();
-    });
-  });
-
   it("should show source not available if there are is not a source uri", () => {
     occurrence.sourceUri = null;
     rerender(
