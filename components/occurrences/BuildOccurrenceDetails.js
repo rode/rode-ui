@@ -24,6 +24,9 @@ import OccurrenceCodeModal from "./OccurrenceCodeModal";
 import LabelWithValue from "components/LabelWithValue";
 import Link from "next/link";
 
+// TODO: ask about build artifacts - the only built artifact should be the resource being shown, correct?
+// Should the "View Git Resource" link live in the build artifact card if that is the case?
+
 const BuildOccurrenceDetails = ({ occurrence, resource }) => {
   const occurrenceResourceUri =
     occurrence.originals.occurrences[0].resource.uri;
@@ -70,9 +73,17 @@ const BuildOccurrenceDetails = ({ occurrence, resource }) => {
         {occurrence.artifacts?.map((artifact) => (
           <div key={artifact.id} className={styles.card}>
             <p className={styles.cardTitle}>Build Artifact</p>
-            <p>{artifact.names.join(", ")}</p>
             <p>{artifact.id}</p>
-            <p>{artifact.checksum}</p>
+            <LabelWithValue
+              label={"Related Artifact(s)"}
+              value={artifact.names.join(", ")}
+              className={styles.buildArtifactDetails}
+            />
+            <LabelWithValue
+              label={"Checksum"}
+              value={artifact.checksum}
+              className={styles.buildArtifactDetails}
+            />
           </div>
         ))}
       </div>
@@ -82,6 +93,7 @@ const BuildOccurrenceDetails = ({ occurrence, resource }) => {
 
 BuildOccurrenceDetails.propTypes = {
   occurrence: PropTypes.object.isRequired,
+  resource: PropTypes.object.isRequired,
 };
 
 export default BuildOccurrenceDetails;

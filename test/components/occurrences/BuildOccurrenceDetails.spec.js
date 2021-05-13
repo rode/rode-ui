@@ -23,10 +23,14 @@ import dayjs from "dayjs";
 jest.mock("dayjs");
 
 describe("BuildOccurrenceDetails", () => {
-  let occurrence, rerender;
+  let occurrence, resource, rerender;
 
   beforeEach(() => {
     occurrence = createMockMappedBuildOccurrence();
+    resource = {
+      resourceType: chance.string(),
+      uri: chance.url(),
+    };
     dayjs.mockReturnValue({
       format: jest
         .fn()
@@ -34,7 +38,9 @@ describe("BuildOccurrenceDetails", () => {
         .mockReturnValue(occurrence.completed),
     });
 
-    const utils = render(<BuildOccurrenceDetails occurrence={occurrence} />);
+    const utils = render(
+      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
+    );
     rerender = utils.rerender;
   });
 
@@ -63,16 +69,51 @@ describe("BuildOccurrenceDetails", () => {
     expect(screen.getByText(occurrence.creator)).toBeInTheDocument();
   });
 
+  describe("showing the related git resource", () => {
+    it("should show a link to the git resource that originated the build occurrence", () => {
+      const renderedLink = screen.getByText("View Git Resource");
+      expect(renderedLink).toBeInTheDocument();
+      expect(renderedLink).toHaveAttribute(
+        "href",
+        `/resources/${encodeURIComponent(
+          occurrence.originals.occurrences[0].resource.uri
+        )}`
+      );
+    });
+
+    it("should not show a link when viewing a git resource", () => {
+      resource.resourceType = "Git";
+
+      rerender( <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />);
+
+      const renderedLink = screen.queryByText("View Git Resource");
+      expect(renderedLink).not.toBeInTheDocument();
+    });
+
+    it("should not show a link when the build occurrence is associated with the request resource", () => {
+      resource.uri = occurrence.originals.occurrences[0].resource.uri;
+
+      rerender( <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />);
+
+      const renderedLink = screen.queryByText("View Git Resource");
+      expect(renderedLink).not.toBeInTheDocument();
+    });
+  });
+
   it("should show source not available if there are is not a source uri", () => {
     occurrence.sourceUri = null;
-    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
+    rerender(
+      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
+    );
 
     expect(screen.getByText("Source not available")).toBeInTheDocument();
   });
 
   it("should show logs not available if there are is not logs uri", () => {
     occurrence.logsUri = null;
-    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
+    rerender(
+      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
+    );
 
     expect(screen.getByText("Logs not available")).toBeInTheDocument();
   });

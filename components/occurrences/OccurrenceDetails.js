@@ -30,8 +30,6 @@ const detailComponentMap = {
   DEPLOYMENT: DeploymentOccurrenceDetails,
 };
 
-// TODO: pass resource uri to here to use in build occurrence?
-
 const OccurrenceDetails = ({ occurrence, resource }) => {
   const { theme } = useTheme();
   const DetailComponent =
@@ -52,13 +50,14 @@ const OccurrenceDetails = ({ occurrence, resource }) => {
       data-testid={"occurrenceDetails"}
       id={"occurrenceDetails"}
     >
-      <DetailComponent occurrence={occurrence} resource={resource}/>
+      <DetailComponent occurrence={occurrence} resource={resource} />
     </div>
   );
 };
 
 OccurrenceDetails.propTypes = {
   occurrence: PropTypes.object.isRequired,
+  resource: PropTypes.object.isRequired,
 };
 
 export default OccurrenceDetails;
