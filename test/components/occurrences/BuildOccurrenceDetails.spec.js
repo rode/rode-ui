@@ -23,14 +23,10 @@ import dayjs from "dayjs";
 jest.mock("dayjs");
 
 describe("BuildOccurrenceDetails", () => {
-  let occurrence, resource, rerender;
+  let occurrence, rerender;
 
   beforeEach(() => {
     occurrence = createMockMappedBuildOccurrence();
-    resource = {
-      resourceType: chance.string(),
-      uri: chance.url(),
-    };
     dayjs.mockReturnValue({
       format: jest
         .fn()
@@ -38,9 +34,7 @@ describe("BuildOccurrenceDetails", () => {
         .mockReturnValue(occurrence.completed),
     });
 
-    const utils = render(
-      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
-    );
+    const utils = render(<BuildOccurrenceDetails occurrence={occurrence} />);
     rerender = utils.rerender;
   });
 
@@ -71,18 +65,14 @@ describe("BuildOccurrenceDetails", () => {
 
   it("should show source not available if there are is not a source uri", () => {
     occurrence.sourceUri = null;
-    rerender(
-      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
-    );
+    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
 
     expect(screen.getByText("Source not available")).toBeInTheDocument();
   });
 
   it("should show logs not available if there are is not logs uri", () => {
     occurrence.logsUri = null;
-    rerender(
-      <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
-    );
+    rerender(<BuildOccurrenceDetails occurrence={occurrence} />);
 
     expect(screen.getByText("Logs not available")).toBeInTheDocument();
   });
