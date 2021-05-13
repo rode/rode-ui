@@ -84,7 +84,9 @@ describe("BuildOccurrenceDetails", () => {
     it("should not show a link when viewing a git resource", () => {
       resource.resourceType = "Git";
 
-      rerender( <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />);
+      rerender(
+        <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
+      );
 
       const renderedLink = screen.queryByText("View Git Resource");
       expect(renderedLink).not.toBeInTheDocument();
@@ -93,7 +95,9 @@ describe("BuildOccurrenceDetails", () => {
     it("should not show a link when the build occurrence is associated with the request resource", () => {
       resource.uri = occurrence.originals.occurrences[0].resource.uri;
 
-      rerender( <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />);
+      rerender(
+        <BuildOccurrenceDetails occurrence={occurrence} resource={resource} />
+      );
 
       const renderedLink = screen.queryByText("View Git Resource");
       expect(renderedLink).not.toBeInTheDocument();
