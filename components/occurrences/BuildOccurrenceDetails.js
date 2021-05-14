@@ -56,9 +56,17 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
         {occurrence.artifacts?.map((artifact) => (
           <div key={artifact.id} className={styles.card}>
             <p className={styles.cardTitle}>Build Artifact</p>
-            <p>{artifact.names.join(", ")}</p>
             <p>{artifact.id}</p>
-            <p>{artifact.checksum}</p>
+            <LabelWithValue
+              label={"Related Artifact(s)"}
+              value={artifact.names.join(", ")}
+              className={styles.buildArtifactDetails}
+            />
+            <LabelWithValue
+              label={"Checksum"}
+              value={artifact.checksum}
+              className={styles.buildArtifactDetails}
+            />
           </div>
         ))}
       </div>

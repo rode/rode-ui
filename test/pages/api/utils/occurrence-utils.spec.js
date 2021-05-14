@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { createMockOccurrence } from "test/testing-utils/mocks";
+import {
+  createMockOccurrence,
+  createMockResourceUri,
+} from "test/testing-utils/mocks";
 import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
 
 describe("occurrence-utils", () => {
@@ -24,11 +27,12 @@ describe("occurrence-utils", () => {
       const deploymentOccurrence = createMockOccurrence("DEPLOYMENT");
       const randomOccurrence = createMockOccurrence(chance.string());
 
-      const mappedOccurrences = mapOccurrencesToSections([
-        buildOccurrence,
-        deploymentOccurrence,
-        randomOccurrence,
-      ]);
+      const resourceUri = buildOccurrence.build.provenance.builtArtifacts[0].id;
+
+      const mappedOccurrences = mapOccurrencesToSections(
+        [buildOccurrence, deploymentOccurrence, randomOccurrence],
+        resourceUri
+      );
 
       expect(mappedOccurrences.build).toHaveLength(1);
       expect(mappedOccurrences.deploy).toHaveLength(1);
@@ -177,7 +181,12 @@ describe("occurrence-utils", () => {
     describe("build occurrences", () => {
       it("should correctly map build occurrences", () => {
         const buildOccurrence = createMockOccurrence("BUILD");
-        const { build } = mapOccurrencesToSections([buildOccurrence]);
+        const resourceUri =
+          buildOccurrence.build.provenance.builtArtifacts[0].id;
+        const { build } = mapOccurrencesToSections(
+          [buildOccurrence],
+          resourceUri
+        );
 
         expect(build[0].name).toEqual(buildOccurrence.name);
         expect(build[0].started).toEqual(
@@ -199,6 +208,26 @@ describe("occurrence-utils", () => {
           buildOccurrence.build.provenance.logsUri
         );
         expect(build[0].originals.occurrences).toContain(buildOccurrence);
+      });
+
+      it("should not include build occurrences that are related to the git resource instead of the requested resource", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        const { build } = mapOccurrencesToSections(
+          [buildOccurrence],
+          createMockResourceUri()
+        );
+
+        expect(build).toHaveLength(0);
+      });
+
+      it("should include all build occurrences when the requested resource is a git resource", () => {
+        const buildOccurrence = createMockOccurrence("BUILD");
+        const { build } = mapOccurrencesToSections(
+          [buildOccurrence],
+          `git://${chance.url()}@${chance.natural()}`
+        );
+
+        expect(build).toHaveLength(1);
       });
     });
 

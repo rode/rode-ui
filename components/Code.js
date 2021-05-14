@@ -19,7 +19,6 @@ import PropTypes from "prop-types";
 import Prism from "prism/prism";
 import styles from "styles/modules/Typography.module.scss";
 
-// TODO: how to prevent non-highlighted code before highlight appears?
 const Code = (props) => {
   const { code, language, className = "", ...otherProps } = props;
 

@@ -45,6 +45,16 @@
   > * {
     padding: 0 0.25rem;
   }
+
+  > a {
+    @include ellipsis(calc(100vw - 12rem));
+  }
+
+  @include tabletAndLarger {
+    > a {
+      max-width: calc(100vw - 22rem);
+    }
+  }
 }
 
 .rootCrumb {

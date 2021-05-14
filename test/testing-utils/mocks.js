@@ -172,7 +172,8 @@ export const createMockMappedVulnerabilityOccurrence = () => {
         ]),
         description: chance.pickone([chance.sentence(), null]),
         relatedUrls: chance.pickone([
-          chance.n(() => ({ url: chance.url() }), chance.d4()),
+          [{ url: chance.url() }],
+          chance.n(() => ({ url: chance.url() }), chance.d4({ min: 2 })),
           [],
         ]),
         cpeUri: chance.url(),
@@ -201,7 +202,10 @@ export const createMockMappedDeploymentOccurrence = () => {
     name: chance.string(),
     deploymentStart: chance.hammertime(),
     deploymentEnd: chance.hammertime(),
-    resourceUris: chance.n(createMockResourceUri, chance.d4()),
+    resourceUris: chance.pickone([
+      chance.n(createMockResourceUri, chance.d4({ min: 2 })),
+      [createMockResourceUri()],
+    ]),
     platform: chance.string({ alpha: true }),
     originals: { occurrences: [createMockOccurrence("DEPLOYMENT")] },
   };

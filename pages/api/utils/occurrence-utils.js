@@ -15,6 +15,7 @@
  */
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import dayjs from "dayjs";
+import { getResourceDetails } from "utils/resource-utils";
 
 dayjs.extend(isSameOrAfter);
 
@@ -149,8 +150,19 @@ const matchAndMapVulnerabilities = (occurrences) => {
   };
 };
 
-const mapBuilds = (occurrences) => {
-  return occurrences.map((occ) => {
+const mapBuilds = (occurrences, resourceUri) => {
+  let relatedBuildOccurrences = occurrences;
+  const { resourceType } = getResourceDetails(resourceUri);
+
+  if (resourceType !== "Git") {
+    relatedBuildOccurrences = occurrences.filter((occurrence) =>
+      occurrence.build.provenance.builtArtifacts.some(
+        (artifact) => artifact.id === resourceUri
+      )
+    );
+  }
+
+  return relatedBuildOccurrences.map((occ) => {
     return {
       name: occ.name,
       started: occ.build.provenance.startTime,
@@ -177,7 +189,7 @@ const mapDeployments = (occurrences) => {
   });
 };
 
-export const mapOccurrencesToSections = (occurrences) => {
+export const mapOccurrencesToSections = (occurrences, resourceUri) => {
   let buildOccurrences = [];
   let vulnerabilityOccurrences = [];
   let deploymentOccurrences = [];
@@ -213,7 +225,7 @@ export const mapOccurrencesToSections = (occurrences) => {
   );
 
   return {
-    build: mapBuilds(buildOccurrences),
+    build: mapBuilds(buildOccurrences, resourceUri),
     secure: vulnerabilities,
     deploy: mapDeployments(deploymentOccurrences),
     other: [...other, ...otherOccurrences],
