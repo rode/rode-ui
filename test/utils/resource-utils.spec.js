@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { getResourceDetails } from "utils/resource-utils";
+import { getNameLabelFromType, getResourceDetails } from "utils/resource-utils";
 
 const createGenericResourceUrl = (name, version, startsWith) => {
   return `${startsWith}${chance.word()}:${name}:${version}`;
@@ -171,6 +171,20 @@ describe("resource utils", () => {
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
+    });
+  });
+
+  describe("getNameLabelFromType", () => {
+    it("should return the correct label for docker images", () => {
+      const actual = getNameLabelFromType("Docker");
+
+      expect(actual).toEqual("Tags");
+    });
+
+    it("should return the correct label for any other type", () => {
+      const actual = getNameLabelFromType(chance.string());
+
+      expect(actual).toEqual("Aliases");
     });
   });
 });
