@@ -107,6 +107,10 @@
   min-width: fit-content;
 }
 
+.versionNames {
+  font-size: 0.8rem;
+}
+
 .viewMoreResultsButton {
   margin: 0 auto 1rem;
 }
@@ -128,6 +132,10 @@
     background-color: $DT_BACKGROUND_LIGHT;
     box-shadow: $DT_BOX_SHADOW;
   }
+
+  .versionNames {
+    color: $DT_SUB_TEXT;
+  }
 }
 
 .lightTheme {
@@ -146,5 +154,9 @@
   .versionCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .versionNames {
+    color: $LT_SUB_TEXT;
   }
 }

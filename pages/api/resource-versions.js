@@ -17,7 +17,6 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
-import { getResourceDetails } from "utils/resource-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -29,16 +28,16 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const searchFilter = req.query.filter;
+    const genericResourceName = req.query.resourceName;
 
-    if (!searchFilter) {
+    if (!genericResourceName) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: "Generic resource name and search filter must be provided",
+        error: "Generic resource name must be provided",
       });
     }
 
     const filter = {
-      filter: searchFilter,
+      parent: genericResourceName,
     };
 
     if (req.query.pageSize) {
@@ -48,7 +47,9 @@ export default async (req, res) => {
       filter.pageToken = req.query.pageToken;
     }
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
+      `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
+        filter
+      )}`
     );
 
     if (!response.ok) {
@@ -59,16 +60,10 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
-    const resources = listResourceVersionsResponse.resources.map(({ uri }) => {
-      const { resourceVersion } = getResourceDetails(uri);
-      return {
-        resourceVersion,
-        uri,
-      };
-    });
+    const versions = listResourceVersionsResponse.versions;
 
     res.status(StatusCodes.OK).json({
-      data: resources,
+      data: versions,
       pageToken: listResourceVersionsResponse.nextPageToken,
     });
   } catch (error) {

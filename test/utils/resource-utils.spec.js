@@ -36,7 +36,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Unknown");
       expect(actual.resourceName).toBe(resourceUri);
       expect(actual.resourceVersion).toBe("N/A");
-      expect(actual.versionFilter).toBeNull();
+      expect(actual.genericName).toBeNull();
       expect(actual.uri).toBeNull();
     });
 
@@ -47,7 +47,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Unknown");
       expect(actual.resourceName).toBe(resourceUri);
       expect(actual.resourceVersion).toBe("N/A");
-      expect(actual.versionFilter).toBeNull();
+      expect(actual.genericName).toBeNull();
       expect(actual.uri).toBe(resourceUri);
     });
 
@@ -62,9 +62,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Debian");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("${url.replace(resourceVersion, "")}")`
-      );
+      expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
       expect(actual.uri).toBe(url);
     });
 
@@ -79,9 +77,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("RPM");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("${url.replace(resourceVersion, "")}")`
-      );
+      expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
       expect(actual.uri).toBe(url);
     });
 
@@ -95,9 +91,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Maven");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("${url.replace(resourceVersion, "")}")`
-      );
+      expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
       expect(actual.uri).toBe(url);
     });
 
@@ -112,9 +106,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("NPM");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("npm://${resourceName}")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
 
@@ -129,9 +121,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("NuGet");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("nuget://${resourceName}")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
 
@@ -146,9 +136,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Python");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("pip://${resourceName}")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
 
@@ -159,9 +147,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("File");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.endsWith("${resourceName}")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
 
@@ -172,9 +158,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Docker");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("${resourceName}@")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
 
@@ -185,9 +169,7 @@ describe("resource utils", () => {
       expect(actual.resourceType).toBe("Git");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.versionFilter).toBe(
-        `resource.uri.startsWith("git://${resourceName}")`
-      );
+      expect(actual.genericName).toBe(resourceName);
       expect(actual.uri).toBe(url);
     });
   });

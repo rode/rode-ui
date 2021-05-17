@@ -25,7 +25,7 @@ jest.mock("utils/resource-utils");
 describe("/api/resource-versions", () => {
   let request,
     response,
-    allResources,
+    resourceVersions,
     rodeResponse,
     versionSearchFilter,
     pageToken;
@@ -35,7 +35,7 @@ describe("/api/resource-versions", () => {
     request = {
       method: "GET",
       query: {
-        filter: versionSearchFilter,
+        resourceName: versionSearchFilter,
       },
     };
     pageToken = chance.string();
@@ -45,7 +45,7 @@ describe("/api/resource-versions", () => {
       json: jest.fn().mockReturnThis(),
     };
 
-    allResources = chance.n(
+    resourceVersions = chance.n(
       () => ({
         [chance.word()]: chance.word(),
         name: chance.name(),
@@ -61,7 +61,7 @@ describe("/api/resource-versions", () => {
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
-        resources: allResources,
+        versions: resourceVersions,
         nextPageToken: pageToken,
       }),
     };
@@ -91,7 +91,7 @@ describe("/api/resource-versions", () => {
 
   describe("missing resource name", () => {
     it("should return bad request when the resource name is not provided", async () => {
-      request.query.filter = null;
+      request.query.resourceName = null;
       await handler(request, response);
 
       expect(response.status)
@@ -99,7 +99,7 @@ describe("/api/resource-versions", () => {
         .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
 
       expect(response.json).toBeCalledTimes(1).toHaveBeenCalledWith({
-        error: "Generic resource name and search filter must be provided",
+        error: "Generic resource name must be provided",
       });
     });
   });
@@ -117,12 +117,14 @@ describe("/api/resource-versions", () => {
     });
 
     const createExpectedUrl = (baseUrl, query = {}) => {
-      return `${baseUrl}/v1alpha1/resources?${new URLSearchParams(query)}`;
+      return `${baseUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
+        query
+      )}`;
     };
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: versionSearchFilter,
+        parent: versionSearchFilter,
       });
 
       await handler(request, response);
@@ -133,7 +135,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: versionSearchFilter,
+        parent: versionSearchFilter,
         pageSize,
       });
 
@@ -145,7 +147,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: versionSearchFilter,
+        parent: versionSearchFilter,
         pageToken,
       });
 
@@ -154,15 +156,11 @@ describe("/api/resource-versions", () => {
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
-    it("should return the mapped resource versions", async () => {
+    it("should return the resource versions", async () => {
       const version = chance.string();
       getResourceDetails.mockReturnValue({
         resourceVersion: version,
       });
-      const expectedVersions = allResources.map(({ uri }) => ({
-        resourceVersion: version,
-        uri,
-      }));
 
       await handler(request, response);
 
@@ -171,7 +169,7 @@ describe("/api/resource-versions", () => {
         .toHaveBeenCalledWith(StatusCodes.OK);
 
       expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        data: expectedVersions,
+        data: resourceVersions,
         pageToken,
       });
     });
