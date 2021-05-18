@@ -14,84 +14,15 @@
  * limitations under the License.
  */
 
-const DOCKER_REGEXP = "(.+)(@sha256:)(.+)";
-const FILE_REGEXP = "^(file:/{2}sha256:)(.+)";
-const GIT_REGEXP = "^(git:/{2})(.+)@(.+)";
-
-const parseGeneric = (uri) => {
-  // deb://dist(optional):arch:name:version
-  // rpm://dist(optional):arch:name:version
-  // npm://package:version
-  // nuget://module:version
-  // pip://package:version
-
-  const uriParts = uri.split(":");
-
-  return {
-    name: uriParts[uriParts.length - 2],
-    version: uriParts[uriParts.length - 1],
-  };
-};
-
-const parseMaven = (uri) => {
-  // gav://group:artifact:version
-  const [groupId, artifactId, version] = uri.slice("gav://".length).split(":");
-
-  return {
-    name: `${groupId}:${artifactId}`,
-    version: version,
-  };
-};
-
-const parseDocker = (uri) => {
-  // https://Namespace/name@sha256:<Checksum>
-  const [nameWithUrl, , version] = uri
-    .split(new RegExp(DOCKER_REGEXP))
-    .filter((value) => value);
-
-  return {
-    name: nameWithUrl,
-    version: version,
-  };
-};
-
-const parseFile = (uri) => {
-  // file://sha256:<Checksum>:name
-
-  const [, checksumWithName] = uri
-    .split(new RegExp(FILE_REGEXP))
-    .filter((value) => value);
-
-  const [checksum, name] = checksumWithName.split(":");
-
-  return {
-    name,
-    version: checksum,
-  };
-};
-
-const parseGit = (uri) => {
-  // git://<host><path>@<commit>
-  const [, name, version] = uri
-    .split(new RegExp(GIT_REGEXP))
-    .filter((value) => value);
-
-  return {
-    name,
-    version,
-  };
-};
-
 const resourceUrlTypes = [
   {
     type: "Debian",
-    regex: "^(deb:/{2})",
+    regex: "^(deb:/{2}).*:(?<name>.+):(?<version>.+)",
     getGenericName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "Docker",
-    regex: DOCKER_REGEXP,
-    parse: parseDocker,
+    regex: "(?<name>.+)(@sha256:)(?<version>.+)",
     getGenericName: ({ name }) => name,
     aliasLabel: "Tags",
     getFormattedAliases: ({ genericName, aliases }) =>
@@ -99,47 +30,44 @@ const resourceUrlTypes = [
   },
   {
     type: "File",
-    regex: FILE_REGEXP,
-    parse: parseFile,
+    regex: "^(file:/{2}sha256:)(?<version>.+):(?<name>.+)",
     getGenericName: ({ name }) => name,
   },
   {
     type: "Maven",
-    regex: "^(gav:/{2})",
-    parse: parseMaven,
+    regex: "^(gav:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "NPM",
-    regex: "^(npm:/{2})",
+    regex: "^(npm:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => name,
   },
   {
     type: "NuGet",
-    regex: "^(nuget:/{2})",
+    regex: "^(nuget:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => name,
   },
   {
     type: "Python",
-    regex: "^(pip:/{2})",
+    regex: "^(pip:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => name,
   },
   {
     type: "RPM",
-    regex: "^(rpm:/{2})",
+    regex: "^(rpm:/{2}).*:(?<name>.+):(?<version>.+)",
     getGenericName: ({ version, uri }) => uri.replace(version, ""),
   },
   {
     type: "Git",
-    regex: GIT_REGEXP,
-    parse: parseGit,
+    regex: "^(git:/{2})(?<name>.+)@(?<version>.+)",
     getGenericName: ({ name }) => name,
   },
 ];
 
 export const getResourceDetails = (uri, resourceVersion) => {
   const resourceMatch = resourceUrlTypes.find((resourceType) =>
-    uri?.match(resourceType.regex)
+    new RegExp(resourceType.regex).exec(uri)
   );
 
   if (!resourceMatch) {
@@ -155,9 +83,8 @@ export const getResourceDetails = (uri, resourceVersion) => {
     };
   }
 
-  const { name, version } = resourceMatch.parse
-    ? resourceMatch.parse(uri)
-    : parseGeneric(uri);
+  const match = new RegExp(resourceMatch.regex).exec(uri);
+  const { name, version } = match.groups;
 
   const genericName = resourceMatch.getGenericName({
     name,

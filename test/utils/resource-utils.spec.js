@@ -17,7 +17,7 @@
 import { getResourceDetails } from "utils/resource-utils";
 
 const createGenericResourceUrl = (name, version, startsWith) => {
-  return `${startsWith}${chance.word()}:${name}:${version}`;
+  return `${startsWith}${name}:${version}`;
 };
 
 describe("resource utils", () => {
@@ -55,38 +55,59 @@ describe("resource utils", () => {
       expect(actual.aliases).toEqual([]);
     });
 
-    it("should return the correct details for a Debian Resource", () => {
-      const url = createGenericResourceUrl(
-        resourceName,
-        resourceVersion,
-        "deb://"
-      );
-      const actual = getResourceDetails(url);
+    describe("Debian Resource", () => {
+      it("should return the correct details for a Debian Resource", () => {
+        const url = `deb://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
+        const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("Debian");
-      expect(actual.resourceName).toBe(resourceName);
-      expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
-      expect(actual.uri).toBe(url);
-      expect(actual.aliasLabel).toBe("Aliases");
-      expect(actual.aliases).toEqual([]);
+        expect(actual.resourceType).toBe("Debian");
+        expect(actual.resourceName).toBe(resourceName);
+        expect(actual.resourceVersion).toBe(resourceVersion);
+        expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
+        expect(actual.uri).toBe(url);
+        expect(actual.aliasLabel).toBe("Aliases");
+        expect(actual.aliases).toEqual([]);
+      });
+
+      it("should return the correct details for a Debian Resource without a specified distribution", () => {
+        const url = `deb://${chance.word()}:${resourceName}:${resourceVersion}`;
+        const actual = getResourceDetails(url);
+
+        expect(actual.resourceType).toBe("Debian");
+        expect(actual.resourceName).toBe(resourceName);
+        expect(actual.resourceVersion).toBe(resourceVersion);
+        expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
+        expect(actual.uri).toBe(url);
+        expect(actual.aliasLabel).toBe("Aliases");
+        expect(actual.aliases).toEqual([]);
+      });
     });
 
-    it("should return the correct details for an RPM Resource", () => {
-      const url = createGenericResourceUrl(
-        resourceName,
-        resourceVersion,
-        "rpm://"
-      );
-      const actual = getResourceDetails(url);
+    describe("RPM Resource", () => {
+      it("should return the correct details for an RPM Resource", () => {
+        const url = `rpm://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
+        const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("RPM");
-      expect(actual.resourceName).toBe(resourceName);
-      expect(actual.resourceVersion).toBe(resourceVersion);
-      expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
-      expect(actual.uri).toBe(url);
-      expect(actual.aliasLabel).toBe("Aliases");
-      expect(actual.aliases).toEqual([]);
+        expect(actual.resourceType).toBe("RPM");
+        expect(actual.resourceName).toBe(resourceName);
+        expect(actual.resourceVersion).toBe(resourceVersion);
+        expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
+        expect(actual.uri).toBe(url);
+        expect(actual.aliasLabel).toBe("Aliases");
+        expect(actual.aliases).toEqual([]);
+      });
+      it("should return the correct details for an RPM Resource without a specified distribution", () => {
+        const url = `rpm://${chance.word()}:${resourceName}:${resourceVersion}`;
+        const actual = getResourceDetails(url);
+
+        expect(actual.resourceType).toBe("RPM");
+        expect(actual.resourceName).toBe(resourceName);
+        expect(actual.resourceVersion).toBe(resourceVersion);
+        expect(actual.genericName).toBe(url.replace(resourceVersion, ""));
+        expect(actual.uri).toBe(url);
+        expect(actual.aliasLabel).toBe("Aliases");
+        expect(actual.aliases).toEqual([]);
+      });
     });
 
     it("should return the correct details for a Maven Resource", () => {
@@ -105,12 +126,13 @@ describe("resource utils", () => {
       expect(actual.aliases).toEqual([]);
     });
 
-    it("should return the correct details for an NPM Resource", () => {
+    it("should return the correct details for an NPM Package", () => {
       const url = createGenericResourceUrl(
         resourceName,
         resourceVersion,
         "npm://"
       );
+
       const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("NPM");
