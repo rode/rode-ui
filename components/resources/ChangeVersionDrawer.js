@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// TODO: fix cypress tests
 import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";

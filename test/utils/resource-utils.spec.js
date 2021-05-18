@@ -22,7 +22,7 @@ const createGenericResourceUrl = (name, version, startsWith) => {
 
 describe("resource utils", () => {
   describe("getResourceDetails", () => {
-    let resourceName, resourceVersion;
+    let resourceName, resourceVersion, url;
 
     beforeEach(() => {
       resourceName = chance.word();
@@ -30,11 +30,11 @@ describe("resource utils", () => {
     });
 
     it("should return generic values for an undefined resource type", () => {
-      const resourceUri = null;
-      const actual = getResourceDetails(resourceUri);
+      url = null;
+      const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("Unknown");
-      expect(actual.resourceName).toBe(resourceUri);
+      expect(actual.resourceName).toBe(url);
       expect(actual.resourceVersion).toBe("N/A");
       expect(actual.genericName).toBeNull();
       expect(actual.uri).toBeNull();
@@ -43,21 +43,21 @@ describe("resource utils", () => {
     });
 
     it("should return generic values for an unknown resource type", () => {
-      const resourceUri = chance.url();
-      const actual = getResourceDetails(resourceUri);
+      url = chance.url();
+      const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("Unknown");
-      expect(actual.resourceName).toBe(resourceUri);
+      expect(actual.resourceName).toBe(url);
       expect(actual.resourceVersion).toBe("N/A");
       expect(actual.genericName).toBeNull();
-      expect(actual.uri).toBe(resourceUri);
+      expect(actual.uri).toBe(url);
       expect(actual.aliasLabel).toBe("Aliases");
       expect(actual.aliases).toEqual([]);
     });
 
     describe("Debian Resource", () => {
       it("should return the correct details for a Debian Resource", () => {
-        const url = `deb://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
+        url = `deb://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("Debian");
@@ -70,7 +70,7 @@ describe("resource utils", () => {
       });
 
       it("should return the correct details for a Debian Resource without a specified distribution", () => {
-        const url = `deb://${chance.word()}:${resourceName}:${resourceVersion}`;
+        url = `deb://${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("Debian");
@@ -85,7 +85,7 @@ describe("resource utils", () => {
 
     describe("RPM Resource", () => {
       it("should return the correct details for an RPM Resource", () => {
-        const url = `rpm://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
+        url = `rpm://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("RPM");
@@ -97,7 +97,7 @@ describe("resource utils", () => {
         expect(actual.aliases).toEqual([]);
       });
       it("should return the correct details for an RPM Resource without a specified distribution", () => {
-        const url = `rpm://${chance.word()}:${resourceName}:${resourceVersion}`;
+        url = `rpm://${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("RPM");
@@ -113,7 +113,7 @@ describe("resource utils", () => {
     it("should return the correct details for a Maven Resource", () => {
       const groupId = chance.word();
       const artifactId = chance.word();
-      const url = `gav://${groupId}:${artifactId}:${resourceVersion}`;
+      url = `gav://${groupId}:${artifactId}:${resourceVersion}`;
       const resourceName = `${groupId}:${artifactId}`;
       const actual = getResourceDetails(url);
 
@@ -127,7 +127,7 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for an NPM Package", () => {
-      const url = createGenericResourceUrl(
+      url = createGenericResourceUrl(
         resourceName,
         resourceVersion,
         "npm://"
@@ -145,7 +145,7 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for a NuGet Resource", () => {
-      const url = createGenericResourceUrl(
+      url = createGenericResourceUrl(
         resourceName,
         resourceVersion,
         "nuget://"
@@ -162,7 +162,7 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for a Python Resource", () => {
-      const url = createGenericResourceUrl(
+      url = createGenericResourceUrl(
         resourceName,
         resourceVersion,
         "pip://"
@@ -179,7 +179,7 @@ describe("resource utils", () => {
     });
 
     it("should return the correct details for a File Resource", () => {
-      const url = `file://sha256:${resourceVersion}:${resourceName}`;
+      url = `file://sha256:${resourceVersion}:${resourceName}`;
       const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("File");
@@ -192,8 +192,6 @@ describe("resource utils", () => {
     });
 
     describe("Docker Images", () => {
-      let url;
-
       beforeEach(() => {
         url = `${resourceName}@sha256:${resourceVersion}`;
       });
@@ -220,7 +218,6 @@ describe("resource utils", () => {
     });
 
     describe("Git Resources", () => {
-      let url;
       beforeEach(() => {
         url = `git://${resourceName}@${resourceVersion}`;
       });
