@@ -25,14 +25,23 @@ import { useTheme } from "providers/theme";
 import styles from "styles/modules/Search.module.scss";
 
 const ResourceSearchResult = ({ searchResult }) => {
-  const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-    searchResult.uri
-  );
+  const { name, type } = searchResult;
   const router = useRouter();
   const { theme } = useTheme();
 
-  const onClick = () => {
-    router.push(`/resources/${encodeURIComponent(searchResult.uri)}`);
+  const onClick = async () => {
+    const response = await fetch(
+      `/api/resource-versions?resourceName=${encodeURIComponent(
+        name
+      )}&pageSize=1`
+    );
+
+    if (response) {
+      const { data } = await response.json();
+      router.push(
+        `/resources/${encodeURIComponent(data[0].versionedResourceUri)}`
+      );
+    }
   };
 
   return (
@@ -40,17 +49,12 @@ const ResourceSearchResult = ({ searchResult }) => {
       <div>
         <LabelWithValue
           label={"Resource Name"}
-          value={resourceName}
+          value={name}
           className={styles.cardHeader}
         />
         <LabelWithValue
-          label={"Version"}
-          value={<ResourceVersion version={resourceVersion} />}
-          className={styles.cardText}
-        />
-        <LabelWithValue
           label={"Type"}
-          value={resourceType}
+          value={type}
           className={styles.cardText}
         />
       </div>
