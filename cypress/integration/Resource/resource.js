@@ -94,9 +94,13 @@ Then(/^I see "([^"]*)" resource search result$/, (resourceName) => {
 
 Then(/^I see "([^"]*)" resource details$/, (resourceName) => {
   const resource = resources[resourceName].data[0];
+  cy.mockRequest(
+    { url: "**/api/occurrences*", method: "GET" },
+    resource.occurrences
+  );
 
   cy.url().should("contain", `/resources/${encodeURIComponent(resource.uri)}`);
-  cy.contains(resource.resourceName).should("be.visible");
+  cy.contains("h1", resource.resourceName).should("be.visible");
   cy.contains(resource.resourceVersion.substring(0, 12)).should("be.visible");
   cy.get(selectors.EvaluateResourceInPlaygroundButton).should("be.visible");
 });

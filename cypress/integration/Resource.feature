@@ -10,7 +10,7 @@ Feature: Resources
     When I search for "NonExistent" resource
     Then I see "NoResourcesFound" message
 
-  @smoke @focus
+  @smoke
   Scenario: Search for an existing resource
     Given I am on the "ResourceSearch" page
     When I search for "Existing" resource

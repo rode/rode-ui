@@ -94,9 +94,9 @@ const Resource = () => {
           {data ? (
             <>
               <div className={styles.resourceHeader}>
-                <p className={styles.resourceName}>
+                <h1 className={styles.resourceName}>
                   {state.currentResource.resourceName}
-                </p>
+                </h1>
                 <div className={styles.resourceDetailsContainer}>
                   <div>
                     <LabelWithValue
