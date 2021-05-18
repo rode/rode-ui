@@ -111,15 +111,16 @@ describe("ChangeVersionDrawer", () => {
 
   describe("matching versions are found", () => {
     beforeEach(() => {
+      const name = chance.string();
       paginatedFetchResponse.data = chance.n(
         () => ({
-          version: createMockResourceUri(),
-          names: chance.n(chance.string, chance.d4()),
+          versionedResourceUri: createMockResourceUri(name, chance.string()),
+          aliases: chance.n(() => `${name}:${chance.string()}`, chance.d4()),
         }),
         chance.d4() + 2
       );
-      paginatedFetchResponse.data[0].version = createMockResourceUri(
-        chance.string(),
+      paginatedFetchResponse.data[0].versionedResourceUri = createMockResourceUri(
+        name,
         resourceState.currentResource.resourceVersion
       );
       render(
@@ -141,13 +142,16 @@ describe("ChangeVersionDrawer", () => {
 
     it("should render a card for each available version", () => {
       paginatedFetchResponse.data.forEach((version, index) => {
-        const { resourceVersion } = getResourceDetails(version.version);
+        const { resourceVersion, aliasLabel, aliases } = getResourceDetails(
+          version.versionedResourceUri,
+          version
+        );
         expect(screen.getAllByText("Version")[index]).toBeInTheDocument();
         expect(
-          screen.getByText(resourceVersion.substring(0, 12))
+          screen.getAllByText(resourceVersion.substring(0, 12))[0]
         ).toBeInTheDocument();
-        expect(screen.getAllByText("Tags")[index]).toBeInTheDocument();
-        expect(screen.getByText(version.names.join(", "))).toBeInTheDocument();
+        expect(screen.getAllByText(aliasLabel)[index]).toBeInTheDocument();
+        expect(screen.getByText(aliases.join(", "))).toBeInTheDocument();
       });
     });
 
@@ -157,7 +161,7 @@ describe("ChangeVersionDrawer", () => {
         renderedSelectButtons[renderedSelectButtons.length - 1];
       const versionUri = encodeURIComponent(
         paginatedFetchResponse.data[paginatedFetchResponse.data.length - 1]
-          .version
+          .versionedResourceUri
       );
       userEvent.click(versionToSelect);
       expect(router.push).toHaveBeenCalledWith(`/resources/${versionUri}`);

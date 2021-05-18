@@ -17,10 +17,8 @@
 import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resource-versions";
-import { getResourceDetails } from "utils/resource-utils";
 
 jest.mock("node-fetch");
-jest.mock("utils/resource-utils");
 
 describe("/api/resource-versions", () => {
   let request,
@@ -47,16 +45,11 @@ describe("/api/resource-versions", () => {
 
     resourceVersions = chance.n(
       () => ({
-        [chance.word()]: chance.word(),
-        name: chance.name(),
-        uri: chance.url(),
+        version: chance.name(),
+        names: chance.n(chance.string, chance.d4()),
       }),
       chance.d4()
     );
-
-    getResourceDetails.mockReturnValue({
-      resourceVersion: chance.string(),
-    });
 
     rodeResponse = {
       ok: true,
@@ -157,11 +150,10 @@ describe("/api/resource-versions", () => {
     });
 
     it("should return the resource versions", async () => {
-      const version = chance.string();
-      getResourceDetails.mockReturnValue({
-        resourceVersion: version,
-      });
-
+      const mappedVersions = resourceVersions.map((version) => ({
+        versionedResourceUri: version.version,
+        aliases: version.names,
+      }));
       await handler(request, response);
 
       expect(response.status)
@@ -169,7 +161,7 @@ describe("/api/resource-versions", () => {
         .toHaveBeenCalledWith(StatusCodes.OK);
 
       expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        data: resourceVersions,
+        data: mappedVersions,
         pageToken,
       });
     });

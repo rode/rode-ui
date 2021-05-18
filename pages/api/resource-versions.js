@@ -60,7 +60,10 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
-    const versions = listResourceVersionsResponse.versions;
+    const versions = listResourceVersionsResponse.versions.map((version) => ({
+      versionedResourceUri: version.version,
+      aliases: version.names,
+    }));
 
     res.status(StatusCodes.OK).json({
       data: versions,

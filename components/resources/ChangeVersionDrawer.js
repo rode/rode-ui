@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// TODO: fix cypress tests
 import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
@@ -28,7 +29,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
-import { getNameLabelFromType, getResourceDetails } from "utils/resource-utils";
+import { getResourceDetails } from "utils/resource-utils";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -67,11 +68,12 @@ const ChangeVersionDrawer = (props) => {
                 version
               </p>
             </div>
-            {data.map(({ version, names }) => {
-              const { resourceVersion, resourceType } = getResourceDetails(
-                version
-              );
-              const label = getNameLabelFromType(resourceType);
+            {data.map((version) => {
+              const {
+                resourceVersion,
+                aliasLabel,
+                aliases,
+              } = getResourceDetails(version.versionedResourceUri, version);
               const isCurrentVersion = resourceVersion === currentVersion;
 
               return (
@@ -82,8 +84,8 @@ const ChangeVersionDrawer = (props) => {
                       value={<ResourceVersion version={resourceVersion} />}
                     />
                     <LabelWithValue
-                      label={label}
-                      value={names.join(", ")}
+                      label={aliasLabel}
+                      value={aliases.join(", ")}
                       className={styles.versionNames}
                     />
                   </div>
@@ -92,7 +94,7 @@ const ChangeVersionDrawer = (props) => {
                     label={isCurrentVersion ? "Selected" : "Select"}
                     disabled={isCurrentVersion}
                     className={styles.versionSelectionButton}
-                    onClick={() => selectVersion(version)}
+                    onClick={() => selectVersion(version.versionedResourceUri)}
                   >
                     {isCurrentVersion && (
                       <>
@@ -114,7 +116,9 @@ const ChangeVersionDrawer = (props) => {
             )}
           </>
         ) : (
-          <p>{`No versions found matching the resource "${resourceName}"`}</p>
+          <p
+            className={styles.notFoundMessage}
+          >{`No versions found matching the resource "${resourceName}"`}</p>
         )}
       </Loading>
     </Drawer>

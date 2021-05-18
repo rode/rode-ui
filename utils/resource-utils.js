@@ -93,6 +93,9 @@ const resourceUrlTypes = [
     regex: DOCKER_REGEXP,
     parse: parseDocker,
     getGenericName: ({ name }) => name,
+    aliasLabel: "Tags",
+    getFormattedAliases: ({ genericName, aliases }) =>
+      aliases.map((alias) => alias.replace(`${genericName}:`, "")),
   },
   {
     type: "File",
@@ -134,7 +137,7 @@ const resourceUrlTypes = [
   },
 ];
 
-export const getResourceDetails = (uri) => {
+export const getResourceDetails = (uri, resourceVersion) => {
   const resourceMatch = resourceUrlTypes.find((resourceType) =>
     uri?.match(resourceType.regex)
   );
@@ -147,6 +150,8 @@ export const getResourceDetails = (uri) => {
       resourceVersion: "N/A",
       genericName: null,
       uri,
+      aliasLabel: "Aliases",
+      aliases: [],
     };
   }
 
@@ -160,19 +165,26 @@ export const getResourceDetails = (uri) => {
     uri,
   });
 
+  const aliasLabel = resourceMatch.aliasLabel || "Aliases";
+
+  let formattedAliases = [];
+
+  if (resourceVersion) {
+    formattedAliases = resourceMatch.getFormattedAliases
+      ? resourceMatch.getFormattedAliases({
+          genericName,
+          aliases: resourceVersion.aliases,
+        })
+      : resourceVersion.aliases;
+  }
+
   return {
     resourceType: resourceMatch.type,
     resourceName: name,
     resourceVersion: version,
     genericName,
     uri,
+    aliasLabel,
+    aliases: formattedAliases,
   };
-};
-
-export const getNameLabelFromType = (resourceType) => {
-  if (resourceType === "Docker") {
-    return "Tags";
-  }
-
-  return "Aliases";
 };
