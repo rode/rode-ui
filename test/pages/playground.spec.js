@@ -212,6 +212,8 @@ describe("PolicyPlayground", () => {
 
     describe("Evaluation", () => {
       it("should call to the correct endpoint", async () => {
+        fetch.mockClear();
+        fetchResponse.json.mockClear();
         const renderedEvaluateButton = screen.getByRole("button", {
           name: "Evaluate",
         });

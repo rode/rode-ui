@@ -229,5 +229,6 @@ export const mapOccurrencesToSections = (occurrences, resourceUri) => {
     secure: vulnerabilities,
     deploy: mapDeployments(deploymentOccurrences),
     other: [...other, ...otherOccurrences],
+    originals: { occurrences },
   };
 };
