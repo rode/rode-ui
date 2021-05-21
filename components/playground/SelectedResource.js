@@ -14,84 +14,41 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
-import ResourceVersion from "components/resources/ResourceVersion";
-import LabelWithValue from "components/LabelWithValue";
 import Code from "components/Code";
 import { useFetch } from "hooks/useFetch";
-import typeStyles from "styles/modules/Typography.module.scss";
+import textStyles from "styles/modules/Typography.module.scss";
 import Loading from "components/Loading";
 
 const SelectedResource = (props) => {
-  const { resource, clearResource } = props;
+  const { resource } = props;
 
-  const [showDetails, setShowDetails] = useState(false);
-  const toggleDetails = () => setShowDetails(!showDetails);
-
-  const { data, loading } = useFetch(`/api/occurrences`, {
-    resourceUri: resource.uri,
+  const { data, loading } = useFetch(resource ? `/api/occurrences` : null, {
+    resourceUri: resource?.uri,
   });
 
   return (
-    <div className={styles.selectionContainer}>
-      <h2 className={styles.selectionTitle}>
-        Selected Resource
-        <span className={styles.selectionName}>{resource.name}</span>
-      </h2>
-      <div className={styles.selectionButtonContainer}>
-        <Button
-          buttonType={"text"}
-          label={
-            showDetails ? "Hide Resource Details" : "Show Resource Details"
-          }
-          onClick={toggleDetails}
-        />
-        <Button
-          buttonType={"textDestructive"}
-          label={"Clear Resource"}
-          onClick={clearResource}
-        />
-      </div>
-      {showDetails && (
-        <div className={styles.selectionDetailsContainer}>
-          <LabelWithValue
-            label={"Version"}
-            value={
-              <ResourceVersion
-                version={resource.version}
-                copy={true}
-                buttonClassName={styles.copyVersionButton}
-              />
-            }
-            className={styles.selectionDetails}
+    <>
+      <p className={textStyles.label}>Occurrence Data</p>
+      {resource ? (
+        <Loading loading={loading}>
+          <Code
+            code={JSON.stringify(data?.originals, null, 2)}
+            language={"json"}
+            className={styles.codeContent}
           />
-          <LabelWithValue
-            label={"Type"}
-            value={resource.type}
-            className={styles.selectionDetails}
-          />
-          <Loading loading={loading}>
-            <p className={styles.selectionDetails}>
-              <span className={typeStyles.label}>Occurrence Data</span>
-            </p>
-            <Code
-              code={JSON.stringify(data?.originals, null, 2)}
-              language={"json"}
-              className={styles.codeContent}
-            />
-          </Loading>
-        </div>
+        </Loading>
+      ) : (
+        <p>Select a resource to begin</p>
       )}
-    </div>
+    </>
   );
 };
 
 SelectedResource.propTypes = {
-  resource: PropTypes.object.isRequired,
-  clearResource: PropTypes.func.isRequired,
+  resource: PropTypes.object,
 };
 
 export default SelectedResource;

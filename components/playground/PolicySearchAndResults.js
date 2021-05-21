@@ -25,10 +25,13 @@ import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import Drawer from "components/Drawer";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
-
+  const [showDrawer, setShowDrawer] = useState(false);
   const { state, dispatch } = usePolicies();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -42,7 +45,11 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   }, [policySearch]);
 
   return (
-    <div className={styles.searchContainer}>
+    <>
+      <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)}>
+        <Icon name={ICON_NAMES.SEARCH} size={"large"}/>
+      </Button>
+      <Drawer className={styles.searchContainer} isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
       <PolicySearchBar
         onSubmit={(event) => {
           event.preventDefault();
@@ -82,6 +89,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                           type: policyActions.SET_SEARCH_TERM,
                           data: "",
                         });
+                        setShowDrawer(false);
                       }}
                       buttonType={"text"}
                       label={"Select Policy"}
@@ -105,7 +113,8 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           </Loading>
         </div>
       )}
-    </div>
+      </Drawer>
+      </>
   );
 };
 

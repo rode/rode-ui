@@ -100,26 +100,8 @@ const PolicyPlayground = () => {
           Choose a resource, pick a policy, and evaluate.
         </p>
       </PageHeader>
-      <Button
-        buttonType={"text"}
-        label={"Reset Playground"}
-        onClick={resetPlayground}
-        className={styles.resetButton}
-      />
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
-          {state.evaluationResource ? (
-            <SelectedResource
-              resource={state.evaluationResource}
-              clearResource={() => {
-                policyDispatch({
-                  type: policyActions.SET_EVALUATION_RESOURCE,
-                  data: null,
-                });
-                setEvaluationResults(null);
-              }}
-            />
-          ) : (
             <ResourceSearchAndResults
               setResource={(data) =>
                 policyDispatch({
@@ -129,21 +111,11 @@ const PolicyPlayground = () => {
               }
               clearEvaluation={() => setEvaluationResults(null)}
             />
-          )}
+            <SelectedResource
+              resource={state.evaluationResource}
+            />
         </div>
         <div className={styles.rightContainer}>
-          {state.evaluationPolicy ? (
-            <SelectedPolicy
-              policy={state.evaluationPolicy}
-              clearPolicy={() => {
-                policyDispatch({
-                  type: policyActions.SET_EVALUATION_POLICY,
-                  data: null,
-                });
-                setEvaluationResults(null);
-              }}
-            />
-          ) : (
             <PolicySearchAndResults
               setPolicy={(data) =>
                 policyDispatch({
@@ -153,7 +125,9 @@ const PolicyPlayground = () => {
               }
               clearEvaluation={() => setEvaluationResults(null)}
             />
-          )}
+            <SelectedPolicy
+              policy={state.evaluationPolicy}
+            />
         </div>
       </div>
       <Button

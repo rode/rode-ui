@@ -28,9 +28,13 @@ import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
+import Drawer from "components/Drawer";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
   const [resourceSearch, setResourceSearch] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
   const { state, dispatch } = useResources();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -44,7 +48,11 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
   }, [resourceSearch]);
 
   return (
-    <div className={styles.searchContainer}>
+    <>
+      <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)}>
+        <Icon name={ICON_NAMES.SEARCH} size={"large"}/>
+      </Button>
+    <Drawer className={styles.searchContainer} isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
       <ResourceSearchBar
         onSubmit={(event) => {
           event.preventDefault();
@@ -105,6 +113,7 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
                             type: resourceActions.SET_SEARCH_TERM,
                             data: "",
                           });
+                          setShowDrawer(false);
                         }}
                         buttonType={"text"}
                         label={"Select Resource"}
@@ -129,7 +138,8 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
           </Loading>
         </div>
       )}
-    </div>
+    </Drawer>
+      </>
   );
 };
 
