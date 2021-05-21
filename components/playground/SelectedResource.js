@@ -20,12 +20,21 @@ import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
+import Code from "components/Code";
+import { useFetch } from "hooks/useFetch";
+import typeStyles from "styles/modules/Typography.module.scss";
+import Loading from "components/Loading";
 
 const SelectedResource = (props) => {
   const { resource, clearResource } = props;
 
   const [showDetails, setShowDetails] = useState(false);
   const toggleDetails = () => setShowDetails(!showDetails);
+
+  const { data, loading } = useFetch(`/api/occurrences`, {
+    resourceUri: resource.uri,
+  });
+
   return (
     <div className={styles.selectionContainer}>
       <h2 className={styles.selectionTitle}>
@@ -64,6 +73,16 @@ const SelectedResource = (props) => {
             value={resource.type}
             className={styles.selectionDetails}
           />
+          <Loading loading={loading}>
+            <p className={styles.selectionDetails}>
+              <span className={typeStyles.label}>Occurrence Data</span>
+            </p>
+            <Code
+              code={JSON.stringify(data?.originals, null, 2)}
+              language={"json"}
+              className={styles.codeContent}
+            />
+          </Loading>
         </div>
       )}
     </div>

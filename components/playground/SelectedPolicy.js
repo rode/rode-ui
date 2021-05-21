@@ -56,7 +56,11 @@ const SelectedPolicy = (props) => {
           <p className={styles.selectionDetails}>
             <span className={typeStyles.label}>Rego Policy Code</span>
           </p>
-          <Code code={policy.regoContent} language={"rego"} />
+          <Code
+            code={policy.regoContent}
+            language={"rego"}
+            className={styles.codeContent}
+          />
         </div>
       )}
     </div>

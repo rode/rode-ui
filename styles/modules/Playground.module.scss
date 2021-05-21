@@ -162,6 +162,12 @@ $CARD_WIDTH: 97%;
   }
 }
 
+.codeContent {
+  height: 35vh;
+  resize: vertical;
+  overflow: auto;
+}
+
 .pageTitle {
   font-size: 1.25rem;
   font-weight: 600;
