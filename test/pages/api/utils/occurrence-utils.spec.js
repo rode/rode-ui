@@ -29,8 +29,14 @@ describe("occurrence-utils", () => {
 
       const resourceUri = buildOccurrence.build.provenance.builtArtifacts[0].id;
 
+      const allOccurrences = [
+        buildOccurrence,
+        deploymentOccurrence,
+        randomOccurrence,
+      ];
+
       const mappedOccurrences = mapOccurrencesToSections(
-        [buildOccurrence, deploymentOccurrence, randomOccurrence],
+        allOccurrences,
         resourceUri
       );
 
@@ -38,6 +44,9 @@ describe("occurrence-utils", () => {
       expect(mappedOccurrences.deploy).toHaveLength(1);
       expect(mappedOccurrences.other).toHaveLength(1);
       expect(mappedOccurrences.other).toContain(randomOccurrence);
+      expect(mappedOccurrences.originals).toEqual({
+        occurrences: allOccurrences,
+      });
     });
 
     describe("vulnerabilities", () => {
