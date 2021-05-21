@@ -46,7 +46,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
 
   return (
     <>
-      <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)}>
+      <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)} className={styles.openSearchButton}>
         <Icon name={ICON_NAMES.SEARCH} size={"large"}/>
       </Button>
       <Drawer className={styles.searchContainer} isOpen={showDrawer} onClose={() => setShowDrawer(false)}>

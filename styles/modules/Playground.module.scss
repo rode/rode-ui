@@ -23,12 +23,12 @@ $CARD_WIDTH: 97%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   height: fit-content;
 
   @include tabletAndLarger {
     margin: 0 auto;
-    min-height: 90%;
+    height: 100%;
   }
 }
 
@@ -40,6 +40,7 @@ $CARD_WIDTH: 97%;
   @include tabletAndLarger {
     flex-direction: row;
     justify-content: space-evenly;
+    height: 100%;
   }
 }
 
@@ -48,13 +49,25 @@ $CARD_WIDTH: 97%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0.5rem;
-  height: 100%;
+  margin: 0 auto;
 
   @include tabletAndLarger {
+    flex: 1;
     width: 48%;
-    margin: 0 0.5rem;
   }
+}
+
+.sectionContainer {
+  position: relative;
+  padding: 1rem;
+  flex: 1;
+  margin: 0.5rem;
+}
+
+.openSearchButton {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .searchResultsContainer {
@@ -122,44 +135,9 @@ $CARD_WIDTH: 97%;
   margin: 0.5rem auto;
 }
 
-.selectionButtonContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.selectionDetailsContainer {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: solid 1px transparent;
-}
-
-.selectionTitle {
-  text-align: center;
-  font-weight: 400;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-}
-
-.selectionName {
-  display: block;
-  font-weight: 600;
-  text-transform: initial;
-  font-size: 1.25rem;
-}
-
-.selectionDetails {
-  margin: 0.5rem 0;
-  @include ellipsis(calc(100vw - 10%));
-  white-space: pre-line;
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 30%);
-  }
-}
-
 .codeContent {
-  height: 35vh;
+  max-height: 100%;
+  height: fit-content;
   resize: vertical;
   overflow: auto;
 }
@@ -257,6 +235,11 @@ $CARD_WIDTH: 97%;
     color: $DT_SUB_TEXT;
   }
 
+  .sectionContainer {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
   .searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
@@ -275,15 +258,6 @@ $CARD_WIDTH: 97%;
     p {
       color: $BRIGHT_GREEN;
     }
-  }
-
-  .selectionDetailsContainer {
-    border-top-color: $MEDIUM_GREY;
-  }
-
-  .selectionContainer {
-    box-shadow: $DT_BOX_SHADOW;
-    background-color: $DT_BACKGROUND_MEDIUM;
   }
 
   .evaluationResults,
@@ -324,6 +298,11 @@ $CARD_WIDTH: 97%;
     color: $LT_SUB_TEXT;
   }
 
+  .sectionContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
@@ -342,15 +321,6 @@ $CARD_WIDTH: 97%;
     p {
       color: $GREEN;
     }
-  }
-
-  .selectionDetailsContainer {
-    border-top-color: $SILVER;
-  }
-
-  .selectionContainer {
-    box-shadow: $LT_BOX_SHADOW;
-    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .evaluationResults,

@@ -29,6 +29,7 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
+import textStyles from "../styles/modules/Typography.module.scss";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -102,20 +103,7 @@ const PolicyPlayground = () => {
       </PageHeader>
       <div className={styles.contentContainer}>
         <div className={styles.leftContainer}>
-            <ResourceSearchAndResults
-              setResource={(data) =>
-                policyDispatch({
-                  type: policyActions.SET_EVALUATION_RESOURCE,
-                  data,
-                })
-              }
-              clearEvaluation={() => setEvaluationResults(null)}
-            />
-            <SelectedResource
-              resource={state.evaluationResource}
-            />
-        </div>
-        <div className={styles.rightContainer}>
+          <div className={styles.sectionContainer}>
             <PolicySearchAndResults
               setPolicy={(data) =>
                 policyDispatch({
@@ -125,19 +113,35 @@ const PolicyPlayground = () => {
               }
               clearEvaluation={() => setEvaluationResults(null)}
             />
-            <SelectedPolicy
-              policy={state.evaluationPolicy}
+            <SelectedPolicy policy={state.evaluationPolicy} />
+          </div>
+        </div>
+        <div className={styles.rightContainer}>
+          <div className={styles.sectionContainer}>
+            <ResourceSearchAndResults
+              setResource={(data) =>
+                policyDispatch({
+                  type: policyActions.SET_EVALUATION_RESOURCE,
+                  data,
+                })
+              }
+              clearEvaluation={() => setEvaluationResults(null)}
             />
+            <SelectedResource resource={state.evaluationResource} />
+          </div>
+          <div className={styles.sectionContainer}>
+            <p className={textStyles.label}>Results</p>
+            <Button
+              label={"Evaluate"}
+              onClick={evaluatePolicy}
+              className={styles.evaluateButton}
+              loading={evaluationLoading}
+              disabled={!state.evaluationResource || !state.evaluationPolicy}
+            />
+            <EvaluationResult results={evaluationResults} />
+          </div>
         </div>
       </div>
-      <Button
-        label={"Evaluate"}
-        onClick={evaluatePolicy}
-        className={styles.evaluateButton}
-        loading={evaluationLoading}
-        disabled={!state.evaluationResource || !state.evaluationPolicy}
-      />
-      <EvaluationResult results={evaluationResults} />
     </div>
   );
 };
