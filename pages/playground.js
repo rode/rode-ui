@@ -94,13 +94,13 @@ const PolicyPlayground = () => {
 
   return (
     <>
-      <PageHeader>
-        <h1 className={styles.pageTitle}>Policy Playground</h1>
-        <p className={styles.instructions}>
-          Choose a resource, pick a policy, and evaluate.
-        </p>
-      </PageHeader>
       <div className={`${styles[theme]} ${styles.contentContainer}`}>
+        <PageHeader>
+          <h1 className={styles.pageTitle}>Policy Playground</h1>
+          <p className={styles.instructions}>
+            Choose a resource, pick a policy, and evaluate.
+          </p>
+        </PageHeader>
         <div className={styles.policyContainer}>
           <PolicySearchAndResults
             setPolicy={(data) =>

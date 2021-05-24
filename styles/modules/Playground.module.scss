@@ -82,6 +82,10 @@ $GAP: 1rem;
   right: 0;
 }
 
+.selectToBeginText {
+  margin: 0.5rem 0 0 0.5rem;
+}
+
 .searchCard {
   width: $CARD_WIDTH;
   height: fit-content;
@@ -249,7 +253,8 @@ $GAP: 1rem;
     color: $LAGOON;
   }
 
-  .instructions {
+  .instructions,
+  .selectToBeginText {
     color: $DT_SUB_TEXT;
   }
 
@@ -312,7 +317,8 @@ $GAP: 1rem;
     color: $DEEP_SEA;
   }
 
-  .instructions {
+  .instructions,
+  .selectToBeginText {
     color: $LT_SUB_TEXT;
   }
 

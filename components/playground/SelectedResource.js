@@ -42,7 +42,7 @@ const SelectedResource = (props) => {
           />
         </Loading>
       ) : (
-        <p>Select a resource to begin</p>
+        <p className={styles.selectToBeginText}>Select a resource to begin</p>
       )}
     </>
   );

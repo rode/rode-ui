@@ -34,7 +34,7 @@ const SelectedPolicy = (props) => {
           data-testId={"regoPolicyCode"}
         />
       ) : (
-        <p>Select a policy to begin</p>
+        <p className={styles.selectToBeginText}>Select a policy to begin</p>
       )}
     </>
   );

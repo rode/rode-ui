@@ -25,7 +25,7 @@ describe("SelectedPolicy", () => {
     policy = {
       name: chance.string(),
       description: chance.string(),
-      regoContent: chance.string(),
+      regoContent: chance.word({ syllables: chance.d10() }),
     };
 
     const utils = render(<SelectedPolicy policy={policy} />);
@@ -37,6 +37,7 @@ describe("SelectedPolicy", () => {
   });
 
   it("should render the rego policy code", () => {
+    expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
     expect(
       screen.getByText(policy.regoContent, { exact: false })
     ).toBeInTheDocument();
