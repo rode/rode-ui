@@ -82,18 +82,11 @@ $GAP: 1rem;
   right: 0;
 }
 
-.searchResultsContainer {
-  flex: 1;
-  min-height: 3rem;
-  max-height: 45vh;
-  overflow: auto;
-}
-
 .searchCard {
   width: $CARD_WIDTH;
   height: fit-content;
   padding: 1rem;
-  margin: 0.5rem auto 0.5rem 0;
+  margin: 0.5rem auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -132,8 +125,22 @@ $GAP: 1rem;
 }
 
 .searchContainer {
-  max-height: 50%;
-  width: 100%;
+  width: 95%;
+  margin: 0.5rem auto;
+  height: fit-content;
+
+  @include tabletAndLarger {
+    margin: 1rem auto 2rem;
+  }
+}
+
+.searchResultsContainer {
+  overflow: auto;
+  height: 70vh;
+
+  @include tabletAndLarger {
+    height: 75vh;
+  }
 }
 
 .viewAllButton {

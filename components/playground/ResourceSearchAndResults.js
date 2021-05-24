@@ -52,28 +52,29 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
       <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)} className={styles.openSearchButton}>
         <Icon name={ICON_NAMES.SEARCH} size={"large"}/>
       </Button>
-    <Drawer className={styles.searchContainer} isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
-      <ResourceSearchBar
-        onSubmit={(event) => {
-          event.preventDefault();
-          setResourceSearch(true);
-        }}
-        onChange={() => setResourceSearch(false)}
-        helpText={
-          <Button
-            className={styles.viewAllButton}
-            buttonType={"text"}
-            label={"View all resources"}
-            onClick={() =>
-              dispatch({
-                type: resourceActions.SET_SEARCH_TERM,
-                data: "all",
-              })
-            }
-          />
-        }
-      />
-      {resourceSearch && (
+    <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
+      <div className={styles.searchContainer}>
+        <ResourceSearchBar
+          onSubmit={(event) => {
+            event.preventDefault();
+            setResourceSearch(true);
+          }}
+          onChange={() => setResourceSearch(false)}
+          helpText={
+            <Button
+              className={styles.viewAllButton}
+              buttonType={"text"}
+              label={"View all resources"}
+              onClick={() =>
+                dispatch({
+                  type: resourceActions.SET_SEARCH_TERM,
+                  data: "all",
+                })
+              }
+            />
+          }
+        />
+        {resourceSearch && (
         <div className={styles.searchResultsContainer}>
           <Loading loading={loading} type={"button"}>
             {data?.length > 0 ? (
@@ -136,8 +137,9 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
               <p>{`No resources found matching "${state.searchTerm}"`}</p>
             )}
           </Loading>
-        </div>
-      )}
+      </div>
+        )}
+      </div>
     </Drawer>
       </>
   );
