@@ -29,7 +29,8 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
-import textStyles from "../styles/modules/Typography.module.scss";
+
+// TODO: are there refactoring opportunities here?
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -127,18 +128,17 @@ const PolicyPlayground = () => {
           <SelectedResource resource={state.evaluationResource} />
         </div>
         <div className={styles.evaluationContainer}>
-          {
-            evaluationResults ?
-              <EvaluationResult results={evaluationResults} />
-              :
-              <Button
-                label={"Evaluate"}
-                onClick={evaluatePolicy}
-                className={styles.evaluateButton}
-                loading={evaluationLoading}
-                disabled={!state.evaluationResource || !state.evaluationPolicy}
-              />
-          }
+          {evaluationResults ? (
+            <EvaluationResult results={evaluationResults} />
+          ) : (
+            <Button
+              label={"Evaluate"}
+              onClick={evaluatePolicy}
+              className={styles.evaluateButton}
+              loading={evaluationLoading}
+              disabled={!state.evaluationResource || !state.evaluationPolicy}
+            />
+          )}
         </div>
       </div>
     </>

@@ -16,11 +16,10 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 
 describe("SelectedPolicy", () => {
-  let policy, clearPolicy, rerender;
+  let policy, rerender;
 
   beforeEach(() => {
     policy = {
@@ -29,54 +28,23 @@ describe("SelectedPolicy", () => {
       regoContent: chance.string(),
     };
 
-    clearPolicy = jest.fn();
-
-    const utils = render(
-      <SelectedPolicy policy={policy} clearPolicy={clearPolicy} />
-    );
+    const utils = render(<SelectedPolicy policy={policy} />);
     rerender = utils.rerender;
   });
 
-  it("should render the policy name", () => {
-    expect(screen.getByText(policy.name)).toBeInTheDocument();
+  it("should render the rego policy label", () => {
+    expect(screen.getByText(/rego policy code/i)).toBeInTheDocument();
   });
 
-  it("should render the button to clear the policy", () => {
-    const renderedButton = screen.getByRole("button", { name: "Clear Policy" });
-
-    expect(renderedButton).toBeInTheDocument();
-    userEvent.click(renderedButton);
-    expect(clearPolicy).toHaveBeenCalledTimes(1);
-  });
-
-  it("should render a button to toggle the policy details", () => {
-    const renderedButton = screen.getByRole("button", {
-      name: "Show Policy Details",
-    });
-
-    expect(renderedButton).toBeInTheDocument();
-    userEvent.click(renderedButton);
-
-    expect(screen.getByText(policy.description)).toBeInTheDocument();
+  it("should render the rego policy code", () => {
     expect(
       screen.getByText(policy.regoContent, { exact: false })
     ).toBeInTheDocument();
   });
 
-  it("should not render a policy description if it doesn't exist", () => {
-    policy = {
-      name: chance.string(),
-      regoContent: chance.string(),
-    };
+  it("should render the instructions if no policy is selected", () => {
+    rerender(<SelectedPolicy policy={null} />);
 
-    rerender(<SelectedPolicy policy={policy} clearPolicy={clearPolicy} />);
-    const renderedButton = screen.getByRole("button", {
-      name: "Show Policy Details",
-    });
-
-    expect(renderedButton).toBeInTheDocument();
-    userEvent.click(renderedButton);
-
-    expect(screen.queryByText("Description")).not.toBeInTheDocument();
+    expect(screen.getByText(/select a policy to begin/i)).toBeInTheDocument();
   });
 });

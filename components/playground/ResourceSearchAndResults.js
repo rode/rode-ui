@@ -49,99 +49,109 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
 
   return (
     <>
-      <Button label={"Search for resources"} buttonType="icon" onClick={() => setShowDrawer(true)} className={styles.openSearchButton}>
-        <Icon name={ICON_NAMES.SEARCH} size={"large"}/>
+      <Button
+        label={"Search for resources"}
+        buttonType="icon"
+        onClick={() => setShowDrawer(true)}
+        className={styles.openSearchButton}
+      >
+        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
       </Button>
-    <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
-      <div className={styles.searchContainer}>
-        <ResourceSearchBar
-          onSubmit={(event) => {
-            event.preventDefault();
-            setResourceSearch(true);
-          }}
-          onChange={() => setResourceSearch(false)}
-          helpText={
-            <Button
-              className={styles.viewAllButton}
-              buttonType={"text"}
-              label={"View all resources"}
-              onClick={() =>
-                dispatch({
-                  type: resourceActions.SET_SEARCH_TERM,
-                  data: "all",
-                })
-              }
-            />
-          }
-        />
-        {resourceSearch && (
-        <div className={styles.searchResultsContainer}>
-          <Loading loading={loading} type={"button"}>
-            {data?.length > 0 ? (
-              <>
-                {data.map((result) => {
-                  const {
-                    resourceName,
-                    resourceVersion,
-                    resourceType,
-                  } = getResourceDetails(result.uri);
+      <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
+        <div className={styles.searchContainer}>
+          <ResourceSearchBar
+            onSubmit={(event) => {
+              event.preventDefault();
+              setResourceSearch(true);
+            }}
+            onChange={() => setResourceSearch(false)}
+            helpText={
+              <Button
+                className={styles.viewAllButton}
+                buttonType={"text"}
+                label={"View all resources"}
+                onClick={() =>
+                  dispatch({
+                    type: resourceActions.SET_SEARCH_TERM,
+                    data: "all",
+                  })
+                }
+              />
+            }
+          />
+          {resourceSearch && (
+            <div className={styles.searchResultsContainer}>
+              <Loading loading={loading} type={"button"}>
+                {data?.length > 0 ? (
+                  <>
+                    {data.map((result) => {
+                      const {
+                        resourceName,
+                        resourceVersion,
+                        resourceType,
+                      } = getResourceDetails(result.uri);
 
-                  return (
-                    <div className={`${styles.searchCard}`} key={result.uri}>
-                      <div>
-                        <p className={styles.cardHeader}>{resourceName}</p>
-                        <LabelWithValue
-                          label={"Version"}
-                          value={<ResourceVersion version={resourceVersion} />}
-                          className={styles.cardText}
-                        />
-                        <LabelWithValue
-                          label={"Type"}
-                          value={resourceType}
-                          className={styles.cardText}
-                        />
-                      </div>
+                      return (
+                        <div
+                          className={`${styles.searchCard}`}
+                          key={result.uri}
+                        >
+                          <div>
+                            <p className={styles.cardHeader}>{resourceName}</p>
+                            <LabelWithValue
+                              label={"Version"}
+                              value={
+                                <ResourceVersion version={resourceVersion} />
+                              }
+                              className={styles.cardText}
+                            />
+                            <LabelWithValue
+                              label={"Type"}
+                              value={resourceType}
+                              className={styles.cardText}
+                            />
+                          </div>
+                          <Button
+                            onClick={() => {
+                              setResource({
+                                uri: result.uri,
+                                name: resourceName,
+                                version: resourceVersion,
+                                type: resourceType,
+                              });
+                              setResourceSearch(false);
+                              dispatch({
+                                type: resourceActions.SET_SEARCH_TERM,
+                                data: "",
+                              });
+                              setShowDrawer(false);
+                            }}
+                            buttonType={"text"}
+                            label={"Select Resource"}
+                            className={styles.actionButton}
+                          />
+                        </div>
+                      );
+                    })}
+                    {!isLastPage && (
                       <Button
-                        onClick={() => {
-                          setResource({
-                            uri: result.uri,
-                            name: resourceName,
-                            version: resourceVersion,
-                            type: resourceType,
-                          });
-                          setResourceSearch(false);
-                          dispatch({
-                            type: resourceActions.SET_SEARCH_TERM,
-                            data: "",
-                          });
-                          setShowDrawer(false);
-                        }}
                         buttonType={"text"}
-                        label={"Select Resource"}
-                        className={styles.actionButton}
+                        label={"See More Resources"}
+                        onClick={goToNextPage}
+                        id={"viewMoreResourcesButton"}
+                        className={styles.viewMoreButton}
                       />
-                    </div>
-                  );
-                })}
-                {!isLastPage && (
-                  <Button
-                    buttonType={"text"}
-                    label={"See More Resources"}
-                    onClick={goToNextPage}
-                    id={"viewMoreResourcesButton"}
-                    className={styles.viewMoreButton}
-                  />
+                    )}
+                  </>
+                ) : (
+                  <p>{`No resources found matching "${state.searchTerm}"`}</p>
                 )}
-              </>
-            ) : (
-              <p>{`No resources found matching "${state.searchTerm}"`}</p>
-            )}
-          </Loading>
-      </div>
-        )}
-      </div>
-    </Drawer>
-      </>
+              </Loading>
+            </div>
+          )}
+        </div>
+      </Drawer>
+    </>
   );
 };
 

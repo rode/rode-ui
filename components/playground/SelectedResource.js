@@ -38,6 +38,7 @@ const SelectedResource = (props) => {
             code={JSON.stringify(data?.originals, null, 2)}
             language={"json"}
             className={styles.codeContent}
+            data-testid={"occurrenceJson"}
           />
         </Loading>
       ) : (

@@ -47,7 +47,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   return (
     <>
       <Button
-        label={"Search for resources"}
+        label={"Search for policies"}
         buttonType="icon"
         onClick={() => setShowDrawer(true)}
         className={styles.openSearchButton}
@@ -78,45 +78,47 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           />
           {policySearch && (
             <div className={styles.searchResultsContainer}>
-            <Loading loading={loading} type={"button"}>
-              {data?.length > 0 ? (
-                <>
-                  {data.map((result) => (
-                    <div className={`${styles.searchCard}`} key={result.id}>
-                      <div>
-                        <p className={styles.cardHeader}>{result.name}</p>
-                        <p className={styles.cardText}>{result.description}</p>
+              <Loading loading={loading} type={"button"}>
+                {data?.length > 0 ? (
+                  <>
+                    {data.map((result) => (
+                      <div className={`${styles.searchCard}`} key={result.id}>
+                        <div>
+                          <p className={styles.cardHeader}>{result.name}</p>
+                          <p className={styles.cardText}>
+                            {result.description}
+                          </p>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setPolicy(result);
+                            setPolicySearch(false);
+                            dispatch({
+                              type: policyActions.SET_SEARCH_TERM,
+                              data: "",
+                            });
+                            setShowDrawer(false);
+                          }}
+                          buttonType={"text"}
+                          label={"Select Policy"}
+                          className={styles.actionButton}
+                        />
                       </div>
+                    ))}
+                    {!isLastPage && (
                       <Button
-                        onClick={() => {
-                          setPolicy(result);
-                          setPolicySearch(false);
-                          dispatch({
-                            type: policyActions.SET_SEARCH_TERM,
-                            data: "",
-                          });
-                          setShowDrawer(false);
-                        }}
-                        buttonType={"text"}
-                        label={"Select Policy"}
-                        className={styles.actionButton}
+                        buttonType="text"
+                        onClick={goToNextPage}
+                        label={"See More Policies"}
+                        className={styles.viewMoreButton}
+                        id={"viewMorePoliciesButton"}
                       />
-                    </div>
-                  ))}
-                  {!isLastPage && (
-                    <Button
-                      buttonType="text"
-                      onClick={goToNextPage}
-                      label={"See More Policies"}
-                      className={styles.viewMoreButton}
-                      id={"viewMorePoliciesButton"}
-                    />
-                  )}
-                </>
-              ) : (
-                <p>{`No policies found matching "${state.searchTerm}"`}</p>
-              )}
-            </Loading>
+                    )}
+                  </>
+                ) : (
+                  <p>{`No policies found matching "${state.searchTerm}"`}</p>
+                )}
+              </Loading>
             </div>
           )}
         </div>

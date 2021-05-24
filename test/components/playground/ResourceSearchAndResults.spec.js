@@ -78,6 +78,16 @@ describe("ResourceSearchAndResults", () => {
     jest.resetAllMocks();
   });
 
+  it("should render the button to open the search drawer", () => {
+    const renderedButton = screen.getByLabelText(/search for resources/i);
+    expect(renderedButton).toBeInTheDocument();
+    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
+
+    userEvent.click(renderedButton);
+
+    expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
+  });
+
   it("should render the search bar", () => {
     expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
 
