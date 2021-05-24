@@ -18,10 +18,10 @@
 @import "styles/mixins";
 
 $CARD_WIDTH: 97%;
-$GAP: 0.5rem;
+$GAP: 1rem;
 
 .contentContainer {
-  height: 100%;
+  height: calc(100% - calc(#{$GAP} * 2));
   width: 100%;
 
   @include tabletAndLarger {
@@ -32,6 +32,8 @@ $GAP: 0.5rem;
     grid-template-areas:
       "left rightTop"
       "left rightBottom";
+    justify-content: center;
+    align-content: start;
     max-height: calc(90vh - 6rem);
   }
 }
@@ -69,6 +71,8 @@ $GAP: 0.5rem;
   @include tabletAndLarger {
     grid-row: rightBottom;
     grid-column: rightBottom;
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -144,6 +148,7 @@ $GAP: 0.5rem;
 }
 
 .codeContent {
+  margin-top: 0.5rem;
   max-height: 95%;
   height: fit-content;
   resize: vertical;
@@ -177,21 +182,15 @@ $GAP: 0.5rem;
 }
 
 .evaluationResultsContainer {
-  margin: 1rem auto;
-  padding: 1rem;
   width: fit-content;
-  max-width: 95%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
 
   > button {
     margin: 0.5rem auto;
     font-size: 0.85rem;
-  }
-
-  @include tabletAndLarger {
-    max-width: 75%;
   }
 }
 
@@ -213,7 +212,6 @@ $GAP: 0.5rem;
   grid-template-areas: "outcome message";
   width: fit-content;
   margin: 0 auto;
-  padding: 1rem;
 
   > p {
     white-space: normal;

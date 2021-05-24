@@ -127,15 +127,18 @@ const PolicyPlayground = () => {
           <SelectedResource resource={state.evaluationResource} />
         </div>
         <div className={styles.evaluationContainer}>
-          <p className={textStyles.label}>Results</p>
-          <Button
-            label={"Evaluate"}
-            onClick={evaluatePolicy}
-            className={styles.evaluateButton}
-            loading={evaluationLoading}
-            disabled={!state.evaluationResource || !state.evaluationPolicy}
-          />
-          <EvaluationResult results={evaluationResults} />
+          {
+            evaluationResults ?
+              <EvaluationResult results={evaluationResults} />
+              :
+              <Button
+                label={"Evaluate"}
+                onClick={evaluatePolicy}
+                className={styles.evaluateButton}
+                loading={evaluationLoading}
+                disabled={!state.evaluationResource || !state.evaluationPolicy}
+              />
+          }
         </div>
       </div>
     </>
