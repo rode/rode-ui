@@ -93,53 +93,51 @@ const PolicyPlayground = () => {
   }, []);
 
   return (
-    <>
-      <div className={`${styles[theme]} ${styles.contentContainer}`}>
-        <PageHeader>
-          <h1 className={styles.pageTitle}>Policy Playground</h1>
-          <p className={styles.instructions}>
-            Choose a resource, pick a policy, and evaluate.
-          </p>
-        </PageHeader>
-        <div className={styles.policyContainer}>
-          <PolicySearchAndResults
-            setPolicy={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_POLICY,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          <SelectedPolicy policy={state.evaluationPolicy} />
-        </div>
-        <div className={styles.resourceContainer}>
-          <ResourceSearchAndResults
-            setResource={(data) =>
-              policyDispatch({
-                type: policyActions.SET_EVALUATION_RESOURCE,
-                data,
-              })
-            }
-            clearEvaluation={() => setEvaluationResults(null)}
-          />
-          <SelectedResource resource={state.evaluationResource} />
-        </div>
-        <div className={styles.evaluationContainer}>
-          {evaluationResults ? (
-            <EvaluationResult results={evaluationResults} />
-          ) : (
-            <Button
-              label={"Evaluate"}
-              onClick={evaluatePolicy}
-              className={styles.evaluateButton}
-              loading={evaluationLoading}
-              disabled={!state.evaluationResource || !state.evaluationPolicy}
-            />
-          )}
-        </div>
+    <div className={`${styles[theme]} ${styles.contentContainer}`}>
+      <PageHeader>
+        <h1 className={styles.pageTitle}>Policy Playground</h1>
+        <p className={styles.instructions}>
+          Choose a resource, pick a policy, and evaluate.
+        </p>
+      </PageHeader>
+      <div className={styles.policyContainer}>
+        <PolicySearchAndResults
+          setPolicy={(data) =>
+            policyDispatch({
+              type: policyActions.SET_EVALUATION_POLICY,
+              data,
+            })
+          }
+          clearEvaluation={() => setEvaluationResults(null)}
+        />
+        <SelectedPolicy policy={state.evaluationPolicy} />
       </div>
-    </>
+      <div className={styles.resourceContainer}>
+        <ResourceSearchAndResults
+          setResource={(data) =>
+            policyDispatch({
+              type: policyActions.SET_EVALUATION_RESOURCE,
+              data,
+            })
+          }
+          clearEvaluation={() => setEvaluationResults(null)}
+        />
+        <SelectedResource resource={state.evaluationResource} />
+      </div>
+      <div className={styles.evaluationContainer}>
+        {evaluationResults ? (
+          <EvaluationResult results={evaluationResults} />
+        ) : (
+          <Button
+            label={"Evaluate"}
+            onClick={evaluatePolicy}
+            className={styles.evaluateButton}
+            loading={evaluationLoading}
+            disabled={!state.evaluationResource || !state.evaluationPolicy}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
