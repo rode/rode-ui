@@ -30,8 +30,6 @@ import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
 
-// TODO: are there refactoring opportunities here?
-
 const PolicyPlayground = () => {
   const { theme } = useTheme();
   const { state, dispatch: policyDispatch } = usePolicies();
