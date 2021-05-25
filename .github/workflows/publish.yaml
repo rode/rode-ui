@@ -89,4 +89,4 @@ jobs:
         with:
           repo: rode/charts
           token: ${{ secrets.GITOPS_TOKEN }}
-          message: "update Rode app version to ${{ steps.tag.outputs.TAG }}"
+          message: "update rode-ui app version to ${{ steps.tag.outputs.TAG }}"
