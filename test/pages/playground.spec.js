@@ -19,12 +19,14 @@ import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicyPlayground from "pages/playground";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { useFetch } from "hooks/useFetch";
 import {
   createMockEvaluationResult,
   createMockResourceUri,
 } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
 
+jest.mock("hooks/useFetch");
 jest.mock("hooks/usePaginatedFetch");
 jest.mock("utils/toast-utils");
 
@@ -35,6 +37,7 @@ describe("PolicyPlayground", () => {
     resourceDispatch,
     fetchResponse,
     usePaginatedFetchResponse,
+    fetchOccurrencesResponse,
     evaluationResults;
 
   beforeEach(() => {
@@ -58,6 +61,13 @@ describe("PolicyPlayground", () => {
       goToNextPage: jest.fn(),
     };
     usePaginatedFetch.mockReturnValue(usePaginatedFetchResponse);
+
+    fetchOccurrencesResponse = {
+      data: chance.n(chance.string, chance.d4()),
+      loading: false,
+    };
+
+    useFetch.mockReturnValue(fetchOccurrencesResponse);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
   });
@@ -170,6 +180,7 @@ describe("PolicyPlayground", () => {
       };
       policyState.evaluationResource = selectedResource;
       policyState.evaluationPolicy = selectedPolicy;
+
       const utils = render(<PolicyPlayground />, {
         policyState: policyState,
         policyDispatch: policyDispatch,
@@ -178,32 +189,15 @@ describe("PolicyPlayground", () => {
       unmount = utils.unmount;
     });
 
-    it("should render the selected resource details", () => {
-      expect(screen.getByText(selectedResource.name)).toBeInTheDocument();
-
-      const renderedClearResourceButton = screen.getByRole("button", {
-        name: "Clear Resource",
+    it("should render the selected resource occurrence data", () => {
+      expect(useFetch).toHaveBeenCalledWith("/api/occurrences", {
+        resourceUri: selectedResource.uri,
       });
-      expect(renderedClearResourceButton).toBeInTheDocument();
-      userEvent.click(renderedClearResourceButton);
-      expect(policyDispatch).toHaveBeenCalledWith({
-        type: "SET_EVALUATION_RESOURCE",
-        data: null,
-      });
+      expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
     });
 
     it("should render the selected policy details", () => {
-      expect(screen.getByText(selectedPolicy.name)).toBeInTheDocument();
-
-      const renderedClearPolicyButton = screen.getByRole("button", {
-        name: "Clear Policy",
-      });
-      expect(renderedClearPolicyButton).toBeInTheDocument();
-      userEvent.click(renderedClearPolicyButton);
-      expect(policyDispatch).toHaveBeenCalledWith({
-        type: "SET_EVALUATION_POLICY",
-        data: null,
-      });
+      expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
     });
 
     it("should render the evaluate button as enabled", () => {
@@ -272,31 +266,8 @@ describe("PolicyPlayground", () => {
           );
       });
 
-      it("should clear the playground when the Reset Playground button is pressed", async () => {
-        const renderedEvaluateButton = screen.getByRole("button", {
-          name: "Evaluate",
-        });
-
-        await act(async () => {
-          await userEvent.click(renderedEvaluateButton);
-        });
-
-        expect(
-          screen.getByText(/^the resource (?:passed|failed) the policy./i)
-        ).toBeInTheDocument();
-
-        const resetPlaygroundButton = screen.getByRole("button", {
-          name: "Reset Playground",
-        });
-
-        expect(resetPlaygroundButton).toBeInTheDocument();
-        act(() => {
-          userEvent.click(resetPlaygroundButton);
-        });
-
-        expect(
-          screen.queryByText(/^the resource (?:passed|failed) the policy./i)
-        ).not.toBeInTheDocument();
+      it("should clear the selected policy and resource when you leave the playground", () => {
+        unmount();
         expect(policyDispatch)
           .toHaveBeenCalledWith({
             type: "SET_EVALUATION_RESOURCE",
@@ -307,19 +278,6 @@ describe("PolicyPlayground", () => {
             data: null,
           });
       });
-    });
-
-    it("should clear the selected policy and resource when you leave the playground", () => {
-      unmount();
-      expect(policyDispatch)
-        .toHaveBeenCalledWith({
-          type: "SET_EVALUATION_RESOURCE",
-          data: null,
-        })
-        .toHaveBeenCalledWith({
-          type: "SET_EVALUATION_POLICY",
-          data: null,
-        });
     });
   });
 });

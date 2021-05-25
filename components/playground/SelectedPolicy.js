@@ -14,61 +14,33 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
-import typeStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
-import LabelWithValue from "components/LabelWithValue";
+import textStyles from "styles/modules/Typography.module.scss";
 
 const SelectedPolicy = (props) => {
-  const { policy, clearPolicy } = props;
-
-  const [showDetails, setShowDetails] = useState(false);
-  const toggleDetails = () => setShowDetails(!showDetails);
+  const { policy } = props;
 
   return (
-    <div className={styles.selectionContainer}>
-      <h2 className={styles.selectionTitle}>
-        Selected Policy
-        <span className={styles.selectionName}>{policy.name}</span>
-      </h2>
-      <div className={styles.selectionButtonContainer}>
-        <Button
-          buttonType={"text"}
-          label={showDetails ? "Hide Policy Details" : "Show Policy Details"}
-          onClick={toggleDetails}
+    <>
+      <p className={textStyles.label}>Rego Policy Code</p>
+      {policy ? (
+        <Code
+          code={policy.regoContent}
+          language={"rego"}
+          className={styles.codeContent}
+          data-testid={"regoPolicyCode"}
         />
-        <Button
-          buttonType={"textDestructive"}
-          label={"Clear Policy"}
-          onClick={clearPolicy}
-        />
-      </div>
-      {showDetails && (
-        <div className={styles.selectionDetailsContainer}>
-          <LabelWithValue
-            label={"Description"}
-            value={policy.description}
-            className={styles.selectionDetails}
-          />
-          <p className={styles.selectionDetails}>
-            <span className={typeStyles.label}>Rego Policy Code</span>
-          </p>
-          <Code
-            code={policy.regoContent}
-            language={"rego"}
-            className={styles.codeContent}
-          />
-        </div>
+      ) : (
+        <p className={styles.selectToBeginText}>Select a policy to begin</p>
       )}
-    </div>
+    </>
   );
 };
 SelectedPolicy.propTypes = {
-  policy: PropTypes.object.isRequired,
-  clearPolicy: PropTypes.func.isRequired,
+  policy: PropTypes.object,
 };
 
 export default SelectedPolicy;

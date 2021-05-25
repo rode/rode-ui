@@ -18,61 +18,79 @@
 @import "styles/mixins";
 
 $CARD_WIDTH: 97%;
-
-.pageContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0 1rem;
-  height: fit-content;
-
-  @include tabletAndLarger {
-    margin: 0 auto;
-    min-height: 90%;
-  }
-}
-
-.resetButton {
-  margin: 0.5rem 0 0.5rem auto;
-}
+$GAP: 1rem;
 
 .contentContainer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  height: calc(100% - calc(#{$GAP} * 2));
+  width: 100%;
 
   @include tabletAndLarger {
-    flex-direction: row;
-    justify-content: space-evenly;
+    display: inline-grid;
+    grid-gap: $GAP;
+    grid-template-columns: repeat(2, calc(50% - #{$GAP}));
+    grid-template-rows: repeat(2, 50%);
+    grid-template-areas:
+      "left rightTop"
+      "left rightBottom";
+    justify-content: center;
+    align-content: start;
+    max-height: calc(90vh - 6rem);
   }
 }
 
-.leftContainer,
-.rightContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0.5rem;
-  height: 100%;
+.sectionContainer {
+  padding: 1rem;
+  position: relative;
 
-  @include tabletAndLarger {
-    width: 48%;
-    margin: 0 0.5rem;
+  @include phoneAndSmaller {
+    height: fit-content;
+    max-height: 50vh;
+    margin: 0.5rem auto;
+    width: 98%;
   }
 }
 
-.searchResultsContainer {
-  flex: 1;
-  min-height: 3rem;
-  max-height: 45vh;
-  overflow: auto;
+.policyContainer {
+  @extend .sectionContainer;
+  @include tabletAndLarger {
+    grid-row: left;
+    grid-column: left;
+  }
+}
+
+.resourceContainer {
+  @extend .sectionContainer;
+  @include tabletAndLarger {
+    grid-row: rightTop;
+    grid-column: rightTop;
+  }
+}
+
+.evaluationContainer {
+  @extend .sectionContainer;
+  @include tabletAndLarger {
+    grid-row: rightBottom;
+    grid-column: rightBottom;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.openSearchButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.selectToBeginText {
+  margin: 0.5rem 0 0 0.5rem;
 }
 
 .searchCard {
   width: $CARD_WIDTH;
   height: fit-content;
   padding: 1rem;
-  margin: 0.5rem auto 0.5rem 0;
+  margin: 0.5rem auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -111,8 +129,22 @@ $CARD_WIDTH: 97%;
 }
 
 .searchContainer {
-  max-height: 50%;
-  width: 100%;
+  width: 95%;
+  margin: 0.5rem auto;
+  height: fit-content;
+
+  @include tabletAndLarger {
+    margin: 1rem auto 2rem;
+  }
+}
+
+.searchResultsContainer {
+  overflow: auto;
+  height: 70vh;
+
+  @include tabletAndLarger {
+    height: 75vh;
+  }
 }
 
 .viewAllButton {
@@ -126,46 +158,16 @@ $CARD_WIDTH: 97%;
   margin: 0.5rem auto;
 }
 
-.selectionButtonContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.selectionDetailsContainer {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: solid 1px transparent;
-}
-
-.selectionTitle {
-  text-align: center;
-  font-weight: 400;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-}
-
-.selectionName {
-  display: block;
-  font-weight: 600;
-  text-transform: initial;
-  font-size: 1.25rem;
-}
-
-.selectionDetails {
-  margin: 0.5rem 0;
-  @include ellipsis(calc(100vw - 10%));
-  white-space: pre-line;
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 30%);
-  }
-}
-
 .codeContent {
-  height: 35vh;
+  margin-top: 0.5rem;
+  max-height: 95%;
+  height: fit-content;
   resize: vertical;
   overflow: auto;
+
+  @include phoneAndSmaller {
+    max-height: 35vh;
+  }
 }
 
 .pageTitle {
@@ -187,25 +189,20 @@ $CARD_WIDTH: 97%;
 
   @include tabletAndLarger {
     width: 65%;
+    align-self: center;
   }
 }
 
 .evaluationResultsContainer {
-  margin: 1rem auto;
-  padding: 1rem;
   width: fit-content;
-  max-width: 95%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
 
   > button {
     margin: 0.5rem auto;
     font-size: 0.85rem;
-  }
-
-  @include tabletAndLarger {
-    max-width: 75%;
   }
 }
 
@@ -227,7 +224,6 @@ $CARD_WIDTH: 97%;
   grid-template-areas: "outcome message";
   width: fit-content;
   margin: 0 auto;
-  padding: 1rem;
 
   > p {
     white-space: normal;
@@ -257,8 +253,14 @@ $CARD_WIDTH: 97%;
     color: $LAGOON;
   }
 
-  .instructions {
+  .instructions,
+  .selectToBeginText {
     color: $DT_SUB_TEXT;
+  }
+
+  .sectionContainer {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .searchCard {
@@ -279,15 +281,6 @@ $CARD_WIDTH: 97%;
     p {
       color: $BRIGHT_GREEN;
     }
-  }
-
-  .selectionDetailsContainer {
-    border-top-color: $MEDIUM_GREY;
-  }
-
-  .selectionContainer {
-    box-shadow: $DT_BOX_SHADOW;
-    background-color: $DT_BACKGROUND_MEDIUM;
   }
 
   .evaluationResults,
@@ -324,8 +317,14 @@ $CARD_WIDTH: 97%;
     color: $DEEP_SEA;
   }
 
-  .instructions {
+  .instructions,
+  .selectToBeginText {
     color: $LT_SUB_TEXT;
+  }
+
+  .sectionContainer {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .searchCard {
@@ -346,15 +345,6 @@ $CARD_WIDTH: 97%;
     p {
       color: $GREEN;
     }
-  }
-
-  .selectionDetailsContainer {
-    border-top-color: $SILVER;
-  }
-
-  .selectionContainer {
-    box-shadow: $LT_BOX_SHADOW;
-    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .evaluationResults,
