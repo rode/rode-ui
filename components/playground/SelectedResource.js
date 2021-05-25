@@ -26,7 +26,7 @@ const SelectedResource = (props) => {
   const { resource } = props;
 
   const { data, loading } = useFetch(resource ? `/api/occurrences` : null, {
-    resourceUri: resource?.uri,
+    resourceUri: resource?.versionedResourceUri,
   });
 
   return (

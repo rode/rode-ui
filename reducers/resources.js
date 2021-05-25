@@ -21,6 +21,13 @@ const setSearchTerm = (state, data) => {
   };
 };
 
+const setVersionSearchTerm = (state, data) => {
+  return {
+    ...state,
+    versionSearchTerm: data,
+  };
+};
+
 const setOccurrenceDetails = (state, data) => {
   return {
     ...state,
@@ -39,6 +46,7 @@ const actionMap = {
   SET_SEARCH_TERM: setSearchTerm,
   SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
   SET_CURRENT_RESOURCE: setCurrentResource,
+  SET_VERSION_SEARCH_TERM: setVersionSearchTerm
 };
 
 export const resourceReducer = (state, action) => {
@@ -51,4 +59,5 @@ export const resourceActions = {
   SET_SEARCH_TERM: "SET_SEARCH_TERM",
   SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
   SET_CURRENT_RESOURCE: "SET_CURRENT_RESOURCE",
+  SET_VERSION_SEARCH_TERM: "SET_VERSION_SEARCH_TERM"
 };

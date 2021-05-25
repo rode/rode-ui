@@ -29,6 +29,7 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
+import ResourceSelectionDrawer from "../components/playground/ResourceSelectionDrawer";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -113,7 +114,7 @@ const PolicyPlayground = () => {
         <SelectedPolicy policy={state.evaluationPolicy} />
       </div>
       <div className={styles.resourceContainer}>
-        <ResourceSearchAndResults
+        <ResourceSelectionDrawer
           setResource={(data) =>
             policyDispatch({
               type: policyActions.SET_EVALUATION_RESOURCE,

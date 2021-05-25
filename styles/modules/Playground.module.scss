@@ -82,6 +82,13 @@ $GAP: 1rem;
   right: 0;
 }
 
+.resourceDrawerNavigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 0.5rem 0;
+}
+
 .selectToBeginText {
   margin: 0.5rem 0 0 0.5rem;
 }
@@ -139,12 +146,6 @@ $GAP: 1rem;
 }
 
 .searchResultsContainer {
-  overflow: auto;
-  height: 70vh;
-
-  @include tabletAndLarger {
-    height: 75vh;
-  }
 }
 
 .viewAllButton {
@@ -263,6 +264,10 @@ $GAP: 1rem;
     box-shadow: $DT_BOX_SHADOW;
   }
 
+  .resourceDrawerNavigation {
+    background-color: $DT_BACKGROUND_LIGHT;
+  }
+
   .searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
@@ -325,6 +330,10 @@ $GAP: 1rem;
   .sectionContainer {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .resourceDrawerNavigation {
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .searchCard {
