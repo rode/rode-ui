@@ -23,6 +23,12 @@ export const EvaluationErrorMessage =
   "An error occurred while evaluating. Please try again.";
 
 // BUTTONS
+export const OpenPolicySearchDrawerButton = createButtonSelector(
+  "Search for policies"
+);
+export const OpenResourceSearchDrawerButton = createButtonSelector(
+  "Search for resources"
+);
 export const EvaluatePlaygroundButton = createButtonSelector("Evaluate");
 export const SelectResourceButton = createButtonSelector("Select Resource");
 export const SelectPolicyButton = createButtonSelector("Select Policy");

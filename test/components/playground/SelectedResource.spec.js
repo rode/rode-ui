@@ -16,14 +16,13 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import SelectedResource from "components/playground/SelectedResource";
 import { useFetch } from "hooks/useFetch";
 
 jest.mock("hooks/useFetch");
 
 describe("SelectedResource", () => {
-  let resource, clearResource, fetchResponse;
+  let resource, fetchResponse, rerender;
 
   beforeEach(() => {
     resource = {
@@ -39,30 +38,19 @@ describe("SelectedResource", () => {
       loading: false,
     };
 
-    clearResource = jest.fn();
     useFetch.mockReturnValue(fetchResponse);
 
-    render(
-      <SelectedResource resource={resource} clearResource={clearResource} />
-    );
+    const utils = render(<SelectedResource resource={resource} />);
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should render the resource name", () => {
-    expect(screen.getByText(resource.name)).toBeInTheDocument();
-  });
-
-  it("should render the button to clear the resource", () => {
-    const renderedButton = screen.getByRole("button", {
-      name: "Clear Resource",
-    });
-
-    expect(renderedButton).toBeInTheDocument();
-    userEvent.click(renderedButton);
-    expect(clearResource).toHaveBeenCalledTimes(1);
+  it("should render the occurrence data label", () => {
+    expect(screen.getByText("Occurrence Data")).toBeInTheDocument();
   });
 
   it("should call to fetch the occurrence data when a resource is selected", () => {
@@ -73,21 +61,22 @@ describe("SelectedResource", () => {
       });
   });
 
-  it("should render a button to toggle the resource details", () => {
-    const renderedButton = screen.getByRole("button", {
-      name: "Show Resource Details",
-    });
+  it("should render the loading indicator while fetching the occurrence data", () => {
+    fetchResponse.loading = true;
+    rerender(<SelectedResource resource={resource} />);
+    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+  });
 
-    expect(renderedButton).toBeInTheDocument();
-    userEvent.click(renderedButton);
+  it("should render the occurrence data once fetched", () => {
+    expect(
+      screen.getByText(JSON.stringify(fetchResponse.data.originals, null, 2), {
+        exact: false,
+      })
+    ).toBeInTheDocument();
+  });
 
-    expect(
-      screen.getByText(resource.version.substring(0, 12))
-    ).toBeInTheDocument();
-    expect(screen.getByText(resource.type)).toBeInTheDocument();
-    expect(screen.getByText(/occurrence data/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(JSON.stringify(fetchResponse.data.originals, null, 2))
-    ).toBeInTheDocument();
+  it("should render the instructions if no resource is selected", () => {
+    rerender(<SelectedResource resource={null} />);
+    expect(screen.getByText(/select a resource to begin/i)).toBeInTheDocument();
   });
 });

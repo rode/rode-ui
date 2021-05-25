@@ -25,10 +25,13 @@ import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import Drawer from "components/Drawer";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
-
+  const [showDrawer, setShowDrawer] = useState(false);
   const { state, dispatch } = usePolicies();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -42,70 +45,85 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   }, [policySearch]);
 
   return (
-    <div className={styles.searchContainer}>
-      <PolicySearchBar
-        onSubmit={(event) => {
-          event.preventDefault();
-          setPolicySearch(true);
-        }}
-        onChange={() => setPolicySearch(false)}
-        helpText={
-          <Button
-            className={styles.viewAllButton}
-            buttonType={"text"}
-            label={"View all policies"}
-            onClick={() =>
-              dispatch({
-                type: policyActions.SET_SEARCH_TERM,
-                data: "all",
-              })
+    <>
+      <Button
+        label={"Search for policies"}
+        buttonType="icon"
+        onClick={() => setShowDrawer(true)}
+        className={styles.openSearchButton}
+      >
+        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+      </Button>
+      <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
+        <div className={styles.searchContainer}>
+          <PolicySearchBar
+            onSubmit={(event) => {
+              event.preventDefault();
+              setPolicySearch(true);
+            }}
+            onChange={() => setPolicySearch(false)}
+            helpText={
+              <Button
+                className={styles.viewAllButton}
+                buttonType={"text"}
+                label={"View all policies"}
+                onClick={() =>
+                  dispatch({
+                    type: policyActions.SET_SEARCH_TERM,
+                    data: "all",
+                  })
+                }
+              />
             }
           />
-        }
-      />
-      {policySearch && (
-        <div className={styles.searchResultsContainer}>
-          <Loading loading={loading} type={"button"}>
-            {data?.length > 0 ? (
-              <>
-                {data.map((result) => (
-                  <div className={`${styles.searchCard}`} key={result.id}>
-                    <div>
-                      <p className={styles.cardHeader}>{result.name}</p>
-                      <p className={styles.cardText}>{result.description}</p>
-                    </div>
-                    <Button
-                      onClick={() => {
-                        setPolicy(result);
-                        setPolicySearch(false);
-                        dispatch({
-                          type: policyActions.SET_SEARCH_TERM,
-                          data: "",
-                        });
-                      }}
-                      buttonType={"text"}
-                      label={"Select Policy"}
-                      className={styles.actionButton}
-                    />
-                  </div>
-                ))}
-                {!isLastPage && (
-                  <Button
-                    buttonType="text"
-                    onClick={goToNextPage}
-                    label={"See More Policies"}
-                    className={styles.viewMoreButton}
-                    id={"viewMorePoliciesButton"}
-                  />
+          {policySearch && (
+            <div className={styles.searchResultsContainer}>
+              <Loading loading={loading} type={"button"}>
+                {data?.length > 0 ? (
+                  <>
+                    {data.map((result) => (
+                      <div className={`${styles.searchCard}`} key={result.id}>
+                        <div>
+                          <p className={styles.cardHeader}>{result.name}</p>
+                          <p className={styles.cardText}>
+                            {result.description}
+                          </p>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setPolicy(result);
+                            setPolicySearch(false);
+                            dispatch({
+                              type: policyActions.SET_SEARCH_TERM,
+                              data: "",
+                            });
+                            setShowDrawer(false);
+                          }}
+                          buttonType={"text"}
+                          label={"Select Policy"}
+                          className={styles.actionButton}
+                        />
+                      </div>
+                    ))}
+                    {!isLastPage && (
+                      <Button
+                        buttonType="text"
+                        onClick={goToNextPage}
+                        label={"See More Policies"}
+                        className={styles.viewMoreButton}
+                        id={"viewMorePoliciesButton"}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <p>{`No policies found matching "${state.searchTerm}"`}</p>
                 )}
-              </>
-            ) : (
-              <p>{`No policies found matching "${state.searchTerm}"`}</p>
-            )}
-          </Loading>
+              </Loading>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </Drawer>
+    </>
   );
 };
 

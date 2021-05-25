@@ -39,6 +39,17 @@ When(/^the resource (?:(passes|fails)) the policy$/i, (passOrFail) => {
   cy.get(selectors.EvaluatePlaygroundButton).click();
 });
 
+When(
+  /^I open the (?:(policy|resource)) search drawer$/i,
+  (policyOrResource) => {
+    let selector = selectors.OpenPolicySearchDrawerButton;
+    if (policyOrResource === "resource") {
+      selector = selectors.OpenResourceSearchDrawerButton;
+    }
+    cy.get(selector).click();
+  }
+);
+
 When("I evaluate and an error occurs", () => {
   cy.mockRequest(
     { url: "**/api/policies/**/attest", method: "POST", status: 500 },
