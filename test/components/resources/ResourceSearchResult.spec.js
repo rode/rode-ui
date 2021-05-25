@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import { useRouter } from "next/router";
@@ -24,41 +24,55 @@ import { createMockResourceUri } from "test/testing-utils/mocks";
 jest.mock("next/router");
 
 describe("ResourceSearchResult", () => {
-  let searchResult, resourceName, version, type, pushMock;
+  let searchResult, fetchResponse, versionResponse, pushMock;
 
   beforeEach(() => {
-    resourceName = chance.string();
-    version = chance.string({ min: 12 });
     searchResult = {
-      uri: createMockResourceUri(resourceName, version),
+      id: chance.string(),
+      name: chance.string(),
+      type: chance.pickone(["DOCKER", "GIT", "NPM"]),
     };
-    type = "Docker";
     pushMock = jest.fn();
     useRouter.mockReturnValue({
       push: pushMock,
     });
+    versionResponse = {
+      data: [{ versionedResourceUri: createMockResourceUri() }],
+    };
+    fetchResponse = {
+      json: jest.fn().mockResolvedValue(versionResponse),
+    };
+    // eslint-disable-next-line no-undef
+    global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     render(<ResourceSearchResult searchResult={searchResult} />);
   });
 
   it("should render the resource details", () => {
     expect(screen.getByText("Resource Name")).toBeInTheDocument();
-    expect(screen.getByText(resourceName)).toBeInTheDocument();
-    expect(screen.getByText("Version")).toBeInTheDocument();
-    expect(
-      screen.getByText(version.substring(0, 12), { exact: false })
-    ).toBeInTheDocument();
+    expect(screen.getByText(searchResult.name)).toBeInTheDocument();
     expect(screen.getByText("Type")).toBeInTheDocument();
-    expect(screen.getByText(type)).toBeInTheDocument();
+    expect(screen.getByText(searchResult.type)).toBeInTheDocument();
   });
 
-  it("should render a view resources button ", () => {
+  it("should render a view resource button ", async () => {
     const renderedButton = screen.getByText("View Resource");
 
     expect(renderedButton).toBeInTheDocument();
 
-    userEvent.click(renderedButton);
+    await act(async () => {
+      await userEvent.click(renderedButton);
+    });
+    expect(fetch)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith(
+        `/api/resource-versions?id=${encodeURIComponent(
+          searchResult.id
+        )}&pageSize=1`
+      );
     expect(pushMock).toHaveBeenCalledWith(
-      `/resources/${encodeURIComponent(searchResult.uri)}`
+      `/resources/${encodeURIComponent(
+        versionResponse.data[0].versionedResourceUri
+      )}`
     );
   });
 });

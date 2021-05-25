@@ -50,7 +50,7 @@ describe("/api/resources", () => {
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
-        resources: allResources,
+        genericResources: allResources,
         nextPageToken: pageToken,
       }),
     };
@@ -91,12 +91,14 @@ describe("/api/resources", () => {
     });
 
     const createExpectedUrl = (baseUrl, query = {}) => {
-      return `${baseUrl}/v1alpha1/resources?${new URLSearchParams(query)}`;
+      return `${baseUrl}/v1alpha1/generic-resources?${new URLSearchParams(
+        query
+      )}`;
     };
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.contains("${filterParam}")`,
+        filter: `name.contains("${filterParam}")`,
       });
 
       await handler(request, response);
@@ -116,7 +118,7 @@ describe("/api/resources", () => {
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.contains("${filterParam}")`,
+        filter: `name.contains("${filterParam}")`,
         pageSize,
       });
 
@@ -128,7 +130,7 @@ describe("/api/resources", () => {
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `resource.uri.contains("${filterParam}")`,
+        filter: `name.contains("${filterParam}")`,
         pageToken,
       });
 
@@ -138,10 +140,7 @@ describe("/api/resources", () => {
     });
 
     it("should return the mapped resources", async () => {
-      const expectedResources = allResources.map((resource) => ({
-        name: resource.name,
-        uri: resource.uri,
-      }));
+      const expectedResources = allResources;
 
       await handler(request, response);
 

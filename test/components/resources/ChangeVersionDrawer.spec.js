@@ -85,7 +85,7 @@ describe("ChangeVersionDrawer", () => {
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
-      { resourceName: resourceState.currentResource.genericName },
+      { id: resourceState.currentResource.genericName },
       10
     );
   });

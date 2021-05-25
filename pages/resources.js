@@ -87,10 +87,7 @@ const Resources = () => {
             <>
               {data.map((result) => {
                 return (
-                  <ResourceSearchResult
-                    key={result.id}
-                    searchResult={result}
-                  />
+                  <ResourceSearchResult key={result.id} searchResult={result} />
                 );
               })}
               {!isLastPage && (

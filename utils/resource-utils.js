@@ -18,7 +18,7 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2}).*:(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => `deb://${name}`
+    getGenericName: ({ name }) => `deb://${name}`,
   },
   {
     type: "Docker",
@@ -31,12 +31,12 @@ const resourceUrlTypes = [
   {
     type: "File",
     regex: "^(file:/{2}sha256:)(?<version>.+):(?<name>.+)",
-    getGenericName: ({ name }) => name,
+    getGenericName: ({ name }) => `file://${name}`,
   },
   {
     type: "Maven",
     regex: "^(gav:/{2})(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => `gav://${name}`
+    getGenericName: ({ name }) => `gav://${name}`,
   },
   {
     type: "NPM",
@@ -56,7 +56,7 @@ const resourceUrlTypes = [
   {
     type: "RPM",
     regex: "^(rpm:/{2}).*:(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => `rpm://${name}`
+    getGenericName: ({ name }) => `rpm://${name}`,
   },
   {
     type: "Git",

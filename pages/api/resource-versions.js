@@ -32,7 +32,7 @@ export default async (req, res) => {
 
     if (!genericResourceId) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: "Generic resource name must be provided",
+        error: "Generic resource id must be provided",
       });
     }
 

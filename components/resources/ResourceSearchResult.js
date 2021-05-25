@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
@@ -22,16 +22,19 @@ import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
 import styles from "styles/modules/Search.module.scss";
 
+// TODO: add latest version to this card
 const ResourceSearchResult = ({ searchResult }) => {
   const { id, name, type } = searchResult;
   const router = useRouter();
   const { theme } = useTheme();
 
+  useEffect(() => {
+    // get latest version here
+  }, []);
+
   const onClick = async () => {
     const response = await fetch(
-      `/api/resource-versions?id=${encodeURIComponent(
-        id
-      )}&pageSize=1`
+      `/api/resource-versions?id=${encodeURIComponent(id)}&pageSize=1`
     );
 
     if (response) {
