@@ -42,7 +42,7 @@ const ChangeVersionDrawer = (props) => {
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     genericName ? "/api/resource-versions" : null,
-    { resourceName: genericName },
+    { id: genericName },
     10
   );
 

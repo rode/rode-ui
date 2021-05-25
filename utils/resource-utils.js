@@ -18,7 +18,7 @@ const resourceUrlTypes = [
   {
     type: "Debian",
     regex: "^(deb:/{2}).*:(?<name>.+):(?<version>.+)",
-    getGenericName: ({ version, uri }) => uri.replace(version, ""),
+    getGenericName: ({ name }) => `deb://${name}`
   },
   {
     type: "Docker",
@@ -36,32 +36,32 @@ const resourceUrlTypes = [
   {
     type: "Maven",
     regex: "^(gav:/{2})(?<name>.+):(?<version>.+)",
-    getGenericName: ({ version, uri }) => uri.replace(version, ""),
+    getGenericName: ({ name }) => `gav://${name}`
   },
   {
     type: "NPM",
     regex: "^(npm:/{2})(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => name,
+    getGenericName: ({ name }) => `npm://${name}`,
   },
   {
     type: "NuGet",
     regex: "^(nuget:/{2})(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => name,
+    getGenericName: ({ name }) => `nuget://${name}`,
   },
   {
     type: "Python",
     regex: "^(pip:/{2})(?<name>.+):(?<version>.+)",
-    getGenericName: ({ name }) => name,
+    getGenericName: ({ name }) => `pip://${name}`,
   },
   {
     type: "RPM",
     regex: "^(rpm:/{2}).*:(?<name>.+):(?<version>.+)",
-    getGenericName: ({ version, uri }) => uri.replace(version, ""),
+    getGenericName: ({ name }) => `rpm://${name}`
   },
   {
     type: "Git",
     regex: "^(git:/{2})(?<name>.+)@(?<version>.+)",
-    getGenericName: ({ name }) => name,
+    getGenericName: ({ name }) => `git://${name}`,
   },
 ];
 

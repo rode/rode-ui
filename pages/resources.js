@@ -88,7 +88,7 @@ const Resources = () => {
               {data.map((result) => {
                 return (
                   <ResourceSearchResult
-                    key={result.uri}
+                    key={result.id}
                     searchResult={result}
                   />
                 );

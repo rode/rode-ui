@@ -28,16 +28,16 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const genericResourceName = req.query.resourceName;
+    const genericResourceId = req.query.id;
 
-    if (!genericResourceName) {
+    if (!genericResourceId) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         error: "Generic resource name must be provided",
       });
     }
 
     const filter = {
-      parent: genericResourceName,
+      id: genericResourceId,
     };
 
     if (req.query.pageSize) {
@@ -60,6 +60,7 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
+
     const versions = listResourceVersionsResponse.versions.map((version) => ({
       versionedResourceUri: version.version,
       aliases: version.names,
