@@ -71,10 +71,7 @@ const Resource = () => {
     policyDispatch({
       type: policyActions.SET_EVALUATION_RESOURCE,
       data: {
-        uri: resourceUri,
-        name: state.currentResource.resourceName,
-        version: state.currentResource.resourceVersion,
-        type: state.currentResource.resourceType,
+        versionedResourceUri: resourceUri,
       },
     });
     router.push("/playground");

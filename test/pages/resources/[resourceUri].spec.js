@@ -171,10 +171,7 @@ describe("Resource Details page", () => {
       .toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
         data: {
-          uri: router.query.resourceUri,
-          name: resourceName,
-          version: resourceVersion,
-          type: resourceType,
+          versionedResourceUri: router.query.resourceUri,
         },
       });
 

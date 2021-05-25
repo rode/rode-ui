@@ -19,7 +19,6 @@ import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
-import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
 import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
 import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
