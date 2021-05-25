@@ -75,4 +75,16 @@ describe("resources reducer", () => {
       currentResource: data,
     });
   });
+
+  it("should update state when the action type is 'SET_VERSION_SEARCH_TERM'", () => {
+    const actual = resourceReducer(state, {
+      type: resourceActions.SET_VERSION_SEARCH_TERM,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      versionSearchTerm: data,
+    });
+  });
 });
