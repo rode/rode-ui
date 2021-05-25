@@ -132,7 +132,9 @@ const PolicyPlayground = () => {
           }}
           clearEvaluation={() => setEvaluationResults(null)}
         />
-        <SelectedResource resourceUri={state.evaluationResource?.versionedResourceUri} />
+        <SelectedResource
+          resourceUri={state.evaluationResource?.versionedResourceUri}
+        />
       </div>
       <div className={styles.evaluationContainer}>
         {evaluationResults ? (

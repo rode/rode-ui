@@ -26,8 +26,8 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
 import LabelWithValue from "components/LabelWithValue";
-import Icon from "../Icon";
-import { ICON_NAMES } from "../../utils/icon-utils";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!genericResource);
@@ -63,60 +63,64 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
           }
         />
         {resourceSearch && (
-            <Loading loading={loading} type={"button"}>
-              {data?.length > 0 ? (
-                <>
-                  {data.map((result) => {
-                    const { id, name, type } = result;
-                    const isCurrentResource = id === genericResource?.id;
+          <Loading loading={loading} type={"button"}>
+            {data?.length > 0 ? (
+              <>
+                {data.map((result) => {
+                  const { id, name, type } = result;
+                  const isCurrentResource = id === genericResource?.id;
 
-                    return (
-                      <div className={`${styles.searchCard}`} key={id}>
-                        <div>
-                          <p className={styles.cardHeader}>{name}</p>
-                          <LabelWithValue
-                            label={"Type"}
-                            value={type}
-                            className={styles.cardText}
-                          />
-                        </div>
-                        <Button
-                          onClick={() => {
-                            onResourceSelect(result);
-                          }}
-                          buttonType={"text"}
-                          label={
-                            isCurrentResource
-                              ? "Selected Resource"
-                              : "Select Resource"
-                          }
-                          className={isCurrentResource ? styles.selectedButton : styles.actionButton}
-                          disabled={isCurrentResource}
-                        >
-                          {isCurrentResource && (
-                            <>
-                              <Icon name={ICON_NAMES.CHECK} />
-                              <p>Selected</p>
-                            </>
-                          )}
-                        </Button>
+                  return (
+                    <div className={`${styles.searchCard}`} key={id}>
+                      <div>
+                        <p className={styles.cardHeader}>{name}</p>
+                        <LabelWithValue
+                          label={"Type"}
+                          value={type}
+                          className={styles.cardText}
+                        />
                       </div>
-                    );
-                  })}
-                  {!isLastPage && (
-                    <Button
-                      buttonType={"text"}
-                      label={"See More Resources"}
-                      onClick={goToNextPage}
-                      id={"viewMoreResourcesButton"}
-                      className={styles.viewMoreButton}
-                    />
-                  )}
-                </>
-              ) : (
-                <p>{`No resources found matching "${state.searchTerm}"`}</p>
-              )}
-            </Loading>
+                      <Button
+                        onClick={() => {
+                          onResourceSelect(result);
+                        }}
+                        buttonType={"text"}
+                        label={
+                          isCurrentResource
+                            ? "Selected Resource"
+                            : "Select Resource"
+                        }
+                        className={
+                          isCurrentResource
+                            ? styles.selectedButton
+                            : styles.actionButton
+                        }
+                        disabled={isCurrentResource}
+                      >
+                        {isCurrentResource && (
+                          <>
+                            <Icon name={ICON_NAMES.CHECK} />
+                            <p>Selected</p>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType={"text"}
+                    label={"See More Resources"}
+                    onClick={goToNextPage}
+                    id={"viewMoreResourcesButton"}
+                    className={styles.viewMoreButton}
+                  />
+                )}
+              </>
+            ) : (
+              <p>{`No resources found matching "${state.searchTerm}"`}</p>
+            )}
+          </Loading>
         )}
       </div>
     </>

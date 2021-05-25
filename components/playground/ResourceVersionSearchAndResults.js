@@ -30,22 +30,25 @@ import ResourceVersionSearchBar from "components/resources/ResourceVersionSearch
 
 const buildSearchParams = (genericName, searchTerm) => {
   const params = {
-    id: genericName
+    id: genericName,
   };
 
   if (searchTerm && searchTerm !== "all") {
-    params.filter = `version.contains("${searchTerm}")`
+    params.filter = `version.contains("${searchTerm}")`;
   }
 
   return params;
-}
+};
 
-const ResourceVersionSearchAndResults = ({ genericResource, onVersionSelect }) => {
+const ResourceVersionSearchAndResults = ({
+  genericResource,
+  onVersionSelect,
+}) => {
   const [versionSearch, setVersionSearch] = useState(true);
   const { state, dispatch } = useResources();
 
   if (!genericResource) {
-    return <p>Select a resource to view a list of possible versions</p>
+    return <p>Select a resource to view a list of possible versions</p>;
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(

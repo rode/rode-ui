@@ -27,7 +27,11 @@ import ResourceVersionSearchAndResults from "./ResourceVersionSearchAndResults";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-const ResourceSelectionDrawer = ({ setResource, clearSearchTerms, clearEvaluation }) => {
+const ResourceSelectionDrawer = ({
+  setResource,
+  clearSearchTerms,
+  clearEvaluation,
+}) => {
   const [genericResource, setGenericResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);

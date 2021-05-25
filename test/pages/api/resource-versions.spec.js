@@ -125,6 +125,18 @@ describe("/api/resource-versions", () => {
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
+    it("should pass the filter as a query param when a filter is specified", async () => {
+      const filter = chance.string();
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+        id: genericResourceId,
+        filter,
+      });
+
+      request.query.filter = filter;
+      await handler(request, response);
+      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+    });
+
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
