@@ -41,7 +41,7 @@ const buildSearchParams = (genericName, searchTerm) => {
 }
 
 const ResourceVersionSearchAndResults = ({ genericResource, onVersionSelect }) => {
-  const [versionSearch, setVersionSearch] = useState(false);
+  const [versionSearch, setVersionSearch] = useState(true);
   const { state, dispatch } = useResources();
 
   if (!genericResource) {
@@ -49,7 +49,7 @@ const ResourceVersionSearchAndResults = ({ genericResource, onVersionSelect }) =
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    versionSearch ? "/api/resource-versions" : null,
+    "/api/resource-versions",
     buildSearchParams(genericResource.id, state.versionSearchTerm),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
