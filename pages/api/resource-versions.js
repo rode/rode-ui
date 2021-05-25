@@ -36,19 +36,22 @@ export default async (req, res) => {
       });
     }
 
-    const filter = {
+    const params = {
       id: genericResourceId,
     };
 
+    if (req.query.filter) {
+      params.filter = req.query.filter;
+    }
     if (req.query.pageSize) {
-      filter.pageSize = req.query.pageSize;
+      params.pageSize = req.query.pageSize;
     }
     if (req.query.pageToken) {
-      filter.pageToken = req.query.pageToken;
+      params.pageToken = req.query.pageToken;
     }
     const response = await fetch(
       `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
-        filter
+        params
       )}`
     );
 

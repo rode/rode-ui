@@ -34,7 +34,7 @@ const buildSearchParams = (genericName, searchTerm) => {
   };
 
   if (searchTerm && searchTerm !== "all") {
-    params.filter = `"version".containers("${searchTerm}")`
+    params.filter = `version.contains("${searchTerm}")`
   }
 
   return params;

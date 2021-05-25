@@ -27,26 +27,20 @@ import ResourceVersionSearchAndResults from "./ResourceVersionSearchAndResults";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
+const ResourceSelectionDrawer = ({ setResource, clearSearchTerms, clearEvaluation }) => {
   const [genericResource, setGenericResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);
   const [currentSection, setCurrentSection] = useState(RESOURCE);
 
-  useEffect(() => {
-    clearEvaluation();
-  }, [genericResource, resourceVersion]);
-
   const openResourceSelection = () => setCurrentSection(RESOURCE);
   const openVersionSelection = () => setCurrentSection(VERSION);
-
-  // TODO: style the resource/version nav better
 
   useEffect(() => {
     clearEvaluation();
 
     if (genericResource && resourceVersion) {
-      setResource(resourceVersion)
+      setResource(resourceVersion);
     }
   }, [genericResource, resourceVersion]);
 
@@ -55,15 +49,40 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
       <Button
         label={"Search for resources"}
         buttonType="icon"
-        onClick={() => setShowDrawer(true)}
+        onClick={() => {
+          clearSearchTerms();
+          setGenericResource(null);
+          setResourceVersion(null);
+          setCurrentSection(RESOURCE);
+          setShowDrawer(true);
+        }}
         className={styles.openSearchButton}
       >
         <Icon name={ICON_NAMES.SEARCH} size={"large"} />
       </Button>
       <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
         <div className={styles.resourceDrawerNavigation}>
-          <Button buttonType={"text"} onClick={openResourceSelection} label={"Resource"}/>
-          <Button buttonType={"text"} onClick={openVersionSelection} label={"Version"} disabled={!genericResource}/>
+          <Button
+            buttonType={"text"}
+            onClick={openResourceSelection}
+            label={"Resource"}
+            className={
+              currentSection === RESOURCE
+                ? styles.activeNavigationButton
+                : styles.navigationButton
+            }
+          />
+          <Button
+            buttonType={"text"}
+            onClick={openVersionSelection}
+            label={"Version"}
+            disabled={!genericResource}
+            className={
+              currentSection === VERSION
+                ? styles.activeNavigationButton
+                : styles.navigationButton
+            }
+          />
         </div>
         {currentSection === RESOURCE && (
           <ResourceSearchAndResults
@@ -90,6 +109,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
 
 ResourceSelectionDrawer.propTypes = {
   setResource: PropTypes.func.isRequired,
+  clearSearchTerms: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
 

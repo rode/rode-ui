@@ -89,6 +89,18 @@ $GAP: 1rem;
   padding: 0.5rem 0;
 }
 
+.navigationButton {
+  padding: 0.25rem 0.5rem;
+  min-width: fit-content;
+  min-height: fit-content;
+  font-weight: 400;
+}
+
+.activeNavigationButton {
+  @extend .navigationButton;
+  font-weight: 700;
+}
+
 .selectToBeginText {
   margin: 0.5rem 0 0 0.5rem;
 }
@@ -143,9 +155,6 @@ $GAP: 1rem;
   @include tabletAndLarger {
     margin: 1rem auto 2rem;
   }
-}
-
-.searchResultsContainer {
 }
 
 .viewAllButton {
@@ -266,6 +275,7 @@ $GAP: 1rem;
 
   .resourceDrawerNavigation {
     background-color: $DT_BACKGROUND_LIGHT;
+    box-shadow: $DT_BOX_SHADOW;
   }
 
   .searchCard {
@@ -334,6 +344,7 @@ $GAP: 1rem;
 
   .resourceDrawerNavigation {
     background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 
   .searchCard {

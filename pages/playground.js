@@ -29,7 +29,7 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
-import ResourceSelectionDrawer from "../components/playground/ResourceSelectionDrawer";
+import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -42,7 +42,7 @@ const PolicyPlayground = () => {
   const evaluatePolicy = async (event) => {
     event.preventDefault();
     const requestBody = {
-      resourceUri: state.evaluationResource.uri,
+      resourceUri: state.evaluationResource.versionedResourceUri,
     };
 
     setEvaluationLoading(true);
@@ -121,6 +121,16 @@ const PolicyPlayground = () => {
               data,
             })
           }
+          clearSearchTerms={() => {
+            resourceDispatch({
+              type: resourceActions.SET_SEARCH_TERM,
+              data: "",
+            });
+            resourceDispatch({
+              type: resourceActions.SET_VERSION_SEARCH_TERM,
+              data: "",
+            });
+          }}
           clearEvaluation={() => setEvaluationResults(null)}
         />
         <SelectedResource resourceUri={state.evaluationResource?.versionedResourceUri} />

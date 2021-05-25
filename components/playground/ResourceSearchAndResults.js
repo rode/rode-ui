@@ -63,7 +63,6 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
           }
         />
         {resourceSearch && (
-          <div className={styles.searchResultsContainer}>
             <Loading loading={loading} type={"button"}>
               {data?.length > 0 ? (
                 <>
@@ -118,7 +117,6 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
                 <p>{`No resources found matching "${state.searchTerm}"`}</p>
               )}
             </Loading>
-          </div>
         )}
       </div>
     </>
