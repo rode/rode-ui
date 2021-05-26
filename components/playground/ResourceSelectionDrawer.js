@@ -29,7 +29,6 @@ import { resourceActions } from "reducers/resources";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-// TODO: tests
 const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
   const { dispatch } = useResources();
   const [genericResource, setGenericResource] = useState(null);

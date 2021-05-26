@@ -109,7 +109,5 @@ describe("ResourceSelectionDrawer", () => {
     const versionButton = screen.getByLabelText("Version");
     expect(versionButton).toBeEnabled();
     expect(versionButton).toHaveClass("activeNavigationButton");
-
-
   });
 });

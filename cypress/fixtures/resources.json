@@ -8,10 +8,15 @@
         "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
         "resourceName": "harbor.localhost/library/nginx",
         "resourceVersion": "0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
-        "versions": [{
-          "versionedResourceUri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
-          "aliases": ["harbor.localhost/library/nginx:123456", "harbor.localhost/library/nginx:alpha"]
-        }],
+        "versions": [
+          {
+            "versionedResourceUri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
+            "aliases": [
+              "harbor.localhost/library/nginx:123456",
+              "harbor.localhost/library/nginx:alpha"
+            ]
+          }
+        ],
         "occurrences": {
           "build": [
             {
