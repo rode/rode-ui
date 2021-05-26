@@ -22,7 +22,6 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
 jest.mock("hooks/usePaginatedFetch");
 
-// TODO: tests around isCurrentResource logic
 describe("ResourceSearchAndResults", () => {
   let onResourceSelect,
     genericResource,
@@ -113,6 +112,22 @@ describe("ResourceSearchAndResults", () => {
       expect(screen.queryAllByText("Type")[index]).toBeInTheDocument();
       expect(screen.getAllByText(resource.type)[0]).toBeInTheDocument();
     });
+  });
+
+  it("should indicate the currently selected resource", () => {
+    genericResource = fetchedResources[0];
+    rerender(
+      <ResourceSearchAndResults
+        onResourceSelect={onResourceSelect}
+        genericResource={genericResource}
+      />
+    );
+    searchForResource();
+
+    const selectedResourceButton = screen.getByLabelText("Selected Resource");
+    expect(selectedResourceButton).toBeInTheDocument();
+    expect(selectedResourceButton).toHaveClass("selectedButton");
+    expect(selectedResourceButton).toBeDisabled();
   });
 
   it("should select the resource when prompted", () => {
