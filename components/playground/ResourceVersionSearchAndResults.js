@@ -80,56 +80,54 @@ const ResourceVersionSearchAndResults = ({
         }
       />
       {versionSearch && (
-        <div className={styles.searchResultsContainer}>
-          <Loading loading={loading} type={"button"}>
-            {data?.length > 0 && (
-              <>
-                {data.map((version) => {
-                  const {
-                    resourceVersion,
-                    aliasLabel,
-                    aliases,
-                  } = getResourceDetails(version.versionedResourceUri, version);
+        <Loading loading={loading} type={"button"}>
+          {data?.length > 0 && (
+            <>
+              {data.map((version) => {
+                const {
+                  resourceVersion,
+                  aliasLabel,
+                  aliases,
+                } = getResourceDetails(version.versionedResourceUri, version);
 
-                  return (
-                    <div
-                      className={`${styles.searchCard}`}
-                      key={version.versionedResourceUri}
-                    >
-                      <div>
-                        <LabelWithValue
-                          label={"Version"}
-                          value={<ResourceVersion version={resourceVersion} />}
-                          className={styles.cardText}
-                        />
-                        <LabelWithValue
-                          label={aliasLabel}
-                          value={aliases.join(", ")}
-                          className={styles.cardText}
-                        />
-                      </div>
-                      <Button
-                        onClick={() => onVersionSelect(version)}
-                        buttonType={"text"}
-                        label={"Select Version"}
-                        className={styles.actionButton}
+                return (
+                  <div
+                    className={`${styles.searchCard}`}
+                    key={version.versionedResourceUri}
+                  >
+                    <div>
+                      <LabelWithValue
+                        label={"Version"}
+                        value={<ResourceVersion version={resourceVersion} />}
+                        className={styles.cardText}
+                      />
+                      <LabelWithValue
+                        label={aliasLabel}
+                        value={aliases.join(", ")}
+                        className={styles.cardText}
                       />
                     </div>
-                  );
-                })}
-                {!isLastPage && (
-                  <Button
-                    buttonType={"text"}
-                    label={"See More Versions"}
-                    onClick={goToNextPage}
-                    id={"viewMoreVersionsButton"}
-                    className={styles.viewMoreButton}
-                  />
-                )}
-              </>
-            )}
-          </Loading>
-        </div>
+                    <Button
+                      onClick={() => onVersionSelect(version)}
+                      buttonType={"text"}
+                      label={"Select Version"}
+                      className={styles.actionButton}
+                    />
+                  </div>
+                );
+              })}
+              {!isLastPage && (
+                <Button
+                  buttonType={"text"}
+                  label={"See More Versions"}
+                  onClick={goToNextPage}
+                  id={"viewMoreVersionsButton"}
+                  className={styles.viewMoreButton}
+                />
+              )}
+            </>
+          )}
+        </Loading>
       )}
     </div>
   );

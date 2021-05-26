@@ -168,10 +168,7 @@ describe("PolicyPlayground", () => {
 
     beforeEach(() => {
       selectedResource = {
-        uri: chance.string(),
-        name: chance.string(),
-        version: chance.string(),
-        type: chance.string(),
+        versionedResourceUri: chance.string(),
       };
       selectedPolicy = {
         name: chance.string(),
@@ -191,7 +188,7 @@ describe("PolicyPlayground", () => {
 
     it("should render the selected resource occurrence data", () => {
       expect(useFetch).toHaveBeenCalledWith("/api/occurrences", {
-        resourceUri: selectedResource.uri,
+        resourceUri: selectedResource.versionedResourceUri,
       });
       expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
     });
@@ -223,7 +220,8 @@ describe("PolicyPlayground", () => {
             {
               method: "POST",
               body: JSON.stringify({
-                resourceUri: policyState.evaluationResource.uri,
+                resourceUri:
+                  policyState.evaluationResource.versionedResourceUri,
               }),
             }
           );

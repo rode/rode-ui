@@ -15,17 +15,16 @@
  */
 
 import React from "react";
-import { render, screen, act } from "test/testing-utils/renderer";
+import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { createMockResourceUri } from "test/testing-utils/mocks";
-import { getResourceDetails } from "utils/resource-utils";
 
 jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSearchAndResults", () => {
-  let setResource,
+  let onResourceSelect,
+    genericResource,
     clearEvaluation,
     state,
     dispatch,
@@ -35,7 +34,7 @@ describe("ResourceSearchAndResults", () => {
     rerender;
 
   beforeEach(() => {
-    setResource = jest.fn();
+    onResourceSelect = jest.fn();
     clearEvaluation = jest.fn();
     state = {
       searchTerm: chance.string(),
@@ -43,7 +42,9 @@ describe("ResourceSearchAndResults", () => {
     dispatch = jest.fn();
     fetchedResources = chance.n(
       () => ({
-        uri: createMockResourceUri(),
+        id: chance.string(),
+        name: chance.string(),
+        type: chance.pickone(["DOCKER", "GIT", "NPM"]),
       }),
       chance.d4()
     );
@@ -55,6 +56,8 @@ describe("ResourceSearchAndResults", () => {
       loading: false,
     };
 
+    genericResource = null;
+
     usePaginatedFetch.mockReturnValue(fetchResponse);
 
     document.getElementById = jest.fn().mockReturnValue({
@@ -63,8 +66,8 @@ describe("ResourceSearchAndResults", () => {
 
     const utils = render(
       <ResourceSearchAndResults
-        setResource={setResource}
-        clearEvaluation={clearEvaluation}
+        onResourceSelect={onResourceSelect}
+        genericResource={genericResource}
       />,
       {
         resourceState: state,
@@ -76,16 +79,6 @@ describe("ResourceSearchAndResults", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-  });
-
-  it("should render the button to open the search drawer", () => {
-    const renderedButton = screen.getByLabelText(/search for resources/i);
-    expect(renderedButton).toBeInTheDocument();
-    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
-
-    userEvent.click(renderedButton);
-
-    expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
   });
 
   it("should render the search bar", () => {
@@ -123,39 +116,17 @@ describe("ResourceSearchAndResults", () => {
 
     expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
     fetchedResources.forEach((resource, index) => {
-      const {
-        resourceName,
-        resourceVersion,
-        resourceType,
-      } = getResourceDetails(resource.uri);
-      expect(screen.getByText(resourceName)).toBeInTheDocument();
-      expect(screen.queryAllByText("Version")[index]).toBeInTheDocument();
-      expect(
-        screen.getByText(resourceVersion.substring(0, 12))
-      ).toBeInTheDocument();
+      expect(screen.getByText(resource.name)).toBeInTheDocument();
       expect(screen.queryAllByText("Type")[index]).toBeInTheDocument();
-      expect(screen.getAllByText(resourceType)[index]).toBeInTheDocument();
+      expect(screen.getAllByText(resource.type)[0]).toBeInTheDocument();
     });
   });
 
   it("should select the resource when prompted", () => {
     searchForResource();
 
-    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-      fetchedResources[0].uri
-    );
-
     userEvent.click(screen.getAllByText("Select Resource")[0]);
-    expect(setResource).toHaveBeenCalledWith({
-      uri: fetchedResources[0].uri,
-      name: resourceName,
-      version: resourceVersion,
-      type: resourceType,
-    });
-    expect(dispatch).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
-      data: "",
-    });
+    expect(onResourceSelect).toHaveBeenCalledWith(fetchedResources[0]);
   });
 
   it("should render a View More button when there are more resources to fetch", () => {
@@ -178,7 +149,7 @@ describe("ResourceSearchAndResults", () => {
 
     rerender(
       <ResourceSearchAndResults
-        setResource={setResource}
+        setResource={onResourceSelect}
         clearEvaluation={clearEvaluation}
       />
     );
