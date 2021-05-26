@@ -44,15 +44,15 @@ const ResourceVersionSearchAndResults = ({
   genericResource,
   onVersionSelect,
 }) => {
-  const [versionSearch, setVersionSearch] = useState(true);
+  const [versionSearch, setVersionSearch] = useState(!!genericResource);
   const { state, dispatch } = useResources();
 
   if (!genericResource) {
-    return <p>Select a resource to view a list of possible versions</p>;
+    return <p>Select a resource to view a list of versions</p>;
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    "/api/resource-versions",
+    versionSearch ? "/api/resource-versions" : null,
     buildSearchParams(genericResource.id, state.versionSearchTerm),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
@@ -70,12 +70,13 @@ const ResourceVersionSearchAndResults = ({
             className={styles.viewAllButton}
             buttonType={"text"}
             label={"View all versions"}
-            onClick={() =>
+            onClick={() => {
+              setVersionSearch(true);
               dispatch({
                 type: resourceActions.SET_VERSION_SEARCH_TERM,
                 data: "all",
-              })
-            }
+              });
+            }}
           />
         }
       />

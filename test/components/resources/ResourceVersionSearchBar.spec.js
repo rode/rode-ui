@@ -59,7 +59,9 @@ describe("ResourceVersionSearchBar", () => {
 
   it("should handle any additional onChange events that are passed", () => {
     const onChangeMock = jest.fn();
-    rerender(<ResourceVersionSearchBar onSubmit={onSubmit} onChange={onChangeMock} />);
+    rerender(
+      <ResourceVersionSearchBar onSubmit={onSubmit} onChange={onChangeMock} />
+    );
 
     const renderedInput = screen.getByText(/search for a version/i);
     const searchTerm = chance.string();
@@ -82,7 +84,9 @@ describe("ResourceVersionSearchBar", () => {
 
   it("should render some helper text if specified", () => {
     const helpText = chance.string();
-    rerender(<ResourceVersionSearchBar onSubmit={onSubmit} helpText={helpText} />);
+    rerender(
+      <ResourceVersionSearchBar onSubmit={onSubmit} helpText={helpText} />
+    );
 
     expect(screen.getByText(helpText)).toBeInTheDocument();
   });

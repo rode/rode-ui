@@ -53,12 +53,13 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
               className={styles.viewAllButton}
               buttonType={"text"}
               label={"View all resources"}
-              onClick={() =>
+              onClick={() => {
+                setResourceSearch(true);
                 dispatch({
                   type: resourceActions.SET_SEARCH_TERM,
                   data: "all",
-                })
-              }
+                });
+              }}
             />
           }
         />

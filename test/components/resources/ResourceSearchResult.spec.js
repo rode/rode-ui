@@ -78,7 +78,7 @@ describe("ResourceSearchResult", () => {
     );
   });
 
-  it("should show an error toast if an error occurs when selecting the resource", async() => {
+  it("should show an error toast if an error occurs when selecting the resource", async () => {
     fetchResponse.json = null;
     const renderedButton = screen.getByText("View Resource");
 
@@ -87,6 +87,8 @@ describe("ResourceSearchResult", () => {
     await act(async () => {
       await userEvent.click(renderedButton);
     });
-    expect(showError).toHaveBeenCalledTimes(1).toHaveBeenCalledWith("An unexpected error has occurred.");
+    expect(showError)
+      .toHaveBeenCalledTimes(1)
+      .toHaveBeenCalledWith("An unexpected error has occurred.");
   });
 });
