@@ -20,8 +20,10 @@ import userEvent from "@testing-library/user-event";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
+import { showError } from "utils/toast-utils";
 
 jest.mock("next/router");
+jest.mock("utils/toast-utils");
 
 describe("ResourceSearchResult", () => {
   let searchResult, fetchResponse, versionResponse, pushMock;
@@ -74,5 +76,17 @@ describe("ResourceSearchResult", () => {
         versionResponse.data[0].versionedResourceUri
       )}`
     );
+  });
+
+  it("should show an error toast if an error occurs when selecting the resource", async() => {
+    fetchResponse.json = null;
+    const renderedButton = screen.getByText("View Resource");
+
+    expect(renderedButton).toBeInTheDocument();
+
+    await act(async () => {
+      await userEvent.click(renderedButton);
+    });
+    expect(showError).toHaveBeenCalledTimes(1).toHaveBeenCalledWith("An unexpected error has occurred.");
   });
 });

@@ -25,17 +25,14 @@ jest.mock("hooks/usePaginatedFetch");
 describe("ResourceSearchAndResults", () => {
   let onResourceSelect,
     genericResource,
-    clearEvaluation,
     state,
     dispatch,
     fetchResponse,
     fetchedResources,
-    scrollMock,
     rerender;
 
   beforeEach(() => {
     onResourceSelect = jest.fn();
-    clearEvaluation = jest.fn();
     state = {
       searchTerm: chance.string(),
     };
@@ -48,7 +45,6 @@ describe("ResourceSearchAndResults", () => {
       }),
       chance.d4()
     );
-    scrollMock = jest.fn();
     fetchResponse = {
       data: fetchedResources,
       isLastPage: chance.bool(),
@@ -59,10 +55,6 @@ describe("ResourceSearchAndResults", () => {
     genericResource = null;
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
-
-    document.getElementById = jest.fn().mockReturnValue({
-      scrollIntoView: scrollMock,
-    });
 
     const utils = render(
       <ResourceSearchAndResults
@@ -147,12 +139,7 @@ describe("ResourceSearchAndResults", () => {
     fetchResponse.loading = false;
     fetchResponse.data = [];
 
-    rerender(
-      <ResourceSearchAndResults
-        setResource={onResourceSelect}
-        clearEvaluation={clearEvaluation}
-      />
-    );
+    rerender(<ResourceSearchAndResults onResourceSelect={onResourceSelect} />);
     searchForResource();
 
     expect(screen.getByText(/no resources found/i)).toBeInTheDocument();

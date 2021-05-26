@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
 import styles from "styles/modules/Search.module.scss";
+import { showError } from "utils/toast-utils";
 
 // TODO: add latest version to this card
 const ResourceSearchResult = ({ searchResult }) => {
@@ -33,15 +34,17 @@ const ResourceSearchResult = ({ searchResult }) => {
   }, []);
 
   const onClick = async () => {
-    const response = await fetch(
-      `/api/resource-versions?id=${encodeURIComponent(id)}&pageSize=1`
-    );
+    try {
+      const response = await fetch(
+        `/api/resource-versions?id=${encodeURIComponent(id)}&pageSize=1`
+      );
 
-    if (response) {
       const { data } = await response.json();
       router.push(
         `/resources/${encodeURIComponent(data[0].versionedResourceUri)}`
       );
+    } catch (error) {
+      showError("An unexpected error has occurred.");
     }
   };
 
