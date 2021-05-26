@@ -120,16 +120,6 @@ const PolicyPlayground = () => {
               data,
             })
           }
-          clearSearchTerms={() => {
-            resourceDispatch({
-              type: resourceActions.SET_SEARCH_TERM,
-              data: "",
-            });
-            resourceDispatch({
-              type: resourceActions.SET_VERSION_SEARCH_TERM,
-              data: "",
-            });
-          }}
           clearEvaluation={() => setEvaluationResults(null)}
         />
         <SelectedResource

@@ -105,7 +105,7 @@ describe("PolicyPlayground", () => {
       ).toBeInTheDocument();
     });
 
-    it("should render a search bar for resources", () => {
+    it("should render a search drawer for resources", () => {
       const resourceName = chance.string();
       const resourceVersion = chance.string();
       usePaginatedFetchResponse.data = [
@@ -115,11 +115,40 @@ describe("PolicyPlayground", () => {
       ];
       usePaginatedFetchResponse.loading = false;
 
-      const renderedSearch = screen.getByLabelText(/search for a resource/i);
+      const resourceResponse = {
+        data: [{ uri: createMockResourceUri() }],
+        loading: false,
+      };
 
-      expect(renderedSearch).toBeInTheDocument();
+      const versionResponse = {
+        data: [{ versionedResourceUri: createMockResourceUri() }],
+        loading: false,
+      };
+
+      usePaginatedFetch
+        .mockReturnValueOnce(resourceResponse)
+        .mockReturnValue(versionResponse);
+
+      const openDrawerButton = screen.getByLabelText(/^search for resources/i);
+
+      userEvent.click(openDrawerButton);
+
+      expect(screen.getByTestId("resourceSelectionDrawer")).toHaveClass(
+        "openDrawer"
+      );
+
+      const renderedResourceSearch = screen.getByLabelText(
+        /search for a resource/i
+      );
       act(() => {
-        userEvent.type(renderedSearch, "{enter}");
+        userEvent.type(renderedResourceSearch, "{enter}");
+      });
+
+      const renderedVersionSearch = screen.getByLabelText(
+        /search for a version/i
+      );
+      act(() => {
+        userEvent.type(renderedVersionSearch, "{enter}");
       });
       userEvent.click(screen.getByRole("button", { name: "Select Resource" }));
       expect(policyDispatch).toHaveBeenCalledWith({

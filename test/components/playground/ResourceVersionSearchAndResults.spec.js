@@ -57,7 +57,26 @@ describe("ResourceVersionSearchAndResults", () => {
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
 
-    const utils = render(
+    // const utils = render(
+    //   <ResourceVersionSearchAndResults
+    //     onVersionSelect={onVersionSelect}
+    //     genericResource={genericResource}
+    //   />,
+    //   {
+    //     resourceState: state,
+    //     resourceDispatch: dispatch,
+    //   }
+    // );
+    // rerender = utils.rerender;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should use the correct params when no search term is specified", () => {
+    state.versionSearchTerm = null;
+    render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
         genericResource={genericResource}
@@ -67,123 +86,165 @@ describe("ResourceVersionSearchAndResults", () => {
         resourceDispatch: dispatch,
       }
     );
-    rerender = utils.rerender;
-  });
+    searchForVersion();
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it("should render the search bar", () => {
-    expect(screen.getByText(/search for a version/i)).toBeInTheDocument();
-
-    const renderedViewAllResourcesButton = screen.getByRole("button", {
-      name: "View all versions",
-    });
-    expect(renderedViewAllResourcesButton).toBeInTheDocument();
-    userEvent.click(renderedViewAllResourcesButton);
-    expect(dispatch).toHaveBeenCalledWith({
-      type: "SET_VERSION_SEARCH_TERM",
-      data: "all",
-    });
+    expect(usePaginatedFetch).toHaveBeenCalledWith(
+      "/api/resource-versions",
+      {
+        id: genericResource.id,
+      },
+      5
+    );
   });
 
   it("should use the correct params when searching for a version", () => {
-    searchForVersion();
-
-    expect(usePaginatedFetch).toHaveBeenCalledWith(
-      "/api/resource-versions",
-      expect.objectContaining({
-        id: genericResource.id,
-        filter: `version.contains("${state.versionSearchTerm}")`,
-      }),
-      5
-    );
-  });
-
-  it("should use the correct params when searching for all versions", () => {
-    searchForVersion("all");
-
-    expect(usePaginatedFetch).toHaveBeenCalledWith(
-      "/api/resource-versions",
-      expect.objectContaining({
-        id: genericResource.id,
-      }),
-      5
-    );
-  });
-
-  it("should render the loading indicator when searching for a version", () => {
-    fetchResponse.loading = true;
-    fetchResponse.data = null;
-    searchForVersion();
-
-    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
-  });
-
-  it("should render a search result for each resource found", () => {
-    searchForVersion();
-
-    expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
-    fetchedVersions.forEach((version, index) => {
-      const { resourceVersion, aliasLabel, aliases } = getResourceDetails(
-        version.versionedResourceUri,
-        version
-      );
-      expect(screen.getAllByText("Version")[index]).toBeInTheDocument();
-      expect(
-        screen.getByText(resourceVersion.substring(0, 12))
-      ).toBeInTheDocument();
-      expect(screen.getAllByText(aliasLabel)[index]).toBeInTheDocument();
-      expect(screen.getByText(aliases.join(", "))).toBeInTheDocument();
-    });
-  });
-
-  it("should select the version when prompted", () => {
-    searchForVersion();
-
-    userEvent.click(screen.getAllByText("Select Version")[0]);
-    expect(onVersionSelect).toHaveBeenCalledWith(fetchedVersions[0]);
-  });
-
-  it("should render a View More button when there are more resources to fetch", () => {
-    fetchResponse.isLastPage = false;
-
-    searchForVersion();
-
-    const renderedShowMoreButton = screen.getByRole("button", {
-      name: "See More Versions",
-    });
-
-    expect(renderedShowMoreButton).toBeInTheDocument();
-    userEvent.click(renderedShowMoreButton);
-    expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
-  });
-
-  it("should return some instructions to pick a resource if the generic resource is not specified", () => {
-    rerender(
+    render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
-        genericResource={null}
+        genericResource={genericResource}
       />,
       {
         resourceState: state,
         resourceDispatch: dispatch,
       }
     );
+    searchForVersion();
 
-    expect(
-      screen.getByText(/select a resource to view a list of versions/i)
-    ).toBeInTheDocument();
+    expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+      "/api/resource-versions",
+      {
+        id: genericResource.id,
+        filter: `version.contains("${state.versionSearchTerm}")`,
+      },
+      5
+    );
+  });
+
+  it("should use the correct params when searching for all versions", () => {
+    state.versionSearchTerm = "all";
+    render(
+      <ResourceVersionSearchAndResults
+        onVersionSelect={onVersionSelect}
+        genericResource={genericResource}
+      />,
+      {
+        resourceState: state,
+        resourceDispatch: dispatch,
+      }
+    );
+    searchForVersion();
+
+    expect(usePaginatedFetch).toHaveBeenCalledWith(
+      "/api/resource-versions",
+      {
+        id: genericResource.id,
+      },
+      5
+    );
+  });
+
+  describe("searching for a version", () => {
+    beforeEach(() => {
+      const utils = render(
+        <ResourceVersionSearchAndResults
+          onVersionSelect={onVersionSelect}
+          genericResource={genericResource}
+        />,
+        {
+          resourceState: state,
+          resourceDispatch: dispatch,
+        }
+      );
+
+      rerender = utils.rerender;
+    });
+
+    it("should render the search bar", () => {
+      expect(screen.getByText(/search for a version/i)).toBeInTheDocument();
+
+      const renderedViewAllResourcesButton = screen.getByRole("button", {
+        name: "View all versions",
+      });
+      expect(renderedViewAllResourcesButton).toBeInTheDocument();
+      userEvent.click(renderedViewAllResourcesButton);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "SET_VERSION_SEARCH_TERM",
+        data: "all",
+      });
+    });
+
+    it("should render the loading indicator when searching for a version", () => {
+      fetchResponse.loading = true;
+      fetchResponse.data = null;
+      searchForVersion();
+
+      expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+    });
+
+    it("should render a search result for each resource found", () => {
+      searchForVersion();
+
+      expect(screen.queryByTestId("loadingIndicator")).not.toBeInTheDocument();
+      fetchedVersions.forEach((version, index) => {
+        const { resourceVersion, aliasLabel, aliases } = getResourceDetails(
+          version.versionedResourceUri,
+          version
+        );
+        expect(screen.getAllByText("Version")[index]).toBeInTheDocument();
+        expect(
+          screen.getByText(resourceVersion.substring(0, 12))
+        ).toBeInTheDocument();
+        expect(screen.getAllByText(aliasLabel)[index]).toBeInTheDocument();
+        expect(screen.getByText(aliases.join(", "))).toBeInTheDocument();
+      });
+    });
+
+    it("should select the version when prompted", () => {
+      searchForVersion();
+
+      userEvent.click(screen.getAllByText("Select Version")[0]);
+      expect(onVersionSelect).toHaveBeenCalledWith(fetchedVersions[0]);
+    });
+
+    it("should render a View More button when there are more resources to fetch", () => {
+      fetchResponse.isLastPage = false;
+
+      searchForVersion();
+
+      const renderedShowMoreButton = screen.getByRole("button", {
+        name: "See More Versions",
+      });
+
+      expect(renderedShowMoreButton).toBeInTheDocument();
+      userEvent.click(renderedShowMoreButton);
+      expect(fetchResponse.goToNextPage).toHaveBeenCalledTimes(1);
+    });
+
+    it("should return some instructions to pick a resource if the generic resource is not specified", () => {
+      rerender(
+        <ResourceVersionSearchAndResults
+          onVersionSelect={onVersionSelect}
+          genericResource={null}
+        />,
+        {
+          resourceState: state,
+          resourceDispatch: dispatch,
+        }
+      );
+
+      expect(
+        screen.getByText(/select a resource to view a list of versions/i)
+      ).toBeInTheDocument();
+    });
   });
 });
 
-const searchForVersion = (searchTerm = chance.string()) => {
+const searchForVersion = () => {
   const renderedSearch = screen.getByText(/search for a version/i);
   const renderedSearchButton = screen.getByLabelText(/search versions/i);
 
   act(() => {
-    userEvent.type(renderedSearch, searchTerm);
+    userEvent.type(renderedSearch, chance.string());
   });
   act(() => {
     userEvent.click(renderedSearchButton);

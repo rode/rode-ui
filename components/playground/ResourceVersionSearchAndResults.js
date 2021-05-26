@@ -32,7 +32,7 @@ const buildSearchParams = (genericName, searchTerm) => {
   const params = {
     id: genericName,
   };
-
+  
   if (searchTerm && searchTerm !== "all") {
     params.filter = `version.contains("${searchTerm}")`;
   }

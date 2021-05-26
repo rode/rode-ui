@@ -23,15 +23,15 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import ResourceSearchAndResults from "./ResourceSearchAndResults";
 import ResourceVersionSearchAndResults from "./ResourceVersionSearchAndResults";
+import { useResources } from "providers/resources";
+import { resourceActions } from "reducers/resources";
 
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-const ResourceSelectionDrawer = ({
-  setResource,
-  clearSearchTerms,
-  clearEvaluation,
-}) => {
+// TODO: tests
+const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
+  const { dispatch } = useResources();
   const [genericResource, setGenericResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);
@@ -39,6 +39,16 @@ const ResourceSelectionDrawer = ({
 
   const openResourceSelection = () => setCurrentSection(RESOURCE);
   const openVersionSelection = () => setCurrentSection(VERSION);
+  const clearSearchTerms = () => {
+    dispatch({
+      type: resourceActions.SET_SEARCH_TERM,
+      data: "",
+    });
+    dispatch({
+      type: resourceActions.SET_VERSION_SEARCH_TERM,
+      data: "",
+    });
+  };
 
   useEffect(() => {
     clearEvaluation();
@@ -64,7 +74,11 @@ const ResourceSelectionDrawer = ({
       >
         <Icon name={ICON_NAMES.SEARCH} size={"large"} />
       </Button>
-      <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
+      <Drawer
+        isOpen={showDrawer}
+        onClose={() => setShowDrawer(false)}
+        testId={"resourceSelectionDrawer"}
+      >
         <div className={styles.resourceDrawerNavigation}>
           <Button
             buttonType={"text"}
@@ -113,7 +127,6 @@ const ResourceSelectionDrawer = ({
 
 ResourceSelectionDrawer.propTypes = {
   setResource: PropTypes.func.isRequired,
-  clearSearchTerms: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
 
