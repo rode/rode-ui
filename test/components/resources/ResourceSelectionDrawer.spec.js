@@ -24,9 +24,10 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSelectionDrawer", () => {
-  let setResource, clearEvaluation;
+  let setResource, clearEvaluation, dispatch;
 
   beforeEach(() => {
+    dispatch = jest.fn();
     setResource = jest.fn();
     clearEvaluation = jest.fn();
     const resourceResponse = {
@@ -62,7 +63,10 @@ describe("ResourceSelectionDrawer", () => {
       <ResourceSelectionDrawer
         clearEvaluation={clearEvaluation}
         setResource={setResource}
-      />
+      />,
+      {
+        resourceDispatch: dispatch,
+      }
     );
   });
 
@@ -71,8 +75,19 @@ describe("ResourceSelectionDrawer", () => {
     const drawer = screen.getByTestId("resourceSelectionDrawer");
     expect(resourceButton).toBeInTheDocument();
     expect(drawer).toHaveClass("closedDrawer");
+
     userEvent.click(resourceButton);
+
     expect(drawer).toHaveClass("openDrawer");
+    expect(dispatch)
+      .toHaveBeenCalledWith({
+        type: "SET_SEARCH_TERM",
+        data: "",
+      })
+      .toHaveBeenCalledWith({
+        type: "SET_VERSION_SEARCH_TERM",
+        data: "",
+      });
   });
 
   it("should show the drawer header", () => {
@@ -109,5 +124,7 @@ describe("ResourceSelectionDrawer", () => {
     const versionButton = screen.getByLabelText("Version");
     expect(versionButton).toBeEnabled();
     expect(versionButton).toHaveClass("activeNavigationButton");
+
+    expect(clearEvaluation).toHaveBeenCalled();
   });
 });

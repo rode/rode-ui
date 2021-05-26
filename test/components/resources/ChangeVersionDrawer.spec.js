@@ -71,11 +71,7 @@ describe("ChangeVersionDrawer", () => {
       resourceState,
       resourceDispatch,
     });
-    expect(usePaginatedFetch).toHaveBeenCalledWith(
-      null,
-      { resourceName: undefined },
-      10
-    );
+    expect(usePaginatedFetch).toHaveBeenCalledWith(null, { id: undefined }, 10);
   });
 
   it("should call to fetch the versions when a resource is selected", () => {

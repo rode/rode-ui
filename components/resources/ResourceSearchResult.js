@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
@@ -23,15 +23,10 @@ import { useTheme } from "providers/theme";
 import styles from "styles/modules/Search.module.scss";
 import { showError } from "utils/toast-utils";
 
-// TODO: add latest version to this card
 const ResourceSearchResult = ({ searchResult }) => {
   const { id, name, type } = searchResult;
   const router = useRouter();
   const { theme } = useTheme();
-
-  useEffect(() => {
-    // get latest version here
-  }, []);
 
   const onClick = async () => {
     try {
