@@ -106,28 +106,38 @@ describe("PolicyPlayground", () => {
     });
 
     it("should render a search drawer for resources", () => {
-      const resourceName = chance.string();
-      const resourceVersion = chance.string();
-      usePaginatedFetchResponse.data = [
-        {
-          uri: createMockResourceUri(resourceName, resourceVersion),
-        },
-      ];
-      usePaginatedFetchResponse.loading = false;
-
       const resourceResponse = {
-        data: [{ uri: createMockResourceUri() }],
+        data: chance.n(
+          () => ({
+            id: createMockResourceUri(),
+            name: chance.string(),
+            type: chance.pickone(["DOCKER", "NPM", "GIT"]),
+          }),
+          chance.d4() + 1
+        ),
         loading: false,
       };
 
       const versionResponse = {
-        data: [{ versionedResourceUri: createMockResourceUri() }],
+        data: chance.n(() => {
+          const name = chance.string();
+          return {
+            versionedResourceUri: createMockResourceUri(name),
+            aliases: chance.n(() => `${name}:${chance.string()}`),
+          };
+        }, 1),
         loading: false,
       };
 
-      usePaginatedFetch
-        .mockReturnValueOnce(resourceResponse)
-        .mockReturnValue(versionResponse);
+      usePaginatedFetch.mockImplementation((endpoint) => {
+        if (endpoint === "/api/resources") {
+          return resourceResponse;
+        } else if (endpoint === "/api/resource-versions") {
+          return versionResponse;
+        } else {
+          return fetchResponse;
+        }
+      });
 
       const openDrawerButton = screen.getByLabelText(/^search for resources/i);
 
@@ -137,28 +147,31 @@ describe("PolicyPlayground", () => {
         "openDrawer"
       );
 
-      const renderedResourceSearch = screen.getByLabelText(
-        /search for a resource/i
+      const renderedAllResourcesButton = screen.getByLabelText(
+        /view all resources/i
       );
+
       act(() => {
-        userEvent.type(renderedResourceSearch, "{enter}");
+        userEvent.click(renderedAllResourcesButton);
+      });
+      act(() => {
+        userEvent.click(screen.getAllByText(/^Select Resource/i)[0]);
       });
 
-      const renderedVersionSearch = screen.getByLabelText(
-        /search for a version/i
+      const renderedAllVersionsButton = screen.getByLabelText(
+        /view all versions/i
       );
+
       act(() => {
-        userEvent.type(renderedVersionSearch, "{enter}");
+        userEvent.click(renderedAllVersionsButton);
       });
-      userEvent.click(screen.getByRole("button", { name: "Select Resource" }));
+      act(() => {
+        userEvent.click(screen.getByLabelText("Select Version"));
+      });
+
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
-        data: {
-          uri: usePaginatedFetchResponse.data[0].uri,
-          name: resourceName,
-          version: resourceVersion,
-          type: "Docker",
-        },
+        data: versionResponse.data[0],
       });
     });
 

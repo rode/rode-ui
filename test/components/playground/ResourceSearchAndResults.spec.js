@@ -22,6 +22,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
 jest.mock("hooks/usePaginatedFetch");
 
+// TODO: tests around isCurrentResource logic
 describe("ResourceSearchAndResults", () => {
   let onResourceSelect,
     genericResource,

@@ -56,18 +56,6 @@ describe("ResourceVersionSearchAndResults", () => {
     genericResource = { id: chance.string() };
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
-
-    // const utils = render(
-    //   <ResourceVersionSearchAndResults
-    //     onVersionSelect={onVersionSelect}
-    //     genericResource={genericResource}
-    //   />,
-    //   {
-    //     resourceState: state,
-    //     resourceDispatch: dispatch,
-    //   }
-    // );
-    // rerender = utils.rerender;
   });
 
   afterEach(() => {
