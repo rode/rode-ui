@@ -33,6 +33,16 @@ When(/^I click on ([^"]*) occurrence$/, (occurrenceType) => {
   cy.contains(selectors[occurrenceName]).click();
 });
 
+When(/^I click the search result to view the "([^"]*)" resource$/, (resourceName) => {
+  const resource = resources[resourceName].data[0];
+  cy.mockRequest(
+    { url: "**/api/resource-versions*", method: "GET" },
+    { data: resource.versions}
+  );
+
+  cy.get(selectors.ViewResourceButton).click();
+});
+
 Then(/^I see "([^"]*)" Build occurrence details$/, (resourceName) => {
   cy.get(selectors.ShowJsonButton).should("be.visible");
 
@@ -98,9 +108,14 @@ Then(/^I see "([^"]*)" resource details$/, (resourceName) => {
     { url: "**/api/occurrences*", method: "GET" },
     resource.occurrences
   );
+  cy.mockRequest(
+    { url: "**/api/resource-versions*", method: "GET" },
+    resource.versions
+  );
 
   cy.url().should("contain", `/resources/${encodeURIComponent(resource.uri)}`);
   cy.contains("h1", resource.resourceName).should("be.visible");
-  cy.contains(resource.resourceVersion.substring(0, 12)).should("be.visible");
+  cy.contains(resource.type).should("be.visible");
+  cy.get("span").contains(resource.resourceVersion.substring(0, 12)).should("be.visible");
   cy.get(selectors.EvaluateResourceInPlaygroundButton).should("be.visible");
 });

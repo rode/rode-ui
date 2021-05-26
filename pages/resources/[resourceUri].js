@@ -79,10 +79,6 @@ const Resource = () => {
 
   return (
     <>
-      <ChangeVersionDrawer
-        isOpen={showVersionDrawer}
-        closeDrawer={() => setShowVersionDrawer(false)}
-      />
       <PageHeader>
         <ResourceBreadcrumbs />
       </PageHeader>
@@ -133,6 +129,10 @@ const Resource = () => {
           )}
         </Loading>
       </div>
+      <ChangeVersionDrawer
+        isOpen={showVersionDrawer}
+        closeDrawer={() => setShowVersionDrawer(false)}
+      />
     </>
   );
 };
