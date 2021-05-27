@@ -43,9 +43,16 @@ describe("SelectedPolicy", () => {
     ).toBeInTheDocument();
   });
 
+  it("should render the policy name", () => {
+    expect(screen.getByText("Policy")).toBeInTheDocument();
+    expect(screen.getByText(policy.name)).toBeInTheDocument();
+  });
+
   it("should render the instructions if no policy is selected", () => {
     rerender(<SelectedPolicy policy={null} />);
 
-    expect(screen.getByText(/select a policy to begin/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/search for a policy to begin/i)
+    ).toBeInTheDocument();
   });
 });

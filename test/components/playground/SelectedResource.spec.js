@@ -18,14 +18,17 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import SelectedResource from "components/playground/SelectedResource";
 import { useFetch } from "hooks/useFetch";
+import { createMockResourceUri } from "test/testing-utils/mocks";
 
 jest.mock("hooks/useFetch");
 
 describe("SelectedResource", () => {
-  let resourceUri, fetchResponse, rerender;
+  let resourceUri, name, version, fetchResponse, rerender;
 
   beforeEach(() => {
-    resourceUri = chance.string();
+    name = chance.string();
+    version = chance.string();
+    resourceUri = createMockResourceUri(name, version);
     fetchResponse = {
       data: {
         originals: chance.string(),
@@ -44,16 +47,26 @@ describe("SelectedResource", () => {
     jest.resetAllMocks();
   });
 
-  it("should render the occurrence data label", () => {
-    expect(screen.getByText("Occurrence Data")).toBeInTheDocument();
-  });
-
   it("should call to fetch the occurrence data when a resource is selected", () => {
     expect(useFetch)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith("/api/occurrences", {
         resourceUri: resourceUri,
       });
+  });
+
+  it("should render the resource name", () => {
+    expect(screen.getByText("Resource")).toBeInTheDocument();
+    expect(screen.getByText(name)).toBeInTheDocument();
+  });
+
+  it("should render the resource version", () => {
+    expect(screen.getByText("Version")).toBeInTheDocument();
+    expect(screen.getByText(version.substring(0, 12))).toBeInTheDocument();
+  });
+
+  it("should render the occurrence data label", () => {
+    expect(screen.getByText("Occurrence Data")).toBeInTheDocument();
   });
 
   it("should render the loading indicator while fetching the occurrence data", () => {
@@ -72,6 +85,8 @@ describe("SelectedResource", () => {
 
   it("should render the instructions if no resource is specified", () => {
     rerender(<SelectedResource resourceUri={null} />);
-    expect(screen.getByText(/select a resource to begin/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/search for a resource to begin/i)
+    ).toBeInTheDocument();
   });
 });

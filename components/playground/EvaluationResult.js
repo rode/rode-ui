@@ -35,39 +35,37 @@ const EvaluationResult = ({ results }) => {
 
   return (
     <>
-      <div className={styles.evaluationResultsContainer}>
-        {results.pass ? (
-          <div className={styles.evaluationResults}>
-            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
-            <p>The resource passed the policy.</p>
-          </div>
-        ) : (
-          <div className={styles.failedEvaluationResults}>
-            <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
-            <p>The resource failed the policy.</p>
-          </div>
-        )}
-        <div className={styles.violations}>
-          {results.result[0].violations.map((violation) => {
-            const outcome = violation.pass ? "pass" : "fail";
-            return (
-              <React.Fragment key={violation.id}>
-                <p className={`${styles.violationResult} ${styles[outcome]}`}>
-                  {outcome}
-                </p>
-                <p>
-                  {violation.message || "Rule message not specified in policy"}
-                </p>
-              </React.Fragment>
-            );
-          })}
+      {results.pass ? (
+        <div className={styles.evaluationResults}>
+          <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
+          <p>The resource passed the policy.</p>
         </div>
-        <Button
-          onClick={() => setShowCode(true)}
-          label={"Show Full Evaluation"}
-          buttonType={"text"}
-        />
+      ) : (
+        <div className={styles.failedEvaluationResults}>
+          <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
+          <p>The resource failed the policy.</p>
+        </div>
+      )}
+      <div className={styles.violations}>
+        {results.result[0].violations.map((violation) => {
+          const outcome = violation.pass ? "pass" : "fail";
+          return (
+            <React.Fragment key={violation.id}>
+              <p className={`${styles.violationResult} ${styles[outcome]}`}>
+                {outcome}
+              </p>
+              <p>
+                {violation.message || "Rule message not specified in policy"}
+              </p>
+            </React.Fragment>
+          );
+        })}
       </div>
+      <Button
+        onClick={() => setShowCode(true)}
+        label={"Show Full Evaluation"}
+        buttonType={"text"}
+      />
       <Modal
         title={"Evaluation Explanation"}
         onClose={() => setShowCode(false)}

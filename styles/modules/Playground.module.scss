@@ -28,7 +28,7 @@ $GAP: 1rem;
     display: inline-grid;
     grid-gap: $GAP;
     grid-template-columns: repeat(2, calc(50% - #{$GAP}));
-    grid-template-rows: repeat(2, 50%);
+    grid-template-rows: 60% 40%;
     grid-template-areas:
       "left rightTop"
       "left rightBottom";
@@ -41,6 +41,8 @@ $GAP: 1rem;
 .sectionContainer {
   padding: 1rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
 
   @include phoneAndSmaller {
     height: fit-content;
@@ -68,11 +70,13 @@ $GAP: 1rem;
 
 .evaluationContainer {
   @extend .sectionContainer;
+  max-height: 100%;
+  align-items: center;
+
   @include tabletAndLarger {
     grid-row: rightBottom;
     grid-column: rightBottom;
-    display: flex;
-    justify-content: center;
+    overflow: auto;
   }
 }
 
@@ -99,10 +103,6 @@ $GAP: 1rem;
 .activeNavigationButton {
   @extend .navigationButton;
   font-weight: 700;
-}
-
-.selectToBeginText {
-  margin: 0.5rem 0 0 0.5rem;
 }
 
 .searchCard {
@@ -170,7 +170,7 @@ $GAP: 1rem;
 
 .codeContent {
   margin-top: 0.5rem;
-  max-height: 95%;
+  max-height: 100%;
   height: fit-content;
   resize: vertical;
   overflow: auto;
@@ -200,19 +200,6 @@ $GAP: 1rem;
   @include tabletAndLarger {
     width: 65%;
     align-self: center;
-  }
-}
-
-.evaluationResultsContainer {
-  width: fit-content;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-
-  > button {
-    margin: 0.5rem auto;
-    font-size: 0.85rem;
   }
 }
 

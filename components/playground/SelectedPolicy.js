@@ -19,22 +19,26 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Code from "components/Code";
 import textStyles from "styles/modules/Typography.module.scss";
+import LabelWithValue from "components/LabelWithValue";
 
 const SelectedPolicy = (props) => {
   const { policy } = props;
 
   return (
     <>
-      <p className={textStyles.label}>Rego Policy Code</p>
       {policy ? (
-        <Code
-          code={policy.regoContent}
-          language={"rego"}
-          className={styles.codeContent}
-          data-testid={"regoPolicyCode"}
-        />
+        <>
+          <LabelWithValue label={"Policy"} value={policy.name} />
+          <p className={textStyles.label}>Rego Policy Code</p>
+          <Code
+            code={policy.regoContent}
+            language={"rego"}
+            className={styles.codeContent}
+            data-testid={"regoPolicyCode"}
+          />
+        </>
       ) : (
-        <p className={styles.selectToBeginText}>Select a policy to begin</p>
+        <p className={styles.selectToBeginText}>Search for a policy to begin</p>
       )}
     </>
   );
