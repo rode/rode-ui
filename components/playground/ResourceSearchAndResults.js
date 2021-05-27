@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
-import { getResourceDetails } from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
-import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
-import Drawer from "components/Drawer";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
-  const [resourceSearch, setResourceSearch] = useState(false);
-  const [showDrawer, setShowDrawer] = useState(false);
+const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
+  const [resourceSearch, setResourceSearch] = useState(!!genericResource);
   const { state, dispatch } = useResources();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -43,121 +39,98 @@ const ResourceSearchAndResults = ({ setResource, clearEvaluation }) => {
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
-  useEffect(() => {
-    clearEvaluation();
-  }, [resourceSearch]);
-
   return (
     <>
-      <Button
-        label={"Search for resources"}
-        buttonType="icon"
-        onClick={() => setShowDrawer(true)}
-        className={styles.openSearchButton}
-      >
-        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
-      </Button>
-      <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
-        <div className={styles.searchContainer}>
-          <ResourceSearchBar
-            onSubmit={(event) => {
-              event.preventDefault();
-              setResourceSearch(true);
-            }}
-            onChange={() => setResourceSearch(false)}
-            helpText={
-              <Button
-                className={styles.viewAllButton}
-                buttonType={"text"}
-                label={"View all resources"}
-                onClick={() =>
-                  dispatch({
-                    type: resourceActions.SET_SEARCH_TERM,
-                    data: "all",
-                  })
-                }
-              />
-            }
-          />
-          {resourceSearch && (
-            <div className={styles.searchResultsContainer}>
-              <Loading loading={loading} type={"button"}>
-                {data?.length > 0 ? (
-                  <>
-                    {data.map((result) => {
-                      const {
-                        resourceName,
-                        resourceVersion,
-                        resourceType,
-                      } = getResourceDetails(result.uri);
+      <div className={styles.searchContainer}>
+        <ResourceSearchBar
+          onSubmit={(event) => {
+            event.preventDefault();
+            setResourceSearch(true);
+          }}
+          onChange={() => setResourceSearch(false)}
+          helpText={
+            <Button
+              className={styles.viewAllButton}
+              buttonType={"text"}
+              label={"View all resources"}
+              onClick={() => {
+                setResourceSearch(true);
+                dispatch({
+                  type: resourceActions.SET_SEARCH_TERM,
+                  data: "all",
+                });
+              }}
+            />
+          }
+        />
+        {resourceSearch && (
+          <Loading loading={loading} type={"button"}>
+            {data?.length > 0 ? (
+              <>
+                {data.map((result) => {
+                  const { id, name, type } = result;
+                  const isCurrentResource = id === genericResource?.id;
 
-                      return (
-                        <div
-                          className={`${styles.searchCard}`}
-                          key={result.uri}
-                        >
-                          <div>
-                            <p className={styles.cardHeader}>{resourceName}</p>
-                            <LabelWithValue
-                              label={"Version"}
-                              value={
-                                <ResourceVersion version={resourceVersion} />
-                              }
-                              className={styles.cardText}
-                            />
-                            <LabelWithValue
-                              label={"Type"}
-                              value={resourceType}
-                              className={styles.cardText}
-                            />
-                          </div>
-                          <Button
-                            onClick={() => {
-                              setResource({
-                                uri: result.uri,
-                                name: resourceName,
-                                version: resourceVersion,
-                                type: resourceType,
-                              });
-                              setResourceSearch(false);
-                              dispatch({
-                                type: resourceActions.SET_SEARCH_TERM,
-                                data: "",
-                              });
-                              setShowDrawer(false);
-                            }}
-                            buttonType={"text"}
-                            label={"Select Resource"}
-                            className={styles.actionButton}
-                          />
-                        </div>
-                      );
-                    })}
-                    {!isLastPage && (
+                  return (
+                    <div className={`${styles.searchCard}`} key={id}>
+                      <div>
+                        <p className={styles.cardHeader}>{name}</p>
+                        <LabelWithValue
+                          label={"Type"}
+                          value={type}
+                          className={styles.cardText}
+                        />
+                      </div>
                       <Button
+                        onClick={() => {
+                          onResourceSelect(result);
+                        }}
                         buttonType={"text"}
-                        label={"See More Resources"}
-                        onClick={goToNextPage}
-                        id={"viewMoreResourcesButton"}
-                        className={styles.viewMoreButton}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <p>{`No resources found matching "${state.searchTerm}"`}</p>
+                        label={
+                          isCurrentResource
+                            ? "Selected Resource"
+                            : "Select Resource"
+                        }
+                        className={
+                          isCurrentResource
+                            ? styles.selectedButton
+                            : styles.actionButton
+                        }
+                        disabled={isCurrentResource}
+                      >
+                        {isCurrentResource && (
+                          <>
+                            <Icon name={ICON_NAMES.CHECK} />
+                            <p>Selected</p>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType={"text"}
+                    label={"See More Resources"}
+                    onClick={goToNextPage}
+                    id={"viewMoreResourcesButton"}
+                    className={styles.viewMoreButton}
+                  />
                 )}
-              </Loading>
-            </div>
-          )}
-        </div>
-      </Drawer>
+              </>
+            ) : (
+              <p>{`No resources found matching "${state.searchTerm}"`}</p>
+            )}
+          </Loading>
+        )}
+      </div>
     </>
   );
 };
 
 ResourceSearchAndResults.propTypes = {
-  setResource: PropTypes.func.isRequired,
-  clearEvaluation: PropTypes.func.isRequired,
+  genericResource: PropTypes.object,
+  onResourceSelect: PropTypes.func.isRequired,
 };
 
 export default ResourceSearchAndResults;

@@ -9,6 +9,8 @@ Feature: Policy Playground
     And I open the resource search drawer
     And I search for "Existing" resource
     And I select "Existing" resource for evaluation
+    And I search for "Existing" resource version
+    And I select "Existing" resource version for evaluation
     When the resource <outcome> the policy
     Then I see "<message>" message
     Scenarios:
@@ -24,5 +26,7 @@ Feature: Policy Playground
     And I open the resource search drawer
     And I search for "Existing" resource
     And I select "Existing" resource for evaluation
+    And I search for "Existing" resource version
+    And I select "Existing" resource version for evaluation
     When I evaluate and an error occurs
     Then I see "EvaluationError" message

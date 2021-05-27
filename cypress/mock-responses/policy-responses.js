@@ -34,6 +34,7 @@ export const mockSuccessPolicyEvaluation = {
     {
       violations: [
         {
+          id: "1234",
           pass: true,
           message: "This rule passed.",
         },
@@ -51,6 +52,7 @@ export const mockFailedPolicyEvaluation = {
     {
       violations: [
         {
+          id: "abcd",
           pass: false,
           message: "This rule failed.",
         },

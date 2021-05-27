@@ -18,8 +18,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
-import { createMockResourceUri } from "test/testing-utils/mocks";
-import { getResourceDetails } from "utils/resource-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { useResources } from "providers/resources";
 import userEvent from "@testing-library/user-event";
@@ -72,7 +70,9 @@ describe("Resources", () => {
     beforeEach(() => {
       resources = chance.n(
         () => ({
-          uri: createMockResourceUri(),
+          id: chance.string(),
+          name: chance.string(),
+          type: chance.pickone(["DOCKER", "GIT", "NPM"]),
         }),
         chance.d4()
       );
@@ -137,9 +137,8 @@ describe("Resources", () => {
       render(<Resources />);
 
       resources.forEach((resource, index) => {
-        const { resourceName } = getResourceDetails(resource.uri);
-        expect(screen.getAllByText("Resource Name")[index]).toBeInTheDocument();
-        expect(screen.getByText(resourceName)).toBeInTheDocument();
+        expect(screen.getByText(resource.name)).toBeInTheDocument();
+        expect(screen.getAllByText(/type/i)[index]).toBeInTheDocument();
       });
     });
 

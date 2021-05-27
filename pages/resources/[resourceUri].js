@@ -71,10 +71,7 @@ const Resource = () => {
     policyDispatch({
       type: policyActions.SET_EVALUATION_RESOURCE,
       data: {
-        uri: resourceUri,
-        name: state.currentResource.resourceName,
-        version: state.currentResource.resourceVersion,
-        type: state.currentResource.resourceType,
+        versionedResourceUri: resourceUri,
       },
     });
     router.push("/playground");
@@ -82,10 +79,6 @@ const Resource = () => {
 
   return (
     <>
-      <ChangeVersionDrawer
-        isOpen={showVersionDrawer}
-        closeDrawer={() => setShowVersionDrawer(false)}
-      />
       <PageHeader>
         <ResourceBreadcrumbs />
       </PageHeader>
@@ -94,9 +87,9 @@ const Resource = () => {
           {data ? (
             <>
               <div className={styles.resourceHeader}>
-                <p className={styles.resourceName}>
+                <h1 className={styles.resourceName}>
                   {state.currentResource.resourceName}
-                </p>
+                </h1>
                 <div className={styles.resourceDetailsContainer}>
                   <div>
                     <LabelWithValue
@@ -136,6 +129,10 @@ const Resource = () => {
           )}
         </Loading>
       </div>
+      <ChangeVersionDrawer
+        isOpen={showVersionDrawer}
+        closeDrawer={() => setShowVersionDrawer(false)}
+      />
     </>
   );
 };

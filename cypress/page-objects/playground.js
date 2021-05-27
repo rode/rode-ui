@@ -31,6 +31,9 @@ export const OpenResourceSearchDrawerButton = createButtonSelector(
 );
 export const EvaluatePlaygroundButton = createButtonSelector("Evaluate");
 export const SelectResourceButton = createButtonSelector("Select Resource");
+export const SelectResourceVersionButton = createButtonSelector(
+  "Select Version"
+);
 export const SelectPolicyButton = createButtonSelector("Select Policy");
 export const ShowEvaluationFailuresButton = createButtonSelector(
   "Show Failures"

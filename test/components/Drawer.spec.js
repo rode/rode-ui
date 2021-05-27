@@ -77,4 +77,15 @@ describe("Drawer", () => {
       expect.any(Function)
     );
   });
+
+  it("should allow the user to override the testId", () => {
+    const testId = chance.string();
+    rerender(
+      <Drawer isOpen={true} onClose={onClose} testId={testId}>
+        <p>children</p>
+      </Drawer>
+    );
+
+    expect(screen.getByTestId(testId)).toHaveClass("openDrawer");
+  });
 });

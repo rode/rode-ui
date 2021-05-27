@@ -22,15 +22,10 @@ import { useFetch } from "hooks/useFetch";
 jest.mock("hooks/useFetch");
 
 describe("SelectedResource", () => {
-  let resource, fetchResponse, rerender;
+  let resourceUri, fetchResponse, rerender;
 
   beforeEach(() => {
-    resource = {
-      name: chance.string(),
-      version: chance.string({ min: 12 }),
-      type: chance.string(),
-      uri: chance.string(),
-    };
+    resourceUri = chance.string();
     fetchResponse = {
       data: {
         originals: chance.string(),
@@ -40,7 +35,7 @@ describe("SelectedResource", () => {
 
     useFetch.mockReturnValue(fetchResponse);
 
-    const utils = render(<SelectedResource resource={resource} />);
+    const utils = render(<SelectedResource resourceUri={resourceUri} />);
 
     rerender = utils.rerender;
   });
@@ -57,13 +52,13 @@ describe("SelectedResource", () => {
     expect(useFetch)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith("/api/occurrences", {
-        resourceUri: resource.uri,
+        resourceUri: resourceUri,
       });
   });
 
   it("should render the loading indicator while fetching the occurrence data", () => {
     fetchResponse.loading = true;
-    rerender(<SelectedResource resource={resource} />);
+    rerender(<SelectedResource resourceUri={resourceUri} />);
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
@@ -75,8 +70,8 @@ describe("SelectedResource", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render the instructions if no resource is selected", () => {
-    rerender(<SelectedResource resource={null} />);
+  it("should render the instructions if no resource is specified", () => {
+    rerender(<SelectedResource resourceUri={null} />);
     expect(screen.getByText(/select a resource to begin/i)).toBeInTheDocument();
   });
 });

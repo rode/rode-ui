@@ -155,10 +155,6 @@ describe("Resource Details page", () => {
   });
 
   it("should render a button to use the resource in the policy playground", () => {
-    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-      router.query.resourceUri
-    );
-
     const renderedButton = screen.getByRole("button", {
       name: "Evaluate in Policy Playground",
     });
@@ -171,10 +167,7 @@ describe("Resource Details page", () => {
       .toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
         data: {
-          uri: router.query.resourceUri,
-          name: resourceName,
-          version: resourceVersion,
-          type: resourceType,
+          versionedResourceUri: router.query.resourceUri,
         },
       });
 

@@ -15,7 +15,7 @@ Feature: Resources
     Given I am on the "ResourceSearch" page
     When I search for "Existing" resource
     Then I see "Existing" resource search result
-    When I click the "ViewResource" button
+    When I click the search result to view the "Existing" resource
     Then I see "Existing" resource details
 
   Scenario Outline: Viewing Resource Details

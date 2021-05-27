@@ -23,7 +23,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useTheme } from "providers/theme";
 
 const Drawer = (props) => {
-  const { isOpen, onClose, children } = props;
+  const { isOpen, onClose, testId = "drawer", children } = props;
   const { theme } = useTheme();
   const ref = useRef(null);
 
@@ -46,7 +46,7 @@ const Drawer = (props) => {
         isOpen ? styles.openDrawer : styles.closedDrawer
       }`}
       ref={ref}
-      data-testid={"drawer"}
+      data-testid={testId}
     >
       <Button
         buttonType={"close"}
@@ -64,6 +64,7 @@ const Drawer = (props) => {
 Drawer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  testId: PropTypes.string,
   onClose: PropTypes.func.isRequired,
 };
 

@@ -71,6 +71,21 @@ When(/^I search for "([^"]*)" resource$/, (searchTerm) => {
   cy.get(selectors.SearchResourceButton).click();
 });
 
+When(/^I search for "([^"]*)" resource version$/, (resourceName) => {
+  if (resources[resourceName]) {
+    const resource = resources[resourceName].data[0];
+    cy.mockRequest(
+      { url: "**/api/resource-versions*", method: "GET" },
+      { data: resource.versions }
+    );
+  }
+  cy.get(selectors.ResourceVersionSearchInput)
+    .focus()
+    .clear()
+    .type(resourceName);
+  cy.get(selectors.SearchResourceVersionButton).click();
+});
+
 Then(/^I see "([^"]*)"$/, (element) => {
   cy.get(selectors[element]).should("be.visible");
 });

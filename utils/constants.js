@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// TODO: make consts for resource types
 export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
 export const DEFAULT_SEARCH_PAGE_SIZE = 10;
 export const PLAYGROUND_SEARCH_PAGE_SIZE = 5;

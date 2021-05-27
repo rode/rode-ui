@@ -28,6 +28,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
+import { getResourceDetails } from "utils/resource-utils";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -36,12 +37,12 @@ const ChangeVersionDrawer = (props) => {
   const {
     resourceName,
     resourceVersion: currentVersion,
-    versionFilter,
+    genericName,
   } = state.currentResource;
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
-    versionFilter ? "/api/resource-versions" : null,
-    { filter: versionFilter },
+    genericName ? "/api/resource-versions" : null,
+    { id: genericName },
     10
   );
 
@@ -66,7 +67,12 @@ const ChangeVersionDrawer = (props) => {
                 version
               </p>
             </div>
-            {data.map(({ resourceVersion, uri }) => {
+            {data.map((version) => {
+              const {
+                resourceVersion,
+                aliasLabel,
+                aliases,
+              } = getResourceDetails(version.versionedResourceUri, version);
               const isCurrentVersion = resourceVersion === currentVersion;
 
               return (
@@ -76,13 +82,18 @@ const ChangeVersionDrawer = (props) => {
                       label={"Version"}
                       value={<ResourceVersion version={resourceVersion} />}
                     />
+                    <LabelWithValue
+                      label={aliasLabel}
+                      value={aliases.join(", ")}
+                      className={styles.versionNames}
+                    />
                   </div>
                   <Button
                     buttonType={"text"}
                     label={isCurrentVersion ? "Selected" : "Select"}
                     disabled={isCurrentVersion}
                     className={styles.versionSelectionButton}
-                    onClick={() => selectVersion(uri)}
+                    onClick={() => selectVersion(version.versionedResourceUri)}
                   >
                     {isCurrentVersion && (
                       <>
@@ -104,7 +115,9 @@ const ChangeVersionDrawer = (props) => {
             )}
           </>
         ) : (
-          <p>{`No versions found matching the resource "${resourceName}"`}</p>
+          <p
+            className={styles.notFoundMessage}
+          >{`No versions found matching the resource "${resourceName}"`}</p>
         )}
       </Loading>
     </Drawer>

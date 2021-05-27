@@ -19,7 +19,6 @@ import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
-import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
 import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
 import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
@@ -29,6 +28,7 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
+import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -41,7 +41,7 @@ const PolicyPlayground = () => {
   const evaluatePolicy = async (event) => {
     event.preventDefault();
     const requestBody = {
-      resourceUri: state.evaluationResource.uri,
+      resourceUri: state.evaluationResource.versionedResourceUri,
     };
 
     setEvaluationLoading(true);
@@ -113,7 +113,7 @@ const PolicyPlayground = () => {
         <SelectedPolicy policy={state.evaluationPolicy} />
       </div>
       <div className={styles.resourceContainer}>
-        <ResourceSearchAndResults
+        <ResourceSelectionDrawer
           setResource={(data) =>
             policyDispatch({
               type: policyActions.SET_EVALUATION_RESOURCE,
@@ -122,7 +122,9 @@ const PolicyPlayground = () => {
           }
           clearEvaluation={() => setEvaluationResults(null)}
         />
-        <SelectedResource resource={state.evaluationResource} />
+        <SelectedResource
+          resourceUri={state.evaluationResource?.versionedResourceUri}
+        />
       </div>
       <div className={styles.evaluationContainer}>
         {evaluationResults ? (
