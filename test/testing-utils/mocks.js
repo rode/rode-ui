@@ -119,9 +119,9 @@ const mockDetailsMap = {
 
 export const createMockOccurrence = (
   kind = chance.pickone(Object.keys(mockDetailsMap)),
-  createTime = chance.timestamp()
+  noteName = `projects/rode/notes/${chance.string()}`
 ) => {
-  const kindSpecificDetails = mockDetailsMap[kind]?.(createTime);
+  const kindSpecificDetails = mockDetailsMap[kind]?.();
 
   return {
     name: `projects/rode/occurrences/${chance.guid()}`,
@@ -130,10 +130,10 @@ export const createMockOccurrence = (
       uri: createMockResourceUri(),
       contentHash: null,
     },
-    noteName: "projects/rode/notes/harbor",
-    kind: kind,
+    noteName,
+    kind,
     remediation: "",
-    createTime: createTime,
+    createTime: chance.timestamp(),
     updateTime: null,
     ...kindSpecificDetails,
   };
