@@ -28,6 +28,7 @@ import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
+import ResourceSearchFilters from "../components/resources/ResourceSearchFilters";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -85,6 +86,7 @@ const Resources = () => {
         <Loading loading={loading}>
           {data?.length > 0 ? (
             <>
+              <ResourceSearchFilters resources={data}/>
               {data.map((result) => {
                 return (
                   <ResourceSearchResult key={result.id} searchResult={result} />
