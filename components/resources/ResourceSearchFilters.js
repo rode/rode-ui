@@ -22,14 +22,9 @@ import textStyles from "styles/modules/Typography.module.scss";
 import { useResources } from "providers/resources";
 import { resourceActions } from "../../reducers/resources";
 
-// TODO: create dropdown component that takes in label and does the styling for me
-// TODO: turn this into a const and build out remaining types
-const resourceLabels = {
-  "DOCKER": "Docker",
-  "GIT": "Git",
-  "NPM": "NPM"
-};
+// TODO: create dropdown component that takes in label and does the styling automagically
 
+// TODO: turn this into a const and build out remaining types
 const options = [
   {label: "Docker", value: "DOCKER"},
   {label: "Git", value: "GIT"},
@@ -39,11 +34,11 @@ const options = [
 
 const ResourceSearchFilters = ({resources}) => {
   const {state, dispatch} = useResources();
-  const resourceTypes = Array.from(new Set(resources.map((resource) => resource.type)));
-  // const options = resourceTypes.map((type) => ({
-  //   label: resourceLabels[type],
-  //   value: type
-  // }));
+
+  let relevantTypes = options.map((option) => option.value);
+  if (state.searchTerm && state.searchTerm !== "all") {
+    relevantTypes = Array.from(new Set(resources?.map((resource) => resource.type)));
+  }
 
   const onChange = (selectedValues) => {
     dispatch({
@@ -63,13 +58,15 @@ const ResourceSearchFilters = ({resources}) => {
         name={"resourceTypeFilter"}
         placeholder={"Resource Type"}
         className={styles.filterDropdown}
+        hideSelectedOptions={false}
+        isOptionDisabled={(option) => resources && !relevantTypes.includes(option.value)}
       />
     </div>
   );
 };
 
 ResourceSearchFilters.propTypes = {
-  resources: PropTypes.array.isRequired
+  resources: PropTypes.array
 };
 
 export default ResourceSearchFilters;
