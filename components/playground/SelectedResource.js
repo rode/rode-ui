@@ -21,6 +21,9 @@ import Code from "components/Code";
 import { useFetch } from "hooks/useFetch";
 import textStyles from "styles/modules/Typography.module.scss";
 import Loading from "components/Loading";
+import { getResourceDetails } from "utils/resource-utils";
+import LabelWithValue from "components/LabelWithValue";
+import ResourceVersion from "components/resources/ResourceVersion";
 
 const SelectedResource = (props) => {
   const { resourceUri } = props;
@@ -29,11 +32,18 @@ const SelectedResource = (props) => {
     resourceUri: resourceUri,
   });
 
+  const { resourceName, resourceVersion } = getResourceDetails(resourceUri);
+
   return (
     <>
-      <p className={textStyles.label}>Occurrence Data</p>
       {resourceUri ? (
         <Loading loading={loading}>
+          <LabelWithValue label={"Resource"} value={resourceName} />
+          <LabelWithValue
+            label={"Version"}
+            value={<ResourceVersion version={resourceVersion} />}
+          />
+          <p className={textStyles.label}>Occurrence Data</p>
           <Code
             code={JSON.stringify(data?.originals, null, 2)}
             language={"json"}
@@ -42,7 +52,9 @@ const SelectedResource = (props) => {
           />
         </Loading>
       ) : (
-        <p className={styles.selectToBeginText}>Select a resource to begin</p>
+        <p className={styles.selectToBeginText}>
+          Search for a resource to begin
+        </p>
       )}
     </>
   );
