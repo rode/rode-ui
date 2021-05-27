@@ -53,7 +53,6 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
     clearEvaluation();
 
     if (genericResource && resourceVersion) {
-      console.log("resourceVersion", resourceVersion);
       setResource(resourceVersion);
     }
   }, [genericResource, resourceVersion]);
