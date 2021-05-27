@@ -17,7 +17,6 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
-import { getResourceDetails } from "utils/resource-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -29,26 +28,31 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const searchFilter = req.query.filter;
+    const genericResourceId = req.query.id;
 
-    if (!searchFilter) {
+    if (!genericResourceId) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: "Generic resource name and search filter must be provided",
+        error: "Generic resource id must be provided",
       });
     }
 
-    const filter = {
-      filter: searchFilter,
+    const params = {
+      id: genericResourceId,
     };
 
+    if (req.query.filter) {
+      params.filter = req.query.filter;
+    }
     if (req.query.pageSize) {
-      filter.pageSize = req.query.pageSize;
+      params.pageSize = req.query.pageSize;
     }
     if (req.query.pageToken) {
-      filter.pageToken = req.query.pageToken;
+      params.pageToken = req.query.pageToken;
     }
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
+      `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
+        params
+      )}`
     );
 
     if (!response.ok) {
@@ -59,16 +63,14 @@ export default async (req, res) => {
     }
 
     const listResourceVersionsResponse = await response.json();
-    const resources = listResourceVersionsResponse.resources.map(({ uri }) => {
-      const { resourceVersion } = getResourceDetails(uri);
-      return {
-        resourceVersion,
-        uri,
-      };
-    });
+
+    const versions = listResourceVersionsResponse.versions.map((version) => ({
+      versionedResourceUri: version.version,
+      aliases: version.names,
+    }));
 
     res.status(StatusCodes.OK).json({
-      data: resources,
+      data: versions,
       pageToken: listResourceVersionsResponse.nextPageToken,
     });
   } catch (error) {

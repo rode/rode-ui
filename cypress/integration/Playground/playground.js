@@ -29,6 +29,10 @@ When(/^I select "([^"]*)" resource for evaluation$/, () => {
   cy.get(selectors.SelectResourceButton).click();
 });
 
+When(/^I select "([^"]*)" resource version for evaluation$/, () => {
+  cy.get(selectors.SelectResourceVersionButton).click();
+});
+
 When(/^the resource (?:(passes|fails)) the policy$/i, (passOrFail) => {
   cy.mockRequest(
     { url: "**/api/policies/**/attest", method: "POST" },

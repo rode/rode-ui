@@ -20,6 +20,8 @@ import ChangeVersionDrawer from "components/resources/ChangeVersionDrawer";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
+import { createMockResourceUri } from "test/testing-utils/mocks";
+import { getResourceDetails } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
@@ -39,7 +41,8 @@ describe("ChangeVersionDrawer", () => {
       currentResource: {
         resourceName: chance.string(),
         resourceVersion: chance.string(),
-        versionFilter: chance.string(),
+        genericName: chance.string(),
+        uri: createMockResourceUri(),
       },
     };
     resourceDispatch = jest.fn();
@@ -58,17 +61,17 @@ describe("ChangeVersionDrawer", () => {
     usePaginatedFetch.mockReturnValue(paginatedFetchResponse);
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it("should not call to fetch the versions if there is no resource selected", () => {
     resourceState.currentResource = {};
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
       resourceState,
       resourceDispatch,
     });
-    expect(usePaginatedFetch).toHaveBeenCalledWith(
-      null,
-      { filter: undefined },
-      10
-    );
+    expect(usePaginatedFetch).toHaveBeenCalledWith(null, { id: undefined }, 10);
   });
 
   it("should call to fetch the versions when a resource is selected", () => {
@@ -78,7 +81,7 @@ describe("ChangeVersionDrawer", () => {
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
-      { filter: resourceState.currentResource.versionFilter },
+      { id: resourceState.currentResource.genericName },
       10
     );
   });
@@ -104,15 +107,18 @@ describe("ChangeVersionDrawer", () => {
 
   describe("matching versions are found", () => {
     beforeEach(() => {
+      const name = chance.string();
       paginatedFetchResponse.data = chance.n(
         () => ({
-          resourceVersion: chance.string(),
-          uri: chance.string(),
+          versionedResourceUri: createMockResourceUri(name, chance.string()),
+          aliases: chance.n(() => `${name}:${chance.string()}`, chance.d4()),
         }),
         chance.d4() + 2
       );
-      paginatedFetchResponse.data[0].resourceVersion =
-        resourceState.currentResource.resourceVersion;
+      paginatedFetchResponse.data[0].versionedResourceUri = createMockResourceUri(
+        name,
+        resourceState.currentResource.resourceVersion
+      );
       render(
         <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
         { resourceState, resourceDispatch }
@@ -132,10 +138,16 @@ describe("ChangeVersionDrawer", () => {
 
     it("should render a card for each available version", () => {
       paginatedFetchResponse.data.forEach((version, index) => {
+        const { resourceVersion, aliasLabel, aliases } = getResourceDetails(
+          version.versionedResourceUri,
+          version
+        );
         expect(screen.getAllByText("Version")[index]).toBeInTheDocument();
         expect(
-          screen.getByText(version.resourceVersion.substring(0, 12))
+          screen.getAllByText(resourceVersion.substring(0, 12))[0]
         ).toBeInTheDocument();
+        expect(screen.getAllByText(aliasLabel)[index]).toBeInTheDocument();
+        expect(screen.getByText(aliases.join(", "))).toBeInTheDocument();
       });
     });
 
@@ -144,7 +156,8 @@ describe("ChangeVersionDrawer", () => {
       const versionToSelect =
         renderedSelectButtons[renderedSelectButtons.length - 1];
       const versionUri = encodeURIComponent(
-        paginatedFetchResponse.data[paginatedFetchResponse.data.length - 1].uri
+        paginatedFetchResponse.data[paginatedFetchResponse.data.length - 1]
+          .versionedResourceUri
       );
       userEvent.click(versionToSelect);
       expect(router.push).toHaveBeenCalledWith(`/resources/${versionUri}`);

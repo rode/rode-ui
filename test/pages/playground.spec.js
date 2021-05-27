@@ -47,6 +47,7 @@ describe("PolicyPlayground", () => {
     policyDispatch = jest.fn();
     resourceState = {
       searchTerm: chance.string(),
+      versionSearchTerm: chance.string(),
     };
     resourceDispatch = jest.fn();
     evaluationResults = createMockEvaluationResult();
@@ -104,31 +105,73 @@ describe("PolicyPlayground", () => {
       ).toBeInTheDocument();
     });
 
-    it("should render a search bar for resources", () => {
-      const resourceName = chance.string();
-      const resourceVersion = chance.string();
-      usePaginatedFetchResponse.data = [
-        {
-          uri: createMockResourceUri(resourceName, resourceVersion),
-        },
-      ];
-      usePaginatedFetchResponse.loading = false;
+    it("should render a search drawer for resources", () => {
+      const resourceResponse = {
+        data: chance.n(
+          () => ({
+            id: createMockResourceUri(),
+            name: chance.string(),
+            type: chance.pickone(["DOCKER", "NPM", "GIT"]),
+          }),
+          chance.d4() + 1
+        ),
+        loading: false,
+      };
 
-      const renderedSearch = screen.getByLabelText(/search for a resource/i);
+      const versionResponse = {
+        data: chance.n(() => {
+          const name = chance.string();
+          return {
+            versionedResourceUri: createMockResourceUri(name),
+            aliases: chance.n(() => `${name}:${chance.string()}`),
+          };
+        }, 1),
+        loading: false,
+      };
 
-      expect(renderedSearch).toBeInTheDocument();
-      act(() => {
-        userEvent.type(renderedSearch, "{enter}");
+      usePaginatedFetch.mockImplementation((endpoint) => {
+        if (endpoint === "/api/resources") {
+          return resourceResponse;
+        } else if (endpoint === "/api/resource-versions") {
+          return versionResponse;
+        } else {
+          return fetchResponse;
+        }
       });
-      userEvent.click(screen.getByRole("button", { name: "Select Resource" }));
+
+      const openDrawerButton = screen.getByLabelText(/^search for resources/i);
+
+      userEvent.click(openDrawerButton);
+
+      expect(screen.getByTestId("resourceSelectionDrawer")).toHaveClass(
+        "openDrawer"
+      );
+
+      const renderedAllResourcesButton = screen.getByLabelText(
+        /view all resources/i
+      );
+
+      act(() => {
+        userEvent.click(renderedAllResourcesButton);
+      });
+      act(() => {
+        userEvent.click(screen.getAllByText(/^Select Resource/i)[0]);
+      });
+
+      const renderedAllVersionsButton = screen.getByLabelText(
+        /view all versions/i
+      );
+
+      act(() => {
+        userEvent.click(renderedAllVersionsButton);
+      });
+      act(() => {
+        userEvent.click(screen.getByLabelText("Select Version"));
+      });
+
       expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
-        data: {
-          uri: usePaginatedFetchResponse.data[0].uri,
-          name: resourceName,
-          version: resourceVersion,
-          type: "Docker",
-        },
+        data: versionResponse.data[0],
       });
     });
 
@@ -168,10 +211,7 @@ describe("PolicyPlayground", () => {
 
     beforeEach(() => {
       selectedResource = {
-        uri: chance.string(),
-        name: chance.string(),
-        version: chance.string(),
-        type: chance.string(),
+        versionedResourceUri: chance.string(),
       };
       selectedPolicy = {
         name: chance.string(),
@@ -191,7 +231,7 @@ describe("PolicyPlayground", () => {
 
     it("should render the selected resource occurrence data", () => {
       expect(useFetch).toHaveBeenCalledWith("/api/occurrences", {
-        resourceUri: selectedResource.uri,
+        resourceUri: selectedResource.versionedResourceUri,
       });
       expect(screen.getByTestId("occurrenceJson")).toBeInTheDocument();
     });
@@ -223,7 +263,8 @@ describe("PolicyPlayground", () => {
             {
               method: "POST",
               body: JSON.stringify({
-                resourceUri: policyState.evaluationResource.uri,
+                resourceUri:
+                  policyState.evaluationResource.versionedResourceUri,
               }),
             }
           );

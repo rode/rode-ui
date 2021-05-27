@@ -18,21 +18,29 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
-import { getResourceDetails } from "utils/resource-utils";
-import ResourceVersion from "./ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
 import styles from "styles/modules/Search.module.scss";
+import { showError } from "utils/toast-utils";
 
 const ResourceSearchResult = ({ searchResult }) => {
-  const { resourceName, resourceVersion, resourceType } = getResourceDetails(
-    searchResult.uri
-  );
+  const { id, name, type } = searchResult;
   const router = useRouter();
   const { theme } = useTheme();
 
-  const onClick = () => {
-    router.push(`/resources/${encodeURIComponent(searchResult.uri)}`);
+  const onClick = async () => {
+    try {
+      const response = await fetch(
+        `/api/resource-versions?id=${encodeURIComponent(id)}&pageSize=1`
+      );
+
+      const { data } = await response.json();
+      router.push(
+        `/resources/${encodeURIComponent(data[0].versionedResourceUri)}`
+      );
+    } catch (error) {
+      showError("An unexpected error has occurred.");
+    }
   };
 
   return (
@@ -40,17 +48,12 @@ const ResourceSearchResult = ({ searchResult }) => {
       <div>
         <LabelWithValue
           label={"Resource Name"}
-          value={resourceName}
+          value={name}
           className={styles.cardHeader}
         />
         <LabelWithValue
-          label={"Version"}
-          value={<ResourceVersion version={resourceVersion} />}
-          className={styles.cardText}
-        />
-        <LabelWithValue
           label={"Type"}
-          value={resourceType}
+          value={type}
           className={styles.cardText}
         />
       </div>

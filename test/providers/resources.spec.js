@@ -38,9 +38,10 @@ describe("resources provider", () => {
   });
 
   it("should render the default state keys", () => {
-    expect(screen.getByText(/searchTerm/i)).toBeInTheDocument();
-    expect(screen.getByText(/occurrenceDetails/i)).toBeInTheDocument();
-    expect(screen.getByText(/currentResource/i)).toBeInTheDocument();
+    expect(screen.getByText(/^searchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/^occurrenceDetails/i)).toBeInTheDocument();
+    expect(screen.getByText(/^currentResource/i)).toBeInTheDocument();
+    expect(screen.getByText(/^versionSearchTerm/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {
@@ -48,7 +49,7 @@ describe("resources provider", () => {
 
     userEvent.click(dispatchButton);
 
-    expect(screen.getByText(/searchTerm:/i)).toHaveTextContent(searchTerm, {
+    expect(screen.getByText(/^searchTerm:/i)).toHaveTextContent(searchTerm, {
       exact: false,
     });
   });

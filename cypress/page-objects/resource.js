@@ -21,6 +21,9 @@ export const NoResourcesFoundMessage = "No resources found";
 
 // BUTTONS
 export const SearchResourceButton = createButtonSelector("Search Resources");
+export const SearchResourceVersionButton = createButtonSelector(
+  "Search Versions"
+);
 export const ViewResourceButton = createButtonSelector("View Resource");
 export const EvaluateResourceInPlaygroundButton = createButtonSelector(
   "Evaluate in Policy Playground"
@@ -34,3 +37,4 @@ export const DeploymentOccurrence = /deployment to \w+/i;
 
 // INPUTS
 export const ResourceSearchInput = "#resourceSearch";
+export const ResourceVersionSearchInput = "#resourceVersionSearch";

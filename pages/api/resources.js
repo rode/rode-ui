@@ -32,7 +32,7 @@ export default async (req, res) => {
     let filter = {};
     if (searchTerm) {
       filter = {
-        filter: `resource.uri.contains("${searchTerm}")`,
+        filter: `name.contains("${searchTerm}")`,
       };
     }
     if (req.query.pageSize) {
@@ -42,7 +42,7 @@ export default async (req, res) => {
       filter.pageToken = req.query.pageToken;
     }
     const response = await fetch(
-      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
+      `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`
     );
 
     if (!response.ok) {
@@ -53,10 +53,7 @@ export default async (req, res) => {
     }
 
     const listResourcesResponse = await response.json();
-    const resources = listResourcesResponse.resources.map(({ name, uri }) => ({
-      name,
-      uri,
-    }));
+    const resources = listResourcesResponse.genericResources;
 
     res.status(StatusCodes.OK).json({
       data: resources,

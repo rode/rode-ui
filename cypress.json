@@ -3,5 +3,7 @@
   "screenshotOnRunFailure": false,
   "video": false,
   "testFiles": "**/**.feature",
-  "defaultCommandTimeout": 6000
+  "defaultCommandTimeout": 6000,
+  "viewportHeight": 1024,
+  "viewportWidth": 1440
 }

@@ -23,16 +23,16 @@ import textStyles from "styles/modules/Typography.module.scss";
 import Loading from "components/Loading";
 
 const SelectedResource = (props) => {
-  const { resource } = props;
+  const { resourceUri } = props;
 
-  const { data, loading } = useFetch(resource ? `/api/occurrences` : null, {
-    resourceUri: resource?.uri,
+  const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
+    resourceUri: resourceUri,
   });
 
   return (
     <>
       <p className={textStyles.label}>Occurrence Data</p>
-      {resource ? (
+      {resourceUri ? (
         <Loading loading={loading}>
           <Code
             code={JSON.stringify(data?.originals, null, 2)}
@@ -49,7 +49,7 @@ const SelectedResource = (props) => {
 };
 
 SelectedResource.propTypes = {
-  resource: PropTypes.object,
+  resourceUri: PropTypes.string,
 };
 
 export default SelectedResource;
