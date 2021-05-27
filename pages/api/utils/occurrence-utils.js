@@ -66,65 +66,46 @@ const matchAndMapVulnerabilities = (occurrences) => {
     (occurrence) =>
       occurrence.discovered.discovered.analysisStatus === "SCANNING"
   );
-  const completedScans = discoveryOccurrences.filter(
+  const scanEnds = discoveryOccurrences.filter(
     (occurrence) =>
       occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS"
   );
 
   const matchedOccurrences = scanStarts
     .map((startScan) => {
-      const startTime = dayjs(startScan.createTime);
-      // get all scans that end after the start time
-      const possibleScanEnds = completedScans.filter((occurrence) =>
-        dayjs(occurrence.createTime).isSameOrAfter(startTime)
-      );
-      // pick the scan that ended closest to the start time
-      const scanEndTimes = possibleScanEnds.map((scan) =>
-        dayjs(scan.createTime).valueOf()
-      );
-      const closestEndTime = Math.min(...scanEndTimes);
-      const matchingScanEndOccurrence = possibleScanEnds.find(
-        (scan) => dayjs(scan.createTime).valueOf() === closestEndTime
-      );
+      const noteName = startScan.noteName;
 
-      if (!matchingScanEndOccurrence) {
-        // if no end scan is found, return as "In Progress"
+      const matchingVulnerabilities = vulnerabilityOccurrences.filter(
+        (vulnerability) => vulnerability.noteName === noteName
+      );
+      const endScan = scanEnds.find((endScan) => endScan.noteName === noteName);
+
+      if (!endScan) {
         return {
           name: startScan.name,
           started: startScan.createTime,
           completed: null,
-          vulnerabilities: [],
+          vulnerabilities: matchingVulnerabilities,
           originals: {
-            occurrences: [startScan],
+            occurrences: [startScan, ...matchingVulnerabilities],
           },
         };
       }
 
-      // get vulnerabilities with the same createTime as the end scan occurrence
-      const matchingVulnerabilityOccurrences = vulnerabilityOccurrences.filter(
-        (vuln) =>
-          vuln.kind === "VULNERABILITY" &&
-          vuln.createTime === matchingScanEndOccurrence?.createTime
-      );
-
       return {
         name: startScan.name,
         started: startScan.createTime,
-        completed: matchingScanEndOccurrence.createTime,
-        vulnerabilities: mapVulnerabilities(matchingVulnerabilityOccurrences),
+        completed: endScan.createTime,
+        vulnerabilities: mapVulnerabilities(matchingVulnerabilities),
         originals: {
-          occurrences: [
-            startScan,
-            matchingScanEndOccurrence,
-            ...matchingVulnerabilityOccurrences,
-          ],
+          occurrences: [startScan, endScan, ...matchingVulnerabilities],
         },
       };
     })
     .filter((val) => val);
 
   // get unmatched end scans occurrences
-  completedScans.forEach((endScan) => {
+  scanEnds.forEach((endScan) => {
     const matchingScan = matchedOccurrences.find((occurrence) =>
       occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)
     );

@@ -54,23 +54,19 @@ describe("occurrence-utils", () => {
         let startScanOccurrence,
           endScanOccurrence,
           matchingVulnerability,
-          scanEndTime;
+          noteName;
 
         beforeEach(() => {
-          let scanStartTime = chance.timestamp();
-          scanEndTime = scanStartTime + 2;
+          noteName = chance.string();
 
-          startScanOccurrence = createMockOccurrence(
-            "DISCOVERY",
-            scanStartTime
-          );
+          startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
           startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
-          endScanOccurrence = createMockOccurrence("DISCOVERY", scanEndTime);
+          endScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
           endScanOccurrence.discovered.discovered.analysisStatus =
             "FINISHED_SUCCESS";
           matchingVulnerability = createMockOccurrence(
             "VULNERABILITY",
-            scanEndTime
+            noteName
           );
         });
 
@@ -140,11 +136,11 @@ describe("occurrence-utils", () => {
         });
 
         it("should sort the vulnerabilities by their severity level", () => {
-          const lowSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          const lowSev = createMockOccurrence("VULNERABILITY", noteName);
           lowSev.vulnerability.effectiveSeverity = "LOW";
-          const medSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          const medSev = createMockOccurrence("VULNERABILITY", noteName);
           medSev.vulnerability.effectiveSeverity = "MEDIUM";
-          const highSev = createMockOccurrence("VULNERABILITY", scanEndTime);
+          const highSev = createMockOccurrence("VULNERABILITY", noteName);
           highSev.vulnerability.effectiveSeverity = "HIGH";
 
           const { secure } = mapOccurrencesToSections([

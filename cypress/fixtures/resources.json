@@ -252,7 +252,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "DISCOVERY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:11Z",
@@ -273,7 +273,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "DISCOVERY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:18Z",
@@ -294,7 +294,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "VULNERABILITY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:18Z",
@@ -361,7 +361,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "VULNERABILITY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:18Z",
@@ -420,7 +420,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "VULNERABILITY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:18Z",
@@ -479,7 +479,7 @@
                       "uri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
                       "contentHash": null
                     },
-                    "noteName": "projects/rode/notes/harbor",
+                    "noteName": "projects/rode/notes/harbor-bd7a9748-2522-4b0c-82ff-fb0c6a5f57b4",
                     "kind": "VULNERABILITY",
                     "remediation": "",
                     "createTime": "2021-02-08T19:48:18Z",
