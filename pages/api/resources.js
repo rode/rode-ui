@@ -28,19 +28,36 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const searchTerm = req.query.filter;
+    const searchTerm = req.query.searchTerm;
+    const resourceTypes = req.query.resourceTypes;
+
     let filter = {};
-    if (searchTerm) {
+
+    if (searchTerm && resourceTypes) {
+      const resources = resourceTypes.split(",");
       filter = {
-        filter: `name.contains("${searchTerm}")`,
+        filter: `name.contains("${searchTerm}")||${resources.map((type) => `"type"=="${type}"`).join("||")}`,
       };
-    }
+    } else if (searchTerm) {
+      filter = {
+        filter: `name.contains("${ searchTerm }")`
+      }
+    } else if (resourceTypes) {
+      const resources = resourceTypes.split(",");
+        filter = {
+          filter: `${resources.map((type) => `"type"=="${type}"`).join("||")}`
+        }
+      }
+
     if (req.query.pageSize) {
       filter.pageSize = req.query.pageSize;
     }
     if (req.query.pageToken) {
       filter.pageToken = req.query.pageToken;
     }
+
+    console.log('filter', filter);
+
     const response = await fetch(
       `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`
     );

@@ -115,3 +115,16 @@ export const getResourceDetails = (uri, resourceVersion) => {
     aliases: formattedAliases,
   };
 };
+
+export const buildResourceQueryParams = (searchTerm, typeFilters) => {
+  let params = {};
+  if (searchTerm && searchTerm !== "all") {
+    params.searchTerm = searchTerm
+  }
+
+  if (typeFilters?.length) {
+    params.resourceTypes = typeFilters
+  }
+
+  return params;
+}

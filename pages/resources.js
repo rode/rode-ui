@@ -28,7 +28,10 @@ import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
-import ResourceSearchFilters from "../components/resources/ResourceSearchFilters";
+import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
+import { buildResourceQueryParams } from "../utils/resource-utils";
+
+// TODO: when page refreshes, how to keep filters alive
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -37,7 +40,7 @@ const Resources = () => {
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/resources" : null,
-    createSearchFilter(router.query.search),
+    buildResourceQueryParams(router.query.search, state.searchTypeFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
@@ -86,7 +89,7 @@ const Resources = () => {
         <Loading loading={loading}>
           {data?.length > 0 ? (
             <>
-              <ResourceSearchFilters resources={data}/>
+              <ResourceSearchFilters resources={data} />
               {data.map((result) => {
                 return (
                   <ResourceSearchResult key={result.id} searchResult={result} />

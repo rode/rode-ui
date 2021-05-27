@@ -17,8 +17,12 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import Button from "components/Button";
+import styles from "styles/modules/Search.module.scss";
+import textStyles from "styles/modules/Typography.module.scss";
+import { useResources } from "providers/resources";
+import { resourceActions } from "../../reducers/resources";
 
+// TODO: create dropdown component that takes in label and does the styling for me
 // TODO: turn this into a const and build out remaining types
 const resourceLabels = {
   "DOCKER": "Docker",
@@ -26,17 +30,40 @@ const resourceLabels = {
   "NPM": "NPM"
 };
 
+const options = [
+  {label: "Docker", value: "DOCKER"},
+  {label: "Git", value: "GIT"},
+  {label: "NPM", value: "NPM"},
+  {label: "RPM", value: "RPM"},
+]
+
 const ResourceSearchFilters = ({resources}) => {
+  const {state, dispatch} = useResources();
   const resourceTypes = Array.from(new Set(resources.map((resource) => resource.type)));
-  const options = resourceTypes.map((type) => ({
-    label: resourceLabels[type],
-    value: type
-  }))
+  // const options = resourceTypes.map((type) => ({
+  //   label: resourceLabels[type],
+  //   value: type
+  // }));
+
+  const onChange = (selectedValues) => {
+    dispatch({
+      type: resourceActions.SET_TYPE_FILTER,
+      data: selectedValues.map(({value}) => value)
+    })
+  }
 
   return (
-    <div>
-      <Select options={options}/>
-      <Button label={"Filter"} onClick={() => console.log("here")} />
+    <div className={styles.filterContainer}>
+      <p className={textStyles.label}>Filter by Resource Type</p>
+      <Select
+        options={options}
+        onChange={onChange}
+        closeMenuOnSelect={false}
+        isMulti={true}
+        name={"resourceTypeFilter"}
+        placeholder={"Resource Type"}
+        className={styles.filterDropdown}
+      />
     </div>
   );
 };

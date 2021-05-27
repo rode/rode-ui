@@ -153,6 +153,19 @@
   margin: 1rem auto;
 }
 
+.filterContainer {
+  width: 100%;
+}
+
+.filterDropdown {
+  margin: 0 auto;
+  width: 90%;
+
+  @include tabletAndLarger {
+    width: 25%;
+  }
+}
+
 .darkTheme {
   &.searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
