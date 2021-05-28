@@ -123,7 +123,7 @@ export const buildResourceQueryParams = (searchTerm, typeFilters) => {
   }
 
   if (typeFilters?.length) {
-    params.resourceTypes = typeFilters
+    params.resourceTypes = typeFilters.map(({value}) => value)
   }
 
   return params;

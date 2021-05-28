@@ -23,14 +23,12 @@ import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { resourceActions } from "reducers/resources";
-import Link from "next/link";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 
-// TODO: view all resources button needs to clear the resource type filters
 const Resources = () => {
   const { theme } = useTheme();
   const { state, dispatch } = useResources();
