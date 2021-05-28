@@ -97,10 +97,13 @@ const Resources = () => {
             </>
           }
         />
+        {
+          showSearchResults &&
+          <ResourceSearchFilters resources={data} />
+        }
       </div>
       {showSearchResults && (
         <>
-          <ResourceSearchFilters resources={data} />
           <Loading loading={loading}>
             {data?.length > 0 ? (
               <>

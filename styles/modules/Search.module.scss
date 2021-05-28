@@ -34,6 +34,36 @@
   }
 }
 
+.showResults {
+  @extend .container;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+
+  .searchBarContainer {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+
+    @include tabletAndLarger {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .form {
+      flex: 1;
+    }
+
+    .filterContainer {
+      flex: 0.5;
+      @include tabletAndLarger {
+        margin-left: 0.5rem;
+      }
+    }
+
+  }
+}
+
 .breadcrumbs {
   width: 100%;
   display: flex;
@@ -62,16 +92,6 @@
 
   @include tabletAndLarger {
     display: unset;
-  }
-}
-
-.showResults {
-  @extend .container;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-
-  .searchBarContainer {
-    width: 90%;
   }
 }
 
@@ -168,11 +188,6 @@
   margin-top: 1rem;
 }
 
-.filterContainer {
-  width: 30%;
-  margin: 0 auto;
-}
-
 .filterDropdown {
   margin: 0 auto;
   width: 90%;
@@ -233,5 +248,9 @@
 
   .cardText {
     color: $GREY;
+  }
+
+  .viewAllButton {
+    color: $LT_LINK;
   }
 }
