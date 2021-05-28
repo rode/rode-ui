@@ -20,7 +20,6 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Select from "react-select";
 
-// TODO: style for themes
 // TODO: make error state styling
 
 const Dropdown = (props) => {
@@ -33,6 +32,7 @@ const Dropdown = (props) => {
     required = false,
     className = "",
     error,
+    classNamePrefix = "",
     ...otherProps
   } = props;
   const { theme } = useTheme();
@@ -53,6 +53,7 @@ const Dropdown = (props) => {
           onChange={onChange}
           placeholder={placeholder || label}
           className={`${className}`}
+          classNamePrefix={`${theme} ${classNamePrefix} dropdown`}
           {...otherProps}
         />
       </div>
@@ -69,7 +70,8 @@ Dropdown.propTypes = {
   options: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  classNamePrefix: PropTypes.string,
 };
 
 export default Dropdown;

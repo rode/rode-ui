@@ -1,0 +1,112 @@
+// RESOURCE FILTER DROPDOWN
+
+@use "sass:color";
+@import "constants";
+
+.dropdown__control {
+  border-radius: 0 !important;
+  border: none !important;
+
+  &.lightTheme {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  &.darkTheme {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+}
+
+.dropdown__dropdown-indicator {
+  &:hover {
+    &.lightTheme {
+      color: $DEEP_SEA
+    }
+    &.darkTheme {
+      color: $LAGOON;
+    }
+  }
+}
+
+.dropdown__menu {
+  &.lightTheme {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+  &.darkTheme {
+    background-color: $DT_BACKGROUND_DARK;
+  }
+}
+
+.dropdown__multi-value {
+  &.lightTheme {
+    background-color: $LT_BACKGROUND_DARK;
+    color: $LT_MAIN_TEXT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  &.darkTheme {
+    background-color: $DT_BACKGROUND_LIGHT;
+    color: $DT_MAIN_TEXT;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+}
+.dropdown__multi-value__label {
+  &.lightTheme {
+    color: $LT_MAIN_TEXT;
+  }
+
+  &.darkTheme {
+    color: $DT_MAIN_TEXT;
+  }
+}
+.dropdown__multi-value__remove {
+  &.lightTheme {
+    color: $DEEP_SEA;
+  }
+
+  &.darkTheme {
+    color: $LAGOON;
+  }
+
+  &:hover {
+    background-color: $HOT_RED !important;
+    color: $WHITE !important;
+  }
+}
+
+.dropdown__option {
+  &.lightTheme {
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $LT_MAIN_TEXT;
+  }
+
+  &.darkTheme {
+    background-color: $DT_BACKGROUND_DARK;
+    color: $DT_MAIN_TEXT;
+  }
+}
+
+.dropdown__option--is-focused {
+  &.lightTheme {
+    background-color: color.scale($DEEP_SEA, $lightness: 80%);
+    color: $LT_MAIN_TEXT;
+  }
+
+  &.darkTheme {
+    background-color: color.scale($LAGOON, $lightness: 60%);
+    color: $DARKEST_GREY;
+  }
+}
+
+.dropdown__option--is-selected {
+  &.lightTheme {
+    background-color: $DEEP_SEA;
+    color: $WHITE;
+  }
+
+  &.darkTheme {
+    background-color: $LAGOON;
+    color: $DARKEST_GREY;
+  }
+}

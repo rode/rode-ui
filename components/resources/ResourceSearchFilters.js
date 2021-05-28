@@ -21,12 +21,17 @@ import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import Dropdown from "components/Dropdown";
 
-// TODO: turn this into a const and build out remaining types
+// TODO: turn this into a const
 const options = [
   {label: "Docker", value: "DOCKER"},
   {label: "Git", value: "GIT"},
+  {label: "Maven", "value": "MAVEN"},
+  {label: "File", value: "FILE"},
   {label: "NPM", value: "NPM"},
-  {label: "RPM", value: "RPM"},
+  {label: "Nuget", value: "NUGET"},
+  {label: "Pip", value: "PIP"},
+  {label: "Debian", value: "DEBIAN"},
+  {label: "RPM", value: "RPM"}
 ]
 
 const ResourceSearchFilters = ({resources}) => {
@@ -55,7 +60,9 @@ const ResourceSearchFilters = ({resources}) => {
         label={"Filter by Resource Type"}
         placeholder={"Resource Type"}
         hideSelectedOptions={false}
+        tabSelectsValue={false}
         isOptionDisabled={(option) => resources && !relevantTypes.includes(option.value)}
+        classNamePrefix={"resource-filters"}
       />
     </div>
   );
