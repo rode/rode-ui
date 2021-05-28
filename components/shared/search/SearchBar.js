@@ -47,7 +47,7 @@ const SearchBar = (props) => {
           placeholder={placeholder}
           value={displayValue}
         />
-        <input type="hidden" name={name} value={searchTerm}/>
+        <input type="hidden" name={name} value={searchTerm} />
         <Button
           label={buttonLabel || "Search"}
           buttonType={"icon"}

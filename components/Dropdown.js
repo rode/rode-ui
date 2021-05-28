@@ -45,11 +45,14 @@ const Dropdown = (props) => {
         </label>
         <Select
           name={name}
-          id={name}
+          inputId={name}
+          aria-label={name}
           options={options}
           onChange={onChange}
           placeholder={placeholder || label}
-          classNamePrefix={`${theme} ${classNamePrefix} ${error ? "error" : ""} dropdown`}
+          classNamePrefix={`${theme} ${classNamePrefix} ${
+            error ? "error" : ""
+          } dropdown`}
           {...otherProps}
         />
       </div>

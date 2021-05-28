@@ -53,15 +53,15 @@ const Resources = () => {
   const viewAllResources = () => {
     dispatch({
       type: resourceActions.SET_TYPE_FILTER,
-      data: []
+      data: [],
     });
     router.push("/resources?search=all");
-  }
+  };
 
   useEffect(() => {
     dispatch({
       type: resourceActions.SET_TYPE_FILTER,
-      data: []
+      data: [],
     });
   }, []);
 
@@ -93,14 +93,17 @@ const Resources = () => {
           helpText={
             <>
               You can search by name, version, or{" "}
-              <button onClick={viewAllResources} className={styles.viewAllButton}>view all resources</button>.
+              <button
+                onClick={viewAllResources}
+                className={styles.viewAllButton}
+              >
+                view all resources
+              </button>
+              .
             </>
           }
         />
-        {
-          showSearchResults &&
-          <ResourceSearchFilters resources={data} />
-        }
+        {showSearchResults && <ResourceSearchFilters resources={data} />}
       </div>
       {showSearchResults && (
         <>

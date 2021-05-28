@@ -36,18 +36,20 @@ export default async (req, res) => {
     if (searchTerm && resourceTypes) {
       const resources = resourceTypes.split(",");
       filter = {
-        filter: `name.contains("${searchTerm}")&&${resources.map((type) => `"type"=="${type}"`).join("||")}`,
+        filter: `name.contains("${searchTerm}")&&${resources
+          .map((type) => `"type"=="${type}"`)
+          .join("||")}`,
       };
     } else if (searchTerm) {
       filter = {
-        filter: `name.contains("${ searchTerm }")`
-      }
+        filter: `name.contains("${searchTerm}")`,
+      };
     } else if (resourceTypes) {
       const resources = resourceTypes.split(",");
-        filter = {
-          filter: `${resources.map((type) => `"type"=="${type}"`).join("||")}`
-        }
-      }
+      filter = {
+        filter: `${resources.map((type) => `"type"=="${type}"`).join("||")}`,
+      };
+    }
 
     if (req.query.pageSize) {
       filter.pageSize = req.query.pageSize;
@@ -56,7 +58,7 @@ export default async (req, res) => {
       filter.pageToken = req.query.pageToken;
     }
 
-    console.log('filter', filter);
+    console.log("filter", filter);
 
     const response = await fetch(
       `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`

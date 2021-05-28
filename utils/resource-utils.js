@@ -119,12 +119,12 @@ export const getResourceDetails = (uri, resourceVersion) => {
 export const buildResourceQueryParams = (searchTerm, typeFilters) => {
   let params = {};
   if (searchTerm && searchTerm !== "all") {
-    params.searchTerm = searchTerm
+    params.searchTerm = searchTerm;
   }
 
   if (typeFilters?.length) {
-    params.resourceTypes = typeFilters.map(({value}) => value)
+    params.resourceTypes = typeFilters.map(({ value }) => value);
   }
 
   return params;
-}
+};
