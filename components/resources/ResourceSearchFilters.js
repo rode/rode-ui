@@ -15,14 +15,11 @@
  */
 
 import React from "react";
-import PropTypes from 'prop-types';
-import Select from 'react-select';
+import PropTypes from "prop-types";
 import styles from "styles/modules/Search.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
 import { useResources } from "providers/resources";
-import { resourceActions } from "../../reducers/resources";
-
-// TODO: create dropdown component that takes in label and does the styling automagically
+import { resourceActions } from "reducers/resources";
+import Dropdown from "components/Dropdown";
 
 // TODO: turn this into a const and build out remaining types
 const options = [
@@ -49,15 +46,14 @@ const ResourceSearchFilters = ({resources}) => {
 
   return (
     <div className={styles.filterContainer}>
-      <p className={textStyles.label}>Filter by Resource Type</p>
-      <Select
+      <Dropdown
         options={options}
         onChange={onChange}
         closeMenuOnSelect={false}
         isMulti={true}
         name={"resourceTypeFilter"}
+        label={"Filter by Resource Type"}
         placeholder={"Resource Type"}
-        className={styles.filterDropdown}
         hideSelectedOptions={false}
         isOptionDisabled={(option) => resources && !relevantTypes.includes(option.value)}
       />
