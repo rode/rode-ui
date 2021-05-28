@@ -49,6 +49,8 @@ const Home = () => {
 
     if (searchTerm.trim().length) {
       router.push(`/${url}?search=${searchTerm.trim()}`);
+    } else {
+      router.push(`/${url}?search=all`);
     }
   };
 

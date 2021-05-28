@@ -20,8 +20,6 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Select from "react-select";
 
-// TODO: make error state styling
-
 const Dropdown = (props) => {
   const {
     name,
@@ -30,7 +28,6 @@ const Dropdown = (props) => {
     placeholder,
     options,
     required = false,
-    className = "",
     error,
     classNamePrefix = "",
     ...otherProps
@@ -52,8 +49,7 @@ const Dropdown = (props) => {
           options={options}
           onChange={onChange}
           placeholder={placeholder || label}
-          className={`${className}`}
-          classNamePrefix={`${theme} ${classNamePrefix} dropdown`}
+          classNamePrefix={`${theme} ${classNamePrefix} ${error ? "error" : ""} dropdown`}
           {...otherProps}
         />
       </div>
@@ -70,7 +66,6 @@ Dropdown.propTypes = {
   options: PropTypes.array.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: PropTypes.func.isRequired,
-  className: PropTypes.string,
   classNamePrefix: PropTypes.string,
 };
 

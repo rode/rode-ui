@@ -10,11 +10,21 @@
   &.lightTheme {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+    border-bottom: solid 1px $MEDIUM_GREY !important;
+
+    &.error {
+      border-bottom-color: $HOT_RED !important;
+    }
   }
 
   &.darkTheme {
     background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
+    border-bottom: solid 1px $DARK_GREY !important;
+
+    &.error {
+      border-bottom-color: $HOT_RED !important;
+    }
   }
 }
 
@@ -23,6 +33,7 @@
     &.lightTheme {
       color: $DEEP_SEA
     }
+
     &.darkTheme {
       color: $LAGOON;
     }
@@ -33,6 +44,7 @@
   &.lightTheme {
     background-color: $LT_BACKGROUND_LIGHT;
   }
+
   &.darkTheme {
     background-color: $DT_BACKGROUND_DARK;
   }
@@ -51,6 +63,7 @@
     box-shadow: $DT_BOX_SHADOW;
   }
 }
+
 .dropdown__multi-value__label {
   &.lightTheme {
     color: $LT_MAIN_TEXT;
@@ -60,6 +73,7 @@
     color: $DT_MAIN_TEXT;
   }
 }
+
 .dropdown__multi-value__remove {
   &.lightTheme {
     color: $DEEP_SEA;
@@ -79,11 +93,13 @@
   &.lightTheme {
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
+    border-bottom: solid 1px $MEDIUM_GREY;
   }
 
   &.darkTheme {
     background-color: $DT_BACKGROUND_DARK;
     color: $DT_MAIN_TEXT;
+    border-bottom: solid 1px $GREY;
   }
 }
 
@@ -108,5 +124,21 @@
   &.darkTheme {
     background-color: $LAGOON;
     color: $DARKEST_GREY;
+  }
+}
+
+.dropdown__option--is-disabled {
+  &:hover {
+    cursor: not-allowed;
+  }
+
+  &.lightTheme {
+    background-color: $LT_BACKGROUND_LIGHT;
+    color: $GREY;
+  }
+
+  &.darkTheme {
+    background-color: $DT_BACKGROUND_DARK;
+    color: $MEDIUM_GREY;
   }
 }

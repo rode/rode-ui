@@ -47,6 +47,8 @@ const Policies = () => {
 
     if (state.searchTerm.trim().length) {
       router.push(`/policies?search=${state.searchTerm.trim()}`);
+    } else {
+      router.push("/policies?search=all");
     }
   };
 

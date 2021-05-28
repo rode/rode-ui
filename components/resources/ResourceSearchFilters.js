@@ -37,6 +37,8 @@ const options = [
 const ResourceSearchFilters = ({resources}) => {
   const {state, dispatch} = useResources();
 
+  // values need to be set from state
+
   let relevantTypes = options.map((option) => option.value);
   if (state.searchTerm && state.searchTerm !== "all") {
     relevantTypes = Array.from(new Set(resources?.map((resource) => resource.type)));
@@ -61,8 +63,7 @@ const ResourceSearchFilters = ({resources}) => {
         placeholder={"Resource Type"}
         hideSelectedOptions={false}
         tabSelectsValue={false}
-        isOptionDisabled={(option) => resources && !relevantTypes.includes(option.value)}
-        classNamePrefix={"resource-filters"}
+        filterOption={(option) => resources && relevantTypes.includes(option.value)}
       />
     </div>
   );

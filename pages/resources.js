@@ -52,6 +52,21 @@ const Resources = () => {
     }
   };
 
+  const viewAllResources = () => {
+    dispatch({
+      type: resourceActions.SET_TYPE_FILTER,
+      data: []
+    });
+    router.push("/resources?search=all");
+  }
+
+  useEffect(() => {
+    dispatch({
+      type: resourceActions.SET_TYPE_FILTER,
+      data: []
+    });
+  }, []);
+
   useEffect(() => {
     if (router.query.search) {
       setShowSearchResults(true);
@@ -80,34 +95,39 @@ const Resources = () => {
           helpText={
             <>
               You can search by name, version, or{" "}
-              <Link href={"/resources?search=all"}>view all resources</Link>.
+              <button onClick={viewAllResources} className={styles.viewAllButton}>view all resources</button>.
             </>
           }
         />
       </div>
-      <ResourceSearchFilters resources={data} />
       {showSearchResults && (
-        <Loading loading={loading}>
-          {data?.length > 0 ? (
-            <>
-              {data.map((result) => {
-                return (
-                  <ResourceSearchResult key={result.id} searchResult={result} />
-                );
-              })}
-              {!isLastPage && (
-                <Button
-                  buttonType="text"
-                  onClick={goToNextPage}
-                  label={"View More"}
-                  className={styles.viewMoreResultsButton}
-                />
-              )}
-            </>
-          ) : (
-            <span className={styles.noResults}>No resources found</span>
-          )}
-        </Loading>
+        <>
+          <ResourceSearchFilters resources={data} />
+          <Loading loading={loading}>
+            {data?.length > 0 ? (
+              <>
+                {data.map((result) => {
+                  return (
+                    <ResourceSearchResult
+                      key={result.id}
+                      searchResult={result}
+                    />
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType="text"
+                    onClick={goToNextPage}
+                    label={"View More"}
+                    className={styles.viewMoreResultsButton}
+                  />
+                )}
+              </>
+            ) : (
+              <span className={styles.noResults}>No resources found</span>
+            )}
+          </Loading>
+        </>
       )}
     </div>
   );

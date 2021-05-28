@@ -149,8 +149,23 @@
   }
 }
 
+.viewAllButton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 .viewMoreResultsButton {
   margin: 1rem auto;
+}
+
+.noResults {
+  margin-top: 1rem;
 }
 
 .filterContainer {
@@ -187,6 +202,10 @@
 
   .cardText {
     color: $DT_SUB_TEXT;
+  }
+
+  .viewAllButton {
+    color: $DT_LINK;
   }
 
   .noResults {
