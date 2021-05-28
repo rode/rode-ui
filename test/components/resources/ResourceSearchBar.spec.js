@@ -78,7 +78,6 @@ describe("ResourceSearchBar", () => {
   it("should render the button to perform a search", () => {
     const renderedSearchButton = screen.getByLabelText("Search Resources");
     expect(renderedSearchButton).toBeInTheDocument();
-    expect(renderedSearchButton).toBeDisabled();
   });
 
   it("should render some helper text if specified", () => {
@@ -86,18 +85,6 @@ describe("ResourceSearchBar", () => {
     rerender(<ResourceSearchBar onSubmit={onSubmit} helpText={helpText} />);
 
     expect(screen.getByText(helpText)).toBeInTheDocument();
-  });
-
-  it("should enable the button when a search term is entered", () => {
-    useResources.mockReturnValue({
-      state: { searchTerm: chance.string() },
-      dispatch: jest.fn(),
-    });
-
-    rerender(<ResourceSearchBar onSubmit={onSubmit} />);
-
-    const renderedSearchButton = screen.getByLabelText("Search Resources");
-    expect(renderedSearchButton).not.toBeDisabled();
   });
 
   it("should fill in the search term based on the url query", () => {
