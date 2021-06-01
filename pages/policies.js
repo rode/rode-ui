@@ -29,8 +29,6 @@ import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 
-// TODO: handle flashing of not found on this and resource search page
-
 const Policies = () => {
   const { theme } = useTheme();
   const { state, dispatch } = usePolicies();
