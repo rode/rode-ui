@@ -15,7 +15,7 @@
  */
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import dayjs from "dayjs";
-import { getResourceDetails } from "utils/resource-utils";
+import { getResourceDetails, RESOURCE_TYPES } from "utils/resource-utils";
 
 dayjs.extend(isSameOrAfter);
 
@@ -135,7 +135,7 @@ const mapBuilds = (occurrences, resourceUri) => {
   let relatedBuildOccurrences = occurrences;
   const { resourceType } = getResourceDetails(resourceUri);
 
-  if (resourceType !== "Git") {
+  if (resourceType !== RESOURCE_TYPES.GIT) {
     relatedBuildOccurrences = occurrences.filter((occurrence) =>
       occurrence.build.provenance.builtArtifacts.some(
         (artifact) => artifact.id === resourceUri

@@ -23,8 +23,11 @@ import Icon from "components/Icon";
 import ExternalLink from "components/ExternalLink";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
+import { getResourceDetails, RESOURCE_TYPES } from "utils/resource-utils";
+import LabelWithValue from "components/LabelWithValue";
+import ResourceVersion from "components/resources/ResourceVersion";
 
-const BuildOccurrenceSection = ({ occurrences }) => {
+const BuildOccurrenceSection = ({ occurrences, type }) => {
   if (!occurrences?.length) {
     return null;
   }
@@ -36,6 +39,14 @@ const BuildOccurrenceSection = ({ occurrences }) => {
         <p>Build</p>
       </div>
       {occurrences.map((occurrence) => {
+        let producedArtifactVersions = null;
+        if (type === RESOURCE_TYPES.GIT) {
+          producedArtifactVersions = occurrence.artifacts.map((artifact) => {
+            const { resourceVersion } = getResourceDetails(artifact.id);
+            return resourceVersion;
+          });
+        }
+
         return (
           <OccurrencePreview
             key={occurrence.name}
@@ -48,6 +59,16 @@ const BuildOccurrenceSection = ({ occurrences }) => {
             )}`}
             subText={
               <>
+                <LabelWithValue
+                  label={"Artifact Version"}
+                  value={
+                    <ResourceVersion
+                      version={
+                        producedArtifactVersions && producedArtifactVersions[0]
+                      }
+                    />
+                  }
+                />
                 <ExternalLink
                   href={occurrence.sourceUri}
                   label={"View source"}
@@ -64,6 +85,7 @@ const BuildOccurrenceSection = ({ occurrences }) => {
 };
 BuildOccurrenceSection.propTypes = {
   occurrences: PropTypes.array,
+  type: PropTypes.oneOf(Object.values(RESOURCE_TYPES)),
 };
 
 export default BuildOccurrenceSection;
