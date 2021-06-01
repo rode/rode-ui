@@ -21,8 +21,7 @@ import Input from "components/Input";
 import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
-
-// TODO: make an "all" const
+import { SEARCH_ALL } from "utils/constants";
 
 const SearchBar = (props) => {
   const {
@@ -36,7 +35,7 @@ const SearchBar = (props) => {
     buttonLabel,
   } = props;
 
-  const displayValue = searchTerm === "all" ? "" : searchTerm;
+  const displayValue = searchTerm === SEARCH_ALL ? "" : searchTerm;
   return (
     <form role="search" className={styles.form} onSubmit={onSubmit}>
       <div className={styles.inputContainer}>

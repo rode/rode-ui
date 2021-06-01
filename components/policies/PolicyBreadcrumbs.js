@@ -18,9 +18,10 @@ import React from "react";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
 import { usePolicies } from "providers/policies";
+import { SEARCH_ALL } from "utils/constants";
 
 const getSearchTermText = (searchTerm) => {
-  if (searchTerm === "all") {
+  if (searchTerm === SEARCH_ALL) {
     return "View all policies";
   } else {
     return `"${searchTerm}"`;

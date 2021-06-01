@@ -15,35 +15,14 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "styles/modules/Search.module.scss";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import Dropdown from "components/Dropdown";
+import { resourceFilters } from "utils/resource-utils";
 
-// TODO: test this
-// TODO: turn this into a const
-const options = [
-  { label: "Docker", value: "DOCKER" },
-  { label: "Git", value: "GIT" },
-  { label: "Maven", value: "MAVEN" },
-  { label: "File", value: "FILE" },
-  { label: "NPM", value: "NPM" },
-  { label: "Nuget", value: "NUGET" },
-  { label: "Pip", value: "PIP" },
-  { label: "Debian", value: "DEBIAN" },
-  { label: "RPM", value: "RPM" },
-];
-
-const ResourceSearchFilters = ({ resources }) => {
+const ResourceSearchFilters = () => {
   const { state, dispatch } = useResources();
-
-  let relevantTypes = options.map((option) => option.value);
-  if (state.searchTerm && state.searchTerm !== "all") {
-    relevantTypes = Array.from(
-      new Set(resources?.map((resource) => resource.type))
-    );
-  }
 
   const onChange = (selectedValues) => {
     dispatch({
@@ -55,7 +34,7 @@ const ResourceSearchFilters = ({ resources }) => {
   return (
     <div className={styles.filterContainer}>
       <Dropdown
-        options={options}
+        options={resourceFilters}
         onChange={onChange}
         closeMenuOnSelect={false}
         isMulti={true}
@@ -64,17 +43,10 @@ const ResourceSearchFilters = ({ resources }) => {
         placeholder={"Resource Type"}
         hideSelectedOptions={false}
         tabSelectsValue={false}
-        filterOption={(option) =>
-          resources && relevantTypes.includes(option.value)
-        }
         value={state.searchTypeFilter}
       />
     </div>
   );
-};
-
-ResourceSearchFilters.propTypes = {
-  resources: PropTypes.array,
 };
 
 export default ResourceSearchFilters;

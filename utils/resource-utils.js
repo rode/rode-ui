@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
+import { SEARCH_ALL } from "./constants";
+
+const DOCKER = "DOCKER";
+const GIT = "GIT";
+const MAVEN = "MAVEN";
+const FILE = "FILE";
+const NPM = "NPM";
+const NUGET = "NUGET";
+const PIP = "PIP";
+const DEBIAN = "DEBIAN";
+const RPM = "RPM";
+
 const resourceUrlTypes = [
   {
-    type: "Debian",
+    value: DEBIAN,
+    label: "Debian",
     regex: "^(deb:/{2}).*:(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `deb://${name}`,
   },
   {
-    type: "Docker",
+    value: DOCKER,
+    label: "Docker",
     regex: "(?<name>.+)(@sha256:)(?<version>.+)",
     getGenericName: ({ name }) => name,
     aliasLabel: "Tags",
@@ -29,39 +43,46 @@ const resourceUrlTypes = [
       aliases.map((alias) => alias.replace(`${genericName}:`, "")),
   },
   {
-    type: "File",
+    value: FILE,
+    label: "File",
     regex: "^(file:/{2}sha256:)(?<version>.+):(?<name>.+)",
     getGenericName: ({ name }) => `file://${name}`,
   },
   {
-    type: "Maven",
+    value: GIT,
+    label: "Git",
+    regex: "^(git:/{2})(?<name>.+)@(?<version>.+)",
+    getGenericName: ({ name }) => `git://${name}`,
+  },
+  {
+    value: MAVEN,
+    label: "Maven",
     regex: "^(gav:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `gav://${name}`,
   },
   {
-    type: "NPM",
+    value: NPM,
+    label: "NPM",
     regex: "^(npm:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `npm://${name}`,
   },
   {
-    type: "NuGet",
+    value: NUGET,
+    label: "NuGet",
     regex: "^(nuget:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `nuget://${name}`,
   },
   {
-    type: "Python",
+    value: PIP,
+    label: "Python",
     regex: "^(pip:/{2})(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `pip://${name}`,
   },
   {
-    type: "RPM",
+    value: RPM,
+    label: "RPM",
     regex: "^(rpm:/{2}).*:(?<name>.+):(?<version>.+)",
     getGenericName: ({ name }) => `rpm://${name}`,
-  },
-  {
-    type: "Git",
-    regex: "^(git:/{2})(?<name>.+)@(?<version>.+)",
-    getGenericName: ({ name }) => `git://${name}`,
   },
 ];
 
@@ -106,7 +127,7 @@ export const getResourceDetails = (uri, resourceVersion) => {
   }
 
   return {
-    resourceType: resourceMatch.type,
+    resourceType: resourceMatch.label,
     resourceName: name,
     resourceVersion: version,
     genericName,
@@ -116,9 +137,26 @@ export const getResourceDetails = (uri, resourceVersion) => {
   };
 };
 
+export const resourceFilters = resourceUrlTypes.map(({ value, label }) => ({
+  value,
+  label,
+}));
+
+export const RESOURCE_TYPES = {
+  DOCKER,
+  GIT,
+  MAVEN,
+  FILE,
+  NPM,
+  NUGET,
+  PIP,
+  DEBIAN,
+  RPM,
+};
+
 export const buildResourceQueryParams = (searchTerm, typeFilters) => {
   let params = {};
-  if (searchTerm && searchTerm !== "all") {
+  if (searchTerm && searchTerm !== SEARCH_ALL) {
     params.searchTerm = searchTerm;
   }
 

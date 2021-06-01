@@ -24,7 +24,7 @@ import { usePolicies } from "providers/policies";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Drawer from "components/Drawer";
@@ -70,7 +70,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                 onClick={() =>
                   dispatch({
                     type: policyActions.SET_SEARCH_TERM,
-                    data: "all",
+                    data: SEARCH_ALL,
                   })
                 }
               />

@@ -23,7 +23,7 @@ import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -57,7 +57,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
                 setResourceSearch(true);
                 dispatch({
                   type: resourceActions.SET_SEARCH_TERM,
-                  data: "all",
+                  data: SEARCH_ALL,
                 });
               }}
             />

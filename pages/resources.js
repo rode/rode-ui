@@ -25,7 +25,7 @@ import Loading from "components/Loading";
 import { resourceActions } from "reducers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
+import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 
@@ -46,7 +46,7 @@ const Resources = () => {
     if (state.searchTerm.trim().length) {
       router.push(`/resources?search=${state.searchTerm.trim()}`);
     } else {
-      router.push("/resources?search=all");
+      router.push(`/resources?search=${SEARCH_ALL}`);
     }
   };
 
@@ -55,7 +55,7 @@ const Resources = () => {
       type: resourceActions.SET_TYPE_FILTER,
       data: [],
     });
-    router.push("/resources?search=all");
+    router.push(`/resources?search=${SEARCH_ALL}`);
   };
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const Resources = () => {
             </>
           }
         />
-        {showSearchResults && <ResourceSearchFilters resources={data} />}
+        {showSearchResults && <ResourceSearchFilters />}
       </div>
       {showSearchResults && (
         <>
