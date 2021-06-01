@@ -45,7 +45,7 @@ export const CancelButton = createButtonSelector("Cancel");
 export const DeletePolicyButton = createButtonSelector("Delete Policy");
 
 // INPUTS
-export const PolicySearchInput = "#policySearch";
+export const PolicySearchInput = "#policySearchDisplay";
 export const PolicyNameInput = "#name";
 export const PolicyDescriptionInput = "#description";
 export const PolicyRegoContentInput = "#regoContent";

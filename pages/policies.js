@@ -27,9 +27,7 @@ import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
-
-// TODO: handle flashing of not found on this and resource search page
+import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 
 const Policies = () => {
   const { theme } = useTheme();
@@ -47,6 +45,8 @@ const Policies = () => {
 
     if (state.searchTerm.trim().length) {
       router.push(`/policies?search=${state.searchTerm.trim()}`);
+    } else {
+      router.push(`/policies?search=${SEARCH_ALL}`);
     }
   };
 
@@ -78,7 +78,10 @@ const Policies = () => {
           helpText={
             <>
               You can search by policy name or{" "}
-              <Link href={"/policies?search=all"}>view all policies</Link>.
+              <Link href={`/policies?search=${SEARCH_ALL}`}>
+                view all policies
+              </Link>
+              .
             </>
           }
         />

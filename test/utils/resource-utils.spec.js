@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { getResourceDetails } from "utils/resource-utils";
+import {
+  buildResourceQueryParams,
+  getResourceDetails,
+} from "utils/resource-utils";
 
 const createGenericResourceUrl = (name, version, startsWith) => {
   return `${startsWith}${name}:${version}`;
@@ -229,6 +232,41 @@ describe("resource utils", () => {
         const actual = getResourceDetails(url, version);
 
         expect(actual.aliases).toEqual([expectedAlias]);
+      });
+    });
+  });
+
+  describe("buildResourceQueryParams", () => {
+    let searchTerm, typeFilters, actual;
+
+    beforeEach(() => {
+      searchTerm = null;
+      typeFilters = [];
+    });
+
+    it("should return the search term param if it exists and is not 'all'", () => {
+      searchTerm = chance.string();
+
+      actual = buildResourceQueryParams(searchTerm, typeFilters);
+      expect(actual).toEqual({ searchTerm });
+    });
+
+    it("should not return the searchTerm param if searching for 'all'", () => {
+      searchTerm = "all";
+
+      actual = buildResourceQueryParams(searchTerm, typeFilters);
+      expect(actual).toEqual({});
+    });
+
+    it("should return the type filters if they exist", () => {
+      typeFilters = chance.n(
+        () => ({ label: chance.string(), value: chance.string() }),
+        chance.d4()
+      );
+
+      actual = buildResourceQueryParams(searchTerm, typeFilters);
+      expect(actual).toEqual({
+        resourceTypes: typeFilters.map(({ value }) => value),
       });
     });
   });

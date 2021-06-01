@@ -36,5 +36,5 @@ export const VulnerabilityOccurrence = /\d vulnerabilities found/i;
 export const DeploymentOccurrence = /deployment to \w+/i;
 
 // INPUTS
-export const ResourceSearchInput = "#resourceSearch";
-export const ResourceVersionSearchInput = "#resourceVersionSearch";
+export const ResourceSearchInput = "#resourceSearchDisplay";
+export const ResourceVersionSearchInput = "#resourceVersionSearchDisplay";

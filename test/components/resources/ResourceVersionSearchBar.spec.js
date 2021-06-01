@@ -79,7 +79,6 @@ describe("ResourceVersionSearchBar", () => {
   it("should render the button to perform a search", () => {
     const renderedSearchButton = screen.getByLabelText("Search Versions");
     expect(renderedSearchButton).toBeInTheDocument();
-    expect(renderedSearchButton).toBeDisabled();
   });
 
   it("should render some helper text if specified", () => {
@@ -89,18 +88,6 @@ describe("ResourceVersionSearchBar", () => {
     );
 
     expect(screen.getByText(helpText)).toBeInTheDocument();
-  });
-
-  it("should enable the button when a search term is entered", () => {
-    useResources.mockReturnValue({
-      state: { versionSearchTerm: chance.string() },
-      dispatch: jest.fn(),
-    });
-
-    rerender(<ResourceVersionSearchBar onSubmit={onSubmit} />);
-
-    const renderedSearchButton = screen.getByLabelText("Search Versions");
-    expect(renderedSearchButton).not.toBeDisabled();
   });
 
   it("should start the search process when the button is clicked", () => {

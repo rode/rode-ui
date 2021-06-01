@@ -23,7 +23,7 @@ import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
@@ -33,7 +33,7 @@ const buildSearchParams = (genericName, searchTerm) => {
     id: genericName,
   };
 
-  if (searchTerm && searchTerm !== "all") {
+  if (searchTerm && searchTerm !== SEARCH_ALL) {
     params.filter = `version.contains("${searchTerm}")`;
   }
 
@@ -74,7 +74,7 @@ const ResourceVersionSearchAndResults = ({
               setVersionSearch(true);
               dispatch({
                 type: resourceActions.SET_VERSION_SEARCH_TERM,
-                data: "all",
+                data: SEARCH_ALL,
               });
             }}
           />

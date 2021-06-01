@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { useResources } from "providers/resources";
 import userEvent from "@testing-library/user-event";
+import { buildResourceQueryParams, RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
@@ -37,6 +38,7 @@ describe("Resources", () => {
     mockDispatch = jest.fn();
     mockState = {
       searchTerm: "",
+      searchTypeFilter: [],
     };
     mockFetchResponse = {
       data: null,
@@ -72,7 +74,7 @@ describe("Resources", () => {
         () => ({
           id: chance.string(),
           name: chance.string(),
-          type: chance.pickone(["DOCKER", "GIT", "NPM"]),
+          type: chance.pickone(Object.values(RESOURCE_TYPES)),
         }),
         chance.d4()
       );
@@ -82,14 +84,16 @@ describe("Resources", () => {
       mockFetchResponse.loading = false;
     });
 
-    it("should do nothing if a search term does not exist", () => {
+    it("should search for all resources if a search term does not exist", () => {
       mockState.searchTerm = " ";
       render(<Resources />);
       const renderedSearchButton = screen.getByTitle(/search/i);
       expect(renderedSearchButton).toBeInTheDocument();
 
       userEvent.click(renderedSearchButton);
-      expect(mockRouter.push).toHaveBeenCalledTimes(0);
+      expect(mockRouter.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=all`);
     });
 
     it("should kick off the search when the search button is pressed and a search term exists", () => {
@@ -118,19 +122,38 @@ describe("Resources", () => {
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
         "/api/resources",
         {
-          filter: expectedSearch,
+          searchTerm: expectedSearch,
         },
         10
       );
     });
 
-    it("should handle viewing all resources", () => {
+    it("should handle search for all resources", () => {
       mockRouter.query.search = "all";
       render(<Resources />);
 
       expect(usePaginatedFetch)
         .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/resources", null, 10);
+        .toHaveBeenCalledWith(
+          "/api/resources",
+          buildResourceQueryParams(
+            mockRouter.query.search,
+            mockState.searchTypeFilter
+          ),
+          10
+        );
+    });
+
+    it("should handle viewing all resources by clicking the view all resources button", () => {
+      render(<Resources />);
+
+      userEvent.click(screen.getByText(/^view all resources/));
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: "SET_TYPE_FILTER",
+        data: [],
+      });
+      expect(mockRouter.push).toHaveBeenCalledWith("/resources?search=all");
     });
 
     it("should render all of the search results", () => {

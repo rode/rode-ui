@@ -84,7 +84,7 @@ describe("Policies", () => {
       mockFetchResponse.loading = false;
     });
 
-    it("should do nothing if a search term does not exist", () => {
+    it("should search for all policies if a search term does not exist", () => {
       mockState.searchTerm = " ";
 
       render(<Policies />);
@@ -92,7 +92,9 @@ describe("Policies", () => {
       expect(renderedSearchButton).toBeInTheDocument();
 
       userEvent.click(renderedSearchButton);
-      expect(pushMock).toHaveBeenCalledTimes(0);
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies?search=all`);
     });
 
     it("should kick off the search when the search button is pressed and a search term exists", () => {

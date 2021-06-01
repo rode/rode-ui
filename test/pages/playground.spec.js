@@ -25,6 +25,7 @@ import {
   createMockResourceUri,
 } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
+import { RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("hooks/useFetch");
 jest.mock("hooks/usePaginatedFetch");
@@ -111,7 +112,7 @@ describe("PolicyPlayground", () => {
           () => ({
             id: createMockResourceUri(),
             name: chance.string(),
-            type: chance.pickone(["DOCKER", "NPM", "GIT"]),
+            type: chance.pickone(Object.values(RESOURCE_TYPES)),
           }),
           chance.d4() + 1
         ),

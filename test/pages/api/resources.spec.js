@@ -21,14 +21,22 @@ import handler from "pages/api/resources";
 jest.mock("node-fetch");
 
 describe("/api/resources", () => {
-  let request, response, allResources, rodeResponse, filterParam, pageToken;
+  let request,
+    response,
+    allResources,
+    rodeResponse,
+    searchTerm,
+    resourceTypes,
+    pageToken;
 
   beforeEach(() => {
-    filterParam = chance.word();
+    searchTerm = chance.word();
+    resourceTypes = null;
     request = {
       method: "GET",
       query: {
-        filter: filterParam,
+        searchTerm,
+        resourceTypes,
       },
     };
     pageToken = chance.string();
@@ -96,9 +104,9 @@ describe("/api/resources", () => {
       )}`;
     };
 
-    it("should hit the Rode API", async () => {
+    it("should pass the correct params for a specified search term", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `name.contains("${filterParam}")`,
+        filter: `name.contains("${searchTerm}")`,
       });
 
       await handler(request, response);
@@ -106,10 +114,42 @@ describe("/api/resources", () => {
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
-    it("should hit the Rode API when no filter is specified", async () => {
+    it("should pass the correct params for specified resource types", async () => {
+      resourceTypes = chance.n(chance.string, chance.d4()).join(",");
+      request.query.searchTerm = null;
+      request.query.resourceTypes = resourceTypes;
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+        filter: resourceTypes
+          .split(",")
+          .map((type) => `"type"=="${type}"`)
+          .join("||"),
+      });
+
+      await handler(request, response);
+
+      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+    });
+
+    it("should pass the correct params when both search term and resource types are specified", async () => {
+      resourceTypes = chance.n(chance.string, chance.d4()).join(",");
+      request.query.resourceTypes = resourceTypes;
+      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+        filter: `name.contains("${searchTerm}")&&(${resourceTypes
+          .split(",")
+          .map((type) => `"type"=="${type}"`)
+          .join("||")})`,
+      });
+
+      await handler(request, response);
+
+      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+    });
+
+    it("should hit the Rode API when no searchTerm or resourceTypes are specified", async () => {
       const expectedUrl = createExpectedUrl("http://localhost:50051");
 
-      request.query.filter = null;
+      request.query.searchTerm = null;
+      request.query.resourceTypes = null;
       await handler(request, response);
 
       expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
@@ -118,7 +158,7 @@ describe("/api/resources", () => {
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `name.contains("${filterParam}")`,
+        filter: `name.contains("${searchTerm}")`,
         pageSize,
       });
 
@@ -130,7 +170,7 @@ describe("/api/resources", () => {
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `name.contains("${filterParam}")`,
+        filter: `name.contains("${searchTerm}")`,
         pageToken,
       });
 

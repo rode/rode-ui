@@ -1,4 +1,5 @@
 import { showSuccess } from "./toast-utils";
+import { SEARCH_ALL } from "./constants";
 
 /**
  * Copyright 2021 The Rode Authors
@@ -19,7 +20,7 @@ import { showSuccess } from "./toast-utils";
 export const isServerSide = () => typeof window === "undefined";
 
 export const createSearchFilter = (searchTerm) => {
-  if (searchTerm && searchTerm !== "all") {
+  if (searchTerm && searchTerm !== SEARCH_ALL) {
     return {
       filter: searchTerm,
     };

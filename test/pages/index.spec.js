@@ -92,7 +92,9 @@ describe("index", () => {
       const resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
 
       userEvent.click(resourceSearchButton);
-      expect(pushMock).not.toHaveBeenCalled();
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=all`);
     });
   });
 
@@ -125,7 +127,9 @@ describe("index", () => {
       const resourceSearchButton = screen.queryAllByTitle(/search/i)[1];
 
       userEvent.click(resourceSearchButton);
-      expect(pushMock).not.toHaveBeenCalled();
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies?search=all`);
     });
   });
 });

@@ -78,25 +78,12 @@ describe("PolicySearchBar", () => {
   it("should render the button to perform a search", () => {
     const renderedSearchButton = screen.getByLabelText("Search Policies");
     expect(renderedSearchButton).toBeInTheDocument();
-    expect(renderedSearchButton).toBeDisabled();
   });
 
   it("should render some helper text if specified", () => {
     const helpText = chance.string();
     rerender(<PolicySearchBar onSubmit={onSubmit} helpText={helpText} />);
     expect(screen.getByText(helpText)).toBeInTheDocument();
-  });
-
-  it("should enable the button when a search term is entered", () => {
-    usePolicies.mockReturnValue({
-      state: { searchTerm: chance.string() },
-      dispatch: jest.fn(),
-    });
-
-    rerender(<PolicySearchBar onSubmit={onSubmit} />);
-
-    const renderedSearchButton = screen.getByLabelText("Search Policies");
-    expect(renderedSearchButton).not.toBeDisabled();
   });
 
   it("should fill in the search term based on the url query", () => {
