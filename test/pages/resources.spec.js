@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { useResources } from "providers/resources";
 import userEvent from "@testing-library/user-event";
-import { buildResourceQueryParams } from "utils/resource-utils";
+import { buildResourceQueryParams, RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
@@ -74,7 +74,7 @@ describe("Resources", () => {
         () => ({
           id: chance.string(),
           name: chance.string(),
-          type: chance.pickone(["DOCKER", "GIT", "NPM"]),
+          type: chance.pickone(Object.values(RESOURCE_TYPES)),
         }),
         chance.d4()
       );
