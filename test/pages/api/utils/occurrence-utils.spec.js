@@ -50,14 +50,64 @@ describe("occurrence-utils", () => {
     });
 
     describe("vulnerabilities", () => {
-      describe("happy path", () => {
-        let startScanOccurrence,
-          endScanOccurrence,
-          matchingVulnerability,
-          noteName;
+      let startScanOccurrence,
+        endScanOccurrence,
+        matchingVulnerability,
+        noteName;
 
+      beforeEach(() => {
+        noteName = "harbor-scan";
+
+        startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
+        startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
+        endScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
+        endScanOccurrence.discovered.discovered.analysisStatus =
+          "FINISHED_SUCCESS";
+        matchingVulnerability = createMockOccurrence("VULNERABILITY", noteName);
+      });
+
+      describe("harbor scans", () => {
+        it("should match up vulnerabilities with a scan start and end", () => {
+          const { secure } = mapOccurrencesToSections([
+            startScanOccurrence,
+            endScanOccurrence,
+            matchingVulnerability,
+            createMockOccurrence("VULNERABILITY"),
+          ]);
+
+          expect(secure).toHaveLength(1);
+          expect(secure[0].started).toEqual(startScanOccurrence.createTime);
+          expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
+          expect(secure[0].originals.occurrences).toContain(
+            startScanOccurrence
+          );
+          expect(secure[0].originals.occurrences).toContain(endScanOccurrence);
+          expect(secure[0].originals.occurrences).toContain(
+            matchingVulnerability
+          );
+        });
+
+        it("should return starting scans with no matching end scan as In Progress", () => {
+          const startScanOccurrence = createMockOccurrence(
+            "DISCOVERY",
+            "harbor-scan"
+          );
+          startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
+          const { secure, other } = mapOccurrencesToSections([
+            startScanOccurrence,
+            createMockOccurrence("VULNERABILITY"),
+          ]);
+
+          expect(secure).toHaveLength(1);
+          expect(secure[0].completed).toBeNull();
+          expect(secure[0].vulnerabilities).toHaveLength(0);
+          expect(other).toHaveLength(1);
+        });
+      });
+
+      describe("tfsec scans", () => {
         beforeEach(() => {
-          noteName = chance.string();
+          noteName = "tfsec";
 
           startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
           startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
@@ -68,6 +118,8 @@ describe("occurrence-utils", () => {
             "VULNERABILITY",
             noteName
           );
+          endScanOccurrence.createTime = startScanOccurrence.createTime;
+          matchingVulnerability.createTime = startScanOccurrence.createTime;
         });
 
         it("should match up vulnerabilities with a scan start and end", () => {
@@ -90,69 +142,86 @@ describe("occurrence-utils", () => {
           );
         });
 
-        it("should correctly map the vulnerabilities", () => {
-          const { secure } = mapOccurrencesToSections([
+        it("should return starting scans with no matching end scan as In Progress", () => {
+          const startScanOccurrence = createMockOccurrence(
+            "DISCOVERY",
+            "tfsec"
+          );
+          startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
+          const { secure, other } = mapOccurrencesToSections([
             startScanOccurrence,
-            endScanOccurrence,
-            matchingVulnerability,
             createMockOccurrence("VULNERABILITY"),
           ]);
 
-          expect(secure[0].vulnerabilities).toHaveLength(1);
-
-          const vulnerability = secure[0].vulnerabilities[0];
-
-          expect(vulnerability.name).toEqual(matchingVulnerability.name);
-          expect(vulnerability.type).toEqual(
-            matchingVulnerability.vulnerability.type
-          );
-          expect(vulnerability.cvssScore).toEqual(
-            matchingVulnerability.vulnerability.cvssScore
-          );
-          expect(vulnerability.severity).toEqual(
-            matchingVulnerability.vulnerability.severity
-          );
-          expect(vulnerability.effectiveSeverity).toEqual(
-            matchingVulnerability.vulnerability.effectiveSeverity
-          );
-          expect(vulnerability.description).toEqual(
-            matchingVulnerability.vulnerability.shortDescription
-          );
-          expect(vulnerability.relatedUrls).toEqual(
-            matchingVulnerability.vulnerability.relatedUrls
-          );
-          expect(vulnerability.cpeUri).toEqual(
-            matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
-              .cpeUri
-          );
-          expect(vulnerability.packageName).toEqual(
-            matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
-              .package
-          );
-          expect(vulnerability.version).toEqual(
-            matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
-              .version
-          );
+          expect(secure).toHaveLength(1);
+          expect(secure[0].completed).toBeNull();
+          expect(secure[0].vulnerabilities).toHaveLength(0);
+          expect(other).toHaveLength(1);
         });
+      });
 
-        it("should sort the vulnerabilities by their severity level", () => {
-          const lowSev = createMockOccurrence("VULNERABILITY", noteName);
-          lowSev.vulnerability.effectiveSeverity = "LOW";
-          const medSev = createMockOccurrence("VULNERABILITY", noteName);
-          medSev.vulnerability.effectiveSeverity = "MEDIUM";
-          const highSev = createMockOccurrence("VULNERABILITY", noteName);
-          highSev.vulnerability.effectiveSeverity = "HIGH";
+      it("should correctly map the vulnerabilities", () => {
+        const { secure } = mapOccurrencesToSections([
+          startScanOccurrence,
+          endScanOccurrence,
+          matchingVulnerability,
+          createMockOccurrence("VULNERABILITY"),
+        ]);
 
-          const { secure } = mapOccurrencesToSections([
-            startScanOccurrence,
-            endScanOccurrence,
-            ...chance.shuffle([lowSev, medSev, highSev]),
-          ]);
+        expect(secure[0].vulnerabilities).toHaveLength(1);
 
-          expect(secure[0].vulnerabilities[0].effectiveSeverity).toBe("HIGH");
-          expect(secure[0].vulnerabilities[1].effectiveSeverity).toBe("MEDIUM");
-          expect(secure[0].vulnerabilities[2].effectiveSeverity).toBe("LOW");
-        });
+        const vulnerability = secure[0].vulnerabilities[0];
+
+        expect(vulnerability.name).toEqual(matchingVulnerability.name);
+        expect(vulnerability.type).toEqual(
+          matchingVulnerability.vulnerability.type
+        );
+        expect(vulnerability.cvssScore).toEqual(
+          matchingVulnerability.vulnerability.cvssScore
+        );
+        expect(vulnerability.severity).toEqual(
+          matchingVulnerability.vulnerability.severity
+        );
+        expect(vulnerability.effectiveSeverity).toEqual(
+          matchingVulnerability.vulnerability.effectiveSeverity
+        );
+        expect(vulnerability.description).toEqual(
+          matchingVulnerability.vulnerability.shortDescription
+        );
+        expect(vulnerability.relatedUrls).toEqual(
+          matchingVulnerability.vulnerability.relatedUrls
+        );
+        expect(vulnerability.cpeUri).toEqual(
+          matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
+            .cpeUri
+        );
+        expect(vulnerability.packageName).toEqual(
+          matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
+            .package
+        );
+        expect(vulnerability.version).toEqual(
+          matchingVulnerability.vulnerability.packageIssue[0].affectedLocation
+            .version
+        );
+      });
+
+      it("should sort the vulnerabilities by their severity level", () => {
+        const lowSev = createMockOccurrence("VULNERABILITY", noteName);
+        lowSev.vulnerability.effectiveSeverity = "LOW";
+        const medSev = createMockOccurrence("VULNERABILITY", noteName);
+        medSev.vulnerability.effectiveSeverity = "MEDIUM";
+        const highSev = createMockOccurrence("VULNERABILITY", noteName);
+        highSev.vulnerability.effectiveSeverity = "HIGH";
+
+        const { secure } = mapOccurrencesToSections([
+          startScanOccurrence,
+          endScanOccurrence,
+          ...chance.shuffle([lowSev, medSev, highSev]),
+        ]);
+
+        expect(secure[0].vulnerabilities[0].effectiveSeverity).toBe("HIGH");
+        expect(secure[0].vulnerabilities[1].effectiveSeverity).toBe("MEDIUM");
+        expect(secure[0].vulnerabilities[2].effectiveSeverity).toBe("LOW");
       });
 
       it("should not return vulnerabilities if they do not have an associated scan start", () => {
@@ -166,20 +235,6 @@ describe("occurrence-utils", () => {
 
         expect(secure).toHaveLength(0);
         expect(other).toHaveLength(2);
-      });
-
-      it("should return starting scans with no matching end scan as In Progress", () => {
-        const startScanOccurrence = createMockOccurrence("DISCOVERY");
-        startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
-        const { secure, other } = mapOccurrencesToSections([
-          startScanOccurrence,
-          createMockOccurrence("VULNERABILITY"),
-        ]);
-
-        expect(secure).toHaveLength(1);
-        expect(secure[0].completed).toBeNull();
-        expect(secure[0].vulnerabilities).toHaveLength(0);
-        expect(other).toHaveLength(1);
       });
     });
 
