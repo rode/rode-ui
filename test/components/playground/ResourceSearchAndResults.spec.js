@@ -96,7 +96,7 @@ describe("ResourceSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resources",
       {
-        filter: state.searchTerm,
+        searchTerm: state.searchTerm,
       },
       5
     );
