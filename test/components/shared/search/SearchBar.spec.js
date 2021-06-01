@@ -34,12 +34,14 @@ describe("SearchBar", () => {
     onChange = jest.fn();
     label = chance.string();
     name = chance.string();
+    searchTerm = chance.string();
     const utils = render(
       <SearchBar
         onSubmit={onSubmit}
         onChange={onChange}
         label={label}
         name={name}
+        searchTerm={searchTerm}
       />
     );
     rerender = utils.rerender;
@@ -48,18 +50,14 @@ describe("SearchBar", () => {
   it("should render the input for the search bar", () => {
     const renderedInput = screen.getByLabelText(label);
     expect(renderedInput).toBeInTheDocument();
+    expect(renderedInput).toHaveValue(searchTerm);
 
     userEvent.type(renderedInput, chance.character());
     expect(onChange).toHaveBeenCalled();
   });
 
-  it("should render the search icon button", () => {
-    searchTerm = chance.string();
-
-    const renderedButton = screen.getByLabelText(/search/i);
-    expect(renderedButton).toBeInTheDocument();
-    expect(renderedButton).toBeDisabled();
-
+  it("should render the input with no value if searching for all", () => {
+    searchTerm = "all";
     rerender(
       <SearchBar
         onSubmit={onSubmit}
@@ -69,7 +67,14 @@ describe("SearchBar", () => {
         searchTerm={searchTerm}
       />
     );
-    expect(renderedButton).not.toBeDisabled();
+
+    const renderedInput = screen.getByLabelText(label);
+    expect(renderedInput).toHaveValue("");
+  });
+
+  it("should render the search icon button", () => {
+    const renderedButton = screen.getByLabelText(/search/i);
+    expect(renderedButton).toBeInTheDocument();
   });
 
   it("should render the placeholder if specified", () => {

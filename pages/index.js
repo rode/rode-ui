@@ -25,6 +25,7 @@ import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { SEARCH_ALL } from "utils/constants";
 
 const Home = () => {
   const { theme } = useTheme();
@@ -49,6 +50,8 @@ const Home = () => {
 
     if (searchTerm.trim().length) {
       router.push(`/${url}?search=${searchTerm.trim()}`);
+    } else {
+      router.push(`/${url}?search=${SEARCH_ALL}`);
     }
   };
 
@@ -62,7 +65,10 @@ const Home = () => {
           helpText={
             <>
               You can search by name, version, or{" "}
-              <Link href={"/resources?search=all"}>view all resources</Link>.
+              <Link href={`/resources?search=${SEARCH_ALL}`}>
+                view all resources
+              </Link>
+              .
             </>
           }
         />
@@ -75,7 +81,10 @@ const Home = () => {
           helpText={
             <>
               You can search by policy name or{" "}
-              <Link href={"/policies?search=all"}>view all policies</Link>.
+              <Link href={`/policies?search=${SEARCH_ALL}`}>
+                view all policies
+              </Link>
+              .
             </>
           }
         />

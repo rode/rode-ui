@@ -34,6 +34,35 @@
   }
 }
 
+.showResults {
+  @extend .container;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+
+  .searchBarContainer {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+
+    @include tabletAndLarger {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .form {
+      flex: 1;
+    }
+
+    .filterContainer {
+      flex: 0.5;
+      @include tabletAndLarger {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
+
 .breadcrumbs {
   width: 100%;
   display: flex;
@@ -62,16 +91,6 @@
 
   @include tabletAndLarger {
     display: unset;
-  }
-}
-
-.showResults {
-  @extend .container;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-
-  .searchBarContainer {
-    width: 90%;
   }
 }
 
@@ -149,8 +168,32 @@
   }
 }
 
+.viewAllButton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 .viewMoreResultsButton {
   margin: 1rem auto;
+}
+
+.noResults {
+  margin-top: 1rem;
+}
+
+.filterDropdown {
+  margin: 0 auto;
+  width: 90%;
+
+  @include tabletAndLarger {
+    width: 25%;
+  }
 }
 
 .darkTheme {
@@ -173,6 +216,10 @@
 
   .cardText {
     color: $DT_SUB_TEXT;
+  }
+
+  .viewAllButton {
+    color: $DT_LINK;
   }
 
   .noResults {
@@ -200,5 +247,9 @@
 
   .cardText {
     color: $GREY;
+  }
+
+  .viewAllButton {
+    color: $LT_LINK;
   }
 }

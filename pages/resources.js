@@ -23,11 +23,11 @@ import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
 import { resourceActions } from "reducers/resources";
-import Link from "next/link";
-import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { DEFAULT_SEARCH_PAGE_SIZE } from "utils/constants";
+import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
+import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
+import { buildResourceQueryParams } from "utils/resource-utils";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -36,7 +36,7 @@ const Resources = () => {
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     router.query.search ? "/api/resources" : null,
-    createSearchFilter(router.query.search),
+    buildResourceQueryParams(router.query.search, state.searchTypeFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
@@ -45,8 +45,25 @@ const Resources = () => {
 
     if (state.searchTerm.trim().length) {
       router.push(`/resources?search=${state.searchTerm.trim()}`);
+    } else {
+      router.push(`/resources?search=${SEARCH_ALL}`);
     }
   };
+
+  const viewAllResources = () => {
+    dispatch({
+      type: resourceActions.SET_TYPE_FILTER,
+      data: [],
+    });
+    router.push(`/resources?search=${SEARCH_ALL}`);
+  };
+
+  useEffect(() => {
+    dispatch({
+      type: resourceActions.SET_TYPE_FILTER,
+      data: [],
+    });
+  }, []);
 
   useEffect(() => {
     if (router.query.search) {
@@ -76,33 +93,46 @@ const Resources = () => {
           helpText={
             <>
               You can search by name, version, or{" "}
-              <Link href={"/resources?search=all"}>view all resources</Link>.
+              <button
+                type={"button"}
+                onClick={viewAllResources}
+                className={styles.viewAllButton}
+              >
+                view all resources
+              </button>
+              .
             </>
           }
         />
+        {showSearchResults && <ResourceSearchFilters />}
       </div>
       {showSearchResults && (
-        <Loading loading={loading}>
-          {data?.length > 0 ? (
-            <>
-              {data.map((result) => {
-                return (
-                  <ResourceSearchResult key={result.id} searchResult={result} />
-                );
-              })}
-              {!isLastPage && (
-                <Button
-                  buttonType="text"
-                  onClick={goToNextPage}
-                  label={"View More"}
-                  className={styles.viewMoreResultsButton}
-                />
-              )}
-            </>
-          ) : (
-            <span className={styles.noResults}>No resources found</span>
-          )}
-        </Loading>
+        <>
+          <Loading loading={loading}>
+            {data?.length > 0 ? (
+              <>
+                {data.map((result) => {
+                  return (
+                    <ResourceSearchResult
+                      key={result.id}
+                      searchResult={result}
+                    />
+                  );
+                })}
+                {!isLastPage && (
+                  <Button
+                    buttonType="text"
+                    onClick={goToNextPage}
+                    label={"View More"}
+                    className={styles.viewMoreResultsButton}
+                  />
+                )}
+              </>
+            ) : (
+              <span className={styles.noResults}>No resources found</span>
+            )}
+          </Loading>
+        </>
       )}
     </div>
   );

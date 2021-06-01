@@ -20,6 +20,7 @@ import userEvent from "@testing-library/user-event";
 import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("hooks/usePaginatedFetch");
 
@@ -35,7 +36,7 @@ describe("ResourceSelectionDrawer", () => {
         () => ({
           id: createMockResourceUri(),
           name: chance.string(),
-          type: chance.pickone(["DOCKER", "NPM", "GIT"]),
+          type: chance.pickone(Object.values(RESOURCE_TYPES)),
         }),
         chance.d4() + 1
       ),

@@ -18,9 +18,10 @@ import React from "react";
 import { useResources } from "providers/resources";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
+import { SEARCH_ALL } from "utils/constants";
 
 const getSearchTermText = (searchTerm) => {
-  if (searchTerm === "all") {
+  if (searchTerm === SEARCH_ALL) {
     return "View all resources";
   } else {
     return `"${searchTerm}"`;

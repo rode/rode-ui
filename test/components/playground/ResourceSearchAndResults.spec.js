@@ -19,6 +19,7 @@ import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("hooks/usePaginatedFetch");
 
@@ -41,7 +42,7 @@ describe("ResourceSearchAndResults", () => {
       () => ({
         id: chance.string(),
         name: chance.string(),
-        type: chance.pickone(["DOCKER", "GIT", "NPM"]),
+        type: chance.pickone(Object.values(RESOURCE_TYPES)),
       }),
       chance.d4()
     );
@@ -96,7 +97,7 @@ describe("ResourceSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resources",
       {
-        filter: state.searchTerm,
+        searchTerm: state.searchTerm,
       },
       5
     );

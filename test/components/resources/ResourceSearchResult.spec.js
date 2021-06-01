@@ -21,6 +21,7 @@ import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
+import { RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -32,7 +33,7 @@ describe("ResourceSearchResult", () => {
     searchResult = {
       id: chance.string(),
       name: chance.string(),
-      type: chance.pickone(["DOCKER", "GIT", "NPM"]),
+      type: chance.pickone(Object.values(RESOURCE_TYPES)),
     };
     pushMock = jest.fn();
     useRouter.mockReturnValue({

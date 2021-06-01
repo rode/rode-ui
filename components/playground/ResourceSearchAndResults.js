@@ -21,13 +21,13 @@ import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
 import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
-import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { PLAYGROUND_SEARCH_PAGE_SIZE } from "utils/constants";
+import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import { buildResourceQueryParams } from "utils/resource-utils";
 
 const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!genericResource);
@@ -35,7 +35,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     resourceSearch ? "/api/resources" : null,
-    createSearchFilter(state.searchTerm),
+    buildResourceQueryParams(state.searchTerm),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
@@ -57,7 +57,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
                 setResourceSearch(true);
                 dispatch({
                   type: resourceActions.SET_SEARCH_TERM,
-                  data: "all",
+                  data: SEARCH_ALL,
                 });
               }}
             />

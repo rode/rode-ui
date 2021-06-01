@@ -87,4 +87,16 @@ describe("resources reducer", () => {
       versionSearchTerm: data,
     });
   });
+
+  it("should update state when the action type is 'SET_TYPE_FILTER'", () => {
+    const actual = resourceReducer(state, {
+      type: resourceActions.SET_TYPE_FILTER,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      searchTypeFilter: data,
+    });
+  });
 });
