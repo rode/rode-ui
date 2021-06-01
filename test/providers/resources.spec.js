@@ -42,6 +42,7 @@ describe("resources provider", () => {
     expect(screen.getByText(/^occurrenceDetails/i)).toBeInTheDocument();
     expect(screen.getByText(/^currentResource/i)).toBeInTheDocument();
     expect(screen.getByText(/^versionSearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/^searchTypeFilter/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {

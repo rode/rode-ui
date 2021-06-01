@@ -94,6 +94,7 @@ const Resources = () => {
             <>
               You can search by name, version, or{" "}
               <button
+                type={"button"}
                 onClick={viewAllResources}
                 className={styles.viewAllButton}
               >

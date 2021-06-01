@@ -128,7 +128,7 @@ describe("Resources", () => {
       );
     });
 
-    it("should handle viewing all resources", () => {
+    it("should handle search for all resources", () => {
       mockRouter.query.search = "all";
       render(<Resources />);
 
@@ -142,6 +142,18 @@ describe("Resources", () => {
           ),
           10
         );
+    });
+
+    it("should handle viewing all resources by clicking the view all resources button", () => {
+      render(<Resources />);
+
+      userEvent.click(screen.getByText(/^view all resources/));
+
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: "SET_TYPE_FILTER",
+        data: [],
+      });
+      expect(mockRouter.push).toHaveBeenCalledWith("/resources?search=all");
     });
 
     it("should render all of the search results", () => {
