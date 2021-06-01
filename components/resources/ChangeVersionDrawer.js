@@ -29,6 +29,8 @@ import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import { getResourceDetails } from "utils/resource-utils";
+import { DATE_TIME_FORMAT } from "utils/constants";
+import dayjs from "dayjs";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -85,6 +87,11 @@ const ChangeVersionDrawer = (props) => {
                     <LabelWithValue
                       label={aliasLabel}
                       value={aliases.join(", ")}
+                      className={styles.versionNames}
+                    />
+                    <LabelWithValue
+                      label={"Created"}
+                      value={dayjs(version.created).format(DATE_TIME_FORMAT)}
                       className={styles.versionNames}
                     />
                   </div>

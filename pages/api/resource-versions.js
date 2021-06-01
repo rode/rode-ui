@@ -67,6 +67,7 @@ export default async (req, res) => {
     const versions = listResourceVersionsResponse.versions.map((version) => ({
       versionedResourceUri: version.version,
       aliases: version.names,
+      created: version.created,
     }));
 
     res.status(StatusCodes.OK).json({

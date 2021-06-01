@@ -112,6 +112,7 @@ describe("ChangeVersionDrawer", () => {
         () => ({
           versionedResourceUri: createMockResourceUri(name, chance.string()),
           aliases: chance.n(() => `${name}:${chance.string()}`, chance.d4()),
+          created: chance.timestamp(),
         }),
         chance.d4() + 2
       );
@@ -148,6 +149,7 @@ describe("ChangeVersionDrawer", () => {
         ).toBeInTheDocument();
         expect(screen.getAllByText(aliasLabel)[index]).toBeInTheDocument();
         expect(screen.getByText(aliases.join(", "))).toBeInTheDocument();
+        expect(screen.getAllByText("Created")[index]).toBeInTheDocument();
       });
     });
 
