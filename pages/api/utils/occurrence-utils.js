@@ -66,12 +66,58 @@ const matchAndMapVulnerabilities = (occurrences) => {
     (occurrence) =>
       occurrence.discovered.discovered.analysisStatus === "SCANNING"
   );
+
+  const tfSecScanStarts = scanStarts.filter((scan) =>
+    scan.noteName.includes("tfsec")
+  );
+  const harborScanStarts = scanStarts.filter((scan) =>
+    scan.noteName.includes("harbor-scan")
+  );
+
   const scanEnds = discoveryOccurrences.filter(
     (occurrence) =>
       occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS"
   );
 
-  const matchedOccurrences = scanStarts
+  const matchedTfSecScans = tfSecScanStarts
+    .map((startScan) => {
+      const endScan = scanEnds.find(
+        (endScan) =>
+          endScan.noteName === startScan.noteName &&
+          endScan.createTime === startScan.createTime
+      );
+
+      const matchingVulnerabilities = vulnerabilityOccurrences.filter(
+        (vulnerability) =>
+          vulnerability.noteName === startScan.noteName &&
+          vulnerability.createTime === startScan.createTime
+      );
+
+      if (!endScan) {
+        return {
+          name: startScan.name,
+          started: startScan.createTime,
+          completed: null,
+          vulnerabilities: matchingVulnerabilities,
+          originals: {
+            occurrences: [startScan, ...matchingVulnerabilities],
+          },
+        };
+      }
+
+      return {
+        name: startScan.name,
+        started: startScan.createTime,
+        completed: endScan.createTime,
+        vulnerabilities: mapVulnerabilities(matchingVulnerabilities),
+        originals: {
+          occurrences: [startScan, endScan, ...matchingVulnerabilities],
+        },
+      };
+    })
+    .filter((val) => val);
+
+  const matchedHarborScans = harborScanStarts
     .map((startScan) => {
       const noteName = startScan.noteName;
 
@@ -106,27 +152,38 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
   // get unmatched end scans occurrences
   scanEnds.forEach((endScan) => {
-    const matchingScan = matchedOccurrences.find((occurrence) =>
+    const matchingHarbor = matchedHarborScans.find((occurrence) =>
       occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)
     );
-    if (!matchingScan) {
+    const matchingTfSec = matchedTfSecScans.find((occurrence) =>
+      occurrence.originals.occurrences.find(
+        (occ) => occ.createTime === endScan.createTime
+      )
+    );
+    if (!matchingHarbor && !matchingTfSec) {
       unmatchedOccurrences.push(endScan);
     }
   });
 
+  // get unmatched vulnerability occurrences
   vulnerabilityOccurrences.forEach((vulnerability) => {
-    const matchingScan = matchedOccurrences.find((occurrence) =>
+    const matchingHarbor = matchedHarborScans.find((occurrence) =>
       occurrence.originals.occurrences.find(
         (occ) => occ.name === vulnerability.name
       )
     );
-    if (!matchingScan) {
+    const matchingTfSec = matchedTfSecScans.find((occurrence) =>
+      occurrence.originals.occurrences.find(
+        (occ) => occ.createTime === vulnerability.createTime
+      )
+    );
+    if (!matchingHarbor && !matchingTfSec) {
       unmatchedOccurrences.push(vulnerability);
     }
   });
 
   return {
-    vulnerabilities: matchedOccurrences,
+    vulnerabilities: [...matchedHarborScans, ...matchedTfSecScans],
     other: unmatchedOccurrences,
   };
 };
