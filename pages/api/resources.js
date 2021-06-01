@@ -36,9 +36,9 @@ export default async (req, res) => {
     if (searchTerm && resourceTypes) {
       const resources = resourceTypes.split(",");
       filter = {
-        filter: `name.contains("${searchTerm}")&&${resources
+        filter: `name.contains("${searchTerm}")&&(${resources
           .map((type) => `"type"=="${type}"`)
-          .join("||")}`,
+          .join("||")})`,
       };
     } else if (searchTerm) {
       filter = {

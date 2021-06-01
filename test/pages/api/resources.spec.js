@@ -134,10 +134,10 @@ describe("/api/resources", () => {
       resourceTypes = chance.n(chance.string, chance.d4()).join(",");
       request.query.resourceTypes = resourceTypes;
       const expectedUrl = createExpectedUrl("http://localhost:50051", {
-        filter: `name.contains("${searchTerm}")&&${resourceTypes
+        filter: `name.contains("${searchTerm}")&&(${resourceTypes
           .split(",")
           .map((type) => `"type"=="${type}"`)
-          .join("||")}`,
+          .join("||")})`,
       });
 
       await handler(request, response);
