@@ -58,8 +58,6 @@ export default async (req, res) => {
       filter.pageToken = req.query.pageToken;
     }
 
-    console.log("filter", filter);
-
     const response = await fetch(
       `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`
     );

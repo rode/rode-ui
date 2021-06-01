@@ -21,6 +21,7 @@ import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import Dropdown from "components/Dropdown";
 
+// TODO: test this
 // TODO: turn this into a const
 const options = [
   { label: "Docker", value: "DOCKER" },
