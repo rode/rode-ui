@@ -83,17 +83,6 @@ $INDENTATION: 1rem;
   }
 }
 
-.occurrenceSection {
-  margin: 1rem 0;
-}
-
-.occurrenceSectionHeader {
-  margin-left: 1rem;
-  padding-left: 0.5rem;
-  font-size: 1.25rem;
-  border-left: solid 0.25rem transparent;
-}
-
 .active {
   border-bottom-width: 0;
   border-left-width: 8px;
@@ -149,7 +138,7 @@ $INDENTATION: 1rem;
   justify-content: flex-start;
   margin-left: 1rem;
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 
   > p {
     margin-left: 0.25rem;
@@ -164,18 +153,6 @@ $INDENTATION: 1rem;
   $ACCENT: $LAGOON;
   .sectionTitle {
     color: $DT_SUB_TEXT;
-  }
-
-  .occurrenceSectionHeader {
-    color: $DT_MAIN_TEXT;
-    border-left-color: $ACCENT;
-    svg {
-      color: $ACCENT;
-
-      &:hover {
-        color: $DT_HOVER_GREEN;
-      }
-    }
   }
 
   .previewContainer {
@@ -203,18 +180,6 @@ $INDENTATION: 1rem;
   $ACCENT: $DEEP_SEA;
   .sectionTitle {
     color: $LT_SUB_TEXT;
-  }
-
-  .occurrenceSectionHeader {
-    color: $LT_MAIN_TEXT;
-    border-left-color: $ACCENT;
-    svg {
-      color: $ACCENT;
-
-      &:hover {
-        color: $LT_HOVER_GREEN;
-      }
-    }
   }
 
   .previewContainer {
