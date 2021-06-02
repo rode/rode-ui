@@ -30,8 +30,6 @@ const ResourceOccurrences = (props) => {
   const { state } = useResources();
   const { theme } = useTheme();
 
-  console.log("occurrences", occurrences.build);
-
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
       <div className={styles.occurrencePreviewsContainer}>

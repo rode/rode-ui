@@ -62,11 +62,9 @@ const BuildOccurrenceSection = ({ occurrences, type }) => {
                 <LabelWithValue
                   label={"Artifact Version"}
                   value={
-                    <ResourceVersion
-                      version={
-                        producedArtifactVersions && producedArtifactVersions[0]
-                      }
-                    />
+                    producedArtifactVersions && (
+                      <ResourceVersion version={producedArtifactVersions[0]} />
+                    )
                   }
                 />
                 <ExternalLink
