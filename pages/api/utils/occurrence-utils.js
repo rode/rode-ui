@@ -82,6 +82,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
       if (!endScan) {
         return {
+          uri: startScan.resource.uri,
           name: startScan.name,
           started: startScan.createTime,
           completed: null,
@@ -93,6 +94,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
       }
 
       return {
+        uri: startScan.resource.uri,
         name: startScan.name,
         started: startScan.createTime,
         completed: endScan.createTime,
@@ -145,6 +147,7 @@ const mapBuilds = (occurrences, resourceUri) => {
 
   return relatedBuildOccurrences.map((occ) => {
     return {
+      uri: occ.resource.uri,
       name: occ.name,
       started: occ.build.provenance.startTime,
       completed: occ.build.provenance.endTime,
@@ -160,6 +163,7 @@ const mapBuilds = (occurrences, resourceUri) => {
 const mapDeployments = (occurrences) => {
   return occurrences.map((occ) => {
     return {
+      uri: occ.resource.uri,
       name: occ.name,
       deploymentStart: occ.deployment.deployment.deployTime,
       deploymentEnd: occ.deployment.deployment.undeployTime,

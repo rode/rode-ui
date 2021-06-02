@@ -24,6 +24,8 @@ import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSectio
 import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
+import { RESOURCE_TYPES } from "utils/resource-utils";
+import GitResourceOccurrences from "./GitResourceOccurrences";
 
 const ResourceOccurrences = (props) => {
   const { occurrences } = props;
@@ -33,13 +35,20 @@ const ResourceOccurrences = (props) => {
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
       <div className={styles.occurrencePreviewsContainer}>
-        <BuildOccurrenceSection
-          occurrences={occurrences.build}
-          type={state.currentResource?.resourceType}
-        />
-        <SecureOccurrenceSection occurrences={occurrences.secure} />
-        <DeploymentOccurrenceSection occurrences={occurrences.deploy} />
-        <OtherOccurrenceSection occurrences={occurrences.other} />
+        {state.currentResource?.resourceType === RESOURCE_TYPES.GIT ? (
+          <>
+            <GitResourceOccurrences occurrences={occurrences}/>
+          </>
+        ) : (
+          <>
+            <BuildOccurrenceSection
+              occurrences={occurrences.build}
+            />
+            <SecureOccurrenceSection occurrences={occurrences.secure} />
+            <DeploymentOccurrenceSection occurrences={occurrences.deploy} />
+            <OtherOccurrenceSection occurrences={occurrences.other} />
+          </>
+        )}
       </div>
       {state.occurrenceDetails && (
         <div className={styles.occurrenceDetailsContainer}>
