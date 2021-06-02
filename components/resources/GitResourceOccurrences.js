@@ -87,20 +87,28 @@ const GitResourceOccurrences = (props) => {
 
         let key = null;
         if (occGroup.build.length > 0) {
-          key = occGroup.build[0].name
+          key = occGroup.build[0].name;
         } else if (occGroup.secure.length > 0) {
-          key = occGroup.secure[0].name
+          key = occGroup.secure[0].name;
         }
 
         return (
           <div key={key} className={styles.occurrenceSection}>
             {occGroup.build.length > 0 && (
-              <LabelWithValue className={styles.occurrenceSectionHeader} label={"Artifact"} value={<ResourceVersion version={version} copy/>}/>
+              <LabelWithValue
+                className={styles.occurrenceSectionHeader}
+                label={"Artifact"}
+                value={<ResourceVersion version={version} copy />}
+              />
             )}
             {!occGroup.build.length &&
               (occGroup.secure.length > 0 ||
                 occGroup.deploy.length > 0 ||
-                occGroup.other.length > 0) && <p className={styles.occurrenceSectionHeader}>Git Occurrences</p>}
+                occGroup.other.length > 0) && (
+                <p className={styles.occurrenceSectionHeader}>
+                  Git Occurrences
+                </p>
+              )}
             <BuildOccurrenceSection
               occurrences={occGroup.build}
               type={state.currentResource?.resourceType}

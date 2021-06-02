@@ -37,13 +37,11 @@ const ResourceOccurrences = (props) => {
       <div className={styles.occurrencePreviewsContainer}>
         {state.currentResource?.resourceType === RESOURCE_TYPES.GIT ? (
           <>
-            <GitResourceOccurrences occurrences={occurrences}/>
+            <GitResourceOccurrences occurrences={occurrences} />
           </>
         ) : (
           <>
-            <BuildOccurrenceSection
-              occurrences={occurrences.build}
-            />
+            <BuildOccurrenceSection occurrences={occurrences.build} />
             <SecureOccurrenceSection occurrences={occurrences.secure} />
             <DeploymentOccurrenceSection occurrences={occurrences.deploy} />
             <OtherOccurrenceSection occurrences={occurrences.other} />

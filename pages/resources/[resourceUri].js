@@ -94,7 +94,7 @@ const Resource = () => {
                   <div>
                     <LabelWithValue
                       label={"Type"}
-                      value={state.currentResource.resourceType}
+                      value={state.currentResource.resourceLabel}
                     />
                     <LabelWithValue
                       label={"Version"}

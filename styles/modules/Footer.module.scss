@@ -92,12 +92,12 @@
 
       .liatrioOuter {
         @include transition;
-        color: $HOT_RED;
+        color: $GREEN;
       }
 
       .liatrioInner {
         @include transition;
-        color: $FLAME_ORANGE;
+        color: $BRIGHT_GREEN;
       }
 
       &[title="Twitter"] {
@@ -156,12 +156,12 @@
   }
 
   &.liatrioOuter {
-    color: $GREEN;
+    color: $LT_MAIN_TEXT;
     @include transition;
   }
 
   &.liatrioInner {
-    color: $BRIGHT_GREEN;
+    color: $MEDIUM_GREY;
     @include transition;
   }
 

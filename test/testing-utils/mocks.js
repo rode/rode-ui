@@ -20,7 +20,7 @@ const chance = new Chance();
 
 const createBuiltArtifacts = () => ({
   checksum: chance.natural(),
-  id: chance.guid(),
+  id: createMockResourceUri(),
   names: [chance.word({ syllables: chance.d10() + 3 })],
 });
 

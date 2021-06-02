@@ -128,13 +128,13 @@ describe("Resource Details page", () => {
   });
 
   it("should render the resource header information", () => {
-    const { resourceName, resourceVersion, resourceType } = getResourceDetails(
+    const { resourceName, resourceVersion, resourceLabel } = getResourceDetails(
       router.query.resourceUri
     );
 
     expect(screen.getByText(resourceName)).toBeInTheDocument();
     expect(screen.getByText("Type")).toBeInTheDocument();
-    expect(screen.getByText(resourceType)).toBeInTheDocument();
+    expect(screen.getByText(resourceLabel)).toBeInTheDocument();
     expect(screen.getByText("Version")).toBeInTheDocument();
     expect(
       screen.getByText(resourceVersion.substring(0, 12))
