@@ -70,8 +70,8 @@ const matchAndMapVulnerabilities = (occurrences) => {
   const tfSecScanStarts = scanStarts.filter((scan) =>
     scan.noteName.includes("tfsec")
   );
-  const harborScanStarts = scanStarts.filter((scan) =>
-    scan.noteName.includes("harbor-scan")
+  const otherScanStarts = scanStarts.filter(
+    (scan) => !scan.noteName.includes("tfsec")
   );
 
   const scanEnds = discoveryOccurrences.filter(
@@ -117,7 +117,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
     })
     .filter((val) => val);
 
-  const matchedHarborScans = harborScanStarts
+  const matchedOtherScans = otherScanStarts
     .map((startScan) => {
       const noteName = startScan.noteName;
 
@@ -152,7 +152,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
   // get unmatched end scans occurrences
   scanEnds.forEach((endScan) => {
-    const matchingHarbor = matchedHarborScans.find((occurrence) =>
+    const matchingHarbor = matchedOtherScans.find((occurrence) =>
       occurrence.originals.occurrences.find((occ) => occ.name === endScan.name)
     );
     const matchingTfSec = matchedTfSecScans.find((occurrence) =>
@@ -167,7 +167,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
 
   // get unmatched vulnerability occurrences
   vulnerabilityOccurrences.forEach((vulnerability) => {
-    const matchingHarbor = matchedHarborScans.find((occurrence) =>
+    const matchingHarbor = matchedOtherScans.find((occurrence) =>
       occurrence.originals.occurrences.find(
         (occ) => occ.name === vulnerability.name
       )
@@ -183,7 +183,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
   });
 
   return {
-    vulnerabilities: [...matchedHarborScans, ...matchedTfSecScans],
+    vulnerabilities: [...matchedOtherScans, ...matchedTfSecScans],
     other: unmatchedOccurrences,
   };
 };
