@@ -25,7 +25,7 @@ import styles from "styles/modules/Occurrences.module.scss";
 import { useResources } from "providers/resources";
 import { useTheme } from "providers/theme";
 import { RESOURCE_TYPES } from "utils/resource-utils";
-import GitResourceOccurrences from "./GitResourceOccurrences";
+import GitResourceOccurrences from "components/resources/GitResourceOccurrences";
 
 const ResourceOccurrences = (props) => {
   const { occurrences } = props;

@@ -21,11 +21,11 @@ import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSect
 import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
 import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSection";
 import { useResources } from "providers/resources";
-import { getResourceDetails } from "../../utils/resource-utils";
-import { mapOccurrencesToSections } from "../../pages/api/utils/occurrence-utils";
+import { getResourceDetails } from "utils/resource-utils";
+import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
 import styles from "styles/modules/Occurrences.module.scss";
-import ResourceVersion from "./ResourceVersion";
-import LabelWithValue from "../LabelWithValue";
+import ResourceVersion from "components/resources/ResourceVersion";
+import LabelWithValue from "components/LabelWithValue";
 
 const GitResourceOccurrences = (props) => {
   const { occurrences } = props;
