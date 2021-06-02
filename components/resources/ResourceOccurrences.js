@@ -33,7 +33,10 @@ const ResourceOccurrences = (props) => {
   return (
     <div className={`${styles.layout} ${styles[theme]}`}>
       <div className={styles.occurrencePreviewsContainer}>
-        <BuildOccurrenceSection occurrences={occurrences.build} />
+        <BuildOccurrenceSection
+          occurrences={occurrences.build}
+          type={state.currentResource?.resourceType}
+        />
         <SecureOccurrenceSection occurrences={occurrences.secure} />
         <DeploymentOccurrenceSection occurrences={occurrences.deploy} />
         <OtherOccurrenceSection occurrences={occurrences.other} />

@@ -47,6 +47,7 @@ describe("/api/resource-versions", () => {
       () => ({
         version: chance.name(),
         names: chance.n(chance.string, chance.d4()),
+        created: chance.timestamp(),
       }),
       chance.d4()
     );
@@ -165,6 +166,7 @@ describe("/api/resource-versions", () => {
       const mappedVersions = resourceVersions.map((version) => ({
         versionedResourceUri: version.version,
         aliases: version.names,
+        created: version.created,
       }));
       await handler(request, response);
 

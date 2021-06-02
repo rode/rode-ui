@@ -36,7 +36,8 @@ describe("resource utils", () => {
       url = null;
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("Unknown");
+      expect(actual.resourceLabel).toBe("Unknown");
+      expect(actual.resourceType).toBe("NOT_SPECIFIED");
       expect(actual.resourceName).toBe(url);
       expect(actual.resourceVersion).toBe("N/A");
       expect(actual.genericName).toBeNull();
@@ -49,7 +50,8 @@ describe("resource utils", () => {
       url = chance.url();
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("Unknown");
+      expect(actual.resourceLabel).toBe("Unknown");
+      expect(actual.resourceType).toBe("NOT_SPECIFIED");
       expect(actual.resourceName).toBe(url);
       expect(actual.resourceVersion).toBe("N/A");
       expect(actual.genericName).toBeNull();
@@ -63,7 +65,8 @@ describe("resource utils", () => {
         url = `deb://${chance.word()}:${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
-        expect(actual.resourceType).toBe("Debian");
+        expect(actual.resourceLabel).toBe("Debian");
+        expect(actual.resourceType).toBe("DEBIAN");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(`deb://${resourceName}`);
@@ -76,7 +79,8 @@ describe("resource utils", () => {
         url = `deb://${chance.word()}:${resourceName}:${resourceVersion}`;
         const actual = getResourceDetails(url);
 
-        expect(actual.resourceType).toBe("Debian");
+        expect(actual.resourceLabel).toBe("Debian");
+        expect(actual.resourceType).toBe("DEBIAN");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(`deb://${resourceName}`);
@@ -92,6 +96,7 @@ describe("resource utils", () => {
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("RPM");
+        expect(actual.resourceLabel).toBe("RPM");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(`rpm://${resourceName}`);
@@ -105,6 +110,7 @@ describe("resource utils", () => {
         const actual = getResourceDetails(url);
 
         expect(actual.resourceType).toBe("RPM");
+        expect(actual.resourceLabel).toBe("RPM");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(`rpm://${resourceName}`);
@@ -121,7 +127,8 @@ describe("resource utils", () => {
       const resourceName = `${groupId}:${artifactId}`;
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("Maven");
+      expect(actual.resourceType).toBe("MAVEN");
+      expect(actual.resourceLabel).toBe("Maven");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(`gav://${resourceName}`);
@@ -136,6 +143,7 @@ describe("resource utils", () => {
       const actual = getResourceDetails(url);
 
       expect(actual.resourceType).toBe("NPM");
+      expect(actual.resourceLabel).toBe("NPM");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(`npm://${resourceName}`);
@@ -148,7 +156,8 @@ describe("resource utils", () => {
       url = createGenericResourceUrl(resourceName, resourceVersion, "nuget://");
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("NuGet");
+      expect(actual.resourceType).toBe("NUGET");
+      expect(actual.resourceLabel).toBe("NuGet");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(`nuget://${resourceName}`);
@@ -161,7 +170,8 @@ describe("resource utils", () => {
       url = createGenericResourceUrl(resourceName, resourceVersion, "pip://");
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("Python");
+      expect(actual.resourceType).toBe("PIP");
+      expect(actual.resourceLabel).toBe("Python");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(`pip://${resourceName}`);
@@ -174,7 +184,8 @@ describe("resource utils", () => {
       url = `file://sha256:${resourceVersion}:${resourceName}`;
       const actual = getResourceDetails(url);
 
-      expect(actual.resourceType).toBe("File");
+      expect(actual.resourceType).toBe("FILE");
+      expect(actual.resourceLabel).toBe("File");
       expect(actual.resourceName).toBe(resourceName);
       expect(actual.resourceVersion).toBe(resourceVersion);
       expect(actual.genericName).toBe(`file://${resourceName}`);
@@ -191,7 +202,8 @@ describe("resource utils", () => {
       it("should return the correct details for a Docker Resource", () => {
         const actual = getResourceDetails(url);
 
-        expect(actual.resourceType).toBe("Docker");
+        expect(actual.resourceType).toBe("DOCKER");
+        expect(actual.resourceLabel).toBe("Docker");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(resourceName);
@@ -217,7 +229,8 @@ describe("resource utils", () => {
       it("should return the correct details for a Git Resource", () => {
         const actual = getResourceDetails(url);
 
-        expect(actual.resourceType).toBe("Git");
+        expect(actual.resourceType).toBe("GIT");
+        expect(actual.resourceLabel).toBe("Git");
         expect(actual.resourceName).toBe(resourceName);
         expect(actual.resourceVersion).toBe(resourceVersion);
         expect(actual.genericName).toBe(`git://${resourceName}`);

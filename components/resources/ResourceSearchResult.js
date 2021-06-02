@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
@@ -27,19 +27,23 @@ const ResourceSearchResult = ({ searchResult }) => {
   const { id, name, type } = searchResult;
   const router = useRouter();
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
 
   const onClick = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         `/api/resource-versions?id=${encodeURIComponent(id)}&pageSize=1`
       );
 
       const { data } = await response.json();
+      setLoading(false);
       router.push(
         `/resources/${encodeURIComponent(data[0].versionedResourceUri)}`
       );
     } catch (error) {
       showError("An unexpected error has occurred.");
+      setLoading(false);
     }
   };
 
@@ -57,7 +61,7 @@ const ResourceSearchResult = ({ searchResult }) => {
           className={styles.cardText}
         />
       </div>
-      <Button onClick={onClick} label={"View Resource"} />
+      <Button onClick={onClick} label={"View Resource"} loading={loading} />
     </div>
   );
 };

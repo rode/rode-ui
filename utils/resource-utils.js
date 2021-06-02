@@ -94,7 +94,8 @@ export const getResourceDetails = (uri, resourceVersion) => {
   if (!resourceMatch) {
     console.log("Resource URI does not match expected format");
     return {
-      resourceType: "Unknown",
+      resourceLabel: "Unknown",
+      resourceType: "NOT_SPECIFIED",
       resourceName: uri,
       resourceVersion: "N/A",
       genericName: null,
@@ -127,7 +128,8 @@ export const getResourceDetails = (uri, resourceVersion) => {
   }
 
   return {
-    resourceType: resourceMatch.label,
+    resourceLabel: resourceMatch.label,
+    resourceType: resourceMatch.value,
     resourceName: name,
     resourceVersion: version,
     genericName,
