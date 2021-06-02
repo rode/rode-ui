@@ -102,17 +102,20 @@ describe("ResourceSelectionDrawer", () => {
     expect(versionButton).toHaveClass("navigationButton");
   });
 
-  it("should take the user to the version selection once a resource has been selected", () => {
-    const renderedAllResourcesButton = screen.getByLabelText(
-      /view all resources/i
-    );
+  it("should allow the user to navigate between sections once a resource has been selected", () => {
+    searchAndSelectResource();
+    const resourceButton = screen.getByLabelText("Resource");
+    expect(resourceButton).toHaveClass("navigationButton");
 
-    act(() => {
-      userEvent.click(renderedAllResourcesButton);
-    });
-    act(() => {
-      userEvent.click(screen.getAllByText(/^Select Resource/i)[0]);
-    });
+    const versionButton = screen.getByLabelText("Version");
+    expect(versionButton).toHaveClass("activeNavigationButton");
+
+    userEvent.click(resourceButton);
+    expect(resourceButton).toHaveClass("activeNavigationButton");
+  });
+
+  it("should take the user to the version selection once a resource has been selected", () => {
+    searchAndSelectResource();
 
     const renderedAllVersionsButton = screen.getByLabelText(
       /view all versions/i
@@ -128,4 +131,29 @@ describe("ResourceSelectionDrawer", () => {
 
     expect(clearEvaluation).toHaveBeenCalled();
   });
+
+  it("should close the drawer and set the versioned resource once a resource and version have been selected", () => {
+    searchAndSelectResource();
+    act(() => {
+      userEvent.click(screen.getAllByText(/^Select Version/i)[0]);
+    });
+
+    expect(screen.getByTestId("resourceSelectionDrawer")).toHaveClass(
+      "closedDrawer"
+    );
+    expect(setResource).toHaveBeenCalledTimes(1);
+  });
 });
+
+const searchAndSelectResource = () => {
+  const renderedAllResourcesButton = screen.getByLabelText(
+    /view all resources/i
+  );
+
+  act(() => {
+    userEvent.click(renderedAllResourcesButton);
+  });
+  act(() => {
+    userEvent.click(screen.getAllByText(/^Select Resource/i)[0]);
+  });
+};
