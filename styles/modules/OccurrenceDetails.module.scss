@@ -103,6 +103,10 @@ $SIDE_SPACING: 1rem;
     width: 97%;
     margin: 0 0 0.25rem auto;
   }
+
+  > p {
+    overflow-wrap: break-word;
+  }
 }
 
 .cardTitle {

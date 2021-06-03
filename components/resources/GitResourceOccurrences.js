@@ -16,6 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
 import BuildOccurrenceSection from "components/occurrences/BuildOccurrenceSection";
 import SecureOccurrenceSection from "components/occurrences/SecureOccurrenceSection";
 import DeploymentOccurrenceSection from "components/occurrences/DeploymentOccurrenceSection";
@@ -77,11 +78,10 @@ const GitResourceOccurrences = (props) => {
   return (
     <>
       {mappedOccurrences.map((occGroup) => {
-        let version = null;
+        let buildDetails = null;
         if (occGroup.build.length > 0) {
-          [version] = occGroup.build[0].artifacts.map((artifact) => {
-            const { resourceVersion } = getResourceDetails(artifact.id);
-            return resourceVersion;
+          [buildDetails] = occGroup.build[0].artifacts.map((artifact) => {
+            return getResourceDetails(artifact.id);
           });
         }
 
@@ -95,11 +95,11 @@ const GitResourceOccurrences = (props) => {
         return (
           <div key={key} className={styles.occurrenceSection}>
             {occGroup.build.length > 0 && (
-              <LabelWithValue
-                className={styles.occurrenceSectionHeader}
-                label={"Artifact"}
-                value={<ResourceVersion version={version} copy />}
-              />
+              <div className={styles.occurrenceSectionHeader}>
+                <Link href={`/resources/${encodeURIComponent(buildDetails.uri)}`}><a>{buildDetails.resourceName}</a></Link>
+                <LabelWithValue label={"Version"} value={<ResourceVersion version={buildDetails.resourceVersion}/>}/>
+                <LabelWithValue label={buildDetails.aliasLabel} value={buildDetails.aliases.join(", ")}/>
+              </div>
             )}
             {!occGroup.build.length &&
               (occGroup.secure.length > 0 ||

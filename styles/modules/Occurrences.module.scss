@@ -84,14 +84,20 @@ $INDENTATION: 1rem;
 }
 
 .occurrenceSection {
-  margin: 1rem 0;
+  margin: 1rem auto;
 }
 
 .occurrenceSectionHeader {
-  margin-left: 1rem;
-  padding-left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.5rem;
   font-size: 1.25rem;
-  border-left: solid 0.25rem transparent;
+
+  > a {
+    display: block;
+    @include ellipsis(calc(100% - 1rem));
+  }
 }
 
 .active {
@@ -168,7 +174,8 @@ $INDENTATION: 1rem;
 
   .occurrenceSectionHeader {
     color: $DT_MAIN_TEXT;
-    border-left-color: $ACCENT;
+    border-top-color: $ACCENT;
+    background-color: $DT_BACKGROUND_DARK;
     svg {
       color: $ACCENT;
 
@@ -207,7 +214,7 @@ $INDENTATION: 1rem;
 
   .occurrenceSectionHeader {
     color: $LT_MAIN_TEXT;
-    border-left-color: $ACCENT;
+    border-top-color: $ACCENT;
     svg {
       color: $ACCENT;
 
