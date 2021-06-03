@@ -40,36 +40,50 @@ const SelectedResource = (props) => {
 
   const { resourceName, resourceVersion } = getResourceDetails(resourceUri);
 
-  const formattedOccurrenceData = JSON.stringify(data?.originals, null, 2)
+  const formattedOccurrenceData = JSON.stringify(data?.originals, null, 2);
 
   return (
     <>
-      <div className={styles.buttonContainer}>
-      {resourceUri && (
-        <>
-          <Button label={"Clear Resource"} buttonType={"icon"} onClick={() => {
-            clearResource();
-            clearEvaluation();
-          }}>
-            <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
-          </Button>
-          <Button label={"Copy Occurrence Data"} buttonType={"icon"} onClick={() => copy(formattedOccurrenceData)}>
-            <Icon name={ICON_NAMES.CLIPBOARD_COPY} size={"large"}/>
-          </Button>
-        </>
-      )}
-      <ResourceSelectionDrawer
-        setResource={setResource}
-        clearEvaluation={clearEvaluation}
-      />
+      <div className={styles.selectionHeader}>
+        {resourceUri && (
+          <div className={styles.selectionDetailsContainer}>
+            <LabelWithValue label={"Resource"} value={resourceName} />
+            <LabelWithValue
+              label={"Version"}
+              value={<ResourceVersion version={resourceVersion} />}
+            />
+          </div>
+        )}
+        <div className={styles.buttonContainer}>
+          {resourceUri && (
+            <>
+              <Button
+                label={"Clear Resource"}
+                buttonType={"icon"}
+                onClick={() => {
+                  clearResource();
+                  clearEvaluation();
+                }}
+              >
+                <Icon name={ICON_NAMES.BAN} />
+              </Button>
+              <Button
+                label={"Copy Occurrence Data"}
+                buttonType={"icon"}
+                onClick={() => copy(formattedOccurrenceData)}
+              >
+                <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
+              </Button>
+            </>
+          )}
+          <ResourceSelectionDrawer
+            setResource={setResource}
+            clearEvaluation={clearEvaluation}
+          />
+        </div>
       </div>
       {resourceUri ? (
         <Loading loading={loading}>
-          <LabelWithValue label={"Resource"} value={resourceName} />
-          <LabelWithValue
-            label={"Version"}
-            value={<ResourceVersion version={resourceVersion} />}
-          />
           <p className={textStyles.label}>Occurrence Data</p>
           <Code
             code={formattedOccurrenceData}

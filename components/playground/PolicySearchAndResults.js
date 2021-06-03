@@ -52,7 +52,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
         onClick={() => setShowDrawer(true)}
         className={styles.openSearchButton}
       >
-        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+        <Icon name={ICON_NAMES.SEARCH} />
       </Button>
       <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
         <div className={styles.searchContainer}>

@@ -32,28 +32,42 @@ const SelectedPolicy = (props) => {
 
   return (
     <>
-      <div className={styles.buttonContainer}>
+      <div className={styles.selectionHeader}>
         {policy && (
-          <>
-            <Button label={"Clear Policy"} buttonType={"icon"} onClick={() => {
-              clearPolicy();
-              clearEvaluation();
-            }}>
-              <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
-            </Button>
-            <Button label={"Copy Rego Policy Code"} buttonType={"icon"} onClick={() => copy(policy.regoContent)}>
-              <Icon name={ICON_NAMES.CLIPBOARD_COPY} size={"large"}/>
-            </Button>
-          </>
+          <div className={styles.selectionDetailsContainer}>
+            <LabelWithValue label={"Policy"} value={policy.name} />
+          </div>
         )}
-      <PolicySearchAndResults
-        setPolicy={setPolicy}
-        clearEvaluation={clearEvaluation}
-      />
+        <div className={styles.buttonContainer}>
+          {policy && (
+            <>
+              <Button
+                label={"Clear Policy"}
+                buttonType={"icon"}
+                onClick={() => {
+                  clearPolicy();
+                  clearEvaluation();
+                }}
+              >
+                <Icon name={ICON_NAMES.BAN} />
+              </Button>
+              <Button
+                label={"Copy Rego Policy Code"}
+                buttonType={"icon"}
+                onClick={() => copy(policy.regoContent)}
+              >
+                <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
+              </Button>
+            </>
+          )}
+          <PolicySearchAndResults
+            setPolicy={setPolicy}
+            clearEvaluation={clearEvaluation}
+          />
+        </div>
       </div>
       {policy ? (
         <>
-          <LabelWithValue label={"Policy"} value={policy.name} />
           <p className={textStyles.label}>Rego Policy Code</p>
           <Code
             code={policy.regoContent}
