@@ -28,14 +28,17 @@ import { ICON_NAMES } from "../../utils/icon-utils";
 import { copy } from "../../utils/shared-utils";
 
 const SelectedPolicy = (props) => {
-  const { policy, setPolicy, clearEvaluation } = props;
+  const { policy, setPolicy, clearPolicy, clearEvaluation } = props;
 
   return (
     <>
       <div className={styles.buttonContainer}>
         {policy && (
           <>
-            <Button label={"Clear Policy"} buttonType={"icon"} onClick={() => alert("clear!")}>
+            <Button label={"Clear Policy"} buttonType={"icon"} onClick={() => {
+              clearPolicy();
+              clearEvaluation();
+            }}>
               <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
             </Button>
             <Button label={"Copy Rego Policy Code"} buttonType={"icon"} onClick={() => copy(policy.regoContent)}>

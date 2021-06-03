@@ -32,7 +32,7 @@ import ResourceSelectionDrawer from "./ResourceSelectionDrawer";
 import { copy } from "../../utils/shared-utils";
 
 const SelectedResource = (props) => {
-  const { resourceUri, setResource, clearEvaluation } = props;
+  const { resourceUri, setResource, clearResource, clearEvaluation } = props;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri: resourceUri,
@@ -47,7 +47,10 @@ const SelectedResource = (props) => {
       <div className={styles.buttonContainer}>
       {resourceUri && (
         <>
-          <Button label={"Clear Resource"} buttonType={"icon"}>
+          <Button label={"Clear Resource"} buttonType={"icon"} onClick={() => {
+            clearResource();
+            clearEvaluation();
+          }}>
             <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
           </Button>
           <Button label={"Copy Occurrence Data"} buttonType={"icon"} onClick={() => copy(formattedOccurrenceData)}>

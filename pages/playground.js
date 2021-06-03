@@ -109,6 +109,10 @@ const PolicyPlayground = () => {
               data,
             })
           }
+          clearPolicy={() =>  policyDispatch({
+            type: policyActions.SET_EVALUATION_POLICY,
+            data: null,
+          })}
           clearEvaluation={() => setEvaluationResults(null)}
         />
       </div>
@@ -121,6 +125,10 @@ const PolicyPlayground = () => {
               data,
             })
           }
+          clearResource={() =>  policyDispatch({
+            type: policyActions.SET_EVALUATION_RESOURCE,
+            data: null,
+          })}
           clearEvaluation={() => setEvaluationResults(null)}
         />
       </div>
