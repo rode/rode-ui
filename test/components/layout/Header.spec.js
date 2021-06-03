@@ -20,39 +20,30 @@ import userEvent from "@testing-library/user-event";
 import Header from "components/layout/Header";
 
 describe("Header", () => {
-  let unmount;
   beforeEach(() => {
     jest.spyOn(document, "addEventListener");
     jest.spyOn(document, "removeEventListener");
-    const utils = render(
+    render(
       <div>
         <Header />
         <p>Trigger</p>
       </div>
     );
-
-    unmount = utils.unmount;
   });
 
   it("should add an event listener to listen to clicks outside of the nav menu", () => {
+    act(() => {
+      userEvent.click(screen.getByLabelText(/^toggle navigation/i));
+    });
     expect(document.addEventListener).toHaveBeenCalledWith(
       "mousedown",
       expect.any(Function)
     );
-    const navigationContainer = screen.getByTestId("navigationContainer");
-    expect(navigationContainer).toHaveClass("hidden");
-
-    act(() => {
-      userEvent.click(screen.getByTitle(/menu/i));
-    });
-    expect(navigationContainer).not.toHaveClass("hidden");
 
     act(() => {
       userEvent.click(screen.getByText("Trigger"));
     });
-    expect(navigationContainer).toHaveClass("hidden");
 
-    unmount();
     expect(document.removeEventListener).toHaveBeenCalledWith(
       "mousedown",
       expect.any(Function)

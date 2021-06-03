@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { render, screen } from "test/testing-utils/renderer";
+import { render, screen, act } from "test/testing-utils/renderer";
 import Resource from "pages/resources/[resourceUri]";
 import { useRouter } from "next/router";
 import { createMockResourceUri } from "test/testing-utils/mocks";
@@ -151,9 +151,12 @@ describe("Resource Details page", () => {
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
 
-    expect(
-      screen.getByText(/no versions found matching the given criteria./i)
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
+
+    act(() => {
+      userEvent.click(screen.getByLabelText(/close drawer/i));
+    });
+    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
   });
 
   it("should render a button to use the resource in the policy playground", () => {

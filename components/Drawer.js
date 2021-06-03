@@ -34,11 +34,12 @@ const Drawer = (props) => {
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", closeDrawerWhenClickingOutside);
-    return () => {
+    if (isOpen) {
+      document.addEventListener("mousedown", closeDrawerWhenClickingOutside);
+    } else {
       document.removeEventListener("mousedown", closeDrawerWhenClickingOutside);
-    };
-  }, []);
+    }
+  }, [isOpen]);
 
   return (
     <div

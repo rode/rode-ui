@@ -79,14 +79,18 @@ const Header = () => {
   }, [router]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", closeNavigationWhenClickingOutside);
-    return () => {
+    if (showNavigation) {
+      document.addEventListener(
+        "mousedown",
+        closeNavigationWhenClickingOutside
+      );
+    } else {
       document.removeEventListener(
         "mousedown",
         closeNavigationWhenClickingOutside
       );
-    };
-  }, []);
+    }
+  }, [showNavigation]);
 
   return (
     <header className={`${styles.container} ${styles[theme]}`} ref={ref}>

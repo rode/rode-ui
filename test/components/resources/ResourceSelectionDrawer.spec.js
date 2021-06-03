@@ -89,6 +89,9 @@ describe("ResourceSelectionDrawer", () => {
         type: "SET_VERSION_SEARCH_TERM",
         data: "",
       });
+
+    userEvent.click(screen.getByLabelText(/close drawer/i));
+    expect(drawer).toHaveClass("closedDrawer");
   });
 
   it("should show the drawer header", () => {

@@ -20,7 +20,7 @@ import Drawer from "components/Drawer";
 import userEvent from "@testing-library/user-event";
 
 describe("Drawer", () => {
-  let isOpen, onClose, children, unmount, rerender;
+  let isOpen, onClose, children, rerender;
 
   beforeEach(() => {
     jest.spyOn(document, "addEventListener");
@@ -37,7 +37,6 @@ describe("Drawer", () => {
         </Drawer>
       </>
     );
-    unmount = utils.unmount;
     rerender = utils.rerender;
   });
 
@@ -71,7 +70,15 @@ describe("Drawer", () => {
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith("mousedown", expect.any(Function));
 
-    unmount();
+    isOpen = false;
+    rerender(
+      <>
+        <p>trigger</p>
+        <Drawer isOpen={isOpen} onClose={onClose}>
+          <p>{children}</p>
+        </Drawer>
+      </>
+    );
     expect(document.removeEventListener).toHaveBeenCalledWith(
       "mousedown",
       expect.any(Function)
