@@ -83,6 +83,23 @@ $INDENTATION: 1rem;
   }
 }
 
+.occurrenceSection {
+  margin: 1rem auto;
+}
+
+.occurrenceSectionHeader {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+
+  > a {
+    display: block;
+    @include ellipsis(calc(100% - 1rem));
+  }
+}
+
 .active {
   border-bottom-width: 0;
   border-left-width: 8px;
@@ -138,7 +155,7 @@ $INDENTATION: 1rem;
   justify-content: flex-start;
   margin-left: 1rem;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 
   > p {
     margin-left: 0.25rem;
@@ -153,6 +170,19 @@ $INDENTATION: 1rem;
   $ACCENT: $LAGOON;
   .sectionTitle {
     color: $DT_SUB_TEXT;
+  }
+
+  .occurrenceSectionHeader {
+    color: $DT_MAIN_TEXT;
+    border-top-color: $ACCENT;
+    background-color: $DT_BACKGROUND_DARK;
+    svg {
+      color: $ACCENT;
+
+      &:hover {
+        color: $DT_HOVER_GREEN;
+      }
+    }
   }
 
   .previewContainer {
@@ -180,6 +210,18 @@ $INDENTATION: 1rem;
   $ACCENT: $DEEP_SEA;
   .sectionTitle {
     color: $LT_SUB_TEXT;
+  }
+
+  .occurrenceSectionHeader {
+    color: $LT_MAIN_TEXT;
+    border-top-color: $ACCENT;
+    svg {
+      color: $ACCENT;
+
+      &:hover {
+        color: $LT_HOVER_GREEN;
+      }
+    }
   }
 
   .previewContainer {
