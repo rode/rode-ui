@@ -162,7 +162,6 @@ const ChangeVersionDrawer = (props) => {
     </Drawer>
   );
 };
-
 ChangeVersionDrawer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   closeDrawer: PropTypes.func.isRequired,
