@@ -132,7 +132,9 @@ describe("Resource Details page", () => {
       router.query.resourceUri
     );
 
-    expect(screen.getByText(resourceName)).toBeInTheDocument();
+    expect(
+      screen.getByText(resourceName, { selector: "h1" })
+    ).toBeInTheDocument();
     expect(screen.getByText("Type")).toBeInTheDocument();
     expect(screen.getByText(resourceLabel)).toBeInTheDocument();
     expect(screen.getByText("Version")).toBeInTheDocument();
@@ -150,7 +152,7 @@ describe("Resource Details page", () => {
     userEvent.click(renderedButton);
 
     expect(
-      screen.getByText(/no versions found matching the resource/i)
+      screen.getByText(/no versions found matching the given criteria./i)
     ).toBeInTheDocument();
   });
 

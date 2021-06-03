@@ -16,6 +16,7 @@
 
 import {
   buildResourceQueryParams,
+  buildResourceVersionQueryParams,
   getResourceDetails,
 } from "utils/resource-utils";
 
@@ -281,6 +282,37 @@ describe("resource utils", () => {
       expect(actual).toEqual({
         resourceTypes: typeFilters.map(({ value }) => value),
       });
+    });
+  });
+
+  describe("buildResourceVersionQueryParams", () => {
+    let genericName, searchTerm, actual;
+
+    beforeEach(() => {
+      genericName = chance.string();
+      searchTerm = "";
+    });
+
+    it("should return the generic name parameters", () => {
+      actual = buildResourceVersionQueryParams(genericName, searchTerm);
+      expect(actual).toEqual({ id: genericName });
+    });
+
+    it("should return the search term param if searching for a term other than 'all'", () => {
+      searchTerm = chance.string();
+
+      actual = buildResourceVersionQueryParams(genericName, searchTerm);
+      expect(actual).toEqual({
+        id: genericName,
+        filter: `version.contains("${searchTerm}")`,
+      });
+    });
+
+    it("should not return the search term param if searching for 'all'", () => {
+      searchTerm = "all";
+
+      actual = buildResourceVersionQueryParams(genericName, searchTerm);
+      expect(actual).toEqual({ id: genericName });
     });
   });
 });

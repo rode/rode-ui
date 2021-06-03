@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import Drawer from "components/Drawer";
@@ -28,9 +28,13 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
-import { getResourceDetails } from "utils/resource-utils";
-import { DATE_TIME_FORMAT } from "utils/constants";
+import {
+  buildResourceVersionQueryParams,
+  getResourceDetails,
+} from "utils/resource-utils";
+import { DATE_TIME_FORMAT, SEARCH_ALL } from "utils/constants";
 import dayjs from "dayjs";
+import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -44,7 +48,7 @@ const ChangeVersionDrawer = (props) => {
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     genericName ? "/api/resource-versions" : null,
-    { id: genericName },
+    buildResourceVersionQueryParams(genericName, state.versionSearchTerm),
     10
   );
 
@@ -57,18 +61,46 @@ const ChangeVersionDrawer = (props) => {
     closeDrawer();
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      dispatch({
+        type: resourceActions.SET_VERSION_SEARCH_TERM,
+        data: SEARCH_ALL,
+      });
+    }
+  }, [isOpen]);
+
   return (
     <Drawer isOpen={isOpen} onClose={closeDrawer}>
+      <div className={styles.versionSelectionHeader}>
+        <p className={styles.versionSelectionName}>{resourceName}</p>
+        <p className={styles.versionSelectionInstructions}>
+          Select from the list below to see occurrences related to that version
+        </p>
+      </div>
+      <div className={styles.versionSearchContainer}>
+        <ResourceVersionSearchBar
+          onSubmit={(event) => {
+            event.preventDefault();
+          }}
+          helpText={
+            <Button
+              className={styles.viewAllButton}
+              buttonType={"text"}
+              label={"View all versions"}
+              onClick={() => {
+                dispatch({
+                  type: resourceActions.SET_VERSION_SEARCH_TERM,
+                  data: SEARCH_ALL,
+                });
+              }}
+            />
+          }
+        />
+      </div>
       <Loading loading={loading}>
         {data?.length > 0 ? (
           <>
-            <div className={styles.versionSelectionHeader}>
-              <p className={styles.versionSelectionName}>{resourceName}</p>
-              <p className={styles.versionSelectionInstructions}>
-                Select from the list below to see occurrences related to that
-                version
-              </p>
-            </div>
             {data.map((version) => {
               const {
                 resourceVersion,
@@ -124,7 +156,7 @@ const ChangeVersionDrawer = (props) => {
         ) : (
           <p
             className={styles.notFoundMessage}
-          >{`No versions found matching the resource "${resourceName}"`}</p>
+          >{`No versions found matching the given criteria.`}</p>
         )}
       </Loading>
     </Drawer>

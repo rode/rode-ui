@@ -168,3 +168,15 @@ export const buildResourceQueryParams = (searchTerm, typeFilters) => {
 
   return params;
 };
+
+export const buildResourceVersionQueryParams = (genericName, searchTerm) => {
+  const params = {
+    id: genericName,
+  };
+
+  if (searchTerm && searchTerm !== SEARCH_ALL) {
+    params.filter = `version.contains("${searchTerm}")`;
+  }
+
+  return params;
+};
