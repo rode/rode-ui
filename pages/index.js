@@ -64,7 +64,7 @@ const Home = () => {
           }
           helpText={
             <>
-              You can search by name, version, or{" "}
+              You can search by resource name or{" "}
               <Link href={`/resources?search=${SEARCH_ALL}`}>
                 view all resources
               </Link>
