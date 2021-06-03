@@ -109,10 +109,7 @@ const GitResourceOccurrences = (props) => {
                   Git Occurrences
                 </p>
               )}
-            <BuildOccurrenceSection
-              occurrences={occGroup.build}
-              type={state.currentResource?.resourceType}
-            />
+            <BuildOccurrenceSection occurrences={occGroup.build} />
             <SecureOccurrenceSection occurrences={occGroup.secure} />
             <DeploymentOccurrenceSection occurrences={occGroup.deploy} />
             <OtherOccurrenceSection occurrences={occGroup.other} />
