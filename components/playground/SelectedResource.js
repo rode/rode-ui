@@ -24,9 +24,15 @@ import Loading from "components/Loading";
 import { getResourceDetails } from "utils/resource-utils";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersion from "components/resources/ResourceVersion";
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import { policyActions } from "../../reducers/policies";
+import ResourceSelectionDrawer from "./ResourceSelectionDrawer";
+import { copy } from "../../utils/shared-utils";
 
 const SelectedResource = (props) => {
-  const { resourceUri } = props;
+  const { resourceUri, setResource, clearEvaluation } = props;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri: resourceUri,
@@ -34,8 +40,26 @@ const SelectedResource = (props) => {
 
   const { resourceName, resourceVersion } = getResourceDetails(resourceUri);
 
+  const formattedOccurrenceData = JSON.stringify(data?.originals, null, 2)
+
   return (
     <>
+      <div className={styles.buttonContainer}>
+      {resourceUri && (
+        <>
+          <Button label={"Clear Resource"} buttonType={"icon"}>
+            <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
+          </Button>
+          <Button label={"Copy Occurrence Data"} buttonType={"icon"} onClick={() => copy(formattedOccurrenceData)}>
+            <Icon name={ICON_NAMES.CLIPBOARD_COPY} size={"large"}/>
+          </Button>
+        </>
+      )}
+      <ResourceSelectionDrawer
+        setResource={setResource}
+        clearEvaluation={clearEvaluation}
+      />
+      </div>
       {resourceUri ? (
         <Loading loading={loading}>
           <LabelWithValue label={"Resource"} value={resourceName} />
@@ -45,7 +69,7 @@ const SelectedResource = (props) => {
           />
           <p className={textStyles.label}>Occurrence Data</p>
           <Code
-            code={JSON.stringify(data?.originals, null, 2)}
+            code={formattedOccurrenceData}
             language={"json"}
             className={styles.codeContent}
             data-testid={"occurrenceJson"}

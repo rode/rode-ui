@@ -101,7 +101,8 @@ const PolicyPlayground = () => {
         </p>
       </PageHeader>
       <div className={styles.policyContainer}>
-        <PolicySearchAndResults
+        <SelectedPolicy
+          policy={state.evaluationPolicy}
           setPolicy={(data) =>
             policyDispatch({
               type: policyActions.SET_EVALUATION_POLICY,
@@ -110,10 +111,10 @@ const PolicyPlayground = () => {
           }
           clearEvaluation={() => setEvaluationResults(null)}
         />
-        <SelectedPolicy policy={state.evaluationPolicy} />
       </div>
       <div className={styles.resourceContainer}>
-        <ResourceSelectionDrawer
+        <SelectedResource
+          resourceUri={state.evaluationResource?.versionedResourceUri}
           setResource={(data) =>
             policyDispatch({
               type: policyActions.SET_EVALUATION_RESOURCE,
@@ -121,9 +122,6 @@ const PolicyPlayground = () => {
             })
           }
           clearEvaluation={() => setEvaluationResults(null)}
-        />
-        <SelectedResource
-          resourceUri={state.evaluationResource?.versionedResourceUri}
         />
       </div>
       <div className={styles.evaluationContainer}>

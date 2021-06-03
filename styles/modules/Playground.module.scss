@@ -80,10 +80,15 @@ $GAP: 1rem;
   }
 }
 
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .openSearchButton {
-  position: absolute;
-  top: 0;
-  right: 0;
+  //position: absolute;
+  //top: 0;
+  //right: 0;
 }
 
 .resourceDrawerNavigation {

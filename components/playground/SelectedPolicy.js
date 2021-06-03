@@ -20,12 +20,34 @@ import styles from "styles/modules/Playground.module.scss";
 import Code from "components/Code";
 import textStyles from "styles/modules/Typography.module.scss";
 import LabelWithValue from "components/LabelWithValue";
+import { policyActions } from "../../reducers/policies";
+import PolicySearchAndResults from "./PolicySearchAndResults";
+import Button from "../Button";
+import Icon from "../Icon";
+import { ICON_NAMES } from "../../utils/icon-utils";
+import { copy } from "../../utils/shared-utils";
 
 const SelectedPolicy = (props) => {
-  const { policy } = props;
+  const { policy, setPolicy, clearEvaluation } = props;
 
   return (
     <>
+      <div className={styles.buttonContainer}>
+        {policy && (
+          <>
+            <Button label={"Clear Policy"} buttonType={"icon"} onClick={() => alert("clear!")}>
+              <Icon name={ICON_NAMES.X_CIRCLE} size={"large"}/>
+            </Button>
+            <Button label={"Copy Rego Policy Code"} buttonType={"icon"} onClick={() => copy(policy.regoContent)}>
+              <Icon name={ICON_NAMES.CLIPBOARD_COPY} size={"large"}/>
+            </Button>
+          </>
+        )}
+      <PolicySearchAndResults
+        setPolicy={setPolicy}
+        clearEvaluation={clearEvaluation}
+      />
+      </div>
       {policy ? (
         <>
           <LabelWithValue label={"Policy"} value={policy.name} />
