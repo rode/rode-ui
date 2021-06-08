@@ -20,7 +20,6 @@ import { ICON_COMPONENTS, ICON_NAMES } from "utils/icon-utils";
 import styles from "styles/modules/Icons.module.scss";
 import { useTheme } from "providers/theme";
 
-// TODO: add title to set the icon title or default to current title in component
 const Icon = (props) => {
   const { name, size = "medium", className = "" } = props;
 

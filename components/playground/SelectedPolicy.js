@@ -47,6 +47,7 @@ const SelectedPolicy = (props) => {
                   setPolicy(null);
                   clearEvaluation();
                 }}
+                tooltip={"Clear Policy"}
               >
                 <Icon name={ICON_NAMES.BAN} />
               </Button>
@@ -54,6 +55,7 @@ const SelectedPolicy = (props) => {
                 label={"Copy Rego Policy Code"}
                 buttonType={"icon"}
                 onClick={() => copy(policy.regoContent)}
+                tooltip={"Copy Rego Policy Code"}
               >
                 <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
               </Button>
