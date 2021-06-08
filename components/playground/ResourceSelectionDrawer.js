@@ -71,7 +71,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
         }}
         className={styles.openSearchButton}
       >
-        <Icon name={ICON_NAMES.SEARCH}/>
+        <Icon name={ICON_NAMES.SEARCH} />
       </Button>
       <Drawer
         isOpen={showDrawer}

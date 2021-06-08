@@ -19,7 +19,6 @@ import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
-import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
 import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
@@ -28,7 +27,6 @@ import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
-import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -109,10 +107,6 @@ const PolicyPlayground = () => {
               data,
             })
           }
-          clearPolicy={() =>  policyDispatch({
-            type: policyActions.SET_EVALUATION_POLICY,
-            data: null,
-          })}
           clearEvaluation={() => setEvaluationResults(null)}
         />
       </div>
@@ -125,10 +119,6 @@ const PolicyPlayground = () => {
               data,
             })
           }
-          clearResource={() =>  policyDispatch({
-            type: policyActions.SET_EVALUATION_RESOURCE,
-            data: null,
-          })}
           clearEvaluation={() => setEvaluationResults(null)}
         />
       </div>

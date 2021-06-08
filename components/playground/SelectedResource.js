@@ -27,12 +27,11 @@ import ResourceVersion from "components/resources/ResourceVersion";
 import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
-import { policyActions } from "../../reducers/policies";
-import ResourceSelectionDrawer from "./ResourceSelectionDrawer";
-import { copy } from "../../utils/shared-utils";
+import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
+import { copy } from "utils/shared-utils";
 
 const SelectedResource = (props) => {
-  const { resourceUri, setResource, clearResource, clearEvaluation } = props;
+  const { resourceUri, setResource, clearEvaluation } = props;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri: resourceUri,
@@ -61,7 +60,7 @@ const SelectedResource = (props) => {
                 label={"Clear Resource"}
                 buttonType={"icon"}
                 onClick={() => {
-                  clearResource();
+                  setResource(null);
                   clearEvaluation();
                 }}
               >
@@ -103,6 +102,8 @@ const SelectedResource = (props) => {
 
 SelectedResource.propTypes = {
   resourceUri: PropTypes.string,
+  setResource: PropTypes.func.isRequired,
+  clearEvaluation: PropTypes.func.isRequired,
 };
 
 export default SelectedResource;

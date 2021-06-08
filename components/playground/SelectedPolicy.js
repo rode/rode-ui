@@ -20,15 +20,14 @@ import styles from "styles/modules/Playground.module.scss";
 import Code from "components/Code";
 import textStyles from "styles/modules/Typography.module.scss";
 import LabelWithValue from "components/LabelWithValue";
-import { policyActions } from "../../reducers/policies";
-import PolicySearchAndResults from "./PolicySearchAndResults";
-import Button from "../Button";
-import Icon from "../Icon";
-import { ICON_NAMES } from "../../utils/icon-utils";
-import { copy } from "../../utils/shared-utils";
+import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import { copy } from "utils/shared-utils";
 
 const SelectedPolicy = (props) => {
-  const { policy, setPolicy, clearPolicy, clearEvaluation } = props;
+  const { policy, setPolicy, clearEvaluation } = props;
 
   return (
     <>
@@ -45,7 +44,7 @@ const SelectedPolicy = (props) => {
                 label={"Clear Policy"}
                 buttonType={"icon"}
                 onClick={() => {
-                  clearPolicy();
+                  setPolicy(null);
                   clearEvaluation();
                 }}
               >
@@ -84,6 +83,8 @@ const SelectedPolicy = (props) => {
 };
 SelectedPolicy.propTypes = {
   policy: PropTypes.object,
+  setPolicy: PropTypes.func.isRequired,
+  clearEvaluation: PropTypes.func.isRequired,
 };
 
 export default SelectedPolicy;

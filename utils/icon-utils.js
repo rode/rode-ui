@@ -32,7 +32,7 @@ import Exclamation from "components/icons/Exclamation";
 import Check from "components/icons/Check";
 import Menu from "components/icons/Menu";
 import ClipboardCopy from "components/icons/ClipboardCopy";
-import Ban from "../components/icons/Ban";
+import Ban from "components/icons/Ban";
 
 const SEARCH = "SEARCH";
 const COG = "COG";
@@ -73,7 +73,7 @@ export const ICON_COMPONENTS = {
   [CHECK]: Check,
   [MENU]: Menu,
   [CLIPBOARD_COPY]: ClipboardCopy,
-  [BAN]: Ban
+  [BAN]: Ban,
 };
 
 export const ICON_NAMES = {
