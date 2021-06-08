@@ -29,8 +29,6 @@ const SecureOccurrenceSection = ({ occurrences }) => {
     return null;
   }
 
-  console.log('occurrences', occurrences);
-
   return (
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>

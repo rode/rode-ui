@@ -67,8 +67,9 @@ describe("occurrence-utils", () => {
         startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
         startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
         endScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
-        endScanOccurrence.discovered.discovered.analysisStatus =
-          chance.pickone(["FINISHED_SUCCESS", "FINISHED_FAILED"]);
+        endScanOccurrence.discovered.discovered.analysisStatus = chance.pickone(
+          ["FINISHED_SUCCESS", "FINISHED_FAILED"]
+        );
         matchingVulnerability = createMockOccurrence("VULNERABILITY", noteName);
       });
 
