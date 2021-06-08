@@ -49,7 +49,7 @@ const Button = (props) => {
           id={tooltipId}
           effect={"solid"}
           place={"top"}
-          delayShow={"200"}
+          delayShow={200}
         >
           <p>{tooltip}</p>
         </ReactTooltip>
