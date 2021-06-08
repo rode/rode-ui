@@ -226,7 +226,7 @@ describe("/api/policies/[id]", () => {
           .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       };
 
-      it("should return a bad request status when rego fails to compile", async () => {
+      it("should return a bad request status when Rego fails to compile", async () => {
         const details = [
           {
             errors: chance.string(),
@@ -249,7 +249,7 @@ describe("/api/policies/[id]", () => {
         });
       });
 
-      it("should return a bad request status when rego fails to parse", async () => {
+      it("should return a bad request status when Rego fails to parse", async () => {
         const details = [
           {
             errors: chance.string(),

@@ -80,10 +80,30 @@ $GAP: 1rem;
   }
 }
 
-.openSearchButton {
-  position: absolute;
-  top: 0;
-  right: 0;
+.selectionHeader {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  width: 100%;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
+}
+
+.selectionDetailsContainer {
+  flex: 1;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.selectToBeginText {
+  text-align: center;
 }
 
 .resourceDrawerNavigation {

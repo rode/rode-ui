@@ -15,44 +15,101 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import SelectedPolicy from "components/playground/SelectedPolicy";
+import { copy } from "utils/shared-utils";
+import userEvent from "@testing-library/user-event";
+
+jest.mock("utils/shared-utils");
 
 describe("SelectedPolicy", () => {
-  let policy, rerender;
+  let policy, setPolicy, clearEvaluation;
 
   beforeEach(() => {
-    policy = {
-      name: chance.string(),
-      description: chance.string(),
-      regoContent: chance.word({ syllables: chance.d10() }),
-    };
-
-    const utils = render(<SelectedPolicy policy={policy} />);
-    rerender = utils.rerender;
+    setPolicy = jest.fn();
+    clearEvaluation = jest.fn();
   });
 
-  it("should render the rego policy label", () => {
-    expect(screen.getByText(/rego policy code/i)).toBeInTheDocument();
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
-  it("should render the rego policy code", () => {
-    expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
-    expect(
-      screen.getByText(policy.regoContent, { exact: false })
-    ).toBeInTheDocument();
+  describe("policy has not been selected", () => {
+    beforeEach(() => {
+      policy = null;
+      render(
+        <SelectedPolicy
+          policy={policy}
+          setPolicy={setPolicy}
+          clearEvaluation={clearEvaluation}
+        />
+      );
+    });
+
+    it("should render the instructions to search for a policy", () => {
+      expect(
+        screen.getByText(/search for a policy to begin/i)
+      ).toBeInTheDocument();
+    });
+
+    it("should render the search button", () => {
+      expect(
+        screen.getByLabelText(/^search for policies/i)
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should render the policy name", () => {
-    expect(screen.getByText("Policy")).toBeInTheDocument();
-    expect(screen.getByText(policy.name)).toBeInTheDocument();
-  });
+  describe("policy has been selected", () => {
+    beforeEach(() => {
+      policy = {
+        name: chance.string(),
+        description: chance.string(),
+        regoContent: chance.word({ syllables: chance.d10() }),
+      };
+      render(
+        <SelectedPolicy
+          policy={policy}
+          setPolicy={setPolicy}
+          clearEvaluation={clearEvaluation}
+        />
+      );
+    });
 
-  it("should render the instructions if no policy is selected", () => {
-    rerender(<SelectedPolicy policy={null} />);
+    it("should render the Rego policy label", () => {
+      expect(
+        screen.getByText("Rego Policy Code", { selector: "p" })
+      ).toBeInTheDocument();
+    });
 
-    expect(
-      screen.getByText(/search for a policy to begin/i)
-    ).toBeInTheDocument();
+    it("should render the Rego policy code", () => {
+      expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
+      expect(
+        screen.getByText(policy.regoContent, { exact: false })
+      ).toBeInTheDocument();
+    });
+
+    it("should render the policy name", () => {
+      expect(screen.getByText("Policy")).toBeInTheDocument();
+      expect(screen.getByText(policy.name)).toBeInTheDocument();
+    });
+
+    it("should render the button to clear the selected policy", () => {
+      const renderedButton = screen.getByLabelText(/Clear Policy/);
+      expect(renderedButton).toBeInTheDocument();
+
+      userEvent.click(renderedButton);
+      expect(setPolicy).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+      expect(clearEvaluation).toHaveBeenCalled();
+    });
+
+    it("should render the button to copy the Rego content", () => {
+      const renderedButton = screen.getByLabelText(/Copy Rego Policy Code/);
+      expect(renderedButton).toBeInTheDocument();
+
+      userEvent.click(renderedButton);
+      expect(copy)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(policy.regoContent);
+    });
   });
 });

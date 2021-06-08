@@ -17,7 +17,10 @@
 import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/occurrences";
-import { createMockOccurrence } from "test/testing-utils/mocks";
+import {
+  createMockOccurrence,
+  createMockResourceUri,
+} from "test/testing-utils/mocks";
 import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
 
 jest.mock("node-fetch");
@@ -26,7 +29,7 @@ describe("/api/occurrences", () => {
   let request, response, allOccurrences, rodeResponse, resourceUriParam;
 
   beforeEach(() => {
-    resourceUriParam = chance.word();
+    resourceUriParam = createMockResourceUri();
     request = {
       method: "GET",
       query: {

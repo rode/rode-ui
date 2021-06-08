@@ -176,7 +176,7 @@ describe("PolicyPlayground", () => {
       });
     });
 
-    it("should render a search bar for policies", () => {
+    it("should render a search drawer for policies", () => {
       const policyName = chance.string();
       const description = chance.string();
       const regoContent = chance.string();
@@ -212,7 +212,7 @@ describe("PolicyPlayground", () => {
 
     beforeEach(() => {
       selectedResource = {
-        versionedResourceUri: chance.string(),
+        versionedResourceUri: createMockResourceUri(),
       };
       selectedPolicy = {
         name: chance.string(),
