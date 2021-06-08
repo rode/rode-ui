@@ -19,14 +19,16 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Typography.module.scss";
 
 const LabelWithValue = (props) => {
-  const { label, value, vertical = false, className = "" } = props;
+  const { label, value, vertical = false, className = "", as = "p" } = props;
 
   if (!value) {
     return null;
   }
 
+  const Text = as;
+
   return (
-    <p
+    <Text
       className={` ${
         vertical
           ? styles.verticalLabelWithValueContainer
@@ -35,7 +37,7 @@ const LabelWithValue = (props) => {
     >
       <span className={styles.label}>{label}</span>
       <span className={styles.value}>{value}</span>
-    </p>
+    </Text>
   );
 };
 
@@ -44,6 +46,7 @@ LabelWithValue.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
   vertical: PropTypes.bool,
+  as: PropTypes.oneOf(["h1", "h2", "h3", "h4", "h5", "h6", "span"]),
 };
 
 export default LabelWithValue;

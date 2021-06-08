@@ -65,4 +65,13 @@ describe("LabelWithValue", () => {
       "verticalLabelWithValueContainer"
     );
   });
+
+  it("should allow the user to specify a different html tag to render", () => {
+    const type = "h1";
+    rerender(<LabelWithValue label={label} value={value} as={type} />);
+
+    const renderedLabel = screen.getByText(label);
+    expect(renderedLabel).toBeInTheDocument();
+    expect(renderedLabel.closest(type)).toHaveClass("labelWithValueContainer");
+  });
 });
