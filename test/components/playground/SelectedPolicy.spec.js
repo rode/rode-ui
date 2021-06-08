@@ -75,7 +75,7 @@ describe("SelectedPolicy", () => {
       );
     });
 
-    it("should render the rego policy label", () => {
+    it("should render the Rego policy label", () => {
       expect(
         screen.getByText("Rego Policy Code", { selector: "p" })
       ).toBeInTheDocument();
