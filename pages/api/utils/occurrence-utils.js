@@ -76,7 +76,7 @@ const matchAndMapVulnerabilities = (occurrences, notes) => {
 
   const scanEnds = discoveryOccurrences.filter(
     (occurrence) =>
-      occurrence.discovered.discovered.analysisStatus === "FINISHED_SUCCESS"
+      occurrence.discovered.discovered.analysisStatus.includes("FINISHED")
   );
 
   const matchedTfSecScans = tfSecScanStarts
