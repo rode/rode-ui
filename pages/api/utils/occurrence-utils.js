@@ -52,7 +52,7 @@ const mapVulnerabilities = (occurrences) => {
   return sortByVulnerability(mapped);
 };
 
-const matchAndMapVulnerabilities = (occurrences) => {
+const matchAndMapVulnerabilities = (occurrences, notes) => {
   const unmatchedOccurrences = [];
 
   const discoveryOccurrences = occurrences.filter(
@@ -93,12 +93,15 @@ const matchAndMapVulnerabilities = (occurrences) => {
           vulnerability.createTime === startScan.createTime
       );
 
+      const matchingNotes = notes[startScan.noteName];
+
       if (!endScan) {
         return {
           name: startScan.name,
           started: startScan.createTime,
           completed: null,
           vulnerabilities: matchingVulnerabilities,
+          notes: matchingNotes,
           originals: {
             occurrences: [startScan, ...matchingVulnerabilities],
           },
@@ -110,6 +113,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
         started: startScan.createTime,
         completed: endScan.createTime,
         vulnerabilities: mapVulnerabilities(matchingVulnerabilities),
+        notes: matchingNotes,
         originals: {
           occurrences: [startScan, endScan, ...matchingVulnerabilities],
         },
@@ -126,12 +130,15 @@ const matchAndMapVulnerabilities = (occurrences) => {
       );
       const endScan = scanEnds.find((endScan) => endScan.noteName === noteName);
 
+      const matchingNotes = notes[startScan.noteName];
+
       if (!endScan) {
         return {
           name: startScan.name,
           started: startScan.createTime,
           completed: null,
           vulnerabilities: matchingVulnerabilities,
+          notes: matchingNotes,
           originals: {
             occurrences: [startScan, ...matchingVulnerabilities],
           },
@@ -143,6 +150,7 @@ const matchAndMapVulnerabilities = (occurrences) => {
         started: startScan.createTime,
         completed: endScan.createTime,
         vulnerabilities: mapVulnerabilities(matchingVulnerabilities),
+        notes: matchingNotes,
         originals: {
           occurrences: [startScan, endScan, ...matchingVulnerabilities],
         },
@@ -227,7 +235,7 @@ const mapDeployments = (occurrences) => {
   });
 };
 
-export const mapOccurrencesToSections = (occurrences, resourceUri) => {
+export const mapOccurrencesToSections = (occurrences, resourceUri, notes) => {
   let buildOccurrences = [];
   let vulnerabilityOccurrences = [];
   let deploymentOccurrences = [];
@@ -259,7 +267,8 @@ export const mapOccurrencesToSections = (occurrences, resourceUri) => {
   });
 
   const { vulnerabilities, other } = matchAndMapVulnerabilities(
-    vulnerabilityOccurrences
+    vulnerabilityOccurrences,
+    notes
   );
 
   return {

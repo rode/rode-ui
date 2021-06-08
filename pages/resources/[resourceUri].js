@@ -46,6 +46,8 @@ const Resource = () => {
     resourceUri,
   });
 
+  console.log("data", data);
+
   useSafeLayoutEffect(() => {
     dispatch({
       type: resourceActions.SET_OCCURRENCE_DETAILS,

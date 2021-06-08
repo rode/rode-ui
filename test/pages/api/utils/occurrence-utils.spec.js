@@ -53,10 +53,16 @@ describe("occurrence-utils", () => {
       let startScanOccurrence,
         endScanOccurrence,
         matchingVulnerability,
-        noteName;
+        noteName,
+        notes;
 
       beforeEach(() => {
         noteName = "harbor-scan";
+        notes = {
+          [noteName]: {
+            [chance.string()]: chance.string(),
+          },
+        };
 
         startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
         startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
@@ -68,16 +74,21 @@ describe("occurrence-utils", () => {
 
       describe("harbor scans", () => {
         it("should match up vulnerabilities with a scan start and end", () => {
-          const { secure } = mapOccurrencesToSections([
-            startScanOccurrence,
-            endScanOccurrence,
-            matchingVulnerability,
-            createMockOccurrence("VULNERABILITY"),
-          ]);
+          const { secure } = mapOccurrencesToSections(
+            [
+              startScanOccurrence,
+              endScanOccurrence,
+              matchingVulnerability,
+              createMockOccurrence("VULNERABILITY"),
+            ],
+            chance.string(),
+            notes
+          );
 
           expect(secure).toHaveLength(1);
           expect(secure[0].started).toEqual(startScanOccurrence.createTime);
           expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
+          expect(secure[0].notes).toEqual(notes[noteName]);
           expect(secure[0].originals.occurrences).toContain(
             startScanOccurrence
           );
@@ -93,10 +104,11 @@ describe("occurrence-utils", () => {
             "harbor-scan"
           );
           startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
-          const { secure, other } = mapOccurrencesToSections([
-            startScanOccurrence,
-            createMockOccurrence("VULNERABILITY"),
-          ]);
+          const { secure, other } = mapOccurrencesToSections(
+            [startScanOccurrence, createMockOccurrence("VULNERABILITY")],
+            chance.string(),
+            notes
+          );
 
           expect(secure).toHaveLength(1);
           expect(secure[0].completed).toBeNull();
@@ -108,6 +120,11 @@ describe("occurrence-utils", () => {
       describe("tfsec scans", () => {
         beforeEach(() => {
           noteName = "tfsec";
+          notes = {
+            [noteName]: {
+              [chance.string()]: chance.string(),
+            },
+          };
 
           startScanOccurrence = createMockOccurrence("DISCOVERY", noteName);
           startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
@@ -123,16 +140,21 @@ describe("occurrence-utils", () => {
         });
 
         it("should match up vulnerabilities with a scan start and end", () => {
-          const { secure } = mapOccurrencesToSections([
-            startScanOccurrence,
-            endScanOccurrence,
-            matchingVulnerability,
-            createMockOccurrence("VULNERABILITY"),
-          ]);
+          const { secure } = mapOccurrencesToSections(
+            [
+              startScanOccurrence,
+              endScanOccurrence,
+              matchingVulnerability,
+              createMockOccurrence("VULNERABILITY"),
+            ],
+            chance.string(),
+            notes
+          );
 
           expect(secure).toHaveLength(1);
           expect(secure[0].started).toEqual(startScanOccurrence.createTime);
           expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
+          expect(secure[0].notes).toEqual(notes[noteName]);
           expect(secure[0].originals.occurrences).toContain(
             startScanOccurrence
           );
@@ -148,10 +170,11 @@ describe("occurrence-utils", () => {
             "tfsec"
           );
           startScanOccurrence.discovered.discovered.analysisStatus = "SCANNING";
-          const { secure, other } = mapOccurrencesToSections([
-            startScanOccurrence,
-            createMockOccurrence("VULNERABILITY"),
-          ]);
+          const { secure, other } = mapOccurrencesToSections(
+            [startScanOccurrence, createMockOccurrence("VULNERABILITY")],
+            chance.string(),
+            notes
+          );
 
           expect(secure).toHaveLength(1);
           expect(secure[0].completed).toBeNull();
@@ -161,12 +184,16 @@ describe("occurrence-utils", () => {
       });
 
       it("should correctly map the vulnerabilities", () => {
-        const { secure } = mapOccurrencesToSections([
-          startScanOccurrence,
-          endScanOccurrence,
-          matchingVulnerability,
-          createMockOccurrence("VULNERABILITY"),
-        ]);
+        const { secure } = mapOccurrencesToSections(
+          [
+            startScanOccurrence,
+            endScanOccurrence,
+            matchingVulnerability,
+            createMockOccurrence("VULNERABILITY"),
+          ],
+          chance.string(),
+          notes
+        );
 
         expect(secure[0].vulnerabilities).toHaveLength(1);
 
@@ -213,11 +240,15 @@ describe("occurrence-utils", () => {
         const highSev = createMockOccurrence("VULNERABILITY", noteName);
         highSev.vulnerability.effectiveSeverity = "HIGH";
 
-        const { secure } = mapOccurrencesToSections([
-          startScanOccurrence,
-          endScanOccurrence,
-          ...chance.shuffle([lowSev, medSev, highSev]),
-        ]);
+        const { secure } = mapOccurrencesToSections(
+          [
+            startScanOccurrence,
+            endScanOccurrence,
+            ...chance.shuffle([lowSev, medSev, highSev]),
+          ],
+          chance.string(),
+          notes
+        );
 
         expect(secure[0].vulnerabilities[0].effectiveSeverity).toBe("HIGH");
         expect(secure[0].vulnerabilities[1].effectiveSeverity).toBe("MEDIUM");

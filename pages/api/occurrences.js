@@ -33,7 +33,7 @@ export default async (req, res) => {
     const response = await fetch(
       `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUri
-      )}&pageSize=1000`
+      )}&fetchRelatedNotes=true&pageSize=1000`
     );
 
     if (!response.ok) {
@@ -51,7 +51,8 @@ export default async (req, res) => {
 
     const occurrences = mapOccurrencesToSections(
       listOccurrencesResponse.occurrences,
-      resourceUri
+      resourceUri,
+      listOccurrencesResponse.relatedNotes
     );
 
     res.status(StatusCodes.OK).json(occurrences);

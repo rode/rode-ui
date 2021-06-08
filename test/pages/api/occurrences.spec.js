@@ -22,7 +22,7 @@ import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
 
 jest.mock("node-fetch");
 
-describe("/api/resources", () => {
+describe("/api/occurrences", () => {
   let request, response, allOccurrences, rodeResponse, resourceUriParam;
 
   beforeEach(() => {
@@ -90,7 +90,7 @@ describe("/api/resources", () => {
     const createExpectedUrl = (baseUrl) => {
       return `${baseUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUriParam
-      )}&pageSize=1000`;
+      )}&fetchRelatedNotes=true&pageSize=1000`;
     };
 
     it("should hit the Rode API", async () => {
