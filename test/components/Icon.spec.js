@@ -136,4 +136,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/clipboard copy/i)).toBeInTheDocument();
   });
+
+  it("should render the ban icon when specified", () => {
+    render(<Icon name={ICON_NAMES.BAN} />);
+
+    expect(screen.getByTitle(/ban/i)).toBeInTheDocument();
+  });
 });

@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Buttons.module.scss";
 import { useTheme } from "providers/theme";
 import Loading from "./Loading";
+import ReactTooltip from "react-tooltip";
 
 const Button = (props) => {
   const {
@@ -29,23 +30,44 @@ const Button = (props) => {
     children,
     className = "",
     loading = false,
+    showTooltip = false,
     ...otherProps
   } = props;
 
   const { theme } = useTheme();
 
+  let tooltipId = null;
+
+  if (showTooltip) {
+    tooltipId = `${label.replace(" ", "")}-toolTip`;
+  }
+
   return (
-    <button
-      className={`${styles[buttonType]} ${styles[theme]} ${className}`}
-      onClick={onClick}
-      aria-label={label}
-      disabled={disabled || loading}
-      {...otherProps}
-    >
-      <Loading type={"button"} loading={loading}>
-        {children || label}
-      </Loading>
-    </button>
+    <>
+      {showTooltip && (
+        <ReactTooltip
+          id={tooltipId}
+          effect={"solid"}
+          place={"top"}
+          delayShow={200}
+        >
+          <p>{label}</p>
+        </ReactTooltip>
+      )}
+      <button
+        className={`${styles[buttonType]} ${styles[theme]} ${className}`}
+        onClick={onClick}
+        aria-label={label}
+        disabled={disabled || loading}
+        data-tip={showTooltip}
+        data-for={tooltipId}
+        {...otherProps}
+      >
+        <Loading type={"button"} loading={loading}>
+          {children || label}
+        </Loading>
+      </button>
+    </>
   );
 };
 
@@ -70,6 +92,7 @@ Button.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   loading: PropTypes.bool,
+  showTooltip: PropTypes.bool,
 };
 
 export default Button;

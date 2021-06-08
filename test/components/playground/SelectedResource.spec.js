@@ -15,20 +15,28 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import SelectedResource from "components/playground/SelectedResource";
 import { useFetch } from "hooks/useFetch";
 import { createMockResourceUri } from "test/testing-utils/mocks";
+import userEvent from "@testing-library/user-event";
+import { copy } from "utils/shared-utils";
 
 jest.mock("hooks/useFetch");
+jest.mock("utils/shared-utils");
 
 describe("SelectedResource", () => {
-  let resourceUri, name, version, fetchResponse, rerender;
+  let resourceUri,
+    name,
+    version,
+    fetchResponse,
+    setResource,
+    clearEvaluation,
+    rerender;
 
   beforeEach(() => {
-    name = chance.string();
-    version = chance.string();
-    resourceUri = createMockResourceUri(name, version);
+    setResource = jest.fn();
+    clearEvaluation = jest.fn();
     fetchResponse = {
       data: {
         originals: chance.string(),
@@ -37,56 +45,120 @@ describe("SelectedResource", () => {
     };
 
     useFetch.mockReturnValue(fetchResponse);
-
-    const utils = render(<SelectedResource resourceUri={resourceUri} />);
-
-    rerender = utils.rerender;
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should call to fetch the occurrence data when a resource is selected", () => {
-    expect(useFetch)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith("/api/occurrences", {
-        resourceUri: resourceUri,
-      });
+  describe("resource has not been selected", () => {
+    beforeEach(() => {
+      resourceUri = null;
+      render(
+        <SelectedResource
+          setResource={setResource}
+          clearEvaluation={clearEvaluation}
+          resourceUri={resourceUri}
+        />
+      );
+    });
+
+    it("should render the instructions to search for a resource", () => {
+      expect(
+        screen.getByText(/search for a resource to begin/i)
+      ).toBeInTheDocument();
+    });
+
+    it("should render the button to search for a resource", () => {
+      expect(
+        screen.getByLabelText(/^search for resources/i)
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should render the resource name", () => {
-    expect(screen.getByText("Resource")).toBeInTheDocument();
-    expect(screen.getByText(name)).toBeInTheDocument();
-  });
+  describe("resource has been selected", () => {
+    beforeEach(() => {
+      name = chance.string();
+      version = chance.string();
+      resourceUri = createMockResourceUri(name, version);
+      const utils = render(
+        <SelectedResource
+          setResource={setResource}
+          clearEvaluation={clearEvaluation}
+          resourceUri={resourceUri}
+        />
+      );
+      rerender = utils.rerender;
+    });
 
-  it("should render the resource version", () => {
-    expect(screen.getByText("Version")).toBeInTheDocument();
-    expect(screen.getByText(version.substring(0, 12))).toBeInTheDocument();
-  });
+    it("should call to fetch the occurrence data when a resource is selected", () => {
+      expect(useFetch)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("/api/occurrences", {
+          resourceUri: resourceUri,
+        });
+    });
 
-  it("should render the occurrence data label", () => {
-    expect(screen.getByText("Occurrence Data")).toBeInTheDocument();
-  });
+    it("should render the resource name", () => {
+      expect(
+        screen.getByText("Resource", { selector: "span" })
+      ).toBeInTheDocument();
+      expect(screen.getByText(name)).toBeInTheDocument();
+    });
 
-  it("should render the loading indicator while fetching the occurrence data", () => {
-    fetchResponse.loading = true;
-    rerender(<SelectedResource resourceUri={resourceUri} />);
-    expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
-  });
+    it("should render the resource version", () => {
+      expect(
+        screen.getByText("Version", { selector: "span" })
+      ).toBeInTheDocument();
+      expect(screen.getByText(version.substring(0, 12))).toBeInTheDocument();
+    });
 
-  it("should render the occurrence data once fetched", () => {
-    expect(
-      screen.getByText(JSON.stringify(fetchResponse.data.originals, null, 2), {
-        exact: false,
-      })
-    ).toBeInTheDocument();
-  });
+    it("should render the occurrence data label", () => {
+      expect(screen.getByText("Occurrence Data")).toBeInTheDocument();
+    });
 
-  it("should render the instructions if no resource is specified", () => {
-    rerender(<SelectedResource resourceUri={null} />);
-    expect(
-      screen.getByText(/search for a resource to begin/i)
-    ).toBeInTheDocument();
+    it("should render the loading indicator while fetching the occurrence data", () => {
+      fetchResponse.loading = true;
+      rerender(
+        <SelectedResource
+          setResource={setResource}
+          clearEvaluation={clearEvaluation}
+          resourceUri={resourceUri}
+        />
+      );
+      expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
+    });
+
+    it("should render the occurrence data once fetched", () => {
+      expect(
+        screen.getByText(
+          JSON.stringify(fetchResponse.data.originals, null, 2),
+          {
+            exact: false,
+          }
+        )
+      ).toBeInTheDocument();
+    });
+
+    it("should render the button to clear the selected resource", () => {
+      const renderedButton = screen.getByLabelText("Clear Resource");
+      expect(renderedButton).toBeInTheDocument();
+
+      userEvent.click(renderedButton);
+      expect(setResource).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+      expect(clearEvaluation).toHaveBeenCalled();
+    });
+
+    it("should render the button to copy the occurrence data", () => {
+      const renderedButton = screen.getByLabelText("Copy Occurrence Data");
+      expect(renderedButton).toBeInTheDocument();
+
+      userEvent.click(renderedButton);
+      expect(copy)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(
+          JSON.stringify(fetchResponse.data.originals, null, 2)
+        );
+    });
   });
 });
