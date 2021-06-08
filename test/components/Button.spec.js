@@ -116,15 +116,14 @@ describe("Button", () => {
     expect(screen.getByLabelText(label)).toBeDisabled();
   });
 
-  it("should allow the user to specific a tooltip", () => {
-    const tooltip = chance.string();
-    render(<Button label={label} onClick={onClick} tooltip={tooltip} />);
+  it("should allow the user to show a tooltip with the label content", () => {
+    render(<Button label={label} onClick={onClick} showTooltip />);
 
     const renderedButton = screen.getByLabelText(label);
 
     expect(renderedButton).toHaveAttribute("data-tip", "true");
     expect(renderedButton).toHaveAttribute("data-for", `${label}-toolTip`);
 
-    expect(screen.getByText(tooltip)).toBeInTheDocument();
+    expect(screen.getByText(label, { selector: "p" })).toBeInTheDocument();
   });
 });

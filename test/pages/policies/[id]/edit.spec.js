@@ -307,7 +307,7 @@ describe("Edit Policy", () => {
       expect(validateField).toHaveBeenCalledTimes(1);
     });
 
-    it("should show an error when the call to update fails due to invalid rego code", async () => {
+    it("should show an error when the call to update fails due to invalid Rego code", async () => {
       const expectedError = {
         isValid: false,
         errors: chance.n(chance.string, chance.d4()),

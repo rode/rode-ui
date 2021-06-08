@@ -81,7 +81,7 @@ describe("SelectedPolicy", () => {
       ).toBeInTheDocument();
     });
 
-    it("should render the rego policy code", () => {
+    it("should render the Rego policy code", () => {
       expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
       expect(
         screen.getByText(policy.regoContent, { exact: false })
@@ -102,7 +102,7 @@ describe("SelectedPolicy", () => {
       expect(clearEvaluation).toHaveBeenCalled();
     });
 
-    it("should render the button to copy the rego content", () => {
+    it("should render the button to copy the Rego content", () => {
       const renderedButton = screen.getByLabelText(/Copy Rego Policy Code/);
       expect(renderedButton).toBeInTheDocument();
 

@@ -33,7 +33,7 @@ describe("Code", () => {
     jest.resetAllMocks();
   });
 
-  it("should highlight the code syntax when rego is specified", () => {
+  it("should highlight the code syntax when Rego is specified", () => {
     render(<Code code={code} language={"rego"} />);
 
     expect(Prism.highlightAll).toHaveBeenCalledTimes(1);

@@ -69,7 +69,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
           setCurrentSection(RESOURCE);
           setShowDrawer(true);
         }}
-        tooltip={"Search for resources"}
+        showTooltip
       >
         <Icon name={ICON_NAMES.SEARCH} />
       </Button>

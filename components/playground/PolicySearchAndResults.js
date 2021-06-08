@@ -50,7 +50,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
         label={"Search for policies"}
         buttonType="icon"
         onClick={() => setShowDrawer(true)}
-        tooltip={"Search for policies"}
+        showTooltip
       >
         <Icon name={ICON_NAMES.SEARCH} />
       </Button>

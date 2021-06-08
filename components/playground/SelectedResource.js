@@ -63,7 +63,7 @@ const SelectedResource = (props) => {
                   setResource(null);
                   clearEvaluation();
                 }}
-                tooltip={"Clear Resource"}
+                showTooltip
               >
                 <Icon name={ICON_NAMES.BAN} />
               </Button>
@@ -71,7 +71,7 @@ const SelectedResource = (props) => {
                 label={"Copy Occurrence Data"}
                 buttonType={"icon"}
                 onClick={() => copy(formattedOccurrenceData)}
-                tooltip={"Copy Occurrence Data"}
+                showTooltip
               >
                 <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
               </Button>

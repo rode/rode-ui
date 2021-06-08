@@ -30,7 +30,7 @@ const Button = (props) => {
     children,
     className = "",
     loading = false,
-    tooltip = null,
+    showTooltip = false,
     ...otherProps
   } = props;
 
@@ -38,20 +38,20 @@ const Button = (props) => {
 
   let tooltipId = null;
 
-  if (tooltip) {
+  if (showTooltip) {
     tooltipId = `${label.replace(" ", "")}-toolTip`;
   }
 
   return (
     <>
-      {tooltip && (
+      {showTooltip && (
         <ReactTooltip
           id={tooltipId}
           effect={"solid"}
           place={"top"}
           delayShow={200}
         >
-          <p>{tooltip}</p>
+          <p>{label}</p>
         </ReactTooltip>
       )}
       <button
@@ -59,7 +59,7 @@ const Button = (props) => {
         onClick={onClick}
         aria-label={label}
         disabled={disabled || loading}
-        data-tip={!!tooltip}
+        data-tip={showTooltip}
         data-for={tooltipId}
         {...otherProps}
       >
@@ -92,7 +92,7 @@ Button.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   loading: PropTypes.bool,
-  tooltip: PropTypes.string,
+  showTooltip: PropTypes.bool,
 };
 
 export default Button;
