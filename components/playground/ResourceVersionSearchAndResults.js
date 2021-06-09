@@ -18,7 +18,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
-import { getResourceDetails } from "utils/resource-utils";
+import {
+  buildResourceVersionQueryParams,
+  getResourceDetails,
+} from "utils/resource-utils";
 import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -27,18 +30,6 @@ import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
-
-const buildSearchParams = (genericName, searchTerm) => {
-  const params = {
-    id: genericName,
-  };
-
-  if (searchTerm && searchTerm !== SEARCH_ALL) {
-    params.filter = `version.contains("${searchTerm}")`;
-  }
-
-  return params;
-};
 
 const ResourceVersionSearchAndResults = ({
   genericResource,
@@ -53,7 +44,10 @@ const ResourceVersionSearchAndResults = ({
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     versionSearch ? "/api/resource-versions" : null,
-    buildSearchParams(genericResource.id, state.versionSearchTerm),
+    buildResourceVersionQueryParams(
+      genericResource.id,
+      state.versionSearchTerm
+    ),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 

@@ -44,6 +44,7 @@ describe("ChangeVersionDrawer", () => {
         genericName: chance.string(),
         uri: createMockResourceUri(),
       },
+      versionSearchTerm: "all",
     };
     resourceDispatch = jest.fn();
     paginatedFetchResponse = {
@@ -86,6 +87,23 @@ describe("ChangeVersionDrawer", () => {
     );
   });
 
+  it("should call to fetch the versions when a resource is selected and a search term is specified", () => {
+    const searchTerm = chance.string();
+    resourceState.versionSearchTerm = searchTerm;
+    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
+      resourceState,
+      resourceDispatch,
+    });
+    expect(usePaginatedFetch).toHaveBeenCalledWith(
+      "/api/resource-versions",
+      {
+        id: resourceState.currentResource.genericName,
+        filter: `version.contains("${searchTerm}")`,
+      },
+      10
+    );
+  });
+
   it("should render a loading indicator when fetching the data", () => {
     paginatedFetchResponse.loading = true;
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
@@ -102,7 +120,50 @@ describe("ChangeVersionDrawer", () => {
       resourceDispatch,
     });
 
-    expect(screen.getByText(/no versions found matching the resource/i));
+    expect(screen.getByText(/no versions found matching the given criteria./i));
+  });
+
+  it("should set the search term to all when the drawer is closed", () => {
+    isOpen = false;
+    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
+      resourceState,
+      resourceDispatch,
+    });
+    expect(resourceDispatch).toHaveBeenCalledWith({
+      type: "SET_VERSION_SEARCH_TERM",
+      data: "all",
+    });
+  });
+
+  it("should render the version search bar", () => {
+    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
+      resourceState,
+      resourceDispatch,
+    });
+
+    const renderedSearchBar = screen.getByLabelText(/search for a version/i);
+
+    expect(renderedSearchBar).toBeInTheDocument();
+    let searchTerm = "all";
+    userEvent.type(renderedSearchBar, searchTerm);
+    userEvent.click(screen.getByLabelText(/^search versions/i));
+
+    expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+      "/api/resource-versions",
+      {
+        id: resourceState.currentResource.genericName,
+      },
+      10
+    );
+
+    userEvent.click(screen.getByLabelText(/^view all versions/i));
+    expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+      "/api/resource-versions",
+      {
+        id: resourceState.currentResource.genericName,
+      },
+      10
+    );
   });
 
   describe("matching versions are found", () => {

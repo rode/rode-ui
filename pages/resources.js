@@ -92,7 +92,7 @@ const Resources = () => {
           onSubmit={onSubmit}
           helpText={
             <>
-              You can search by name, version, or{" "}
+              You can search by name or{" "}
               <button
                 type={"button"}
                 onClick={viewAllResources}

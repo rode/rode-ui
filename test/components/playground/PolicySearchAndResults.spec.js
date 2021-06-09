@@ -80,11 +80,15 @@ describe("PolicySearchAndResults", () => {
   it("should render the button to open the search drawer", () => {
     const renderedButton = screen.getByLabelText(/search for policies/i);
     expect(renderedButton).toBeInTheDocument();
-    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
+
+    const renderedDrawer = screen.getByTestId("drawer");
+    expect(renderedDrawer).toHaveClass("closedDrawer");
 
     userEvent.click(renderedButton);
+    expect(renderedDrawer).toHaveClass("openDrawer");
 
-    expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
+    userEvent.click(screen.getByLabelText(/close drawer/i));
+    expect(renderedDrawer).toHaveClass("closedDrawer");
   });
 
   it("should render the search bar", () => {
