@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-const useDebouncedSearch = (value, delay = 500) => {
+const useDebouncedValue = (value, delay = 500) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      console.log('here setting value', value)
+      console.log("here setting value", value);
       setDebouncedValue(value);
     }, delay);
 
@@ -15,6 +15,6 @@ const useDebouncedSearch = (value, delay = 500) => {
   }, [value, delay]);
 
   return debouncedValue;
-}
+};
 
-export default useDebouncedSearch;
+export default useDebouncedValue;
