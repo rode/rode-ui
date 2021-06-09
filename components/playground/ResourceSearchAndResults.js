@@ -28,14 +28,16 @@ import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
+import useDebouncedValue from "hooks/useDebouncedValue";
 
 const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!genericResource);
+  const [debounceDelay, setDebounceDelay] = useState(500);
   const { state, dispatch } = useResources();
-
+  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    state.searchTerm ? "/api/resources" : null,
-    buildResourceQueryParams(state.searchTerm),
+    debouncedSearch ? "/api/resources" : null,
+    buildResourceQueryParams(debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
@@ -47,7 +49,10 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
             event.preventDefault();
             setResourceSearch(true);
           }}
-          onChange={() => setResourceSearch(false)}
+          onBlur={() => setDebounceDelay(0)}
+          onChange={() => {
+            setDebounceDelay(500);
+          }}
           helpText={
             <Button
               className={styles.viewAllButton}

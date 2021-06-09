@@ -20,7 +20,7 @@ import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
 
-const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange }) => {
+const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = useResources();
 
   const onSearchChange = (event) => {
@@ -38,6 +38,7 @@ const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange }) => {
     <SearchBar
       onSubmit={onSubmit}
       onChange={onSearchChange}
+      onBlur={onBlur}
       label={"Search for a version"}
       name={"resourceVersionSearch"}
       searchTerm={state.versionSearchTerm}
@@ -51,6 +52,7 @@ ResourceVersionSearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
 };
 
 export default ResourceVersionSearchBar;

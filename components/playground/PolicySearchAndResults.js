@@ -28,15 +28,18 @@ import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Drawer from "components/Drawer";
+import useDebouncedValue from "hooks/useDebouncedValue";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [debounceDelay, setDebounceDelay] = useState(500);
   const { state, dispatch } = usePolicies();
+  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    state.searchTerm ? "/api/policies" : null,
-    createSearchFilter(state.searchTerm),
+    debouncedSearch ? "/api/policies" : null,
+    createSearchFilter(debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
@@ -61,7 +64,10 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
               event.preventDefault();
               setPolicySearch(true);
             }}
-            onChange={() => setPolicySearch(false)}
+            onBlur={() => setDebounceDelay(0)}
+            onChange={() => {
+              setDebounceDelay(500);
+            }}
             helpText={
               <Button
                 className={styles.viewAllButton}

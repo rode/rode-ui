@@ -30,24 +30,28 @@ import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
+import useDebouncedValue from "hooks/useDebouncedValue";
 
 const ResourceVersionSearchAndResults = ({
   genericResource,
   onVersionSelect,
 }) => {
   const [versionSearch, setVersionSearch] = useState(!!genericResource);
+  const [debounceDelay, setDebounceDelay] = useState(500);
   const { state, dispatch } = useResources();
+
+  const debouncedSearch = useDebouncedValue(
+    state.versionSearchTerm,
+    debounceDelay
+  );
 
   if (!genericResource) {
     return <p>Select a resource to view a list of versions</p>;
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    state.versionSearchTerm ? "/api/resource-versions" : null,
-    buildResourceVersionQueryParams(
-      genericResource.id,
-      state.versionSearchTerm
-    ),
+    "/api/resource-versions",
+    buildResourceVersionQueryParams(genericResource.id, debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
@@ -58,7 +62,10 @@ const ResourceVersionSearchAndResults = ({
           event.preventDefault();
           setVersionSearch(true);
         }}
-        onChange={() => setVersionSearch(false)}
+        onBlur={() => setDebounceDelay(0)}
+        onChange={() => {
+          setDebounceDelay(500);
+        }}
         helpText={
           <Button
             className={styles.viewAllButton}
