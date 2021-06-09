@@ -112,7 +112,7 @@ describe("/api/policies/validate", () => {
   });
 
   describe("failed calls to Rode", () => {
-    it("should return a bad request status when rego fails to compile", async () => {
+    it("should return a bad request status when Rego fails to compile", async () => {
       const details = [
         {
           errors: chance.string(),
@@ -135,7 +135,7 @@ describe("/api/policies/validate", () => {
       });
     });
 
-    it("should return a bad request status when rego fails to parse", async () => {
+    it("should return a bad request status when Rego fails to parse", async () => {
       const details = [
         {
           errors: chance.string(),
@@ -158,7 +158,7 @@ describe("/api/policies/validate", () => {
       });
     });
 
-    it("should return a bad request status when rego is missing rode required fields", async () => {
+    it("should return a bad request status when Rego is missing rode required fields", async () => {
       const details = [
         {
           errors: chance.string(),

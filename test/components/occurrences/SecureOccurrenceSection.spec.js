@@ -79,6 +79,17 @@ describe("SecureOccurrenceSection", () => {
       });
     });
 
+    it("should render the preview with the note description if it exists", () => {
+      const description = chance.string();
+      occurrences[0].notes = {
+        shortDescription: description,
+      };
+
+      rerender(<SecureOccurrenceSection occurrences={occurrences} />);
+
+      expect(screen.getByText(description)).toBeInTheDocument();
+    });
+
     it("should render the preview as 'In Progress' when a scan has not completed", () => {
       occurrences[0].completed = null;
 

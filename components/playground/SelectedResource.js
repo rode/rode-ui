@@ -24,9 +24,14 @@ import Loading from "components/Loading";
 import { getResourceDetails } from "utils/resource-utils";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersion from "components/resources/ResourceVersion";
+import Button from "components/Button";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
+import { copy } from "utils/shared-utils";
 
 const SelectedResource = (props) => {
-  const { resourceUri } = props;
+  const { resourceUri, setResource, clearEvaluation } = props;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri: resourceUri,
@@ -34,18 +39,55 @@ const SelectedResource = (props) => {
 
   const { resourceName, resourceVersion } = getResourceDetails(resourceUri);
 
+  const formattedOccurrenceData = JSON.stringify(data?.originals, null, 2);
+
   return (
     <>
+      <div className={styles.selectionHeader}>
+        {resourceUri && (
+          <div className={styles.selectionDetailsContainer}>
+            <LabelWithValue label={"Resource"} value={resourceName} />
+            <LabelWithValue
+              label={"Version"}
+              value={<ResourceVersion version={resourceVersion} />}
+            />
+          </div>
+        )}
+        <div className={styles.buttonContainer}>
+          {resourceUri && (
+            <>
+              <Button
+                label={"Clear Resource"}
+                buttonType={"icon"}
+                onClick={() => {
+                  setResource(null);
+                  clearEvaluation();
+                }}
+                showTooltip
+              >
+                <Icon name={ICON_NAMES.BAN} />
+              </Button>
+              <Button
+                label={"Copy Occurrence Data"}
+                buttonType={"icon"}
+                onClick={() => copy(formattedOccurrenceData)}
+                showTooltip
+              >
+                <Icon name={ICON_NAMES.CLIPBOARD_COPY} />
+              </Button>
+            </>
+          )}
+          <ResourceSelectionDrawer
+            setResource={setResource}
+            clearEvaluation={clearEvaluation}
+          />
+        </div>
+      </div>
       {resourceUri ? (
         <Loading loading={loading}>
-          <LabelWithValue label={"Resource"} value={resourceName} />
-          <LabelWithValue
-            label={"Version"}
-            value={<ResourceVersion version={resourceVersion} />}
-          />
           <p className={textStyles.label}>Occurrence Data</p>
           <Code
-            code={JSON.stringify(data?.originals, null, 2)}
+            code={formattedOccurrenceData}
             language={"json"}
             className={styles.codeContent}
             data-testid={"occurrenceJson"}
@@ -62,6 +104,8 @@ const SelectedResource = (props) => {
 
 SelectedResource.propTypes = {
   resourceUri: PropTypes.string,
+  setResource: PropTypes.func.isRequired,
+  clearEvaluation: PropTypes.func.isRequired,
 };
 
 export default SelectedResource;

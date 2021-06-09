@@ -104,7 +104,7 @@ describe("Policy Form", () => {
     expect(validateField).toHaveBeenCalled();
   });
 
-  it("should render a help link to the rego documentation", () => {
+  it("should render a help link to the Rego documentation", () => {
     const renderedText = screen.getByText(/rego documentation/i);
 
     expect(renderedText).toBeInTheDocument();

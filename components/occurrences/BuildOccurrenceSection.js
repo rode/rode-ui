@@ -66,6 +66,7 @@ const BuildOccurrenceSection = ({ occurrences, type }) => {
                       <ResourceVersion version={producedArtifactVersions[0]} />
                     )
                   }
+                  as={"span"}
                 />
                 <ExternalLink
                   href={occurrence.sourceUri}

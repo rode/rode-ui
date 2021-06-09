@@ -69,9 +69,9 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
           setCurrentSection(RESOURCE);
           setShowDrawer(true);
         }}
-        className={styles.openSearchButton}
+        showTooltip
       >
-        <Icon name={ICON_NAMES.SEARCH} size={"large"} />
+        <Icon name={ICON_NAMES.SEARCH} />
       </Button>
       <Drawer
         isOpen={showDrawer}
