@@ -46,7 +46,6 @@ $SIDE_SPACING: 1rem;
 
 .title {
   font-size: 1.5rem;
-  margin-bottom: 1rem;
 }
 
 .rightMargin {
@@ -138,9 +137,10 @@ $SIDE_SPACING: 1rem;
   }
 }
 
-.vulnerabilityBreakdown {
+.vulnerabilitySubtext {
   @include desktopAndLarger {
     text-indent: 1rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -202,7 +202,7 @@ $SIDE_SPACING: 1rem;
     color: $DT_SUB_TEXT;
   }
 
-  .vulnerabilityBreakdown {
+  .vulnerabilitySubtext {
     color: $DT_SUB_TEXT;
   }
 
@@ -241,7 +241,7 @@ $SIDE_SPACING: 1rem;
     color: $LT_SUB_TEXT;
   }
 
-  .vulnerabilityBreakdown {
+  .vulnerabilitySubtext {
     color: $LT_SUB_TEXT;
   }
 

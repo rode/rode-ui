@@ -39,7 +39,7 @@ const SecureOccurrenceSection = ({ occurrences }) => {
         <OccurrencePreview
           key={occurrence.name}
           currentOccurrence={occurrence}
-          mainText={"Vulnerability Scan"}
+          mainText={occurrence.notes?.shortDescription || "Vulnerability Scan"}
           timestamp={
             occurrence.completed
               ? `Completed at ${dayjs(occurrence.completed).format(
