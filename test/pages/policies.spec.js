@@ -118,6 +118,7 @@ describe("Policies", () => {
     });
 
     it("should pass the search term through as a filter", () => {
+      mockState.searchTerm = expectedSearch;
       render(<Policies />);
 
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
@@ -130,7 +131,7 @@ describe("Policies", () => {
     });
 
     it("should handle viewing all policies", () => {
-      mockRouter.query.search = "all";
+      mockState.searchTerm = "all";
       render(<Policies />);
 
       expect(usePaginatedFetch)

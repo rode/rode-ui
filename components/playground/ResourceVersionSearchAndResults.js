@@ -43,7 +43,7 @@ const ResourceVersionSearchAndResults = ({
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    versionSearch ? "/api/resource-versions" : null,
+    state.versionSearchTerm ? "/api/resource-versions" : null,
     buildResourceVersionQueryParams(
       genericResource.id,
       state.versionSearchTerm

@@ -117,6 +117,7 @@ describe("Resources", () => {
     });
 
     it("should pass the search term through as a filter", () => {
+      mockState.searchTerm = expectedSearch;
       render(<Resources />);
 
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
@@ -129,7 +130,7 @@ describe("Resources", () => {
     });
 
     it("should handle search for all resources", () => {
-      mockRouter.query.search = "all";
+      mockState.searchTerm = "all";
       render(<Resources />);
 
       expect(usePaginatedFetch)
@@ -137,7 +138,7 @@ describe("Resources", () => {
         .toHaveBeenCalledWith(
           "/api/resources",
           buildResourceQueryParams(
-            mockRouter.query.search,
+            mockState.searchTerm,
             mockState.searchTypeFilter
           ),
           10

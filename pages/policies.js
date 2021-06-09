@@ -35,8 +35,8 @@ const Policies = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    router.query.search ? "/api/policies" : null,
-    createSearchFilter(router.query.search),
+    state.searchTerm ? "/api/policies" : null,
+    createSearchFilter(state.searchTerm),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 

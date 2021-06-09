@@ -34,7 +34,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const { state, dispatch } = useResources();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    resourceSearch ? "/api/resources" : null,
+    state.searchTerm ? "/api/resources" : null,
     buildResourceQueryParams(state.searchTerm),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );

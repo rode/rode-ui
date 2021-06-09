@@ -77,7 +77,7 @@ describe("ResourceVersionSearchAndResults", () => {
     searchForVersion();
 
     expect(usePaginatedFetch).toHaveBeenCalledWith(
-      "/api/resource-versions",
+      null,
       {
         id: genericResource.id,
       },

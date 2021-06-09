@@ -35,8 +35,8 @@ const Resources = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    router.query.search ? "/api/resources" : null,
-    buildResourceQueryParams(router.query.search, state.searchTypeFilter),
+    state.searchTerm ? "/api/resources" : null,
+    buildResourceQueryParams(state.searchTerm, state.searchTypeFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 

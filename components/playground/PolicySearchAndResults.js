@@ -35,7 +35,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const { state, dispatch } = usePolicies();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    policySearch ? "/api/policies" : null,
+    state.searchTerm ? "/api/policies" : null,
     createSearchFilter(state.searchTerm),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
