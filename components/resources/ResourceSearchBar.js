@@ -20,7 +20,7 @@ import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
 
-const ResourceSearchBar = ({ onSubmit, helpText, onChange }) => {
+const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = useResources();
 
   const onSearchChange = (event) => {
@@ -38,6 +38,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange }) => {
     <SearchBar
       onSubmit={onSubmit}
       onChange={onSearchChange}
+      onBlur={onBlur}
       label={"Search for a resource"}
       name={"resourceSearch"}
       searchTerm={state.searchTerm}
@@ -50,6 +51,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange }) => {
 
 ResourceSearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   onChange: PropTypes.func,
 };

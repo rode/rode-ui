@@ -37,11 +37,11 @@ describe("SearchBar", () => {
     searchTerm = chance.string();
     const utils = render(
       <SearchBar
-        onSubmit={onSubmit}
-        onChange={onChange}
-        label={label}
-        name={name}
-        searchTerm={searchTerm}
+        onSubmit={ onSubmit }
+        onChange={ onChange }
+        label={ label }
+        name={ name }
+        searchTerm={ searchTerm }
       />
     );
     rerender = utils.rerender;
@@ -60,11 +60,11 @@ describe("SearchBar", () => {
     searchTerm = "all";
     rerender(
       <SearchBar
-        onSubmit={onSubmit}
-        onChange={onChange}
-        label={label}
-        name={name}
-        searchTerm={searchTerm}
+        onSubmit={ onSubmit }
+        onChange={ onChange }
+        label={ label }
+        name={ name }
+        searchTerm={ searchTerm }
       />
     );
 
@@ -84,11 +84,11 @@ describe("SearchBar", () => {
 
     rerender(
       <SearchBar
-        onSubmit={onSubmit}
-        onChange={onChange}
-        label={label}
-        name={name}
-        placeholder={placeholder}
+        onSubmit={ onSubmit }
+        onChange={ onChange }
+        label={ label }
+        name={ name }
+        placeholder={ placeholder }
       />
     );
     expect(renderedInput).toHaveAttribute("placeholder", placeholder);
@@ -98,11 +98,11 @@ describe("SearchBar", () => {
     helpText = chance.string();
     rerender(
       <SearchBar
-        onSubmit={onSubmit}
-        onChange={onChange}
-        label={label}
-        name={name}
-        helpText={helpText}
+        onSubmit={ onSubmit }
+        onChange={ onChange }
+        label={ label }
+        name={ name }
+        helpText={ helpText }
       />
     );
 
@@ -113,15 +113,38 @@ describe("SearchBar", () => {
     const buttonLabel = chance.string();
     rerender(
       <SearchBar
-        onSubmit={onSubmit}
-        onChange={onChange}
-        label={label}
-        name={name}
-        buttonLabel={buttonLabel}
+        onSubmit={ onSubmit }
+        onChange={ onChange }
+        label={ label }
+        name={ name }
+        buttonLabel={ buttonLabel }
       />
     );
     const renderedButton = screen.getByLabelText(buttonLabel);
     expect(renderedButton).toBeInTheDocument();
     expect(renderedButton.type).toBe("submit");
+  });
+
+  it("should allow the user to pass an onblur function", () => {
+    const onBlur = jest.fn();
+    const triggerBlur = chance.string();
+    rerender(
+      <>
+        <p>{triggerBlur}</p>
+        <SearchBar
+          onSubmit={ onSubmit }
+          onChange={ onChange }
+          label={ label }
+          name={ name }
+          onBlur={ onBlur }
+        />
+      </>
+    );
+
+    const renderedInput = screen.getByLabelText(label);
+    userEvent.click(renderedInput);
+    userEvent.click(screen.getByText(triggerBlur));
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
   });
 });

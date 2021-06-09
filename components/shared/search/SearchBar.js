@@ -27,6 +27,7 @@ const SearchBar = (props) => {
   const {
     onSubmit,
     onChange,
+    onBlur,
     searchTerm,
     label,
     name,
@@ -45,6 +46,7 @@ const SearchBar = (props) => {
           onChange={onChange}
           placeholder={placeholder}
           value={displayValue}
+          onBlur={onBlur}
         />
         <input type="hidden" name={name} value={searchTerm} />
         <Button
@@ -63,6 +65,7 @@ const SearchBar = (props) => {
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
