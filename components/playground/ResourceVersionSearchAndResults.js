@@ -83,7 +83,7 @@ const ResourceVersionSearchAndResults = ({
       />
       {versionSearch && (
         <Loading loading={loading} type={"button"}>
-          {data?.length > 0 && (
+          {data?.length > 0 ? (
             <>
               {data.map((version) => {
                 const {
@@ -128,6 +128,8 @@ const ResourceVersionSearchAndResults = ({
                 />
               )}
             </>
+          ) : (
+            <p>{`No versions found matching "${state.versionSearchTerm}"`}</p>
           )}
         </Loading>
       )}
