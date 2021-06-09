@@ -78,10 +78,10 @@ const Resources = () => {
       setShowSearchResults(false);
       dispatch({
         type: resourceActions.SET_SEARCH_TERM,
-        data: "",
+        data: SEARCH_ALL,
       });
     }
-  }, [router.query.search]);
+  }, [router.query]);
 
   return (
     <div
@@ -92,9 +92,7 @@ const Resources = () => {
       <div className={styles.searchBarContainer}>
         <ResourceSearchBar
           onSubmit={onSubmit}
-          onBlur={() =>
-            router.push(`/resources?search=${state.searchTerm.trim()}`)
-          }
+          onBlur={onSubmit}
           helpText={
             <>
               You can search by name or{" "}

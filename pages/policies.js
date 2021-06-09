@@ -77,9 +77,7 @@ const Policies = () => {
       <div className={styles.searchBarContainer}>
         <PolicySearchBar
           onSubmit={onSubmit}
-          onBlur={() =>
-            router.push(`/policies?search=${state.searchTerm.trim()}`)
-          }
+          onBlur={onSubmit}
           helpText={
             <>
               You can search by policy name or{" "}
