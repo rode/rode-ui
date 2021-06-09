@@ -39,6 +39,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = useResources();
   const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
+
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/resources" : null,
     buildResourceQueryParams(debouncedSearch),
@@ -53,8 +54,12 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
             event.preventDefault();
             setResourceSearch(true);
           }}
-          onBlur={() => setDebounceDelay(0)}
+          onBlur={() => {
+            setResourceSearch(true);
+            setDebounceDelay(10);
+          }}
           onChange={() => {
+            setResourceSearch(true);
             setDebounceDelay(DEFAULT_DEBOUNCE_DELAY);
           }}
           helpText={

@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
+import { SEARCH_ALL } from "utils/constants";
 
 const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = useResources();
@@ -30,7 +31,7 @@ const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
 
     dispatch({
       type: resourceActions.SET_VERSION_SEARCH_TERM,
-      data: event.target.value,
+      data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
 

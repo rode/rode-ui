@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import SearchBar from "components/shared/search/SearchBar";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
+import { SEARCH_ALL } from "utils/constants";
 
 const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = usePolicies();
@@ -27,10 +28,9 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
     if (onChange) {
       onChange();
     }
-
     dispatch({
       type: policyActions.SET_SEARCH_TERM,
-      data: event.target.value,
+      data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
 

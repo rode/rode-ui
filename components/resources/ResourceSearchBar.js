@@ -19,18 +19,19 @@ import PropTypes from "prop-types";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/search/SearchBar";
+import { SEARCH_ALL } from "utils/constants";
 
 const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = useResources();
 
   const onSearchChange = (event) => {
     if (onChange) {
-      onChange();
+      onChange(event);
     }
 
     dispatch({
       type: resourceActions.SET_SEARCH_TERM,
-      data: event.target.value,
+      data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
 
