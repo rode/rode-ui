@@ -24,7 +24,11 @@ import { usePolicies } from "providers/policies";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
+import {
+  DEFAULT_DEBOUNCE_DELAY,
+  PLAYGROUND_SEARCH_PAGE_SIZE,
+  SEARCH_ALL,
+} from "utils/constants";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Drawer from "components/Drawer";
@@ -33,7 +37,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [debounceDelay, setDebounceDelay] = useState(500);
+  const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = usePolicies();
   const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
 
@@ -66,7 +70,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
             }}
             onBlur={() => setDebounceDelay(0)}
             onChange={() => {
-              setDebounceDelay(500);
+              setDebounceDelay(DEFAULT_DEBOUNCE_DELAY);
             }}
             helpText={
               <Button

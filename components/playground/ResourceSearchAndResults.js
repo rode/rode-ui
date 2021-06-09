@@ -23,7 +23,11 @@ import { resourceActions } from "reducers/resources";
 import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
-import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
+import {
+  DEFAULT_DEBOUNCE_DELAY,
+  PLAYGROUND_SEARCH_PAGE_SIZE,
+  SEARCH_ALL,
+} from "utils/constants";
 import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -32,7 +36,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 
 const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!genericResource);
-  const [debounceDelay, setDebounceDelay] = useState(500);
+  const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = useResources();
   const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -51,7 +55,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
           }}
           onBlur={() => setDebounceDelay(0)}
           onChange={() => {
-            setDebounceDelay(500);
+            setDebounceDelay(DEFAULT_DEBOUNCE_DELAY);
           }}
           helpText={
             <Button
