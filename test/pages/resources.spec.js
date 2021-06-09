@@ -109,6 +109,25 @@ describe("Resources", () => {
         .toHaveBeenCalledWith(`/resources?search=${expectedSearch}`);
     });
 
+    it("should kick off the search when the user navigates away from the search bar", () => {
+      const blurTrigger = chance.string();
+      mockState.searchTerm = expectedSearch;
+      render(
+        <>
+          <p>{blurTrigger}</p>
+          <Resources />
+        </>
+      );
+
+      const renderedInput = screen.getByLabelText(/^search for a resource$/i);
+
+      userEvent.click(renderedInput);
+      userEvent.click(screen.getByText(blurTrigger));
+      expect(mockRouter.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=${expectedSearch}`);
+    });
+
     it("should render a loading indicator when fetching results", () => {
       mockFetchResponse.loading = true;
       render(<Resources />);

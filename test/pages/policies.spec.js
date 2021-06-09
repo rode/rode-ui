@@ -110,6 +110,24 @@ describe("Policies", () => {
         .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
     });
 
+    it("should kick off the search when the user navigates away from the search bar", () => {
+      const blurTrigger = chance.string();
+      mockState.searchTerm = expectedSearch;
+
+      render(
+        <>
+          <p>{blurTrigger}</p>
+          <Policies />
+        </>
+      );
+      const renderedInput = screen.getByLabelText(/^search for a policy$/i);
+      userEvent.click(renderedInput);
+      userEvent.click(screen.getByText(blurTrigger));
+      expect(pushMock)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
+    });
+
     it("should render a loading indicator when fetching results", () => {
       mockFetchResponse.loading = true;
       render(<Policies />);
