@@ -56,7 +56,9 @@ describe("Edit Policy", () => {
       id: router.query.id,
       name: chance.string(),
       description: chance.sentence(),
-      regoContent: chance.string(),
+      policy: {
+        regoContent: chance.string(),
+      },
     };
     dispatchMock = jest.fn();
     fetchResponse = {
@@ -115,7 +117,9 @@ describe("Edit Policy", () => {
     expect(screen.getByLabelText(/description/i)).toHaveValue(
       policy.description
     );
-    expect(screen.getByLabelText(/rego/i)).toHaveValue(policy.regoContent);
+    expect(screen.getByLabelText(/rego/i)).toHaveValue(
+      policy.policy.regoContent
+    );
   });
 
   it("should render the save button for the form", () => {
@@ -259,7 +263,7 @@ describe("Edit Policy", () => {
       expect(isValid).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
         name: policy.name,
         description: policy.description,
-        regoContent: policy.regoContent,
+        regoContent: policy.policy.regoContent,
       });
     });
 
@@ -271,7 +275,9 @@ describe("Edit Policy", () => {
           body: JSON.stringify({
             name: policy.name,
             description: policy.description,
-            regoContent: policy.regoContent,
+            policy: {
+              regoContent: policy.policy.regoContent,
+            },
           }),
         });
     });
