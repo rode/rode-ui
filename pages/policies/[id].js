@@ -29,8 +29,6 @@ import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import Code from "components/Code";
 
-// TODO: creating a policy and navigating to policy page does not show correct information
-
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();

@@ -25,7 +25,7 @@ const NewPolicy = () => {
       endpoint={"/api/policies"}
       verb={"create"}
       submitButtonText={"Save Policy"}
-      policy={{ policy: { regoContent: EXAMPLE_POLICY } }}
+      policy={{ regoContent: EXAMPLE_POLICY }}
     />
   );
 };

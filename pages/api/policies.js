@@ -18,6 +18,8 @@ import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
 
+// TODO: create mapper for policies so changes in data model don't break everything
+
 const ALLOWED_METHODS = ["GET", "POST"];
 
 export default async (req, res) => {
@@ -112,8 +114,8 @@ export default async (req, res) => {
       const createPolicyResponse = await response.json();
       const policy = {
         id: createPolicyResponse.id,
-        name: createPolicyResponse.policy.name,
-        description: createPolicyResponse.policy.description,
+        name: createPolicyResponse.name,
+        description: createPolicyResponse.description,
         regoContent: createPolicyResponse.policy.regoContent,
       };
 

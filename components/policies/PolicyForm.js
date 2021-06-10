@@ -50,9 +50,7 @@ const PolicyForm = ({
 
   const [name, setName] = useState(policy.name || "");
   const [description, setDescription] = useState(policy.description || "");
-  const [regoContent, setRegoContent] = useState(
-    policy?.policy?.regoContent || ""
-  );
+  const [regoContent, setRegoContent] = useState(policy.regoContent || "");
 
   const { isValid, validateField, errors } = useFormValidation(schema);
 

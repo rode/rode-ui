@@ -227,9 +227,9 @@ describe("/api/policies", () => {
 
       createdPolicy = {
         id: chance.guid(),
+        name: chance.string(),
+        description: chance.sentence(),
         policy: {
-          name: chance.string(),
-          description: chance.sentence(),
           regoContent: chance.string(),
         },
       };
@@ -263,8 +263,8 @@ describe("/api/policies", () => {
 
         expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
           id: createdPolicy.id,
-          name: createdPolicy.policy.name,
-          description: createdPolicy.policy.description,
+          name: createdPolicy.name,
+          description: createdPolicy.description,
           regoContent: createdPolicy.policy.regoContent,
         });
       });
