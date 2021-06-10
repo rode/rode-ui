@@ -43,6 +43,7 @@ describe("/api/policies/[id]", () => {
     };
 
     foundPolicy = {
+      id,
       name: chance.string(),
       description: chance.string(),
       policy: {

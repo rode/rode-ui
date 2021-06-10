@@ -48,7 +48,7 @@ export default async (req, res) => {
 
       const getPolicyResponse = await response.json();
 
-      const policy = mapToClientModel({ ...getPolicyResponse, id });
+      const policy = mapToClientModel(getPolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
@@ -95,7 +95,7 @@ export default async (req, res) => {
 
       const updatePolicyResponse = await response.json();
 
-      const policy = mapToClientModel({ ...updatePolicyResponse, id });
+      const policy = mapToClientModel(updatePolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
