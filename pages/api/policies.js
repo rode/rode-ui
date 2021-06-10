@@ -75,7 +75,7 @@ export default async (req, res) => {
 
   if (req.method === "POST") {
     try {
-      const postBody = mapToApiModel(JSON.parse(req.body));
+      const postBody = mapToApiModel(req.body);
 
       const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
 

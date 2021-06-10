@@ -18,8 +18,9 @@ import { mapToClientModel, mapToApiModel } from "pages/api/utils/policy-utils";
 
 describe("policy-utils", () => {
   describe("mapToClientModel", () => {
-    it("should return the mapped policy matching the client model", () => {
-      const unmapped = {
+    let unmappedPolicy;
+    beforeEach(() => {
+      unmappedPolicy = {
         [chance.string()]: chance.string(),
         id: chance.string(),
         name: chance.string(),
@@ -29,34 +30,63 @@ describe("policy-utils", () => {
           regoContent: chance.string(),
         },
       };
+    });
 
-      const actual = mapToClientModel(unmapped);
+    it("should return the mapped policy matching the client model", () => {
+      const actual = mapToClientModel(unmappedPolicy);
 
       expect(actual).toEqual({
-        id: unmapped.id,
-        name: unmapped.name,
-        description: unmapped.description,
-        regoContent: unmapped.policy.regoContent,
+        id: unmappedPolicy.id,
+        name: unmappedPolicy.name,
+        description: unmappedPolicy.description,
+        regoContent: unmappedPolicy.policy.regoContent,
+      });
+    });
+
+    it("should parse the data if the response is passed as a string", () => {
+      const actual = mapToClientModel(JSON.stringify(unmappedPolicy));
+
+      expect(actual).toEqual({
+        id: unmappedPolicy.id,
+        name: unmappedPolicy.name,
+        description: unmappedPolicy.description,
+        regoContent: unmappedPolicy.policy.regoContent,
       });
     });
   });
 
   describe("mapToApiModel", () => {
-    it("should return the mapped policy matching the api model", () => {
-      const unmapped = {
+    let unmappedPolicy;
+
+    beforeEach(() => {
+      unmappedPolicy = {
         [chance.string()]: chance.string(),
         name: chance.string(),
         description: chance.string(),
         regoContent: chance.string(),
       };
+    });
 
-      const actual = mapToApiModel(unmapped);
+    it("should return the mapped policy matching the api model", () => {
+      const actual = mapToApiModel(unmappedPolicy);
 
       expect(actual).toEqual({
-        name: unmapped.name,
-        description: unmapped.description,
+        name: unmappedPolicy.name,
+        description: unmappedPolicy.description,
         policy: {
-          regoContent: unmapped.regoContent,
+          regoContent: unmappedPolicy.regoContent,
+        },
+      });
+    });
+
+    it("should parse the data if the request is passed as a string", () => {
+      const actual = mapToApiModel(JSON.stringify(unmappedPolicy));
+
+      expect(actual).toEqual({
+        name: unmappedPolicy.name,
+        description: unmappedPolicy.description,
+        policy: {
+          regoContent: unmappedPolicy.regoContent,
         },
       });
     });

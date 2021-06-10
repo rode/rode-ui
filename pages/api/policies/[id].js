@@ -64,7 +64,7 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const updateBody = mapToApiModel(JSON.parse(req.body));
+      const updateBody = mapToApiModel(req.body);
 
       const response = await patch(
         `${rodeUrl}/v1alpha1/policies/${id}`,

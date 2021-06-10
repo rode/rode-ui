@@ -15,20 +15,32 @@
  */
 
 export const mapToClientModel = (policyResponse) => {
+  let formattedResponse = policyResponse;
+
+  if (typeof policyResponse === "string") {
+    formattedResponse = JSON.parse(policyResponse);
+  }
+
   return {
-    id: policyResponse.id,
-    name: policyResponse.name,
-    description: policyResponse.description,
-    regoContent: policyResponse.policy.regoContent,
+    id: formattedResponse.id,
+    name: formattedResponse.name,
+    description: formattedResponse.description,
+    regoContent: formattedResponse.policy.regoContent,
   };
 };
 
 export const mapToApiModel = (requestBody) => {
+  let formattedRequest = requestBody;
+
+  if (typeof requestBody === "string") {
+    formattedRequest = JSON.parse(requestBody);
+  }
+
   return {
-    name: requestBody.name,
-    description: requestBody.description,
+    name: formattedRequest.name,
+    description: formattedRequest.description,
     policy: {
-      regoContent: requestBody.regoContent,
+      regoContent: formattedRequest.regoContent,
     },
   };
 };
