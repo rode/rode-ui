@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// TODO: test this
-
 export const mapToClientModel = (policy) => {
   return {
     id: policy.id,
