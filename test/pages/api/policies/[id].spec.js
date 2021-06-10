@@ -45,14 +45,18 @@ describe("/api/policies/[id]", () => {
     foundPolicy = {
       name: chance.string(),
       description: chance.string(),
-      regoContent: chance.string(),
+      policy: {
+        version: chance.d4(),
+        message: chance.string(),
+        regoContent: chance.string(),
+      },
     };
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
         id,
-        policy: foundPolicy,
+        ...foundPolicy,
       }),
     };
 
@@ -115,7 +119,7 @@ describe("/api/policies/[id]", () => {
           id,
           name: foundPolicy.name,
           description: foundPolicy.description,
-          regoContent: foundPolicy.regoContent,
+          regoContent: foundPolicy.policy.regoContent,
         });
       });
 
@@ -210,7 +214,7 @@ describe("/api/policies/[id]", () => {
           id,
           name: foundPolicy.name,
           description: foundPolicy.description,
-          regoContent: foundPolicy.regoContent,
+          regoContent: foundPolicy.policy.regoContent,
         });
       });
     });

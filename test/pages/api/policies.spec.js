@@ -164,12 +164,14 @@ describe("/api/policies", () => {
       });
 
       it("should return the mapped policies", async () => {
-        const expectedPolicies = allPolicies.map(({ id, name, description, policy }) => ({
-          id,
-          name: name,
-          description: description,
-          regoContent: policy.regoContent,
-        }));
+        const expectedPolicies = allPolicies.map(
+          ({ id, name, description, policy }) => ({
+            id,
+            name: name,
+            description: description,
+            regoContent: policy.regoContent,
+          })
+        );
 
         await handler(request, response);
 

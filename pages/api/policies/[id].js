@@ -47,10 +47,11 @@ export default async (req, res) => {
       }
 
       const getPolicyResponse = await response.json();
+
       const policy = {
         id,
-        name: getPolicyResponse.policy.name,
-        description: getPolicyResponse.policy.description,
+        name: getPolicyResponse.name,
+        description: getPolicyResponse.description,
         regoContent: getPolicyResponse.policy.regoContent,
       };
 
@@ -99,8 +100,8 @@ export default async (req, res) => {
 
       const policy = {
         id,
-        name: updatePolicyResponse.policy.name,
-        description: updatePolicyResponse.policy.description,
+        name: updatePolicyResponse.name,
+        description: updatePolicyResponse.description,
         regoContent: updatePolicyResponse.policy.regoContent,
       };
 
