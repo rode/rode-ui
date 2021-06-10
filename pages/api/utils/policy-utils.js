@@ -15,17 +15,11 @@
  */
 
 export const mapToClientModel = (policyResponse) => {
-  let formattedResponse = policyResponse;
-
-  if (typeof policyResponse === "string") {
-    formattedResponse = JSON.parse(policyResponse);
-  }
-
   return {
-    id: formattedResponse.id,
-    name: formattedResponse.name,
-    description: formattedResponse.description,
-    regoContent: formattedResponse.policy.regoContent,
+    id: policyResponse.id,
+    name: policyResponse.name,
+    description: policyResponse.description,
+    regoContent: policyResponse.policy.regoContent,
   };
 };
 

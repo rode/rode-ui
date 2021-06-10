@@ -42,17 +42,6 @@ describe("policy-utils", () => {
         regoContent: unmappedPolicy.policy.regoContent,
       });
     });
-
-    it("should parse the data if the response is passed as a string", () => {
-      const actual = mapToClientModel(JSON.stringify(unmappedPolicy));
-
-      expect(actual).toEqual({
-        id: unmappedPolicy.id,
-        name: unmappedPolicy.name,
-        description: unmappedPolicy.description,
-        regoContent: unmappedPolicy.policy.regoContent,
-      });
-    });
   });
 
   describe("mapToApiModel", () => {
