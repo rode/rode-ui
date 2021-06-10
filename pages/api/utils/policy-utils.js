@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-export const mapToClientModel = (policy) => {
+export const mapToClientModel = (policyResponse) => {
   return {
-    id: policy.id,
-    name: policy.name,
-    description: policy.description,
-    regoContent: policy.policy.regoContent,
+    id: policyResponse.id,
+    name: policyResponse.name,
+    description: policyResponse.description,
+    regoContent: policyResponse.policy.regoContent,
   };
 };
 
-export const mapToApiModel = (policy) => {
+export const mapToApiModel = (requestBody) => {
   return {
-    name: policy.name,
-    description: policy.description,
+    name: requestBody.name,
+    description: requestBody.description,
     policy: {
-      regoContent: policy.regoContent,
+      regoContent: requestBody.regoContent,
     },
   };
 };

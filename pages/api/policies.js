@@ -15,11 +15,8 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import fetch from "node-fetch";
-import { getRodeUrl } from "./utils/api-utils";
+import { get, getRodeUrl, post } from "./utils/api-utils";
 import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
-
-// TODO: create fetch utils to handle stringifying and parsing bodies
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -47,7 +44,7 @@ export default async (req, res) => {
       if (req.query.pageToken) {
         filter.pageToken = req.query.pageToken;
       }
-      const response = await fetch(
+      const response = await get(
         `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
       );
 
@@ -80,10 +77,7 @@ export default async (req, res) => {
     try {
       const postBody = mapToApiModel(JSON.parse(req.body));
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies`, {
-        method: "POST",
-        body: JSON.stringify(postBody),
-      });
+      const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

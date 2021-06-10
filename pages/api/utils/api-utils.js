@@ -14,5 +14,28 @@
  * limitations under the License.
  */
 
+import * as nodeFetch from "node-fetch";
+
 export const getRodeUrl = () =>
   process.env.RODE_URL || "http://localhost:50051";
+
+// TODO: test this
+const fetch = (endpoint, method, body) => {
+  const options = {
+    method,
+  };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  return nodeFetch(endpoint, options);
+};
+
+export const post = (endpoint, body) => fetch(endpoint, "POST", body);
+
+export const patch = (endpoint, body) => fetch(endpoint, "PATCH", body);
+
+export const get = (endpoint) => fetch(endpoint, "GET");
+
+export const del = (endpoint) => fetch(endpoint, "DELETE");

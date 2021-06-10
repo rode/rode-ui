@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { get, post, getRodeUrl } from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
@@ -105,7 +104,7 @@ describe("/api/policies", () => {
         }),
       };
 
-      fetch.mockResolvedValue(rodeResponse);
+      get.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
@@ -120,9 +119,7 @@ describe("/api/policies", () => {
 
         await handler(request, response);
 
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(expectedUrl);
+        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
       it("should hit the Rode API when no filter is specified", async () => {
@@ -131,9 +128,7 @@ describe("/api/policies", () => {
         request.query.filter = null;
         await handler(request, response);
 
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(expectedUrl);
+        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
       it("should pass the pageSize as a query param when a pageSize is specified", async () => {
@@ -145,9 +140,7 @@ describe("/api/policies", () => {
 
         request.query.pageSize = pageSize;
         await handler(request, response);
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(expectedUrl);
+        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
       it("should pass the pageToken as a query param when a pageToken is specified", async () => {
@@ -159,9 +152,7 @@ describe("/api/policies", () => {
 
         request.query.pageToken = pageToken;
         await handler(request, response);
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(expectedUrl);
+        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
       it("should return the mapped policies", async () => {
@@ -197,7 +188,7 @@ describe("/api/policies", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        get.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -240,19 +231,19 @@ describe("/api/policies", () => {
         json: jest.fn().mockResolvedValue(createdPolicy),
       };
 
-      fetch.mockResolvedValue(rodeResponse);
+      post.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(post)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith("http://localhost:50051/v1alpha1/policies", {
-            body: JSON.stringify(mapToApiModel(request.body)),
-            method: "POST",
-          });
+          .toHaveBeenCalledWith(
+            "http://localhost:50051/v1alpha1/policies",
+            mapToApiModel(request.body)
+          );
       });
 
       it("should return the mapped created policy", async () => {
@@ -327,7 +318,7 @@ describe("/api/policies", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        post.mockRejectedValue(new Error());
 
         await handler(request, response);
 

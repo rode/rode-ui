@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, get, patch, del } from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
@@ -61,7 +60,7 @@ describe("/api/policies/[id]", () => {
       }),
     };
 
-    fetch.mockResolvedValue(rodeResponse);
+    get.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
@@ -87,6 +86,8 @@ describe("/api/policies/[id]", () => {
   describe("GET", () => {
     beforeEach(() => {
       request.method = "GET";
+
+      get.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
@@ -104,7 +105,7 @@ describe("/api/policies/[id]", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
       });
@@ -158,7 +159,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        get.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -179,6 +180,7 @@ describe("/api/policies/[id]", () => {
     beforeEach(() => {
       request.method = "PATCH";
       request.body = JSON.stringify(foundPolicy);
+      patch.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
@@ -196,12 +198,12 @@ describe("/api/policies/[id]", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(patch)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
-            method: "PATCH",
-            body: JSON.stringify(mapToApiModel(JSON.parse(request.body))),
-          });
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policies/${id}`,
+            mapToApiModel(JSON.parse(request.body))
+          );
       });
 
       it("should return the updated policy", async () => {
@@ -286,7 +288,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        patch.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -314,6 +316,7 @@ describe("/api/policies/[id]", () => {
       beforeEach(() => {
         rodeUrlEnv = process.env.RODE_URL;
         delete process.env.RODE_URL;
+        del.mockResolvedValue(rodeResponse);
       });
 
       afterEach(() => {
@@ -323,11 +326,9 @@ describe("/api/policies/[id]", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
-            method: "DELETE",
-          });
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
       });
 
       it("should return null if the delete was successful", async () => {
@@ -356,6 +357,7 @@ describe("/api/policies/[id]", () => {
 
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
+        del.mockResolvedValue(rodeResponse);
 
         await handler(request, response);
 
@@ -363,7 +365,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        del.mockRejectedValue(new Error());
 
         await handler(request, response);
 
