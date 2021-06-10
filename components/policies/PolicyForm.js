@@ -72,7 +72,7 @@ const PolicyForm = ({
     setLoading(true);
     const response = await fetch(endpoint, {
       method,
-      body: JSON.stringify({ name, description, policy: { regoContent } }),
+      body: JSON.stringify(formData),
     });
 
     setLoading(false);

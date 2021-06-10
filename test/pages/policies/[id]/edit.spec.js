@@ -264,17 +264,16 @@ describe("Edit Policy", () => {
     });
 
     it("should submit the form when filled out entirely", () => {
+      const formData = {
+        name: policy.name,
+        description: policy.description,
+        regoContent: policy.regoContent,
+      };
       expect(fetch)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/api/policies/${policy.id}`, {
           method: "PATCH",
-          body: JSON.stringify({
-            name: policy.name,
-            description: policy.description,
-            policy: {
-              regoContent: policy.regoContent,
-            },
-          }),
+          body: JSON.stringify(formData),
         });
     });
 

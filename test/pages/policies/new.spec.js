@@ -118,11 +118,7 @@ describe("New Policy", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith("/api/policies", {
           method: "POST",
-          body: JSON.stringify({
-            name: formData.name,
-            description: formData.description,
-            policy: { regoContent: formData.regoContent },
-          }),
+          body: JSON.stringify(formData),
         });
     });
 

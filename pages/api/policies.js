@@ -17,8 +17,9 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "./utils/api-utils";
+import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
 
-// TODO: create mapper for policies so changes in data model don't break everything
+// TODO: create fetch utils to handle stringifying and parsing bodies
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -58,13 +59,8 @@ export default async (req, res) => {
       }
 
       const listPoliciesResponse = await response.json();
-      const policies = listPoliciesResponse.policies.map(
-        ({ id, name, description, policy }) => ({
-          id,
-          name: name,
-          description: description,
-          regoContent: policy.regoContent,
-        })
+      const policies = listPoliciesResponse.policies.map((policy) =>
+        mapToClientModel(policy)
       );
 
       res.status(StatusCodes.OK).json({
@@ -82,11 +78,11 @@ export default async (req, res) => {
 
   if (req.method === "POST") {
     try {
-      const formData = req.body;
+      const postBody = mapToApiModel(JSON.parse(req.body));
 
       const response = await fetch(`${rodeUrl}/v1alpha1/policies`, {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(postBody),
       });
 
       if (!response.ok) {
@@ -112,12 +108,7 @@ export default async (req, res) => {
       }
 
       const createPolicyResponse = await response.json();
-      const policy = {
-        id: createPolicyResponse.id,
-        name: createPolicyResponse.name,
-        description: createPolicyResponse.description,
-        regoContent: createPolicyResponse.policy.regoContent,
-      };
+      const policy = mapToClientModel(createPolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {

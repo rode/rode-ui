@@ -18,6 +18,7 @@ import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]";
 import { getRodeUrl } from "pages/api/utils/api-utils";
+import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
@@ -177,7 +178,7 @@ describe("/api/policies/[id]", () => {
   describe("PATCH", () => {
     beforeEach(() => {
       request.method = "PATCH";
-      request.body = foundPolicy;
+      request.body = JSON.stringify(foundPolicy);
     });
 
     describe("successful call to Rode", () => {
@@ -199,7 +200,7 @@ describe("/api/policies/[id]", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
             method: "PATCH",
-            body: request.body,
+            body: JSON.stringify(mapToApiModel(JSON.parse(request.body))),
           });
       });
 

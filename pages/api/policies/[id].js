@@ -17,6 +17,7 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import fetch from "node-fetch";
 import { getRodeUrl } from "pages/api/utils/api-utils";
+import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
@@ -48,12 +49,7 @@ export default async (req, res) => {
 
       const getPolicyResponse = await response.json();
 
-      const policy = {
-        id,
-        name: getPolicyResponse.name,
-        description: getPolicyResponse.description,
-        regoContent: getPolicyResponse.policy.regoContent,
-      };
+      const policy = mapToClientModel({ ...getPolicyResponse, id });
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
@@ -69,9 +65,11 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
+      const updateBody = mapToApiModel(JSON.parse(req.body));
+
       const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`, {
         method: "PATCH",
-        body: req.body,
+        body: JSON.stringify(updateBody),
       });
 
       if (!response.ok) {
@@ -98,12 +96,7 @@ export default async (req, res) => {
 
       const updatePolicyResponse = await response.json();
 
-      const policy = {
-        id,
-        name: updatePolicyResponse.name,
-        description: updatePolicyResponse.description,
-        regoContent: updatePolicyResponse.policy.regoContent,
-      };
+      const policy = mapToClientModel({ ...updatePolicyResponse, id });
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {

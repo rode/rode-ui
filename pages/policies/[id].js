@@ -29,6 +29,7 @@ import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import Code from "components/Code";
 
+// TODO: e2e test updates
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();

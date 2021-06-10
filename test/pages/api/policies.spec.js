@@ -18,6 +18,7 @@ import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies";
 import { getRodeUrl } from "pages/api/utils/api-utils";
+import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
@@ -222,7 +223,7 @@ describe("/api/policies", () => {
       };
       request = {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(formData),
       };
 
       createdPolicy = {
@@ -249,7 +250,7 @@ describe("/api/policies", () => {
         expect(fetch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith("http://localhost:50051/v1alpha1/policies", {
-            body: formData,
+            body: JSON.stringify(mapToApiModel(request.body)),
             method: "POST",
           });
       });
