@@ -124,4 +124,27 @@ describe("SearchBar", () => {
     expect(renderedButton).toBeInTheDocument();
     expect(renderedButton.type).toBe("submit");
   });
+
+  it("should allow the user to pass an onblur function", () => {
+    const onBlur = jest.fn();
+    const triggerBlur = chance.string();
+    rerender(
+      <>
+        <p>{triggerBlur}</p>
+        <SearchBar
+          onSubmit={onSubmit}
+          onChange={onChange}
+          label={label}
+          name={name}
+          onBlur={onBlur}
+        />
+      </>
+    );
+
+    const renderedInput = screen.getByLabelText(label);
+    userEvent.click(renderedInput);
+    userEvent.click(screen.getByText(triggerBlur));
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
 });

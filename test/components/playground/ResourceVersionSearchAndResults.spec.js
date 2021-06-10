@@ -224,6 +224,15 @@ describe("ResourceVersionSearchAndResults", () => {
         screen.getByText(/select a resource to view a list of versions/i)
       ).toBeInTheDocument();
     });
+
+    it("should render the no versions found message if no versions are found", () => {
+      fetchResponse.loading = false;
+      fetchResponse.data = [];
+
+      searchForVersion();
+
+      expect(screen.getByText(/no versions found/i)).toBeInTheDocument();
+    });
   });
 });
 

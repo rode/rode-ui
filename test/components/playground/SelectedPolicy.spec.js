@@ -84,7 +84,7 @@ describe("SelectedPolicy", () => {
     it("should render the Rego policy code", () => {
       expect(screen.getByTestId("regoPolicyCode")).toBeInTheDocument();
       expect(
-        screen.getByText(policy.regoContent, { exact: false })
+        screen.getByText(policy.regoContent, { exact: false, selector: "code" })
       ).toBeInTheDocument();
     });
 

@@ -15,9 +15,9 @@
  */
 
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
 import PolicySearchBar from "components/policies/PolicySearchBar";
-import userEvent from "@testing-library/user-event";
+import userEvent, { specialChars } from "@testing-library/user-event";
 import { usePolicies } from "providers/policies";
 
 jest.mock("providers/policies");
@@ -73,6 +73,23 @@ describe("PolicySearchBar", () => {
         data: expect.any(String),
       });
     expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
+  });
+
+  it("should search for all policies when the user clears any search terms", () => {
+    const renderedInput = screen.getByLabelText(/search for a policy/i);
+    expect(renderedInput).toBeInTheDocument();
+
+    const character = " ";
+    act(() => {
+      userEvent.type(renderedInput, character);
+    });
+    act(() => {
+      userEvent.type(renderedInput, specialChars.backspace);
+    });
+    expect(dispatchMock).toHaveBeenLastCalledWith({
+      type: "SET_SEARCH_TERM",
+      data: "all",
+    });
   });
 
   it("should render the button to perform a search", () => {

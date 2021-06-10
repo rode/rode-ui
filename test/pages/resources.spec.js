@@ -109,6 +109,25 @@ describe("Resources", () => {
         .toHaveBeenCalledWith(`/resources?search=${expectedSearch}`);
     });
 
+    it("should kick off the search when the user navigates away from the search bar", () => {
+      const blurTrigger = chance.string();
+      mockState.searchTerm = expectedSearch;
+      render(
+        <>
+          <p>{blurTrigger}</p>
+          <Resources />
+        </>
+      );
+
+      const renderedInput = screen.getByLabelText(/^search for a resource$/i);
+
+      userEvent.click(renderedInput);
+      userEvent.click(screen.getByText(blurTrigger));
+      expect(mockRouter.push)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(`/resources?search=${expectedSearch}`);
+    });
+
     it("should render a loading indicator when fetching results", () => {
       mockFetchResponse.loading = true;
       render(<Resources />);
@@ -117,6 +136,7 @@ describe("Resources", () => {
     });
 
     it("should pass the search term through as a filter", () => {
+      mockState.searchTerm = expectedSearch;
       render(<Resources />);
 
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
@@ -129,7 +149,7 @@ describe("Resources", () => {
     });
 
     it("should handle search for all resources", () => {
-      mockRouter.query.search = "all";
+      mockState.searchTerm = "all";
       render(<Resources />);
 
       expect(usePaginatedFetch)
@@ -137,7 +157,7 @@ describe("Resources", () => {
         .toHaveBeenCalledWith(
           "/api/resources",
           buildResourceQueryParams(
-            mockRouter.query.search,
+            mockState.searchTerm,
             mockState.searchTypeFilter
           ),
           10

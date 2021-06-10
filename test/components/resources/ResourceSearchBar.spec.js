@@ -15,9 +15,9 @@
  */
 
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
-import userEvent from "@testing-library/user-event";
+import userEvent, { specialChars } from "@testing-library/user-event";
 import { useResources } from "providers/resources";
 
 jest.mock("providers/resources");
@@ -73,6 +73,23 @@ describe("ResourceSearchBar", () => {
         data: expect.any(String),
       });
     expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
+  });
+
+  it("should search for all resources when the user clears any search terms", () => {
+    const renderedInput = screen.getByLabelText(/search for a resource/i);
+    expect(renderedInput).toBeInTheDocument();
+
+    const character = " ";
+    act(() => {
+      userEvent.type(renderedInput, character);
+    });
+    act(() => {
+      userEvent.type(renderedInput, specialChars.backspace);
+    });
+    expect(dispatchMock).toHaveBeenLastCalledWith({
+      type: "SET_SEARCH_TERM",
+      data: "all",
+    });
   });
 
   it("should render the button to perform a search", () => {

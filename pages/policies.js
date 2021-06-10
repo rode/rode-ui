@@ -28,15 +28,17 @@ import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
+import useDebouncedValue from "hooks/useDebouncedValue";
 
 const Policies = () => {
   const { theme } = useTheme();
   const { state, dispatch } = usePolicies();
+  const debouncedSearch = useDebouncedValue(state.searchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    router.query.search ? "/api/policies" : null,
-    createSearchFilter(router.query.search),
+    debouncedSearch ? "/api/policies" : null,
+    createSearchFilter(debouncedSearch),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
@@ -75,6 +77,7 @@ const Policies = () => {
       <div className={styles.searchBarContainer}>
         <PolicySearchBar
           onSubmit={onSubmit}
+          onBlur={onSubmit}
           helpText={
             <>
               You can search by policy name or{" "}

@@ -28,15 +28,17 @@ import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
+import useDebouncedValue from "hooks/useDebouncedValue";
 
 const Resources = () => {
   const { theme } = useTheme();
   const { state, dispatch } = useResources();
+  const debouncedSearch = useDebouncedValue(state.searchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    router.query.search ? "/api/resources" : null,
-    buildResourceQueryParams(router.query.search, state.searchTypeFilter),
+    debouncedSearch ? "/api/resources" : null,
+    buildResourceQueryParams(debouncedSearch, state.searchTypeFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
@@ -76,7 +78,7 @@ const Resources = () => {
       setShowSearchResults(false);
       dispatch({
         type: resourceActions.SET_SEARCH_TERM,
-        data: "",
+        data: SEARCH_ALL,
       });
     }
   }, [router.query]);
@@ -90,6 +92,7 @@ const Resources = () => {
       <div className={styles.searchBarContainer}>
         <ResourceSearchBar
           onSubmit={onSubmit}
+          onBlur={onSubmit}
           helpText={
             <>
               You can search by name or{" "}
