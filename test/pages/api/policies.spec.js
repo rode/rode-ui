@@ -87,9 +87,9 @@ describe("/api/policies", () => {
         () => ({
           [chance.word()]: chance.word(),
           id: chance.guid(),
+          name: chance.name(),
+          description: chance.sentence(),
           policy: {
-            name: chance.name(),
-            description: chance.sentence(),
             regoContent: chance.string(),
           },
         }),
@@ -164,10 +164,10 @@ describe("/api/policies", () => {
       });
 
       it("should return the mapped policies", async () => {
-        const expectedPolicies = allPolicies.map(({ id, policy }) => ({
+        const expectedPolicies = allPolicies.map(({ id, name, description, policy }) => ({
           id,
-          name: policy.name,
-          description: policy.description,
+          name: name,
+          description: description,
           regoContent: policy.regoContent,
         }));
 

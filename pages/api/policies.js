@@ -56,10 +56,10 @@ export default async (req, res) => {
       }
 
       const listPoliciesResponse = await response.json();
-      const policies = listPoliciesResponse.policies.map(({ id, policy }) => ({
+      const policies = listPoliciesResponse.policies.map(({ id, name, description, policy }) => ({
         id,
-        name: policy.name,
-        description: policy.description,
+        name: name,
+        description: description,
         regoContent: policy.regoContent,
       }));
 
