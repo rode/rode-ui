@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resource-versions";
+import { getRodeUrl, get } from "pages/api/utils/api-utils";
 
-jest.mock("node-fetch");
+jest.mock("pages/api/utils/api-utils");
 
 describe("/api/resource-versions", () => {
   let request,
@@ -26,7 +26,8 @@ describe("/api/resource-versions", () => {
     resourceVersions,
     rodeResponse,
     genericResourceId,
-    pageToken;
+    pageToken,
+    rodeUrl;
 
   beforeEach(() => {
     genericResourceId = chance.word();
@@ -59,8 +60,11 @@ describe("/api/resource-versions", () => {
         nextPageToken: pageToken,
       }),
     };
+    rodeUrl = chance.url();
 
-    fetch.mockResolvedValue(rodeResponse);
+    getRodeUrl.mockReturnValue(rodeUrl);
+
+    get.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
@@ -99,67 +103,56 @@ describe("/api/resource-versions", () => {
   });
 
   describe("successful call to Rode", () => {
-    let rodeUrlEnv;
-
-    beforeEach(() => {
-      rodeUrlEnv = process.env.RODE_URL;
-      delete process.env.RODE_URL;
-    });
-
-    afterEach(() => {
-      process.env.RODE_URL = rodeUrlEnv;
-    });
-
-    const createExpectedUrl = (baseUrl, query = {}) => {
-      return `${baseUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
+    const createExpectedUrl = (query = {}) => {
+      return `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
         query
       )}`;
     };
 
     it("should hit the Rode API", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+      const expectedUrl = createExpectedUrl({
         id: genericResourceId,
       });
 
       await handler(request, response);
 
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
     it("should pass the filter as a query param when a filter is specified", async () => {
       const filter = chance.string();
-      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+      const expectedUrl = createExpectedUrl({
         id: genericResourceId,
         filter,
       });
 
       request.query.filter = filter;
       await handler(request, response);
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
-      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+      const expectedUrl = createExpectedUrl({
         id: genericResourceId,
         pageSize,
       });
 
       request.query.pageSize = pageSize;
       await handler(request, response);
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
-      const expectedUrl = createExpectedUrl("http://localhost:50051", {
+      const expectedUrl = createExpectedUrl({
         id: genericResourceId,
         pageToken,
       });
 
       request.query.pageToken = pageToken;
       await handler(request, response);
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
     it("should return the resource versions", async () => {
@@ -201,7 +194,7 @@ describe("/api/resource-versions", () => {
     });
 
     it("should return an internal server error on a network or other fetch error", async () => {
-      fetch.mockRejectedValue(new Error());
+      get.mockRejectedValue(new Error());
 
       await handler(request, response);
 

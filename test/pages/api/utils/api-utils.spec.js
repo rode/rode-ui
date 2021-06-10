@@ -39,12 +39,14 @@ describe("api-utils", () => {
   });
 
   describe("post", () => {
+    let body, endpoint;
+
     it("should call fetch with the appropriate params", () => {
-      const body = {
+      body = {
         [chance.string()]: chance.string(),
       };
 
-      const endpoint = chance.url();
+      endpoint = chance.url();
 
       post(endpoint, body);
 
@@ -53,21 +55,44 @@ describe("api-utils", () => {
         body: JSON.stringify(body),
       });
     });
+
+    it("should pass the raw body if it is not an object", () => {
+      body = chance.string();
+      endpoint = chance.url();
+      post(endpoint, body);
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "POST",
+        body,
+      });
+    });
   });
 
   describe("patch", () => {
+    let body, endpoint;
     it("should call fetch with the appropriate params", () => {
-      const body = {
+      body = {
         [chance.string()]: chance.string(),
       };
 
-      const endpoint = chance.url();
+      endpoint = chance.url();
 
       patch(endpoint, body);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
         method: "PATCH",
         body: JSON.stringify(body),
+      });
+    });
+
+    it("should pass the raw body if it is not an object", () => {
+      body = chance.string();
+      endpoint = chance.url();
+
+      patch(endpoint, body);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "PATCH",
+        body,
       });
     });
   });

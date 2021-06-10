@@ -25,7 +25,7 @@ const fetch = (endpoint, method, body) => {
   };
 
   if (body) {
-    options.body = JSON.stringify(body);
+    options.body = typeof body === "object" ? JSON.stringify(body) : body;
   }
 
   return nodeFetch(endpoint, options);

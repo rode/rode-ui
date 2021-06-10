@@ -91,17 +91,6 @@ describe("/api/policies/[id]", () => {
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
-      beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
-      });
-
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
@@ -184,17 +173,6 @@ describe("/api/policies/[id]", () => {
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
-      beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
-      });
-
       it("should hit the Rode API", async () => {
         await handler(request, response);
 

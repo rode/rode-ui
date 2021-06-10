@@ -15,8 +15,7 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import fetch from "node-fetch";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, post } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["POST"];
 
@@ -32,10 +31,10 @@ export default async (req, res) => {
   try {
     const policy = req.body;
 
-    const response = await fetch(`${rodeUrl}/v1alpha1/policies:validate`, {
-      method: "POST",
-      body: policy,
-    });
+    const response = await post(
+      `${rodeUrl}/v1alpha1/policies:validate`,
+      policy
+    );
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
