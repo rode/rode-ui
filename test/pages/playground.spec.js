@@ -267,6 +267,9 @@ describe("PolicyPlayground", () => {
                 resourceUri:
                   policyState.evaluationResource.versionedResourceUri,
               }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
             }
           );
 
