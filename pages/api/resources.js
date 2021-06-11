@@ -15,8 +15,7 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import fetch from "node-fetch";
-import { getRodeUrl } from "./utils/api-utils";
+import { get, getRodeUrl } from "./utils/api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -58,7 +57,7 @@ export default async (req, res) => {
       filter.pageToken = req.query.pageToken;
     }
 
-    const response = await fetch(
+    const response = await get(
       `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`
     );
 

@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-import * as nodeFetch from "node-fetch";
-
-export const getRodeUrl = () =>
-  process.env.RODE_URL || "http://localhost:50051";
-
-const fetch = (endpoint, method, body) => {
-  const options = {
-    method,
+export const mapToClientModel = (policyResponse) => {
+  return {
+    id: policyResponse.id,
+    name: policyResponse.name,
+    description: policyResponse.description,
+    regoContent: policyResponse.policy.regoContent,
   };
-
-  if (body) {
-    options.body = typeof body === "object" ? JSON.stringify(body) : body;
-  }
-
-  return nodeFetch(endpoint, options);
 };
 
-export const post = (endpoint, body) => fetch(endpoint, "POST", body);
+export const mapToApiModel = (request) => {
+  let formattedRequest = request.body;
 
-export const patch = (endpoint, body) => fetch(endpoint, "PATCH", body);
-
-export const get = (endpoint) => fetch(endpoint, "GET");
-
-export const del = (endpoint) => fetch(endpoint, "DELETE");
+  return {
+    name: formattedRequest.name,
+    description: formattedRequest.description,
+    policy: {
+      regoContent: formattedRequest.regoContent,
+    },
+  };
+};

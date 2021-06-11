@@ -15,8 +15,8 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import fetch from "node-fetch";
-import { getRodeUrl } from "./utils/api-utils";
+import { get, getRodeUrl, post } from "./utils/api-utils";
+import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -44,7 +44,7 @@ export default async (req, res) => {
       if (req.query.pageToken) {
         filter.pageToken = req.query.pageToken;
       }
-      const response = await fetch(
+      const response = await get(
         `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
       );
 
@@ -56,12 +56,9 @@ export default async (req, res) => {
       }
 
       const listPoliciesResponse = await response.json();
-      const policies = listPoliciesResponse.policies.map(({ id, policy }) => ({
-        id,
-        name: policy.name,
-        description: policy.description,
-        regoContent: policy.regoContent,
-      }));
+      const policies = listPoliciesResponse.policies.map((policy) =>
+        mapToClientModel(policy)
+      );
 
       res.status(StatusCodes.OK).json({
         data: policies,
@@ -78,12 +75,9 @@ export default async (req, res) => {
 
   if (req.method === "POST") {
     try {
-      const formData = req.body;
+      const postBody = mapToApiModel(req);
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -108,12 +102,7 @@ export default async (req, res) => {
       }
 
       const createPolicyResponse = await response.json();
-      const policy = {
-        id: createPolicyResponse.id,
-        name: createPolicyResponse.policy.name,
-        description: createPolicyResponse.policy.description,
-        regoContent: createPolicyResponse.policy.regoContent,
-      };
+      const policy = mapToClientModel(createPolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {

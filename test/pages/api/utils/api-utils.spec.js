@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, post, patch, get, del } from "pages/api/utils/api-utils";
+import fetch from "node-fetch";
+
+jest.mock("node-fetch");
 
 describe("api-utils", () => {
   describe("getRodeUrl", () => {
@@ -32,6 +35,89 @@ describe("api-utils", () => {
       const actual = getRodeUrl();
 
       expect(actual).toEqual("http://localhost:50051");
+    });
+  });
+
+  describe("post", () => {
+    let body, endpoint;
+
+    it("should call fetch with the appropriate params", () => {
+      body = {
+        [chance.string()]: chance.string(),
+      };
+
+      endpoint = chance.url();
+
+      post(endpoint, body);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+    });
+
+    it("should pass the raw body if it is not an object", () => {
+      body = chance.string();
+      endpoint = chance.url();
+      post(endpoint, body);
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "POST",
+        body,
+      });
+    });
+  });
+
+  describe("patch", () => {
+    let body, endpoint;
+    it("should call fetch with the appropriate params", () => {
+      body = {
+        [chance.string()]: chance.string(),
+      };
+
+      endpoint = chance.url();
+
+      patch(endpoint, body);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+    });
+
+    it("should pass the raw body if it is not an object", () => {
+      body = chance.string();
+      endpoint = chance.url();
+
+      patch(endpoint, body);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "PATCH",
+        body,
+      });
+    });
+  });
+
+  describe("get", () => {
+    it("should call fetch with the appropriate params", () => {
+      const endpoint = chance.url();
+
+      get(endpoint);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "GET",
+      });
+    });
+  });
+
+  describe("del", () => {
+    it("should call fetch with the appropriate params", () => {
+      const endpoint = chance.url();
+
+      del(endpoint);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        method: "DELETE",
+      });
     });
   });
 });

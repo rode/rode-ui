@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/occurrences";
 import {
@@ -22,11 +21,17 @@ import {
   createMockResourceUri,
 } from "test/testing-utils/mocks";
 import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
+import { getRodeUrl, get } from "pages/api/utils/api-utils";
 
-jest.mock("node-fetch");
+jest.mock("pages/api/utils/api-utils");
 
 describe("/api/occurrences", () => {
-  let request, response, allOccurrences, rodeResponse, resourceUriParam;
+  let request,
+    response,
+    allOccurrences,
+    rodeResponse,
+    resourceUriParam,
+    rodeUrl;
 
   beforeEach(() => {
     resourceUriParam = createMockResourceUri();
@@ -54,8 +59,10 @@ describe("/api/occurrences", () => {
         occurrences: allOccurrences,
       }),
     };
+    rodeUrl = chance.url();
 
-    fetch.mockResolvedValue(rodeResponse);
+    getRodeUrl.mockReturnValue(rodeUrl);
+    get.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
@@ -79,40 +86,15 @@ describe("/api/occurrences", () => {
   });
 
   describe("successful call to Rode", () => {
-    let rodeUrlEnv;
-
-    beforeEach(() => {
-      rodeUrlEnv = process.env.RODE_URL;
-      delete process.env.RODE_URL;
-    });
-
-    afterEach(() => {
-      process.env.RODE_URL = rodeUrlEnv;
-    });
-
-    const createExpectedUrl = (baseUrl) => {
-      return `${baseUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
+    it("should hit the Rode API", async () => {
+      const expectedUrl = `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUriParam
       )}&fetchRelatedNotes=true&pageSize=1000`;
-    };
-
-    it("should hit the Rode API", async () => {
-      const expectedUrl = createExpectedUrl("http://localhost:50051");
 
       await handler(request, response);
 
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
-
-    it("should take the Rode URL from the environment if set", async () => {
-      const rodeUrl = chance.url();
-      const expectedUrl = createExpectedUrl(rodeUrl);
-      process.env.RODE_URL = rodeUrl;
-
-      await handler(request, response);
-
-      delete process.env.RODE_URL;
-      expect(fetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(getRodeUrl).toHaveBeenCalledTimes(1);
+      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
     it("should return the mapped resources", async () => {
@@ -157,7 +139,7 @@ describe("/api/occurrences", () => {
     });
 
     it("should return an internal server error on a network or other fetch error", async () => {
-      fetch.mockRejectedValue(new Error());
+      get.mockRejectedValue(new Error());
 
       await handler(request, response);
 

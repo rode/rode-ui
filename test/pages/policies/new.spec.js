@@ -119,6 +119,9 @@ describe("New Policy", () => {
         .toHaveBeenCalledWith("/api/policies", {
           method: "POST",
           body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
     });
 

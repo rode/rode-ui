@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, get, patch, del } from "pages/api/utils/api-utils";
+import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
@@ -43,20 +43,25 @@ describe("/api/policies/[id]", () => {
     };
 
     foundPolicy = {
+      id,
       name: chance.string(),
       description: chance.string(),
-      regoContent: chance.string(),
+      policy: {
+        version: chance.d4(),
+        message: chance.string(),
+        regoContent: chance.string(),
+      },
     };
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
         id,
-        policy: foundPolicy,
+        ...foundPolicy,
       }),
     };
 
-    fetch.mockResolvedValue(rodeResponse);
+    get.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
@@ -82,24 +87,15 @@ describe("/api/policies/[id]", () => {
   describe("GET", () => {
     beforeEach(() => {
       request.method = "GET";
+
+      get.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
-      beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
-      });
-
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
       });
@@ -115,7 +111,7 @@ describe("/api/policies/[id]", () => {
           id,
           name: foundPolicy.name,
           description: foundPolicy.description,
-          regoContent: foundPolicy.regoContent,
+          regoContent: foundPolicy.policy.regoContent,
         });
       });
 
@@ -153,7 +149,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        get.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -173,30 +169,23 @@ describe("/api/policies/[id]", () => {
   describe("PATCH", () => {
     beforeEach(() => {
       request.method = "PATCH";
-      request.body = foundPolicy;
+      request.body = JSON.stringify(foundPolicy);
+      request.headers = {
+        "Content-Type": "application/json",
+      };
+      patch.mockResolvedValue(rodeResponse);
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
-      beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
-      });
-
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(patch)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
-            method: "PATCH",
-            body: request.body,
-          });
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policies/${id}`,
+            mapToApiModel(request)
+          );
       });
 
       it("should return the updated policy", async () => {
@@ -210,7 +199,7 @@ describe("/api/policies/[id]", () => {
           id,
           name: foundPolicy.name,
           description: foundPolicy.description,
-          regoContent: foundPolicy.regoContent,
+          regoContent: foundPolicy.policy.regoContent,
         });
       });
     });
@@ -281,7 +270,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        patch.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -309,6 +298,7 @@ describe("/api/policies/[id]", () => {
       beforeEach(() => {
         rodeUrlEnv = process.env.RODE_URL;
         delete process.env.RODE_URL;
+        del.mockResolvedValue(rodeResponse);
       });
 
       afterEach(() => {
@@ -318,11 +308,9 @@ describe("/api/policies/[id]", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`, {
-            method: "DELETE",
-          });
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
       });
 
       it("should return null if the delete was successful", async () => {
@@ -351,6 +339,7 @@ describe("/api/policies/[id]", () => {
 
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
+        del.mockResolvedValue(rodeResponse);
 
         await handler(request, response);
 
@@ -358,7 +347,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        del.mockRejectedValue(new Error());
 
         await handler(request, response);
 

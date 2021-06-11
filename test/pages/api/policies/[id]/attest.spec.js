@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]/attest";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, post } from "pages/api/utils/api-utils";
 
-jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/[id]/attest", () => {
@@ -55,7 +53,7 @@ describe("/api/policies/[id]/attest", () => {
       json: jest.fn().mockResolvedValue(evalResponse),
     };
 
-    fetch.mockResolvedValue(rodeResponse);
+    post.mockResolvedValue(rodeResponse);
   });
 
   afterEach(() => {
@@ -83,14 +81,11 @@ describe("/api/policies/[id]/attest", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(fetch)
+        expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
             `${expectedRodeUrl}/v1alpha1/policies/${id}:attest`,
-            {
-              method: "POST",
-              body: request.body,
-            }
+            request.body
           );
       });
 
@@ -127,7 +122,7 @@ describe("/api/policies/[id]/attest", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        fetch.mockRejectedValue(new Error());
+        post.mockRejectedValue(new Error());
 
         await handler(request, response);
 

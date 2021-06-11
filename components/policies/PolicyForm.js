@@ -73,6 +73,9 @@ const PolicyForm = ({
     const response = await fetch(endpoint, {
       method,
       body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     setLoading(false);
@@ -109,6 +112,9 @@ const PolicyForm = ({
       body: JSON.stringify({
         policy: regoContent,
       }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     const result = await response.json();

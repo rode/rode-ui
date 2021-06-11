@@ -15,8 +15,8 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import fetch from "node-fetch";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
+import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
@@ -33,7 +33,7 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`);
+      const response = await get(`${rodeUrl}/v1alpha1/policies/${id}`);
 
       if (response.status === StatusCodes.NOT_FOUND) {
         return res.status(StatusCodes.OK).send(null);
@@ -47,12 +47,8 @@ export default async (req, res) => {
       }
 
       const getPolicyResponse = await response.json();
-      const policy = {
-        id,
-        name: getPolicyResponse.policy.name,
-        description: getPolicyResponse.policy.description,
-        regoContent: getPolicyResponse.policy.regoContent,
-      };
+
+      const policy = mapToClientModel(getPolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
@@ -68,10 +64,12 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`, {
-        method: "PATCH",
-        body: req.body,
-      });
+      const updateBody = mapToApiModel(req);
+
+      const response = await patch(
+        `${rodeUrl}/v1alpha1/policies/${id}`,
+        updateBody
+      );
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -97,12 +95,7 @@ export default async (req, res) => {
 
       const updatePolicyResponse = await response.json();
 
-      const policy = {
-        id,
-        name: updatePolicyResponse.policy.name,
-        description: updatePolicyResponse.policy.description,
-        regoContent: updatePolicyResponse.policy.regoContent,
-      };
+      const policy = mapToClientModel(updatePolicyResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
@@ -118,9 +111,7 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const response = await fetch(`${rodeUrl}/v1alpha1/policies/${id}`, {
-        method: "DELETE",
-      });
+      const response = await del(`${rodeUrl}/v1alpha1/policies/${id}`);
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

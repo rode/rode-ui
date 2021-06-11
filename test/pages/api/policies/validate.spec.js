@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import fetch from "node-fetch";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/validate";
-import { getRodeUrl } from "pages/api/utils/api-utils";
+import { getRodeUrl, post } from "pages/api/utils/api-utils";
 
-jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/validate", () => {
@@ -48,7 +46,7 @@ describe("/api/policies/validate", () => {
       json: jest.fn().mockResolvedValue(validationResult),
     };
 
-    fetch.mockResolvedValue(rodeResponse);
+    post.mockResolvedValue(rodeResponse);
     getRodeUrl.mockReturnValue("http://localhost:50051");
   });
 
@@ -86,14 +84,11 @@ describe("/api/policies/validate", () => {
     it("should hit the Rode API", async () => {
       await handler(request, response);
 
-      expect(fetch)
+      expect(post)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(
           "http://localhost:50051/v1alpha1/policies:validate",
-          {
-            body: request.body,
-            method: "POST",
-          }
+          request.body
         );
     });
 
@@ -191,7 +186,7 @@ describe("/api/policies/validate", () => {
     });
 
     it("should return an internal server error on a network or other fetch error", async () => {
-      fetch.mockRejectedValue(new Error());
+      post.mockRejectedValue(new Error());
 
       await handler(request, response);
 
