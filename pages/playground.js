@@ -49,8 +49,8 @@ const PolicyPlayground = () => {
         method: "POST",
         body: JSON.stringify(requestBody),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 

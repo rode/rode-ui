@@ -45,7 +45,7 @@ describe("policy-utils", () => {
   });
 
   describe("mapToApiModel", () => {
-    let unmappedPolicy;
+    let unmappedPolicy, request;
 
     beforeEach(() => {
       unmappedPolicy = {
@@ -54,10 +54,14 @@ describe("policy-utils", () => {
         description: chance.string(),
         regoContent: chance.string(),
       };
+
+      request = {
+        body: unmappedPolicy,
+      };
     });
 
     it("should return the mapped policy matching the api model", () => {
-      const actual = mapToApiModel(unmappedPolicy);
+      const actual = mapToApiModel(request);
 
       expect(actual).toEqual({
         name: unmappedPolicy.name,
@@ -68,8 +72,12 @@ describe("policy-utils", () => {
       });
     });
 
-    it("should parse the data if the request is passed as a string", () => {
-      const actual = mapToApiModel(JSON.stringify(unmappedPolicy));
+    it("should parse the data if the request is passed as a string but should be json", () => {
+      request.body = JSON.stringify(unmappedPolicy);
+      request.headers = {
+        "content-type": "application/json",
+      };
+      const actual = mapToApiModel(request);
 
       expect(actual).toEqual({
         name: unmappedPolicy.name,

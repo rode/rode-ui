@@ -170,6 +170,9 @@ describe("/api/policies/[id]", () => {
     beforeEach(() => {
       request.method = "PATCH";
       request.body = JSON.stringify(foundPolicy);
+      request.headers = {
+        "Content-Type": "application/json",
+      };
       patch.mockResolvedValue(rodeResponse);
     });
 
@@ -181,7 +184,7 @@ describe("/api/policies/[id]", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
             `${expectedRodeUrl}/v1alpha1/policies/${id}`,
-            mapToApiModel(JSON.parse(request.body))
+            mapToApiModel(request)
           );
       });
 

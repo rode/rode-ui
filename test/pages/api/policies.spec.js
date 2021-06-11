@@ -215,6 +215,9 @@ describe("/api/policies", () => {
       request = {
         method: "POST",
         body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
       };
 
       createdPolicy = {
@@ -242,7 +245,7 @@ describe("/api/policies", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
             "http://localhost:50051/v1alpha1/policies",
-            mapToApiModel(request.body)
+            mapToApiModel(request)
           );
       });
 

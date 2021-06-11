@@ -23,11 +23,14 @@ export const mapToClientModel = (policyResponse) => {
   };
 };
 
-export const mapToApiModel = (requestBody) => {
-  let formattedRequest = requestBody;
+export const mapToApiModel = (request) => {
+  let formattedRequest = request.body;
 
-  if (typeof requestBody === "string") {
-    formattedRequest = JSON.parse(requestBody);
+  if (
+    typeof request.body === "string" &&
+    request.headers["content-type"] === "application/json"
+  ) {
+    formattedRequest = JSON.parse(request.body);
   }
 
   return {
