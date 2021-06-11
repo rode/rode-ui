@@ -26,13 +26,6 @@ export const mapToClientModel = (policyResponse) => {
 export const mapToApiModel = (request) => {
   let formattedRequest = request.body;
 
-  if (
-    typeof request.body === "string" &&
-    request.headers["content-type"] === "application/json"
-  ) {
-    formattedRequest = JSON.parse(request.body);
-  }
-
   return {
     name: formattedRequest.name,
     description: formattedRequest.description,

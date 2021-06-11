@@ -71,21 +71,5 @@ describe("policy-utils", () => {
         },
       });
     });
-
-    it("should parse the data if the request is passed as a string but should be json", () => {
-      request.body = JSON.stringify(unmappedPolicy);
-      request.headers = {
-        "content-type": "application/json",
-      };
-      const actual = mapToApiModel(request);
-
-      expect(actual).toEqual({
-        name: unmappedPolicy.name,
-        description: unmappedPolicy.description,
-        policy: {
-          regoContent: unmappedPolicy.regoContent,
-        },
-      });
-    });
   });
 });
