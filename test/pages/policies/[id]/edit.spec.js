@@ -274,6 +274,9 @@ describe("Edit Policy", () => {
         .toHaveBeenCalledWith(`/api/policies/${policy.id}`, {
           method: "PATCH",
           body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
     });
 

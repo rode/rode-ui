@@ -151,6 +151,9 @@ describe("Policy Form", () => {
           body: JSON.stringify({
             policy: regoContent,
           }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
     });
 
