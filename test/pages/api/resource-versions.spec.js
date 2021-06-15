@@ -104,7 +104,7 @@ describe("/api/resource-versions", () => {
 
   describe("successful call to Rode", () => {
     const createExpectedUrl = (query = {}) => {
-      return `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
+      return `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(
         query
       )}`;
     };

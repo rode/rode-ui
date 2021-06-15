@@ -58,7 +58,7 @@ export default async (req, res) => {
     }
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(filter)}`
+      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
     );
 
     if (!response.ok) {

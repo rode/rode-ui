@@ -92,9 +92,7 @@ describe("/api/resources", () => {
 
   describe("successful call to Rode", () => {
     const createExpectedUrl = (query = {}) => {
-      return `${rodeUrl}/v1alpha1/generic-resources?${new URLSearchParams(
-        query
-      )}`;
+      return `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(query)}`;
     };
 
     it("should pass the correct params for a specified search term", async () => {

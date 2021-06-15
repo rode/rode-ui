@@ -49,9 +49,7 @@ export default async (req, res) => {
       params.pageToken = req.query.pageToken;
     }
     const response = await get(
-      `${rodeUrl}/v1alpha1/generic-resource-versions?${new URLSearchParams(
-        params
-      )}`
+      `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(params)}`
     );
 
     if (!response.ok) {
