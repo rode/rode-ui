@@ -59,7 +59,7 @@ describe("/api/resources", () => {
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
-        genericResources: allResources,
+        resources: allResources,
         nextPageToken: pageToken,
       }),
     };

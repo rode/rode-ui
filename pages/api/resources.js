@@ -69,7 +69,7 @@ export default async (req, res) => {
     }
 
     const listResourcesResponse = await response.json();
-    const resources = listResourcesResponse.genericResources;
+    const resources = listResourcesResponse.resources;
 
     res.status(StatusCodes.OK).json({
       data: resources,
