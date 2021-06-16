@@ -17,6 +17,13 @@
 import * as yup from "yup";
 
 export const schema = yup.object().shape({
-  name: yup.string().required().label("Policy Group Name").matches(/^([a-z]*|\d*|[-_]*)*$/g, "Invalid character(s). Please refer to name guidelines."),
+  name: yup
+    .string()
+    .required()
+    .label("Policy Group Name")
+    .matches(
+      /^([a-z]*|\d*|[-_]*)*$/g,
+      "Invalid character(s). Please refer to name guidelines."
+    ),
   description: yup.string().label("Description"),
 });

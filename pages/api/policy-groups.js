@@ -41,6 +41,7 @@ export default async (req, res) => {
       if (req.query.pageToken) {
         params.pageToken = req.query.pageToken;
       }
+
       const response = await get(
         `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`
       );
@@ -85,12 +86,7 @@ export default async (req, res) => {
 
       const createPolicyGroupResponse = await response.json();
 
-      const policyGroup = createPolicyGroupResponse;
-
-      res.status(StatusCodes.OK).json({
-        data: policyGroup,
-        pageToken: createPolicyGroupResponse.nextPageToken,
-      });
+      res.status(StatusCodes.OK).json(createPolicyGroupResponse);
     } catch (error) {
       console.error("Error listing policy groups", error);
 

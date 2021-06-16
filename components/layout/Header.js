@@ -50,9 +50,9 @@ const policyLinks = [
 const adminLinks = [
   {
     href: "/policy-groups",
-    label: "Policy Groups"
-  }
-]
+    label: "Policy Groups",
+  },
+];
 
 const navigationSections = [
   {

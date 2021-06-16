@@ -95,6 +95,7 @@ Button.propTypes = {
   className: PropTypes.string,
   loading: PropTypes.bool,
   showTooltip: PropTypes.bool,
+  type: PropTypes.oneOf(["button", "submit", "reset"]),
 };
 
 export default Button;

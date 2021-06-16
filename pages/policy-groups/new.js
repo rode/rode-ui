@@ -23,17 +23,18 @@ import styles from "styles/modules/PolicyGroupForm.module.scss";
 import PageHeader from "components/layout/PageHeader";
 import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
+import { showError } from "utils/toast-utils";
 
+// TODO: tests
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { isValid, validateField, errors } = useFormValidation(schema);
-
-  console.log("errors", errors);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +49,7 @@ const PolicyGroups = () => {
       return;
     }
 
+    setLoading(true);
     const response = await fetch("/api/policy-groups", {
       method: "POST",
       body: JSON.stringify(formData),
@@ -55,14 +57,12 @@ const PolicyGroups = () => {
         "Content-Type": "application/json",
       },
     });
+    setLoading(false);
 
     if (!response.ok) {
-      console.log("error occurred", response);
+      showError("Failed to create the policy group.");
       return;
     }
-
-    const parsedResponse = await response.json();
-    console.log("here successful save", parsedResponse);
 
     // TODO: once implemented, push to created policy group page
     router.push("/policy-groups");
@@ -104,12 +104,17 @@ const PolicyGroups = () => {
           />
         </div>
         <div className={styles.buttonsContainer}>
-          <Button label={"Save Policy Group"} type={"submit"} />
+          <Button
+            label={"Save Policy Group"}
+            type={"submit"}
+            loading={loading}
+          />
 
           <Button
             label={"Cancel"}
             onClick={() => router.back()}
             buttonType={"text"}
+            disabled={loading}
           />
         </div>
       </form>
