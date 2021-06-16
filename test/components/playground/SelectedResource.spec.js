@@ -30,12 +30,12 @@ describe("SelectedResource", () => {
     name,
     version,
     fetchResponse,
-    setResource,
+    setEvaluationResource,
     clearEvaluation,
     rerender;
 
   beforeEach(() => {
-    setResource = jest.fn();
+    setEvaluationResource = jest.fn();
     clearEvaluation = jest.fn();
     fetchResponse = {
       data: {
@@ -56,7 +56,7 @@ describe("SelectedResource", () => {
       resourceUri = null;
       render(
         <SelectedResource
-          setResource={setResource}
+          setEvaluationResource={setEvaluationResource}
           clearEvaluation={clearEvaluation}
           resourceUri={resourceUri}
         />
@@ -83,7 +83,7 @@ describe("SelectedResource", () => {
       resourceUri = createMockResourceUri(name, version);
       const utils = render(
         <SelectedResource
-          setResource={setResource}
+          setEvaluationResource={setEvaluationResource}
           clearEvaluation={clearEvaluation}
           resourceUri={resourceUri}
         />
@@ -121,7 +121,7 @@ describe("SelectedResource", () => {
       fetchResponse.loading = true;
       rerender(
         <SelectedResource
-          setResource={setResource}
+          setEvaluationResource={setEvaluationResource}
           clearEvaluation={clearEvaluation}
           resourceUri={resourceUri}
         />
@@ -145,7 +145,9 @@ describe("SelectedResource", () => {
       expect(renderedButton).toBeInTheDocument();
 
       userEvent.click(renderedButton);
-      expect(setResource).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null);
+      expect(setEvaluationResource)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(null);
       expect(clearEvaluation).toHaveBeenCalled();
     });
 

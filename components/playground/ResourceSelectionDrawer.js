@@ -29,9 +29,12 @@ import { resourceActions } from "reducers/resources";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
+const ResourceSelectionDrawer = ({
+  setEvaluationResource,
+  clearEvaluation,
+}) => {
   const { dispatch } = useResources();
-  const [genericResource, setGenericResource] = useState(null);
+  const [resource, setResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);
   const [currentSection, setCurrentSection] = useState(RESOURCE);
@@ -52,10 +55,10 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
   useEffect(() => {
     clearEvaluation();
 
-    if (genericResource && resourceVersion) {
-      setResource(resourceVersion);
+    if (resource && resourceVersion) {
+      setEvaluationResource(resourceVersion);
     }
-  }, [genericResource, resourceVersion]);
+  }, [resource, resourceVersion]);
 
   return (
     <>
@@ -64,7 +67,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
         buttonType="icon"
         onClick={() => {
           clearSearchTerms();
-          setGenericResource(null);
+          setResource(null);
           setResourceVersion(null);
           setCurrentSection(RESOURCE);
           setShowDrawer(true);
@@ -93,7 +96,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
             buttonType={"text"}
             onClick={openVersionSelection}
             label={"Version"}
-            disabled={!genericResource}
+            disabled={!resource}
             className={
               currentSection === VERSION
                 ? styles.activeNavigationButton
@@ -103,16 +106,16 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
         </div>
         {currentSection === RESOURCE && (
           <ResourceSearchAndResults
-            genericResource={genericResource}
+            selectedResource={resource}
             onResourceSelect={(resource) => {
-              setGenericResource(resource);
+              setResource(resource);
               openVersionSelection();
             }}
           />
         )}
         {currentSection === VERSION && (
           <ResourceVersionSearchAndResults
-            genericResource={genericResource}
+            selectedResource={resource}
             onVersionSelect={(version) => {
               setResourceVersion(version);
               setShowDrawer(false);
@@ -125,7 +128,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
 };
 
 ResourceSelectionDrawer.propTypes = {
-  setResource: PropTypes.func.isRequired,
+  setEvaluationResource: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
 

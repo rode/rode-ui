@@ -27,16 +27,16 @@ export default async (req, res) => {
   const rodeUrl = getRodeUrl();
 
   try {
-    const genericResourceId = req.query.id;
+    const resourceId = req.query.id;
 
-    if (!genericResourceId) {
+    if (!resourceId) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: "Generic resource id must be provided",
+        error: "Resource id must be provided",
       });
     }
 
     const params = {
-      id: genericResourceId,
+      id: resourceId,
     };
 
     if (req.query.filter) {

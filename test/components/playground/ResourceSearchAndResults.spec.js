@@ -25,7 +25,7 @@ jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSearchAndResults", () => {
   let onResourceSelect,
-    genericResource,
+    selectedResource,
     state,
     dispatch,
     fetchResponse,
@@ -53,14 +53,14 @@ describe("ResourceSearchAndResults", () => {
       loading: false,
     };
 
-    genericResource = null;
+    selectedResource = null;
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
 
     const utils = render(
       <ResourceSearchAndResults
         onResourceSelect={onResourceSelect}
-        genericResource={genericResource}
+        selectedResource={selectedResource}
       />,
       {
         resourceState: state,
@@ -116,11 +116,11 @@ describe("ResourceSearchAndResults", () => {
   });
 
   it("should indicate the currently selected resource", () => {
-    genericResource = fetchedResources[0];
+    selectedResource = fetchedResources[0];
     rerender(
       <ResourceSearchAndResults
         onResourceSelect={onResourceSelect}
-        genericResource={genericResource}
+        selectedResource={selectedResource}
       />
     );
     searchForResource();

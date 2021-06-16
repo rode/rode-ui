@@ -25,14 +25,14 @@ import { RESOURCE_TYPES } from "utils/resource-utils";
 jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceSelectionDrawer", () => {
-  let setResource, clearEvaluation, dispatch, state;
+  let setEvaluationResource, clearEvaluation, dispatch, state;
 
   beforeEach(() => {
     dispatch = jest.fn();
     state = {
       searchTerm: chance.string(),
     };
-    setResource = jest.fn();
+    setEvaluationResource = jest.fn();
     clearEvaluation = jest.fn();
     const resourceResponse = {
       data: chance.n(
@@ -66,7 +66,7 @@ describe("ResourceSelectionDrawer", () => {
     render(
       <ResourceSelectionDrawer
         clearEvaluation={clearEvaluation}
-        setResource={setResource}
+        setEvaluationResource={setEvaluationResource}
       />,
       {
         resourceDispatch: dispatch,
@@ -148,7 +148,7 @@ describe("ResourceSelectionDrawer", () => {
     expect(screen.getByTestId("resourceSelectionDrawer")).toHaveClass(
       "closedDrawer"
     );
-    expect(setResource).toHaveBeenCalledTimes(1);
+    expect(setEvaluationResource).toHaveBeenCalledTimes(1);
   });
 });
 

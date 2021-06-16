@@ -31,7 +31,7 @@ import ResourceSelectionDrawer from "components/playground/ResourceSelectionDraw
 import { copy } from "utils/shared-utils";
 
 const SelectedResource = (props) => {
-  const { resourceUri, setResource, clearEvaluation } = props;
+  const { resourceUri, setEvaluationResource, clearEvaluation } = props;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri: resourceUri,
@@ -60,7 +60,7 @@ const SelectedResource = (props) => {
                 label={"Clear Resource"}
                 buttonType={"icon"}
                 onClick={() => {
-                  setResource(null);
+                  setEvaluationResource(null);
                   clearEvaluation();
                 }}
                 showTooltip
@@ -78,7 +78,7 @@ const SelectedResource = (props) => {
             </>
           )}
           <ResourceSelectionDrawer
-            setResource={setResource}
+            setEvaluationResource={setEvaluationResource}
             clearEvaluation={clearEvaluation}
           />
         </div>
@@ -104,7 +104,7 @@ const SelectedResource = (props) => {
 
 SelectedResource.propTypes = {
   resourceUri: PropTypes.string,
-  setResource: PropTypes.func.isRequired,
+  setEvaluationResource: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
 

@@ -25,16 +25,16 @@ describe("/api/resource-versions", () => {
     response,
     resourceVersions,
     rodeResponse,
-    genericResourceId,
+    resourceId,
     pageToken,
     rodeUrl;
 
   beforeEach(() => {
-    genericResourceId = chance.word();
+    resourceId = chance.word();
     request = {
       method: "GET",
       query: {
-        id: genericResourceId,
+        id: resourceId,
       },
     };
     pageToken = chance.string();
@@ -97,7 +97,7 @@ describe("/api/resource-versions", () => {
         .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
 
       expect(response.json).toBeCalledTimes(1).toHaveBeenCalledWith({
-        error: "Generic resource id must be provided",
+        error: "Resource id must be provided",
       });
     });
   });
@@ -111,7 +111,7 @@ describe("/api/resource-versions", () => {
 
     it("should hit the Rode API", async () => {
       const expectedUrl = createExpectedUrl({
-        id: genericResourceId,
+        id: resourceId,
       });
 
       await handler(request, response);
@@ -122,7 +122,7 @@ describe("/api/resource-versions", () => {
     it("should pass the filter as a query param when a filter is specified", async () => {
       const filter = chance.string();
       const expectedUrl = createExpectedUrl({
-        id: genericResourceId,
+        id: resourceId,
         filter,
       });
 
@@ -134,7 +134,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageSize as a query param when a pageSize is specified", async () => {
       const pageSize = chance.d10();
       const expectedUrl = createExpectedUrl({
-        id: genericResourceId,
+        id: resourceId,
         pageSize,
       });
 
@@ -146,7 +146,7 @@ describe("/api/resource-versions", () => {
     it("should pass the pageToken as a query param when a pageToken is specified", async () => {
       const pageToken = chance.string();
       const expectedUrl = createExpectedUrl({
-        id: genericResourceId,
+        id: resourceId,
         pageToken,
       });
 
