@@ -34,7 +34,7 @@ const ResourceSelectionDrawer = ({
   clearEvaluation,
 }) => {
   const { dispatch } = useResources();
-  const [genericResource, setGenericResource] = useState(null);
+  const [resource, setResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);
   const [currentSection, setCurrentSection] = useState(RESOURCE);
@@ -55,10 +55,10 @@ const ResourceSelectionDrawer = ({
   useEffect(() => {
     clearEvaluation();
 
-    if (genericResource && resourceVersion) {
+    if (resource && resourceVersion) {
       setEvaluationResource(resourceVersion);
     }
-  }, [genericResource, resourceVersion]);
+  }, [resource, resourceVersion]);
 
   return (
     <>
@@ -67,7 +67,7 @@ const ResourceSelectionDrawer = ({
         buttonType="icon"
         onClick={() => {
           clearSearchTerms();
-          setGenericResource(null);
+          setResource(null);
           setResourceVersion(null);
           setCurrentSection(RESOURCE);
           setShowDrawer(true);
@@ -96,7 +96,7 @@ const ResourceSelectionDrawer = ({
             buttonType={"text"}
             onClick={openVersionSelection}
             label={"Version"}
-            disabled={!genericResource}
+            disabled={!resource}
             className={
               currentSection === VERSION
                 ? styles.activeNavigationButton
@@ -106,16 +106,16 @@ const ResourceSelectionDrawer = ({
         </div>
         {currentSection === RESOURCE && (
           <ResourceSearchAndResults
-            genericResource={genericResource}
+            selectedResource={resource}
             onResourceSelect={(resource) => {
-              setGenericResource(resource);
+              setResource(resource);
               openVersionSelection();
             }}
           />
         )}
         {currentSection === VERSION && (
           <ResourceVersionSearchAndResults
-            genericResource={genericResource}
+            selectedResource={resource}
             onVersionSelect={(version) => {
               setResourceVersion(version);
               setShowDrawer(false);
