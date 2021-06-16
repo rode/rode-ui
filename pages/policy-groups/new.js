@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Button from "components/Button";
+import Input from "components/Input";
+import styles from "styles/modules/PolicyGroupForm.module.scss";
+import PageHeader from "components/layout/PageHeader";
+import { useFormValidation } from "hooks/useFormValidation";
+import { schema } from "schemas/policy-group-form";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
@@ -27,58 +31,105 @@ const PolicyGroups = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
+  const { isValid, validateField, errors } = useFormValidation(schema);
+
+  console.log("errors", errors);
+
   const onSubmit = async (event) => {
     event.preventDefault();
     const formData = {
       name,
-      description
+      description,
     };
 
-    const response = await fetch('/api/policy-groups', {
+    const validForm = isValid(formData);
+
+    if (!validForm) {
+      return;
+    }
+
+    const response = await fetch("/api/policy-groups", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
-      console.log('error occurred',response);
+      console.log("error occurred", response);
       return;
     }
 
     const parsedResponse = await response.json();
-    console.log('here successful save', parsedResponse);
+    console.log("here successful save", parsedResponse);
 
+    // TODO: once implemented, push to created policy group page
+    router.push("/policy-groups");
   };
 
   return (
-    <div>
-      <p>New Policy Groups</p>
-      <form onSubmit={onSubmit}>
-        <Input
-          name={"name"}
-          label={"Policy Group Name"}
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-          value={name}
-        />
-        <Input
-          name={"description"}
-          label={"Description"}
-          onChange={(event) => {
-            setDescription(event.target.value);
-          }}
-          value={description}
-        />
-        <Button label={"Save Policy Group"} type={"submit"} />
-        <Button
-          label={"Cancel"}
-          onClick={() => router.back()}
-          buttonType={"text"}
-        />
+    <div className={`${styles.pageContainer} ${styles[theme]}`}>
+      <PageHeader>
+        <h1 className={styles.pageHeader}>Create Policy Group</h1>
+      </PageHeader>
+      <form onSubmit={onSubmit} className={styles.form}>
+        <div className={styles.formContentContainer}>
+          <Input
+            name={"name"}
+            label={"Policy Group Name"}
+            placeholder={"ex: pci-bundle"}
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+            value={name}
+            horizontal
+            onBlur={validateField}
+            error={errors.name}
+          />
+          <p className={styles.hint}>
+            Please note: policy group name cannot be changed after creation.
+          </p>
+          <Input
+            name={"description"}
+            label={"Description"}
+            placeholder={"A summary of the intended use for this policy group"}
+            onChange={(event) => {
+              setDescription(event.target.value);
+            }}
+            value={description}
+            horizontal
+            onBlur={validateField}
+            error={errors.description}
+          />
+        </div>
+        <div className={styles.buttonsContainer}>
+          <Button label={"Save Policy Group"} type={"submit"} />
+
+          <Button
+            label={"Cancel"}
+            onClick={() => router.back()}
+            buttonType={"text"}
+          />
+        </div>
       </form>
+      <div className={styles.formNotes}>
+        <div>
+          <p>Policy Group Name Guidelines</p>
+          <ul>
+            <li>Lowercase</li>
+            <li>Alphanumeric Characters</li>
+            <li>Dashes or Hyphens</li>
+            <li>Underscores</li>
+          </ul>
+        </div>
+        <div>
+          <p>Examples</p>
+          <code>development_3</code>
+          <code>pci-requirements</code>
+          <code>docker_images_prod</code>
+        </div>
+      </div>
     </div>
   );
 };

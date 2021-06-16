@@ -17,34 +17,42 @@
 import React from "react";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
-import Button from "../components/Button";
-import PageHeader from "../components/layout/PageHeader";
-import { usePaginatedFetch } from "../hooks/usePaginatedFetch";
-import Loading from "../components/Loading";
+import Button from "components/Button";
+import PageHeader from "components/layout/PageHeader";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import Loading from "components/Loading";
+import styles from "styles/modules/PolicyGroupDashboard.module.scss";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
-  const {data, loading, isLastPage, goToNextPage} = usePaginatedFetch("/api/policy-groups", {}, 100);
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
+    "/api/policy-groups",
+    {},
+    100
+  );
 
   return (
-    <>
+    <div className={styles[theme]}>
+      <Button
+        label={"Create New Policy Group"}
+        onClick={() => router.push("/policy-groups/new")}
+        className={styles.createNewButton}
+      />
       <PageHeader>
-        <p>Manage Policy Groups</p>
+        <h1 className={styles.pageHeader}>Manage Policy Groups</h1>
       </PageHeader>
-    <div>
-      <Loading loading={loading}>
-        {
-          data?.length > 0 ? (
+      <div className={styles.cardsContainer}>
+        <Loading loading={loading}>
+          {data?.length > 0 ? (
             <>
-            {
-              data.map((group) => (
-                <div key={group.id}>
-                  <p>{group.toString()}</p>
+              {data.map((group) => (
+                <div key={group.name} className={styles.card}>
+                  <p className={styles.policyGroupName}>{group.name}</p>
+                  <p>{group.description}</p>
                 </div>
-              ))
-            }
+              ))}
               {!isLastPage && (
                 <Button
                   buttonType="text"
@@ -52,15 +60,14 @@ const PolicyGroups = () => {
                   label={"View More"}
                 />
               )}
-              </>
-          )
-            :
+            </>
+          ) : (
             <p>No policy groups exist.</p>
-        }
-      </Loading>
-      <Button label={'Create New Policy Group'} onClick={() => router.push("/policy-groups/new")}/>
+          )}
+        </Loading>
+      </div>
+
     </div>
-    </>
   );
 };
 
