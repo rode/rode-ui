@@ -18,16 +18,49 @@ import React from "react";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
+import PageHeader from "../components/layout/PageHeader";
+import { usePaginatedFetch } from "../hooks/usePaginatedFetch";
+import Loading from "../components/Loading";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
+  const {data, loading, isLastPage, goToNextPage} = usePaginatedFetch("/api/policy-groups", {}, 100);
+
   return (
+    <>
+      <PageHeader>
+        <p>Manage Policy Groups</p>
+      </PageHeader>
     <div>
-      <p>Policy Groups</p>
+      <Loading loading={loading}>
+        {
+          data?.length > 0 ? (
+            <>
+            {
+              data.map((group) => (
+                <div key={group.id}>
+                  <p>{group.toString()}</p>
+                </div>
+              ))
+            }
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                />
+              )}
+              </>
+          )
+            :
+            <p>No policy groups exist.</p>
+        }
+      </Loading>
       <Button label={'Create New Policy Group'} onClick={() => router.push("/policy-groups/new")}/>
     </div>
+    </>
   );
 };
 
