@@ -29,7 +29,10 @@ import { resourceActions } from "reducers/resources";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
+const ResourceSelectionDrawer = ({
+  setEvaluationResource,
+  clearEvaluation,
+}) => {
   const { dispatch } = useResources();
   const [genericResource, setGenericResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
@@ -53,7 +56,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
     clearEvaluation();
 
     if (genericResource && resourceVersion) {
-      setResource(resourceVersion);
+      setEvaluationResource(resourceVersion);
     }
   }, [genericResource, resourceVersion]);
 
@@ -125,7 +128,7 @@ const ResourceSelectionDrawer = ({ setResource, clearEvaluation }) => {
 };
 
 ResourceSelectionDrawer.propTypes = {
-  setResource: PropTypes.func.isRequired,
+  setEvaluationResource: PropTypes.func.isRequired,
   clearEvaluation: PropTypes.func.isRequired,
 };
 
