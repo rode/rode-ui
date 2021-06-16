@@ -47,6 +47,13 @@ const policyLinks = [
   },
 ];
 
+const adminLinks = [
+  {
+    href: "/policy-groups",
+    label: "Policy Groups"
+  }
+]
+
 const navigationSections = [
   {
     title: "Resources",
@@ -55,6 +62,10 @@ const navigationSections = [
   {
     title: "Policies",
     links: policyLinks,
+  },
+  {
+    title: "Admin",
+    links: adminLinks,
   },
 ];
 
