@@ -26,7 +26,7 @@ jest.mock("hooks/usePaginatedFetch");
 
 describe("ResourceVersionSearchAndResults", () => {
   let onVersionSelect,
-    genericResource,
+    selectedResource,
     state,
     dispatch,
     fetchResponse,
@@ -53,7 +53,7 @@ describe("ResourceVersionSearchAndResults", () => {
       loading: false,
     };
 
-    genericResource = { id: chance.string() };
+    selectedResource = { id: chance.string() };
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
   });
@@ -67,7 +67,7 @@ describe("ResourceVersionSearchAndResults", () => {
     render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
-        genericResource={genericResource}
+        selectedResource={selectedResource}
       />,
       {
         resourceState: state,
@@ -79,7 +79,7 @@ describe("ResourceVersionSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       {
-        id: genericResource.id,
+        id: selectedResource.id,
       },
       5
     );
@@ -89,7 +89,7 @@ describe("ResourceVersionSearchAndResults", () => {
     render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
-        genericResource={genericResource}
+        selectedResource={selectedResource}
       />,
       {
         resourceState: state,
@@ -101,7 +101,7 @@ describe("ResourceVersionSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
       "/api/resource-versions",
       {
-        id: genericResource.id,
+        id: selectedResource.id,
         filter: `version.contains("${state.versionSearchTerm}")`,
       },
       5
@@ -113,7 +113,7 @@ describe("ResourceVersionSearchAndResults", () => {
     render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
-        genericResource={genericResource}
+        selectedResource={selectedResource}
       />,
       {
         resourceState: state,
@@ -125,7 +125,7 @@ describe("ResourceVersionSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       {
-        id: genericResource.id,
+        id: selectedResource.id,
       },
       5
     );
@@ -136,7 +136,7 @@ describe("ResourceVersionSearchAndResults", () => {
       const utils = render(
         <ResourceVersionSearchAndResults
           onVersionSelect={onVersionSelect}
-          genericResource={genericResource}
+          selectedResource={selectedResource}
         />,
         {
           resourceState: state,
@@ -212,7 +212,7 @@ describe("ResourceVersionSearchAndResults", () => {
       rerender(
         <ResourceVersionSearchAndResults
           onVersionSelect={onVersionSelect}
-          genericResource={null}
+          selectedResource={null}
         />,
         {
           resourceState: state,

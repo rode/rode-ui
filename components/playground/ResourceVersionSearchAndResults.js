@@ -33,10 +33,10 @@ import ResourceVersionSearchBar from "components/resources/ResourceVersionSearch
 import useDebouncedValue from "hooks/useDebouncedValue";
 
 const ResourceVersionSearchAndResults = ({
-  genericResource,
+  selectedResource,
   onVersionSelect,
 }) => {
-  const [versionSearch, setVersionSearch] = useState(!!genericResource);
+  const [versionSearch, setVersionSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(500);
   const { state, dispatch } = useResources();
 
@@ -45,13 +45,13 @@ const ResourceVersionSearchAndResults = ({
     debounceDelay
   );
 
-  if (!genericResource) {
+  if (!selectedResource) {
     return <p>Select a resource to view a list of versions</p>;
   }
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     "/api/resource-versions",
-    buildResourceVersionQueryParams(genericResource.id, debouncedSearch),
+    buildResourceVersionQueryParams(selectedResource.id, debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
@@ -138,7 +138,7 @@ const ResourceVersionSearchAndResults = ({
 };
 
 ResourceVersionSearchAndResults.propTypes = {
-  genericResource: PropTypes.object.isRequired,
+  selectedResource: PropTypes.object.isRequired,
   onVersionSelect: PropTypes.func.isRequired,
 };
 

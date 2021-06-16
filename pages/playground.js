@@ -116,7 +116,7 @@ const PolicyPlayground = () => {
       <div className={styles.resourceContainer}>
         <SelectedResource
           resourceUri={state.evaluationResource?.versionedResourceUri}
-          setResource={(data) =>
+          setEvaluationResource={(data) =>
             policyDispatch({
               type: policyActions.SET_EVALUATION_RESOURCE,
               data,

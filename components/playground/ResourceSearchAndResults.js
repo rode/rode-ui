@@ -34,8 +34,8 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 
-const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
-  const [resourceSearch, setResourceSearch] = useState(!!genericResource);
+const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
+  const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = useResources();
   const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
@@ -83,7 +83,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
               <>
                 {data.map((result) => {
                   const { id, name, type } = result;
-                  const isCurrentResource = id === genericResource?.id;
+                  const isCurrentResource = id === selectedResource?.id;
 
                   return (
                     <div className={`${styles.searchCard}`} key={id}>
@@ -143,7 +143,7 @@ const ResourceSearchAndResults = ({ genericResource, onResourceSelect }) => {
 };
 
 ResourceSearchAndResults.propTypes = {
-  genericResource: PropTypes.object,
+  selectedResource: PropTypes.object,
   onResourceSelect: PropTypes.func.isRequired,
 };
 
