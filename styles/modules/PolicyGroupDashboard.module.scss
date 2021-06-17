@@ -47,6 +47,13 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  border: none;
+  @include transition;
+
+  &:hover {
+    @include transition;
+    cursor: pointer;
+  }
 
   > * {
     text-align: center;
@@ -62,6 +69,10 @@
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
     color: $DT_MAIN_TEXT;
+
+    &:hover {
+      box-shadow: $DT_HOVER_SHADOW;
+    }
   }
 }
 
@@ -74,5 +85,9 @@
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
     color: $LT_MAIN_TEXT;
+
+    &:hover {
+      box-shadow: $LT_HOVER_SHADOW;
+    }
   }
 }

@@ -48,10 +48,10 @@ const PolicyGroups = () => {
           {data?.length > 0 ? (
             <>
               {data.map((group) => (
-                <div key={group.name} className={styles.card}>
+                <button key={group.name} className={styles.card} onClick={() => router.push(`/policy-groups/${encodeURIComponent(group.name)}`)}>
                   <p className={styles.policyGroupName}>{group.name}</p>
                   {group.description && <p>{group.description}</p>}
-                </div>
+                </button>
               ))}
               {!isLastPage && (
                 <Button
