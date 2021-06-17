@@ -69,29 +69,24 @@ export default async (req, res) => {
     }
   }
 
-  if (req.method === "POST") {
-    try {
-      const response = await post(
-        `${rodeUrl}/v1alpha1/policy-groups`,
-        req.body
-      );
+  try {
+    const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body);
 
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const createPolicyGroupResponse = await response.json();
-
-      return res.status(StatusCodes.OK).json(createPolicyGroupResponse);
-    } catch (error) {
-      console.error("Error listing policy groups", error);
-
+    if (!response.ok) {
+      console.error(`Unsuccessful response from Rode: ${response.status}`);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
+
+    const createPolicyGroupResponse = await response.json();
+
+    return res.status(StatusCodes.OK).json(createPolicyGroupResponse);
+  } catch (error) {
+    console.error("Error listing policy groups", error);
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
   }
 };

@@ -70,44 +70,42 @@ export default async (req, res) => {
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
   }
-  if (req.method === "POST") {
-    try {
-      const postBody = mapToApiModel(req);
+  try {
+    const postBody = mapToApiModel(req);
 
-      const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
+    const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
 
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
+    if (!response.ok) {
+      console.error(`Unsuccessful response from Rode: ${response.status}`);
 
-        const parsedResponse = await response.json();
+      const parsedResponse = await response.json();
 
-        if (
-          parsedResponse?.message?.includes("failed to compile") ||
-          parsedResponse?.message?.includes("failed to parse")
-        ) {
-          const validationError = {
-            errors: parsedResponse.details[0].errors,
-            isValid: false,
-          };
+      if (
+        parsedResponse?.message?.includes("failed to compile") ||
+        parsedResponse?.message?.includes("failed to parse")
+      ) {
+        const validationError = {
+          errors: parsedResponse.details[0].errors,
+          isValid: false,
+        };
 
-          return res.status(StatusCodes.BAD_REQUEST).json(validationError);
-        }
-
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+        return res.status(StatusCodes.BAD_REQUEST).json(validationError);
       }
-
-      const createPolicyResponse = await response.json();
-      const policy = mapToClientModel(createPolicyResponse);
-
-      return res.status(StatusCodes.OK).json(policy);
-    } catch (error) {
-      console.error("Error creating policy", error);
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
+
+    const createPolicyResponse = await response.json();
+    const policy = mapToClientModel(createPolicyResponse);
+
+    return res.status(StatusCodes.OK).json(policy);
+  } catch (error) {
+    console.error("Error creating policy", error);
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
   }
 };
