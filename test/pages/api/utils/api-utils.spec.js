@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import { getRodeUrl, post, patch, get, del } from "pages/api/utils/api-utils";
+import {
+  getRodeUrl,
+  post,
+  patch,
+  get,
+  del,
+  buildPaginationParams,
+} from "pages/api/utils/api-utils";
 import fetch from "node-fetch";
 
 jest.mock("node-fetch");
@@ -117,6 +124,32 @@ describe("api-utils", () => {
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
         method: "DELETE",
+      });
+    });
+  });
+
+  describe("buildPaginationParams", () => {
+    let request;
+
+    beforeEach(() => {
+      request = {
+        query: {},
+      };
+    });
+
+    it("should return the pageSize param when it is present in the request", () => {
+      request.query.pageSize = chance.d100();
+      const actual = buildPaginationParams(request);
+      expect(actual).toEqual({
+        pageSize: request.query.pageSize,
+      });
+    });
+
+    it("should return the pageToken param when it is present in the request", () => {
+      request.query.pageToken = chance.string();
+      const actual = buildPaginationParams(request);
+      expect(actual).toEqual({
+        pageToken: request.query.pageToken,
       });
     });
   });

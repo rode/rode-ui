@@ -16,7 +16,11 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resources";
-import { getRodeUrl, get } from "pages/api/utils/api-utils";
+import {
+  getRodeUrl,
+  get,
+  buildPaginationParams,
+} from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
@@ -65,6 +69,7 @@ describe("/api/resources", () => {
     };
 
     rodeUrl = chance.url();
+    buildPaginationParams.mockReturnValue({});
     getRodeUrl.mockReturnValue(rodeUrl);
 
     get.mockResolvedValue(rodeResponse);
@@ -102,6 +107,9 @@ describe("/api/resources", () => {
 
       await handler(request, response);
 
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
@@ -112,12 +120,15 @@ describe("/api/resources", () => {
       const expectedUrl = createExpectedUrl({
         filter: resourceTypes
           .split(",")
-          .map((type) => `"type"=="${type}"`)
+          .map((type) => `type=="${type}"`)
           .join("||"),
       });
 
       await handler(request, response);
 
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
@@ -127,12 +138,15 @@ describe("/api/resources", () => {
       const expectedUrl = createExpectedUrl({
         filter: `name.contains("${searchTerm}")&&(${resourceTypes
           .split(",")
-          .map((type) => `"type"=="${type}"`)
+          .map((type) => `type=="${type}"`)
           .join("||")})`,
       });
 
       await handler(request, response);
 
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
@@ -143,30 +157,9 @@ describe("/api/resources", () => {
       request.query.resourceTypes = null;
       await handler(request, response);
 
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
-
-    it("should pass the pageSize as a query param when a pageSize is specified", async () => {
-      const pageSize = chance.d10();
-      const expectedUrl = createExpectedUrl({
-        filter: `name.contains("${searchTerm}")`,
-        pageSize,
-      });
-
-      request.query.pageSize = pageSize;
-      await handler(request, response);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
-
-    it("should pass the pageToken as a query param when a pageToken is specified", async () => {
-      const pageToken = chance.string();
-      const expectedUrl = createExpectedUrl({
-        filter: `name.contains("${searchTerm}")`,
-        pageToken,
-      });
-
-      request.query.pageToken = pageToken;
-      await handler(request, response);
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 

@@ -169,10 +169,10 @@ const PolicyForm = ({
           />
         </div>
       </Modal>
+      <PageHeader>
+        <h1>{title}</h1>
+      </PageHeader>
       <form onSubmit={onSubmit} className={`${styles.form} ${styles[theme]}`}>
-        <PageHeader>
-          <h1 className={styles.heading}>{title}</h1>
-        </PageHeader>
         <div className={styles.policyInputsContainer}>
           <Input
             name={"name"}

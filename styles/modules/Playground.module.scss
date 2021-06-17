@@ -200,11 +200,6 @@ $GAP: 1rem;
   }
 }
 
-.pageTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
 .instructions {
   display: none;
 
@@ -264,10 +259,6 @@ $GAP: 1rem;
 .darkTheme {
   &.pageContainer {
     background-color: $DT_BACKGROUND_LIGHT;
-  }
-
-  .pageTitle {
-    color: $LAGOON;
   }
 
   .instructions,
@@ -335,10 +326,6 @@ $GAP: 1rem;
 }
 
 .lightTheme {
-  .pageTitle {
-    color: $DEEP_SEA;
-  }
-
   .instructions,
   .selectToBeginText {
     color: $LT_SUB_TEXT;

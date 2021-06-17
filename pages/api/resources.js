@@ -15,7 +15,7 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { get, getRodeUrl } from "./utils/api-utils";
+import { buildPaginationParams, get, getRodeUrl } from "./utils/api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -30,35 +30,24 @@ export default async (req, res) => {
     const searchTerm = req.query.searchTerm;
     const resourceTypes = req.query.resourceTypes;
 
-    let filter = {};
+    let params = buildPaginationParams(req);
 
     if (searchTerm && resourceTypes) {
       const resources = resourceTypes.split(",");
-      filter = {
-        filter: `name.contains("${searchTerm}")&&(${resources
-          .map((type) => `"type"=="${type}"`)
-          .join("||")})`,
-      };
+      params.filter = `name.contains("${searchTerm}")&&(${resources
+        .map((type) => `type=="${type}"`)
+        .join("||")})`;
     } else if (searchTerm) {
-      filter = {
-        filter: `name.contains("${searchTerm}")`,
-      };
+      params.filter = `name.contains("${searchTerm}")`;
     } else if (resourceTypes) {
       const resources = resourceTypes.split(",");
-      filter = {
-        filter: `${resources.map((type) => `"type"=="${type}"`).join("||")}`,
-      };
-    }
-
-    if (req.query.pageSize) {
-      filter.pageSize = req.query.pageSize;
-    }
-    if (req.query.pageToken) {
-      filter.pageToken = req.query.pageToken;
+      params.filter = `${resources
+        .map((type) => `type=="${type}"`)
+        .join("||")}`;
     }
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(filter)}`
+      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(params)}`
     );
 
     if (!response.ok) {

@@ -31,6 +31,7 @@ const Button = (props) => {
     className = "",
     loading = false,
     showTooltip = false,
+    type = "button",
     ...otherProps
   } = props;
 
@@ -61,6 +62,7 @@ const Button = (props) => {
         disabled={disabled || loading}
         data-tip={showTooltip}
         data-for={tooltipId}
+        type={type}
         {...otherProps}
       >
         <Loading type={"button"} loading={loading}>
@@ -93,6 +95,7 @@ Button.propTypes = {
   className: PropTypes.string,
   loading: PropTypes.bool,
   showTooltip: PropTypes.bool,
+  type: PropTypes.oneOf(["button", "submit", "reset"]),
 };
 
 export default Button;

@@ -86,4 +86,13 @@ describe("Header", () => {
     expect(screen.getByText("Policy Playground")).toBeInTheDocument();
     expect(screen.getByText("Create New Policy")).toBeInTheDocument();
   });
+
+  it("should render the section and links for Admin", () => {
+    act(() => {
+      userEvent.click(screen.getByTitle(/menu/i));
+    });
+
+    expect(screen.getByText("Admin")).toBeInTheDocument();
+    expect(screen.getByText("Policy Groups")).toBeInTheDocument();
+  });
 });

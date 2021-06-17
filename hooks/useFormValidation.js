@@ -45,8 +45,8 @@ export const useFormValidation = (schema) => {
     return isValid;
   };
 
-  const validateField = (event) => {
-    if (!formData) {
+  const validateField = (event, forceValidation = false) => {
+    if (!forceValidation && !formData) {
       return;
     }
     const field = event.target.name;

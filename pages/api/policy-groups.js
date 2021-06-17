@@ -21,7 +21,6 @@ import {
   getRodeUrl,
   post,
 } from "./utils/api-utils";
-import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -36,14 +35,14 @@ export default async (req, res) => {
 
   if (req.method === "GET") {
     try {
-      const searchTerm = req.query.filter;
-      let params = buildPaginationParams(req);
-      if (searchTerm) {
-        params.filter = `name.contains("${searchTerm}")`;
+      const params = buildPaginationParams(req);
+
+      if (req.query.filter) {
+        params.filter = req.query.filter;
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`
       );
 
       if (!response.ok) {
@@ -53,56 +52,38 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      const listPoliciesResponse = await response.json();
-      const policies = listPoliciesResponse.policies.map((policy) =>
-        mapToClientModel(policy)
-      );
+      const listPolicyGroupsResponse = await response.json();
+
+      const policyGroups = listPolicyGroupsResponse.policyGroups;
 
       return res.status(StatusCodes.OK).json({
-        data: policies,
-        pageToken: listPoliciesResponse.nextPageToken,
+        data: policyGroups,
+        pageToken: listPolicyGroupsResponse.nextPageToken,
       });
     } catch (error) {
-      console.error("Error listing policies", error);
+      console.error("Error listing policy groups", error);
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
   }
-  try {
-    const postBody = mapToApiModel(req);
 
-    const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
+  try {
+    const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body);
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-      const parsedResponse = await response.json();
-
-      if (
-        parsedResponse?.message?.includes("failed to compile") ||
-        parsedResponse?.message?.includes("failed to parse")
-      ) {
-        const validationError = {
-          errors: parsedResponse.details[0].errors,
-          isValid: false,
-        };
-
-        return res.status(StatusCodes.BAD_REQUEST).json(validationError);
-      }
-
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
 
-    const createPolicyResponse = await response.json();
-    const policy = mapToClientModel(createPolicyResponse);
+    const createPolicyGroupResponse = await response.json();
 
-    return res.status(StatusCodes.OK).json(policy);
+    return res.status(StatusCodes.OK).json(createPolicyGroupResponse);
   } catch (error) {
-    console.error("Error creating policy", error);
+    console.error("Error listing policy groups", error);
 
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

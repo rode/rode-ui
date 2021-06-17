@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "styles/modules/Header.module.scss";
-import { useTheme } from "providers/theme";
+import * as yup from "yup";
 
-const PageHeader = ({ children }) => {
-  const { theme } = useTheme();
-
-  return (
-    <div className={`${styles[theme]} ${styles.pageHeader}`}>{children}</div>
-  );
-};
-
-PageHeader.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
-};
-
-export default PageHeader;
+export const schema = yup.object().shape({
+  name: yup
+    .string()
+    .required()
+    .label("Policy Group Name")
+    .matches(
+      /^[a-z\d\-_]+$/g,
+      "Invalid character(s). Please refer to the name guidelines."
+    ),
+  description: yup.string().label("Description"),
+});

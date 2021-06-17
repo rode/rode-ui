@@ -15,19 +15,18 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import handler from "pages/api/policies";
+import handler from "pages/api/policy-groups";
 import {
   get,
   post,
   getRodeUrl,
   buildPaginationParams,
 } from "pages/api/utils/api-utils";
-import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
-describe("/api/policies", () => {
+describe("/api/policy-groups", () => {
   let request, response, rodeResponse;
 
   beforeEach(() => {
@@ -41,6 +40,8 @@ describe("/api/policies", () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
     };
+
+    buildPaginationParams.mockReturnValue({});
 
     getRodeUrl.mockReturnValue("http://localhost:50051");
   });
@@ -76,36 +77,28 @@ describe("/api/policies", () => {
   });
 
   describe("GET", () => {
-    let filterParam, allPolicies, pageToken;
+    let policyGroups, pageToken;
 
     beforeEach(() => {
-      filterParam = chance.word();
       request = {
         method: "GET",
-        query: {
-          filter: filterParam,
-        },
+        query: {},
       };
       pageToken = chance.string();
 
-      allPolicies = chance.n(
+      policyGroups = chance.n(
         () => ({
           [chance.word()]: chance.word(),
-          id: chance.guid(),
           name: chance.name(),
           description: chance.sentence(),
-          policy: {
-            regoContent: chance.string(),
-          },
         }),
         chance.d4()
       );
-      buildPaginationParams.mockReturnValue({});
 
       rodeResponse = {
         ok: true,
         json: jest.fn().mockResolvedValue({
-          policies: allPolicies,
+          policyGroups: policyGroups,
           nextPageToken: pageToken,
         }),
       };
@@ -115,40 +108,37 @@ describe("/api/policies", () => {
 
     describe("successful call to Rode", () => {
       const createExpectedUrl = (baseUrl, query = {}) => {
-        return `${baseUrl}/v1alpha1/policies?${new URLSearchParams(query)}`;
+        return `${baseUrl}/v1alpha1/policy-groups?${new URLSearchParams(
+          query
+        )}`;
       };
 
       it("should hit the Rode API", async () => {
-        const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `name.contains("${filterParam}")`,
-        });
-
-        await handler(request, response);
-
-        expect(buildPaginationParams).toHaveBeenCalledWith(request);
-        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-      });
-
-      it("should hit the Rode API when no filter is specified", async () => {
         const expectedUrl = createExpectedUrl("http://localhost:50051");
 
-        request.query.filter = null;
         await handler(request, response);
 
-        expect(buildPaginationParams).toHaveBeenCalledWith(request);
+        expect(buildPaginationParams)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(request);
         expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
-      it("should return the mapped policies", async () => {
-        const expectedPolicies = allPolicies.map(
-          ({ id, name, description, policy }) => ({
-            id,
-            name: name,
-            description: description,
-            regoContent: policy.regoContent,
-          })
-        );
+      it("should pass the filter as a query param when a filter is specified", async () => {
+        const filter = chance.string();
+        const expectedUrl = createExpectedUrl("http://localhost:50051", {
+          filter,
+        });
 
+        request.query.filter = filter;
+        await handler(request, response);
+        expect(buildPaginationParams)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(request);
+        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      });
+
+      it("should return the policy groups", async () => {
         await handler(request, response);
 
         expect(response.status)
@@ -156,7 +146,7 @@ describe("/api/policies", () => {
           .toHaveBeenCalledWith(StatusCodes.OK);
 
         expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          data: expectedPolicies,
+          data: policyGroups,
           pageToken,
         });
       });
@@ -190,7 +180,7 @@ describe("/api/policies", () => {
   });
 
   describe("POST", () => {
-    let formData, createdPolicy;
+    let formData, createdPolicyGroup;
 
     beforeEach(() => {
       formData = {
@@ -204,18 +194,14 @@ describe("/api/policies", () => {
         },
       };
 
-      createdPolicy = {
-        id: chance.guid(),
+      createdPolicyGroup = {
         name: chance.string(),
         description: chance.sentence(),
-        policy: {
-          regoContent: chance.string(),
-        },
       };
 
       rodeResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(createdPolicy),
+        json: jest.fn().mockResolvedValue(createdPolicyGroup),
       };
 
       post.mockResolvedValue(rodeResponse);
@@ -228,74 +214,25 @@ describe("/api/policies", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            "http://localhost:50051/v1alpha1/policies",
-            mapToApiModel(request)
+            "http://localhost:50051/v1alpha1/policy-groups",
+            request.body
           );
       });
 
-      it("should return the mapped created policy", async () => {
+      it("should return the created policy group", async () => {
         await handler(request, response);
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          id: createdPolicy.id,
-          name: createdPolicy.name,
-          description: createdPolicy.description,
-          regoContent: createdPolicy.policy.regoContent,
-        });
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(createdPolicyGroup);
       });
     });
 
     describe("failed calls to Rode", () => {
-      it("should return a bad request status when Rego fails to compile", async () => {
-        const details = [
-          {
-            errors: chance.string(),
-          },
-        ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to compile the provided policy",
-        });
-
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          errors: details[0].errors,
-          isValid: false,
-        });
-      });
-
-      it("should return a bad request status when Rego fails to parse", async () => {
-        const details = [
-          {
-            errors: chance.string(),
-          },
-        ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to parse the provided policy",
-        });
-
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          errors: details[0].errors,
-          isValid: false,
-        });
-      });
-
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
 

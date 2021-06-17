@@ -52,11 +52,6 @@
   }
 }
 
-.heading {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
 .policyInputsContainer {
   margin-bottom: 1rem;
   padding: 1rem;
@@ -250,10 +245,6 @@
 }
 
 .darkTheme {
-  .heading {
-    color: $LAGOON;
-  }
-
   .policyInputsContainer {
     background-color: $DT_BACKGROUND_MEDIUM;
   }
@@ -282,10 +273,6 @@
 }
 
 .lightTheme {
-  .heading {
-    color: $DEEP_SEA;
-  }
-
   .policyInputsContainer {
     background-color: $LT_BACKGROUND_LIGHT;
   }

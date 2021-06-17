@@ -38,3 +38,16 @@ export const patch = (endpoint, body) => fetch(endpoint, "PATCH", body);
 export const get = (endpoint) => fetch(endpoint, "GET");
 
 export const del = (endpoint) => fetch(endpoint, "DELETE");
+
+export const buildPaginationParams = (request) => {
+  let params = {};
+
+  if (request.query.pageSize) {
+    params.pageSize = request.query.pageSize;
+  }
+  if (request.query.pageToken) {
+    params.pageToken = request.query.pageToken;
+  }
+
+  return params;
+};
