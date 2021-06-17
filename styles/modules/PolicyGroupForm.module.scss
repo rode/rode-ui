@@ -35,13 +35,31 @@
 .hint {
   font-size: 0.8rem;
   font-style: italic;
-  text-align: right;
-  margin-left: auto;
+  margin-left: 1rem;
+
+  &::before {
+    content: attr(spacing);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 1rem;
+    visibility: hidden;
+  }
+
+  > span {
+    font-weight: 700;
+  }
 }
 
 .formNotes {
   flex: 1;
   margin: 0 1rem;
+  padding-left: 1rem;
+  border-left: solid 0.25rem transparent;
+
+  h2 {
+    font-weight: 600;
+    font-size: 1rem;
+  }
 
   > *:not(code) {
     margin: 0.25rem auto;
@@ -114,10 +132,21 @@
 
   .formNotes {
     color: $DT_SUB_TEXT;
+    border-left-color: $LAGOON;
+
+    h2 {
+      color: $DT_MAIN_TEXT;
+    }
 
     code {
       color: $DT_MAIN_TEXT;
       background-color: $DT_BACKGROUND_DARK;
+    }
+  }
+
+  .hint {
+    > span {
+      color: $LAGOON;
     }
   }
 }
@@ -129,10 +158,21 @@
 
   .formNotes {
     color: $LT_SUB_TEXT;
+    border-left-color: $DEEP_SEA;
+
+    h2 {
+      color: $LT_MAIN_TEXT;
+    }
 
     code {
       color: $LT_MAIN_TEXT;
       background-color: $LT_BACKGROUND_DARK;
+    }
+  }
+
+  .hint {
+    > span {
+      color: $DEEP_SEA;
     }
   }
 }

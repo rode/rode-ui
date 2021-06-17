@@ -88,8 +88,8 @@ const CreateNewPolicyGroup = () => {
               required
               error={errors.name}
             />
-            <p className={styles.hint}>
-              Please note: policy group name cannot be changed after creation.
+            <p className={styles.hint} spacing={"Policy Group Name"}>
+              <span>Please note:</span> Policy Group Name cannot be changed after creation.
             </p>
             <Input
               name={"description"}
@@ -123,7 +123,7 @@ const CreateNewPolicyGroup = () => {
         </form>
         <div className={styles.formNotes}>
           <div>
-            <p>Policy Group Name Guidelines</p>
+            <h2>Policy Group Name Guidelines</h2>
             <ul>
               <li>Lowercase</li>
               <li>Alphanumeric Characters</li>
