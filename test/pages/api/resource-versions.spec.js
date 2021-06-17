@@ -16,7 +16,11 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resource-versions";
-import { getRodeUrl, get } from "pages/api/utils/api-utils";
+import {
+  getRodeUrl,
+  get,
+  buildPaginationParams,
+} from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
@@ -63,6 +67,7 @@ describe("/api/resource-versions", () => {
     rodeUrl = chance.url();
 
     getRodeUrl.mockReturnValue(rodeUrl);
+    buildPaginationParams.mockReturnValue({});
 
     get.mockResolvedValue(rodeResponse);
   });
@@ -116,6 +121,9 @@ describe("/api/resource-versions", () => {
 
       await handler(request, response);
 
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 
@@ -128,30 +136,10 @@ describe("/api/resource-versions", () => {
 
       request.query.filter = filter;
       await handler(request, response);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
 
-    it("should pass the pageSize as a query param when a pageSize is specified", async () => {
-      const pageSize = chance.d10();
-      const expectedUrl = createExpectedUrl({
-        id: resourceId,
-        pageSize,
-      });
-
-      request.query.pageSize = pageSize;
-      await handler(request, response);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-    });
-
-    it("should pass the pageToken as a query param when a pageToken is specified", async () => {
-      const pageToken = chance.string();
-      const expectedUrl = createExpectedUrl({
-        id: resourceId,
-        pageToken,
-      });
-
-      request.query.pageToken = pageToken;
-      await handler(request, response);
+      expect(buildPaginationParams)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(request);
       expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
     });
 

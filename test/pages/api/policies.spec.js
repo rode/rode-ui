@@ -16,7 +16,12 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies";
-import { get, post, getRodeUrl } from "pages/api/utils/api-utils";
+import {
+  get,
+  post,
+  getRodeUrl,
+  buildPaginationParams,
+} from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
@@ -95,6 +100,7 @@ describe("/api/policies", () => {
         }),
         chance.d4()
       );
+      buildPaginationParams.mockReturnValue({});
 
       rodeResponse = {
         ok: true,
@@ -119,6 +125,7 @@ describe("/api/policies", () => {
 
         await handler(request, response);
 
+        expect(buildPaginationParams).toHaveBeenCalledWith(request);
         expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 
@@ -128,30 +135,7 @@ describe("/api/policies", () => {
         request.query.filter = null;
         await handler(request, response);
 
-        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-      });
-
-      it("should pass the pageSize as a query param when a pageSize is specified", async () => {
-        const pageSize = chance.d10();
-        const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `policy.name.contains("${filterParam}")`,
-          pageSize,
-        });
-
-        request.query.pageSize = pageSize;
-        await handler(request, response);
-        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
-      });
-
-      it("should pass the pageToken as a query param when a pageToken is specified", async () => {
-        const pageToken = chance.string();
-        const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `policy.name.contains("${filterParam}")`,
-          pageToken,
-        });
-
-        request.query.pageToken = pageToken;
-        await handler(request, response);
+        expect(buildPaginationParams).toHaveBeenCalledWith(request);
         expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
       });
 

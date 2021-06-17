@@ -15,7 +15,7 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { get, getRodeUrl } from "./utils/api-utils";
+import { buildPaginationParams, get, getRodeUrl } from "./utils/api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -37,17 +37,13 @@ export default async (req, res) => {
 
     const params = {
       id: resourceId,
+      ...buildPaginationParams(req),
     };
 
     if (req.query.filter) {
       params.filter = req.query.filter;
     }
-    if (req.query.pageSize) {
-      params.pageSize = req.query.pageSize;
-    }
-    if (req.query.pageToken) {
-      params.pageToken = req.query.pageToken;
-    }
+
     const response = await get(
       `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(params)}`
     );

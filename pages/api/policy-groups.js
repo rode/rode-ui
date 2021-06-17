@@ -15,7 +15,12 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { get, getRodeUrl, post } from "./utils/api-utils";
+import {
+  buildPaginationParams,
+  get,
+  getRodeUrl,
+  post,
+} from "./utils/api-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -30,17 +35,10 @@ export default async (req, res) => {
 
   if (req.method === "GET") {
     try {
-      const params = {};
+      const params = buildPaginationParams(req);
 
-      // TODO: pull out query param building into helper method
       if (req.query.filter) {
         params.filter = req.query.filter;
-      }
-      if (req.query.pageSize) {
-        params.pageSize = req.query.pageSize;
-      }
-      if (req.query.pageToken) {
-        params.pageToken = req.query.pageToken;
       }
 
       const response = await get(
@@ -72,10 +70,9 @@ export default async (req, res) => {
   }
   if (req.method === "POST") {
     try {
-      const requestBody = req.body;
       const response = await post(
         `${rodeUrl}/v1alpha1/policy-groups`,
-        requestBody
+        req.body
       );
 
       if (!response.ok) {

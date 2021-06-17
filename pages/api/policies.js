@@ -15,7 +15,12 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { get, getRodeUrl, post } from "./utils/api-utils";
+import {
+  buildPaginationParams,
+  get,
+  getRodeUrl,
+  post,
+} from "./utils/api-utils";
 import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
@@ -32,20 +37,12 @@ export default async (req, res) => {
   if (req.method === "GET") {
     try {
       const searchTerm = req.query.filter;
-      let filter = {};
+      let params = buildPaginationParams(req);
       if (searchTerm) {
-        filter = {
-          filter: `policy.name.contains("${searchTerm}")`,
-        };
-      }
-      if (req.query.pageSize) {
-        filter.pageSize = req.query.pageSize;
-      }
-      if (req.query.pageToken) {
-        filter.pageToken = req.query.pageToken;
+        params.filter = `policy.name.contains("${searchTerm}")`;
       }
       const response = await get(
-        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(filter)}`
+        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`
       );
 
       if (!response.ok) {
