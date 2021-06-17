@@ -1,9 +1,6 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-// TODO: create form component?
-// TODO: align all form buttons to bottom of the page if applicable
-
 .pageContainer {
   display: flex;
   flex-direction: column;
@@ -17,11 +14,6 @@
     flex-direction: row;
     justify-content: space-between;
   }
-}
-
-.pageHeader {
-  font-size: 1.25rem;
-  font-weight: 600;
 }
 
 .hint {
@@ -100,10 +92,6 @@
 }
 
 .darkTheme {
-  .pageHeader {
-    color: $DT_LINK;
-  }
-
   .formContentContainer {
     background-color: $DT_BACKGROUND_MEDIUM;
   }
@@ -119,10 +107,6 @@
 }
 
 .lightTheme {
-  .pageHeader {
-    color: $LT_LINK;
-  }
-
   .formContentContainer {
     background-color: $LT_BACKGROUND_LIGHT;
   }
