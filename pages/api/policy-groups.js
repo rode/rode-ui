@@ -32,6 +32,7 @@ export default async (req, res) => {
     try {
       const params = {};
 
+      // TODO: pull out query param building into helper method
       if (req.query.filter) {
         params.filter = req.query.filter;
       }

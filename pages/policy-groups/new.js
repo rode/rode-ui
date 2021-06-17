@@ -25,8 +25,7 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
 import { showError } from "utils/toast-utils";
 
-// TODO: tests
-const PolicyGroups = () => {
+const CreateNewPolicyGroup = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
@@ -85,6 +84,7 @@ const PolicyGroups = () => {
             value={name}
             horizontal
             onBlur={validateField}
+            required
             error={errors.name}
           />
           <p className={styles.hint}>
@@ -139,4 +139,4 @@ const PolicyGroups = () => {
   );
 };
 
-export default PolicyGroups;
+export default CreateNewPolicyGroup;
