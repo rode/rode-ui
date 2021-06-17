@@ -91,6 +91,15 @@ describe("Policy Groups", () => {
     });
   });
 
+  it("should render the card with no description if it is not present", () => {
+    mockPaginatedFetchResponse.data[0].description = "";
+    rerender(<PolicyGroups />);
+    const renderedName = screen.getByText(
+      mockPaginatedFetchResponse.data[0].name
+    );
+    expect(renderedName.closest("div").children).toHaveLength(1);
+  });
+
   it("should render the button to view more if there are multiple pages of results", () => {
     mockPaginatedFetchResponse.isLastPage = false;
     rerender(<PolicyGroups />);

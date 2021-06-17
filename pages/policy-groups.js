@@ -50,7 +50,7 @@ const PolicyGroups = () => {
               {data.map((group) => (
                 <div key={group.name} className={styles.card}>
                   <p className={styles.policyGroupName}>{group.name}</p>
-                  <p>{group.description}</p>
+                  {group.description && <p>{group.description}</p>}
                 </div>
               ))}
               {!isLastPage && (
