@@ -26,9 +26,7 @@ import { policyActions } from "reducers/policies";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
 
-// TODO: tests
-
-const Policy = () => {
+const PolicyGroup = () => {
   const router = useRouter();
   const { dispatch } = usePolicies();
   const { theme } = useTheme();
@@ -56,9 +54,11 @@ const Policy = () => {
             <div className={styles.policyGroupHeader}>
               <div>
                 <p className={styles.policyGroupName}>{policyGroup.name}</p>
-                <p className={styles.policyGroupDescription}>
-                  {policyGroup.description}
-                </p>
+                {policyGroup.description && (
+                  <p className={styles.policyGroupDescription}>
+                    {policyGroup.description}
+                  </p>
+                )}
               </div>
               <div>
                 <Button
@@ -83,4 +83,4 @@ const Policy = () => {
   );
 };
 
-export default Policy;
+export default PolicyGroup;
