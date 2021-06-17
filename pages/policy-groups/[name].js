@@ -19,21 +19,28 @@ import { useRouter } from "next/router";
 import styles from "styles/modules/PolicyGroupDetails.module.scss";
 import { useTheme } from "providers/theme";
 import PageHeader from "components/layout/PageHeader";
-import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
 import Button from "components/Button";
+import { usePolicies } from "../../providers/policies";
+import { policyActions } from "../../reducers/policies";
+import { usePolicyGroup } from "../../hooks/usePolicyGroup";
 
 // TODO: tests
 
 const Policy = () => {
   const router = useRouter();
+  const {dispatch} = usePolicies();
   const { theme } = useTheme();
 
   const { name } = router.query;
 
-  const { data, loading } = useFetch(`/api/policy-groups/${name}`);
+  const { policyGroup, loading } = usePolicyGroup(name);
 
   const editPolicy = () => {
+    dispatch({
+      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      data: policyGroup
+    });
     router.push(`/policy-groups/${name}/edit`);
   };
 
@@ -44,12 +51,12 @@ const Policy = () => {
       </PageHeader>
       <div className={`${styles[theme]}`}>
         <Loading loading={loading}>
-          {data ? (
+          {policyGroup ? (
             <div className={styles.policyGroupHeader}>
               <div>
-                <p className={styles.policyGroupName}>{data.name}</p>
+                <p className={styles.policyGroupName}>{policyGroup.name}</p>
                 <p className={styles.policyGroupDescription}>
-                  {data.description}
+                  {policyGroup.description}
                 </p>
               </div>
               <div>

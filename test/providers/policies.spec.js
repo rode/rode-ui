@@ -42,6 +42,7 @@ describe("policies provider", () => {
     expect(screen.getByText(/currentPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentPolicyGroup/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {

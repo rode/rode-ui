@@ -22,16 +22,29 @@ import PageHeader from "components/layout/PageHeader";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
+
+// TODO: tests
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
+  const {dispatch} = usePolicies();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     "/api/policy-groups",
     {},
     100
   );
+
+  const navigateToPolicyGroupPage = (policyGroup) => {
+    dispatch({
+      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      data: policyGroup
+    });
+    router.push(`/policy-groups/${encodeURIComponent(policyGroup.name)}`);
+  }
 
   return (
     <div className={styles[theme]}>
@@ -48,7 +61,7 @@ const PolicyGroups = () => {
           {data?.length > 0 ? (
             <>
               {data.map((group) => (
-                <button key={group.name} className={styles.card} onClick={() => router.push(`/policy-groups/${encodeURIComponent(group.name)}`)}>
+                <button key={group.name} className={styles.card} onClick={() => navigateToPolicyGroupPage(group)}>
                   <p className={styles.policyGroupName}>{group.name}</p>
                   {group.description && <p>{group.description}</p>}
                 </button>

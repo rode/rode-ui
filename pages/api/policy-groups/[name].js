@@ -16,9 +16,11 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
-import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
+import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-group-utils";
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
+
+// TODO: tests
 
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
@@ -32,7 +34,7 @@ export default async (req, res) => {
   if (req.method === "GET") {
     try {
       const { name } = req.query;
-
+      
       const response = await get(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
 
       if (response.status === StatusCodes.NOT_FOUND) {
@@ -48,8 +50,7 @@ export default async (req, res) => {
 
       const getPolicyGroupResponse = await response.json();
 
-
-      res.status(StatusCodes.OK).json(getPolicyGroupResponse);
+      res.status(StatusCodes.OK).json(mapToClientModel(getPolicyGroupResponse));
     } catch (error) {
       console.error("Error getting policy group", error);
 
@@ -63,11 +64,11 @@ export default async (req, res) => {
     try {
       const { name } = req.query;
 
-      // const updateBody = mapToApiModel(req);
+      const updateBody = mapToApiModel(req);
 
       const response = await patch(
         `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        req.body
+        updateBody
       );
 
       if (!response.ok) {
@@ -78,9 +79,9 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      const updatePolicyResponse = await response.json();
+      const updatePolicyGroupResponse = await response.json();
 
-      const policy = mapToClientModel(updatePolicyResponse);
+      const policy = mapToClientModel(updatePolicyGroupResponse);
 
       res.status(StatusCodes.OK).json(policy);
     } catch (error) {
