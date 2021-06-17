@@ -120,7 +120,7 @@ describe("/api/resources", () => {
       const expectedUrl = createExpectedUrl({
         filter: resourceTypes
           .split(",")
-          .map((type) => `"type"=="${type}"`)
+          .map((type) => `type=="${type}"`)
           .join("||"),
       });
 
@@ -138,7 +138,7 @@ describe("/api/resources", () => {
       const expectedUrl = createExpectedUrl({
         filter: `name.contains("${searchTerm}")&&(${resourceTypes
           .split(",")
-          .map((type) => `"type"=="${type}"`)
+          .map((type) => `type=="${type}"`)
           .join("||")})`,
       });
 

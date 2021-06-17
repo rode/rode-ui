@@ -56,18 +56,19 @@ export default async (req, res) => {
 
       const policyGroups = listPolicyGroupsResponse.policyGroups;
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         data: policyGroups,
         pageToken: listPolicyGroupsResponse.nextPageToken,
       });
     } catch (error) {
       console.error("Error listing policy groups", error);
 
-      res
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
   }
+
   if (req.method === "POST") {
     try {
       const response = await post(
@@ -84,11 +85,11 @@ export default async (req, res) => {
 
       const createPolicyGroupResponse = await response.json();
 
-      res.status(StatusCodes.OK).json(createPolicyGroupResponse);
+      return res.status(StatusCodes.OK).json(createPolicyGroupResponse);
     } catch (error) {
       console.error("Error listing policy groups", error);
 
-      res
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }

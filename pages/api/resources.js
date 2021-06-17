@@ -35,14 +35,14 @@ export default async (req, res) => {
     if (searchTerm && resourceTypes) {
       const resources = resourceTypes.split(",");
       params.filter = `name.contains("${searchTerm}")&&(${resources
-        .map((type) => `"type"=="${type}"`)
+        .map((type) => `type=="${type}"`)
         .join("||")})`;
     } else if (searchTerm) {
       params.filter = `name.contains("${searchTerm}")`;
     } else if (resourceTypes) {
       const resources = resourceTypes.split(",");
       params.filter = `${resources
-        .map((type) => `"type"=="${type}"`)
+        .map((type) => `type=="${type}"`)
         .join("||")}`;
     }
 

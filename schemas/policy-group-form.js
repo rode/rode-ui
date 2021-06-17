@@ -22,8 +22,8 @@ export const schema = yup.object().shape({
     .required()
     .label("Policy Group Name")
     .matches(
-      /^([a-z]*|\d*|[-_]*)*$/g,
-      "Invalid character(s). Please refer to name guidelines."
+      /^[a-z\d\-_]+$/g,
+      "Invalid character(s). Please refer to the name guidelines."
     ),
   description: yup.string().label("Description"),
 });

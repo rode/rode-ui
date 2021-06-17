@@ -58,19 +58,18 @@ export default async (req, res) => {
         mapToClientModel(policy)
       );
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         data: policies,
         pageToken: listPoliciesResponse.nextPageToken,
       });
     } catch (error) {
       console.error("Error listing policies", error);
 
-      res
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
   }
-
   if (req.method === "POST") {
     try {
       const postBody = mapToApiModel(req);
@@ -102,11 +101,11 @@ export default async (req, res) => {
       const createPolicyResponse = await response.json();
       const policy = mapToClientModel(createPolicyResponse);
 
-      res.status(StatusCodes.OK).json(policy);
+      return res.status(StatusCodes.OK).json(policy);
     } catch (error) {
       console.error("Error creating policy", error);
 
-      res
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
