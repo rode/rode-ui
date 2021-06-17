@@ -39,8 +39,9 @@ export default async (req, res) => {
       const searchTerm = req.query.filter;
       let params = buildPaginationParams(req);
       if (searchTerm) {
-        params.filter = `policy.name.contains("${searchTerm}")`;
+        params.filter = `name.contains("${searchTerm}")`;
       }
+
       const response = await get(
         `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`
       );

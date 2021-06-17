@@ -120,7 +120,7 @@ describe("/api/policies", () => {
 
       it("should hit the Rode API", async () => {
         const expectedUrl = createExpectedUrl("http://localhost:50051", {
-          filter: `policy.name.contains("${filterParam}")`,
+          filter: `name.contains("${filterParam}")`,
         });
 
         await handler(request, response);
