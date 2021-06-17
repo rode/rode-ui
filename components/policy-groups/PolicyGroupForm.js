@@ -28,8 +28,6 @@ import { showError } from "utils/toast-utils";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 
-// TODO: tests
-
 const PolicyGroupForm = (props) => {
   const {
     title,

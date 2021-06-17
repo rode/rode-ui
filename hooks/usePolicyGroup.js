@@ -20,8 +20,6 @@ import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 
-// TODO: tests
-
 export const usePolicyGroup = (policyGroupName) => {
   const [policyGroup, setPolicyGroup] = React.useState(null);
   const {
