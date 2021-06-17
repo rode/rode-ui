@@ -30,7 +30,9 @@ export const usePolicyGroup = (policyGroupName) => {
   } = usePolicies();
 
   const { data, loading } = useFetch(
-    policyGroupName !== currentPolicyGroup?.name ? `/api/policy-groups/${policyGroupName}` : null
+    policyGroupName !== currentPolicyGroup?.name
+      ? `/api/policy-groups/${policyGroupName}`
+      : null
   );
 
   useSafeLayoutEffect(() => {

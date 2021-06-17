@@ -72,11 +72,14 @@ describe("New Policy Group", () => {
   it("should render the name input", () => {
     const input = screen.getByLabelText(/name/i);
     expect(input).toBeInTheDocument();
+    expect(input).toBeEnabled();
+    expect(input).toHaveValue("");
   });
 
   it("should render the description input", () => {
     const input = screen.getByLabelText(/description/i);
     expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
   });
 
   it("should render the save button for the form", () => {
@@ -92,13 +95,28 @@ describe("New Policy Group", () => {
     expect(router.back).toHaveBeenCalledTimes(1);
   });
 
+  it("should render the policy group name guidelines and permanent name warning", () => {
+    expect(
+      screen.getByText(/policy group name cannot be changed after creation/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/policy group name guidelines/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/lowercase/i)).toBeInTheDocument();
+    expect(screen.getByText(/alphanumeric characters/i)).toBeInTheDocument();
+    expect(screen.getByText(/dashes or hyphens/i)).toBeInTheDocument();
+    expect(screen.getByText(/underscores/i)).toBeInTheDocument();
+    expect(screen.getByText(/unique/i)).toBeInTheDocument();
+    expect(screen.getByText(/examples/i)).toBeInTheDocument();
+  });
+
   describe("successful save", () => {
     let formData;
 
     beforeEach(async () => {
       formData = {
-        name: chance.string({ alpha: true, casing: "lower" }),
-        description: chance.sentence(),
+        name: createdPolicyGroup.name,
+        description: createdPolicyGroup.description,
       };
 
       userEvent.type(screen.getByLabelText(/name/i), formData.name);
@@ -128,10 +146,10 @@ describe("New Policy Group", () => {
         });
     });
 
-    it("should redirect the user to the policy group dashboard", () => {
+    it("should redirect the user to the created policy group page", () => {
       expect(router.push)
         .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith("/policy-groups");
+        .toHaveBeenCalledWith(`/policy-groups/${createdPolicyGroup.name}`);
     });
   });
 

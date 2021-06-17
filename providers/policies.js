@@ -25,7 +25,7 @@ const initialState = {
   currentPolicy: null,
   evaluationResource: null,
   evaluationPolicy: null,
-  currentPolicyGroup: null
+  currentPolicyGroup: null,
 };
 
 export const PoliciesProvider = ({ value, children }) => {

@@ -125,6 +125,19 @@
   }
 }
 
+.notFoundContainer {
+  text-align: center;
+
+  > h1 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  > * {
+    margin: 1rem auto;
+  }
+}
+
 .darkTheme {
   .formContentContainer {
     background-color: $DT_BACKGROUND_MEDIUM;

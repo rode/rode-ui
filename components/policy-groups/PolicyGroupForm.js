@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
 import Button from "components/Button";
@@ -28,6 +28,8 @@ import { showError } from "utils/toast-utils";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
 
+// TODO: tests
+
 const PolicyGroupForm = (props) => {
   const {
     title,
@@ -37,9 +39,10 @@ const PolicyGroupForm = (props) => {
     submitButtonText,
     policyGroup = {},
   } = props;
+  const creatingNewPolicyGroup = method === "POST";
   const { theme } = useTheme();
   const router = useRouter();
-  const {dispatch} = usePolicies();
+  const { dispatch } = usePolicies();
 
   const [name, setName] = useState(policyGroup.name || "");
   const [description, setDescription] = useState(policyGroup.description || "");
@@ -77,7 +80,7 @@ const PolicyGroupForm = (props) => {
 
     dispatch({
       type: policyActions.SET_CURRENT_POLICY_GROUP,
-      data: formData
+      data: formData,
     });
 
     router.push(`/policy-groups/${formData.name}`);
@@ -105,9 +108,9 @@ const PolicyGroupForm = (props) => {
               onBlur={(event) => validateField(event, true)}
               required
               error={errors.name}
-              disabled={method !== "CREATE"}
+              disabled={!creatingNewPolicyGroup}
             />
-            {method === "CREATE" && (
+            {creatingNewPolicyGroup && (
               <p className={styles.hint} spacing={"Policy Group Name"}>
                 <span>Please note:</span> Policy Group Name cannot be changed
                 after creation.
@@ -144,11 +147,12 @@ const PolicyGroupForm = (props) => {
           </div>
         </form>
         <div className={styles.formNotes}>
-          {method === "CREATE" && (
+          {creatingNewPolicyGroup && (
             <>
               <div>
                 <h2>Policy Group Name Guidelines</h2>
                 <ul>
+                  <li>Must be unique</li>
                   <li>Lowercase</li>
                   <li>Alphanumeric Characters</li>
                   <li>Dashes or Hyphens</li>
@@ -171,11 +175,11 @@ const PolicyGroupForm = (props) => {
 
 PolicyGroupForm.propTypes = {
   title: PropTypes.string.isRequired,
-  method: PropTypes.oneOf(['POST', 'PATCH']).isRequired,
+  method: PropTypes.oneOf(["POST", "PATCH"]).isRequired,
   endpoint: PropTypes.string.isRequired,
   verb: PropTypes.string.isRequired,
   submitButtonText: PropTypes.string.isRequired,
   policyGroup: PropTypes.object,
-}
+};
 
 export default PolicyGroupForm;

@@ -21,15 +21,16 @@ import { useTheme } from "providers/theme";
 import PageHeader from "components/layout/PageHeader";
 import Loading from "components/Loading";
 import Button from "components/Button";
-import { usePolicies } from "../../providers/policies";
-import { policyActions } from "../../reducers/policies";
-import { usePolicyGroup } from "../../hooks/usePolicyGroup";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
+import { usePolicyGroup } from "hooks/usePolicyGroup";
+import Link from "next/link";
 
 // TODO: tests
 
 const Policy = () => {
   const router = useRouter();
-  const {dispatch} = usePolicies();
+  const { dispatch } = usePolicies();
   const { theme } = useTheme();
 
   const { name } = router.query;
@@ -39,7 +40,7 @@ const Policy = () => {
   const editPolicy = () => {
     dispatch({
       type: policyActions.SET_CURRENT_POLICY_GROUP,
-      data: policyGroup
+      data: policyGroup,
     });
     router.push(`/policy-groups/${name}/edit`);
   };
@@ -68,7 +69,13 @@ const Policy = () => {
               </div>
             </div>
           ) : (
-            <p>Policy Group not found.</p>
+            <div className={styles.notFoundContainer}>
+              <h1>No policy group found under {`"${name}"`}</h1>
+              <p>
+                Go to the <Link href={"/policy-groups"}>dashboard</Link> to view
+                all policy groups
+              </p>
+            </div>
           )}
         </Loading>
       </div>

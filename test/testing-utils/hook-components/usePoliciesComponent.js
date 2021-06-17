@@ -25,7 +25,11 @@ const PolicyComponent = ({ newSearchTerm }) => {
   return (
     <>
       {Object.keys(state).map((key) => (
-        <p key={key}>{`${key}: ${state[key]}`}</p>
+        <div key={key}>
+          <h1>{key}</h1>
+          <span>:</span>
+          <h2>{state[key]}</h2>
+        </div>
       ))}
       <button
         onClick={() =>

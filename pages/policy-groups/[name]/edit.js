@@ -15,20 +15,19 @@
  */
 
 import React from "react";
-import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
-import { usePolicyGroup } from "../../../hooks/usePolicyGroup";
-import PolicyGroupForm from "../../../components/policy-groups/PolicyGroupForm";
-import Loading from "../../../components/Loading";
+import { usePolicyGroup } from "hooks/usePolicyGroup";
+import PolicyGroupForm from "components/policy-groups/PolicyGroupForm";
+import Loading from "components/Loading";
 import Link from "next/link";
+import styles from "styles/modules/PolicyGroupForm.module.scss";
 
 const EditPolicyGroup = () => {
-  const { theme } = useTheme();
   const router = useRouter();
 
-  const policyGroupName = router.query.name;
+  const { name } = router.query;
 
-  const { policyGroup, loading } = usePolicyGroup(policyGroupName);
+  const { policyGroup, loading } = usePolicyGroup(name);
 
   return (
     <Loading loading={loading}>
@@ -42,10 +41,10 @@ const EditPolicyGroup = () => {
           policyGroup={policyGroup}
         />
       ) : (
-        <div>
-          <h1>No policy group found under {`"${policyGroupName}"`}</h1>
+        <div className={styles.notFoundContainer}>
+          <h1>No policy group found under {`"${name}"`}</h1>
           <p>
-            Go to <Link href={"/policy-groups"}>dashboard</Link> to view all
+            Go to the <Link href={"/policy-groups"}>dashboard</Link> to view all
             policy groups
           </p>
         </div>

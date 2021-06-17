@@ -16,7 +16,10 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
-import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-group-utils";
+import {
+  mapToApiModel,
+  mapToClientModel,
+} from "pages/api/utils/policy-group-utils";
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
@@ -34,7 +37,7 @@ export default async (req, res) => {
   if (req.method === "GET") {
     try {
       const { name } = req.query;
-      
+
       const response = await get(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
 
       if (response.status === StatusCodes.NOT_FOUND) {
