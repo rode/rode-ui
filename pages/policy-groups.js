@@ -23,8 +23,6 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
 
-// TODO: tests
-
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
