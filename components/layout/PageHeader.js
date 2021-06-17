@@ -17,11 +17,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Header.module.scss";
-
-// TODO: create pageHeader in typography, share between pages
+import { useTheme } from "providers/theme";
 
 const PageHeader = ({ children }) => {
-  return <div className={styles.pageHeader}>{children}</div>;
+  const { theme } = useTheme();
+
+  return (
+    <div className={`${styles[theme]} ${styles.pageHeader}`}>{children}</div>
+  );
 };
 
 PageHeader.propTypes = {

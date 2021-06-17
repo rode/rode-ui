@@ -157,6 +157,15 @@ $DESKTOP_NAV_WIDTH: 30vw;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+
+  > h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  > * {
+    margin-left: 0.75rem;
+  }
 }
 
 .darkTheme {
@@ -184,6 +193,12 @@ $DESKTOP_NAV_WIDTH: 30vw;
       border-bottom-color: $DT_LINK;
     }
   }
+
+  &.pageHeader {
+    > h1 {
+      color: $LAGOON;
+    }
+  }
 }
 
 .lightTheme {
@@ -209,6 +224,12 @@ $DESKTOP_NAV_WIDTH: 30vw;
     &:hover {
       @include transition;
       border-bottom-color: $LT_LINK;
+    }
+  }
+
+  &.pageHeader {
+    > h1 {
+      color: $DEEP_SEA;
     }
   }
 }

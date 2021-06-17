@@ -68,74 +68,78 @@ const CreateNewPolicyGroup = () => {
   };
 
   return (
-    <div className={`${styles.pageContainer} ${styles[theme]}`}>
+    <>
       <PageHeader>
-        <h1 className={styles.pageHeader}>Create Policy Group</h1>
+        <h1>Create Policy Group</h1>
       </PageHeader>
-      <form onSubmit={onSubmit} className={styles.form}>
-        <div className={styles.formContentContainer}>
-          <Input
-            name={"name"}
-            label={"Policy Group Name"}
-            placeholder={"ex: pci-bundle"}
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-            value={name}
-            horizontal
-            onBlur={validateField}
-            required
-            error={errors.name}
-          />
-          <p className={styles.hint}>
-            Please note: policy group name cannot be changed after creation.
-          </p>
-          <Input
-            name={"description"}
-            label={"Description"}
-            placeholder={"A summary of the intended use for this policy group"}
-            onChange={(event) => {
-              setDescription(event.target.value);
-            }}
-            value={description}
-            horizontal
-            onBlur={validateField}
-            error={errors.description}
-          />
-        </div>
-        <div className={styles.buttonsContainer}>
-          <Button
-            label={"Save Policy Group"}
-            type={"submit"}
-            loading={loading}
-          />
+      <div className={`${styles.pageContainer} ${styles[theme]}`}>
+        <form onSubmit={onSubmit} className={styles.form}>
+          <div className={styles.formContentContainer}>
+            <Input
+              name={"name"}
+              label={"Policy Group Name"}
+              placeholder={"ex: pci-bundle"}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
+              value={name}
+              horizontal
+              onBlur={validateField}
+              required
+              error={errors.name}
+            />
+            <p className={styles.hint}>
+              Please note: policy group name cannot be changed after creation.
+            </p>
+            <Input
+              name={"description"}
+              label={"Description"}
+              placeholder={
+                "A summary of the intended use for this policy group"
+              }
+              onChange={(event) => {
+                setDescription(event.target.value);
+              }}
+              value={description}
+              horizontal
+              onBlur={validateField}
+              error={errors.description}
+            />
+          </div>
+          <div className={styles.buttonsContainer}>
+            <Button
+              label={"Save Policy Group"}
+              type={"submit"}
+              loading={loading}
+            />
 
-          <Button
-            label={"Cancel"}
-            onClick={() => router.back()}
-            buttonType={"text"}
-            disabled={loading}
-          />
-        </div>
-      </form>
-      <div className={styles.formNotes}>
-        <div>
-          <p>Policy Group Name Guidelines</p>
-          <ul>
-            <li>Lowercase</li>
-            <li>Alphanumeric Characters</li>
-            <li>Dashes or Hyphens</li>
-            <li>Underscores</li>
-          </ul>
-        </div>
-        <div>
-          <p>Examples</p>
-          <code>development_3</code>
-          <code>pci-requirements</code>
-          <code>docker_images_prod</code>
+            <Button
+              label={"Cancel"}
+              onClick={() => router.back()}
+              buttonType={"text"}
+              disabled={loading}
+            />
+          </div>
+        </form>
+        <div className={styles.formNotes}>
+          <div>
+            <p>Policy Group Name Guidelines</p>
+            <ul>
+              <li>Lowercase</li>
+              <li>Alphanumeric Characters</li>
+              <li>Dashes or Hyphens</li>
+              <li>Underscores</li>
+            </ul>
+          </div>
+          <div>
+            <p>Examples</p>
+            <code>development_3</code>
+            <code>pci-requirements</code>
+            <code>docker_images_prod</code>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
