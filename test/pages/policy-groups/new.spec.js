@@ -27,6 +27,8 @@ jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
 
+// TODO: implement special path for name conflict 409
+
 describe("New Policy Group", () => {
   let router,
     fetchResponse,

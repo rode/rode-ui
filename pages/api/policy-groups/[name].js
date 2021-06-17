@@ -23,8 +23,6 @@ import {
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
-// TODO: tests
-
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
