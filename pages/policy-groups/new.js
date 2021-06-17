@@ -84,12 +84,13 @@ const CreateNewPolicyGroup = () => {
               }}
               value={name}
               horizontal
-              onBlur={validateField}
+              onBlur={(event) => validateField(event, true)}
               required
               error={errors.name}
             />
             <p className={styles.hint} spacing={"Policy Group Name"}>
-              <span>Please note:</span> Policy Group Name cannot be changed after creation.
+              <span>Please note:</span> Policy Group Name cannot be changed
+              after creation.
             </p>
             <Input
               name={"description"}
