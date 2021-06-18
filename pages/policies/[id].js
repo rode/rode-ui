@@ -28,7 +28,8 @@ import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
 import DetailsHeader from "components/shared/DetailsHeader";
-import DetailsNavigation from "../../components/shared/DetailsNavigation";
+import DetailsNavigation from "components/shared/DetailsNavigation";
+import PolicyHistory from "../../components/policies/PolicyHistory";
 
 // TODO: pull out evaluate button into shared component
 
@@ -42,10 +43,10 @@ const createLinks = (baseUrl) => {
       label: "History",
       href: `${baseUrl}#history`
     },
-    {
-      label: "Assignments",
-      href: `${baseUrl}#assignments`
-    }
+    // {
+    //   label: "Assignments",
+    //   href: `${baseUrl}#assignments`
+    // }
   ]
 }
 
@@ -106,7 +107,14 @@ const Policy = () => {
                 onClick={evaluateInPlayground}
                 className={styles.playgroundButton}
               />
+              {
+                activeSection === "details" &&
                 <PolicyDetails policy={policy} />
+              }
+              {
+                activeSection === "history" &&
+                  <PolicyHistory policy={policy}/>
+              }
             </>
           ) : (
             <div className={styles.notFound}>
