@@ -42,11 +42,19 @@ const setEvaluationResource = (state, data) => {
   };
 };
 
+const setCurrentPolicyGroup = (state, data) => {
+  return {
+    ...state,
+    currentPolicyGroup: data,
+  };
+};
+
 const actionMap = {
   SET_SEARCH_TERM: setSearchTerm,
   SET_CURRENT_POLICY: setCurrentPolicy,
   SET_EVALUATION_POLICY: setEvaluationPolicy,
   SET_EVALUATION_RESOURCE: setEvaluationResource,
+  SET_CURRENT_POLICY_GROUP: setCurrentPolicyGroup,
 };
 
 export const policyReducer = (state, action) => {
@@ -60,4 +68,5 @@ export const policyActions = {
   SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
   SET_EVALUATION_POLICY: "SET_EVALUATION_POLICY",
   SET_EVALUATION_RESOURCE: "SET_EVALUATION_RESOURCE",
+  SET_CURRENT_POLICY_GROUP: "SET_CURRENT_POLICY_GROUP",
 };

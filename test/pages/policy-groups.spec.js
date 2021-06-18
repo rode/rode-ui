@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import userEvent from "@testing-library/user-event";
@@ -25,7 +25,7 @@ jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
 
 describe("Policy Groups", () => {
-  let router, policyGroups, mockPaginatedFetchResponse, rerender;
+  let router, policyGroups, mockPaginatedFetchResponse, rerender, dispatch;
   beforeEach(() => {
     policyGroups = chance.n(
       () => ({
@@ -44,10 +44,11 @@ describe("Policy Groups", () => {
       query: {},
       push: jest.fn(),
     };
+    dispatch = jest.fn();
     useRouter.mockReturnValue(router);
 
     usePaginatedFetch.mockReturnValue(mockPaginatedFetchResponse);
-    const utils = render(<PolicyGroups />);
+    const utils = render(<PolicyGroups />, { policyDispatch: dispatch });
     rerender = utils.rerender;
   });
 
@@ -86,23 +87,34 @@ describe("Policy Groups", () => {
 
   it("should render a card for each policy group found", () => {
     mockPaginatedFetchResponse.data.forEach((group) => {
-      expect(screen.getByText(group.name)).toBeInTheDocument();
+      const renderedName = screen.getByText(group.name);
+      expect(renderedName).toBeInTheDocument();
       expect(screen.getByText(group.description)).toBeInTheDocument();
+
+      const renderedButton = renderedName.closest("button");
+      userEvent.click(renderedButton);
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "SET_CURRENT_POLICY_GROUP",
+        data: group,
+      });
+      expect(router.push).toHaveBeenCalledWith(
+        `/policy-groups/${encodeURIComponent(group.name)}`
+      );
     });
   });
 
   it("should render the card with no description if it is not present", () => {
     mockPaginatedFetchResponse.data[0].description = "";
-    rerender(<PolicyGroups />);
+    rerender(<PolicyGroups />, { policyDispatch: dispatch });
     const renderedName = screen.getByText(
       mockPaginatedFetchResponse.data[0].name
     );
-    expect(renderedName.closest("div").children).toHaveLength(1);
+    expect(renderedName.closest("button").children).toHaveLength(1);
   });
 
   it("should render the button to view more if there are multiple pages of results", () => {
     mockPaginatedFetchResponse.isLastPage = false;
-    rerender(<PolicyGroups />);
+    rerender(<PolicyGroups />, { policyDispatch: dispatch });
 
     const renderedButton = screen.getByText("View More");
     expect(renderedButton).toBeInTheDocument;
@@ -112,7 +124,7 @@ describe("Policy Groups", () => {
 
   it("should render the no policy groups found message if no groups are found", () => {
     mockPaginatedFetchResponse.data = [];
-    rerender(<PolicyGroups />);
+    rerender(<PolicyGroups />, { policyDispatch: dispatch });
 
     expect(screen.getByText(/no policy groups exist./i)).toBeInTheDocument();
   });

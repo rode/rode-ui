@@ -16,37 +16,21 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import Loading from "components/Loading";
+import { usePolicyGroup } from "hooks/usePolicyGroup";
 
-const PolicyComponent = ({ newSearchTerm }) => {
-  const { state, dispatch } = usePolicies();
+const PolicyComponent = ({ name }) => {
+  const { policyGroup, loading } = usePolicyGroup(name);
 
   return (
-    <>
-      {Object.keys(state).map((key) => (
-        <div key={key}>
-          <h1>{key}</h1>
-          <span>:</span>
-          <h2>{state[key]}</h2>
-        </div>
-      ))}
-      <button
-        onClick={() =>
-          dispatch({
-            type: policyActions.SET_SEARCH_TERM,
-            data: newSearchTerm,
-          })
-        }
-      >
-        Update search term
-      </button>
-    </>
+    <Loading loading={loading}>
+      <p>{policyGroup?.name}</p>
+    </Loading>
   );
 };
 
 PolicyComponent.propTypes = {
-  newSearchTerm: PropTypes.string.isRequired,
+  name: PropTypes.string,
 };
 
 export default PolicyComponent;

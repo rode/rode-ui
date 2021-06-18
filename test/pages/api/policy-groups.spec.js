@@ -233,6 +233,20 @@ describe("/api/policy-groups", () => {
     });
 
     describe("failed calls to Rode", () => {
+      it("should return a conflict error when the policy group name already exists", async () => {
+        rodeResponse.ok = false;
+        rodeResponse.status = 409;
+        await handler(request, response);
+
+        expect(response.status)
+          .toBeCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.CONFLICT);
+
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ error: ReasonPhrases.CONFLICT });
+      });
+
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
 
