@@ -33,6 +33,7 @@ import ChangeVersionDrawer from "components/resources/ChangeVersionDrawer";
 import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
+import DetailsHeader from "components/shared/DetailsHeader";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -86,12 +87,10 @@ const Resource = () => {
         <Loading loading={loading}>
           {data ? (
             <>
-              <div className={styles.resourceHeader}>
-                <h1 className={styles.resourceName}>
-                  {state.currentResource.resourceName}
-                </h1>
-                <div className={styles.resourceDetailsContainer}>
-                  <div>
+              <DetailsHeader
+                name={state.currentResource.resourceName}
+                subText={
+                  <div className={styles.resourceDetails}>
                     <LabelWithValue
                       label={"Type"}
                       value={state.currentResource.resourceLabel}
@@ -106,12 +105,14 @@ const Resource = () => {
                       }
                     />
                   </div>
+                }
+                actionButton={
                   <Button
                     onClick={() => setShowVersionDrawer(true)}
                     label={"Change Version"}
                   />
-                </div>
-              </div>
+                }
+              />
               <div className={styles.playgroundContainer}>
                 <Button
                   label={"Evaluate in Policy Playground"}

@@ -1,0 +1,76 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.detailsHeader {
+  display: flex;
+  max-width: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  position: sticky;
+  top: 0;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+
+  > div {
+    flex: 1;
+  }
+}
+
+.name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 auto;
+  @include ellipsis(calc(100vw - 5rem));
+  text-align: center;
+
+  @include tabletAndLarger {
+    margin: 0 1rem 0 0;
+    max-width: calc(70vw - 2rem);
+    text-align: unset;
+  }
+}
+
+.darkTheme {
+  &.detailsHeader {
+    background-color: $LAGOON;
+    box-shadow: $DT_BOX_SHADOW;
+
+    > * {
+      color: $DARK_GREY;
+    }
+  }
+}
+
+.lightTheme {
+  &.detailsHeader {
+    background-color: $DEEP_SEA;
+    box-shadow: $LT_BOX_SHADOW;
+
+    > * {
+      color: $SOFT_WHITE;
+    }
+  }
+}

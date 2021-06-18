@@ -19,7 +19,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
@@ -27,7 +26,10 @@ import { usePolicy } from "hooks/usePolicy";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
-import Code from "components/Code";
+import PolicyDetails from "components/policies/PolicyDetails";
+import DetailsHeader from "components/shared/DetailsHeader";
+
+// TODO: pull out evaluate button into shared component
 
 const Policy = () => {
   const router = useRouter();
@@ -56,45 +58,46 @@ const Policy = () => {
         <PolicyBreadcrumbs />
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
-        <div className={styles.detailsContainer}>
-          <Loading loading={loading}>
-            {policy ? (
-              <>
-                <div className={styles.detailsHeader}>
-                  <div className={styles.detailsHeaderTextContainer}>
-                    <p className={styles.policyName}>{policy.name}</p>
-                    <p className={styles.policyDescription}>
-                      {policy.description}
-                    </p>
-                  </div>
+        <Loading loading={loading}>
+          {policy ? (
+            <>
+              <DetailsHeader
+                name={policy.name}
+                subText={<p>{policy.description}</p>}
+                actionButton={
                   <Button label={"Edit Policy"} onClick={editPolicy} />
-                </div>
-                <Button
-                  label={"Evaluate in Policy Playground"}
-                  buttonType={"text"}
-                  onClick={evaluateInPlayground}
-                  className={styles.playgroundButton}
-                />
-                <div className={styles.regoContainer}>
-                  <p className={textStyles.label}>Rego Policy Code</p>
-                  <Code code={policy.regoContent} language={"rego"} />
-                </div>
-              </>
-            ) : (
-              <div className={styles.notFound}>
-                <h1 className={styles.notFound}>
-                  No policy found under {`"${id}"`}
-                </h1>
-                <p>
-                  Try <Link href={"/policies"}>searching for a policy</Link>.
-                </p>
+                }
+              />
+              <div>
+                <Link href={`/policies/${policy.id}#details`}>
+                  Policy Details
+                </Link>
+                <Link href={`/policies/${policy.id}#history`}>History</Link>
+                <Link href={`/policies/${policy.id}#assignments`}>
+                  Assignments
+                </Link>
               </div>
-            )}
-          </Loading>
-        </div>
+              <Button
+                label={"Evaluate in Policy Playground"}
+                buttonType={"text"}
+                onClick={evaluateInPlayground}
+                className={styles.playgroundButton}
+              />
+              <PolicyDetails policy={policy} />
+            </>
+          ) : (
+            <div className={styles.notFound}>
+              <h1 className={styles.notFound}>
+                No policy found under {`"${id}"`}
+              </h1>
+              <p>
+                Try <Link href={"/policies"}>searching for a policy</Link>.
+              </p>
+            </div>
+          )}
+        </Loading>
       </div>
     </>
   );
 };
-
 export default Policy;

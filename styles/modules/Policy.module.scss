@@ -176,15 +176,6 @@
   height: 100%;
 }
 
-.detailsContainer {
-  min-height: fit-content;
-  margin: 1rem auto 2rem;
-  padding: 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .detailsHeader {
   display: flex;
   flex-direction: column;
@@ -249,16 +240,11 @@
     background-color: $DT_BACKGROUND_MEDIUM;
   }
 
-  .detailsContainer {
-    background-color: $DT_BACKGROUND_MEDIUM;
-  }
-
-  .policyName {
-    color: $LAGOON;
-  }
-
-  .policyDescription {
-    color: $DT_SUB_TEXT;
+  .detailsHeader {
+    background-color: $LAGOON;
+    > * {
+      color: $DARK_GREY;
+    }
   }
 
   .validationResults {
@@ -277,15 +263,10 @@
     background-color: $LT_BACKGROUND_LIGHT;
   }
 
-  .detailsContainer {
-    background-color: $LT_BACKGROUND_LIGHT;
-  }
-
-  .policyName {
-    color: $DEEP_SEA;
-  }
-
-  .policyDescription {
-    color: $LT_SUB_TEXT;
+  .detailsHeader {
+    background-color: $DEEP_SEA;
+    > * {
+      color: $SOFT_WHITE;
+    }
   }
 }

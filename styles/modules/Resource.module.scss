@@ -27,46 +27,12 @@
   justify-content: flex-start;
 }
 
-.resourceHeader {
+.resourceDetails {
   display: flex;
-  max-width: 100%;
-  width: 100%;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0.5rem 1rem;
-  position: sticky;
-  top: 0;
+  flex-direction: row;
 
-  @include tabletAndLarger {
-    flex-direction: row;
-    align-items: center;
-    padding: 1rem 2rem;
-  }
-}
-
-.resourceName {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 auto;
-  @include ellipsis(calc(100vw - 5rem));
-
-  @include tabletAndLarger {
-    margin: 0 1rem 0 0;
-    max-width: calc(70vw - 2rem);
-  }
-}
-
-.resourceDetailsContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem auto 0;
-
-  @include tabletAndLarger {
-    flex-direction: row;
-    margin: 0;
+  > * {
+    margin-right: 1.5rem;
   }
 }
 
@@ -121,15 +87,6 @@
 }
 
 .darkTheme {
-  .resourceHeader {
-    background-color: $LAGOON;
-    box-shadow: $DT_BOX_SHADOW;
-
-    > * {
-      color: $DARK_GREY;
-    }
-  }
-
   .copyButton {
     color: $DARK_GREY;
 
@@ -141,15 +98,6 @@
 }
 
 .lightTheme {
-  .resourceHeader {
-    background-color: $DEEP_SEA;
-    box-shadow: $LT_BOX_SHADOW;
-
-    > * {
-      color: $SOFT_WHITE;
-    }
-  }
-
   .copyButton {
     color: $SOFT_WHITE;
 
