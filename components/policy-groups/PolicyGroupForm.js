@@ -150,7 +150,11 @@ const PolicyGroupForm = (props) => {
             />
           </div>
         </form>
-        <div className={styles.formNotes}>
+        <div
+          className={
+            creatingNewPolicyGroup ? styles.formNotes : styles.emptyFormNotes
+          }
+        >
           {creatingNewPolicyGroup && (
             <>
               <div>

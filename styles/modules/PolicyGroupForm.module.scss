@@ -37,12 +37,14 @@
   font-style: italic;
   margin-left: 1rem;
 
-  &::before {
-    content: attr(spacing);
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0 1rem;
-    visibility: hidden;
+  @include tabletAndLarger {
+    &::before {
+      content: attr(spacing);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0 1rem;
+      visibility: hidden;
+    }
   }
 
   > span {
@@ -50,9 +52,13 @@
   }
 }
 
-.formNotes {
+.emptyFormNotes {
   flex: 1;
   margin: 0 1rem;
+}
+
+.formNotes {
+  @extend .emptyFormNotes;
   padding-left: 1rem;
   border-left: solid 0.25rem transparent;
 
