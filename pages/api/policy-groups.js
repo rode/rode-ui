@@ -73,6 +73,12 @@ export default async (req, res) => {
     const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body);
 
     if (!response.ok) {
+      if (response.status === StatusCodes.CONFLICT) {
+        return res
+          .status(StatusCodes.CONFLICT)
+          .json({ error: ReasonPhrases.CONFLICT });
+      }
+
       console.error(`Unsuccessful response from Rode: ${response.status}`);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)

@@ -27,8 +27,6 @@ jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
 
-// TODO: implement special path for name conflict 409
-
 describe("New Policy Group", () => {
   let router,
     fetchResponse,
@@ -36,6 +34,7 @@ describe("New Policy Group", () => {
     isValid,
     validationErrors,
     validateField,
+    dispatch,
     rerender;
 
   beforeEach(() => {
@@ -61,9 +60,12 @@ describe("New Policy Group", () => {
       validateField,
     });
     useRouter.mockReturnValue(router);
+    dispatch = jest.fn();
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    const utils = render(<CreateNewPolicyGroup />);
+    const utils = render(<CreateNewPolicyGroup />, {
+      policyDispatch: dispatch,
+    });
     rerender = utils.rerender;
   });
 
@@ -172,6 +174,27 @@ describe("New Policy Group", () => {
       expect(validateField).toHaveBeenCalledTimes(1);
     });
 
+    it("should show an error when the call to create failed due to naming conflicts", async () => {
+      fetchResponse.status = 409;
+      act(() => {
+        userEvent.type(
+          screen.getByLabelText("Policy Group Name"),
+          createdPolicyGroup.name
+        );
+      });
+      await act(async () => {
+        await userEvent.click(screen.getByText(/save policy group/i));
+      });
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(
+          expect.stringMatching(/^Policy Group "[a-z\d]+" already exists.$/)
+        );
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(router.push).not.toHaveBeenCalled();
+    });
+
     it("should show an error when the call to create failed", async () => {
       fetchResponse.ok = false;
       await act(async () => {
@@ -182,6 +205,7 @@ describe("New Policy Group", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith("Failed to create the policy group.");
       expect(fetch).toHaveBeenCalledTimes(1);
+      expect(dispatch).not.toHaveBeenCalled();
       expect(router.push).not.toHaveBeenCalled();
     });
   });

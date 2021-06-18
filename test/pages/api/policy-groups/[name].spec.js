@@ -17,7 +17,10 @@
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]";
 import { getRodeUrl, get, patch, del } from "pages/api/utils/api-utils";
-import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-group-utils";
+import {
+  mapToApiModel,
+  mapToClientModel,
+} from "pages/api/utils/policy-group-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
@@ -88,7 +91,9 @@ describe("/api/policy-groups/[name]", () => {
 
         expect(get)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policy-groups/${name}`);
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}`
+          );
       });
 
       it("should return the found policy group", async () => {
@@ -98,7 +103,9 @@ describe("/api/policy-groups/[name]", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(policyGroup);
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(policyGroup);
       });
 
       it("should return null when the policy group is not found", async () => {
@@ -181,7 +188,9 @@ describe("/api/policy-groups/[name]", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(mapToClientModel(policyGroup));
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(mapToClientModel(policyGroup));
       });
     });
 
@@ -245,7 +254,9 @@ describe("/api/policy-groups/[name]", () => {
 
         expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policy-groups/${name}`);
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}`
+          );
       });
 
       it("should return null if the delete was successful", async () => {

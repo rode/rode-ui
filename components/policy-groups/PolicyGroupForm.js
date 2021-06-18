@@ -27,6 +27,7 @@ import { schema } from "schemas/policy-group-form";
 import { showError } from "utils/toast-utils";
 import { policyActions } from "reducers/policies";
 import { usePolicies } from "providers/policies";
+import { StatusCodes } from "http-status-codes";
 
 const PolicyGroupForm = (props) => {
   const {
@@ -70,6 +71,11 @@ const PolicyGroupForm = (props) => {
       },
     });
     setLoading(false);
+
+    if (response.status === StatusCodes.CONFLICT) {
+      showError(`Policy Group "${formData.name}" already exists.`);
+      return;
+    }
 
     if (!response.ok) {
       showError(`Failed to ${verb} the policy group.`);
