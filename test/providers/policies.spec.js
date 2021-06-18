@@ -39,9 +39,10 @@ describe("policies provider", () => {
 
   it("should render the default state keys", () => {
     expect(screen.getByText(/searchTerm/i)).toBeInTheDocument();
-    expect(screen.getByText(/currentPolicy/i)).toBeInTheDocument();
+    expect(screen.getByText(/^currentPolicy$/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentPolicyGroup/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {
@@ -49,8 +50,6 @@ describe("policies provider", () => {
 
     userEvent.click(dispatchButton);
 
-    expect(screen.getByText(/searchTerm:/i)).toHaveTextContent(searchTerm, {
-      exact: false,
-    });
+    expect(screen.getByText(searchTerm)).toBeInTheDocument();
   });
 });

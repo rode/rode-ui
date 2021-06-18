@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PolicyGroupForm from "components/policy-groups/PolicyGroupForm";
-
-const CreateNewPolicyGroup = () => {
-  return (
-    <PolicyGroupForm
-      title={"Create Policy Group"}
-      method={"POST"}
-      endpoint={"/api/policy-groups"}
-      verb={"create"}
-      submitButtonText={"Save Policy Group"}
-    />
-  );
+export const mapToClientModel = (policyGroupResponse) => {
+  return {
+    name: policyGroupResponse.name,
+    description: policyGroupResponse.description,
+  };
 };
 
-export default CreateNewPolicyGroup;
+export const mapToApiModel = (request) => {
+  let formattedRequest = request.body;
+
+  return {
+    description: formattedRequest.description,
+  };
+};

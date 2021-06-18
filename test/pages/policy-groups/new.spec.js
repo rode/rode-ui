@@ -34,6 +34,7 @@ describe("New Policy Group", () => {
     isValid,
     validationErrors,
     validateField,
+    dispatch,
     rerender;
 
   beforeEach(() => {
@@ -59,9 +60,12 @@ describe("New Policy Group", () => {
       validateField,
     });
     useRouter.mockReturnValue(router);
+    dispatch = jest.fn();
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
-    const utils = render(<CreateNewPolicyGroup />);
+    const utils = render(<CreateNewPolicyGroup />, {
+      policyDispatch: dispatch,
+    });
     rerender = utils.rerender;
   });
 
@@ -72,11 +76,14 @@ describe("New Policy Group", () => {
   it("should render the name input", () => {
     const input = screen.getByLabelText(/name/i);
     expect(input).toBeInTheDocument();
+    expect(input).toBeEnabled();
+    expect(input).toHaveValue("");
   });
 
   it("should render the description input", () => {
     const input = screen.getByLabelText(/description/i);
     expect(input).toBeInTheDocument();
+    expect(input).toHaveValue("");
   });
 
   it("should render the save button for the form", () => {
@@ -92,13 +99,28 @@ describe("New Policy Group", () => {
     expect(router.back).toHaveBeenCalledTimes(1);
   });
 
+  it("should render the policy group name guidelines and permanent name warning", () => {
+    expect(
+      screen.getByText(/policy group name cannot be changed after creation/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/policy group name guidelines/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/lowercase/i)).toBeInTheDocument();
+    expect(screen.getByText(/alphanumeric characters/i)).toBeInTheDocument();
+    expect(screen.getByText(/dashes or hyphens/i)).toBeInTheDocument();
+    expect(screen.getByText(/underscores/i)).toBeInTheDocument();
+    expect(screen.getByText(/unique/i)).toBeInTheDocument();
+    expect(screen.getByText(/examples/i)).toBeInTheDocument();
+  });
+
   describe("successful save", () => {
     let formData;
 
     beforeEach(async () => {
       formData = {
-        name: chance.string({ alpha: true, casing: "lower" }),
-        description: chance.sentence(),
+        name: createdPolicyGroup.name,
+        description: createdPolicyGroup.description,
       };
 
       userEvent.type(screen.getByLabelText(/name/i), formData.name);
@@ -128,10 +150,10 @@ describe("New Policy Group", () => {
         });
     });
 
-    it("should redirect the user to the policy group dashboard", () => {
+    it("should redirect the user to the created policy group page", () => {
       expect(router.push)
         .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith("/policy-groups");
+        .toHaveBeenCalledWith(`/policy-groups/${createdPolicyGroup.name}`);
     });
   });
 
@@ -152,6 +174,27 @@ describe("New Policy Group", () => {
       expect(validateField).toHaveBeenCalledTimes(1);
     });
 
+    it("should show an error when the call to create failed due to naming conflicts", async () => {
+      fetchResponse.status = 409;
+      act(() => {
+        userEvent.type(
+          screen.getByLabelText("Policy Group Name"),
+          createdPolicyGroup.name
+        );
+      });
+      await act(async () => {
+        await userEvent.click(screen.getByText(/save policy group/i));
+      });
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(
+          expect.stringMatching(/^Policy Group "[a-z\d]+" already exists.$/)
+        );
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(router.push).not.toHaveBeenCalled();
+    });
+
     it("should show an error when the call to create failed", async () => {
       fetchResponse.ok = false;
       await act(async () => {
@@ -162,6 +205,7 @@ describe("New Policy Group", () => {
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith("Failed to create the policy group.");
       expect(fetch).toHaveBeenCalledTimes(1);
+      expect(dispatch).not.toHaveBeenCalled();
       expect(router.push).not.toHaveBeenCalled();
     });
   });

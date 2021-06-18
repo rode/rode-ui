@@ -1,0 +1,92 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.policyGroupHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 4rem;
+    padding: 1rem 2rem;
+  }
+}
+
+.policyGroupName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 auto;
+  @include ellipsis(calc(100vw - 5rem));
+
+  @include tabletAndLarger {
+    margin: 0 1rem 0 0;
+    max-width: calc(70vw - 2rem);
+  }
+}
+
+.policyGroupDescription {
+  padding-left: 1rem;
+}
+
+.notFoundContainer {
+  text-align: center;
+
+  > h1 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  > * {
+    margin: 1rem auto;
+  }
+}
+
+.darkTheme {
+  .policyGroupHeader {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .policyGroupName {
+    color: $LAGOON;
+  }
+
+  .policyGroupDescription {
+    color: $DT_SUB_TEXT;
+  }
+}
+
+.lightTheme {
+  .policyGroupHeader {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .policyGroupName {
+    color: $DEEP_SEA;
+  }
+
+  .policyGroupDescription {
+    color: $LT_SUB_TEXT;
+  }
+}
