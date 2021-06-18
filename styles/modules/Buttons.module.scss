@@ -102,7 +102,7 @@
     &:hover,
     &:focus,
     &:active {
-      background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -30%);
+      background-color: color.scale($DT_BACKGROUND_MEDIUM, $lightness: -50%);
     }
 
     &[disabled] {
