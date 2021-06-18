@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/DetailsNavigation.module.scss";
 import { useTheme } from "providers/theme";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
+// TODO: tests
 
 const DetailsNavigation = (props) => {
   const { links, activeSection } = props;
@@ -27,21 +28,19 @@ const DetailsNavigation = (props) => {
 
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
-      {
-        links.map(({ label, href }) => {
-          let className = styles.link;
+      {links.map(({ label, href }) => {
+        let className = styles.link;
 
-          if (href.endsWith(activeSection)) {
-            className = styles.activeLink;
-          }
+        if (href.endsWith(activeSection)) {
+          className = styles.activeLink;
+        }
 
-          return (
-            <Link key={href} href={href} passHref>
-              <p className={className}>{label}</p>
-            </Link>
-          );
-        })
-      }
+        return (
+          <Link key={href} href={href} passHref>
+            <p className={className}>{label}</p>
+          </Link>
+        );
+      })}
     </div>
   );
 };
@@ -53,7 +52,7 @@ DetailsNavigation.propTypes = {
       href: PropTypes.string.isRequired,
     })
   ).isRequired,
-  activeSection: PropTypes.string.isRequired
+  activeSection: PropTypes.string.isRequired,
 };
 
 export default DetailsNavigation;

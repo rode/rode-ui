@@ -34,6 +34,7 @@ import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 import DetailsHeader from "components/shared/DetailsHeader";
+import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 
 const Resource = () => {
   const { theme } = useTheme();
@@ -113,14 +114,7 @@ const Resource = () => {
                   />
                 }
               />
-              <div className={styles.playgroundContainer}>
-                <Button
-                  label={"Evaluate in Policy Playground"}
-                  onClick={evaluateInPlayground}
-                  className={styles.playgroundButton}
-                  buttonType={"text"}
-                />
-              </div>
+              <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
               <ResourceOccurrences occurrences={data} />
             </>
           ) : (

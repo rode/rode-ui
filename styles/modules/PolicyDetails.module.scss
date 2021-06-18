@@ -23,6 +23,8 @@
 }
 
 .regoContainer {
+  margin-top: 1rem;
+
   > * {
     margin-bottom: 0.5rem;
   }
@@ -35,8 +37,7 @@
 }
 
 .lightTheme {
-
   .regoPolicyCode {
-    background-color: $LT_BACKGROUND_LIGHT
+    background-color: $LT_BACKGROUND_LIGHT;
   }
 }

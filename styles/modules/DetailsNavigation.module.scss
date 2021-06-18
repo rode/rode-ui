@@ -49,6 +49,17 @@
   font-weight: 600;
 }
 
+.playgroundButton {
+  margin: 0 auto 1rem;
+
+  @include tabletAndLarger {
+    margin: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
 .darkTheme {
   &.container {
     background-color: $DT_BACKGROUND_MEDIUM;
@@ -64,7 +75,6 @@
 
     &:hover {
       color: $DT_LINK;
-      border-bottom-color: $DT_LINK;
     }
   }
 
@@ -93,7 +103,6 @@
 
     &:hover {
       color: $LT_LINK;
-      border-bottom-color: $LT_LINK;
     }
   }
 

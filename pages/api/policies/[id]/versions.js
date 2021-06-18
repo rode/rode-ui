@@ -31,9 +31,7 @@ export default async (req, res) => {
   try {
     const { id } = req.query;
 
-    const response = await get(
-      `${rodeUrl}/v1alpha1/policies/${id}/versions`,
-    );
+    const response = await get(`${rodeUrl}/v1alpha1/policies/${id}/versions`);
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -47,7 +45,7 @@ export default async (req, res) => {
 
     res.status(StatusCodes.OK).json({
       data: getPolicyVersionsResponse.versions,
-      pageToken: getPolicyVersionsResponse.nextPageToken
+      pageToken: getPolicyVersionsResponse.nextPageToken,
     });
   } catch (error) {
     console.error("Error fetching policy versions", error);

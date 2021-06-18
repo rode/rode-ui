@@ -30,7 +30,7 @@ describe("/api/policies/[id]/versions", () => {
       method: "GET",
       query: {
         id,
-      }
+      },
     };
     getRodeUrl.mockReturnValue(expectedRodeUrl);
 
@@ -43,14 +43,14 @@ describe("/api/policies/[id]/versions", () => {
       version: chance.d4(),
       message: chance.string(),
       regoContent: chance.string(),
-      created: chance.timestamp()
-    }))
+      created: chance.timestamp(),
+    }));
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
         versions: policyVersions,
-        nextPageToken: chance.guid()
+        nextPageToken: chance.guid(),
       }),
     };
 
@@ -100,7 +100,7 @@ describe("/api/policies/[id]/versions", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith({
             data: policyVersions,
-            pageToken: expect.any(String)
+            pageToken: expect.any(String),
           });
       });
     });

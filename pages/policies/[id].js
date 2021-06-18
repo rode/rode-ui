@@ -29,32 +29,33 @@ import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
 import DetailsHeader from "components/shared/DetailsHeader";
 import DetailsNavigation from "components/shared/DetailsNavigation";
-import PolicyHistory from "../../components/policies/PolicyHistory";
+import PolicyHistory from "components/policies/PolicyHistory";
+import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 
-// TODO: pull out evaluate button into shared component
+// TODO: tests
 
 const createLinks = (baseUrl) => {
   return [
     {
       label: "Policy Details",
-      href: `${baseUrl}#details`
+      href: `${baseUrl}#details`,
     },
     {
       label: "History",
-      href: `${baseUrl}#history`
+      href: `${baseUrl}#history`,
     },
     // {
     //   label: "Assignments",
     //   href: `${baseUrl}#assignments`
     // }
-  ]
-}
+  ];
+};
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const { dispatch } = usePolicies();
-  const [activeSection, setActiveSection] = useState("details")
+  const [activeSection, setActiveSection] = useState("details");
 
   const { id } = router.query;
 
@@ -72,7 +73,7 @@ const Policy = () => {
     router.push("/playground");
   };
 
-  const navigationLinks = createLinks(`/policies/${id}`)
+  const navigationLinks = createLinks(`/policies/${id}`);
 
   useEffect(() => {
     const fullPath = router.asPath;
@@ -97,24 +98,13 @@ const Policy = () => {
                   <Button label={"Edit Policy"} onClick={editPolicy} />
                 }
               />
-              <DetailsNavigation 
+              <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
+              <DetailsNavigation
                 links={navigationLinks}
                 activeSection={activeSection}
               />
-              <Button
-                label={"Evaluate in Policy Playground"}
-                buttonType={"text"}
-                onClick={evaluateInPlayground}
-                className={styles.playgroundButton}
-              />
-              {
-                activeSection === "details" &&
-                <PolicyDetails policy={policy} />
-              }
-              {
-                activeSection === "history" &&
-                  <PolicyHistory policy={policy}/>
-              }
+              {activeSection === "details" && <PolicyDetails policy={policy} />}
+              {activeSection === "history" && <PolicyHistory policy={policy} />}
             </>
           ) : (
             <div className={styles.notFound}>

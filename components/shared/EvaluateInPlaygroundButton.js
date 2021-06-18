@@ -16,32 +16,26 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/PolicyDetails.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
-import Code from "components/Code";
-import { useTheme } from "providers/theme";
+import styles from "styles/modules/DetailsNavigation.module.scss";
+import Button from "components/Button";
 
 // TODO: tests
 
-const PolicyDetails = ({ policy }) => {
-  const { theme } = useTheme();
+const EvaluateInPlaygroundButton = (props) => {
+  const { onClick } = props;
 
   return (
-    <div className={`${styles[theme]} ${styles.container}`}>
-      <div className={styles.regoContainer}>
-        <p className={textStyles.label}>Rego Policy Code</p>
-        <Code
-          code={policy.regoContent}
-          language={"rego"}
-          className={styles.regoPolicyCode}
-        />
-      </div>
-    </div>
+    <Button
+      label={"Evaluate in Policy Playground"}
+      buttonType={"text"}
+      onClick={onClick}
+      className={styles.playgroundButton}
+    />
   );
 };
 
-PolicyDetails.propTypes = {
-  policy: PropTypes.object.isRequired,
+EvaluateInPlaygroundButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
 
-export default PolicyDetails;
+export default EvaluateInPlaygroundButton;
