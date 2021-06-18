@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SearchBar from "components/shared/search/SearchBar";
+import SearchBar from "components/shared/SearchBar";
 
 describe("SearchBar", () => {
   let onSubmit,

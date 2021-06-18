@@ -18,7 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useResources } from "providers/resources";
 import { resourceActions } from "reducers/resources";
-import SearchBar from "components/shared/search/SearchBar";
+import SearchBar from "components/shared/SearchBar";
 import { SEARCH_ALL } from "utils/constants";
 
 const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
