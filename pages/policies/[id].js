@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
@@ -28,13 +28,32 @@ import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
 import DetailsHeader from "components/shared/DetailsHeader";
+import DetailsNavigation from "../../components/shared/DetailsNavigation";
 
 // TODO: pull out evaluate button into shared component
+
+const createLinks = (baseUrl) => {
+  return [
+    {
+      label: "Policy Details",
+      href: `${baseUrl}#details`
+    },
+    {
+      label: "History",
+      href: `${baseUrl}#history`
+    },
+    {
+      label: "Assignments",
+      href: `${baseUrl}#assignments`
+    }
+  ]
+}
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const { dispatch } = usePolicies();
+  const [activeSection, setActiveSection] = useState("details")
 
   const { id } = router.query;
 
@@ -52,6 +71,15 @@ const Policy = () => {
     router.push("/playground");
   };
 
+  const navigationLinks = createLinks(`/policies/${id}`)
+
+  useEffect(() => {
+    const fullPath = router.asPath;
+    const [, hash] = fullPath.split("#");
+
+    setActiveSection(hash || navigationLinks[0].href.split("#")[1]);
+  }, [router.asPath]);
+
   return (
     <>
       <PageHeader>
@@ -68,22 +96,17 @@ const Policy = () => {
                   <Button label={"Edit Policy"} onClick={editPolicy} />
                 }
               />
-              <div>
-                <Link href={`/policies/${policy.id}#details`}>
-                  Policy Details
-                </Link>
-                <Link href={`/policies/${policy.id}#history`}>History</Link>
-                <Link href={`/policies/${policy.id}#assignments`}>
-                  Assignments
-                </Link>
-              </div>
+              <DetailsNavigation 
+                links={navigationLinks}
+                activeSection={activeSection}
+              />
               <Button
                 label={"Evaluate in Policy Playground"}
                 buttonType={"text"}
                 onClick={evaluateInPlayground}
                 className={styles.playgroundButton}
               />
-              <PolicyDetails policy={policy} />
+                <PolicyDetails policy={policy} />
             </>
           ) : (
             <div className={styles.notFound}>
