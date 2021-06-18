@@ -19,8 +19,6 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/DetailsNavigation.module.scss";
 import Button from "components/Button";
 
-// TODO: tests
-
 const EvaluateInPlaygroundButton = (props) => {
   const { onClick } = props;
 

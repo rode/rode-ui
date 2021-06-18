@@ -20,8 +20,6 @@ import styles from "styles/modules/DetailsNavigation.module.scss";
 import { useTheme } from "providers/theme";
 import Link from "next/link";
 
-// TODO: tests
-
 const DetailsNavigation = (props) => {
   const { links, activeSection } = props;
   const { theme } = useTheme();
