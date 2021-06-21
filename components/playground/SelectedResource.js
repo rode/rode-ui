@@ -17,9 +17,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
+import textStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
 import { useFetch } from "hooks/useFetch";
-import textStyles from "styles/modules/Typography.module.scss";
 import Loading from "components/Loading";
 import { getResourceDetails } from "utils/resource-utils";
 import LabelWithValue from "components/LabelWithValue";

@@ -250,14 +250,12 @@ describe("Edit Policy", () => {
   });
 
   describe("updating the policy and creating a new version", () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       act(() =>
         userEvent.type(screen.getByText("Rego Policy Code"), chance.string())
       );
 
-      await act(async () => {
-        await userEvent.click(screen.getByText(/update policy/i));
-      });
+      userEvent.click(screen.getByText(/update policy/i));
     });
 
     it("should show the update message modal", () => {
@@ -277,9 +275,11 @@ describe("Edit Policy", () => {
     });
 
     it("should show an input for the user to specific an update message", () => {
-      expect(
-        screen.getByText("Policy Update Message", { selector: "label" })
-      ).toBeInTheDocument();
+      const renderedInput = screen.getByText("Policy Update Message", {
+        selector: "label",
+      });
+      expect(renderedInput).toBeInTheDocument();
+      userEvent.type(renderedInput, chance.string());
     });
 
     it("should close the modal when pressing the cancel button", () => {
