@@ -20,4 +20,5 @@ export const schema = yup.object().shape({
   name: yup.string().required().label("Policy Name"),
   description: yup.string().label("Description"),
   regoContent: yup.string().required().label("Rego Policy Code"),
+  message: yup.string()
 });
