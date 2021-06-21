@@ -25,8 +25,6 @@ import Button from "components/Button";
 import styles from "styles/modules/PolicyHistory.module.scss";
 import { useTheme } from "providers/theme";
 
-// TODO: tests
-
 const PolicyHistory = ({ policy }) => {
   const { theme } = useTheme();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(

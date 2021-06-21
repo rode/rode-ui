@@ -32,15 +32,17 @@ import DetailsNavigation from "components/shared/DetailsNavigation";
 import PolicyHistory from "components/policies/PolicyHistory";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 
+const DETAILS = "details";
+const HISTORY = "history";
 const createLinks = (baseUrl) => {
   return [
     {
       label: "Policy Details",
-      href: `${baseUrl}#details`,
+      href: `${baseUrl}#${DETAILS}`,
     },
     {
       label: "History",
-      href: `${baseUrl}#history`,
+      href: `${baseUrl}#${HISTORY}`,
     },
   ];
 };
@@ -49,7 +51,7 @@ const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const { dispatch } = usePolicies();
-  const [activeSection, setActiveSection] = useState("details");
+  const [activeSection, setActiveSection] = useState(DETAILS);
 
   const { id } = router.query;
 
@@ -97,8 +99,8 @@ const Policy = () => {
                 links={navigationLinks}
                 activeSection={activeSection}
               />
-              {activeSection === "details" && <PolicyDetails policy={policy} />}
-              {activeSection === "history" && <PolicyHistory policy={policy} />}
+              {activeSection === DETAILS && <PolicyDetails policy={policy} />}
+              {activeSection === HISTORY && <PolicyHistory policy={policy} />}
             </>
           ) : (
             <div className={styles.notFound}>
