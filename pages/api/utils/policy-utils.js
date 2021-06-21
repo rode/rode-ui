@@ -31,7 +31,7 @@ export const mapToApiModel = (request) => {
     description: formattedRequest.description,
     policy: {
       regoContent: formattedRequest.regoContent,
-      message: formattedRequest.message || ""
+      message: formattedRequest.message || "",
     },
   };
 };

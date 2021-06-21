@@ -76,12 +76,16 @@ const PolicyForm = ({
       return;
     }
 
-    if (isEditingPolicy && Diff.diffChars(policy.regoContent, regoContent).length > 1) {
+    if (
+      isEditingPolicy &&
+      Diff.diffChars(policy.regoContent, regoContent).length > 1
+    ) {
       setShowUpdateModal(true);
+
       return;
     }
 
-    await onSubmitConfirm(formData);
+    return onSubmitConfirm(formData);
   };
 
   const onSubmitConfirm = async (formData) => {
@@ -160,6 +164,14 @@ const PolicyForm = ({
 
   const confirmDelete = () => setShowDeleteModal(true);
 
+  const confirmUpdate = () =>
+    onSubmitConfirm({
+      name,
+      description,
+      regoContent,
+      message,
+    });
+
   return (
     <>
       <Modal
@@ -190,8 +202,14 @@ const PolicyForm = ({
         onClose={() => setShowUpdateModal(false)}
         title={"Policy Update Message"}
       >
-        <p className={styles.updateMessageText}>By updating the Rego Policy Code, you are creating a new version of this policy.</p>
-        <p className={styles.updateMessageText}>Attach an optional message to this version of the policy, describing the changes that were made.</p>
+        <p className={styles.updateMessageText}>
+          By updating the Rego Policy Code, you are creating a new version of
+          this policy.
+        </p>
+        <p className={styles.updateMessageText}>
+          Attach an optional message to this version of the policy, describing
+          the changes that were made.
+        </p>
         <TextArea
           name={"message"}
           label={"Policy Update Message"}
@@ -206,6 +224,7 @@ const PolicyForm = ({
         />
         <div className={styles.modalActionButtons}>
           <Button
+            data-testId={"cancelUpdate"}
             label={"Cancel"}
             buttonType={"text"}
             onClick={() => {
@@ -217,14 +236,7 @@ const PolicyForm = ({
           <Button
             label={"Update & Save Policy"}
             buttonType={"primary"}
-            onClick={() =>
-              onSubmitConfirm({
-                name,
-                description,
-                regoContent,
-                message,
-              })
-            }
+            onClick={confirmUpdate}
             loading={loading}
           />
         </div>

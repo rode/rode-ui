@@ -24,6 +24,7 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { usePolicy } from "hooks/usePolicy";
 import { showError, showSuccess } from "utils/toast-utils";
 import Prism from "prism/prism";
+import { waitFor } from "@testing-library/dom";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -248,6 +249,67 @@ describe("Edit Policy", () => {
     });
   });
 
+  describe("updating the policy and creating a new version", () => {
+    beforeEach(async () => {
+      act(() =>
+        userEvent.type(screen.getByText("Rego Policy Code"), chance.string())
+      );
+
+      await act(async () => {
+        await userEvent.click(screen.getByText(/update policy/i));
+      });
+    });
+
+    it("should show the update message modal", () => {
+      expect(
+        screen.getByText(
+          "By updating the Rego Policy Code, you are creating a new version of this policy."
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "Attach an optional message to this version of the policy, describing the changes that were made."
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Policy Update Message", { selector: "h1" })
+      ).toBeInTheDocument();
+    });
+
+    it("should show an input for the user to specific an update message", () => {
+      expect(
+        screen.getByText("Policy Update Message", { selector: "label" })
+      ).toBeInTheDocument();
+    });
+
+    it("should close the modal when pressing the cancel button", () => {
+      const renderedCancel = screen.getByTestId("cancelUpdate");
+      userEvent.click(renderedCancel);
+
+      expect(
+        screen.queryByText("Policy Update Message")
+      ).not.toBeInTheDocument();
+    });
+
+    it("should close the modal when pressing the close button", () => {
+      const renderedClose = screen.getByLabelText("Close Modal");
+      userEvent.click(renderedClose);
+
+      expect(
+        screen.queryByText("Policy Update Message")
+      ).not.toBeInTheDocument();
+    });
+
+    it("should submit the form when the user confirms update", async () => {
+      const renderedSubmit = screen.getByLabelText("Update & Save Policy");
+      await act(async () => {
+        await userEvent.click(renderedSubmit);
+      });
+
+      await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
+    });
+  });
+
   describe("successful save", () => {
     beforeEach(async () => {
       await act(async () => {
@@ -260,6 +322,7 @@ describe("Edit Policy", () => {
         name: policy.name,
         description: policy.description,
         regoContent: policy.regoContent,
+        message: "",
       });
     });
 
@@ -268,6 +331,7 @@ describe("Edit Policy", () => {
         name: policy.name,
         description: policy.description,
         regoContent: policy.regoContent,
+        message: "",
       };
       expect(fetch)
         .toHaveBeenCalledTimes(1)
@@ -314,20 +378,20 @@ describe("Edit Policy", () => {
     it("should show an error when the call to update fails due to invalid Rego code", async () => {
       const expectedError = {
         isValid: false,
-        errors: chance.n(chance.string, chance.d4()),
+        errors: chance.n(() => chance.string({ alpha: true }), chance.d4()),
       };
       fetchResponse.ok = false;
       fetchResponse.json.mockResolvedValue(expectedError);
 
-      await act(async () => {
-        await userEvent.click(screen.getByText(/update policy/i));
-      });
+      await userEvent.click(screen.getByText(/update policy/i));
 
-      expect(showError)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(
-          "Failed to update the policy due to invalid Rego code. See error(s) below for details."
-        );
+      await waitFor(() =>
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(
+            "Failed to update the policy due to invalid Rego code. See error(s) below for details."
+          )
+      );
 
       expectedError.errors.forEach((error) => {
         expect(screen.getByText(error, { exact: false })).toBeInTheDocument();
@@ -336,13 +400,13 @@ describe("Edit Policy", () => {
 
     it("should show an error when the call to update failed", async () => {
       fetchResponse.ok = false;
-      await act(async () => {
-        await userEvent.click(screen.getByText(/update policy/i));
-      });
+      await userEvent.click(screen.getByText(/update policy/i));
 
-      expect(showError)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith("Failed to update the policy.");
+      await waitFor(() =>
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith("Failed to update the policy.")
+      );
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();
     });

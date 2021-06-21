@@ -53,7 +53,7 @@ describe("policy-utils", () => {
         name: chance.string(),
         description: chance.string(),
         regoContent: chance.string(),
-        message: chance.string()
+        message: chance.string(),
       };
 
       request = {
@@ -69,7 +69,7 @@ describe("policy-utils", () => {
         description: unmappedPolicy.description,
         policy: {
           regoContent: unmappedPolicy.regoContent,
-          message: unmappedPolicy.message
+          message: unmappedPolicy.message,
         },
       });
     });
@@ -83,9 +83,9 @@ describe("policy-utils", () => {
         description: unmappedPolicy.description,
         policy: {
           regoContent: unmappedPolicy.regoContent,
-          message: ""
+          message: "",
         },
-      })
+      });
     });
   });
 });

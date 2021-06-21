@@ -92,6 +92,7 @@ describe("New Policy", () => {
         name: chance.string(),
         description: chance.sentence(),
         regoContent: chance.string(),
+        message: "",
       };
 
       userEvent.type(screen.getByLabelText(/policy name/i), formData.name);
