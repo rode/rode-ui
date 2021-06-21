@@ -87,9 +87,7 @@ describe("Policy Details", () => {
 
   describe("fetching the policy", () => {
     it("should call to get the policy", () => {
-      expect(usePolicy)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenLastCalledWith(router.query.id);
+      expect(usePolicy).toHaveBeenLastCalledWith(router.query.id);
     });
 
     it("should render the loading indicator", () => {
