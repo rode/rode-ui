@@ -44,7 +44,7 @@ const PolicyHistory = ({ policy }) => {
                   <div>
                     <LabelWithValue
                       label={"Policy Version"}
-                      value={`${version.version}${
+                      value={`v${version.version}${
                         index === 0 ? " (latest)" : ""
                       }`}
                     />

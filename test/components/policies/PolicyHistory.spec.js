@@ -87,7 +87,7 @@ describe("PolicyHistory", () => {
     policyVersions.forEach((version, index) => {
       expect(screen.getAllByText("Policy Version")[index]).toBeInTheDocument();
       expect(
-        screen.getByText(`${version.version}${index === 0 ? " (latest)" : ""}`)
+        screen.getByText(`v${version.version}${index === 0 ? " (latest)" : ""}`)
       ).toBeInTheDocument();
       expect(dayjs).toHaveBeenCalledWith(version.created);
       expect(format).toHaveBeenCalledWith(DATE_TIME_FORMAT);
