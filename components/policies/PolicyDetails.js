@@ -21,8 +21,6 @@ import textStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
 import { useTheme } from "providers/theme";
 
-// TODO: tests
-
 const PolicyDetails = ({ policy }) => {
   const { theme } = useTheme();
 
