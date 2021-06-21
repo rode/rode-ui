@@ -135,14 +135,14 @@ describe("Policy Details", () => {
     });
 
     it("should render the policy details when the user navigates to that section", () => {
-      router.asPath = `${chance.string()}#details`;
+      router.asPath = `${chance.word()}#details`;
       rerender(<Policy />);
 
       expect(screen.getByText("Rego Policy Code")).toBeInTheDocument();
     });
 
     it("should render the policy history when the user navigates to that section", () => {
-      router.asPath = `${chance.string()}#history`;
+      router.asPath = `${chance.word()}#history`;
       rerender(<Policy />);
 
       policyVersions.forEach((version) => {
