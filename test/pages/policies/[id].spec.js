@@ -131,18 +131,14 @@ describe("Policy Details", () => {
     });
 
     it("should render the policy details when no section is specified", () => {
-      expect(
-        screen.getByText(policy.regoContent, { exact: false })
-      ).toBeInTheDocument();
+      expect(screen.getByText("Rego Policy Code")).toBeInTheDocument();
     });
 
     it("should render the policy details when the user navigates to that section", () => {
       router.asPath = `${chance.string()}#details`;
       rerender(<Policy />);
 
-      expect(
-        screen.getByText(policy.regoContent, { exact: false })
-      ).toBeInTheDocument();
+      expect(screen.getByText("Rego Policy Code")).toBeInTheDocument();
     });
 
     it("should render the policy history when the user navigates to that section", () => {

@@ -30,7 +30,9 @@ import { useTheme } from "providers/theme";
 const PolicyHistory = ({ policy }) => {
   const { theme } = useTheme();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    `/api/policies/${policy.id}/versions`
+    `/api/policies/${policy.id}/versions`,
+    {},
+    15
   );
 
   return (
