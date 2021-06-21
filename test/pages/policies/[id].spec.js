@@ -20,13 +20,21 @@ import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { usePolicy } from "hooks/usePolicy";
 import Policy from "pages/policies/[id]";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/usePolicy");
+jest.mock("hooks/usePaginatedFetch");
 
 describe("Policy Details", () => {
-  let router, policy, mockUsePolicy, rerender, dispatchMock;
+  let router,
+    policy,
+    mockUsePolicy,
+    policyVersions,
+    mockPaginatedFetch,
+    rerender,
+    dispatchMock;
 
   beforeEach(() => {
     dispatchMock = jest.fn();
@@ -35,6 +43,7 @@ describe("Policy Details", () => {
         id: chance.guid(),
       },
       push: jest.fn(),
+      asPath: chance.string(),
     };
     policy = {
       id: router.query.id,
@@ -47,8 +56,24 @@ describe("Policy Details", () => {
       policy,
       loading: false,
     };
+
+    policyVersions = chance.n(
+      () => ({
+        version: chance.d100(),
+        message: chance.string(),
+        created: chance.timestamp(),
+      }),
+      chance.d4()
+    );
     usePolicy.mockReturnValue(mockUsePolicy);
     useRouter.mockReturnValue(router);
+    mockPaginatedFetch = {
+      data: policyVersions,
+      loading: false,
+      isLastPage: false,
+      goToNextPage: jest.fn(),
+    };
+    usePaginatedFetch.mockReturnValue(mockPaginatedFetch);
     const utils = render(<Policy />, {
       policyState: { searchTerm: "test search term" },
       policyDispatch: dispatchMock,
@@ -76,15 +101,10 @@ describe("Policy Details", () => {
   });
 
   describe("policy has been found", () => {
-    it("should render the policy details once they have been fetched", () => {
+    it("should render the policy header", () => {
       expect(screen.getByText(policy.name)).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
-      expect(
-        screen.getByText(policy.regoContent, { exact: false })
-      ).toBeInTheDocument();
-    });
 
-    it("should render a button to edit the policy", () => {
       const renderedButton = screen.getByText("Edit Policy");
       expect(renderedButton).toBeInTheDocument();
       userEvent.click(renderedButton);
@@ -108,6 +128,30 @@ describe("Policy Details", () => {
       expect(router.push)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith("/playground");
+    });
+
+    it("should render the policy details when no section is specified", () => {
+      expect(
+        screen.getByText(policy.regoContent, { exact: false })
+      ).toBeInTheDocument();
+    });
+
+    it("should render the policy details when the user navigates to that section", () => {
+      router.asPath = `${chance.string()}#details`;
+      rerender(<Policy />);
+
+      expect(
+        screen.getByText(policy.regoContent, { exact: false })
+      ).toBeInTheDocument();
+    });
+
+    it("should render the policy history when the user navigates to that section", () => {
+      router.asPath = `${chance.string()}#history`;
+      rerender(<Policy />);
+
+      policyVersions.forEach((version) => {
+        expect(screen.getByText(version.message)).toBeInTheDocument();
+      });
     });
   });
 

@@ -23,17 +23,15 @@ describe("EvaluateInPlaygroundButton", () => {
   let onClick;
 
   beforeEach(() => {
-    onClick=jest.fn();
+    onClick = jest.fn();
 
-    render(
-      <EvaluateInPlaygroundButton
-        onClick={onClick}
-      />
-    );
+    render(<EvaluateInPlaygroundButton onClick={onClick} />);
   });
 
   it("should render the button", () => {
-    expect(screen.getByLabelText("Evaluate in Policy Playground")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Evaluate in Policy Playground")
+    ).toBeInTheDocument();
   });
 
   it("should call the passed function when pressed", () => {

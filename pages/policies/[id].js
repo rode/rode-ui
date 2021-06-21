@@ -32,8 +32,6 @@ import DetailsNavigation from "components/shared/DetailsNavigation";
 import PolicyHistory from "components/policies/PolicyHistory";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 
-// TODO: tests
-
 const createLinks = (baseUrl) => {
   return [
     {
@@ -44,10 +42,6 @@ const createLinks = (baseUrl) => {
       label: "History",
       href: `${baseUrl}#history`,
     },
-    // {
-    //   label: "Assignments",
-    //   href: `${baseUrl}#assignments`
-    // }
   ];
 };
 

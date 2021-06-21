@@ -22,25 +22,23 @@ describe("DetailsNavigation", () => {
   let links, activeSection;
 
   beforeEach(() => {
-    links = chance.n(() => ({
-      label: chance.string(),
-      href: `/${chance.word()}#${chance.word()}`
-    }), chance.d4() + 2);
-    activeSection = links[0].href.split('#')[1];
-
-    render(
-      <DetailsNavigation
-        links={links}
-        activeSection={activeSection}
-      />
+    links = chance.n(
+      () => ({
+        label: chance.string(),
+        href: `/${chance.word()}#${chance.word()}`,
+      }),
+      chance.d4() + 2
     );
+    activeSection = links[0].href.split("#")[1];
+
+    render(<DetailsNavigation links={links} activeSection={activeSection} />);
   });
 
   it("should render a section for each link passed", () => {
-    links.forEach(({ label, href}) => {
+    links.forEach(({ label, href }) => {
       const renderedSection = screen.getByText(label);
       expect(renderedSection).toBeInTheDocument();
-      expect(renderedSection).toHaveAttribute("href", href)
+      expect(renderedSection).toHaveAttribute("href", href);
     });
   });
 
@@ -48,7 +46,9 @@ describe("DetailsNavigation", () => {
     const renderedActiveSection = screen.getByText(links[0].label);
     expect(renderedActiveSection).toHaveClass("activeLink");
 
-    const renderedInactiveSection = screen.getByText(links[links.length - 1].label);
+    const renderedInactiveSection = screen.getByText(
+      links[links.length - 1].label
+    );
     expect(renderedInactiveSection).toHaveClass("link");
   });
 });
