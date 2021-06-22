@@ -19,13 +19,13 @@ import { render, screen } from "@testing-library/react";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { useResources } from "providers/resources";
+import { usePolicies } from "providers/policies";
 import userEvent from "@testing-library/user-event";
 import { buildResourceQueryParams, RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
-jest.mock("providers/resources");
+jest.mock("providers/policies");
 
 describe("Resources", () => {
   let mockRouter, mockDispatch, mockState, mockFetchResponse;
@@ -48,7 +48,7 @@ describe("Resources", () => {
     };
     useRouter.mockReturnValue(mockRouter);
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       dispatch: mockDispatch,
       state: mockState,
     });

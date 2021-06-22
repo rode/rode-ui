@@ -34,8 +34,6 @@ jest.mock("utils/toast-utils");
 describe("PolicyPlayground", () => {
   let policyState,
     policyDispatch,
-    resourceState,
-    resourceDispatch,
     fetchResponse,
     usePaginatedFetchResponse,
     fetchOccurrencesResponse,
@@ -44,13 +42,10 @@ describe("PolicyPlayground", () => {
   beforeEach(() => {
     policyState = {
       policySearchTerm: chance.string(),
-    };
-    policyDispatch = jest.fn();
-    resourceState = {
       resourceSearchTerm: chance.string(),
       resourceVersionSearchTerm: chance.string(),
     };
-    resourceDispatch = jest.fn();
+    policyDispatch = jest.fn();
     evaluationResults = createMockEvaluationResult();
     fetchResponse = {
       json: jest.fn().mockResolvedValue(evaluationResults),
@@ -83,20 +78,19 @@ describe("PolicyPlayground", () => {
       render(<PolicyPlayground />, {
         policyState,
         policyDispatch,
-        resourceState,
-        resourceDispatch,
       });
     });
 
     it("should clear any search terms set by other searches", () => {
-      expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        type: "SET_RESOURCE_SEARCH_TERM",
-        data: "",
-      });
-      expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        type: "SET_POLICY_SEARCH_TERM",
-        data: "",
-      });
+      expect(policyDispatch)
+        .toHaveBeenCalledWith({
+          type: "SET_RESOURCE_SEARCH_TERM",
+          data: "",
+        })
+        .toHaveBeenCalledWith({
+          type: "SET_POLICY_SEARCH_TERM",
+          data: "",
+        });
     });
 
     it("should render the title and instructions", () => {

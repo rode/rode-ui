@@ -24,12 +24,11 @@ import Home from "pages/index";
 jest.mock("next/router");
 
 describe("index", () => {
-  let searchTerm, pushMock, policyDispatch, resourceDispatch;
+  let searchTerm, pushMock, policyDispatch;
 
   beforeEach(() => {
     pushMock = jest.fn();
     policyDispatch = jest.fn();
-    resourceDispatch = jest.fn();
     searchTerm = chance.string();
     useRouter.mockReturnValue({
       push: pushMock,
@@ -42,31 +41,29 @@ describe("index", () => {
 
   it("should clear any saved search terms", () => {
     render(<Home />, {
-      resourceState: {
-        searchTerm,
-      },
       policyState: {
         policySearchTerm: searchTerm,
+        resourceSearchTerm: searchTerm,
       },
       policyDispatch,
-      resourceDispatch,
     });
-    expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: "SET_RESOURCE_SEARCH_TERM",
-      data: "",
-    });
-    expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: "SET_POLICY_SEARCH_TERM",
-      data: "",
-    });
+    expect(policyDispatch)
+      .toHaveBeenCalledWith({
+        type: "SET_RESOURCE_SEARCH_TERM",
+        data: "",
+      })
+      .toHaveBeenCalledWith({
+        type: "SET_POLICY_SEARCH_TERM",
+        data: "",
+      });
     expect(screen.queryByText(searchTerm)).not.toBeInTheDocument();
   });
 
   describe("resource card", () => {
     it("should render a card for resources and handle a valid search", () => {
       render(<Home />, {
-        resourceState: {
-          searchTerm,
+        policyState: {
+          resourceSearchTerm: searchTerm,
         },
       });
       let renderedSearch = screen.getByLabelText(/search for a resource/i);
@@ -82,8 +79,8 @@ describe("index", () => {
 
     it("should render a card for resources and handle an empty search", () => {
       render(<Home />, {
-        resourceState: {
-          searchTerm: " ",
+        policyState: {
+          resourceSearchTerm: " ",
         },
       });
       let renderedSearch = screen.getByLabelText(/search for a resource/i);

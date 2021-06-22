@@ -15,14 +15,12 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import { createMockOccurrence } from "test/testing-utils/mocks";
 import OccurrenceCodeModal from "components/occurrences/OccurrenceCodeModal";
-import { useResources } from "providers/resources";
 import { copy } from "utils/shared-utils";
 
-jest.mock("providers/resources");
 jest.mock("utils/shared-utils");
 
 describe("OccurrenceCodeModal", () => {
@@ -34,10 +32,6 @@ describe("OccurrenceCodeModal", () => {
 
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
-    });
-
-    useResources.mockReturnValue({
-      state: {},
     });
 
     render(<OccurrenceCodeModal json={occurrence} />);

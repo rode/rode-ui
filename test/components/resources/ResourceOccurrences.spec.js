@@ -22,7 +22,7 @@ import ResourceOccurrences from "components/resources/ResourceOccurrences";
 jest.mock("hooks/useFetch");
 
 describe("ResourceOccurrences", () => {
-  let occurrences, resourceState;
+  let occurrences, policyState;
 
   beforeEach(() => {
     document.getElementById = jest.fn().mockReturnValue({
@@ -37,11 +37,11 @@ describe("ResourceOccurrences", () => {
 
   describe("showing occurrence previews", () => {
     beforeEach(() => {
-      resourceState = {
+      policyState = {
         occurrenceDetails: null,
       };
       render(<ResourceOccurrences occurrences={occurrences} />, {
-        resourceState,
+        policyState,
       });
     });
 
@@ -66,10 +66,10 @@ describe("ResourceOccurrences", () => {
   });
 
   it("should render the occurrence details if they should be shown", () => {
-    resourceState.occurrenceDetails = occurrences.build[0];
+    policyState.occurrenceDetails = occurrences.build[0];
 
     render(<ResourceOccurrences occurrences={occurrences} />, {
-      resourceState,
+      policyState,
     });
 
     expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();

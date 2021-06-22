@@ -27,12 +27,7 @@ jest.mock("next/router");
 jest.mock("hooks/useFetch");
 
 describe("Resource Details page", () => {
-  let resourceState,
-    router,
-    policyDispatch,
-    resourceDispatch,
-    unmount,
-    rerender;
+  let policyState, router, policyDispatch, unmount, rerender;
 
   beforeEach(() => {
     const resourceUri = createMockResourceUri();
@@ -43,7 +38,7 @@ describe("Resource Details page", () => {
       push: jest.fn(),
     };
 
-    resourceState = {
+    policyState = {
       currentResource: {
         ...getResourceDetails(resourceUri),
       },
@@ -55,12 +50,10 @@ describe("Resource Details page", () => {
     });
 
     policyDispatch = jest.fn();
-    resourceDispatch = jest.fn();
 
     useRouter.mockReturnValue(router);
     const utils = render(<Resource />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
       policyDispatch,
     });
     rerender = utils.rerender;
@@ -72,7 +65,7 @@ describe("Resource Details page", () => {
   });
 
   it("should clear the occurrence details on load", () => {
-    expect(resourceDispatch).toHaveBeenCalledWith({
+    expect(policyDispatch).toHaveBeenCalledWith({
       type: "SET_OCCURRENCE_DETAILS",
       data: null,
     });
@@ -80,7 +73,7 @@ describe("Resource Details page", () => {
 
   it("should clear the current resource on unmount", () => {
     unmount();
-    expect(resourceDispatch).toHaveBeenCalledWith({
+    expect(policyDispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_RESOURCE",
       data: {},
     });
@@ -90,8 +83,7 @@ describe("Resource Details page", () => {
     useFetch.mockClear();
     router.query.resourceUri = null;
     rerender(<Resource />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
       policyDispatch,
     });
     expect(useFetch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(null, {
@@ -102,8 +94,7 @@ describe("Resource Details page", () => {
   it("should call to fetch the occurrences if a uri is specified", () => {
     useFetch.mockReturnValue({});
     render(<Resource />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
       policyDispatch,
     });
     expect(useFetch)
@@ -119,8 +110,7 @@ describe("Resource Details page", () => {
     });
 
     rerender(<Resource />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
       policyDispatch,
     });
 
@@ -167,14 +157,12 @@ describe("Resource Details page", () => {
     expect(renderedButton).toBeInTheDocument();
     userEvent.click(renderedButton);
 
-    expect(policyDispatch)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith({
-        type: "SET_EVALUATION_RESOURCE",
-        data: {
-          versionedResourceUri: router.query.resourceUri,
-        },
-      });
+    expect(policyDispatch).toHaveBeenCalledWith({
+      type: "SET_EVALUATION_RESOURCE",
+      data: {
+        versionedResourceUri: router.query.resourceUri,
+      },
+    });
 
     expect(router.push)
       .toHaveBeenCalledTimes(1)

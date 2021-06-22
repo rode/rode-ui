@@ -29,15 +29,15 @@ jest.mock("hooks/usePaginatedFetch");
 describe("ChangeVersionDrawer", () => {
   let isOpen,
     closeDrawer,
-    resourceState,
+    policyState,
     paginatedFetchResponse,
-    resourceDispatch,
+    policyDispatch,
     router;
 
   beforeEach(() => {
     isOpen = true;
     closeDrawer = jest.fn();
-    resourceState = {
+    policyState = {
       currentResource: {
         resourceName: chance.string(),
         resourceVersion: chance.string(),
@@ -46,7 +46,7 @@ describe("ChangeVersionDrawer", () => {
       },
       resourceVersionSearchTerm: "all",
     };
-    resourceDispatch = jest.fn();
+    policyDispatch = jest.fn();
     paginatedFetchResponse = {
       data: [],
       loading: false,
@@ -67,37 +67,37 @@ describe("ChangeVersionDrawer", () => {
   });
 
   it("should not call to fetch the versions if there is no resource selected", () => {
-    resourceState.currentResource = {};
+    policyState.currentResource = {};
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(null, { id: undefined }, 10);
   });
 
   it("should call to fetch the versions when a resource is selected", () => {
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
-      { id: resourceState.currentResource.genericName },
+      { id: policyState.currentResource.genericName },
       10
     );
   });
 
   it("should call to fetch the versions when a resource is selected and a search term is specified", () => {
     const searchTerm = chance.string();
-    resourceState.resourceVersionSearchTerm = searchTerm;
+    policyState.resourceVersionSearchTerm = searchTerm;
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: policyState.currentResource.genericName,
         filter: `version.contains("${searchTerm}")`,
       },
       10
@@ -107,8 +107,8 @@ describe("ChangeVersionDrawer", () => {
   it("should render a loading indicator when fetching the data", () => {
     paginatedFetchResponse.loading = true;
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
@@ -116,8 +116,8 @@ describe("ChangeVersionDrawer", () => {
 
   it("should show a not found message if no data is found for the resource", () => {
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
 
     expect(screen.getByText(/no versions found matching the given criteria./i));
@@ -126,10 +126,10 @@ describe("ChangeVersionDrawer", () => {
   it("should set the search term to all when the drawer is closed", () => {
     isOpen = false;
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
-    expect(resourceDispatch).toHaveBeenCalledWith({
+    expect(policyDispatch).toHaveBeenCalledWith({
       type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
     });
@@ -137,8 +137,8 @@ describe("ChangeVersionDrawer", () => {
 
   it("should render the version search bar", () => {
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
+      policyState,
+      policyDispatch,
     });
 
     const renderedSearchBar = screen.getByLabelText(/search for a version/i);
@@ -151,7 +151,7 @@ describe("ChangeVersionDrawer", () => {
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: policyState.currentResource.genericName,
       },
       10
     );
@@ -160,7 +160,7 @@ describe("ChangeVersionDrawer", () => {
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: policyState.currentResource.genericName,
       },
       10
     );
@@ -179,17 +179,17 @@ describe("ChangeVersionDrawer", () => {
       );
       paginatedFetchResponse.data[0].versionedResourceUri = createMockResourceUri(
         name,
-        resourceState.currentResource.resourceVersion
+        policyState.currentResource.resourceVersion
       );
       render(
         <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
-        { resourceState, resourceDispatch }
+        { policyState, policyDispatch }
       );
     });
 
     it("should render the instructions", () => {
       expect(
-        screen.getByText(resourceState.currentResource.resourceName)
+        screen.getByText(policyState.currentResource.resourceName)
       ).toBeInTheDocument();
       expect(
         screen.getByText(
@@ -224,7 +224,7 @@ describe("ChangeVersionDrawer", () => {
       );
       userEvent.click(versionToSelect);
       expect(router.push).toHaveBeenCalledWith(`/resources/${versionUri}`);
-      expect(resourceDispatch).toHaveBeenCalledWith({
+      expect(policyDispatch).toHaveBeenCalledWith({
         type: "SET_OCCURRENCE_DETAILS",
         data: null,
       });

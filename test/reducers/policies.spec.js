@@ -99,4 +99,64 @@ describe("policies reducer", () => {
       currentPolicyGroup: data,
     });
   });
+
+  it("should update state when the action type is 'SET_RESOURCE_SEARCH_TERM'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      resourceSearchTerm: data,
+    });
+  });
+
+  it("should update state when the action type is 'SET_OCCURRENCE_DETAILS'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_OCCURRENCE_DETAILS,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      occurrenceDetails: data,
+    });
+  });
+
+  it("should update state when the action type is 'SET_CURRENT_RESOURCE'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_CURRENT_RESOURCE,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      currentResource: data,
+    });
+  });
+
+  it("should update state when the action type is 'SET_RESOURCE_VERSION_SEARCH_TERM'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      resourceVersionSearchTerm: data,
+    });
+  });
+
+  it("should update state when the action type is 'SET_RESOURCE_TYPE_SEARCH_FILTER'", () => {
+    const actual = policyReducer(state, {
+      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      data,
+    });
+
+    expect(actual).toEqual({
+      ...state,
+      resourceTypeSearchFilter: data,
+    });
+  });
 });

@@ -19,8 +19,8 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Occurrences.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const OccurrencePreview = ({
   mainText,
@@ -29,7 +29,7 @@ const OccurrencePreview = ({
   currentOccurrence,
 }) => {
   const [isActive, setIsActive] = useState(false);
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
 
   useEffect(() => {
     setIsActive(
@@ -40,7 +40,7 @@ const OccurrencePreview = ({
 
   const onClick = () => {
     dispatch({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      type: policyActions.SET_OCCURRENCE_DETAILS,
       data: isActive ? null : currentOccurrence,
     });
   };

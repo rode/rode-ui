@@ -63,8 +63,8 @@ describe("ResourceSearchAndResults", () => {
         selectedResource={selectedResource}
       />,
       {
-        resourceState: state,
-        resourceDispatch: dispatch,
+        policyState: state,
+        policyDispatch: dispatch,
       }
     );
     rerender = utils.rerender;

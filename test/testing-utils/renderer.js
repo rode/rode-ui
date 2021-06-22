@@ -16,7 +16,6 @@
 
 import React from "react";
 import { render as rtlRender } from "@testing-library/react";
-import { ResourcesProvider } from "providers/resources";
 import { PoliciesProvider } from "providers/policies";
 import { ThemeProvider } from "providers/theme";
 import { LIGHT_THEME } from "utils/constants";
@@ -25,10 +24,8 @@ import { ToastContainer } from "react-toastify";
 const render = (
   Component,
   {
-    resourceState = {},
     policyState = {},
     theme = LIGHT_THEME,
-    resourceDispatch = jest.fn(),
     policyDispatch = jest.fn(),
     ...options
   } = {}
@@ -36,16 +33,12 @@ const render = (
   // eslint-disable-next-line react/prop-types
   const Wrapper = ({ children }) => (
     <ThemeProvider value={{ theme, toggleTheme: jest.fn() }}>
-      <ResourcesProvider
-        value={{ state: resourceState, dispatch: resourceDispatch }}
+      <PoliciesProvider
+        value={{ state: policyState, dispatch: policyDispatch }}
       >
-        <PoliciesProvider
-          value={{ state: policyState, dispatch: policyDispatch }}
-        >
-          <ToastContainer />
-          {children}
-        </PoliciesProvider>
-      </ResourcesProvider>
+        <ToastContainer />
+        {children}
+      </PoliciesProvider>
     </ThemeProvider>
   );
   return rtlRender(Component, { wrapper: Wrapper, ...options });

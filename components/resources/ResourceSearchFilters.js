@@ -16,17 +16,17 @@
 
 import React from "react";
 import styles from "styles/modules/Search.module.scss";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import Dropdown from "components/Dropdown";
 import { resourceFilters } from "utils/resource-utils";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const ResourceSearchFilters = () => {
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
 
   const onChange = (selectedValues) => {
     dispatch({
-      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: selectedValues,
     });
   };

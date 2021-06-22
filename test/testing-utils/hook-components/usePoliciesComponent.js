@@ -27,8 +27,6 @@ const PolicyComponent = ({ newSearchTerm }) => {
       {Object.keys(state).map((key) => (
         <div key={key}>
           <h1>{key}</h1>
-          <span>:</span>
-          <h2>{state[key]}</h2>
         </div>
       ))}
       <button
@@ -41,6 +39,7 @@ const PolicyComponent = ({ newSearchTerm }) => {
       >
         Update search term
       </button>
+      <p>{state.policySearchTerm}</p>
     </>
   );
 };

@@ -17,8 +17,6 @@
 import React, { useEffect } from "react";
 import styles from "styles/modules/Home.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useTheme } from "providers/theme";
 import { usePolicies } from "providers/policies";
@@ -30,16 +28,15 @@ import { SEARCH_ALL } from "utils/constants";
 const Home = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { state: resourceState, dispatch: resourceDispatch } = useResources();
-  const { state: policyState, dispatch: policyDispatch } = usePolicies();
+  const { state, dispatch } = usePolicies();
 
   useEffect(() => {
-    resourceDispatch({
-      type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+    dispatch({
+      type: policyActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
 
-    policyDispatch({
+    dispatch({
       type: policyActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
@@ -60,7 +57,7 @@ const Home = () => {
       <div className={styles.card}>
         <ResourceSearchBar
           onSubmit={(event) =>
-            onSubmit(event, "resources", resourceState.searchTerm)
+            onSubmit(event, "resources", state.resourceSearchTerm)
           }
           helpText={
             <>
@@ -76,7 +73,7 @@ const Home = () => {
       <div className={styles.card}>
         <PolicySearchBar
           onSubmit={(event) =>
-            onSubmit(event, "policies", policyState.policySearchTerm)
+            onSubmit(event, "policies", state.policySearchTerm)
           }
           helpText={
             <>

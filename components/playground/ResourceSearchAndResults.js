@@ -19,8 +19,6 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
-import { resourceActions } from "reducers/resources";
-import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import {
@@ -33,11 +31,13 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
   const debouncedSearch = useDebouncedValue(
     state.resourceSearchTerm,
     debounceDelay
@@ -58,7 +58,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
             // TODO: test this logic
             if (!state.resourceSearchTerm.length) {
               dispatch({
-                type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+                type: policyActions.SET_RESOURCE_SEARCH_TERM,
                 data: SEARCH_ALL,
               });
             }
@@ -80,7 +80,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
               onClick={() => {
                 setResourceSearch(true);
                 dispatch({
-                  type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+                  type: policyActions.SET_RESOURCE_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

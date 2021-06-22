@@ -19,11 +19,11 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
+import { policyActions } from "reducers/policies";
+import { usePolicies } from "providers/policies";
 
 jest.mock("dayjs");
-jest.mock("providers/resources");
+jest.mock("providers/policies");
 
 describe("OccurrencePreview", () => {
   let mainText,
@@ -44,7 +44,7 @@ describe("OccurrencePreview", () => {
     };
     dispatchMock = jest.fn();
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: {
         occurrenceDetails: {
           originals: { occurrences: [{ name: chance.string() }] },
@@ -83,11 +83,11 @@ describe("OccurrencePreview", () => {
     expect(screen.getByTitle(/chevron right/i)).toBeInTheDocument();
     userEvent.click(screen.getByText(mainText));
     expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      type: policyActions.SET_OCCURRENCE_DETAILS,
       data: currentOccurrence,
     });
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: {
         occurrenceDetails: {
           originals: { occurrences: [{ name: expectedOccurrenceName }] },
@@ -109,7 +109,7 @@ describe("OccurrencePreview", () => {
     userEvent.click(screen.getByText(mainText));
 
     expect(dispatchMock).toHaveBeenCalledTimes(2).toHaveBeenCalledWith({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      type: policyActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
   });

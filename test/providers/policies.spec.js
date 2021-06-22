@@ -21,13 +21,13 @@ import PolicyComponent from "test/testing-utils/hook-components/usePoliciesCompo
 import { PoliciesProvider } from "providers/policies";
 
 describe("policies provider", () => {
-  let policySearchTerm;
+  let searchTerm;
 
   beforeEach(() => {
-    policySearchTerm = chance.string();
+    searchTerm = chance.string();
     render(
       <PoliciesProvider>
-        <PolicyComponent newSearchTerm={policySearchTerm} />
+        <PolicyComponent newSearchTerm={searchTerm} />
       </PoliciesProvider>
     );
   });
@@ -43,6 +43,11 @@ describe("policies provider", () => {
     expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
     expect(screen.getByText(/currentPolicyGroup/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceSearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceVersionSearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceTypeSearchFilter/i)).toBeInTheDocument();
+    expect(screen.getByText(/occurrenceDetails/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentResource/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {
@@ -50,6 +55,6 @@ describe("policies provider", () => {
 
     userEvent.click(dispatchButton);
 
-    expect(screen.getByText(policySearchTerm)).toBeInTheDocument();
+    expect(screen.getByText(searchTerm)).toBeInTheDocument();
   });
 });

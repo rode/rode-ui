@@ -19,20 +19,20 @@ import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
-import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
-import { resourceActions } from "reducers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const Resources = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
   const debouncedSearch = useDebouncedValue(state.resourceSearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
@@ -54,7 +54,7 @@ const Resources = () => {
 
   const viewAllResources = () => {
     dispatch({
-      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
     router.push(`/resources?search=${SEARCH_ALL}`);
@@ -62,7 +62,7 @@ const Resources = () => {
 
   useEffect(() => {
     dispatch({
-      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
   }, []);
@@ -71,13 +71,13 @@ const Resources = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+        type: policyActions.SET_RESOURCE_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+        type: policyActions.SET_RESOURCE_SEARCH_TERM,
         data: SEARCH_ALL,
       });
     }

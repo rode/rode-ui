@@ -18,9 +18,9 @@ import React from "react";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { useResources } from "providers/resources";
+import { usePolicies } from "providers/policies";
 
-jest.mock("providers/resources");
+jest.mock("providers/policies");
 
 describe("ResourceSearchBar", () => {
   let onSubmit, dispatchMock, rerender;
@@ -29,7 +29,7 @@ describe("ResourceSearchBar", () => {
     onSubmit = jest.fn();
     dispatchMock = jest.fn();
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { resourceSearchTerm: "" },
       dispatch: dispatchMock,
     });
@@ -107,7 +107,7 @@ describe("ResourceSearchBar", () => {
   it("should start the search process when the button is clicked", () => {
     const searchTerm = chance.string();
 
-    useResources.mockReturnValue({
+    usePolicies.mockReturnValue({
       state: { searchTerm },
       dispatch: jest.fn(),
     });

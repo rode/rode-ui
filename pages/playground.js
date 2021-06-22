@@ -22,16 +22,13 @@ import { showError } from "utils/toast-utils";
 import EvaluationResult from "components/playground/EvaluationResult";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
-  const { state, dispatch: policyDispatch } = usePolicies();
-  const { dispatch: resourceDispatch } = useResources();
+  const { state, dispatch } = usePolicies();
 
   const [evaluationResults, setEvaluationResults] = useState(null);
   const [evaluationLoading, setEvaluationLoading] = useState(false);
@@ -67,11 +64,11 @@ const PolicyPlayground = () => {
   };
 
   const resetPlayground = () => {
-    policyDispatch({
+    dispatch({
       type: policyActions.SET_EVALUATION_RESOURCE,
       data: null,
     });
-    policyDispatch({
+    dispatch({
       type: policyActions.SET_EVALUATION_POLICY,
       data: null,
     });
@@ -79,11 +76,11 @@ const PolicyPlayground = () => {
   };
 
   useEffect(() => {
-    resourceDispatch({
-      type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+    dispatch({
+      type: policyActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
-    policyDispatch({
+    dispatch({
       type: policyActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
@@ -105,7 +102,7 @@ const PolicyPlayground = () => {
         <SelectedPolicy
           policy={state.evaluationPolicy}
           setPolicy={(data) =>
-            policyDispatch({
+            dispatch({
               type: policyActions.SET_EVALUATION_POLICY,
               data,
             })
@@ -117,7 +114,7 @@ const PolicyPlayground = () => {
         <SelectedResource
           resourceUri={state.evaluationResource?.versionedResourceUri}
           setEvaluationResource={(data) =>
-            policyDispatch({
+            dispatch({
               type: policyActions.SET_EVALUATION_RESOURCE,
               data,
             })

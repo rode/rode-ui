@@ -16,13 +16,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import SearchBar from "components/shared/SearchBar";
 import { SEARCH_ALL } from "utils/constants";
+import { usePolicies } from "providers/policies";
+import { policyActions } from "reducers/policies";
 
 const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = usePolicies();
 
   const onSearchChange = (event) => {
     if (onChange) {
@@ -30,7 +30,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
     }
 
     dispatch({
-      type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+      type: policyActions.SET_RESOURCE_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };

@@ -26,6 +26,11 @@ const initialState = {
   evaluationResource: null,
   evaluationPolicy: null,
   currentPolicyGroup: null,
+  resourceSearchTerm: "",
+  resourceVersionSearchTerm: "",
+  resourceTypeSearchFilter: [],
+  occurrenceDetails: null,
+  currentResource: {},
 };
 
 export const PoliciesProvider = ({ value, children }) => {

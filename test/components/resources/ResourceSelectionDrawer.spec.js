@@ -69,8 +69,8 @@ describe("ResourceSelectionDrawer", () => {
         setEvaluationResource={setEvaluationResource}
       />,
       {
-        resourceDispatch: dispatch,
-        resourceState: state,
+        policyDispatch: dispatch,
+        policyState: state,
       }
     );
   });
