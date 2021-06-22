@@ -36,7 +36,7 @@ describe("ResourceVersionSearchAndResults", () => {
   beforeEach(() => {
     onVersionSelect = jest.fn();
     state = {
-      versionSearchTerm: chance.string(),
+      resourceVersionSearchTerm: chance.string(),
     };
     dispatch = jest.fn();
     fetchedVersions = chance.n(() => {
@@ -63,7 +63,7 @@ describe("ResourceVersionSearchAndResults", () => {
   });
 
   it("should use the correct params when no search term is specified", () => {
-    state.versionSearchTerm = null;
+    state.resourceVersionSearchTerm = null;
     render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
@@ -102,14 +102,14 @@ describe("ResourceVersionSearchAndResults", () => {
       "/api/resource-versions",
       {
         id: selectedResource.id,
-        filter: `version.contains("${state.versionSearchTerm}")`,
+        filter: `version.contains("${state.resourceVersionSearchTerm}")`,
       },
       5
     );
   });
 
   it("should use the correct params when searching for all versions", () => {
-    state.versionSearchTerm = "all";
+    state.resourceVersionSearchTerm = "all";
     render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
@@ -156,7 +156,7 @@ describe("ResourceVersionSearchAndResults", () => {
       expect(renderedViewAllResourcesButton).toBeInTheDocument();
       userEvent.click(renderedViewAllResourcesButton);
       expect(dispatch).toHaveBeenCalledWith({
-        type: "SET_VERSION_SEARCH_TERM",
+        type: "SET_RESOURCE_VERSION_SEARCH_TERM",
         data: "all",
       });
     });

@@ -90,7 +90,7 @@ describe("ResourceSelectionDrawer", () => {
         data: "",
       })
       .toHaveBeenCalledWith({
-        type: "SET_VERSION_SEARCH_TERM",
+        type: "SET_RESOURCE_VERSION_SEARCH_TERM",
         data: "",
       });
 

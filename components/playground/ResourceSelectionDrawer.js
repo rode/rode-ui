@@ -47,7 +47,7 @@ const ResourceSelectionDrawer = ({
       data: "",
     });
     dispatch({
-      type: resourceActions.SET_VERSION_SEARCH_TERM,
+      type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
       data: "",
     });
   };

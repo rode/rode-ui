@@ -48,7 +48,10 @@ const ChangeVersionDrawer = (props) => {
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     genericName ? "/api/resource-versions" : null,
-    buildResourceVersionQueryParams(genericName, state.versionSearchTerm),
+    buildResourceVersionQueryParams(
+      genericName,
+      state.resourceVersionSearchTerm
+    ),
     10
   );
 
@@ -64,7 +67,7 @@ const ChangeVersionDrawer = (props) => {
   useEffect(() => {
     if (!isOpen) {
       dispatch({
-        type: resourceActions.SET_VERSION_SEARCH_TERM,
+        type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
         data: SEARCH_ALL,
       });
     }
@@ -90,7 +93,7 @@ const ChangeVersionDrawer = (props) => {
               label={"View all versions"}
               onClick={() => {
                 dispatch({
-                  type: resourceActions.SET_VERSION_SEARCH_TERM,
+                  type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

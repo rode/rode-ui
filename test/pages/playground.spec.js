@@ -48,7 +48,7 @@ describe("PolicyPlayground", () => {
     policyDispatch = jest.fn();
     resourceState = {
       resourceSearchTerm: chance.string(),
-      versionSearchTerm: chance.string(),
+      resourceVersionSearchTerm: chance.string(),
     };
     resourceDispatch = jest.fn();
     evaluationResults = createMockEvaluationResult();

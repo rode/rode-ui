@@ -44,7 +44,7 @@ describe("ChangeVersionDrawer", () => {
         genericName: chance.string(),
         uri: createMockResourceUri(),
       },
-      versionSearchTerm: "all",
+      resourceVersionSearchTerm: "all",
     };
     resourceDispatch = jest.fn();
     paginatedFetchResponse = {
@@ -89,7 +89,7 @@ describe("ChangeVersionDrawer", () => {
 
   it("should call to fetch the versions when a resource is selected and a search term is specified", () => {
     const searchTerm = chance.string();
-    resourceState.versionSearchTerm = searchTerm;
+    resourceState.resourceVersionSearchTerm = searchTerm;
     render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
       resourceState,
       resourceDispatch,
@@ -130,7 +130,7 @@ describe("ChangeVersionDrawer", () => {
       resourceDispatch,
     });
     expect(resourceDispatch).toHaveBeenCalledWith({
-      type: "SET_VERSION_SEARCH_TERM",
+      type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
     });
   });

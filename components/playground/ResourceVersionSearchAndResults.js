@@ -41,7 +41,7 @@ const ResourceVersionSearchAndResults = ({
   const { state, dispatch } = useResources();
 
   const debouncedSearch = useDebouncedValue(
-    state.versionSearchTerm,
+    state.resourceVersionSearchTerm,
     debounceDelay
   );
 
@@ -74,7 +74,7 @@ const ResourceVersionSearchAndResults = ({
             onClick={() => {
               setVersionSearch(true);
               dispatch({
-                type: resourceActions.SET_VERSION_SEARCH_TERM,
+                type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
                 data: SEARCH_ALL,
               });
             }}
@@ -129,7 +129,7 @@ const ResourceVersionSearchAndResults = ({
               )}
             </>
           ) : (
-            <p>{`No versions found matching "${state.versionSearchTerm}"`}</p>
+            <p>{`No versions found matching "${state.resourceVersionSearchTerm}"`}</p>
           )}
         </Loading>
       )}

@@ -29,7 +29,7 @@ describe("ResourceVersionSearchBar", () => {
     dispatchMock = jest.fn();
 
     useResources.mockReturnValue({
-      state: { versionSearchTerm: "" },
+      state: { resourceVersionSearchTerm: "" },
       dispatch: dispatchMock,
     });
 
@@ -52,7 +52,7 @@ describe("ResourceVersionSearchBar", () => {
     expect(dispatchMock)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_VERSION_SEARCH_TERM",
+        type: "SET_RESOURCE_VERSION_SEARCH_TERM",
         data: expect.any(String),
       });
   });
@@ -70,7 +70,7 @@ describe("ResourceVersionSearchBar", () => {
     expect(dispatchMock)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_VERSION_SEARCH_TERM",
+        type: "SET_RESOURCE_VERSION_SEARCH_TERM",
         data: expect.any(String),
       });
     expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
@@ -88,7 +88,7 @@ describe("ResourceVersionSearchBar", () => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
     expect(dispatchMock).toHaveBeenLastCalledWith({
-      type: "SET_VERSION_SEARCH_TERM",
+      type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
     });
   });
@@ -108,10 +108,10 @@ describe("ResourceVersionSearchBar", () => {
   });
 
   it("should start the search process when the button is clicked", () => {
-    const versionSearchTerm = chance.string();
+    const resourceVersionSearchTerm = chance.string();
 
     useResources.mockReturnValue({
-      state: { versionSearchTerm },
+      state: { resourceVersionSearchTerm },
       dispatch: jest.fn(),
     });
     rerender(<ResourceVersionSearchBar onSubmit={onSubmit} />);

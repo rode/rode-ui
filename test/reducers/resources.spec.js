@@ -76,15 +76,15 @@ describe("resources reducer", () => {
     });
   });
 
-  it("should update state when the action type is 'SET_VERSION_SEARCH_TERM'", () => {
+  it("should update state when the action type is 'SET_RESOURCE_VERSION_SEARCH_TERM'", () => {
     const actual = resourceReducer(state, {
-      type: resourceActions.SET_VERSION_SEARCH_TERM,
+      type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
       data,
     });
 
     expect(actual).toEqual({
       ...state,
-      versionSearchTerm: data,
+      resourceVersionSearchTerm: data,
     });
   });
 

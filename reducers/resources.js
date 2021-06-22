@@ -21,10 +21,10 @@ const setResourceSearchTerm = (state, data) => {
   };
 };
 
-const setVersionSearchTerm = (state, data) => {
+const setResourceVersionSearchTerm = (state, data) => {
   return {
     ...state,
-    versionSearchTerm: data,
+    resourceVersionSearchTerm: data,
   };
 };
 
@@ -53,7 +53,7 @@ const actionMap = {
   SET_RESOURCE_SEARCH_TERM: setResourceSearchTerm,
   SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
   SET_CURRENT_RESOURCE: setCurrentResource,
-  SET_VERSION_SEARCH_TERM: setVersionSearchTerm,
+  SET_RESOURCE_VERSION_SEARCH_TERM: setResourceVersionSearchTerm,
   SET_TYPE_FILTER: setTypeFilter,
 };
 
@@ -67,6 +67,6 @@ export const resourceActions = {
   SET_RESOURCE_SEARCH_TERM: "SET_RESOURCE_SEARCH_TERM",
   SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
   SET_CURRENT_RESOURCE: "SET_CURRENT_RESOURCE",
-  SET_VERSION_SEARCH_TERM: "SET_VERSION_SEARCH_TERM",
+  SET_RESOURCE_VERSION_SEARCH_TERM: "SET_RESOURCE_VERSION_SEARCH_TERM",
   SET_TYPE_FILTER: "SET_TYPE_FILTER",
 };

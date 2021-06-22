@@ -30,7 +30,7 @@ const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
     }
 
     dispatch({
-      type: resourceActions.SET_VERSION_SEARCH_TERM,
+      type: resourceActions.SET_RESOURCE_VERSION_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
@@ -42,7 +42,7 @@ const ResourceVersionSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onBlur={onBlur}
       label={"Search for a version"}
       name={"resourceVersionSearch"}
-      searchTerm={state.versionSearchTerm}
+      searchTerm={state.resourceVersionSearchTerm}
       helpText={helpText}
       buttonLabel={"Search Versions"}
     />
