@@ -7,14 +7,14 @@
           {
             "id": "1234",
             "pass": true,
-            "message": "This rule passed.",
-          },
-        ],
-      },
+            "message": "This rule passed."
+          }
+        ]
+      }
     ],
     "explanation": {
-      "0": "This is a passing evaluation explanation",
-    },
+      "0": "This is a passing evaluation explanation"
+    }
   },
   "fails": {
     "pass": false,
@@ -24,13 +24,13 @@
           {
             "id": "abcd",
             "pass": false,
-            "message": "This rule failed.",
-          },
-        ],
-      },
+            "message": "This rule failed."
+          }
+        ]
+      }
     ],
     "explanation": {
-      "0": "This is a failed evaluation explanation",
-    },
+      "0": "This is a failed evaluation explanation"
+    }
   }
 }
