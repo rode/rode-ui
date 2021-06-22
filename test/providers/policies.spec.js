@@ -21,13 +21,13 @@ import PolicyComponent from "test/testing-utils/hook-components/usePoliciesCompo
 import { PoliciesProvider } from "providers/policies";
 
 describe("policies provider", () => {
-  let searchTerm;
+  let policySearchTerm;
 
   beforeEach(() => {
-    searchTerm = chance.string();
+    policySearchTerm = chance.string();
     render(
       <PoliciesProvider>
-        <PolicyComponent newSearchTerm={searchTerm} />
+        <PolicyComponent newSearchTerm={policySearchTerm} />
       </PoliciesProvider>
     );
   });
@@ -38,7 +38,7 @@ describe("policies provider", () => {
   });
 
   it("should render the default state keys", () => {
-    expect(screen.getByText(/searchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/policySearchTerm/i)).toBeInTheDocument();
     expect(screen.getByText(/^currentPolicy$/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
@@ -50,6 +50,6 @@ describe("policies provider", () => {
 
     userEvent.click(dispatchButton);
 
-    expect(screen.getByText(searchTerm)).toBeInTheDocument();
+    expect(screen.getByText(policySearchTerm)).toBeInTheDocument();
   });
 });

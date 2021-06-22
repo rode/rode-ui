@@ -34,6 +34,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 
+// TODO: fix searching for resource/version when you press the submit button to set search term or default to show all
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);

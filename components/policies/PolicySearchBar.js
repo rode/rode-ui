@@ -29,7 +29,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onChange();
     }
     dispatch({
-      type: policyActions.SET_SEARCH_TERM,
+      type: policyActions.SET_POLICY_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
@@ -41,7 +41,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onBlur={onBlur}
       label={"Search for a policy"}
       name={"policySearch"}
-      searchTerm={state.searchTerm}
+      searchTerm={state.policySearchTerm}
       placeholder={"ex: max-severe-vulnerabilities"}
       helpText={helpText}
       buttonLabel={"Search Policies"}

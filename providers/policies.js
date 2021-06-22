@@ -21,7 +21,7 @@ import { policyReducer } from "reducers/policies";
 const PolicyContext = createContext();
 
 const initialState = {
-  searchTerm: "",
+  policySearchTerm: "",
   currentPolicy: null,
   evaluationResource: null,
   evaluationPolicy: null,

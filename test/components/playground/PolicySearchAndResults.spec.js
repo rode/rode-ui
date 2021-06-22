@@ -36,7 +36,7 @@ describe("PolicySearchAndResults", () => {
     setPolicy = jest.fn();
     clearEvaluation = jest.fn();
     state = {
-      searchTerm: chance.string(),
+      policySearchTerm: chance.string(),
     };
     dispatch = jest.fn();
     fetchedPolicies = chance.n(
@@ -100,7 +100,7 @@ describe("PolicySearchAndResults", () => {
     expect(renderedViewAllPoliciesButton).toBeInTheDocument();
     userEvent.click(renderedViewAllPoliciesButton);
     expect(dispatch).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_POLICY_SEARCH_TERM",
       data: "all",
     });
   });
@@ -114,7 +114,7 @@ describe("PolicySearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/policies",
       {
-        filter: state.searchTerm,
+        filter: state.policySearchTerm,
       },
       5
     );
@@ -137,7 +137,7 @@ describe("PolicySearchAndResults", () => {
     userEvent.click(screen.getAllByText("Select Policy")[0]);
     expect(setPolicy).toHaveBeenCalledWith(fetchedPolicies[0]);
     expect(dispatch).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_POLICY_SEARCH_TERM",
       data: "",
     });
   });

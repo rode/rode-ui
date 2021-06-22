@@ -21,18 +21,19 @@ import { usePolicies } from "providers/policies";
 
 jest.mock("providers/policies");
 
+// TODO: convert these tests to use test renderer instead of mocking hook
 describe("PolicyBreadcrumbs", () => {
-  let searchTerm;
+  let policySearchTerm;
 
   beforeEach(() => {
-    searchTerm = chance.string();
+    policySearchTerm = chance.string();
   });
 
   describe("searchTerm exists", () => {
     beforeEach(() => {
       usePolicies.mockReturnValue({
         state: {
-          searchTerm,
+          policySearchTerm: policySearchTerm,
         },
       });
 
@@ -44,20 +45,20 @@ describe("PolicyBreadcrumbs", () => {
     });
 
     it("should return a breadcrumb for the search term", () => {
-      const renderedSearchTermLink = screen.getByText(searchTerm, {
+      const renderedSearchTermLink = screen.getByText(policySearchTerm, {
         exact: false,
       });
       expect(renderedSearchTermLink).toBeInTheDocument();
       expect(renderedSearchTermLink).toHaveAttribute(
         "href",
-        `/policies?search=${encodeURIComponent(searchTerm)}`
+        `/policies?search=${encodeURIComponent(policySearchTerm)}`
       );
     });
 
     it("should return the correct breadcrumb when viewing all policies", () => {
       usePolicies.mockReturnValue({
         state: {
-          searchTerm: "all",
+          policySearchTerm: "all",
         },
       });
 
@@ -75,7 +76,7 @@ describe("PolicyBreadcrumbs", () => {
       });
 
       render(<PolicyBreadcrumbs />);
-      expect(screen.queryByText(searchTerm)).toBeNull();
+      expect(screen.queryByText(policySearchTerm)).toBeNull();
     });
   });
 });

@@ -15,26 +15,24 @@
  */
 
 import React from "react";
-import { cleanup, render, screen, act } from "@testing-library/react";
+import { cleanup, render, screen, act } from "test/testing-utils/renderer";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { usePolicies } from "providers/policies";
-
-jest.mock("providers/policies");
 
 describe("PolicySearchBar", () => {
-  let onSubmit, dispatchMock, rerender;
+  let onSubmit, state, dispatchMock, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     onSubmit = jest.fn();
     dispatchMock = jest.fn();
+    state = {
+      policySearchTerm: "",
+    };
 
-    usePolicies.mockReturnValue({
-      state: { searchTerm: "" },
-      dispatch: dispatchMock,
+    const utils = render(<PolicySearchBar onSubmit={onSubmit} />, {
+      policyState: state,
+      policyDispatch: dispatchMock,
     });
-
-    const utils = render(<PolicySearchBar onSubmit={onSubmit} />);
     rerender = utils.rerender;
   });
 
@@ -53,7 +51,7 @@ describe("PolicySearchBar", () => {
     expect(dispatchMock)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_SEARCH_TERM",
+        type: "SET_POLICY_SEARCH_TERM",
         data: expect.any(String),
       });
   });
@@ -69,7 +67,7 @@ describe("PolicySearchBar", () => {
     expect(dispatchMock)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_SEARCH_TERM",
+        type: "SET_POLICY_SEARCH_TERM",
         data: expect.any(String),
       });
     expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
@@ -87,7 +85,7 @@ describe("PolicySearchBar", () => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
     expect(dispatchMock).toHaveBeenLastCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_POLICY_SEARCH_TERM",
       data: "all",
     });
   });
@@ -103,27 +101,7 @@ describe("PolicySearchBar", () => {
     expect(screen.getByText(helpText)).toBeInTheDocument();
   });
 
-  it("should fill in the search term based on the url query", () => {
-    const currentSearchTerm = chance.string();
-    usePolicies.mockReturnValue({
-      state: { searchTerm: currentSearchTerm },
-      dispatch: jest.fn(),
-    });
-
-    rerender(<PolicySearchBar onSubmit={onSubmit} />);
-
-    const renderedSearchInput = screen.getByLabelText(/search for a policy/i);
-    expect(renderedSearchInput).toHaveAttribute("value", currentSearchTerm);
-  });
-
   it("should start the search process when the button is clicked", () => {
-    const searchTerm = chance.string();
-
-    usePolicies.mockReturnValue({
-      state: { searchTerm },
-      dispatch: jest.fn(),
-    });
-    rerender(<PolicySearchBar onSubmit={onSubmit} />);
     const renderedSearchButton = screen.getByLabelText("Search Policies");
 
     userEvent.click(renderedSearchButton);

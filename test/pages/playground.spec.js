@@ -94,7 +94,7 @@ describe("PolicyPlayground", () => {
         data: "",
       });
       expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        type: "SET_SEARCH_TERM",
+        type: "SET_POLICY_SEARCH_TERM",
         data: "",
       });
     });

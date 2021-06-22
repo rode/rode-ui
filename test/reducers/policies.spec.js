@@ -40,15 +40,15 @@ describe("policies reducer", () => {
     expect.assertions(actions.length);
   });
 
-  it("should update state when the action type is 'SET_SEARCH_TERM'", () => {
+  it("should update state when the action type is 'SET_POLICY_SEARCH_TERM'", () => {
     const actual = policyReducer(state, {
-      type: policyActions.SET_SEARCH_TERM,
+      type: policyActions.SET_POLICY_SEARCH_TERM,
       data,
     });
 
     expect(actual).toEqual({
       ...state,
-      searchTerm: data,
+      policySearchTerm: data,
     });
   });
 

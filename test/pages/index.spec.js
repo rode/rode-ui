@@ -46,7 +46,7 @@ describe("index", () => {
         searchTerm,
       },
       policyState: {
-        searchTerm,
+        policySearchTerm: searchTerm,
       },
       policyDispatch,
       resourceDispatch,
@@ -56,7 +56,7 @@ describe("index", () => {
       data: "",
     });
     expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_POLICY_SEARCH_TERM",
       data: "",
     });
     expect(screen.queryByText(searchTerm)).not.toBeInTheDocument();
@@ -102,7 +102,7 @@ describe("index", () => {
     it("should render a card for policies and handle a valid search", () => {
       render(<Home />, {
         policyState: {
-          searchTerm,
+          policySearchTerm: searchTerm,
         },
       });
       const renderedSearch = screen.getByLabelText(/search for a policy/i);
@@ -118,7 +118,7 @@ describe("index", () => {
     it("should render a card for policies and handle an empty search", () => {
       render(<Home />, {
         policyState: {
-          searchTerm: " ",
+          policySearchTerm: " ",
         },
       });
       let renderedSearch = screen.getByLabelText(/search for a policy/i);

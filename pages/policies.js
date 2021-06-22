@@ -33,7 +33,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 const Policies = () => {
   const { theme } = useTheme();
   const { state, dispatch } = usePolicies();
-  const debouncedSearch = useDebouncedValue(state.searchTerm);
+  const debouncedSearch = useDebouncedValue(state.policySearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -45,8 +45,8 @@ const Policies = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (state.searchTerm.trim().length) {
-      router.push(`/policies?search=${state.searchTerm.trim()}`);
+    if (state.policySearchTerm.trim().length) {
+      router.push(`/policies?search=${state.policySearchTerm.trim()}`);
     } else {
       router.push(`/policies?search=${SEARCH_ALL}`);
     }
@@ -56,13 +56,13 @@ const Policies = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: policyActions.SET_SEARCH_TERM,
+        type: policyActions.SET_POLICY_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: policyActions.SET_SEARCH_TERM,
+        type: policyActions.SET_POLICY_SEARCH_TERM,
         data: "",
       });
     }

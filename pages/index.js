@@ -40,7 +40,7 @@ const Home = () => {
     });
 
     policyDispatch({
-      type: policyActions.SET_SEARCH_TERM,
+      type: policyActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
   }, []);
@@ -76,7 +76,7 @@ const Home = () => {
       <div className={styles.card}>
         <PolicySearchBar
           onSubmit={(event) =>
-            onSubmit(event, "policies", policyState.searchTerm)
+            onSubmit(event, "policies", policyState.policySearchTerm)
           }
           helpText={
             <>

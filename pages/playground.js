@@ -84,7 +84,7 @@ const PolicyPlayground = () => {
       data: "",
     });
     policyDispatch({
-      type: policyActions.SET_SEARCH_TERM,
+      type: policyActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
 

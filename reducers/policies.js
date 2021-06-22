@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-const setSearchTerm = (state, data) => {
+const setPolicySearchTerm = (state, data) => {
   return {
     ...state,
-    searchTerm: data,
+    policySearchTerm: data,
   };
 };
 
@@ -50,7 +50,7 @@ const setCurrentPolicyGroup = (state, data) => {
 };
 
 const actionMap = {
-  SET_SEARCH_TERM: setSearchTerm,
+  SET_POLICY_SEARCH_TERM: setPolicySearchTerm,
   SET_CURRENT_POLICY: setCurrentPolicy,
   SET_EVALUATION_POLICY: setEvaluationPolicy,
   SET_EVALUATION_RESOURCE: setEvaluationResource,
@@ -64,7 +64,7 @@ export const policyReducer = (state, action) => {
 };
 
 export const policyActions = {
-  SET_SEARCH_TERM: "SET_SEARCH_TERM",
+  SET_POLICY_SEARCH_TERM: "SET_POLICY_SEARCH_TERM",
   SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
   SET_EVALUATION_POLICY: "SET_EVALUATION_POLICY",
   SET_EVALUATION_RESOURCE: "SET_EVALUATION_RESOURCE",

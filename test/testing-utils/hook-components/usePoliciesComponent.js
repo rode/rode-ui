@@ -34,7 +34,7 @@ const PolicyComponent = ({ newSearchTerm }) => {
       <button
         onClick={() =>
           dispatch({
-            type: policyActions.SET_SEARCH_TERM,
+            type: policyActions.SET_POLICY_SEARCH_TERM,
             data: newSearchTerm,
           })
         }

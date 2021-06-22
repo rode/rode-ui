@@ -32,7 +32,7 @@ describe("Policies", () => {
     pushMock = jest.fn();
     mockDispatch = jest.fn();
     mockState = {
-      searchTerm: "",
+      policySearchTerm: "",
     };
     mockFetchResponse = {
       data: null,
@@ -85,7 +85,7 @@ describe("Policies", () => {
     });
 
     it("should search for all policies if a search term does not exist", () => {
-      mockState.searchTerm = " ";
+      mockState.policySearchTerm = " ";
 
       render(<Policies />);
       const renderedSearchButton = screen.getByTitle(/search/i);
@@ -98,7 +98,7 @@ describe("Policies", () => {
     });
 
     it("should kick off the search when the search button is pressed and a search term exists", () => {
-      mockState.searchTerm = expectedSearch;
+      mockState.policySearchTerm = expectedSearch;
 
       render(<Policies />);
       const renderedSearchButton = screen.getByTitle(/search/i);
@@ -112,7 +112,7 @@ describe("Policies", () => {
 
     it("should kick off the search when the user navigates away from the search bar", () => {
       const blurTrigger = chance.string();
-      mockState.searchTerm = expectedSearch;
+      mockState.policySearchTerm = expectedSearch;
 
       render(
         <>
@@ -136,7 +136,7 @@ describe("Policies", () => {
     });
 
     it("should pass the search term through as a filter", () => {
-      mockState.searchTerm = expectedSearch;
+      mockState.policySearchTerm = expectedSearch;
       render(<Policies />);
 
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
@@ -149,7 +149,7 @@ describe("Policies", () => {
     });
 
     it("should handle viewing all policies", () => {
-      mockState.searchTerm = "all";
+      mockState.policySearchTerm = "all";
       render(<Policies />);
 
       expect(usePaginatedFetch)

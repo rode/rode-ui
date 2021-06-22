@@ -39,7 +39,10 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [showDrawer, setShowDrawer] = useState(false);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = usePolicies();
-  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
+  const debouncedSearch = useDebouncedValue(
+    state.policySearchTerm,
+    debounceDelay
+  );
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/policies" : null,
@@ -66,6 +69,10 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();
+              dispatch({
+                type: policyActions.SET_POLICY_SEARCH_TERM,
+                data: state.policySearchTerm || SEARCH_ALL,
+              });
               setPolicySearch(true);
             }}
             onBlur={() => setDebounceDelay(0)}
@@ -77,12 +84,13 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                 className={styles.viewAllButton}
                 buttonType={"text"}
                 label={"View all policies"}
-                onClick={() =>
+                onClick={() => {
                   dispatch({
-                    type: policyActions.SET_SEARCH_TERM,
+                    type: policyActions.SET_POLICY_SEARCH_TERM,
                     data: SEARCH_ALL,
-                  })
-                }
+                  });
+                  setPolicySearch(true);
+                }}
               />
             }
           />
@@ -101,7 +109,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                           setPolicy(result);
                           setPolicySearch(false);
                           dispatch({
-                            type: policyActions.SET_SEARCH_TERM,
+                            type: policyActions.SET_POLICY_SEARCH_TERM,
                             data: "",
                           });
                           setShowDrawer(false);
@@ -123,7 +131,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                   )}
                 </>
               ) : (
-                <p>{`No policies found matching "${state.searchTerm}"`}</p>
+                <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
               )}
             </Loading>
           )}
