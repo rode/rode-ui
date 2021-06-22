@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import { DARK_THEME, LIGHT_THEME } from "utils/constants";
 import styles from "styles/modules/Footer.module.scss";
 
 const Liatrio = ({ theme }) => {

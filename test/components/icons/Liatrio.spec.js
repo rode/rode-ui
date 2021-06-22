@@ -16,7 +16,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import { DARK_THEME, LIGHT_THEME } from "utils/constants";
 import Liatrio from "components/icons/Liatrio";
 
 describe("Liatrio", () => {

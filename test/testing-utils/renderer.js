@@ -19,7 +19,7 @@ import { render as rtlRender } from "@testing-library/react";
 import { ResourcesProvider } from "providers/resources";
 import { PoliciesProvider } from "providers/policies";
 import { ThemeProvider } from "providers/theme";
-import { LIGHT_THEME } from "utils/theme-utils";
+import { LIGHT_THEME } from "utils/constants";
 import { ToastContainer } from "react-toastify";
 
 const render = (

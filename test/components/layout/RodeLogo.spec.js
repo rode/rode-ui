@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import RodeLogo from "components/layout/RodeLogo";
-import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import { DARK_THEME, LIGHT_THEME } from "utils/constants";
 
 describe("Rode Logo", () => {
   it("should render the dark theme logo if dark theme is turned on", () => {

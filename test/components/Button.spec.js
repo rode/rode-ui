@@ -19,7 +19,7 @@ import { render, screen } from "@testing-library/react";
 import Button from "components/Button";
 import userEvent from "@testing-library/user-event";
 import { useTheme } from "providers/theme";
-import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import { DARK_THEME, LIGHT_THEME } from "utils/constants";
 
 jest.mock("providers/theme");
 

@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { DARK_THEME, LIGHT_THEME } from "utils/theme-utils";
+import { DARK_THEME, LIGHT_THEME } from "utils/constants";
 
 const RodeLogo = ({ theme, title = "" }) => {
   if (theme === DARK_THEME) {

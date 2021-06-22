@@ -16,7 +16,7 @@
 
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { LIGHT_THEME, DARK_THEME } from "utils/theme-utils";
+import { LIGHT_THEME, DARK_THEME } from "utils/constants";
 import { isServerSide } from "utils/shared-utils";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 const LOCAL_STORAGE_THEME_KEY = "rode-ui-theme";
