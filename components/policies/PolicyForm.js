@@ -30,6 +30,7 @@ import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
 import CodeEditor from "components/CodeEditor";
+import { mutate } from "swr";
 
 const PolicyForm = ({
   title,
@@ -101,6 +102,11 @@ const PolicyForm = ({
       type: policyActions.SET_CURRENT_POLICY,
       data: policy,
     });
+
+    if (method === "PATCH") {
+      await mutate(`/api/policies/${policy.id}/versions`);
+    }
+
     router.push(`/policies/${policy.id}`);
   };
 
