@@ -16,10 +16,7 @@
 
 import { When } from "cypress-cucumber-preprocessor/steps";
 import * as selectors from "../../page-objects/playground";
-import {
-  mockFailedPolicyEvaluation,
-  mockSuccessPolicyEvaluation,
-} from "../../mock-responses/policy-responses";
+import evaluations from "../../fixtures/evaluation.json";
 
 When(/^I select "([^"]*)" policy for evaluation$/, () => {
   cy.get(selectors.SelectPolicyButton).click();
@@ -36,9 +33,7 @@ When(/^I select "([^"]*)" resource version for evaluation$/, () => {
 When(/^the resource (?:(passes|fails)) the policy$/i, (passOrFail) => {
   cy.mockRequest(
     { url: "**/api/policies/**/attest", method: "POST" },
-    passOrFail === "passes"
-      ? mockSuccessPolicyEvaluation
-      : mockFailedPolicyEvaluation
+    evaluations[passOrFail]
   );
   cy.get(selectors.EvaluatePlaygroundButton).click();
 });
@@ -57,7 +52,7 @@ When(
 When("I evaluate and an error occurs", () => {
   cy.mockRequest(
     { url: "**/api/policies/**/attest", method: "POST", status: 500 },
-    mockFailedPolicyEvaluation
+    evaluations["fails"]
   );
   cy.get(selectors.EvaluatePlaygroundButton).click();
 });

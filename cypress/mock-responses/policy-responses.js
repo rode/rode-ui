@@ -27,39 +27,3 @@ export const mockSuccessPolicyValidation = {
 export const mockFailedPatchPolicyResponse = {
   errors: ["Invalid rego code"],
 };
-
-export const mockSuccessPolicyEvaluation = {
-  pass: true,
-  result: [
-    {
-      violations: [
-        {
-          id: "1234",
-          pass: true,
-          message: "This rule passed.",
-        },
-      ],
-    },
-  ],
-  explanation: {
-    0: "This is a passing evaluation explanation",
-  },
-};
-
-export const mockFailedPolicyEvaluation = {
-  pass: false,
-  result: [
-    {
-      violations: [
-        {
-          id: "abcd",
-          pass: false,
-          message: "This rule failed.",
-        },
-      ],
-    },
-  ],
-  explanation: {
-    0: "This is a failed evaluation explanation",
-  },
-};
