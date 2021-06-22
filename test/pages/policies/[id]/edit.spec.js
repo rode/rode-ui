@@ -24,8 +24,10 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { usePolicy } from "hooks/usePolicy";
 import { showError, showSuccess } from "utils/toast-utils";
 import Prism from "prism/prism";
+import { mutate } from "swr";
 import { waitFor } from "@testing-library/dom";
 
+jest.mock("swr");
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/useFormValidation");
@@ -82,6 +84,7 @@ describe("Edit Policy", () => {
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
     });
+    mutate.mockResolvedValue({});
 
     Prism.highlight = jest.fn().mockReturnValue(`\n ${chance.string()} \n`);
     // eslint-disable-next-line no-undef
@@ -351,10 +354,18 @@ describe("Edit Policy", () => {
       });
     });
 
-    it("should redirect the user to the updated policy page", () => {
-      expect(router.push)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(`/policies/${policy.id}`);
+    it("should update the list of policy versions", () => {
+      expect(mutate).toHaveBeenCalledWith(
+        `/api/policies/${policy.id}/versions`
+      );
+    });
+
+    it("should redirect the user to the updated policy page", async () => {
+      await waitFor(() =>
+        expect(router.push)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`/policies/${policy.id}`)
+      );
     });
   });
 

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import styles from "styles/modules/Policy.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
 import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
@@ -27,12 +26,32 @@ import { usePolicy } from "hooks/usePolicy";
 import { usePolicies } from "providers/policies";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
-import Code from "components/Code";
+import PolicyDetails from "components/policies/PolicyDetails";
+import DetailsHeader from "components/shared/DetailsHeader";
+import DetailsNavigation from "components/shared/DetailsNavigation";
+import PolicyHistory from "components/policies/PolicyHistory";
+import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
+
+const DETAILS = "details";
+const HISTORY = "history";
+const createLinks = (baseUrl) => {
+  return [
+    {
+      label: "Policy Details",
+      href: `${baseUrl}#${DETAILS}`,
+    },
+    {
+      label: "History",
+      href: `${baseUrl}#${HISTORY}`,
+    },
+  ];
+};
 
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const { dispatch } = usePolicies();
+  const [activeSection, setActiveSection] = useState(DETAILS);
 
   const { id } = router.query;
 
@@ -50,51 +69,52 @@ const Policy = () => {
     router.push("/playground");
   };
 
+  const navigationLinks = createLinks(`/policies/${id}`);
+
+  useEffect(() => {
+    const fullPath = router.asPath;
+    const [, hash] = fullPath.split("#");
+
+    setActiveSection(hash || navigationLinks[0].href.split("#")[1]);
+  }, [router.asPath]);
+
   return (
     <>
       <PageHeader>
         <PolicyBreadcrumbs />
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
-        <div className={styles.detailsContainer}>
-          <Loading loading={loading}>
-            {policy ? (
-              <>
-                <div className={styles.detailsHeader}>
-                  <div className={styles.detailsHeaderTextContainer}>
-                    <p className={styles.policyName}>{policy.name}</p>
-                    <p className={styles.policyDescription}>
-                      {policy.description}
-                    </p>
-                  </div>
+        <Loading loading={loading}>
+          {policy ? (
+            <>
+              <DetailsHeader
+                name={policy.name}
+                subText={<p>{policy.description}</p>}
+                actionButton={
                   <Button label={"Edit Policy"} onClick={editPolicy} />
-                </div>
-                <Button
-                  label={"Evaluate in Policy Playground"}
-                  buttonType={"text"}
-                  onClick={evaluateInPlayground}
-                  className={styles.playgroundButton}
-                />
-                <div className={styles.regoContainer}>
-                  <p className={textStyles.label}>Rego Policy Code</p>
-                  <Code code={policy.regoContent} language={"rego"} />
-                </div>
-              </>
-            ) : (
-              <div className={styles.notFound}>
-                <h1 className={styles.notFound}>
-                  No policy found under {`"${id}"`}
-                </h1>
-                <p>
-                  Try <Link href={"/policies"}>searching for a policy</Link>.
-                </p>
-              </div>
-            )}
-          </Loading>
-        </div>
+                }
+              />
+              <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
+              <DetailsNavigation
+                links={navigationLinks}
+                activeSection={activeSection}
+              />
+              {activeSection === DETAILS && <PolicyDetails policy={policy} />}
+              {activeSection === HISTORY && <PolicyHistory policy={policy} />}
+            </>
+          ) : (
+            <div className={styles.notFound}>
+              <h1 className={styles.notFound}>
+                No policy found under {`"${id}"`}
+              </h1>
+              <p>
+                Try <Link href={"/policies"}>searching for a policy</Link>.
+              </p>
+            </div>
+          )}
+        </Loading>
       </div>
     </>
   );
 };
-
 export default Policy;

@@ -30,6 +30,7 @@ import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
 import CodeEditor from "components/CodeEditor";
+import { mutate } from "swr";
 import TextArea from "components/TextArea";
 import * as Diff from "diff";
 
@@ -121,6 +122,11 @@ const PolicyForm = ({
       type: policyActions.SET_CURRENT_POLICY,
       data: policy,
     });
+
+    if (isEditingPolicy) {
+      await mutate(`/api/policies/${policy.id}/versions`);
+    }
+
     router.push(`/policies/${policy.id}`);
   };
 
