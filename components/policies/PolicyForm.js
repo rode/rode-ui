@@ -230,7 +230,7 @@ const PolicyForm = ({
         />
         <div className={styles.modalActionButtons}>
           <Button
-            data-testId={"cancelUpdate"}
+            data-testid={"cancelUpdate"}
             label={"Cancel"}
             buttonType={"text"}
             onClick={() => {
