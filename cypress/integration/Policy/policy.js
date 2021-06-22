@@ -87,6 +87,10 @@ When(
     const selectorName = `Policy${capitalize(field)}Input`;
     cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
     cy.get(selectors.UpdatePolicyButton).click();
+
+    if (field === "regoContent") {
+      cy.get(selectors.ConfirmUpdatePolicyButton).click();
+    }
   }
 );
 
@@ -105,6 +109,7 @@ When("I save invalid rego code", () => {
   );
   cy.get(selectors.PolicyRegoContentInput).clear().type(chance.string());
   cy.get(selectors.UpdatePolicyButton).click();
+  cy.get(selectors.ConfirmUpdatePolicyButton).click();
 });
 
 When("I confirm to delete the policy", () => {

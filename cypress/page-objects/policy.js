@@ -43,6 +43,9 @@ export const SavePolicyButton = createButtonSelector("Save Policy");
 export const ValidatePolicyButton = createButtonSelector("Validate Policy");
 export const CancelButton = createButtonSelector("Cancel");
 export const DeletePolicyButton = createButtonSelector("Delete Policy");
+export const ConfirmUpdatePolicyButton = createButtonSelector(
+  "Update & Save Policy"
+);
 
 // INPUTS
 export const PolicySearchInput = "#policySearchDisplay";

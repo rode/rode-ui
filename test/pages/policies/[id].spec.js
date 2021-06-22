@@ -43,7 +43,7 @@ describe("Policy Details", () => {
         id: chance.guid(),
       },
       push: jest.fn(),
-      asPath: chance.string(),
+      asPath: chance.string({ alpha: true }),
     };
     policy = {
       id: router.query.id,

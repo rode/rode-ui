@@ -31,6 +31,8 @@ import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
 import CodeEditor from "components/CodeEditor";
 import { mutate } from "swr";
+import TextArea from "components/TextArea";
+import * as Diff from "diff";
 
 const PolicyForm = ({
   title,
@@ -44,7 +46,8 @@ const PolicyForm = ({
   const router = useRouter();
   const { dispatch } = usePolicies();
 
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const [validationResults, setValidationResults] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,8 +55,11 @@ const PolicyForm = ({
   const [name, setName] = useState(policy.name || "");
   const [description, setDescription] = useState(policy.description || "");
   const [regoContent, setRegoContent] = useState(policy.regoContent || "");
+  const [message, setMessage] = useState("");
 
   const { isValid, validateField, errors } = useFormValidation(schema);
+
+  const isEditingPolicy = method === "PATCH";
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -62,6 +68,7 @@ const PolicyForm = ({
       name,
       description,
       regoContent,
+      message,
     };
 
     const validForm = isValid(formData);
@@ -70,6 +77,19 @@ const PolicyForm = ({
       return;
     }
 
+    if (
+      isEditingPolicy &&
+      Diff.diffChars(policy.regoContent, regoContent).length > 1
+    ) {
+      setShowUpdateModal(true);
+
+      return;
+    }
+
+    return onSubmitConfirm(formData);
+  };
+
+  const onSubmitConfirm = async (formData) => {
     setLoading(true);
     const response = await fetch(endpoint, {
       method,
@@ -103,7 +123,7 @@ const PolicyForm = ({
       data: policy,
     });
 
-    if (method === "PATCH") {
+    if (isEditingPolicy) {
       await mutate(`/api/policies/${policy.id}/versions`);
     }
 
@@ -148,29 +168,81 @@ const PolicyForm = ({
     router.push("/policies");
   };
 
-  const confirmDelete = () => setShowModal(true);
+  const confirmDelete = () => setShowDeleteModal(true);
+
+  const confirmUpdate = () =>
+    onSubmitConfirm({
+      name,
+      description,
+      regoContent,
+      message,
+    });
 
   return (
     <>
       <Modal
-        isVisible={showModal}
-        onClose={() => setShowModal(false)}
+        isVisible={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
         title={"Confirm Policy Deletion"}
       >
         <p className={styles.confirmDeleteText}>
           Are you sure you want to delete this policy?
         </p>
-        <div className={styles.actionButtons}>
+        <div className={styles.modalActionButtons}>
           <Button
             label={"Cancel"}
             buttonType={"text"}
-            onClick={() => setShowModal(false)}
+            onClick={() => setShowDeleteModal(false)}
             disabled={loading}
           />
           <Button
             label={"Delete Policy"}
             buttonType={"primaryDestructive"}
             onClick={onDelete}
+            loading={loading}
+          />
+        </div>
+      </Modal>
+      <Modal
+        isVisible={showUpdateModal}
+        onClose={() => setShowUpdateModal(false)}
+        title={"Policy Update Message"}
+      >
+        <p className={styles.updateMessageText}>
+          By updating the Rego Policy Code, you are creating a new version of
+          this policy.
+        </p>
+        <p className={styles.updateMessageText}>
+          Attach an optional message to this version of the policy, describing
+          the changes that were made.
+        </p>
+        <TextArea
+          name={"message"}
+          label={"Policy Update Message"}
+          placeholder={
+            "Use this field to describe the changes being made to the policy code to help identify differences from one version to another."
+          }
+          onChange={(event) => {
+            setMessage(event.target.value);
+          }}
+          value={message}
+          rows={10}
+        />
+        <div className={styles.modalActionButtons}>
+          <Button
+            data-testid={"cancelUpdate"}
+            label={"Cancel"}
+            buttonType={"text"}
+            onClick={() => {
+              setMessage("");
+              setShowUpdateModal(false);
+            }}
+            disabled={loading}
+          />
+          <Button
+            label={"Update & Save Policy"}
+            buttonType={"primary"}
+            onClick={confirmUpdate}
             loading={loading}
           />
         </div>
@@ -248,7 +320,7 @@ const PolicyForm = ({
               disabled={loading}
             />
           </div>
-          {method === "PATCH" && (
+          {isEditingPolicy && (
             <Button
               type={"button"}
               label={"Delete Policy"}
