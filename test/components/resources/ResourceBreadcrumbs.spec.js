@@ -32,7 +32,7 @@ describe("ResourceBreadcrumbs", () => {
     beforeEach(() => {
       useResources.mockReturnValue({
         state: {
-          searchTerm,
+          resourceSearchTerm: searchTerm,
         },
       });
 
@@ -57,7 +57,7 @@ describe("ResourceBreadcrumbs", () => {
     it("should return the correct breadcrumb when viewing all resources", () => {
       useResources.mockReturnValue({
         state: {
-          searchTerm: "all",
+          resourceSearchTerm: "all",
         },
       });
 

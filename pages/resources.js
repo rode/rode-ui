@@ -33,7 +33,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 const Resources = () => {
   const { theme } = useTheme();
   const { state, dispatch } = useResources();
-  const debouncedSearch = useDebouncedValue(state.searchTerm);
+  const debouncedSearch = useDebouncedValue(state.resourceSearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -45,8 +45,8 @@ const Resources = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (state.searchTerm.trim().length) {
-      router.push(`/resources?search=${state.searchTerm.trim()}`);
+    if (state.resourceSearchTerm.trim().length) {
+      router.push(`/resources?search=${state.resourceSearchTerm.trim()}`);
     } else {
       router.push(`/resources?search=${SEARCH_ALL}`);
     }
@@ -71,13 +71,13 @@ const Resources = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
+        type: resourceActions.SET_RESOURCE_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
+        type: resourceActions.SET_RESOURCE_SEARCH_TERM,
         data: SEARCH_ALL,
       });
     }

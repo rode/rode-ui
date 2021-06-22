@@ -30,10 +30,10 @@ const getSearchTermText = (searchTerm) => {
 
 const ResourceBreadcrumbs = () => {
   const {
-    state: { searchTerm },
+    state: { resourceSearchTerm },
   } = useResources();
 
-  if (!searchTerm) {
+  if (!resourceSearchTerm) {
     return null;
   }
 
@@ -41,8 +41,10 @@ const ResourceBreadcrumbs = () => {
     <div className={styles.breadcrumbs}>
       <p className={styles.rootCrumb}>Resource Search</p>
       <p className={styles.rootCrumb}>/</p>
-      <Link href={`/resources?search=${encodeURIComponent(searchTerm)}`}>
-        <a>{getSearchTermText(searchTerm)}</a>
+      <Link
+        href={`/resources?search=${encodeURIComponent(resourceSearchTerm)}`}
+      >
+        <a>{getSearchTermText(resourceSearchTerm)}</a>
       </Link>
     </div>
   );

@@ -34,12 +34,14 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 
-// TODO: fix searching for resource/version when you press the submit button to set search term or default to show all
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
   const { state, dispatch } = useResources();
-  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
+  const debouncedSearch = useDebouncedValue(
+    state.resourceSearchTerm,
+    debounceDelay
+  );
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/resources" : null,
@@ -53,6 +55,13 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
         <ResourceSearchBar
           onSubmit={(event) => {
             event.preventDefault();
+            // TODO: test this logic
+            if (!state.resourceSearchTerm.length) {
+              dispatch({
+                type: resourceActions.SET_RESOURCE_SEARCH_TERM,
+                data: SEARCH_ALL,
+              });
+            }
             setResourceSearch(true);
           }}
           onBlur={() => {
@@ -71,7 +80,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
               onClick={() => {
                 setResourceSearch(true);
                 dispatch({
-                  type: resourceActions.SET_SEARCH_TERM,
+                  type: resourceActions.SET_RESOURCE_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

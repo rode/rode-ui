@@ -37,7 +37,7 @@ describe("Resources", () => {
     };
     mockDispatch = jest.fn();
     mockState = {
-      searchTerm: "",
+      resourceSearchTerm: "",
       searchTypeFilter: [],
     };
     mockFetchResponse = {
@@ -85,7 +85,7 @@ describe("Resources", () => {
     });
 
     it("should search for all resources if a search term does not exist", () => {
-      mockState.searchTerm = " ";
+      mockState.resourceSearchTerm = " ";
       render(<Resources />);
       const renderedSearchButton = screen.getByTitle(/search/i);
       expect(renderedSearchButton).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe("Resources", () => {
     });
 
     it("should kick off the search when the search button is pressed and a search term exists", () => {
-      mockState.searchTerm = expectedSearch;
+      mockState.resourceSearchTerm = expectedSearch;
       render(<Resources />);
 
       const renderedSearchButton = screen.getByTitle(/search/i);
@@ -111,7 +111,7 @@ describe("Resources", () => {
 
     it("should kick off the search when the user navigates away from the search bar", () => {
       const blurTrigger = chance.string();
-      mockState.searchTerm = expectedSearch;
+      mockState.resourceSearchTerm = expectedSearch;
       render(
         <>
           <p>{blurTrigger}</p>
@@ -136,7 +136,7 @@ describe("Resources", () => {
     });
 
     it("should pass the search term through as a filter", () => {
-      mockState.searchTerm = expectedSearch;
+      mockState.resourceSearchTerm = expectedSearch;
       render(<Resources />);
 
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
@@ -149,7 +149,7 @@ describe("Resources", () => {
     });
 
     it("should handle search for all resources", () => {
-      mockState.searchTerm = "all";
+      mockState.resourceSearchTerm = "all";
       render(<Resources />);
 
       expect(usePaginatedFetch)
@@ -157,7 +157,7 @@ describe("Resources", () => {
         .toHaveBeenCalledWith(
           "/api/resources",
           buildResourceQueryParams(
-            mockState.searchTerm,
+            mockState.resourceSearchTerm,
             mockState.searchTypeFilter
           ),
           10

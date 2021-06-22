@@ -75,7 +75,7 @@ describe("Policy Details", () => {
     };
     usePaginatedFetch.mockReturnValue(mockPaginatedFetch);
     const utils = render(<Policy />, {
-      policyState: { searchTerm: "test search term" },
+      policyState: { policySearchTerm: "test search term" },
       policyDispatch: dispatchMock,
     });
     rerender = utils.rerender;

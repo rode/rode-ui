@@ -30,7 +30,7 @@ const ResourceComponent = ({ newSearchTerm }) => {
       <button
         onClick={() =>
           dispatch({
-            type: resourceActions.SET_SEARCH_TERM,
+            type: resourceActions.SET_RESOURCE_SEARCH_TERM,
             data: newSearchTerm,
           })
         }

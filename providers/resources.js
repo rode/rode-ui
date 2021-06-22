@@ -21,7 +21,7 @@ import { resourceReducer } from "reducers/resources";
 const ResourceContext = createContext();
 
 const initialState = {
-  searchTerm: "",
+  resourceSearchTerm: "",
   versionSearchTerm: "",
   searchTypeFilter: [],
   occurrenceDetails: null,

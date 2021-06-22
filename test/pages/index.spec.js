@@ -52,7 +52,7 @@ describe("index", () => {
       resourceDispatch,
     });
     expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_RESOURCE_SEARCH_TERM",
       data: "",
     });
     expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({

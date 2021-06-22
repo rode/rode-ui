@@ -43,7 +43,7 @@ const ResourceSelectionDrawer = ({
   const openVersionSelection = () => setCurrentSection(VERSION);
   const clearSearchTerms = () => {
     dispatch({
-      type: resourceActions.SET_SEARCH_TERM,
+      type: resourceActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
     dispatch({

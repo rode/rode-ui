@@ -30,7 +30,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
     }
 
     dispatch({
-      type: resourceActions.SET_SEARCH_TERM,
+      type: resourceActions.SET_RESOURCE_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
@@ -42,7 +42,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onBlur={onBlur}
       label={"Search for a resource"}
       name={"resourceSearch"}
-      searchTerm={state.searchTerm}
+      searchTerm={state.resourceSearchTerm}
       placeholder={"ex: alpine@sha256:etcetcetc"}
       helpText={helpText}
       buttonLabel={"Search Resources"}

@@ -43,11 +43,11 @@ describe("PolicyPlayground", () => {
 
   beforeEach(() => {
     policyState = {
-      searchTerm: chance.string(),
+      policySearchTerm: chance.string(),
     };
     policyDispatch = jest.fn();
     resourceState = {
-      searchTerm: chance.string(),
+      resourceSearchTerm: chance.string(),
       versionSearchTerm: chance.string(),
     };
     resourceDispatch = jest.fn();
@@ -90,7 +90,7 @@ describe("PolicyPlayground", () => {
 
     it("should clear any search terms set by other searches", () => {
       expect(resourceDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-        type: "SET_SEARCH_TERM",
+        type: "SET_RESOURCE_SEARCH_TERM",
         data: "",
       });
       expect(policyDispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({

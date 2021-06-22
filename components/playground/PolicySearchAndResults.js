@@ -69,10 +69,13 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();
-              dispatch({
-                type: policyActions.SET_POLICY_SEARCH_TERM,
-                data: state.policySearchTerm || SEARCH_ALL,
-              });
+              // TODO: test this logic
+              if (!state.policySearchTerm.length) {
+                dispatch({
+                  type: policyActions.SET_POLICY_SEARCH_TERM,
+                  data: SEARCH_ALL,
+                });
+              }
               setPolicySearch(true);
             }}
             onBlur={() => setDebounceDelay(0)}

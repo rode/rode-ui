@@ -30,7 +30,7 @@ describe("ResourceSelectionDrawer", () => {
   beforeEach(() => {
     dispatch = jest.fn();
     state = {
-      searchTerm: chance.string(),
+      resourceSearchTerm: chance.string(),
     };
     setEvaluationResource = jest.fn();
     clearEvaluation = jest.fn();
@@ -86,7 +86,7 @@ describe("ResourceSelectionDrawer", () => {
     expect(drawer).toHaveClass("openDrawer");
     expect(dispatch)
       .toHaveBeenCalledWith({
-        type: "SET_SEARCH_TERM",
+        type: "SET_RESOURCE_SEARCH_TERM",
         data: "",
       })
       .toHaveBeenCalledWith({

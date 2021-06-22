@@ -35,7 +35,7 @@ describe("ResourceSearchAndResults", () => {
   beforeEach(() => {
     onResourceSelect = jest.fn();
     state = {
-      searchTerm: chance.string(),
+      resourceSearchTerm: chance.string(),
     };
     dispatch = jest.fn();
     fetchedResources = chance.n(
@@ -83,7 +83,7 @@ describe("ResourceSearchAndResults", () => {
     expect(renderedViewAllResourcesButton).toBeInTheDocument();
     userEvent.click(renderedViewAllResourcesButton);
     expect(dispatch).toHaveBeenCalledWith({
-      type: "SET_SEARCH_TERM",
+      type: "SET_RESOURCE_SEARCH_TERM",
       data: "all",
     });
   });
@@ -97,7 +97,7 @@ describe("ResourceSearchAndResults", () => {
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resources",
       {
-        searchTerm: state.searchTerm,
+        searchTerm: state.resourceSearchTerm,
       },
       5
     );
