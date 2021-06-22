@@ -28,10 +28,10 @@ const setResourceVersionSearchTerm = (state, data) => {
   };
 };
 
-const setTypeFilter = (state, data) => {
+const setResourceTypeSearchFilter = (state, data) => {
   return {
     ...state,
-    searchTypeFilter: data,
+    resourceTypeSearchFilter: data,
   };
 };
 
@@ -54,7 +54,7 @@ const actionMap = {
   SET_OCCURRENCE_DETAILS: setOccurrenceDetails,
   SET_CURRENT_RESOURCE: setCurrentResource,
   SET_RESOURCE_VERSION_SEARCH_TERM: setResourceVersionSearchTerm,
-  SET_TYPE_FILTER: setTypeFilter,
+  SET_RESOURCE_TYPE_SEARCH_FILTER: setResourceTypeSearchFilter,
 };
 
 export const resourceReducer = (state, action) => {
@@ -68,5 +68,5 @@ export const resourceActions = {
   SET_OCCURRENCE_DETAILS: "SET_OCCURRENCE_DETAILS",
   SET_CURRENT_RESOURCE: "SET_CURRENT_RESOURCE",
   SET_RESOURCE_VERSION_SEARCH_TERM: "SET_RESOURCE_VERSION_SEARCH_TERM",
-  SET_TYPE_FILTER: "SET_TYPE_FILTER",
+  SET_RESOURCE_TYPE_SEARCH_FILTER: "SET_RESOURCE_TYPE_SEARCH_FILTER",
 };

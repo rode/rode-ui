@@ -38,7 +38,7 @@ const Resources = () => {
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/resources" : null,
-    buildResourceQueryParams(debouncedSearch, state.searchTypeFilter),
+    buildResourceQueryParams(debouncedSearch, state.resourceTypeSearchFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
@@ -54,7 +54,7 @@ const Resources = () => {
 
   const viewAllResources = () => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
     router.push(`/resources?search=${SEARCH_ALL}`);
@@ -62,7 +62,7 @@ const Resources = () => {
 
   useEffect(() => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
   }, []);

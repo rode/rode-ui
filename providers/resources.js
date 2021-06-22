@@ -23,7 +23,7 @@ const ResourceContext = createContext();
 const initialState = {
   resourceSearchTerm: "",
   resourceVersionSearchTerm: "",
-  searchTypeFilter: [],
+  resourceTypeSearchFilter: [],
   occurrenceDetails: null,
   currentResource: {},
 };

@@ -26,7 +26,7 @@ const ResourceSearchFilters = () => {
 
   const onChange = (selectedValues) => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: resourceActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: selectedValues,
     });
   };
@@ -43,7 +43,7 @@ const ResourceSearchFilters = () => {
         placeholder={"Resource Type"}
         hideSelectedOptions={false}
         tabSelectsValue={false}
-        value={state.searchTypeFilter}
+        value={state.resourceTypeSearchFilter}
       />
     </div>
   );

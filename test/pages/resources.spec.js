@@ -38,7 +38,7 @@ describe("Resources", () => {
     mockDispatch = jest.fn();
     mockState = {
       resourceSearchTerm: "",
-      searchTypeFilter: [],
+      resourceTypeSearchFilter: [],
     };
     mockFetchResponse = {
       data: null,
@@ -158,7 +158,7 @@ describe("Resources", () => {
           "/api/resources",
           buildResourceQueryParams(
             mockState.resourceSearchTerm,
-            mockState.searchTypeFilter
+            mockState.resourceTypeSearchFilter
           ),
           10
         );
@@ -170,7 +170,7 @@ describe("Resources", () => {
       userEvent.click(screen.getByText(/^view all resources/));
 
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: "SET_TYPE_FILTER",
+        type: "SET_RESOURCE_TYPE_SEARCH_FILTER",
         data: [],
       });
       expect(mockRouter.push).toHaveBeenCalledWith("/resources?search=all");
