@@ -40,123 +40,29 @@ describe("AppState Reducer", () => {
     expect.assertions(actions.length);
   });
 
-  it("should update state when the action type is 'SET_POLICY_SEARCH_TERM'", () => {
+  it.each([
+    [stateActions.SET_POLICY_SEARCH_TERM, "policySearchTerm"],
+    [stateActions.SET_CURRENT_POLICY, "currentPolicy"],
+    [stateActions.SET_EVALUATION_POLICY, "evaluationPolicy"],
+    [stateActions.SET_EVALUATION_RESOURCE, "evaluationResource"],
+    [stateActions.SET_CURRENT_POLICY_GROUP, "currentPolicyGroup"],
+    [stateActions.SET_RESOURCE_SEARCH_TERM, "resourceSearchTerm"],
+    [
+      stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+      "resourceVersionSearchTerm",
+    ],
+    [stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER, "resourceTypeSearchFilter"],
+    [stateActions.SET_OCCURRENCE_DETAILS, "occurrenceDetails"],
+    [stateActions.SET_CURRENT_RESOURCE, "currentResource"],
+  ])("should update state when the action type is %s", (action, fieldName) => {
     const actual = appStateReducer(state, {
-      type: stateActions.SET_POLICY_SEARCH_TERM,
+      type: action,
       data,
     });
 
     expect(actual).toEqual({
       ...state,
-      policySearchTerm: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_CURRENT_POLICY'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_CURRENT_POLICY,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      currentPolicy: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_EVALUATION_POLICY'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_EVALUATION_POLICY,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      evaluationPolicy: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_EVALUATION_RESOURCE'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_EVALUATION_RESOURCE,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      evaluationResource: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_CURRENT_POLICY_GROUP'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_CURRENT_POLICY_GROUP,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      currentPolicyGroup: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_RESOURCE_SEARCH_TERM'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_RESOURCE_SEARCH_TERM,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      resourceSearchTerm: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_OCCURRENCE_DETAILS'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_OCCURRENCE_DETAILS,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      occurrenceDetails: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_CURRENT_RESOURCE'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_CURRENT_RESOURCE,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      currentResource: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_RESOURCE_VERSION_SEARCH_TERM'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      resourceVersionSearchTerm: data,
-    });
-  });
-
-  it("should update state when the action type is 'SET_RESOURCE_TYPE_SEARCH_FILTER'", () => {
-    const actual = appStateReducer(state, {
-      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
-      data,
-    });
-
-    expect(actual).toEqual({
-      ...state,
-      resourceTypeSearchFilter: data,
+      [fieldName]: data,
     });
   });
 });
