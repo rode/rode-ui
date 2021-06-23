@@ -24,11 +24,11 @@ import Home from "pages/index";
 jest.mock("next/router");
 
 describe("index", () => {
-  let searchTerm, pushMock, policyDispatch;
+  let searchTerm, pushMock, dispatch;
 
   beforeEach(() => {
     pushMock = jest.fn();
-    policyDispatch = jest.fn();
+    dispatch = jest.fn();
     searchTerm = chance.string();
     useRouter.mockReturnValue({
       push: pushMock,
@@ -41,13 +41,13 @@ describe("index", () => {
 
   it("should clear any saved search terms", () => {
     render(<Home />, {
-      policyState: {
+      state: {
         policySearchTerm: searchTerm,
         resourceSearchTerm: searchTerm,
       },
-      policyDispatch,
+      dispatch,
     });
-    expect(policyDispatch)
+    expect(dispatch)
       .toHaveBeenCalledWith({
         type: "SET_RESOURCE_SEARCH_TERM",
         data: "",
@@ -62,7 +62,7 @@ describe("index", () => {
   describe("resource card", () => {
     it("should render a card for resources and handle a valid search", () => {
       render(<Home />, {
-        policyState: {
+        state: {
           resourceSearchTerm: searchTerm,
         },
       });
@@ -79,7 +79,7 @@ describe("index", () => {
 
     it("should render a card for resources and handle an empty search", () => {
       render(<Home />, {
-        policyState: {
+        state: {
           resourceSearchTerm: " ",
         },
       });
@@ -98,7 +98,7 @@ describe("index", () => {
   describe("policy card", () => {
     it("should render a card for policies and handle a valid search", () => {
       render(<Home />, {
-        policyState: {
+        state: {
           policySearchTerm: searchTerm,
         },
       });
@@ -114,7 +114,7 @@ describe("index", () => {
 
     it("should render a card for policies and handle an empty search", () => {
       render(<Home />, {
-        policyState: {
+        state: {
           policySearchTerm: " ",
         },
       });

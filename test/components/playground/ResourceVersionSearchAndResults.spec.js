@@ -70,8 +70,8 @@ describe("ResourceVersionSearchAndResults", () => {
         selectedResource={selectedResource}
       />,
       {
-        policyState: state,
-        policyDispatch: dispatch,
+        state,
+        dispatch,
       }
     );
     searchForVersion();
@@ -92,8 +92,8 @@ describe("ResourceVersionSearchAndResults", () => {
         selectedResource={selectedResource}
       />,
       {
-        policyState: state,
-        policyDispatch: dispatch,
+        state,
+        dispatch,
       }
     );
     searchForVersion();
@@ -116,8 +116,8 @@ describe("ResourceVersionSearchAndResults", () => {
         selectedResource={selectedResource}
       />,
       {
-        policyState: state,
-        policyDispatch: dispatch,
+        state,
+        dispatch,
       }
     );
     searchForVersion();
@@ -139,8 +139,8 @@ describe("ResourceVersionSearchAndResults", () => {
           selectedResource={selectedResource}
         />,
         {
-          policyState: state,
-          policyDispatch: dispatch,
+          state,
+          dispatch,
         }
       );
 
@@ -215,8 +215,8 @@ describe("ResourceVersionSearchAndResults", () => {
           selectedResource={null}
         />,
         {
-          policyState: state,
-          policyDispatch: dispatch,
+          state,
+          dispatch,
         }
       );
 

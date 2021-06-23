@@ -64,7 +64,7 @@ describe("New Policy Group", () => {
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
     const utils = render(<CreateNewPolicyGroup />, {
-      policyDispatch: dispatch,
+      dispatch: dispatch,
     });
     rerender = utils.rerender;
   });

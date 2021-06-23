@@ -49,7 +49,7 @@ describe("Policy Group Details", () => {
       loading: false,
     });
     useRouter.mockReturnValue(router);
-    const utils = render(<PolicyGroup />, { policyDispatch: dispatch });
+    const utils = render(<PolicyGroup />, { dispatch: dispatch });
     rerender = utils.rerender;
   });
 
@@ -95,7 +95,7 @@ describe("Policy Group Details", () => {
         policyGroup: null,
         loading: false,
       });
-      rerender(<PolicyGroup />, { policyDispatch: dispatch });
+      rerender(<PolicyGroup />, { dispatch: dispatch });
     });
 
     it("should render the not found message", () => {

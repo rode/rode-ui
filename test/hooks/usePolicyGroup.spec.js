@@ -24,15 +24,15 @@ jest.mock("hooks/useFetch");
 jest.mock("utils/shared-utils");
 
 describe("usePolicyGroup", () => {
-  let policyGroup, dispatchMock, policyState, fetchResponse;
+  let policyGroup, dispatch, state, fetchResponse;
 
   beforeEach(() => {
     policyGroup = {
       name: chance.string(),
       description: chance.string(),
     };
-    dispatchMock = jest.fn();
-    policyState = {
+    dispatch = jest.fn();
+    state = {
       currentPolicyGroup: policyGroup,
     };
 
@@ -58,7 +58,7 @@ describe("usePolicyGroup", () => {
 
   it("should return the policy group if it is already saved in state", () => {
     render(<PolicyGroupComponent name={policyGroup.name} />, {
-      policyState: policyState,
+      state: state,
     });
 
     expect(useFetch).not.toHaveBeenCalledWith(
@@ -69,14 +69,14 @@ describe("usePolicyGroup", () => {
 
   it("should fetch the policy group if it is not saved in state", () => {
     render(<PolicyGroupComponent name={policyGroup.name} />, {
-      policyState: {},
-      policyDispatch: dispatchMock,
+      state: {},
+      dispatch: dispatch,
     });
 
     expect(useFetch).toHaveBeenCalledWith(
       `/api/policy-groups/${policyGroup.name}`
     );
-    expect(dispatchMock).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_POLICY_GROUP",
       data: policyGroup,
     });
@@ -85,13 +85,13 @@ describe("usePolicyGroup", () => {
   it("should return nothing if the policy group has not yet been fetched", () => {
     fetchResponse.data = null;
     render(<PolicyGroupComponent name={policyGroup.name} />, {
-      policyState: {},
-      policyDispatch: dispatchMock,
+      state: {},
+      dispatch: dispatch,
     });
 
     expect(useFetch).toHaveBeenCalledWith(
       `/api/policy-groups/${policyGroup.name}`
     );
-    expect(dispatchMock).not.toHaveBeenCalled();
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });

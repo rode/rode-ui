@@ -32,20 +32,20 @@ jest.mock("hooks/usePaginatedFetch");
 jest.mock("utils/toast-utils");
 
 describe("PolicyPlayground", () => {
-  let policyState,
-    policyDispatch,
+  let state,
+    dispatch,
     fetchResponse,
     usePaginatedFetchResponse,
     fetchOccurrencesResponse,
     evaluationResults;
 
   beforeEach(() => {
-    policyState = {
+    state = {
       policySearchTerm: chance.string(),
       resourceSearchTerm: chance.string(),
       resourceVersionSearchTerm: chance.string(),
     };
-    policyDispatch = jest.fn();
+    dispatch = jest.fn();
     evaluationResults = createMockEvaluationResult();
     fetchResponse = {
       json: jest.fn().mockResolvedValue(evaluationResults),
@@ -76,13 +76,13 @@ describe("PolicyPlayground", () => {
   describe("Empty Evaluation Screen", () => {
     beforeEach(() => {
       render(<PolicyPlayground />, {
-        policyState,
-        policyDispatch,
+        state,
+        dispatch,
       });
     });
 
     it("should clear any search terms set by other searches", () => {
-      expect(policyDispatch)
+      expect(dispatch)
         .toHaveBeenCalledWith({
           type: "SET_RESOURCE_SEARCH_TERM",
           data: "",
@@ -164,7 +164,7 @@ describe("PolicyPlayground", () => {
         userEvent.click(screen.getByLabelText("Select Version"));
       });
 
-      expect(policyDispatch).toHaveBeenCalledWith({
+      expect(dispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_RESOURCE",
         data: versionResponse.data[0],
       });
@@ -190,7 +190,7 @@ describe("PolicyPlayground", () => {
         userEvent.type(renderedSearch, "{enter}");
       });
       userEvent.click(screen.getByRole("button", { name: "Select Policy" }));
-      expect(policyDispatch).toHaveBeenCalledWith({
+      expect(dispatch).toHaveBeenCalledWith({
         type: "SET_EVALUATION_POLICY",
         data: usePaginatedFetchResponse.data[0],
       });
@@ -213,12 +213,12 @@ describe("PolicyPlayground", () => {
         description: chance.string(),
         regoContent: chance.string(),
       };
-      policyState.evaluationResource = selectedResource;
-      policyState.evaluationPolicy = selectedPolicy;
+      state.evaluationResource = selectedResource;
+      state.evaluationPolicy = selectedPolicy;
 
       const utils = render(<PolicyPlayground />, {
-        policyState: policyState,
-        policyDispatch: policyDispatch,
+        state,
+        dispatch: dispatch,
       });
 
       unmount = utils.unmount;
@@ -254,12 +254,11 @@ describe("PolicyPlayground", () => {
         expect(fetch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `/api/policies/${policyState.evaluationPolicy.id}/attest`,
+            `/api/policies/${state.evaluationPolicy.id}/attest`,
             {
               method: "POST",
               body: JSON.stringify({
-                resourceUri:
-                  policyState.evaluationResource.versionedResourceUri,
+                resourceUri: state.evaluationResource.versionedResourceUri,
               }),
               headers: {
                 "Content-Type": "application/json",
@@ -307,7 +306,7 @@ describe("PolicyPlayground", () => {
 
       it("should clear the selected policy and resource when you leave the playground", () => {
         unmount();
-        expect(policyDispatch)
+        expect(dispatch)
           .toHaveBeenCalledWith({
             type: "SET_EVALUATION_RESOURCE",
             data: null,

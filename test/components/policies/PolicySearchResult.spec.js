@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 jest.mock("next/router");
 
 describe("PolicySearchResult", () => {
-  let searchResult, pushMock, dispatchMock;
+  let searchResult, pushMock, dispatch;
 
   beforeEach(() => {
     searchResult = {
@@ -33,12 +33,12 @@ describe("PolicySearchResult", () => {
       regoContent: chance.string(),
     };
     pushMock = jest.fn();
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
     useRouter.mockReturnValue({
       push: pushMock,
     });
     render(<PolicySearchResult searchResult={searchResult} />, {
-      policyDispatch: dispatchMock,
+      dispatch: dispatch,
     });
   });
 
@@ -54,7 +54,7 @@ describe("PolicySearchResult", () => {
     expect(renderedButton).toBeInTheDocument();
 
     userEvent.click(renderedButton);
-    expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
       type: "SET_CURRENT_POLICY",
       data: searchResult,
     });

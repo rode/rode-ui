@@ -29,8 +29,8 @@ describe("ResourceSearchFilters", () => {
     };
     dispatch = jest.fn();
     render(<ResourceSearchFilters />, {
-      policyDispatch: dispatch,
-      policyState: state,
+      dispatch,
+      state,
     });
   });
 

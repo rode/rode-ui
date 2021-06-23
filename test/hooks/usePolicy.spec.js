@@ -24,7 +24,7 @@ jest.mock("hooks/useFetch");
 jest.mock("utils/shared-utils");
 
 describe("usePolicy", () => {
-  let policy, dispatchMock, policyState, fetchResponse;
+  let policy, dispatch, state, fetchResponse;
 
   beforeEach(() => {
     policy = {
@@ -33,8 +33,8 @@ describe("usePolicy", () => {
       regoContent: chance.string(),
       id: chance.guid(),
     };
-    dispatchMock = jest.fn();
-    policyState = {
+    dispatch = jest.fn();
+    state = {
       currentPolicy: policy,
     };
 
@@ -59,7 +59,7 @@ describe("usePolicy", () => {
   });
 
   it("should return the policy if it is already saved in state", () => {
-    render(<PolicyComponent id={policy.id} />, { policyState: policyState });
+    render(<PolicyComponent id={policy.id} />, { state });
 
     expect(useFetch).not.toHaveBeenCalledWith(`/api/policies/${policy.id}`);
     expect(screen.getByText(policy.name)).toBeInTheDocument();
@@ -67,12 +67,12 @@ describe("usePolicy", () => {
 
   it("should fetch the policy if it is not saved in state", () => {
     render(<PolicyComponent id={policy.id} />, {
-      policyState: {},
-      policyDispatch: dispatchMock,
+      state: {},
+      dispatch: dispatch,
     });
 
     expect(useFetch).toHaveBeenCalledWith(`/api/policies/${policy.id}`);
-    expect(dispatchMock).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_POLICY",
       data: policy,
     });
@@ -81,11 +81,11 @@ describe("usePolicy", () => {
   it("should return nothing if the policy has not yet been fetched", () => {
     fetchResponse.data = null;
     render(<PolicyComponent id={policy.id} />, {
-      policyState: {},
-      policyDispatch: dispatchMock,
+      state: {},
+      dispatch: dispatch,
     });
 
     expect(useFetch).toHaveBeenCalledWith(`/api/policies/${policy.id}`);
-    expect(dispatchMock).not.toHaveBeenCalled();
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });

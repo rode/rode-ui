@@ -20,18 +20,18 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
 
 describe("PolicySearchBar", () => {
-  let onSubmit, state, dispatchMock, rerender;
+  let onSubmit, state, dispatch, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     onSubmit = jest.fn();
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
     state = {
       policySearchTerm: "",
     };
 
     const utils = render(<PolicySearchBar onSubmit={onSubmit} />, {
-      policyState: state,
-      policyDispatch: dispatchMock,
+      state,
+      dispatch,
     });
     rerender = utils.rerender;
   });
@@ -48,7 +48,7 @@ describe("PolicySearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_POLICY_SEARCH_TERM",
@@ -64,7 +64,7 @@ describe("PolicySearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_POLICY_SEARCH_TERM",
@@ -84,7 +84,7 @@ describe("PolicySearchBar", () => {
     act(() => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
-    expect(dispatchMock).toHaveBeenLastCalledWith({
+    expect(dispatch).toHaveBeenLastCalledWith({
       type: "SET_POLICY_SEARCH_TERM",
       data: "all",
     });

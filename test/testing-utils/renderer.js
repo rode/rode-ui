@@ -23,19 +23,12 @@ import { ToastContainer } from "react-toastify";
 
 const render = (
   Component,
-  {
-    policyState = {},
-    theme = LIGHT_THEME,
-    policyDispatch = jest.fn(),
-    ...options
-  } = {}
+  { state = {}, theme = LIGHT_THEME, dispatch = jest.fn(), ...options } = {}
 ) => {
   // eslint-disable-next-line react/prop-types
   const Wrapper = ({ children }) => (
     <ThemeProvider value={{ theme, toggleTheme: jest.fn() }}>
-      <AppStateProvider
-        value={{ state: policyState, dispatch: policyDispatch }}
-      >
+      <AppStateProvider value={{ state, dispatch }}>
         <ToastContainer />
         {children}
       </AppStateProvider>
