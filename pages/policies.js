@@ -22,7 +22,7 @@ import { useTheme } from "providers/theme";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";

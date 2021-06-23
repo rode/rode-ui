@@ -18,6 +18,11 @@ import React, { createContext, useReducer, useMemo, useContext } from "react";
 import PropTypes from "prop-types";
 import { policyReducer } from "reducers/policies";
 
+// TODO: rename to "useAppState"/"AppStateProvider"/"AppStateActions"
+// TODO: comb through tests, update places where provider is being mocked and use test renderer
+// TODO: experiment with test renderer to pass updates state?
+// TODO: update test renderer to take in "state" and "dispatch" instead of "policyState" and "policyDispatch"
+
 const PolicyContext = createContext();
 
 const initialState = {
@@ -33,7 +38,7 @@ const initialState = {
   currentResource: {},
 };
 
-export const PoliciesProvider = ({ value, children }) => {
+export const AppStateProvider = ({ value, children }) => {
   const [state, dispatch] = useReducer(policyReducer, initialState);
 
   const contextValue = useMemo(() => {
@@ -57,7 +62,7 @@ export const PoliciesProvider = ({ value, children }) => {
   );
 };
 
-PoliciesProvider.propTypes = {
+AppStateProvider.propTypes = {
   value: PropTypes.any,
   children: PropTypes.node.isRequired,
 };

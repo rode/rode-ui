@@ -27,7 +27,7 @@ import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const Resources = () => {

@@ -26,7 +26,7 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
 import { showError } from "utils/toast-utils";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
 
 const PolicyGroupForm = (props) => {

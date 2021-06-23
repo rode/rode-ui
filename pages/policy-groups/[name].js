@@ -21,7 +21,7 @@ import { useTheme } from "providers/theme";
 import PageHeader from "components/layout/PageHeader";
 import Loading from "components/Loading";
 import Button from "components/Button";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";

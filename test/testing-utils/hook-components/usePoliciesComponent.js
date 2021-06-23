@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const PolicyComponent = ({ newSearchTerm }) => {

@@ -18,7 +18,7 @@ import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import PolicyComponent from "test/testing-utils/hook-components/usePoliciesComponent";
-import { PoliciesProvider } from "providers/policies";
+import { AppStateProvider } from "providers/appState";
 
 describe("policies provider", () => {
   let searchTerm;
@@ -26,9 +26,9 @@ describe("policies provider", () => {
   beforeEach(() => {
     searchTerm = chance.string();
     render(
-      <PoliciesProvider>
+      <AppStateProvider>
         <PolicyComponent newSearchTerm={searchTerm} />
-      </PoliciesProvider>
+      </AppStateProvider>
     );
   });
 

@@ -16,7 +16,7 @@
 
 import React from "react";
 import { useFetch } from "./useFetch";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 

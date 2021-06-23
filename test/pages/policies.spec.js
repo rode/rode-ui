@@ -18,13 +18,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import Policies from "pages/policies";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
-jest.mock("providers/policies");
+jest.mock("providers/appState");
 
 describe("Policies", () => {
   let pushMock, mockRouter, mockState, mockDispatch, mockFetchResponse;

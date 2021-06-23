@@ -17,9 +17,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
-jest.mock("providers/policies");
+jest.mock("providers/appState");
 
 describe("ResourceBreadcrumbs", () => {
   let searchTerm;

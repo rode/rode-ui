@@ -17,9 +17,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
-jest.mock("providers/policies");
+jest.mock("providers/appState");
 
 // TODO: convert these tests to use test renderer instead of mocking hook
 describe("PolicyBreadcrumbs", () => {

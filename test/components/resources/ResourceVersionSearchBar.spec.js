@@ -18,9 +18,9 @@ import React from "react";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
-jest.mock("providers/policies");
+jest.mock("providers/appState");
 
 describe("ResourceVersionSearchBar", () => {
   let onSubmit, dispatchMock, rerender;

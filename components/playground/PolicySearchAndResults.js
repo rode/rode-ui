@@ -20,7 +20,7 @@ import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";

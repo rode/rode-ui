@@ -19,13 +19,13 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import "styles/globals.scss";
 import { ThemeProvider } from "providers/theme";
-import { PoliciesProvider } from "providers/policies";
+import { AppStateProvider } from "providers/appState";
 import PageLayout from "components/layout/PageLayout";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
     <ThemeProvider>
-      <PoliciesProvider>
+      <AppStateProvider>
         <React.Fragment>
           <Head>
             <title>Rode</title>
@@ -60,7 +60,7 @@ const MyApp = ({ Component, pageProps }) => {
             <Component {...pageProps} />
           </PageLayout>
         </React.Fragment>
-      </PoliciesProvider>
+      </AppStateProvider>
     </ThemeProvider>
   );
 };

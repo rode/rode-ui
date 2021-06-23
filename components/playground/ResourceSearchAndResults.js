@@ -31,7 +31,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {

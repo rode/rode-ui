@@ -29,7 +29,7 @@ import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ResourceVersionSearchAndResults = ({

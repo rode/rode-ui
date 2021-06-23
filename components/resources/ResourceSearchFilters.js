@@ -18,7 +18,7 @@ import React from "react";
 import styles from "styles/modules/Search.module.scss";
 import Dropdown from "components/Dropdown";
 import { resourceFilters } from "utils/resource-utils";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ResourceSearchFilters = () => {

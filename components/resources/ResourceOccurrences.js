@@ -23,7 +23,7 @@ import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import OtherOccurrenceSection from "components/occurrences/OtherOccurrenceSection";
 import styles from "styles/modules/Occurrences.module.scss";
 import { useTheme } from "providers/theme";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
 const ResourceOccurrences = (props) => {
   const { occurrences } = props;

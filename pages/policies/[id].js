@@ -23,7 +23,7 @@ import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";

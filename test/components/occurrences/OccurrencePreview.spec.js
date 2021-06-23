@@ -20,10 +20,10 @@ import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
 jest.mock("dayjs");
-jest.mock("providers/policies");
+jest.mock("providers/appState");
 
 describe("OccurrencePreview", () => {
   let mainText,

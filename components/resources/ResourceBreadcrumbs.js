@@ -18,7 +18,7 @@ import React from "react";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
 import { SEARCH_ALL } from "utils/constants";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {

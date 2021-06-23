@@ -20,7 +20,7 @@ import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
 import EvaluationResult from "components/playground/EvaluationResult";
-import { usePolicies } from "providers/policies";
+import { usePolicies } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
