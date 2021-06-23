@@ -19,14 +19,14 @@ import styles from "styles/modules/Search.module.scss";
 import Dropdown from "components/Dropdown";
 import { resourceFilters } from "utils/resource-utils";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const ResourceSearchFilters = () => {
   const { state, dispatch } = useAppState();
 
   const onChange = (selectedValues) => {
     dispatch({
-      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: selectedValues,
     });
   };

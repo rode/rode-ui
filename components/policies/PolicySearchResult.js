@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import styles from "styles/modules/Search.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
@@ -32,7 +32,7 @@ const PolicySearchResult = ({ searchResult }) => {
 
   const onClick = () => {
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY,
+      type: stateActions.SET_CURRENT_POLICY,
       data: searchResult,
     });
     router.push(`/policies/${encodeURIComponent(id)}`);

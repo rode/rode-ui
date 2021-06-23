@@ -24,7 +24,7 @@ import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
 import DetailsHeader from "components/shared/DetailsHeader";
@@ -63,7 +63,7 @@ const Policy = () => {
 
   const evaluateInPlayground = () => {
     dispatch({
-      type: policyActions.SET_EVALUATION_POLICY,
+      type: stateActions.SET_EVALUATION_POLICY,
       data: policy,
     });
     router.push("/playground");

@@ -26,7 +26,7 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { showError, showSuccess } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
 import CodeEditor from "components/CodeEditor";
@@ -119,7 +119,7 @@ const PolicyForm = ({
     const policy = await response.json();
 
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY,
+      type: stateActions.SET_CURRENT_POLICY,
       data: policy,
     });
 

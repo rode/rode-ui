@@ -16,12 +16,12 @@
 
 import React, { createContext, useReducer, useMemo, useContext } from "react";
 import PropTypes from "prop-types";
-import { policyReducer } from "reducers/policies";
+import { appStateReducer } from "reducers/appState";
 
 // TODO: comb through tests, update places where provider is being mocked and use test renderer
 // TODO: experiment with test renderer to pass updates state?
 
-const PolicyContext = createContext();
+const AppStateContext = createContext();
 
 const initialState = {
   policySearchTerm: "",
@@ -37,7 +37,7 @@ const initialState = {
 };
 
 export const AppStateProvider = ({ value, children }) => {
-  const [state, dispatch] = useReducer(policyReducer, initialState);
+  const [state, dispatch] = useReducer(appStateReducer, initialState);
 
   const contextValue = useMemo(() => {
     if (value) {
@@ -54,9 +54,9 @@ export const AppStateProvider = ({ value, children }) => {
   }, [state, dispatch]);
 
   return (
-    <PolicyContext.Provider value={contextValue}>
+    <AppStateContext.Provider value={contextValue}>
       {children}
-    </PolicyContext.Provider>
+    </AppStateContext.Provider>
   );
 };
 
@@ -66,7 +66,7 @@ AppStateProvider.propTypes = {
 };
 
 export const useAppState = () => {
-  const { state, dispatch } = useContext(PolicyContext);
+  const { state, dispatch } = useContext(AppStateContext);
 
   return {
     state,

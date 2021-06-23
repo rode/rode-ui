@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import SearchBar from "components/shared/SearchBar";
 import { SEARCH_ALL } from "utils/constants";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
   const { state, dispatch } = useAppState();
@@ -30,7 +30,7 @@ const ResourceSearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
     }
 
     dispatch({
-      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };

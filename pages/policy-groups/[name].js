@@ -22,7 +22,7 @@ import PageHeader from "components/layout/PageHeader";
 import Loading from "components/Loading";
 import Button from "components/Button";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
 
@@ -37,7 +37,7 @@ const PolicyGroup = () => {
 
   const editPolicy = () => {
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      type: stateActions.SET_CURRENT_POLICY_GROUP,
       data: policyGroup,
     });
     router.push(`/policy-groups/${name}/edit`);

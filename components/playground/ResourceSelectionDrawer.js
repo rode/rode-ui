@@ -24,7 +24,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import ResourceSearchAndResults from "./ResourceSearchAndResults";
 import ResourceVersionSearchAndResults from "./ResourceVersionSearchAndResults";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const RESOURCE = "Resource";
 const VERSION = "Version";
@@ -43,11 +43,11 @@ const ResourceSelectionDrawer = ({
   const openVersionSelection = () => setCurrentSection(VERSION);
   const clearSearchTerms = () => {
     dispatch({
-      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
     dispatch({
-      type: policyActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+      type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
       data: "",
     });
   };

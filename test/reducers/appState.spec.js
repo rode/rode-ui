@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { policyActions, policyReducer } from "reducers/policies";
+import { stateActions, appStateReducer } from "reducers/appState";
 
-describe("policies reducer", () => {
+describe("AppState Reducer", () => {
   let state, data;
 
   beforeEach(() => {
@@ -27,9 +27,9 @@ describe("policies reducer", () => {
   });
 
   it("should have an action function for each named action", () => {
-    const actions = Object.keys(policyActions);
+    const actions = Object.keys(stateActions);
     actions.forEach((action) => {
-      const actual = policyReducer(state, {
+      const actual = appStateReducer(state, {
         type: action,
         data,
       });
@@ -41,8 +41,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_POLICY_SEARCH_TERM'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_POLICY_SEARCH_TERM,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data,
     });
 
@@ -53,8 +53,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_CURRENT_POLICY'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_CURRENT_POLICY,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_CURRENT_POLICY,
       data,
     });
 
@@ -65,8 +65,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_EVALUATION_POLICY'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_EVALUATION_POLICY,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_EVALUATION_POLICY,
       data,
     });
 
@@ -77,8 +77,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_EVALUATION_RESOURCE'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_EVALUATION_RESOURCE,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_EVALUATION_RESOURCE,
       data,
     });
 
@@ -89,8 +89,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_CURRENT_POLICY_GROUP'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_CURRENT_POLICY_GROUP,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_CURRENT_POLICY_GROUP,
       data,
     });
 
@@ -101,8 +101,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_RESOURCE_SEARCH_TERM'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data,
     });
 
@@ -113,8 +113,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_OCCURRENCE_DETAILS'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_OCCURRENCE_DETAILS,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data,
     });
 
@@ -125,8 +125,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_CURRENT_RESOURCE'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_CURRENT_RESOURCE,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_CURRENT_RESOURCE,
       data,
     });
 
@@ -137,8 +137,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_RESOURCE_VERSION_SEARCH_TERM'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
       data,
     });
 
@@ -149,8 +149,8 @@ describe("policies reducer", () => {
   });
 
   it("should update state when the action type is 'SET_RESOURCE_TYPE_SEARCH_FILTER'", () => {
-    const actual = policyReducer(state, {
-      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+    const actual = appStateReducer(state, {
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data,
     });
 

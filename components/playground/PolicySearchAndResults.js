@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
@@ -72,7 +72,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
               // TODO: test this logic
               if (!state.policySearchTerm.length) {
                 dispatch({
-                  type: policyActions.SET_POLICY_SEARCH_TERM,
+                  type: stateActions.SET_POLICY_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }
@@ -89,7 +89,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                 label={"View all policies"}
                 onClick={() => {
                   dispatch({
-                    type: policyActions.SET_POLICY_SEARCH_TERM,
+                    type: stateActions.SET_POLICY_SEARCH_TERM,
                     data: SEARCH_ALL,
                   });
                   setPolicySearch(true);
@@ -112,7 +112,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                           setPolicy(result);
                           setPolicySearch(false);
                           dispatch({
-                            type: policyActions.SET_POLICY_SEARCH_TERM,
+                            type: stateActions.SET_POLICY_SEARCH_TERM,
                             data: "",
                           });
                           setShowDrawer(false);

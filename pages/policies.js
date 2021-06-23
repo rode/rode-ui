@@ -23,7 +23,7 @@ import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -56,13 +56,13 @@ const Policies = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: policyActions.SET_POLICY_SEARCH_TERM,
+        type: stateActions.SET_POLICY_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: policyActions.SET_POLICY_SEARCH_TERM,
+        type: stateActions.SET_POLICY_SEARCH_TERM,
         data: "",
       });
     }

@@ -97,13 +97,13 @@ const actionMap = {
   SET_RESOURCE_TYPE_SEARCH_FILTER: setResourceTypeSearchFilter,
 };
 
-export const policyReducer = (state, action) => {
+export const appStateReducer = (state, action) => {
   const { type, data } = action;
 
   return actionMap[type](state, data);
 };
 
-export const policyActions = {
+export const stateActions = {
   SET_POLICY_SEARCH_TERM: "SET_POLICY_SEARCH_TERM",
   SET_CURRENT_POLICY: "SET_CURRENT_POLICY",
   SET_EVALUATION_POLICY: "SET_EVALUATION_POLICY",

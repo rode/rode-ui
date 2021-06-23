@@ -25,7 +25,7 @@ import PageHeader from "components/layout/PageHeader";
 import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
 import { showError } from "utils/toast-utils";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
 
@@ -83,7 +83,7 @@ const PolicyGroupForm = (props) => {
     }
 
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      type: stateActions.SET_CURRENT_POLICY_GROUP,
       data: formData,
     });
 

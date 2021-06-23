@@ -19,7 +19,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 
 jest.mock("dayjs");
@@ -83,7 +83,7 @@ describe("OccurrencePreview", () => {
     expect(screen.getByTitle(/chevron right/i)).toBeInTheDocument();
     userEvent.click(screen.getByText(mainText));
     expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: policyActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: currentOccurrence,
     });
 
@@ -109,7 +109,7 @@ describe("OccurrencePreview", () => {
     userEvent.click(screen.getByText(mainText));
 
     expect(dispatchMock).toHaveBeenCalledTimes(2).toHaveBeenCalledWith({
-      type: policyActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
   });

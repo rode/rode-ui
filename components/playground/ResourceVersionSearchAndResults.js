@@ -30,7 +30,7 @@ import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const ResourceVersionSearchAndResults = ({
   selectedResource,
@@ -74,7 +74,7 @@ const ResourceVersionSearchAndResults = ({
             onClick={() => {
               setVersionSearch(true);
               dispatch({
-                type: policyActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+                type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
                 data: SEARCH_ALL,
               });
             }}

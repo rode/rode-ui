@@ -22,7 +22,7 @@ import { getResourceDetails } from "utils/resource-utils";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
 import Button from "components/Button";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
@@ -47,13 +47,13 @@ const Resource = () => {
 
   useSafeLayoutEffect(() => {
     dispatch({
-      type: policyActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
 
     return () => {
       dispatch({
-        type: policyActions.SET_CURRENT_RESOURCE,
+        type: stateActions.SET_CURRENT_RESOURCE,
         data: {},
       });
     };
@@ -61,14 +61,14 @@ const Resource = () => {
 
   useSafeLayoutEffect(() => {
     dispatch({
-      type: policyActions.SET_CURRENT_RESOURCE,
+      type: stateActions.SET_CURRENT_RESOURCE,
       data: getResourceDetails(resourceUri),
     });
   }, [resourceUri]);
 
   const evaluateInPlayground = () => {
     dispatch({
-      type: policyActions.SET_EVALUATION_RESOURCE,
+      type: stateActions.SET_EVALUATION_RESOURCE,
       data: {
         versionedResourceUri: resourceUri,
       },

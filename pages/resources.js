@@ -28,7 +28,7 @@ import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -54,7 +54,7 @@ const Resources = () => {
 
   const viewAllResources = () => {
     dispatch({
-      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
     router.push(`/resources?search=${SEARCH_ALL}`);
@@ -62,7 +62,7 @@ const Resources = () => {
 
   useEffect(() => {
     dispatch({
-      type: policyActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
   }, []);
@@ -71,13 +71,13 @@ const Resources = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: policyActions.SET_RESOURCE_SEARCH_TERM,
+        type: stateActions.SET_RESOURCE_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: policyActions.SET_RESOURCE_SEARCH_TERM,
+        type: stateActions.SET_RESOURCE_SEARCH_TERM,
         data: SEARCH_ALL,
       });
     }

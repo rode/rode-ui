@@ -17,7 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const PolicyComponent = ({ newSearchTerm }) => {
   const { state, dispatch } = useAppState();
@@ -32,7 +32,7 @@ const PolicyComponent = ({ newSearchTerm }) => {
       <button
         onClick={() =>
           dispatch({
-            type: policyActions.SET_POLICY_SEARCH_TERM,
+            type: stateActions.SET_POLICY_SEARCH_TERM,
             data: newSearchTerm,
           })
         }

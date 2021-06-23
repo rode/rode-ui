@@ -17,7 +17,7 @@
 import React from "react";
 import { useFetch } from "./useFetch";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 
 export const usePolicyGroup = (policyGroupName) => {
@@ -40,7 +40,7 @@ export const usePolicyGroup = (policyGroupName) => {
       setPolicyGroup(data);
 
       dispatch({
-        type: policyActions.SET_CURRENT_POLICY_GROUP,
+        type: stateActions.SET_CURRENT_POLICY_GROUP,
         data,
       });
     }

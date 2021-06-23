@@ -23,7 +23,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
@@ -38,7 +38,7 @@ const PolicyGroups = () => {
 
   const navigateToPolicyGroupPage = (policyGroup) => {
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      type: stateActions.SET_CURRENT_POLICY_GROUP,
       data: policyGroup,
     });
     router.push(`/policy-groups/${encodeURIComponent(policyGroup.name)}`);

@@ -32,7 +32,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
@@ -58,7 +58,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
             // TODO: test this logic
             if (!state.resourceSearchTerm.length) {
               dispatch({
-                type: policyActions.SET_RESOURCE_SEARCH_TERM,
+                type: stateActions.SET_RESOURCE_SEARCH_TERM,
                 data: SEARCH_ALL,
               });
             }
@@ -80,7 +80,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
               onClick={() => {
                 setResourceSearch(true);
                 dispatch({
-                  type: policyActions.SET_RESOURCE_SEARCH_TERM,
+                  type: stateActions.SET_RESOURCE_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

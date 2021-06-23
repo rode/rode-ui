@@ -21,7 +21,7 @@ import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
 import EvaluationResult from "components/playground/EvaluationResult";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
@@ -65,11 +65,11 @@ const PolicyPlayground = () => {
 
   const resetPlayground = () => {
     dispatch({
-      type: policyActions.SET_EVALUATION_RESOURCE,
+      type: stateActions.SET_EVALUATION_RESOURCE,
       data: null,
     });
     dispatch({
-      type: policyActions.SET_EVALUATION_POLICY,
+      type: stateActions.SET_EVALUATION_POLICY,
       data: null,
     });
     setEvaluationResults(null);
@@ -77,11 +77,11 @@ const PolicyPlayground = () => {
 
   useEffect(() => {
     dispatch({
-      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
     dispatch({
-      type: policyActions.SET_POLICY_SEARCH_TERM,
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
 
@@ -103,7 +103,7 @@ const PolicyPlayground = () => {
           policy={state.evaluationPolicy}
           setPolicy={(data) =>
             dispatch({
-              type: policyActions.SET_EVALUATION_POLICY,
+              type: stateActions.SET_EVALUATION_POLICY,
               data,
             })
           }
@@ -115,7 +115,7 @@ const PolicyPlayground = () => {
           resourceUri={state.evaluationResource?.versionedResourceUri}
           setEvaluationResource={(data) =>
             dispatch({
-              type: policyActions.SET_EVALUATION_RESOURCE,
+              type: stateActions.SET_EVALUATION_RESOURCE,
               data,
             })
           }

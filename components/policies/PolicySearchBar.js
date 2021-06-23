@@ -18,7 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import SearchBar from "components/shared/SearchBar";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import { SEARCH_ALL } from "utils/constants";
 
 const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
@@ -29,7 +29,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onChange();
     }
     dispatch({
-      type: policyActions.SET_POLICY_SEARCH_TERM,
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };

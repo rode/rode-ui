@@ -20,7 +20,7 @@ import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useTheme } from "providers/theme";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SEARCH_ALL } from "utils/constants";
@@ -32,12 +32,12 @@ const Home = () => {
 
   useEffect(() => {
     dispatch({
-      type: policyActions.SET_RESOURCE_SEARCH_TERM,
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
 
     dispatch({
-      type: policyActions.SET_POLICY_SEARCH_TERM,
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
   }, []);

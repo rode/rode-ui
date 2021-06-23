@@ -20,7 +20,7 @@ import styles from "styles/modules/Occurrences.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useAppState } from "providers/appState";
-import { policyActions } from "reducers/policies";
+import { stateActions } from "reducers/appState";
 
 const OccurrencePreview = ({
   mainText,
@@ -40,7 +40,7 @@ const OccurrencePreview = ({
 
   const onClick = () => {
     dispatch({
-      type: policyActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: isActive ? null : currentOccurrence,
     });
   };
