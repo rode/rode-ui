@@ -37,7 +37,9 @@ describe("PolicyPlayground", () => {
     fetchResponse,
     usePaginatedFetchResponse,
     fetchOccurrencesResponse,
-    evaluationResults;
+    evaluationResults,
+    rerender,
+    unmount;
 
   beforeEach(() => {
     state = {
@@ -67,6 +69,14 @@ describe("PolicyPlayground", () => {
     useFetch.mockReturnValue(fetchOccurrencesResponse);
     // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(fetchResponse);
+
+    const utils = render(<PolicyPlayground />, {
+      state,
+      dispatch,
+    });
+
+    rerender = utils.rerender;
+    unmount = utils.unmount;
   });
 
   afterEach(() => {
@@ -74,13 +84,6 @@ describe("PolicyPlayground", () => {
   });
 
   describe("Empty Evaluation Screen", () => {
-    beforeEach(() => {
-      render(<PolicyPlayground />, {
-        state,
-        dispatch,
-      });
-    });
-
     it("should clear any search terms set by other searches", () => {
       expect(dispatch)
         .toHaveBeenCalledWith({
@@ -202,7 +205,7 @@ describe("PolicyPlayground", () => {
   });
 
   describe("Resource and Policy have been selected for evaluation", () => {
-    let selectedResource, selectedPolicy, unmount;
+    let selectedResource, selectedPolicy;
 
     beforeEach(() => {
       selectedResource = {
@@ -216,12 +219,7 @@ describe("PolicyPlayground", () => {
       state.evaluationResource = selectedResource;
       state.evaluationPolicy = selectedPolicy;
 
-      const utils = render(<PolicyPlayground />, {
-        state,
-        dispatch: dispatch,
-      });
-
-      unmount = utils.unmount;
+      rerender(<PolicyPlayground />);
     });
 
     it("should render the selected resource occurrence data", () => {

@@ -96,7 +96,7 @@ describe("Policies", () => {
 
   describe("searching for policies", () => {
     it("should search for all policies if a search term does not exist", () => {
-      state.policySearchTerm = " ";
+      state.policySearchTerm = "";
 
       rerender(<Policies />);
       const renderedSearchButton = screen.getByTitle(/search/i);

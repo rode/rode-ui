@@ -78,7 +78,7 @@ const Resources = () => {
       setShowSearchResults(false);
       dispatch({
         type: stateActions.SET_RESOURCE_SEARCH_TERM,
-        data: SEARCH_ALL,
+        data: "",
       });
     }
   }, [router.query]);

@@ -24,7 +24,7 @@ import Home from "pages/index";
 jest.mock("next/router");
 
 describe("index", () => {
-  let searchTerm, pushMock, dispatch;
+  let searchTerm, pushMock, dispatch, state, rerender;
 
   beforeEach(() => {
     pushMock = jest.fn();
@@ -33,6 +33,12 @@ describe("index", () => {
     useRouter.mockReturnValue({
       push: pushMock,
     });
+    state = {
+      policySearchTerm: searchTerm,
+      resourceSearchTerm: searchTerm,
+    };
+    const utils = render(<Home />, { state, dispatch });
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -40,13 +46,6 @@ describe("index", () => {
   });
 
   it("should clear any saved search terms", () => {
-    render(<Home />, {
-      state: {
-        policySearchTerm: searchTerm,
-        resourceSearchTerm: searchTerm,
-      },
-      dispatch,
-    });
     expect(dispatch)
       .toHaveBeenCalledWith({
         type: "SET_RESOURCE_SEARCH_TERM",
@@ -61,12 +60,7 @@ describe("index", () => {
 
   describe("resource card", () => {
     it("should render a card for resources and handle a valid search", () => {
-      render(<Home />, {
-        state: {
-          resourceSearchTerm: searchTerm,
-        },
-      });
-      let renderedSearch = screen.getByLabelText(/search for a resource/i);
+      const renderedSearch = screen.getByLabelText(/search for a resource/i);
       expect(renderedSearch).toBeInTheDocument();
 
       const resourceSearchButton = screen.queryAllByTitle(/search/i)[0];
@@ -78,11 +72,8 @@ describe("index", () => {
     });
 
     it("should render a card for resources and handle an empty search", () => {
-      render(<Home />, {
-        state: {
-          resourceSearchTerm: " ",
-        },
-      });
+      state.resourceSearchTerm = "";
+      rerender(<Home />);
       let renderedSearch = screen.getByLabelText(/search for a resource/i);
       expect(renderedSearch).toBeInTheDocument();
 
@@ -97,11 +88,6 @@ describe("index", () => {
 
   describe("policy card", () => {
     it("should render a card for policies and handle a valid search", () => {
-      render(<Home />, {
-        state: {
-          policySearchTerm: searchTerm,
-        },
-      });
       const renderedSearch = screen.getByLabelText(/search for a policy/i);
       expect(renderedSearch).toBeInTheDocument();
 
@@ -113,11 +99,8 @@ describe("index", () => {
     });
 
     it("should render a card for policies and handle an empty search", () => {
-      render(<Home />, {
-        state: {
-          policySearchTerm: " ",
-        },
-      });
+      state.policySearchTerm = "";
+      rerender(<Home />);
       let renderedSearch = screen.getByLabelText(/search for a policy/i);
       expect(renderedSearch).toBeInTheDocument();
 
