@@ -55,7 +55,6 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
         <ResourceSearchBar
           onSubmit={(event) => {
             event.preventDefault();
-            // TODO: test this logic
             if (!state.resourceSearchTerm.length) {
               dispatch({
                 type: stateActions.SET_RESOURCE_SEARCH_TERM,

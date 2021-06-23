@@ -19,6 +19,7 @@ import { render, screen, act } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import PolicySearchAndResults from "components/playground/PolicySearchAndResults";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { SEARCH_ALL } from "utils/constants";
 
 jest.mock("hooks/usePaginatedFetch");
 
@@ -102,6 +103,23 @@ describe("PolicySearchAndResults", () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_POLICY_SEARCH_TERM",
       data: "all",
+    });
+  });
+
+  it("should search for all policies if there is no search term specified when the user starts a search", () => {
+    state.policySearchTerm = "";
+    rerender(
+      <PolicySearchAndResults
+        clearEvaluation={clearEvaluation}
+        setPolicy={setPolicy}
+      />
+    );
+    const renderedSearchButton = screen.getByLabelText("Search Policies");
+    userEvent.click(renderedSearchButton);
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_POLICY_SEARCH_TERM",
+      data: SEARCH_ALL,
     });
   });
 

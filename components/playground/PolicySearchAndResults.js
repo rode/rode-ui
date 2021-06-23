@@ -69,7 +69,6 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();
-              // TODO: test this logic
               if (!state.policySearchTerm.length) {
                 dispatch({
                   type: stateActions.SET_POLICY_SEARCH_TERM,

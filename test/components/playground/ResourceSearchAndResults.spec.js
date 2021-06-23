@@ -20,6 +20,7 @@ import userEvent from "@testing-library/user-event";
 import ResourceSearchAndResults from "components/playground/ResourceSearchAndResults";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { RESOURCE_TYPES } from "utils/resource-utils";
+import { SEARCH_ALL } from "utils/constants";
 
 jest.mock("hooks/usePaginatedFetch");
 
@@ -85,6 +86,18 @@ describe("ResourceSearchAndResults", () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_RESOURCE_SEARCH_TERM",
       data: "all",
+    });
+  });
+
+  it("should search for all resources if there is no search term specified when the user starts a search", () => {
+    state.resourceSearchTerm = "";
+    rerender(<ResourceSearchAndResults onResourceSelect={onResourceSelect} />);
+    const renderedSearchButton = screen.getByLabelText("Search Resources");
+    userEvent.click(renderedSearchButton);
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_RESOURCE_SEARCH_TERM",
+      data: SEARCH_ALL,
     });
   });
 
