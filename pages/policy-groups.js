@@ -22,13 +22,13 @@ import PageHeader from "components/layout/PageHeader";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     "/api/policy-groups",

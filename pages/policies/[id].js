@@ -23,7 +23,7 @@ import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
@@ -50,7 +50,7 @@ const createLinks = (baseUrl) => {
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
   const [activeSection, setActiveSection] = useState(DETAILS);
 
   const { id } = router.query;

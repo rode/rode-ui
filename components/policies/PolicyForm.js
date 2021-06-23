@@ -25,7 +25,7 @@ import { schema } from "schemas/policy-form";
 import { useFormValidation } from "hooks/useFormValidation";
 import { showError, showSuccess } from "utils/toast-utils";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import Modal from "components/Modal";
 import PageHeader from "components/layout/PageHeader";
@@ -44,7 +44,7 @@ const PolicyForm = ({
 }) => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);

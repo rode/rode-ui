@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 
 jest.mock("providers/appState");
 
@@ -30,7 +30,7 @@ describe("ResourceBreadcrumbs", () => {
 
   describe("searchTerm exists", () => {
     beforeEach(() => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {
           resourceSearchTerm: searchTerm,
         },
@@ -55,7 +55,7 @@ describe("ResourceBreadcrumbs", () => {
     });
 
     it("should return the correct breadcrumb when viewing all resources", () => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {
           resourceSearchTerm: "all",
         },
@@ -70,7 +70,7 @@ describe("ResourceBreadcrumbs", () => {
 
   describe("no searchTerm exists", () => {
     it("should return null", () => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {},
       });
 

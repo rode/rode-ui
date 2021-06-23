@@ -19,7 +19,7 @@ import styles from "styles/modules/Home.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useTheme } from "providers/theme";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ import { SEARCH_ALL } from "utils/constants";
 const Home = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   useEffect(() => {
     dispatch({

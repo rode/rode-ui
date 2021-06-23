@@ -20,7 +20,7 @@ import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -38,7 +38,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.policySearchTerm,
     debounceDelay

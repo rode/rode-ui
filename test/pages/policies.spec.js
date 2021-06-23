@@ -18,7 +18,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import Policies from "pages/policies";
 import userEvent from "@testing-library/user-event";
 
@@ -46,7 +46,7 @@ describe("Policies", () => {
     };
     useRouter.mockReturnValue(mockRouter);
 
-    usePolicies.mockReturnValue({
+    useAppState.mockReturnValue({
       dispatch: mockDispatch,
       state: mockState,
     });

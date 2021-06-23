@@ -17,17 +17,17 @@
 import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import PolicyComponent from "test/testing-utils/hook-components/usePoliciesComponent";
+import AppStateComponent from "test/testing-utils/hook-components/useAppStateComponent";
 import { AppStateProvider } from "providers/appState";
 
-describe("policies provider", () => {
+describe("AppStateProvider", () => {
   let searchTerm;
 
   beforeEach(() => {
     searchTerm = chance.string();
     render(
       <AppStateProvider>
-        <PolicyComponent newSearchTerm={searchTerm} />
+        <AppStateComponent newSearchTerm={searchTerm} />
       </AppStateProvider>
     );
   });

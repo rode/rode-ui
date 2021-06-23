@@ -26,7 +26,7 @@ import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
 import { showError } from "utils/toast-utils";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
 
 const PolicyGroupForm = (props) => {
@@ -41,7 +41,7 @@ const PolicyGroupForm = (props) => {
   const creatingNewPolicyGroup = method === "POST";
   const { theme } = useTheme();
   const router = useRouter();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
 
   const [name, setName] = useState(policyGroup.name || "");
   const [description, setDescription] = useState(policyGroup.description || "");

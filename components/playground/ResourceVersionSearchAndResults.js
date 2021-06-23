@@ -29,7 +29,7 @@ import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ResourceVersionSearchAndResults = ({
@@ -38,7 +38,7 @@ const ResourceVersionSearchAndResults = ({
 }) => {
   const [versionSearch, setVersionSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(500);
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   const debouncedSearch = useDebouncedValue(
     state.resourceVersionSearchTerm,

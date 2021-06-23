@@ -23,7 +23,7 @@ import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
 import Button from "components/Button";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
@@ -36,7 +36,7 @@ import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundBu
 
 const Resource = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const router = useRouter();
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;

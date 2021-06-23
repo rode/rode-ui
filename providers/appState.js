@@ -67,7 +67,7 @@ AppStateProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const usePolicies = () => {
+export const useAppState = () => {
   const { state, dispatch } = useContext(PolicyContext);
 
   return {

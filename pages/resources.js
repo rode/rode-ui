@@ -27,12 +27,12 @@ import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const Resources = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(state.resourceSearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();

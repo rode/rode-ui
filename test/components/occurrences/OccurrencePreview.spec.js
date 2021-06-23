@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
 import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 
 jest.mock("dayjs");
 jest.mock("providers/appState");
@@ -44,7 +44,7 @@ describe("OccurrencePreview", () => {
     };
     dispatchMock = jest.fn();
 
-    usePolicies.mockReturnValue({
+    useAppState.mockReturnValue({
       state: {
         occurrenceDetails: {
           originals: { occurrences: [{ name: chance.string() }] },
@@ -87,7 +87,7 @@ describe("OccurrencePreview", () => {
       data: currentOccurrence,
     });
 
-    usePolicies.mockReturnValue({
+    useAppState.mockReturnValue({
       state: {
         occurrenceDetails: {
           originals: { occurrences: [{ name: expectedOccurrenceName }] },

@@ -16,11 +16,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const PolicyComponent = ({ newSearchTerm }) => {
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   return (
     <>

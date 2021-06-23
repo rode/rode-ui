@@ -23,7 +23,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import ResourceSearchAndResults from "./ResourceSearchAndResults";
 import ResourceVersionSearchAndResults from "./ResourceVersionSearchAndResults";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const RESOURCE = "Resource";
@@ -33,7 +33,7 @@ const ResourceSelectionDrawer = ({
   setEvaluationResource,
   clearEvaluation,
 }) => {
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
   const [resource, setResource] = useState(null);
   const [resourceVersion, setResourceVersion] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);

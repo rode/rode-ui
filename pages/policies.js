@@ -22,7 +22,7 @@ import { useTheme } from "providers/theme";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import PolicySearchResult from "components/policies/PolicySearchResult";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 import { createSearchFilter } from "utils/shared-utils";
 import Button from "components/Button";
@@ -32,7 +32,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 
 const Policies = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(state.policySearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();

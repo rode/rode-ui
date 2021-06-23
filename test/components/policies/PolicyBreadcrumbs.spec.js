@@ -17,7 +17,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 
 jest.mock("providers/appState");
 
@@ -31,7 +31,7 @@ describe("PolicyBreadcrumbs", () => {
 
   describe("searchTerm exists", () => {
     beforeEach(() => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {
           policySearchTerm: policySearchTerm,
         },
@@ -56,7 +56,7 @@ describe("PolicyBreadcrumbs", () => {
     });
 
     it("should return the correct breadcrumb when viewing all policies", () => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {
           policySearchTerm: "all",
         },
@@ -71,7 +71,7 @@ describe("PolicyBreadcrumbs", () => {
 
   describe("no searchTerm exists", () => {
     it("should return null", () => {
-      usePolicies.mockReturnValue({
+      useAppState.mockReturnValue({
         state: {},
       });
 

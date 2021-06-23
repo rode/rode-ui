@@ -18,7 +18,7 @@ import React from "react";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
 import { SEARCH_ALL } from "utils/constants";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {
@@ -31,7 +31,7 @@ const getSearchTermText = (searchTerm) => {
 const ResourceBreadcrumbs = () => {
   const {
     state: { resourceSearchTerm },
-  } = usePolicies();
+  } = useAppState();
 
   if (!resourceSearchTerm) {
     return null;

@@ -33,13 +33,13 @@ import {
 import { DATE_TIME_FORMAT, SEARCH_ALL } from "utils/constants";
 import dayjs from "dayjs";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const {
     resourceName,
     resourceVersion: currentVersion,

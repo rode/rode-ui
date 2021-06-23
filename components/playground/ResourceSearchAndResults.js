@@ -31,13 +31,13 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
-import { usePolicies } from "providers/appState";
+import { useAppState } from "providers/appState";
 import { policyActions } from "reducers/policies";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.resourceSearchTerm,
     debounceDelay
