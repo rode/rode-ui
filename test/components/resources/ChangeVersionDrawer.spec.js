@@ -27,7 +27,13 @@ jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
 
 describe("ChangeVersionDrawer", () => {
-  let isOpen, closeDrawer, state, paginatedFetchResponse, dispatch, router;
+  let isOpen,
+    closeDrawer,
+    state,
+    paginatedFetchResponse,
+    dispatch,
+    router,
+    rerender;
 
   beforeEach(() => {
     isOpen = true;
@@ -55,6 +61,16 @@ describe("ChangeVersionDrawer", () => {
     useRouter.mockReturnValue(router);
 
     usePaginatedFetch.mockReturnValue(paginatedFetchResponse);
+
+    const utils = render(
+      <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
+      {
+        state,
+        dispatch,
+      }
+    );
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -63,18 +79,11 @@ describe("ChangeVersionDrawer", () => {
 
   it("should not call to fetch the versions if there is no resource selected", () => {
     state.currentResource = {};
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch: dispatch,
-    });
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
     expect(usePaginatedFetch).toHaveBeenCalledWith(null, { id: undefined }, 10);
   });
 
   it("should call to fetch the versions when a resource is selected", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       { id: state.currentResource.genericName },
@@ -85,10 +94,8 @@ describe("ChangeVersionDrawer", () => {
   it("should call to fetch the versions when a resource is selected and a search term is specified", () => {
     const searchTerm = chance.string();
     state.resourceVersionSearchTerm = searchTerm;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
+
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       {
@@ -101,29 +108,18 @@ describe("ChangeVersionDrawer", () => {
 
   it("should render a loading indicator when fetching the data", () => {
     paginatedFetchResponse.loading = true;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
   it("should show a not found message if no data is found for the resource", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
-
     expect(screen.getByText(/no versions found matching the given criteria./i));
   });
 
   it("should set the search term to all when the drawer is closed", () => {
     isOpen = false;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
@@ -131,11 +127,6 @@ describe("ChangeVersionDrawer", () => {
   });
 
   it("should render the version search bar", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      state,
-      dispatch,
-    });
-
     const renderedSearchBar = screen.getByLabelText(/search for a version/i);
 
     expect(renderedSearchBar).toBeInTheDocument();
@@ -176,9 +167,8 @@ describe("ChangeVersionDrawer", () => {
         name,
         state.currentResource.resourceVersion
       );
-      render(
-        <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
-        { state, dispatch }
+      rerender(
+        <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />
       );
     });
 

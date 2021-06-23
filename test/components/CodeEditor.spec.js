@@ -24,18 +24,20 @@ import CodeEditor from "components/CodeEditor";
 jest.mock("prism/prism");
 
 describe("CodeEditor", () => {
-  let name, label, onChange;
+  let name, label, onChange, rerender;
 
   beforeEach(() => {
     name = chance.string();
     label = chance.string();
     onChange = jest.fn();
     Prism.highlight = jest.fn().mockReturnValue(`\n ${chance.string()} \n`);
+    const utils = render(
+      <CodeEditor name={name} label={label} onChange={onChange} />
+    );
+    rerender = utils.rerender;
   });
 
   it("should render the code editor with default values", () => {
-    render(<CodeEditor name={name} label={label} onChange={onChange} />);
-
     const renderedComponent = screen.getByLabelText(label);
 
     expect(renderedComponent).toBeInTheDocument();
@@ -44,8 +46,6 @@ describe("CodeEditor", () => {
   });
 
   it("should call the onChange event", () => {
-    render(<CodeEditor name={name} label={label} onChange={onChange} />);
-
     const textToType = chance.string();
     const renderedComponent = screen.getByLabelText(label);
     userEvent.type(renderedComponent, textToType);
@@ -59,7 +59,7 @@ describe("CodeEditor", () => {
 
   it("should render the placeholder if specified", () => {
     const placeholder = chance.string();
-    render(
+    rerender(
       <CodeEditor
         name={name}
         label={label}
@@ -73,7 +73,7 @@ describe("CodeEditor", () => {
 
   it("should render the value if specified", () => {
     const value = chance.string();
-    render(
+    rerender(
       <CodeEditor name={name} label={label} onChange={onChange} value={value} />
     );
 
@@ -81,7 +81,7 @@ describe("CodeEditor", () => {
   });
 
   it("should allow the user to specify the code editor as required", () => {
-    render(
+    rerender(
       <CodeEditor name={name} label={label} onChange={onChange} required />
     );
 
@@ -89,19 +89,19 @@ describe("CodeEditor", () => {
   });
 
   it("should allow the user to specify the code editor as disabled", () => {
-    render(<CodeEditor name={name} label={label} disabled />);
+    rerender(<CodeEditor name={name} label={label} disabled />);
     expect(screen.getByLabelText(label)).toBeDisabled();
   });
 
   it("should require an onChange event if the code editor is not disabled", () => {
     console.error = jest.fn();
-    render(<CodeEditor name={name} label={label} />);
+    rerender(<CodeEditor name={name} label={label} />);
     expect(console.error).toHaveBeenCalled();
   });
 
   it("should render an error if specified", () => {
     const error = chance.string();
-    render(
+    rerender(
       <CodeEditor name={name} label={label} onChange={onChange} error={error} />
     );
 

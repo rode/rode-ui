@@ -22,13 +22,23 @@ import ResourceOccurrences from "components/resources/ResourceOccurrences";
 jest.mock("hooks/useFetch");
 
 describe("ResourceOccurrences", () => {
-  let occurrences, state;
+  let occurrences, state, rerender;
 
   beforeEach(() => {
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: jest.fn(),
     });
     occurrences = createMockMappedOccurrences();
+
+    state = {
+      occurrenceDetails: null,
+    };
+
+    const utils = render(<ResourceOccurrences occurrences={occurrences} />, {
+      state,
+    });
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -36,15 +46,6 @@ describe("ResourceOccurrences", () => {
   });
 
   describe("showing occurrence previews", () => {
-    beforeEach(() => {
-      state = {
-        occurrenceDetails: null,
-      };
-      render(<ResourceOccurrences occurrences={occurrences} />, {
-        state,
-      });
-    });
-
     it("should render the build occurrence section", () => {
       expect(screen.getByText("Build")).toBeInTheDocument();
       expect(screen.getByTitle("Cog")).toBeInTheDocument();
@@ -68,9 +69,7 @@ describe("ResourceOccurrences", () => {
   it("should render the occurrence details if they should be shown", () => {
     state.occurrenceDetails = occurrences.build[0];
 
-    render(<ResourceOccurrences occurrences={occurrences} />, {
-      state,
-    });
+    rerender(<ResourceOccurrences occurrences={occurrences} />);
 
     expect(screen.getByTestId("occurrenceDetails")).toBeInTheDocument();
   });

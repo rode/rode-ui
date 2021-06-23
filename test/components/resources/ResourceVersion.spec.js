@@ -23,25 +23,27 @@ import { copy } from "utils/shared-utils";
 jest.mock("utils/shared-utils");
 
 describe("ResourceVersion", () => {
-  let version;
+  let version, rerender;
+
+  beforeEach(() => {
+    version = chance.string({ min: 12 });
+    const utils = render(<ResourceVersion version={version} />);
+    rerender = utils.rerender;
+  });
 
   it("should display the shortened version if the length is longer than 12 characters", () => {
-    version = chance.string({ min: 12 });
-    render(<ResourceVersion version={version} />);
-
     expect(screen.getByText(version.substring(0, 12))).toBeInTheDocument();
   });
 
   it("should display the full version if the length is shorter than or equal to 12 characters", () => {
     version = chance.string({ max: 11 });
-    render(<ResourceVersion version={version} />);
+    rerender(<ResourceVersion version={version} />);
 
     expect(screen.getByText(version)).toBeInTheDocument();
   });
 
   it("should display the copy button if specified", () => {
-    version = chance.string({ min: 12 });
-    render(<ResourceVersion version={version} copy={true} />);
+    rerender(<ResourceVersion version={version} copy={true} />);
 
     const renderedButton = screen.getByTitle(/clipboard copy/i);
     expect(renderedButton).toBeInTheDocument();
@@ -51,9 +53,8 @@ describe("ResourceVersion", () => {
   });
 
   it("should allow the user to specify a button classname", () => {
-    version = chance.string();
     const buttonClass = chance.string();
-    render(
+    rerender(
       <ResourceVersion
         version={version}
         buttonClassName={buttonClass}

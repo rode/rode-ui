@@ -56,15 +56,8 @@ describe("ResourceVersionSearchAndResults", () => {
     selectedResource = { id: chance.string() };
 
     usePaginatedFetch.mockReturnValue(fetchResponse);
-  });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it("should use the correct params when no search term is specified", () => {
-    state.resourceVersionSearchTerm = null;
-    render(
+    const utils = render(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
         selectedResource={selectedResource}
@@ -73,6 +66,22 @@ describe("ResourceVersionSearchAndResults", () => {
         state,
         dispatch,
       }
+    );
+
+    rerender = utils.rerender;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should use the correct params when no search term is specified", () => {
+    state.resourceVersionSearchTerm = null;
+    rerender(
+      <ResourceVersionSearchAndResults
+        onVersionSelect={onVersionSelect}
+        selectedResource={selectedResource}
+      />
     );
     searchForVersion();
 
@@ -86,16 +95,6 @@ describe("ResourceVersionSearchAndResults", () => {
   });
 
   it("should use the correct params when searching for a version", () => {
-    render(
-      <ResourceVersionSearchAndResults
-        onVersionSelect={onVersionSelect}
-        selectedResource={selectedResource}
-      />,
-      {
-        state,
-        dispatch,
-      }
-    );
     searchForVersion();
 
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
@@ -110,15 +109,11 @@ describe("ResourceVersionSearchAndResults", () => {
 
   it("should use the correct params when searching for all versions", () => {
     state.resourceVersionSearchTerm = "all";
-    render(
+    rerender(
       <ResourceVersionSearchAndResults
         onVersionSelect={onVersionSelect}
         selectedResource={selectedResource}
-      />,
-      {
-        state,
-        dispatch,
-      }
+      />
     );
     searchForVersion();
 
@@ -132,21 +127,6 @@ describe("ResourceVersionSearchAndResults", () => {
   });
 
   describe("searching for a version", () => {
-    beforeEach(() => {
-      const utils = render(
-        <ResourceVersionSearchAndResults
-          onVersionSelect={onVersionSelect}
-          selectedResource={selectedResource}
-        />,
-        {
-          state,
-          dispatch,
-        }
-      );
-
-      rerender = utils.rerender;
-    });
-
     it("should render the search bar", () => {
       expect(screen.getByText(/search for a version/i)).toBeInTheDocument();
 
@@ -213,11 +193,7 @@ describe("ResourceVersionSearchAndResults", () => {
         <ResourceVersionSearchAndResults
           onVersionSelect={onVersionSelect}
           selectedResource={null}
-        />,
-        {
-          state,
-          dispatch,
-        }
+        />
       );
 
       expect(

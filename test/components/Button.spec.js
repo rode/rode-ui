@@ -15,29 +15,22 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import Button from "components/Button";
 import userEvent from "@testing-library/user-event";
-import { useTheme } from "providers/theme";
-import { DARK_THEME, LIGHT_THEME } from "utils/constants";
-
-jest.mock("providers/theme");
 
 describe("Button", () => {
-  let onClick, label;
+  let onClick, label, rerender;
 
   beforeEach(() => {
-    useTheme.mockReturnValue({
-      theme: chance.pickone([LIGHT_THEME, DARK_THEME]),
-    });
     onClick = jest.fn();
     label = chance.string();
     console.error = jest.fn();
+    const utils = render(<Button onClick={onClick} label={label} />);
+    rerender = utils.rerender;
   });
 
   it("should render the button with defaults", () => {
-    render(<Button onClick={onClick} label={label} />);
-
     const renderedButton = screen.getByLabelText(label);
 
     expect(renderedButton).toBeInTheDocument();
@@ -48,8 +41,6 @@ describe("Button", () => {
   });
 
   it("should call the passed onClick function", () => {
-    render(<Button onClick={onClick} label={label} />);
-
     const renderedButton = screen.getByLabelText(label);
 
     userEvent.click(renderedButton);
@@ -60,7 +51,7 @@ describe("Button", () => {
   it("should render the children if the button needs to render more than just the label", () => {
     const children = chance.string();
 
-    render(
+    rerender(
       <Button onClick={onClick} label={label}>
         {children}
       </Button>
@@ -73,7 +64,7 @@ describe("Button", () => {
   });
 
   it("should allow a button type of 'icon'", () => {
-    render(<Button onClick={onClick} label={label} buttonType={"icon"} />);
+    rerender(<Button onClick={onClick} label={label} buttonType={"icon"} />);
 
     const renderedButton = screen.getByLabelText(label);
 
@@ -82,7 +73,7 @@ describe("Button", () => {
   });
 
   it("should allow a button type of 'text'", () => {
-    render(<Button onClick={onClick} label={label} buttonType={"text"} />);
+    rerender(<Button onClick={onClick} label={label} buttonType={"text"} />);
 
     const renderedButton = screen.getByLabelText(label);
 
@@ -91,33 +82,33 @@ describe("Button", () => {
   });
 
   it("should render the button as disabled when specified", () => {
-    render(<Button onClick={onClick} label={label} disabled={true} />);
+    rerender(<Button onClick={onClick} label={label} disabled={true} />);
 
     expect(screen.getByLabelText(label)).toBeDisabled();
   });
 
   it("should require an onClick function for buttons that are not of type submit", () => {
-    render(<Button label={label} />);
+    rerender(<Button label={label} />);
 
     expect(console.error).toHaveBeenCalledTimes(1);
   });
 
   it("should allow the user to specify additional classes", () => {
     const className = chance.string();
-    render(<Button label={label} className={className} />);
+    rerender(<Button label={label} className={className} />);
 
     expect(screen.getByLabelText(label)).toHaveClass(className);
   });
 
   it("should allow the user to pass a loading prop to show the loading indicator", () => {
-    render(<Button label={label} onClick={onClick} loading={true} />);
+    rerender(<Button label={label} onClick={onClick} loading={true} />);
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
     expect(screen.getByLabelText(label)).toBeDisabled();
   });
 
   it("should allow the user to show a tooltip with the label content", () => {
-    render(<Button label={label} onClick={onClick} showTooltip />);
+    rerender(<Button label={label} onClick={onClick} showTooltip />);
 
     const renderedButton = screen.getByLabelText(label);
 

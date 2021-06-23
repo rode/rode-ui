@@ -15,25 +15,23 @@
  */
 
 import React from "react";
-import { act, cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "test/testing-utils/renderer";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { useAppState } from "providers/appState";
-
-jest.mock("providers/appState");
 
 describe("ResourceVersionSearchBar", () => {
-  let onSubmit, dispatchMock, rerender;
+  let onSubmit, dispatch, state, rerender;
   beforeEach(() => {
     onSubmit = jest.fn();
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
+    state = {
+      resourceVersionSearchTerm: "",
+    };
 
-    useAppState.mockReturnValue({
-      state: { resourceVersionSearchTerm: "" },
-      dispatch: dispatchMock,
+    const utils = render(<ResourceVersionSearchBar onSubmit={onSubmit} />, {
+      state,
+      dispatch,
     });
-
-    const utils = render(<ResourceVersionSearchBar onSubmit={onSubmit} />);
     rerender = utils.rerender;
   });
 
@@ -49,7 +47,7 @@ describe("ResourceVersionSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_RESOURCE_VERSION_SEARCH_TERM",
@@ -67,7 +65,7 @@ describe("ResourceVersionSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_RESOURCE_VERSION_SEARCH_TERM",
@@ -87,7 +85,7 @@ describe("ResourceVersionSearchBar", () => {
     act(() => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
-    expect(dispatchMock).toHaveBeenLastCalledWith({
+    expect(dispatch).toHaveBeenLastCalledWith({
       type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
     });
@@ -110,10 +108,7 @@ describe("ResourceVersionSearchBar", () => {
   it("should start the search process when the button is clicked", () => {
     const resourceVersionSearchTerm = chance.string();
 
-    useAppState.mockReturnValue({
-      state: { resourceVersionSearchTerm },
-      dispatch: jest.fn(),
-    });
+    state.resourceVersionSearchTerm = resourceVersionSearchTerm;
     rerender(<ResourceVersionSearchBar onSubmit={onSubmit} />);
     const renderedSearchButton = screen.getByLabelText("Search Versions");
 

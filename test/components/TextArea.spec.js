@@ -21,17 +21,19 @@ import userEvent from "@testing-library/user-event";
 import TextArea from "components/TextArea";
 
 describe("TextArea", () => {
-  let name, label, onChange;
+  let name, label, onChange, rerender;
 
   beforeEach(() => {
     name = chance.string();
     label = chance.string();
     onChange = jest.fn();
+    const utils = render(
+      <TextArea name={name} label={label} onChange={onChange} />
+    );
+    rerender = utils.rerender;
   });
 
   it("should render the textArea with default values", () => {
-    render(<TextArea name={name} label={label} onChange={onChange} />);
-
     const renderedComponent = screen.getByLabelText(label);
 
     expect(renderedComponent).toBeInTheDocument();
@@ -41,8 +43,6 @@ describe("TextArea", () => {
   });
 
   it("should call the onChange event", () => {
-    render(<TextArea name={name} label={label} onChange={onChange} />);
-
     const textToType = chance.string();
     const renderedComponent = screen.getByLabelText(label);
     userEvent.type(renderedComponent, textToType);
@@ -52,7 +52,7 @@ describe("TextArea", () => {
 
   it("should allow overriding the default number of rows", () => {
     const rowCount = chance.d10();
-    render(
+    rerender(
       <TextArea name={name} label={label} onChange={onChange} rows={rowCount} />
     );
 
@@ -64,7 +64,7 @@ describe("TextArea", () => {
 
   it("should render the placeholder if specified", () => {
     const placeholder = chance.string();
-    render(
+    rerender(
       <TextArea
         name={name}
         label={label}
@@ -78,7 +78,7 @@ describe("TextArea", () => {
 
   it("should render the value if specified", () => {
     const value = chance.string();
-    render(
+    rerender(
       <TextArea name={name} label={label} onChange={onChange} value={value} />
     );
 
@@ -86,25 +86,27 @@ describe("TextArea", () => {
   });
 
   it("should allow the user to specify the text area as required", () => {
-    render(<TextArea name={name} label={label} onChange={onChange} required />);
+    rerender(
+      <TextArea name={name} label={label} onChange={onChange} required />
+    );
 
     expect(screen.getByText(label)).toHaveClass("required", { exact: false });
   });
 
   it("should allow the user to specify the text area as disabled", () => {
-    render(<TextArea name={name} label={label} disabled />);
+    rerender(<TextArea name={name} label={label} disabled />);
     expect(screen.getByLabelText(label)).toBeDisabled();
   });
 
   it("should require an onChange event if the text area is not disabled", () => {
     console.error = jest.fn();
-    render(<TextArea name={name} label={label} />);
+    rerender(<TextArea name={name} label={label} />);
     expect(console.error).toHaveBeenCalled();
   });
 
   it("should render an error if specified", () => {
     const error = chance.string();
-    render(
+    rerender(
       <TextArea name={name} label={label} onChange={onChange} error={error} />
     );
 

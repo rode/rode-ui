@@ -15,26 +15,25 @@
  */
 
 import React from "react";
-import { act, cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "test/testing-utils/renderer";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { useAppState } from "providers/appState";
-
-jest.mock("providers/appState");
 
 describe("ResourceSearchBar", () => {
-  let onSubmit, dispatchMock, rerender;
+  let onSubmit, dispatch, state, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     onSubmit = jest.fn();
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
 
-    useAppState.mockReturnValue({
-      state: { resourceSearchTerm: "" },
-      dispatch: dispatchMock,
+    state = {
+      resourceSearchTerm: "",
+    };
+
+    const utils = render(<ResourceSearchBar onSubmit={onSubmit} />, {
+      state,
+      dispatch,
     });
-
-    const utils = render(<ResourceSearchBar onSubmit={onSubmit} />);
     rerender = utils.rerender;
   });
 
@@ -50,7 +49,7 @@ describe("ResourceSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_RESOURCE_SEARCH_TERM",
@@ -66,7 +65,7 @@ describe("ResourceSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
         type: "SET_RESOURCE_SEARCH_TERM",
@@ -86,7 +85,7 @@ describe("ResourceSearchBar", () => {
     act(() => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
-    expect(dispatchMock).toHaveBeenLastCalledWith({
+    expect(dispatch).toHaveBeenLastCalledWith({
       type: "SET_RESOURCE_SEARCH_TERM",
       data: "all",
     });
@@ -105,12 +104,8 @@ describe("ResourceSearchBar", () => {
   });
 
   it("should start the search process when the button is clicked", () => {
-    const searchTerm = chance.string();
+    state.searchTerm = chance.string();
 
-    useAppState.mockReturnValue({
-      state: { searchTerm },
-      dispatch: jest.fn(),
-    });
     rerender(<ResourceSearchBar onSubmit={onSubmit} />);
     const renderedSearchButton = screen.getByLabelText("Search Resources");
 

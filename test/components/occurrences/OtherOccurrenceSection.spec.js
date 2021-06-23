@@ -22,35 +22,33 @@ import dayjs from "dayjs";
 jest.mock("dayjs");
 
 describe("OtherOccurrenceSection", () => {
-  let occurrences, expectedTimestamp;
+  let occurrences, expectedTimestamp, rerender;
 
   beforeEach(() => {
     expectedTimestamp = chance.timestamp();
     dayjs.mockReturnValue({
       format: jest.fn().mockReturnValue(expectedTimestamp),
     });
+    occurrences = chance.n(
+      () => ({
+        kind: chance.string(),
+        name: chance.string(),
+        createTime: chance.timestamp(),
+      }),
+      chance.d4()
+    );
+    const utils = render(<OtherOccurrenceSection occurrences={occurrences} />);
+    rerender = utils.rerender;
   });
 
   it("should return null if there are no relevant occurrences", () => {
     occurrences = [];
-    render(<OtherOccurrenceSection occurrences={occurrences} />);
+    rerender(<OtherOccurrenceSection occurrences={occurrences} />);
 
     expect(screen.queryByText(/other/i)).not.toBeInTheDocument();
   });
 
   describe("other occurrences exist", () => {
-    beforeEach(() => {
-      occurrences = chance.n(
-        () => ({
-          kind: chance.string(),
-          name: chance.string(),
-          createTime: chance.timestamp(),
-        }),
-        chance.d4()
-      );
-      render(<OtherOccurrenceSection occurrences={occurrences} />);
-    });
-
     it("should render the section title", () => {
       expect(screen.getByText("Other")).toBeInTheDocument();
       expect(screen.getByTitle("Flag")).toBeInTheDocument();

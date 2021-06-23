@@ -38,7 +38,7 @@ describe("PolicySearchResult", () => {
       push: pushMock,
     });
     render(<PolicySearchResult searchResult={searchResult} />, {
-      dispatch: dispatch,
+      dispatch,
     });
   });
 

@@ -20,7 +20,7 @@ import userEvent from "@testing-library/user-event";
 import Modal from "components/Modal";
 
 describe("Modal", () => {
-  let title, onClose, children, scrollMock;
+  let title, onClose, children, scrollMock, rerender;
 
   beforeEach(() => {
     title = chance.string();
@@ -31,6 +31,12 @@ describe("Modal", () => {
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
     });
+    const utils = render(
+      <Modal title={title} onClose={onClose} isVisible={true}>
+        {children}
+      </Modal>
+    );
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -38,7 +44,8 @@ describe("Modal", () => {
   });
 
   it("should return null when the modal should not be showing", () => {
-    render(
+    scrollMock.mockClear();
+    rerender(
       <Modal title={title} onClose={onClose} isVisible={false}>
         {children}
       </Modal>
@@ -48,14 +55,6 @@ describe("Modal", () => {
   });
 
   describe("modal should show", () => {
-    beforeEach(() => {
-      render(
-        <Modal title={title} onClose={onClose} isVisible={true}>
-          {children}
-        </Modal>
-      );
-    });
-
     it("should put the modal into view", () => {
       expect(scrollMock).toHaveBeenCalledTimes(1);
     });

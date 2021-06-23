@@ -20,7 +20,7 @@ import OccurrenceDetails from "components/occurrences/OccurrenceDetails";
 import { createMockMappedOccurrences } from "test/testing-utils/mocks";
 
 describe("OccurrenceDetails", () => {
-  let mappedOccurrences, scrollMock;
+  let mappedOccurrences, scrollMock, rerender;
 
   beforeEach(() => {
     mappedOccurrences = createMockMappedOccurrences();
@@ -28,6 +28,14 @@ describe("OccurrenceDetails", () => {
     document.getElementById = jest.fn().mockReturnValue({
       scrollIntoView: scrollMock,
     });
+    window.innerWidth = chance.natural({ min: 768 });
+    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
+    const utils = render(
+      <OccurrenceDetails
+        occurrence={mappedOccurrences[randomOccurrenceType][0]}
+      />
+    );
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -36,55 +44,35 @@ describe("OccurrenceDetails", () => {
 
   it("should scroll to the details when on a mobile device", () => {
     window.innerWidth = 767;
-    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences[randomOccurrenceType][0]}
-      />
-    );
 
+    rerender(<OccurrenceDetails occurrence={mappedOccurrences.build[0]} />);
     expect(scrollMock)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith({ behavior: "smooth" });
   });
 
   it("should not scroll to the details when on a tablet or larger screened device", () => {
-    window.innerWidth = 768;
-    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences[randomOccurrenceType][0]}
-      />
-    );
-
     expect(scrollMock).not.toHaveBeenCalled();
   });
 
   it("should render the occurrence code block button on any occurrence type", () => {
-    const randomOccurrenceType = chance.pickone(["build", "secure", "deploy"]);
-    render(
-      <OccurrenceDetails
-        occurrence={mappedOccurrences[randomOccurrenceType][0]}
-      />
-    );
-
     expect(screen.getByText(/show json/i)).toBeInTheDocument();
   });
 
   it("should show the build occurrence details if a build occurrence is selected", () => {
-    render(<OccurrenceDetails occurrence={mappedOccurrences.build[0]} />);
+    rerender(<OccurrenceDetails occurrence={mappedOccurrences.build[0]} />);
 
     expect(screen.getByText(/view source/i)).toBeInTheDocument();
   });
 
   it("should show the vulnerability occurrence details if a vulnerability scan is selected", () => {
-    render(<OccurrenceDetails occurrence={mappedOccurrences.secure[0]} />);
+    rerender(<OccurrenceDetails occurrence={mappedOccurrences.secure[0]} />);
 
     expect(screen.getByText(/vulnerabilities/i)).toBeInTheDocument();
   });
 
   it("should show the deployment occurrence details if a deployment occurrence is selected", () => {
-    render(<OccurrenceDetails occurrence={mappedOccurrences.deploy[0]} />);
+    rerender(<OccurrenceDetails occurrence={mappedOccurrences.deploy[0]} />);
 
     expect(screen.queryAllByText(/deployment/i)[0]).toBeInTheDocument();
   });
