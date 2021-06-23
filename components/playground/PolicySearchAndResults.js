@@ -19,8 +19,8 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
-import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/policies";
+import { stateActions } from "reducers/appState";
+import { useAppState } from "providers/appState";
 import Button from "components/Button";
 import { createSearchFilter } from "utils/shared-utils";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -38,8 +38,11 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const { state, dispatch } = usePolicies();
-  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
+  const { state, dispatch } = useAppState();
+  const debouncedSearch = useDebouncedValue(
+    state.policySearchTerm,
+    debounceDelay
+  );
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/policies" : null,
@@ -66,6 +69,12 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();
+              if (!state.policySearchTerm.length) {
+                dispatch({
+                  type: stateActions.SET_POLICY_SEARCH_TERM,
+                  data: SEARCH_ALL,
+                });
+              }
               setPolicySearch(true);
             }}
             onBlur={() => setDebounceDelay(0)}
@@ -77,12 +86,13 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                 className={styles.viewAllButton}
                 buttonType={"text"}
                 label={"View all policies"}
-                onClick={() =>
+                onClick={() => {
                   dispatch({
-                    type: policyActions.SET_SEARCH_TERM,
+                    type: stateActions.SET_POLICY_SEARCH_TERM,
                     data: SEARCH_ALL,
-                  })
-                }
+                  });
+                  setPolicySearch(true);
+                }}
               />
             }
           />
@@ -101,7 +111,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                           setPolicy(result);
                           setPolicySearch(false);
                           dispatch({
-                            type: policyActions.SET_SEARCH_TERM,
+                            type: stateActions.SET_POLICY_SEARCH_TERM,
                             data: "",
                           });
                           setShowDrawer(false);
@@ -123,7 +133,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                   )}
                 </>
               ) : (
-                <p>{`No policies found matching "${state.searchTerm}"`}</p>
+                <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
               )}
             </Loading>
           )}

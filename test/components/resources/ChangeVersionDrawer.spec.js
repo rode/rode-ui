@@ -29,24 +29,25 @@ jest.mock("hooks/usePaginatedFetch");
 describe("ChangeVersionDrawer", () => {
   let isOpen,
     closeDrawer,
-    resourceState,
+    state,
     paginatedFetchResponse,
-    resourceDispatch,
-    router;
+    dispatch,
+    router,
+    rerender;
 
   beforeEach(() => {
     isOpen = true;
     closeDrawer = jest.fn();
-    resourceState = {
+    state = {
       currentResource: {
         resourceName: chance.string(),
         resourceVersion: chance.string(),
         genericName: chance.string(),
         uri: createMockResourceUri(),
       },
-      versionSearchTerm: "all",
+      resourceVersionSearchTerm: "all",
     };
-    resourceDispatch = jest.fn();
+    dispatch = jest.fn();
     paginatedFetchResponse = {
       data: [],
       loading: false,
@@ -60,6 +61,16 @@ describe("ChangeVersionDrawer", () => {
     useRouter.mockReturnValue(router);
 
     usePaginatedFetch.mockReturnValue(paginatedFetchResponse);
+
+    const utils = render(
+      <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
+      {
+        state,
+        dispatch,
+      }
+    );
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -67,37 +78,28 @@ describe("ChangeVersionDrawer", () => {
   });
 
   it("should not call to fetch the versions if there is no resource selected", () => {
-    resourceState.currentResource = {};
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
+    state.currentResource = {};
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
     expect(usePaginatedFetch).toHaveBeenCalledWith(null, { id: undefined }, 10);
   });
 
   it("should call to fetch the versions when a resource is selected", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
-      { id: resourceState.currentResource.genericName },
+      { id: state.currentResource.genericName },
       10
     );
   });
 
   it("should call to fetch the versions when a resource is selected and a search term is specified", () => {
     const searchTerm = chance.string();
-    resourceState.versionSearchTerm = searchTerm;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
+    state.resourceVersionSearchTerm = searchTerm;
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
+
     expect(usePaginatedFetch).toHaveBeenCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: state.currentResource.genericName,
         filter: `version.contains("${searchTerm}")`,
       },
       10
@@ -106,41 +108,25 @@ describe("ChangeVersionDrawer", () => {
 
   it("should render a loading indicator when fetching the data", () => {
     paginatedFetchResponse.loading = true;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
 
     expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
   });
 
   it("should show a not found message if no data is found for the resource", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
-
     expect(screen.getByText(/no versions found matching the given criteria./i));
   });
 
   it("should set the search term to all when the drawer is closed", () => {
     isOpen = false;
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
-    expect(resourceDispatch).toHaveBeenCalledWith({
-      type: "SET_VERSION_SEARCH_TERM",
+    rerender(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_RESOURCE_VERSION_SEARCH_TERM",
       data: "all",
     });
   });
 
   it("should render the version search bar", () => {
-    render(<ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />, {
-      resourceState,
-      resourceDispatch,
-    });
-
     const renderedSearchBar = screen.getByLabelText(/search for a version/i);
 
     expect(renderedSearchBar).toBeInTheDocument();
@@ -151,7 +137,7 @@ describe("ChangeVersionDrawer", () => {
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: state.currentResource.genericName,
       },
       10
     );
@@ -160,7 +146,7 @@ describe("ChangeVersionDrawer", () => {
     expect(usePaginatedFetch).toHaveBeenLastCalledWith(
       "/api/resource-versions",
       {
-        id: resourceState.currentResource.genericName,
+        id: state.currentResource.genericName,
       },
       10
     );
@@ -179,17 +165,16 @@ describe("ChangeVersionDrawer", () => {
       );
       paginatedFetchResponse.data[0].versionedResourceUri = createMockResourceUri(
         name,
-        resourceState.currentResource.resourceVersion
+        state.currentResource.resourceVersion
       );
-      render(
-        <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />,
-        { resourceState, resourceDispatch }
+      rerender(
+        <ChangeVersionDrawer isOpen={isOpen} closeDrawer={closeDrawer} />
       );
     });
 
     it("should render the instructions", () => {
       expect(
-        screen.getByText(resourceState.currentResource.resourceName)
+        screen.getByText(state.currentResource.resourceName)
       ).toBeInTheDocument();
       expect(
         screen.getByText(
@@ -224,7 +209,7 @@ describe("ChangeVersionDrawer", () => {
       );
       userEvent.click(versionToSelect);
       expect(router.push).toHaveBeenCalledWith(`/resources/${versionUri}`);
-      expect(resourceDispatch).toHaveBeenCalledWith({
+      expect(dispatch).toHaveBeenCalledWith({
         type: "SET_OCCURRENCE_DETAILS",
         data: null,
       });

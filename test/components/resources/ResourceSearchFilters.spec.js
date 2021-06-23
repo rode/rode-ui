@@ -29,8 +29,8 @@ describe("ResourceSearchFilters", () => {
     };
     dispatch = jest.fn();
     render(<ResourceSearchFilters />, {
-      resourceDispatch: dispatch,
-      resourceState: state,
+      dispatch,
+      state,
     });
   });
 
@@ -61,7 +61,7 @@ describe("ResourceSearchFilters", () => {
     expect(dispatch)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith({
-        type: "SET_TYPE_FILTER",
+        type: "SET_RESOURCE_TYPE_SEARCH_FILTER",
         data: [resourceToSelect],
       });
   });

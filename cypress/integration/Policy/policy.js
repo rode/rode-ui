@@ -17,12 +17,9 @@
 import { Before, Given, When, Then } from "cypress-cucumber-preprocessor/steps";
 import * as selectors from "../../page-objects/policy";
 import policies from "../../fixtures/policies.json";
+import policyResponses from "../../fixtures/policy-responses.json";
+import validation from "../../fixtures/policy-validation.json";
 import Chance from "chance";
-import {
-  mockFailedPatchPolicyResponse,
-  mockFailedPolicyValidation,
-  mockSuccessPolicyValidation,
-} from "../../mock-responses/policy-responses";
 import { capitalize } from "../../page-objects/utils";
 
 const chance = new Chance();
@@ -52,9 +49,7 @@ When(/^I test (?:(valid|invalid)) Rego policy code$/, (validity) => {
       url: "**/api/policies/validate",
       method: "POST",
     },
-    validity === "invalid"
-      ? mockFailedPolicyValidation
-      : mockSuccessPolicyValidation
+    validation[validity]
   );
 
   cy.get(selectors.PolicyRegoContentInput)
@@ -105,7 +100,7 @@ When("I save the Edit Policy form and an error occurs", () => {
 When("I save invalid rego code", () => {
   cy.mockRequest(
     { url: `**/api/policies/**`, method: "PATCH", status: 500 },
-    mockFailedPatchPolicyResponse
+    policyResponses["invalidRegoCode"]
   );
   cy.get(selectors.PolicyRegoContentInput).clear().type(chance.string());
   cy.get(selectors.UpdatePolicyButton).click();

@@ -23,10 +23,12 @@ import Code from "components/Code";
 jest.mock("prism/prism");
 
 describe("Code", () => {
-  let code;
+  let code, rerender;
 
   beforeEach(() => {
     code = chance.string();
+    const utils = render(<Code code={code} language={"rego"} />);
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -34,8 +36,6 @@ describe("Code", () => {
   });
 
   it("should highlight the code syntax when Rego is specified", () => {
-    render(<Code code={code} language={"rego"} />);
-
     expect(Prism.highlightAll).toHaveBeenCalledTimes(1);
     const renderedComponent = screen.getByText(code, {
       selector: "code",
@@ -48,7 +48,8 @@ describe("Code", () => {
   });
 
   it("should highlight the code syntax when json is specified", () => {
-    render(<Code code={code} language={"json"} />);
+    Prism.highlightAll.mockClear();
+    rerender(<Code code={code} language={"json"} />);
 
     expect(Prism.highlightAll).toHaveBeenCalledTimes(1);
     const renderedComponent = screen.getByText(code, {
@@ -63,7 +64,7 @@ describe("Code", () => {
 
   it("should allow the user to specify additional class names", () => {
     const className = chance.string();
-    render(
+    rerender(
       <Code
         code={code}
         language={chance.pickone(["rego", "json"])}
@@ -85,7 +86,7 @@ describe("Code", () => {
     const extraProp = {
       id: chance.string(),
     };
-    render(
+    rerender(
       <Code
         code={code}
         language={chance.pickone(["rego", "json"])}

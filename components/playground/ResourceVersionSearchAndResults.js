@@ -22,8 +22,6 @@ import {
   buildResourceVersionQueryParams,
   getResourceDetails,
 } from "utils/resource-utils";
-import { resourceActions } from "reducers/resources";
-import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { PLAYGROUND_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
@@ -31,6 +29,8 @@ import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const ResourceVersionSearchAndResults = ({
   selectedResource,
@@ -38,10 +38,10 @@ const ResourceVersionSearchAndResults = ({
 }) => {
   const [versionSearch, setVersionSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(500);
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = useAppState();
 
   const debouncedSearch = useDebouncedValue(
-    state.versionSearchTerm,
+    state.resourceVersionSearchTerm,
     debounceDelay
   );
 
@@ -74,7 +74,7 @@ const ResourceVersionSearchAndResults = ({
             onClick={() => {
               setVersionSearch(true);
               dispatch({
-                type: resourceActions.SET_VERSION_SEARCH_TERM,
+                type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
                 data: SEARCH_ALL,
               });
             }}
@@ -129,7 +129,7 @@ const ResourceVersionSearchAndResults = ({
               )}
             </>
           ) : (
-            <p>{`No versions found matching "${state.versionSearchTerm}"`}</p>
+            <p>{`No versions found matching "${state.resourceVersionSearchTerm}"`}</p>
           )}
         </Loading>
       )}

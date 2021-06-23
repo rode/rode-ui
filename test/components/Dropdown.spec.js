@@ -21,17 +21,14 @@ import userEvent from "@testing-library/user-event";
 import Dropdown from "components/Dropdown";
 
 describe("Dropdown", () => {
-  let name, label, onChange, options;
+  let name, label, onChange, options, rerender;
 
   beforeEach(() => {
     name = chance.string();
     label = chance.string();
     onChange = jest.fn();
     options = [{ label: chance.string(), value: chance.string() }];
-  });
-
-  it("should render the dropdown with default values", () => {
-    render(
+    const utils = render(
       <Dropdown
         name={name}
         label={label}
@@ -39,7 +36,10 @@ describe("Dropdown", () => {
         options={options}
       />
     );
+    rerender = utils.rerender;
+  });
 
+  it("should render the dropdown with default values", () => {
     const renderedComponent = screen.getByLabelText(label);
 
     expect(renderedComponent).toBeInTheDocument();
@@ -47,15 +47,6 @@ describe("Dropdown", () => {
   });
 
   it("should call the onChange event when changing the value of the dropdown", () => {
-    render(
-      <Dropdown
-        name={name}
-        label={label}
-        onChange={onChange}
-        options={options}
-      />
-    );
-
     const renderedComponent = screen.getByLabelText(label);
     userEvent.click(renderedComponent);
     userEvent.type(renderedComponent, options[0].label);
@@ -66,7 +57,7 @@ describe("Dropdown", () => {
 
   it("should render the placeholder if specified", () => {
     const placeholder = chance.string();
-    render(
+    rerender(
       <Dropdown
         name={name}
         label={label}
@@ -81,7 +72,7 @@ describe("Dropdown", () => {
 
   it("should render the value if specified", () => {
     const value = options[0];
-    render(
+    rerender(
       <Dropdown
         name={name}
         label={label}
@@ -95,7 +86,7 @@ describe("Dropdown", () => {
   });
 
   it("should allow the user to specify the dropdown as required", () => {
-    render(
+    rerender(
       <Dropdown
         name={name}
         label={label}
@@ -111,7 +102,7 @@ describe("Dropdown", () => {
 
   it("should render an error if specified", () => {
     const error = chance.string();
-    render(
+    rerender(
       <Dropdown
         name={name}
         label={label}

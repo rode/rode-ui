@@ -22,13 +22,13 @@ import PageHeader from "components/layout/PageHeader";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     "/api/policy-groups",
@@ -38,7 +38,7 @@ const PolicyGroups = () => {
 
   const navigateToPolicyGroupPage = (policyGroup) => {
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY_GROUP,
+      type: stateActions.SET_CURRENT_POLICY_GROUP,
       data: policyGroup,
     });
     router.push(`/policy-groups/${encodeURIComponent(policyGroup.name)}`);

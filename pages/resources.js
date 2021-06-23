@@ -19,34 +19,34 @@ import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
-import { useResources } from "providers/resources";
 import ResourceSearchResult from "components/resources/ResourceSearchResult";
 import Loading from "components/Loading";
-import { resourceActions } from "reducers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import ResourceSearchFilters from "components/resources/ResourceSearchFilters";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const Resources = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = useResources();
-  const debouncedSearch = useDebouncedValue(state.searchTerm);
+  const { state, dispatch } = useAppState();
+  const debouncedSearch = useDebouncedValue(state.resourceSearchTerm);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/resources" : null,
-    buildResourceQueryParams(debouncedSearch, state.searchTypeFilter),
+    buildResourceQueryParams(debouncedSearch, state.resourceTypeSearchFilter),
     DEFAULT_SEARCH_PAGE_SIZE
   );
 
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (state.searchTerm.trim().length) {
-      router.push(`/resources?search=${state.searchTerm.trim()}`);
+    if (state.resourceSearchTerm.trim().length) {
+      router.push(`/resources?search=${state.resourceSearchTerm.trim()}`);
     } else {
       router.push(`/resources?search=${SEARCH_ALL}`);
     }
@@ -54,7 +54,7 @@ const Resources = () => {
 
   const viewAllResources = () => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
     router.push(`/resources?search=${SEARCH_ALL}`);
@@ -62,7 +62,7 @@ const Resources = () => {
 
   useEffect(() => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: [],
     });
   }, []);
@@ -71,14 +71,14 @@ const Resources = () => {
     if (router.query.search) {
       setShowSearchResults(true);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
+        type: stateActions.SET_RESOURCE_SEARCH_TERM,
         data: router.query.search,
       });
     } else {
       setShowSearchResults(false);
       dispatch({
-        type: resourceActions.SET_SEARCH_TERM,
-        data: SEARCH_ALL,
+        type: stateActions.SET_RESOURCE_SEARCH_TERM,
+        data: "",
       });
     }
   }, [router.query]);

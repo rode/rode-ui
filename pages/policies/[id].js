@@ -23,8 +23,8 @@ import { useTheme } from "providers/theme";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
 import Button from "components/Button";
 import { usePolicy } from "hooks/usePolicy";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import PageHeader from "components/layout/PageHeader";
 import PolicyDetails from "components/policies/PolicyDetails";
 import DetailsHeader from "components/shared/DetailsHeader";
@@ -50,7 +50,7 @@ const createLinks = (baseUrl) => {
 const Policy = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
   const [activeSection, setActiveSection] = useState(DETAILS);
 
   const { id } = router.query;
@@ -63,7 +63,7 @@ const Policy = () => {
 
   const evaluateInPlayground = () => {
     dispatch({
-      type: policyActions.SET_EVALUATION_POLICY,
+      type: stateActions.SET_EVALUATION_POLICY,
       data: policy,
     });
     router.push("/playground");

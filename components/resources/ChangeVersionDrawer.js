@@ -26,8 +26,6 @@ import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useRouter } from "next/router";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import {
   buildResourceVersionQueryParams,
   getResourceDetails,
@@ -35,11 +33,13 @@ import {
 import { DATE_TIME_FORMAT, SEARCH_ALL } from "utils/constants";
 import dayjs from "dayjs";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = useAppState();
   const {
     resourceName,
     resourceVersion: currentVersion,
@@ -48,14 +48,17 @@ const ChangeVersionDrawer = (props) => {
 
   const { data, loading, goToNextPage, isLastPage } = usePaginatedFetch(
     genericName ? "/api/resource-versions" : null,
-    buildResourceVersionQueryParams(genericName, state.versionSearchTerm),
+    buildResourceVersionQueryParams(
+      genericName,
+      state.resourceVersionSearchTerm
+    ),
     10
   );
 
   const selectVersion = (uri) => {
     router.push(`/resources/${encodeURIComponent(uri)}`);
     dispatch({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
     closeDrawer();
@@ -64,7 +67,7 @@ const ChangeVersionDrawer = (props) => {
   useEffect(() => {
     if (!isOpen) {
       dispatch({
-        type: resourceActions.SET_VERSION_SEARCH_TERM,
+        type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
         data: SEARCH_ALL,
       });
     }
@@ -90,7 +93,7 @@ const ChangeVersionDrawer = (props) => {
               label={"View all versions"}
               onClick={() => {
                 dispatch({
-                  type: resourceActions.SET_VERSION_SEARCH_TERM,
+                  type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

@@ -17,7 +17,7 @@
 import React from "react";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
-import { usePolicies } from "providers/policies";
+import { useAppState } from "providers/appState";
 import { SEARCH_ALL } from "utils/constants";
 
 const getSearchTermText = (searchTerm) => {
@@ -30,10 +30,10 @@ const getSearchTermText = (searchTerm) => {
 
 const PolicyBreadcrumbs = () => {
   const {
-    state: { searchTerm },
-  } = usePolicies();
+    state: { policySearchTerm },
+  } = useAppState();
 
-  if (!searchTerm) {
+  if (!policySearchTerm) {
     return null;
   }
 
@@ -41,8 +41,8 @@ const PolicyBreadcrumbs = () => {
     <div className={styles.breadcrumbs}>
       <p className={styles.rootCrumb}>Policy Search</p>
       <p className={styles.rootCrumb}>/</p>
-      <Link href={`/policies?search=${encodeURIComponent(searchTerm)}`}>
-        <a>{getSearchTermText(searchTerm)}</a>
+      <Link href={`/policies?search=${encodeURIComponent(policySearchTerm)}`}>
+        <a>{getSearchTermText(policySearchTerm)}</a>
       </Link>
     </div>
   );

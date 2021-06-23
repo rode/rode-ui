@@ -15,10 +15,10 @@
  */
 
 import React from "react";
-import { useResources } from "providers/resources";
 import styles from "styles/modules/Search.module.scss";
 import Link from "next/link";
 import { SEARCH_ALL } from "utils/constants";
+import { useAppState } from "providers/appState";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {
@@ -30,10 +30,10 @@ const getSearchTermText = (searchTerm) => {
 
 const ResourceBreadcrumbs = () => {
   const {
-    state: { searchTerm },
-  } = useResources();
+    state: { resourceSearchTerm },
+  } = useAppState();
 
-  if (!searchTerm) {
+  if (!resourceSearchTerm) {
     return null;
   }
 
@@ -41,8 +41,10 @@ const ResourceBreadcrumbs = () => {
     <div className={styles.breadcrumbs}>
       <p className={styles.rootCrumb}>Resource Search</p>
       <p className={styles.rootCrumb}>/</p>
-      <Link href={`/resources?search=${encodeURIComponent(searchTerm)}`}>
-        <a>{getSearchTermText(searchTerm)}</a>
+      <Link
+        href={`/resources?search=${encodeURIComponent(resourceSearchTerm)}`}
+      >
+        <a>{getSearchTermText(resourceSearchTerm)}</a>
       </Link>
     </div>
   );

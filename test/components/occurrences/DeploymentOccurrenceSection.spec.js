@@ -28,6 +28,7 @@ describe("DeploymentOccurrenceSection", () => {
 
     expect(screen.queryByText(/build/i)).not.toBeInTheDocument();
   });
+
   describe("build occurrences exist", () => {
     beforeEach(() => {
       occurrences = chance.n(createMockMappedDeploymentOccurrence, chance.d4());

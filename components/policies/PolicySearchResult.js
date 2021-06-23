@@ -18,8 +18,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
 import { useRouter } from "next/router";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import styles from "styles/modules/Search.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
@@ -27,12 +27,12 @@ import { useTheme } from "providers/theme";
 const PolicySearchResult = ({ searchResult }) => {
   const { name, description, id } = searchResult;
   const router = useRouter();
-  const { dispatch } = usePolicies();
+  const { dispatch } = useAppState();
   const { theme } = useTheme();
 
   const onClick = () => {
     dispatch({
-      type: policyActions.SET_CURRENT_POLICY,
+      type: stateActions.SET_CURRENT_POLICY,
       data: searchResult,
     });
     router.push(`/policies/${encodeURIComponent(id)}`);

@@ -16,8 +16,8 @@
 
 import React from "react";
 import { useFetch } from "./useFetch";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 
 export const usePolicy = (policyId) => {
@@ -25,7 +25,7 @@ export const usePolicy = (policyId) => {
   const {
     state: { currentPolicy },
     dispatch,
-  } = usePolicies();
+  } = useAppState();
 
   const { data, loading } = useFetch(
     policyId !== currentPolicy?.id ? `/api/policies/${policyId}` : null
@@ -38,7 +38,7 @@ export const usePolicy = (policyId) => {
       setPolicy(data);
 
       dispatch({
-        type: policyActions.SET_CURRENT_POLICY,
+        type: stateActions.SET_CURRENT_POLICY,
         data,
       });
     }

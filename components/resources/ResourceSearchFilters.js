@@ -16,17 +16,17 @@
 
 import React from "react";
 import styles from "styles/modules/Search.module.scss";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import Dropdown from "components/Dropdown";
 import { resourceFilters } from "utils/resource-utils";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const ResourceSearchFilters = () => {
-  const { state, dispatch } = useResources();
+  const { state, dispatch } = useAppState();
 
   const onChange = (selectedValues) => {
     dispatch({
-      type: resourceActions.SET_TYPE_FILTER,
+      type: stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER,
       data: selectedValues,
     });
   };
@@ -43,7 +43,7 @@ const ResourceSearchFilters = () => {
         placeholder={"Resource Type"}
         hideSelectedOptions={false}
         tabSelectsValue={false}
-        value={state.searchTypeFilter}
+        value={state.resourceTypeSearchFilter}
       />
     </div>
   );

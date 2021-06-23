@@ -20,18 +20,15 @@ import styles from "styles/modules/Playground.module.scss";
 import { useTheme } from "providers/theme";
 import { showError } from "utils/toast-utils";
 import EvaluationResult from "components/playground/EvaluationResult";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
-  const { state, dispatch: policyDispatch } = usePolicies();
-  const { dispatch: resourceDispatch } = useResources();
+  const { state, dispatch } = useAppState();
 
   const [evaluationResults, setEvaluationResults] = useState(null);
   const [evaluationLoading, setEvaluationLoading] = useState(false);
@@ -67,24 +64,24 @@ const PolicyPlayground = () => {
   };
 
   const resetPlayground = () => {
-    policyDispatch({
-      type: policyActions.SET_EVALUATION_RESOURCE,
+    dispatch({
+      type: stateActions.SET_EVALUATION_RESOURCE,
       data: null,
     });
-    policyDispatch({
-      type: policyActions.SET_EVALUATION_POLICY,
+    dispatch({
+      type: stateActions.SET_EVALUATION_POLICY,
       data: null,
     });
     setEvaluationResults(null);
   };
 
   useEffect(() => {
-    resourceDispatch({
-      type: resourceActions.SET_SEARCH_TERM,
+    dispatch({
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
-    policyDispatch({
-      type: policyActions.SET_SEARCH_TERM,
+    dispatch({
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
 
@@ -105,8 +102,8 @@ const PolicyPlayground = () => {
         <SelectedPolicy
           policy={state.evaluationPolicy}
           setPolicy={(data) =>
-            policyDispatch({
-              type: policyActions.SET_EVALUATION_POLICY,
+            dispatch({
+              type: stateActions.SET_EVALUATION_POLICY,
               data,
             })
           }
@@ -117,8 +114,8 @@ const PolicyPlayground = () => {
         <SelectedResource
           resourceUri={state.evaluationResource?.versionedResourceUri}
           setEvaluationResource={(data) =>
-            policyDispatch({
-              type: policyActions.SET_EVALUATION_RESOURCE,
+            dispatch({
+              type: stateActions.SET_EVALUATION_RESOURCE,
               data,
             })
           }

@@ -45,6 +45,18 @@ describe("SelectedResource", () => {
     };
 
     useFetch.mockReturnValue(fetchResponse);
+
+    name = chance.string();
+    version = chance.string();
+    resourceUri = createMockResourceUri(name, version);
+    const utils = render(
+      <SelectedResource
+        setEvaluationResource={setEvaluationResource}
+        clearEvaluation={clearEvaluation}
+        resourceUri={resourceUri}
+      />
+    );
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -54,7 +66,7 @@ describe("SelectedResource", () => {
   describe("resource has not been selected", () => {
     beforeEach(() => {
       resourceUri = null;
-      render(
+      rerender(
         <SelectedResource
           setEvaluationResource={setEvaluationResource}
           clearEvaluation={clearEvaluation}
@@ -77,20 +89,6 @@ describe("SelectedResource", () => {
   });
 
   describe("resource has been selected", () => {
-    beforeEach(() => {
-      name = chance.string();
-      version = chance.string();
-      resourceUri = createMockResourceUri(name, version);
-      const utils = render(
-        <SelectedResource
-          setEvaluationResource={setEvaluationResource}
-          clearEvaluation={clearEvaluation}
-          resourceUri={resourceUri}
-        />
-      );
-      rerender = utils.rerender;
-    });
-
     it("should call to fetch the occurrence data when a resource is selected", () => {
       expect(useFetch)
         .toHaveBeenCalledTimes(1)

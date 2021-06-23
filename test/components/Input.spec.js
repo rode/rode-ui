@@ -21,17 +21,19 @@ import userEvent from "@testing-library/user-event";
 import Input from "components/Input";
 
 describe("Input", () => {
-  let name, label, onChange;
+  let name, label, onChange, rerender;
 
   beforeEach(() => {
     name = chance.string();
     label = chance.string();
     onChange = jest.fn();
+    const utils = render(
+      <Input name={name} label={label} onChange={onChange} />
+    );
+    rerender = utils.rerender;
   });
 
   it("should render the input with default values", () => {
-    render(<Input name={name} label={label} onChange={onChange} />);
-
     const renderedComponent = screen.getByLabelText(label);
 
     expect(renderedComponent).toBeInTheDocument();
@@ -44,8 +46,6 @@ describe("Input", () => {
   });
 
   it("should call the onChange event", () => {
-    render(<Input name={name} label={label} onChange={onChange} />);
-
     const textToType = chance.string();
     const renderedComponent = screen.getByLabelText(label);
     userEvent.type(renderedComponent, textToType);
@@ -55,7 +55,7 @@ describe("Input", () => {
 
   it("should allow overriding the default input type", () => {
     const inputType = chance.pickone(["number", "date"]);
-    render(
+    rerender(
       <Input name={name} label={label} onChange={onChange} type={inputType} />
     );
 
@@ -64,7 +64,7 @@ describe("Input", () => {
 
   it("should render the placeholder if specified", () => {
     const placeholder = chance.string();
-    render(
+    rerender(
       <Input
         name={name}
         label={label}
@@ -78,7 +78,7 @@ describe("Input", () => {
 
   it("should render the value if specified", () => {
     const value = chance.string();
-    render(
+    rerender(
       <Input name={name} label={label} onChange={onChange} value={value} />
     );
 
@@ -86,7 +86,9 @@ describe("Input", () => {
   });
 
   it("should allow the user to specify the label and input be horizontally placed", () => {
-    render(<Input name={name} label={label} onChange={onChange} horizontal />);
+    rerender(
+      <Input name={name} label={label} onChange={onChange} horizontal />
+    );
 
     expect(screen.getByLabelText(label).closest("div")).toHaveClass(
       "horizontalContainer"
@@ -94,14 +96,14 @@ describe("Input", () => {
   });
 
   it("should allow the user to specify the input as required", () => {
-    render(<Input name={name} label={label} onChange={onChange} required />);
+    rerender(<Input name={name} label={label} onChange={onChange} required />);
 
     expect(screen.getByText(label)).toHaveClass("required", { exact: false });
   });
 
   it("should render an error if specified", () => {
     const error = chance.string();
-    render(
+    rerender(
       <Input name={name} label={label} onChange={onChange} error={error} />
     );
 

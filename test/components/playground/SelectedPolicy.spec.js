@@ -23,11 +23,26 @@ import userEvent from "@testing-library/user-event";
 jest.mock("utils/shared-utils");
 
 describe("SelectedPolicy", () => {
-  let policy, setPolicy, clearEvaluation;
+  let policy, setPolicy, clearEvaluation, rerender;
 
   beforeEach(() => {
     setPolicy = jest.fn();
     clearEvaluation = jest.fn();
+    policy = {
+      name: chance.string(),
+      description: chance.string(),
+      regoContent: chance.word({ syllables: chance.d10() }),
+    };
+
+    const utils = render(
+      <SelectedPolicy
+        policy={policy}
+        setPolicy={setPolicy}
+        clearEvaluation={clearEvaluation}
+      />
+    );
+
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -37,7 +52,7 @@ describe("SelectedPolicy", () => {
   describe("policy has not been selected", () => {
     beforeEach(() => {
       policy = null;
-      render(
+      rerender(
         <SelectedPolicy
           policy={policy}
           setPolicy={setPolicy}
@@ -60,21 +75,6 @@ describe("SelectedPolicy", () => {
   });
 
   describe("policy has been selected", () => {
-    beforeEach(() => {
-      policy = {
-        name: chance.string(),
-        description: chance.string(),
-        regoContent: chance.word({ syllables: chance.d10() }),
-      };
-      render(
-        <SelectedPolicy
-          policy={policy}
-          setPolicy={setPolicy}
-          clearEvaluation={clearEvaluation}
-        />
-      );
-    });
-
     it("should render the Rego policy label", () => {
       expect(
         screen.getByText("Rego Policy Code", { selector: "p" })

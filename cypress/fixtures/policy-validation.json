@@ -1,0 +1,10 @@
+{
+  "valid": {
+    "isValid": true,
+    "errors": null
+  },
+  "invalid": {
+    "isValid": false,
+    "errors": ["Invalid rego code"]
+  }
+}

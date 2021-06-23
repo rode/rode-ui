@@ -21,11 +21,9 @@ import styles from "styles/modules/Resource.module.scss";
 import { getResourceDetails } from "utils/resource-utils";
 import ResourceOccurrences from "components/resources/ResourceOccurrences";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import Button from "components/Button";
-import { policyActions } from "reducers/policies";
-import { usePolicies } from "providers/policies";
+import { stateActions } from "reducers/appState";
+import { useAppState } from "providers/appState";
 import PageHeader from "components/layout/PageHeader";
 import ResourceVersion from "components/resources/ResourceVersion";
 import LabelWithValue from "components/LabelWithValue";
@@ -38,8 +36,7 @@ import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundBu
 
 const Resource = () => {
   const { theme } = useTheme();
-  const { state, dispatch } = useResources();
-  const { dispatch: policyDispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
   const router = useRouter();
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
   const { resourceUri } = router.query;
@@ -50,13 +47,13 @@ const Resource = () => {
 
   useSafeLayoutEffect(() => {
     dispatch({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
 
     return () => {
       dispatch({
-        type: resourceActions.SET_CURRENT_RESOURCE,
+        type: stateActions.SET_CURRENT_RESOURCE,
         data: {},
       });
     };
@@ -64,14 +61,14 @@ const Resource = () => {
 
   useSafeLayoutEffect(() => {
     dispatch({
-      type: resourceActions.SET_CURRENT_RESOURCE,
+      type: stateActions.SET_CURRENT_RESOURCE,
       data: getResourceDetails(resourceUri),
     });
   }, [resourceUri]);
 
   const evaluateInPlayground = () => {
-    policyDispatch({
-      type: policyActions.SET_EVALUATION_RESOURCE,
+    dispatch({
+      type: stateActions.SET_EVALUATION_RESOURCE,
       data: {
         versionedResourceUri: resourceUri,
       },

@@ -15,53 +15,43 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
-import { usePolicies } from "providers/policies";
-
-jest.mock("providers/policies");
 
 describe("PolicyBreadcrumbs", () => {
-  let searchTerm;
+  let policySearchTerm, state, rerender;
 
   beforeEach(() => {
-    searchTerm = chance.string();
+    policySearchTerm = chance.string();
+    state = {
+      policySearchTerm,
+    };
+    const utils = render(<PolicyBreadcrumbs />, { state });
+    rerender = utils.rerender;
   });
 
   describe("searchTerm exists", () => {
-    beforeEach(() => {
-      usePolicies.mockReturnValue({
-        state: {
-          searchTerm,
-        },
-      });
-
-      render(<PolicyBreadcrumbs />);
-    });
-
     it("should display the Policy Search text", () => {
       expect(screen.getByText(/policy search/i)).toBeInTheDocument();
     });
 
     it("should return a breadcrumb for the search term", () => {
-      const renderedSearchTermLink = screen.getByText(searchTerm, {
+      const renderedSearchTermLink = screen.getByText(policySearchTerm, {
         exact: false,
       });
       expect(renderedSearchTermLink).toBeInTheDocument();
       expect(renderedSearchTermLink).toHaveAttribute(
         "href",
-        `/policies?search=${encodeURIComponent(searchTerm)}`
+        `/policies?search=${encodeURIComponent(policySearchTerm)}`
       );
     });
+  });
 
+  describe("searching for all policies", () => {
     it("should return the correct breadcrumb when viewing all policies", () => {
-      usePolicies.mockReturnValue({
-        state: {
-          searchTerm: "all",
-        },
-      });
+      state.policySearchTerm = "all";
 
-      render(<PolicyBreadcrumbs />);
+      rerender(<PolicyBreadcrumbs />);
       const renderedLink = screen.getByText(/view all policies/i);
       expect(renderedLink).toBeInTheDocument();
       expect(renderedLink).toHaveAttribute("href", `/policies?search=all`);
@@ -70,12 +60,12 @@ describe("PolicyBreadcrumbs", () => {
 
   describe("no searchTerm exists", () => {
     it("should return null", () => {
-      usePolicies.mockReturnValue({
-        state: {},
-      });
+      state.policySearchTerm = "";
 
-      render(<PolicyBreadcrumbs />);
-      expect(screen.queryByText(searchTerm)).toBeNull();
+      rerender(<PolicyBreadcrumbs />);
+
+      expect(screen.queryByText(policySearchTerm)).toBeNull();
+      expect(screen.queryByText("Policy Search")).toBeNull();
     });
   });
 });

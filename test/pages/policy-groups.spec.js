@@ -48,7 +48,7 @@ describe("Policy Groups", () => {
     useRouter.mockReturnValue(router);
 
     usePaginatedFetch.mockReturnValue(mockPaginatedFetchResponse);
-    const utils = render(<PolicyGroups />, { policyDispatch: dispatch });
+    const utils = render(<PolicyGroups />, { dispatch });
     rerender = utils.rerender;
   });
 
@@ -105,7 +105,7 @@ describe("Policy Groups", () => {
 
   it("should render the card with no description if it is not present", () => {
     mockPaginatedFetchResponse.data[0].description = "";
-    rerender(<PolicyGroups />, { policyDispatch: dispatch });
+    rerender(<PolicyGroups />);
     const renderedName = screen.getByText(
       mockPaginatedFetchResponse.data[0].name
     );
@@ -114,7 +114,7 @@ describe("Policy Groups", () => {
 
   it("should render the button to view more if there are multiple pages of results", () => {
     mockPaginatedFetchResponse.isLastPage = false;
-    rerender(<PolicyGroups />, { policyDispatch: dispatch });
+    rerender(<PolicyGroups />);
 
     const renderedButton = screen.getByText("View More");
     expect(renderedButton).toBeInTheDocument;
@@ -124,7 +124,7 @@ describe("Policy Groups", () => {
 
   it("should render the no policy groups found message if no groups are found", () => {
     mockPaginatedFetchResponse.data = [];
-    rerender(<PolicyGroups />, { policyDispatch: dispatch });
+    rerender(<PolicyGroups />);
 
     expect(screen.getByText(/no policy groups exist./i)).toBeInTheDocument();
   });

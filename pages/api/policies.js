@@ -54,6 +54,7 @@ export default async (req, res) => {
       }
 
       const listPoliciesResponse = await response.json();
+
       const policies = listPoliciesResponse.policies.map((policy) =>
         mapToClientModel(policy)
       );

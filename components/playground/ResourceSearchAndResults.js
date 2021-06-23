@@ -19,8 +19,6 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
-import { resourceActions } from "reducers/resources";
-import { useResources } from "providers/resources";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import {
@@ -33,12 +31,17 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const { state, dispatch } = useResources();
-  const debouncedSearch = useDebouncedValue(state.searchTerm, debounceDelay);
+  const { state, dispatch } = useAppState();
+  const debouncedSearch = useDebouncedValue(
+    state.resourceSearchTerm,
+    debounceDelay
+  );
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/resources" : null,
@@ -52,6 +55,12 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
         <ResourceSearchBar
           onSubmit={(event) => {
             event.preventDefault();
+            if (!state.resourceSearchTerm.length) {
+              dispatch({
+                type: stateActions.SET_RESOURCE_SEARCH_TERM,
+                data: SEARCH_ALL,
+              });
+            }
             setResourceSearch(true);
           }}
           onBlur={() => {
@@ -70,7 +79,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
               onClick={() => {
                 setResourceSearch(true);
                 dispatch({
-                  type: resourceActions.SET_SEARCH_TERM,
+                  type: stateActions.SET_RESOURCE_SEARCH_TERM,
                   data: SEARCH_ALL,
                 });
               }}

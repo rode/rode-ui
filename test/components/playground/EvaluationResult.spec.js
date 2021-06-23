@@ -29,6 +29,7 @@ describe("EvaluationResult", () => {
       scrollIntoView: jest.fn(),
     });
   });
+
   it("should return null when there are no results", () => {
     render(<EvaluationResult results={null} />);
 

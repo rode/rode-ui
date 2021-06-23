@@ -34,10 +34,10 @@ describe("Policy Details", () => {
     policyVersions,
     mockPaginatedFetch,
     rerender,
-    dispatchMock;
+    dispatch;
 
   beforeEach(() => {
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
     router = {
       query: {
         id: chance.guid(),
@@ -75,8 +75,8 @@ describe("Policy Details", () => {
     };
     usePaginatedFetch.mockReturnValue(mockPaginatedFetch);
     const utils = render(<Policy />, {
-      policyState: { searchTerm: "test search term" },
-      policyDispatch: dispatchMock,
+      state: { policySearchTerm: "test search term" },
+      dispatch: dispatch,
     });
     rerender = utils.rerender;
   });
@@ -119,7 +119,7 @@ describe("Policy Details", () => {
 
       expect(renderedButton).toBeInTheDocument();
       userEvent.click(renderedButton);
-      expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+      expect(dispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
         type: "SET_EVALUATION_POLICY",
         data: policy,
       });

@@ -19,29 +19,31 @@ import { render, screen } from "@testing-library/react";
 import PolicyValidationResult from "components/policies/PolicyValidationResult";
 
 describe("PolicyValidationResult", () => {
-  let validation;
+  let validation, rerender;
+
+  beforeEach(() => {
+    validation = {
+      isValid: chance.bool(),
+      errors: chance.n(() => chance.word({ syllables: 4 }), chance.d4()),
+    };
+    const utils = render(<PolicyValidationResult validation={validation} />);
+    rerender = utils.rerender;
+  });
 
   describe("validation does not exist", () => {
     it("should return null", () => {
       validation = null;
-      render(<PolicyValidationResult validation={validation} />);
+      rerender(<PolicyValidationResult validation={validation} />);
 
       expect(screen.queryByText(/policy is/i)).not.toBeInTheDocument();
     });
   });
 
   describe("validation exists", () => {
-    beforeEach(() => {
-      validation = {
-        isValid: chance.bool(),
-        errors: chance.n(() => chance.word({ syllables: 4 }), chance.d4()),
-      };
-    });
-
     describe("policy is valid", () => {
       beforeEach(() => {
         validation.isValid = true;
-        render(<PolicyValidationResult validation={validation} />);
+        rerender(<PolicyValidationResult validation={validation} />);
       });
 
       it("should render a success message", () => {
@@ -55,10 +57,10 @@ describe("PolicyValidationResult", () => {
     describe("policy is not valid", () => {
       beforeEach(() => {
         validation.isValid = false;
+        rerender(<PolicyValidationResult validation={validation} />);
       });
 
       it("should render an error message", () => {
-        render(<PolicyValidationResult validation={validation} />);
         expect(
           screen.getByText("This policy failed validation.")
         ).toBeInTheDocument();
@@ -66,7 +68,6 @@ describe("PolicyValidationResult", () => {
       });
 
       it("should render the errors that are returned if they are present", () => {
-        render(<PolicyValidationResult validation={validation} />);
         expect(
           screen.getByText(/this policy failed validation/i).closest("pre")
         ).toBeDefined();
@@ -78,7 +79,7 @@ describe("PolicyValidationResult", () => {
 
       it("should not render any errors if they are not present", () => {
         validation.errors = [];
-        render(<PolicyValidationResult validation={validation} />);
+        rerender(<PolicyValidationResult validation={validation} />);
         expect(
           screen.getByText(/this policy failed validation/i).closest("pre")
         ).not.toBeInTheDocument();

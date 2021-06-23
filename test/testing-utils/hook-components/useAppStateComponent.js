@@ -16,31 +16,30 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 
 const PolicyComponent = ({ newSearchTerm }) => {
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   return (
     <>
       {Object.keys(state).map((key) => (
         <div key={key}>
           <h1>{key}</h1>
-          <span>:</span>
-          <h2>{state[key]}</h2>
         </div>
       ))}
       <button
         onClick={() =>
           dispatch({
-            type: policyActions.SET_SEARCH_TERM,
+            type: stateActions.SET_POLICY_SEARCH_TERM,
             data: newSearchTerm,
           })
         }
       >
         Update search term
       </button>
+      <p>{state.policySearchTerm}</p>
     </>
   );
 };

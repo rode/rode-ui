@@ -23,7 +23,7 @@ describe("PolicyDetails", () => {
 
   beforeEach(() => {
     policy = {
-      regoContent: chance.word(),
+      regoContent: chance.string({ alpha: true }),
     };
 
     render(<PolicyDetails policy={policy} />);

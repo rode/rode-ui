@@ -16,20 +16,25 @@
 
 import React, { createContext, useReducer, useMemo, useContext } from "react";
 import PropTypes from "prop-types";
-import { policyReducer } from "reducers/policies";
+import { appStateReducer } from "reducers/appState";
 
-const PolicyContext = createContext();
+const AppStateContext = createContext();
 
 const initialState = {
-  searchTerm: "",
+  policySearchTerm: "",
   currentPolicy: null,
   evaluationResource: null,
   evaluationPolicy: null,
   currentPolicyGroup: null,
+  resourceSearchTerm: "",
+  resourceVersionSearchTerm: "",
+  resourceTypeSearchFilter: [],
+  occurrenceDetails: null,
+  currentResource: {},
 };
 
-export const PoliciesProvider = ({ value, children }) => {
-  const [state, dispatch] = useReducer(policyReducer, initialState);
+export const AppStateProvider = ({ value, children }) => {
+  const [state, dispatch] = useReducer(appStateReducer, initialState);
 
   const contextValue = useMemo(() => {
     if (value) {
@@ -46,19 +51,19 @@ export const PoliciesProvider = ({ value, children }) => {
   }, [state, dispatch]);
 
   return (
-    <PolicyContext.Provider value={contextValue}>
+    <AppStateContext.Provider value={contextValue}>
       {children}
-    </PolicyContext.Provider>
+    </AppStateContext.Provider>
   );
 };
 
-PoliciesProvider.propTypes = {
+AppStateProvider.propTypes = {
   value: PropTypes.any,
   children: PropTypes.node.isRequired,
 };
 
-export const usePolicies = () => {
-  const { state, dispatch } = useContext(PolicyContext);
+export const useAppState = () => {
+  const { state, dispatch } = useContext(AppStateContext);
 
   return {
     state,

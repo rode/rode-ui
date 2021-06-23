@@ -17,19 +17,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SearchBar from "components/shared/SearchBar";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import { SEARCH_ALL } from "utils/constants";
 
 const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
-  const { state, dispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   const onSearchChange = (event) => {
     if (onChange) {
       onChange();
     }
     dispatch({
-      type: policyActions.SET_SEARCH_TERM,
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: event.target.value.trim() === "" ? SEARCH_ALL : event.target.value,
     });
   };
@@ -41,7 +41,7 @@ const PolicySearchBar = ({ onSubmit, helpText, onChange, onBlur }) => {
       onBlur={onBlur}
       label={"Search for a policy"}
       name={"policySearch"}
-      searchTerm={state.searchTerm}
+      searchTerm={state.policySearchTerm}
       placeholder={"ex: max-severe-vulnerabilities"}
       helpText={helpText}
       buttonLabel={"Search Policies"}

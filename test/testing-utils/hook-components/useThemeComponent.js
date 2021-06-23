@@ -16,7 +16,7 @@
 
 import React from "react";
 import { useTheme } from "providers/theme";
-import { LIGHT_THEME } from "utils/theme-utils";
+import { LIGHT_THEME } from "utils/constants";
 
 const ThemeComponent = () => {
   const { theme, toggleTheme } = useTheme();

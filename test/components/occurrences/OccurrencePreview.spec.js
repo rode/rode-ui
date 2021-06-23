@@ -15,15 +15,13 @@
  */
 
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import OccurrencePreview from "components/occurrences/OccurrencePreview";
 import dayjs from "dayjs";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
+import { stateActions } from "reducers/appState";
 
 jest.mock("dayjs");
-jest.mock("providers/resources");
 
 describe("OccurrencePreview", () => {
   let mainText,
@@ -31,7 +29,8 @@ describe("OccurrencePreview", () => {
     subText,
     currentOccurrence,
     expectedOccurrenceName,
-    dispatchMock,
+    state,
+    dispatch,
     rerender;
 
   beforeEach(() => {
@@ -42,16 +41,13 @@ describe("OccurrencePreview", () => {
     currentOccurrence = {
       originals: { occurrences: [{ name: expectedOccurrenceName }] },
     };
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
 
-    useResources.mockReturnValue({
-      state: {
-        occurrenceDetails: {
-          originals: { occurrences: [{ name: chance.string() }] },
-        },
+    state = {
+      occurrenceDetails: {
+        originals: { occurrences: [{ name: chance.string() }] },
       },
-      dispatch: dispatchMock,
-    });
+    };
 
     dayjs.mockReturnValue({
       format: jest.fn().mockReturnValue(timestamp),
@@ -63,7 +59,8 @@ describe("OccurrencePreview", () => {
         timestamp={timestamp}
         subText={subText}
         currentOccurrence={currentOccurrence}
-      />
+      />,
+      { state, dispatch }
     );
     rerender = utils.rerender;
   });
@@ -82,19 +79,12 @@ describe("OccurrencePreview", () => {
   it("should set the occurrence details when clicked", () => {
     expect(screen.getByTitle(/chevron right/i)).toBeInTheDocument();
     userEvent.click(screen.getByText(mainText));
-    expect(dispatchMock).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+    expect(dispatch).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: currentOccurrence,
     });
 
-    useResources.mockReturnValue({
-      state: {
-        occurrenceDetails: {
-          originals: { occurrences: [{ name: expectedOccurrenceName }] },
-        },
-      },
-      dispatch: dispatchMock,
-    });
+    state.occurrenceDetails.originals.occurrences[0].name = expectedOccurrenceName;
 
     rerender(
       <OccurrencePreview
@@ -108,8 +98,8 @@ describe("OccurrencePreview", () => {
     expect(screen.getByTitle(/chevron double right/i)).toBeInTheDocument();
     userEvent.click(screen.getByText(mainText));
 
-    expect(dispatchMock).toHaveBeenCalledTimes(2).toHaveBeenCalledWith({
-      type: resourceActions.SET_OCCURRENCE_DETAILS,
+    expect(dispatch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith({
+      type: stateActions.SET_OCCURRENCE_DETAILS,
       data: null,
     });
   });

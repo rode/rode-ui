@@ -17,18 +17,18 @@
 import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ResourceComponent from "test/testing-utils/hook-components/useResourcesComponent";
-import { ResourcesProvider } from "providers/resources";
+import AppStateComponent from "test/testing-utils/hook-components/useAppStateComponent";
+import { AppStateProvider } from "providers/appState";
 
-describe("resources provider", () => {
+describe("AppStateProvider", () => {
   let searchTerm;
 
   beforeEach(() => {
     searchTerm = chance.string();
     render(
-      <ResourcesProvider>
-        <ResourceComponent newSearchTerm={searchTerm} />
-      </ResourcesProvider>
+      <AppStateProvider>
+        <AppStateComponent newSearchTerm={searchTerm} />
+      </AppStateProvider>
     );
   });
 
@@ -38,11 +38,16 @@ describe("resources provider", () => {
   });
 
   it("should render the default state keys", () => {
-    expect(screen.getByText(/^searchTerm/i)).toBeInTheDocument();
-    expect(screen.getByText(/^occurrenceDetails/i)).toBeInTheDocument();
-    expect(screen.getByText(/^currentResource/i)).toBeInTheDocument();
-    expect(screen.getByText(/^versionSearchTerm/i)).toBeInTheDocument();
-    expect(screen.getByText(/^searchTypeFilter/i)).toBeInTheDocument();
+    expect(screen.getByText(/policySearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/^currentPolicy$/i)).toBeInTheDocument();
+    expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
+    expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentPolicyGroup/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceSearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceVersionSearchTerm/i)).toBeInTheDocument();
+    expect(screen.getByText(/resourceTypeSearchFilter/i)).toBeInTheDocument();
+    expect(screen.getByText(/occurrenceDetails/i)).toBeInTheDocument();
+    expect(screen.getByText(/currentResource/i)).toBeInTheDocument();
   });
 
   it("should handle dispatching an action", () => {
@@ -50,8 +55,6 @@ describe("resources provider", () => {
 
     userEvent.click(dispatchButton);
 
-    expect(screen.getByText(/^searchTerm:/i)).toHaveTextContent(searchTerm, {
-      exact: false,
-    });
+    expect(screen.getByText(searchTerm)).toBeInTheDocument();
   });
 });

@@ -15,26 +15,25 @@
  */
 
 import React from "react";
-import { act, cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "test/testing-utils/renderer";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import userEvent, { specialChars } from "@testing-library/user-event";
-import { useResources } from "providers/resources";
-
-jest.mock("providers/resources");
 
 describe("ResourceSearchBar", () => {
-  let onSubmit, dispatchMock, rerender;
+  let onSubmit, dispatch, state, rerender;
   beforeEach(() => {
     jest.spyOn(console, "log");
     onSubmit = jest.fn();
-    dispatchMock = jest.fn();
+    dispatch = jest.fn();
 
-    useResources.mockReturnValue({
-      state: { searchTerm: "" },
-      dispatch: dispatchMock,
+    state = {
+      resourceSearchTerm: "",
+    };
+
+    const utils = render(<ResourceSearchBar onSubmit={onSubmit} />, {
+      state,
+      dispatch,
     });
-
-    const utils = render(<ResourceSearchBar onSubmit={onSubmit} />);
     rerender = utils.rerender;
   });
 
@@ -50,10 +49,10 @@ describe("ResourceSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_SEARCH_TERM",
+        type: "SET_RESOURCE_SEARCH_TERM",
         data: expect.any(String),
       });
   });
@@ -66,10 +65,10 @@ describe("ResourceSearchBar", () => {
     const searchTerm = chance.string();
 
     userEvent.type(renderedInput, searchTerm);
-    expect(dispatchMock)
+    expect(dispatch)
       .toHaveBeenCalledTimes(searchTerm.length)
       .toHaveBeenNthCalledWith(searchTerm.length, {
-        type: "SET_SEARCH_TERM",
+        type: "SET_RESOURCE_SEARCH_TERM",
         data: expect.any(String),
       });
     expect(onChangeMock).toHaveBeenCalledTimes(searchTerm.length);
@@ -86,8 +85,8 @@ describe("ResourceSearchBar", () => {
     act(() => {
       userEvent.type(renderedInput, specialChars.backspace);
     });
-    expect(dispatchMock).toHaveBeenLastCalledWith({
-      type: "SET_SEARCH_TERM",
+    expect(dispatch).toHaveBeenLastCalledWith({
+      type: "SET_RESOURCE_SEARCH_TERM",
       data: "all",
     });
   });
@@ -104,26 +103,9 @@ describe("ResourceSearchBar", () => {
     expect(screen.getByText(helpText)).toBeInTheDocument();
   });
 
-  it("should fill in the search term based on the url query", () => {
-    const currentSearchTerm = chance.string();
-    useResources.mockReturnValue({
-      state: { searchTerm: currentSearchTerm },
-      dispatch: jest.fn(),
-    });
-
-    rerender(<ResourceSearchBar onSubmit={onSubmit} />);
-
-    const renderedSearchInput = screen.getByLabelText(/search for a resource/i);
-    expect(renderedSearchInput).toHaveAttribute("value", currentSearchTerm);
-  });
-
   it("should start the search process when the button is clicked", () => {
-    const searchTerm = chance.string();
+    state.searchTerm = chance.string();
 
-    useResources.mockReturnValue({
-      state: { searchTerm },
-      dispatch: jest.fn(),
-    });
     rerender(<ResourceSearchBar onSubmit={onSubmit} />);
     const renderedSearchButton = screen.getByLabelText("Search Resources");
 

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+export const LIGHT_THEME = "lightTheme";
+export const DARK_THEME = "darkTheme";
 export const SEARCH_ALL = "all";
 export const DATE_TIME_FORMAT = "h:mm:ssa | MMM D, YYYY";
 export const DEFAULT_SEARCH_PAGE_SIZE = 10;

@@ -17,12 +17,10 @@
 import React, { useEffect } from "react";
 import styles from "styles/modules/Home.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
-import { useResources } from "providers/resources";
-import { resourceActions } from "reducers/resources";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useTheme } from "providers/theme";
-import { usePolicies } from "providers/policies";
-import { policyActions } from "reducers/policies";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SEARCH_ALL } from "utils/constants";
@@ -30,17 +28,16 @@ import { SEARCH_ALL } from "utils/constants";
 const Home = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const { state: resourceState, dispatch: resourceDispatch } = useResources();
-  const { state: policyState, dispatch: policyDispatch } = usePolicies();
+  const { state, dispatch } = useAppState();
 
   useEffect(() => {
-    resourceDispatch({
-      type: resourceActions.SET_SEARCH_TERM,
+    dispatch({
+      type: stateActions.SET_RESOURCE_SEARCH_TERM,
       data: "",
     });
 
-    policyDispatch({
-      type: policyActions.SET_SEARCH_TERM,
+    dispatch({
+      type: stateActions.SET_POLICY_SEARCH_TERM,
       data: "",
     });
   }, []);
@@ -60,7 +57,7 @@ const Home = () => {
       <div className={styles.card}>
         <ResourceSearchBar
           onSubmit={(event) =>
-            onSubmit(event, "resources", resourceState.searchTerm)
+            onSubmit(event, "resources", state.resourceSearchTerm)
           }
           helpText={
             <>
@@ -76,7 +73,7 @@ const Home = () => {
       <div className={styles.card}>
         <PolicySearchBar
           onSubmit={(event) =>
-            onSubmit(event, "policies", policyState.searchTerm)
+            onSubmit(event, "policies", state.policySearchTerm)
           }
           helpText={
             <>

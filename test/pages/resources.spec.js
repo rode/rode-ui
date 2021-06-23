@@ -15,45 +15,57 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import Resources from "pages/resources";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { useResources } from "providers/resources";
 import userEvent from "@testing-library/user-event";
 import { buildResourceQueryParams, RESOURCE_TYPES } from "utils/resource-utils";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
-jest.mock("providers/resources");
 
 describe("Resources", () => {
-  let mockRouter, mockDispatch, mockState, mockFetchResponse;
+  let mockRouter,
+    expectedSearch,
+    resources,
+    dispatch,
+    state,
+    mockFetchResponse,
+    rerender;
 
   beforeEach(() => {
+    expectedSearch = chance.string({ alpha: true });
     mockRouter = {
-      query: {},
+      query: {
+        search: expectedSearch,
+      },
       push: jest.fn(),
     };
-    mockDispatch = jest.fn();
-    mockState = {
-      searchTerm: "",
-      searchTypeFilter: [],
+    dispatch = jest.fn();
+    state = {
+      resourceSearchTerm: expectedSearch,
+      resourceTypeSearchFilter: [],
     };
+    resources = chance.n(
+      () => ({
+        id: chance.guid(),
+        name: chance.string({ alpha: true }),
+        type: chance.pickone(Object.values(RESOURCE_TYPES)),
+      }),
+      chance.d4() + 2
+    );
     mockFetchResponse = {
-      data: null,
-      loading: chance.bool(),
+      data: resources,
+      loading: false,
       isLastPage: chance.bool(),
       goToNextPage: jest.fn(),
     };
     useRouter.mockReturnValue(mockRouter);
 
-    useResources.mockReturnValue({
-      dispatch: mockDispatch,
-      state: mockState,
-    });
-
     usePaginatedFetch.mockReturnValue(mockFetchResponse);
+    const utils = render(<Resources />, { state, dispatch });
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -61,32 +73,30 @@ describe("Resources", () => {
   });
 
   it("should render an input for searching for a resource", () => {
-    render(<Resources />);
-
     expect(screen.getByText(/search for a resource/i)).toBeInTheDocument();
   });
 
-  describe("searching for resources", () => {
-    let resources, expectedSearch;
+  it("should clear the saved search term if it doesn't exist in the url", () => {
+    mockRouter.query.search = "";
+    rerender(<Resources />);
 
-    beforeEach(() => {
-      resources = chance.n(
-        () => ({
-          id: chance.string(),
-          name: chance.string(),
-          type: chance.pickone(Object.values(RESOURCE_TYPES)),
-        }),
-        chance.d4()
-      );
-      expectedSearch = chance.word();
-      mockRouter.query.search = expectedSearch;
-      mockFetchResponse.data = resources;
-      mockFetchResponse.loading = false;
+    expect(dispatch).toHaveBeenLastCalledWith({
+      type: "SET_RESOURCE_SEARCH_TERM",
+      data: "",
     });
+  });
 
+  it("should save the search term specified in the url", () => {
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_RESOURCE_SEARCH_TERM",
+      data: expectedSearch,
+    });
+  });
+
+  describe("searching for resources", () => {
     it("should search for all resources if a search term does not exist", () => {
-      mockState.searchTerm = " ";
-      render(<Resources />);
+      state.resourceSearchTerm = "";
+      rerender(<Resources />);
       const renderedSearchButton = screen.getByTitle(/search/i);
       expect(renderedSearchButton).toBeInTheDocument();
 
@@ -97,9 +107,6 @@ describe("Resources", () => {
     });
 
     it("should kick off the search when the search button is pressed and a search term exists", () => {
-      mockState.searchTerm = expectedSearch;
-      render(<Resources />);
-
       const renderedSearchButton = screen.getByTitle(/search/i);
       expect(renderedSearchButton).toBeInTheDocument();
 
@@ -111,8 +118,7 @@ describe("Resources", () => {
 
     it("should kick off the search when the user navigates away from the search bar", () => {
       const blurTrigger = chance.string();
-      mockState.searchTerm = expectedSearch;
-      render(
+      rerender(
         <>
           <p>{blurTrigger}</p>
           <Resources />
@@ -130,15 +136,12 @@ describe("Resources", () => {
 
     it("should render a loading indicator when fetching results", () => {
       mockFetchResponse.loading = true;
-      render(<Resources />);
+      rerender(<Resources />);
 
       expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
     });
 
     it("should pass the search term through as a filter", () => {
-      mockState.searchTerm = expectedSearch;
-      render(<Resources />);
-
       expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
         "/api/resources",
         {
@@ -149,36 +152,30 @@ describe("Resources", () => {
     });
 
     it("should handle search for all resources", () => {
-      mockState.searchTerm = "all";
-      render(<Resources />);
+      state.resourceSearchTerm = "all";
+      rerender(<Resources />);
 
-      expect(usePaginatedFetch)
-        .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith(
-          "/api/resources",
-          buildResourceQueryParams(
-            mockState.searchTerm,
-            mockState.searchTypeFilter
-          ),
-          10
-        );
+      expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+        "/api/resources",
+        buildResourceQueryParams(
+          state.resourceSearchTerm,
+          state.resourceTypeSearchFilter
+        ),
+        10
+      );
     });
 
     it("should handle viewing all resources by clicking the view all resources button", () => {
-      render(<Resources />);
-
       userEvent.click(screen.getByText(/^view all resources/));
 
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: "SET_TYPE_FILTER",
+      expect(dispatch).toHaveBeenCalledWith({
+        type: "SET_RESOURCE_TYPE_SEARCH_FILTER",
         data: [],
       });
       expect(mockRouter.push).toHaveBeenCalledWith("/resources?search=all");
     });
 
     it("should render all of the search results", () => {
-      render(<Resources />);
-
       resources.forEach((resource, index) => {
         expect(screen.getByText(resource.name)).toBeInTheDocument();
         expect(screen.getAllByText(/type/i)[index]).toBeInTheDocument();
@@ -188,7 +185,7 @@ describe("Resources", () => {
     it("should render a button to view more results if the user is not at the end of the found results", () => {
       mockFetchResponse.isLastPage = false;
 
-      render(<Resources />);
+      rerender(<Resources />);
       const viewMoreButton = screen.getByRole("button", { name: "View More" });
       expect(viewMoreButton).toBeInTheDocument();
       userEvent.click(viewMoreButton);
@@ -198,7 +195,7 @@ describe("Resources", () => {
     it("should render a message when there are no results", () => {
       mockFetchResponse.data = [];
 
-      render(<Resources />);
+      rerender(<Resources />);
 
       expect(screen.getByText("No resources found")).toBeInTheDocument();
     });
