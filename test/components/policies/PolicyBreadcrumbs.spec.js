@@ -15,31 +15,22 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import PolicyBreadcrumbs from "components/policies/PolicyBreadcrumbs";
-import { useAppState } from "providers/appState";
 
-jest.mock("providers/appState");
-
-// TODO: convert these tests to use test renderer instead of mocking hook
 describe("PolicyBreadcrumbs", () => {
-  let policySearchTerm;
+  let policySearchTerm, state, rerender;
 
   beforeEach(() => {
     policySearchTerm = chance.string();
+    state = {
+      policySearchTerm,
+    };
+    const utils = render(<PolicyBreadcrumbs />, { state });
+    rerender = utils.rerender;
   });
 
   describe("searchTerm exists", () => {
-    beforeEach(() => {
-      useAppState.mockReturnValue({
-        state: {
-          policySearchTerm: policySearchTerm,
-        },
-      });
-
-      render(<PolicyBreadcrumbs />);
-    });
-
     it("should display the Policy Search text", () => {
       expect(screen.getByText(/policy search/i)).toBeInTheDocument();
     });
@@ -54,15 +45,13 @@ describe("PolicyBreadcrumbs", () => {
         `/policies?search=${encodeURIComponent(policySearchTerm)}`
       );
     });
+  });
 
+  describe("searching for all policies", () => {
     it("should return the correct breadcrumb when viewing all policies", () => {
-      useAppState.mockReturnValue({
-        state: {
-          policySearchTerm: "all",
-        },
-      });
+      state.policySearchTerm = "all";
 
-      render(<PolicyBreadcrumbs />);
+      rerender(<PolicyBreadcrumbs />);
       const renderedLink = screen.getByText(/view all policies/i);
       expect(renderedLink).toBeInTheDocument();
       expect(renderedLink).toHaveAttribute("href", `/policies?search=all`);
@@ -71,12 +60,12 @@ describe("PolicyBreadcrumbs", () => {
 
   describe("no searchTerm exists", () => {
     it("should return null", () => {
-      useAppState.mockReturnValue({
-        state: {},
-      });
+      state.policySearchTerm = "";
 
-      render(<PolicyBreadcrumbs />);
+      rerender(<PolicyBreadcrumbs />);
+
       expect(screen.queryByText(policySearchTerm)).toBeNull();
+      expect(screen.queryByText("Policy Search")).toBeNull();
     });
   });
 });

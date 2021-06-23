@@ -15,43 +15,59 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { useAppState } from "providers/appState";
 import Policies from "pages/policies";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
-jest.mock("providers/appState");
 
 describe("Policies", () => {
-  let pushMock, mockRouter, mockState, mockDispatch, mockFetchResponse;
+  let policies,
+    expectedSearch,
+    pushMock,
+    mockRouter,
+    state,
+    dispatch,
+    mockFetchResponse,
+    blurTrigger,
+    rerender;
+
   beforeEach(() => {
     pushMock = jest.fn();
-    mockDispatch = jest.fn();
-    mockState = {
+    dispatch = jest.fn();
+    state = {
       policySearchTerm: "",
     };
+    blurTrigger = chance.string({ alpha: true });
+    policies = chance.n(
+      () => ({
+        name: chance.string(),
+        description: chance.string(),
+        id: chance.guid(),
+      }),
+      chance.d4()
+    );
+    expectedSearch = chance.word();
     mockFetchResponse = {
-      data: null,
-      loading: chance.bool(),
+      data: policies,
+      loading: false,
       isLastPage: chance.bool(),
       goToNextPage: jest.fn(),
     };
     mockRouter = {
-      query: {},
+      query: {
+        search: expectedSearch,
+      },
       push: pushMock,
     };
     useRouter.mockReturnValue(mockRouter);
 
-    useAppState.mockReturnValue({
-      dispatch: mockDispatch,
-      state: mockState,
-    });
-
     usePaginatedFetch.mockReturnValue(mockFetchResponse);
+    const utils = render(<Policies />, { state, dispatch });
+    rerender = utils.rerender;
   });
 
   afterEach(() => {
@@ -59,35 +75,30 @@ describe("Policies", () => {
   });
 
   it("should render an input for searching for a policy", () => {
-    render(<Policies />);
-
     expect(screen.getByText(/search for a policy/i)).toBeInTheDocument();
   });
 
-  describe("searching for policies", () => {
-    let policies, expectedSearch;
-
-    beforeEach(() => {
-      policies = chance.n(
-        () => ({
-          name: chance.string(),
-          description: chance.string(),
-          id: chance.guid(),
-        }),
-        chance.d4()
-      );
-      expectedSearch = chance.word();
-      mockRouter.query = {
-        search: expectedSearch,
-      };
-      mockFetchResponse.data = policies;
-      mockFetchResponse.loading = false;
+  it("should clear the search term if it doesn't exist in the url", () => {
+    mockRouter.query.search = "";
+    rerender(<Policies />);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_POLICY_SEARCH_TERM",
+      data: "",
     });
+  });
 
+  it("should save the search term specified in the url", () => {
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "SET_POLICY_SEARCH_TERM",
+      data: expectedSearch,
+    });
+  });
+
+  describe("searching for policies", () => {
     it("should search for all policies if a search term does not exist", () => {
-      mockState.policySearchTerm = " ";
+      state.policySearchTerm = " ";
 
-      render(<Policies />);
+      rerender(<Policies />);
       const renderedSearchButton = screen.getByTitle(/search/i);
       expect(renderedSearchButton).toBeInTheDocument();
 
@@ -97,69 +108,56 @@ describe("Policies", () => {
         .toHaveBeenCalledWith(`/policies?search=all`);
     });
 
-    it("should kick off the search when the search button is pressed and a search term exists", () => {
-      mockState.policySearchTerm = expectedSearch;
+    describe("searching for a specific term", () => {
+      beforeEach(() => {
+        state.policySearchTerm = expectedSearch;
+        rerender(<Policies />);
+      });
 
-      render(<Policies />);
-      const renderedSearchButton = screen.getByTitle(/search/i);
-      expect(renderedSearchButton).toBeInTheDocument();
+      it("should kick off the search when the search button is pressed and a search term exists", () => {
+        const renderedSearchButton = screen.getByTitle(/search/i);
+        expect(renderedSearchButton).toBeInTheDocument();
 
-      userEvent.click(renderedSearchButton);
-      expect(pushMock)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
-    });
+        userEvent.click(renderedSearchButton);
+        expect(pushMock)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
+      });
 
-    it("should kick off the search when the user navigates away from the search bar", () => {
-      const blurTrigger = chance.string();
-      mockState.policySearchTerm = expectedSearch;
+      it("should kick off the search when the user navigates away from the search bar", () => {
+        rerender(
+          <>
+            <p>{blurTrigger}</p>
+            <Policies />
+          </>
+        );
+        const renderedInput = screen.getByLabelText(/^search for a policy$/i);
+        userEvent.click(renderedInput);
+        userEvent.click(screen.getByText(blurTrigger));
+        expect(pushMock)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
+      });
 
-      render(
-        <>
-          <p>{blurTrigger}</p>
-          <Policies />
-        </>
-      );
-      const renderedInput = screen.getByLabelText(/^search for a policy$/i);
-      userEvent.click(renderedInput);
-      userEvent.click(screen.getByText(blurTrigger));
-      expect(pushMock)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(`/policies?search=${expectedSearch}`);
+      it("should pass the search term through as a filter", () => {
+        expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+          "/api/policies",
+          {
+            filter: expectedSearch,
+          },
+          10
+        );
+      });
     });
 
     it("should render a loading indicator when fetching results", () => {
       mockFetchResponse.loading = true;
-      render(<Policies />);
+      rerender(<Policies />);
 
       expect(screen.getByTestId("loadingIndicator")).toBeInTheDocument();
     });
 
-    it("should pass the search term through as a filter", () => {
-      mockState.policySearchTerm = expectedSearch;
-      render(<Policies />);
-
-      expect(usePaginatedFetch).toHaveBeenCalledTimes(2).toHaveBeenCalledWith(
-        "/api/policies",
-        {
-          filter: expectedSearch,
-        },
-        10
-      );
-    });
-
-    it("should handle viewing all policies", () => {
-      mockState.policySearchTerm = "all";
-      render(<Policies />);
-
-      expect(usePaginatedFetch)
-        .toHaveBeenCalledTimes(2)
-        .toHaveBeenCalledWith("/api/policies", null, 10);
-    });
-
     it("should render all of the returned search results", () => {
-      render(<Policies />);
-
       policies.forEach((policy, index) => {
         const { name } = policy;
         expect(screen.getAllByText("Policy Name")[index]).toBeInTheDocument();
@@ -167,9 +165,20 @@ describe("Policies", () => {
       });
     });
 
+    it("should handle viewing all policies", () => {
+      state.policySearchTerm = "all";
+      rerender(<Policies />);
+
+      expect(usePaginatedFetch).toHaveBeenLastCalledWith(
+        "/api/policies",
+        null,
+        10
+      );
+    });
+
     it("should render a button to view more results if the user is not at the end of the found results", () => {
       mockFetchResponse.isLastPage = false;
-      render(<Policies />);
+      rerender(<Policies />);
 
       const viewMoreButton = screen.getByRole("button", { name: "View More" });
       expect(viewMoreButton).toBeInTheDocument();
@@ -180,7 +189,7 @@ describe("Policies", () => {
     it("should render a message when there are no results", () => {
       mockFetchResponse.data = [];
 
-      render(<Policies />);
+      rerender(<Policies />);
 
       expect(screen.getByText("No policies found")).toBeInTheDocument();
     });

@@ -30,12 +30,9 @@ describe("Drawer", () => {
     children = chance.string();
 
     const utils = render(
-      <>
-        <p>trigger</p>
-        <Drawer isOpen={isOpen} onClose={onClose}>
-          <p>{children}</p>
-        </Drawer>
-      </>
+      <Drawer isOpen={isOpen} onClose={onClose}>
+        <p>{children}</p>
+      </Drawer>
     );
     rerender = utils.rerender;
   });
@@ -55,44 +52,44 @@ describe("Drawer", () => {
   it("should render the contents of an open drawer", () => {
     expect(screen.getByTestId("drawer")).toHaveClass("openDrawer");
     expect(screen.getByText(children)).toBeInTheDocument();
-
-    rerender(
-      <Drawer isOpen={false} onClose={onClose}>
-        <p>{children}</p>
-      </Drawer>
-    );
-
-    expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
   });
 
   it("should register a listener for click events outside of the drawer", () => {
     expect(document.addEventListener)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith("mousedown", expect.any(Function));
-
-    isOpen = false;
-    rerender(
-      <>
-        <p>trigger</p>
-        <Drawer isOpen={isOpen} onClose={onClose}>
-          <p>{children}</p>
-        </Drawer>
-      </>
-    );
-    expect(document.removeEventListener).toHaveBeenCalledWith(
-      "mousedown",
-      expect.any(Function)
-    );
   });
 
   it("should allow the user to override the testId", () => {
     const testId = chance.string();
     rerender(
-      <Drawer isOpen={true} onClose={onClose} testId={testId}>
-        <p>children</p>
+      <Drawer isOpen={isOpen} onClose={onClose} testId={testId}>
+        <p>{children}</p>
       </Drawer>
     );
 
     expect(screen.getByTestId(testId)).toHaveClass("openDrawer");
+  });
+
+  describe("closed drawer", () => {
+    beforeEach(() => {
+      isOpen = false;
+      rerender(
+        <Drawer isOpen={isOpen} onClose={onClose}>
+          <p>{children}</p>
+        </Drawer>
+      );
+    });
+
+    it("should remove the event listener", () => {
+      expect(document.removeEventListener).toHaveBeenCalledWith(
+        "mousedown",
+        expect.any(Function)
+      );
+    });
+
+    it("should have the correct class name", () => {
+      expect(screen.getByTestId("drawer")).toHaveClass("closedDrawer");
+    });
   });
 });

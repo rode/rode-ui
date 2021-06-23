@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable react/display-name,react/prop-types */
 import React from "react";
 import { render as rtlRender } from "@testing-library/react";
 import { AppStateProvider } from "providers/appState";
@@ -21,21 +22,43 @@ import { ThemeProvider } from "providers/theme";
 import { LIGHT_THEME } from "utils/constants";
 import { ToastContainer } from "react-toastify";
 
+const Wrapper = ({ theme, state, dispatch, children }) => (
+  <ThemeProvider value={{ theme, toggleTheme: jest.fn() }}>
+    <AppStateProvider value={{ state, dispatch }}>
+      <ToastContainer />
+      {children}
+    </AppStateProvider>
+  </ThemeProvider>
+);
+
 const render = (
   Component,
   { state = {}, theme = LIGHT_THEME, dispatch = jest.fn(), ...options } = {}
 ) => {
-  // eslint-disable-next-line react/prop-types
-  const Wrapper = ({ children }) => (
-    <ThemeProvider value={{ theme, toggleTheme: jest.fn() }}>
-      <AppStateProvider value={{ state, dispatch }}>
-        <ToastContainer />
+  const rendered = rtlRender(Component, {
+    wrapper: ({ children }) => (
+      <Wrapper theme={theme} state={state} dispatch={dispatch}>
         {children}
-      </AppStateProvider>
-    </ThemeProvider>
-  );
-  return rtlRender(Component, { wrapper: Wrapper, ...options });
+      </Wrapper>
+    ),
+    ...options,
+  });
+
+  return {
+    ...rendered,
+    rerender: (component, options = {}) =>
+      render(component, {
+        container: rendered.container,
+        wrapper: ({ children }) => (
+          <Wrapper theme={theme} state={state} dispatch={dispatch}>
+            {children}
+          </Wrapper>
+        ),
+        ...options,
+      }),
+  };
 };
 
 export * from "@testing-library/react";
 export { render };
+/* eslint-enable react/display-name,react/prop-types */

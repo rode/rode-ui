@@ -15,30 +15,22 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test/testing-utils/renderer";
 import ResourceBreadcrumbs from "components/resources/ResourceBreadcrumbs";
-import { useAppState } from "providers/appState";
-
-jest.mock("providers/appState");
 
 describe("ResourceBreadcrumbs", () => {
-  let searchTerm;
+  let searchTerm, state, rerender;
 
   beforeEach(() => {
     searchTerm = chance.string();
+    state = {
+      resourceSearchTerm: searchTerm,
+    };
+    const utils = render(<ResourceBreadcrumbs />, { state });
+    rerender = utils.rerender;
   });
 
   describe("searchTerm exists", () => {
-    beforeEach(() => {
-      useAppState.mockReturnValue({
-        state: {
-          resourceSearchTerm: searchTerm,
-        },
-      });
-
-      render(<ResourceBreadcrumbs />);
-    });
-
     it("should display the Resource Search indicator", () => {
       expect(screen.getByText(/resource search/i)).toBeInTheDocument();
     });
@@ -55,13 +47,9 @@ describe("ResourceBreadcrumbs", () => {
     });
 
     it("should return the correct breadcrumb when viewing all resources", () => {
-      useAppState.mockReturnValue({
-        state: {
-          resourceSearchTerm: "all",
-        },
-      });
+      state.resourceSearchTerm = "all";
 
-      render(<ResourceBreadcrumbs />);
+      rerender(<ResourceBreadcrumbs />);
       const renderedLink = screen.getByText(/view all resources/i);
       expect(renderedLink).toBeInTheDocument();
       expect(renderedLink).toHaveAttribute("href", `/resources?search=all`);
@@ -70,11 +58,10 @@ describe("ResourceBreadcrumbs", () => {
 
   describe("no searchTerm exists", () => {
     it("should return null", () => {
-      useAppState.mockReturnValue({
-        state: {},
-      });
+      state.resourceSearchTerm = null;
 
-      render(<ResourceBreadcrumbs />);
+      rerender(<ResourceBreadcrumbs />);
+      expect(screen.queryByText("Resource Search")).toBeNull();
       expect(screen.queryByText(searchTerm)).toBeNull();
     });
   });
