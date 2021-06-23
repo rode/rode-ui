@@ -18,9 +18,6 @@ import React, { createContext, useReducer, useMemo, useContext } from "react";
 import PropTypes from "prop-types";
 import { appStateReducer } from "reducers/appState";
 
-// TODO: comb through tests, update places where provider is being mocked and use test renderer
-// TODO: experiment with test renderer to pass updates state?
-
 const AppStateContext = createContext();
 
 const initialState = {
