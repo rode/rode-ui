@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Policies from "pages/policies";
 import userEvent from "@testing-library/user-event";
+import { SEARCH_ALL } from "utils/constants";
 
 jest.mock("next/router");
 jest.mock("hooks/usePaginatedFetch");
@@ -106,6 +107,15 @@ describe("Policies", () => {
       expect(pushMock)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(`/policies?search=all`);
+    });
+
+    it("should search for all policies when the user views all policies", () => {
+      const renderedViewAllButton = screen.getByRole("button", {
+        name: "view all policies",
+      });
+
+      userEvent.click(renderedViewAllButton);
+      expect(pushMock).toHaveBeenCalledWith(`/policies?search=${SEARCH_ALL}`);
     });
 
     describe("searching for a specific term", () => {

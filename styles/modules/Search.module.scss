@@ -63,37 +63,6 @@
   }
 }
 
-.breadcrumbs {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0.5rem 1rem;
-
-  > * {
-    padding: 0 0.25rem;
-  }
-
-  > a {
-    @include ellipsis(calc(100vw - 12rem));
-  }
-
-  @include tabletAndLarger {
-    > a {
-      max-width: calc(100vw - 22rem);
-    }
-  }
-}
-
-.rootCrumb {
-  display: none;
-
-  @include tabletAndLarger {
-    display: unset;
-  }
-}
-
 .form {
   width: 100%;
   display: flex;
@@ -118,56 +87,6 @@
   text-align: right;
 }
 
-.searchCard {
-  width: 90%;
-  padding: 1rem;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-
-  @include tabletAndLarger {
-    flex-direction: row;
-    align-items: center;
-    padding: 2rem;
-    margin: 1rem auto;
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-
-  button {
-    margin: 0.5rem auto 0;
-
-    @include tabletAndLarger {
-      margin: 0;
-    }
-  }
-}
-
-.cardHeader {
-  text-align: left;
-  @include ellipsis(calc(100vw - 7rem));
-  white-space: pre-line;
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
-}
-
-.cardText {
-  @extend .cardHeader;
-  font-size: 0.8rem;
-  margin-left: 1rem;
-  @include ellipsis(calc(100vw - 7rem));
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
-}
-
 .viewAllButton {
   background-color: transparent;
   border: none;
@@ -187,37 +106,7 @@
   margin-top: 1rem;
 }
 
-.filterDropdown {
-  margin: 0 auto;
-  width: 90%;
-
-  @include tabletAndLarger {
-    width: 25%;
-  }
-}
-
 .darkTheme {
-  &.searchCard {
-    background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .breadcrumbs {
-    color: $DT_SUB_TEXT;
-
-    a {
-      color: $DT_LINK;
-    }
-  }
-
-  .cardHeader {
-    color: $DT_MAIN_TEXT;
-  }
-
-  .cardText {
-    color: $DT_SUB_TEXT;
-  }
-
   .viewAllButton {
     color: $DT_LINK;
   }
@@ -228,27 +117,6 @@
 }
 
 .lightTheme {
-  &.searchCard {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .breadcrumbs {
-    color: $LT_SUB_TEXT;
-
-    a {
-      color: $LT_LINK;
-    }
-  }
-
-  .cardHeader {
-    color: $LT_MAIN_TEXT;
-  }
-
-  .cardText {
-    color: $GREY;
-  }
-
   .viewAllButton {
     color: $LT_LINK;
   }

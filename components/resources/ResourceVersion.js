@@ -25,7 +25,7 @@ import { useTheme } from "providers/theme";
 const ResourceVersion = (props) => {
   const { version, copy, buttonClassName = "" } = props;
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const shortenedVersion =
     version?.length > 12 ? version.substring(0, 12) : version;

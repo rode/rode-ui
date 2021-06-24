@@ -15,10 +15,11 @@
  */
 
 import React from "react";
-import styles from "styles/modules/Search.module.scss";
+import styles from "styles/modules/Breadcrumbs.module.scss";
 import Link from "next/link";
 import { useAppState } from "providers/appState";
 import { SEARCH_ALL } from "utils/constants";
+import { useTheme } from "providers/theme";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {
@@ -32,13 +33,14 @@ const PolicyBreadcrumbs = () => {
   const {
     state: { policySearchTerm },
   } = useAppState();
+  const { theme } = useTheme();
 
   if (!policySearchTerm) {
     return null;
   }
 
   return (
-    <div className={styles.breadcrumbs}>
+    <div className={`${styles[theme]} ${styles.breadcrumbs}`}>
       <p className={styles.rootCrumb}>Policy Search</p>
       <p className={styles.rootCrumb}>/</p>
       <Link href={`/policies?search=${encodeURIComponent(policySearchTerm)}`}>
