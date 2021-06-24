@@ -1,3 +1,6 @@
+import { get, getRodeUrl } from "./api-utils";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+
 /**
  * Copyright 2021 The Rode Authors
  *
@@ -35,3 +38,41 @@ export const mapToApiModel = (request) => {
     },
   };
 };
+
+// TODO: test this
+export const getPolicyByPolicyId = async (policyId) => {
+  try {
+    const response = await get(`${getRodeUrl()}/v1alpha1/policies/${policyId}`);
+
+    if (response.status === StatusCodes.NOT_FOUND) {
+      return {
+        status: StatusCodes.OK,
+        data: null
+      };
+    }
+
+    if (!response.ok) {
+      console.error(`Unsuccessful response from Rode: ${response.status}`);
+      return {
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        error: ReasonPhrases.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    const getPolicyResponse = await response.json();
+
+    const policy = mapToClientModel(getPolicyResponse);
+
+    return {
+      status: StatusCodes.OK,
+      data: policy
+    }
+  } catch (error) {
+    console.error("Error getting policy", error);
+
+    return {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      error: ReasonPhrases.INTERNAL_SERVER_ERROR
+    }
+  }
+}

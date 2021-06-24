@@ -25,6 +25,7 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
+import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -33,7 +34,14 @@ const PolicyGroup = () => {
 
   const { name } = router.query;
 
+  // TODO: figure out what is up with loading spinner now working
   const { policyGroup, loading } = usePolicyGroup(name);
+
+  const { data, loading: loadingAssignments } = usePaginatedFetch(
+    policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
+    {},
+    50
+  );
 
   const editPolicy = () => {
     dispatch({
@@ -48,26 +56,64 @@ const PolicyGroup = () => {
       <PageHeader>
         <h1>Manage Policy Groups</h1>
       </PageHeader>
-      <div className={`${styles[theme]}`}>
+      <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>
           {policyGroup ? (
-            <div className={styles.policyGroupHeader}>
-              <div>
-                <p className={styles.policyGroupName}>{policyGroup.name}</p>
-                {policyGroup.description && (
-                  <p className={styles.policyGroupDescription}>
-                    {policyGroup.description}
-                  </p>
-                )}
+            <>
+              <div className={styles.policyGroupHeader}>
+                <div>
+                  <p className={styles.policyGroupName}>{policyGroup.name}</p>
+                  {policyGroup.description && (
+                    <p className={styles.policyGroupDescription}>
+                      {policyGroup.description}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Button
+                    label={"Edit Policy Group"}
+                    onClick={editPolicy}
+                    buttonType={"text"}
+                  />
+                </div>
               </div>
-              <div>
+              <div className={styles.policyGroupDetailsContainer}>
+                <p>Assigned Policies</p>
+                <Loading loading={loadingAssignments}>
+                  {data?.length > 0 ? (
+                    <>
+                      {data.map((assignment) => {
+                        return (
+                          <div
+                            key={assignment.id}
+                            className={styles.assignmentCard}
+                          >
+                            <div>
+                              <p>Policy {assignment.policyName}</p>
+                              <p>Policy Version {assignment.policyVersion}</p>
+                            </div>
+                            <Button
+                              label={"View Policy"}
+                              buttonType={"text"}
+                              onClick={() =>
+                                router.push(`/policies/${assignment.policyId}`)
+                              }
+                            />
+                          </div>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <p>No policies are assigned to this policy group.</p>
+                  )}
+                </Loading>
                 <Button
-                  label={"Edit Policy Group"}
-                  onClick={editPolicy}
+                  label={"Edit Assignments"}
                   buttonType={"text"}
+                  onClick={() => {}}
                 />
               </div>
-            </div>
+            </>
           ) : (
             <div className={styles.notFoundContainer}>
               <h1>No policy group found under {`"${name}"`}</h1>

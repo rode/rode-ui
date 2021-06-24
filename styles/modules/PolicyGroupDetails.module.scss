@@ -17,6 +17,10 @@
 @import "styles/constants";
 @import "styles/mixins";
 
+.pageContainer {
+  height: 100%;
+}
+
 .policyGroupHeader {
   display: flex;
   flex-direction: column;
@@ -48,6 +52,30 @@
   padding-left: 1rem;
 }
 
+.policyGroupDetailsContainer {
+  padding: 0.5rem;
+
+  @include tabletAndLarger {
+    padding: 1rem;
+  }
+}
+
+.assignmentCard {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+
+  @include tabletAndLarger {
+    padding: 1rem 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 50%;
+  }
+}
+
 .notFoundContainer {
   text-align: center;
 
@@ -74,6 +102,11 @@
   .policyGroupDescription {
     color: $DT_SUB_TEXT;
   }
+
+  .assignmentCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
 }
 
 .lightTheme {
@@ -88,5 +121,10 @@
 
   .policyGroupDescription {
     color: $LT_SUB_TEXT;
+  }
+
+  .assignmentCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
   }
 }
