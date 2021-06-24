@@ -14,153 +14,186 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import styles from "styles/modules/Header.module.scss";
-import RodeLogo from "./RodeLogo";
-import ThemeToggle from "./ThemeToggle";
-import { useTheme } from "providers/theme";
-import Button from "components/Button";
-import Icon from "components/Icon";
-import { ICON_NAMES } from "utils/icon-utils";
-import { useRouter } from "next/router";
+import React, {useState, useEffect, useRef} from 'react';
+import Link from 'next/link';
+import styles from 'styles/modules/Header.module.scss';
+import RodeLogo from './RodeLogo';
+import ThemeToggle from './ThemeToggle';
+import {useTheme} from 'providers/theme';
+import Button from 'components/Button';
+import Icon from 'components/Icon';
+import {ICON_NAMES} from 'utils/icon-utils';
+import {useRouter} from 'next/router';
+import {signIn, signOut, useSession} from 'next-auth/client'
+
 
 const resourceLinks = [
-  {
-    href: "/resources",
-    label: "Resource Search",
-  },
+    {
+        href: '/resources',
+        label: 'Resource Search',
+    },
 ];
 
 const policyLinks = [
-  {
-    href: "/policies",
-    label: "Policy Search",
-  },
-  {
-    href: "/playground",
-    label: "Policy Playground",
-  },
-  {
-    href: "/policies/new",
-    label: "Create New Policy",
-  },
+    {
+        href: '/policies',
+        label: 'Policy Search',
+    },
+    {
+        href: '/playground',
+        label: 'Policy Playground',
+    },
+    {
+        href: '/policies/new',
+        label: 'Create New Policy',
+    },
 ];
 
 const adminLinks = [
-  {
-    href: "/policy-groups",
-    label: "Policy Groups",
-  },
+    {
+        href: '/policy-groups',
+        label: 'Policy Groups',
+    },
 ];
 
 const navigationSections = [
-  {
-    title: "Resources",
-    links: resourceLinks,
-  },
-  {
-    title: "Policies",
-    links: policyLinks,
-  },
-  {
-    title: "Admin",
-    links: adminLinks,
-  },
+    {
+        title: 'Resources',
+        links: resourceLinks,
+    },
+    {
+        title: 'Policies',
+        links: policyLinks,
+    },
+    {
+        title: 'Admin',
+        links: adminLinks,
+    },
 ];
 
+const Auth = ({showNavigation}) => {
+    const [session, loading] = useSession()
+
+    let child = <Button onClick={() => signIn()}>Sign in</Button>
+
+    if (session) {
+        child =
+            <>
+                <p
+                    style={{
+                        color: '#ebebeb',
+                    }}
+                >Authenticated as {session.user.name}</p>
+                <Button onClick={() => signOut()}>Sign out</Button>
+            </>
+    }
+
+    return (
+        <div
+            className={
+                styles.section
+            }
+        >
+            {child}
+        </div>
+    )
+}
+
+
 const Header = () => {
-  const { theme } = useTheme();
-  const router = useRouter();
-  const ref = useRef(null);
-  const [showNavigation, setShowNavigation] = useState(false);
+    const {theme} = useTheme();
+    const router = useRouter();
+    const ref = useRef(null);
+    const [showNavigation, setShowNavigation] = useState(false);
 
-  const toggleNavigation = () => {
-    setShowNavigation(!showNavigation);
-  };
 
-  const closeNavigationWhenClickingOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setShowNavigation(false);
-    }
-  };
+    const toggleNavigation = () => {
+        setShowNavigation(!showNavigation);
+    };
 
-  useEffect(() => {
-    setShowNavigation(false);
-  }, [router]);
-
-  useEffect(() => {
-    if (showNavigation) {
-      document.addEventListener(
-        "mousedown",
-        closeNavigationWhenClickingOutside
-      );
-    } else {
-      document.removeEventListener(
-        "mousedown",
-        closeNavigationWhenClickingOutside
-      );
-    }
-  }, [showNavigation]);
-
-  return (
-    <header className={`${styles.container} ${styles[theme]}`} ref={ref}>
-      <div
-        className={
-          showNavigation ? styles.fixedLogoContainer : styles.logoContainer
+    const closeNavigationWhenClickingOutside = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            setShowNavigation(false);
         }
-      >
-        <Link href={"/"}>
-          <a href={"/"} className={styles.logo}>
-            <RodeLogo theme={theme} />
-          </a>
-        </Link>
-      </div>
+    };
 
-      <div
-        className={
-          showNavigation ? styles.expandedNavigation : styles.hiddenNavigation
-        }
-      >
-        <Button
-          label={"Toggle Navigation"}
-          buttonType={"icon"}
-          onClick={toggleNavigation}
-          className={
-            showNavigation ? styles.expandedToggle : styles.hiddenToggle
-          }
-        >
-          <Icon name={ICON_NAMES.MENU} size={"large"} />
-        </Button>
-        <div
-          className={showNavigation ? "" : styles.hidden}
-          data-testid={"navigationContainer"}
-        >
-          {navigationSections.map((section) => {
-            return (
-              <div key={section.title} className={styles.section}>
-                <p className={styles.sectionTitle}>{section.title}</p>
-                {section.links.map((link) => {
-                  return (
-                    <Link href={link.href} key={link.label}>
-                      <a className={styles.link}>{link.label}</a>
-                    </Link>
-                  );
-                })}
-              </div>
+    useEffect(() => {
+        setShowNavigation(false);
+    }, [router]);
+
+    useEffect(() => {
+        if (showNavigation) {
+            document.addEventListener(
+                'mousedown',
+                closeNavigationWhenClickingOutside,
             );
-          })}
-        </div>
-        <div
-          className={
-            showNavigation ? styles.themeToggleContainer : styles.hidden
-          }
-        >
-          <ThemeToggle />
-        </div>
-      </div>
-    </header>
-  );
+        } else {
+            document.removeEventListener(
+                'mousedown',
+                closeNavigationWhenClickingOutside,
+            );
+        }
+    }, [showNavigation]);
+
+    return (
+        <header className={`${styles.container} ${styles[theme]}`} ref={ref}>
+            <div
+                className={
+                    showNavigation ? styles.fixedLogoContainer : styles.logoContainer
+                }
+            >
+                <Link href={'/'}>
+                    <a href={'/'} className={styles.logo}>
+                        <RodeLogo theme={theme} />
+                    </a>
+                </Link>
+            </div>
+
+            <div
+                className={
+                    showNavigation ? styles.expandedNavigation : styles.hiddenNavigation
+                }
+            >
+                <Button
+                    label={'Toggle Navigation'}
+                    buttonType={'icon'}
+                    onClick={toggleNavigation}
+                    className={
+                        showNavigation ? styles.expandedToggle : styles.hiddenToggle
+                    }
+                >
+                    <Icon name={ICON_NAMES.MENU} size={'large'} />
+                </Button>
+                <div
+                    className={showNavigation ? '' : styles.hidden}
+                    data-testid={'navigationContainer'}
+                >
+                    {navigationSections.map((section) => {
+                        return (
+                            <div key={section.title} className={styles.section}>
+                                <p className={styles.sectionTitle}>{section.title}</p>
+                                {section.links.map((link) => {
+                                    return (
+                                        <Link href={link.href} key={link.label}>
+                                            <a className={styles.link}>{link.label}</a>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+                <Auth showNavigation={showNavigation}/>
+                <div
+                    className={
+                        showNavigation ? styles.themeToggleContainer : styles.hidden
+                    }
+                >
+                    <ThemeToggle />
+                </div>
+            </div>
+        </header>
+    );
 };
 
 export default Header;

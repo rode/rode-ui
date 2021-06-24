@@ -20,6 +20,10 @@ import {
   mapToApiModel,
   mapToClientModel,
 } from "pages/api/utils/policy-group-utils";
+import { getSession } from 'next-auth/client'
+import jwt, {getToken} from 'next-auth/jwt'
+
+import * as sessionStorage from 'pages/api/utils/session';
 
 const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
 
@@ -30,20 +34,27 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
+  const token = await getToken({req, secret: 'abc123'})
+  // const accessToken = sessionStorage.get(token.sub)
+  console.log('accessToken', token.accessToken)
+  // console.log('Session', JSON.stringify(session, null, 2))
+  // const token = await jwt.getToken({ req, secret: "abc123"})
+  // console.log('token', token)
+
   const rodeUrl = getRodeUrl();
 
   if (req.method === "GET") {
     try {
       const { name } = req.query;
 
-      const response = await get(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
+      const response = await get(`${rodeUrl}/v1alpha1/policy-groups/${name}`, token.accessToken);
 
       if (response.status === StatusCodes.NOT_FOUND) {
         return res.status(StatusCodes.OK).send(null);
       }
 
       if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        console.error(`Unsuccessful response from Rode: ${response.status}`, await response.text());
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
@@ -69,11 +80,12 @@ export default async (req, res) => {
 
       const response = await patch(
         `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        updateBody
+        updateBody,
+          token.accessToken
       );
 
       if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        console.error(`Unsuccessful response from Rode: ${response.status}`, await response.text());
 
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -98,10 +110,10 @@ export default async (req, res) => {
     try {
       const { name } = req.query;
 
-      const response = await del(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
+      const response = await del(`${rodeUrl}/v1alpha1/policy-groups/${name}`, token.accessToken);
 
       if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        console.error(`Unsuccessful response from Rode: ${response.status}`, await response.text());
 
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)

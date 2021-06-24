@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
+import {signIn, useSession} from 'next-auth/client';
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Header.module.scss";
 import { useTheme } from "providers/theme";
+import Button from '../Button';
+
 
 const PageHeader = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <div className={`${styles[theme]} ${styles.pageHeader}`}>{children}</div>
+    <div className={`${styles[theme]} ${styles.pageHeader}`}>
+      {children}
+    </div>
   );
 };
 

@@ -19,25 +19,51 @@ import * as nodeFetch from "node-fetch";
 export const getRodeUrl = () =>
   process.env.RODE_URL || "http://localhost:50051";
 
-const fetch = (endpoint, method, body) => {
+const fetch = ({accessToken, endpoint, method, body}) => {
   const options = {
     method,
+    headers: {
+      "Accept": "application/json"
+    }
   };
 
   if (body) {
     options.body = typeof body === "object" ? JSON.stringify(body) : body;
+    options.headers["Content-Type"] = "application/json"
+  }
+
+  if (accessToken) {
+    options.headers["Authorization"] = `Bearer ${accessToken}`
   }
 
   return nodeFetch(endpoint, options);
 };
 
-export const post = (endpoint, body) => fetch(endpoint, "POST", body);
+export const post = (endpoint, body, accessToken) => fetch({
+  accessToken,
+  endpoint,
+  method: "POST",
+  body,
+});
 
-export const patch = (endpoint, body) => fetch(endpoint, "PATCH", body);
+export const patch = (endpoint, body, accessToken) => fetch({
+  accessToken,
+  endpoint,
+  method: "PATCH",
+  body
+});
 
-export const get = (endpoint) => fetch(endpoint, "GET");
+export const get = (endpoint, accessToken) => fetch({
+    accessToken,
+    endpoint,
+    method: "GET"
+});
 
-export const del = (endpoint) => fetch(endpoint, "DELETE");
+export const del = (endpoint, accessToken) => fetch({
+    accessToken,
+    endpoint,
+    method: "DELETE"
+});
 
 export const buildPaginationParams = (request) => {
   let params = {};

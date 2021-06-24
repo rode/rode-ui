@@ -14,60 +14,65 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import "styles/globals.scss";
-import { ThemeProvider } from "providers/theme";
-import { AppStateProvider } from "providers/appState";
-import PageLayout from "components/layout/PageLayout";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import 'styles/globals.scss';
+import {ThemeProvider} from 'providers/theme';
+import {AppStateProvider} from 'providers/appState';
+import PageLayout from 'components/layout/PageLayout';
+import {signIn, signOut, useSession} from 'next-auth/client'
+import {Provider} from 'next-auth/client'
 
-const MyApp = ({ Component, pageProps }) => {
-  return (
-    <ThemeProvider>
-      <AppStateProvider>
-        <React.Fragment>
-          <Head>
-            <title>Rode</title>
-            <link
-              rel="apple-touch-icon"
-              sizes="180x180"
-              href="/apple-touch-icon.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="32x32"
-              href="/favicon-32x32.png"
-            />
-            <link
-              rel="icon"
-              type="image/png"
-              sizes="16x16"
-              href="/favicon-16x16.png"
-            />
-            <link rel="preconnect" href="https://fonts.gstatic.com" />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap"
-              rel="stylesheet"
-            />
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1"
-            />
-          </Head>
-          <PageLayout>
-            <Component {...pageProps} />
-          </PageLayout>
-        </React.Fragment>
-      </AppStateProvider>
-    </ThemeProvider>
-  );
+
+const MyApp = ({Component, pageProps}) => {
+    return (
+        <Provider session={pageProps.session}>
+            <ThemeProvider>
+                <AppStateProvider>
+                    <React.Fragment>
+                        <Head>
+                            <title>Rode</title>
+                            <link
+                                rel="apple-touch-icon"
+                                sizes="180x180"
+                                href="/apple-touch-icon.png"
+                            />
+                            <link
+                                rel="icon"
+                                type="image/png"
+                                sizes="32x32"
+                                href="/favicon-32x32.png"
+                            />
+                            <link
+                                rel="icon"
+                                type="image/png"
+                                sizes="16x16"
+                                href="/favicon-16x16.png"
+                            />
+                            <link rel="preconnect" href="https://fonts.gstatic.com" />
+                            <link
+                                href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap"
+                                rel="stylesheet"
+                            />
+                            <meta
+                                name="viewport"
+                                content="width=device-width, initial-scale=1"
+                            />
+                        </Head>
+                        <PageLayout>
+                            <Component {...pageProps} />
+                        </PageLayout>
+                    </React.Fragment>
+                </AppStateProvider>
+            </ThemeProvider>
+        </Provider>
+    );
 };
 
 MyApp.propTypes = {
-  Component: PropTypes.func,
-  pageProps: PropTypes.object,
+    Component: PropTypes.func,
+    pageProps: PropTypes.object,
 };
 
 export default MyApp;

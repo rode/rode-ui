@@ -15,12 +15,14 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import {getToken} from 'next-auth/jwt';
 import {
   buildPaginationParams,
   get,
   getRodeUrl,
   post,
 } from "./utils/api-utils";
+import * as sessionStorage from './utils/session';
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -32,6 +34,10 @@ export default async (req, res) => {
   }
 
   const rodeUrl = getRodeUrl();
+  const token = await getToken({req, secret: 'abc123'})
+  console.log('token?', token)
+  // const accessToken = sessionStorage.get(token.sub)
+  // console.log('accessToken', accessToken)
 
   if (req.method === "GET") {
     try {
@@ -42,11 +48,12 @@ export default async (req, res) => {
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`,
+          token.accessToken
       );
 
       if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        console.error(`Unsuccessful response from Rode: ${response.status}`, await response.text());
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
@@ -79,7 +86,7 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.CONFLICT });
       }
 
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
+      console.error(`Unsuccessful response from Rode: ${response.status}`, await response.text());
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
