@@ -39,7 +39,7 @@ const ResourceVersionSearchAndResults = ({
 }) => {
   const [versionSearch, setVersionSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(500);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
 
   const debouncedSearch = useDebouncedValue(

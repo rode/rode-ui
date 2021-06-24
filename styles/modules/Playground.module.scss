@@ -20,7 +20,7 @@
 $CARD_WIDTH: 97%;
 $GAP: 1rem;
 
-.contentContainer {
+.pageContainer {
   height: calc(100% - calc(#{$GAP} * 2));
   width: 100%;
 
@@ -125,11 +125,6 @@ $GAP: 1rem;
   font-weight: 700;
 }
 
-.selectionContainer {
-  padding: 1rem 0.75rem;
-  width: $CARD_WIDTH;
-}
-
 .codeContent {
   margin-top: 0.5rem;
   max-height: 100%;
@@ -161,11 +156,7 @@ $GAP: 1rem;
 }
 
 .darkTheme {
-  &.pageContainer {
-    background-color: $DT_BACKGROUND_LIGHT;
-  }
-
-  .instructions,
+ .instructions,
   .selectToBeginText {
     color: $DT_SUB_TEXT;
   }
@@ -178,16 +169,6 @@ $GAP: 1rem;
   .resourceDrawerNavigation {
     background-color: $DT_BACKGROUND_LIGHT;
     box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .copyVersionButton {
-    @include transition;
-    color: $WHITE;
-
-    &:hover {
-      @include transition;
-      color: $LAGOON;
-    }
   }
 }
 
@@ -205,15 +186,5 @@ $GAP: 1rem;
   .resourceDrawerNavigation {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .copyVersionButton {
-    @include transition;
-    color: $DARK_GREY;
-
-    &:hover {
-      @include transition;
-      color: $DEEP_SEA;
-    }
   }
 }

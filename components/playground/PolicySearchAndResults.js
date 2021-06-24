@@ -41,7 +41,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.policySearchTerm,

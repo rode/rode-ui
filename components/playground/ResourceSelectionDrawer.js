@@ -29,8 +29,6 @@ import { stateActions } from "reducers/appState";
 const RESOURCE = "Resource";
 const VERSION = "Version";
 
-// TODO: style the header to match the new policy details subheader
-
 const ResourceSelectionDrawer = ({
   setEvaluationResource,
   clearEvaluation,

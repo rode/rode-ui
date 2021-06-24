@@ -38,7 +38,7 @@ import { useTheme } from "providers/theme";
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.resourceSearchTerm,
