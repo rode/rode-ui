@@ -218,44 +218,6 @@ $GAP: 1rem;
   }
 }
 
-.evaluationResults,
-.failedEvaluationResults {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: fit-content;
-  margin: 0 auto 0.5rem;
-  font-weight: 600;
-}
-
-.violations {
-  display: grid;
-  grid-template-columns: 4rem 1fr;
-  grid-gap: 0.5rem;
-  grid-template-areas: "outcome message";
-  width: fit-content;
-  margin: 0 auto;
-
-  > p {
-    white-space: normal;
-  }
-
-  .violationResult {
-    font-weight: 600;
-    text-transform: uppercase;
-    text-align: center;
-  }
-}
-
-.explanationJson {
-  max-height: 60vh;
-}
-
-.copyButton {
-  margin: 0 auto 0.5rem;
-}
-
 .darkTheme {
   &.pageContainer {
     background-color: $DT_BACKGROUND_LIGHT;
@@ -294,24 +256,6 @@ $GAP: 1rem;
     p {
       color: $BRIGHT_GREEN;
     }
-  }
-
-  .evaluationResults,
-  .violationResult.pass {
-    color: $BRIGHT_GREEN;
-  }
-
-  .failedEvaluationResults,
-  .violationResult.fail {
-    color: $HOT_RED;
-  }
-
-  .explanationJson {
-    background-color: $DT_BACKGROUND_DARK;
-  }
-
-  .evaluationResultsContainer {
-    background-color: $DT_BACKGROUND_DARK;
   }
 
   .copyVersionButton {
@@ -359,20 +303,6 @@ $GAP: 1rem;
     p {
       color: $GREEN;
     }
-  }
-
-  .evaluationResults,
-  .violationResult.pass {
-    color: $GREEN;
-  }
-
-  .failedEvaluationResults,
-  .violationResult.fail {
-    color: $HOT_RED;
-  }
-
-  .evaluationResultsContainer {
-    background-color: $LT_BACKGROUND_LIGHT;
   }
 
   .copyVersionButton {
