@@ -37,8 +37,6 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { useTheme } from "providers/theme";
 
-// TODO: what would it take to create a search result card that takes in left side & action button?
-
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();

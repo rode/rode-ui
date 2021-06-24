@@ -35,8 +35,6 @@ import Drawer from "components/Drawer";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useTheme } from "providers/theme";
 
-// TODO: share the view all button used in playground?
-
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
