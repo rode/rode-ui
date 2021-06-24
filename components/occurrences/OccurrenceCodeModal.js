@@ -17,13 +17,15 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Button from "components/Button";
-import styles from "styles/modules/Modal.module.scss";
+import styles from "styles/modules/OccurrenceCodeModal.module.scss";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
 import Code from "components/Code";
+import { useTheme } from "providers/theme";
 
 const OccurrenceCodeModal = ({ json }) => {
   const [showCode, setShowCode] = useState(false);
+  const { theme } = useTheme();
 
   const stringifiedJson = JSON.stringify(json, null, 2);
 
@@ -34,18 +36,20 @@ const OccurrenceCodeModal = ({ json }) => {
         title={"Occurrence JSON"}
         isVisible={showCode}
       >
-        <Button
-          onClick={() => copy(stringifiedJson)}
-          label={"Copy to Clipboard"}
-          buttonType={"text"}
-          className={styles.copyButton}
-        />
-        <Code
-          code={stringifiedJson}
-          language={"json"}
-          className={styles.jsonContainer}
-          data-testid={"occurrenceJson"}
-        />
+        <div className={styles[theme]}>
+          <Button
+            onClick={() => copy(stringifiedJson)}
+            label={"Copy to Clipboard"}
+            buttonType={"text"}
+            className={styles.copyButton}
+          />
+          <Code
+            code={stringifiedJson}
+            language={"json"}
+            className={styles.jsonContainer}
+            data-testid={"occurrenceJson"}
+          />
+        </div>
       </Modal>
       <Button onClick={() => setShowCode(true)} label={"Show JSON"} />
     </>

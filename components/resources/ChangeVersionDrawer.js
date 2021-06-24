@@ -21,7 +21,7 @@ import Drawer from "components/Drawer";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import ResourceVersion from "./ResourceVersion";
-import styles from "styles/modules/Drawer.module.scss";
+import styles from "styles/modules/ChangeResourceVersionDrawer.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -35,10 +35,12 @@ import dayjs from "dayjs";
 import ResourceVersionSearchBar from "components/resources/ResourceVersionSearchBar";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import { useTheme } from "providers/theme";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
   const router = useRouter();
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const {
     resourceName,
@@ -75,93 +77,98 @@ const ChangeVersionDrawer = (props) => {
 
   return (
     <Drawer isOpen={isOpen} onClose={closeDrawer}>
-      <div className={styles.versionSelectionHeader}>
-        <p className={styles.versionSelectionName}>{resourceName}</p>
-        <p className={styles.versionSelectionInstructions}>
-          Select from the list below to see occurrences related to that version
-        </p>
-      </div>
-      <div className={styles.versionSearchContainer}>
-        <ResourceVersionSearchBar
-          onSubmit={(event) => {
-            event.preventDefault();
-          }}
-          helpText={
-            <Button
-              className={styles.viewAllButton}
-              buttonType={"text"}
-              label={"View all versions"}
-              onClick={() => {
-                dispatch({
-                  type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
-                  data: SEARCH_ALL,
-                });
-              }}
-            />
-          }
-        />
-      </div>
-      <Loading loading={loading}>
-        {data?.length > 0 ? (
-          <>
-            {data.map((version) => {
-              const {
-                resourceVersion,
-                aliasLabel,
-                aliases,
-              } = getResourceDetails(version.versionedResourceUri, version);
-              const isCurrentVersion = resourceVersion === currentVersion;
-
-              return (
-                <div key={resourceVersion} className={styles.versionCard}>
-                  <div>
-                    <LabelWithValue
-                      label={"Version"}
-                      value={<ResourceVersion version={resourceVersion} />}
-                    />
-                    <LabelWithValue
-                      label={aliasLabel}
-                      value={aliases.join(", ")}
-                      className={styles.versionNames}
-                    />
-                    <LabelWithValue
-                      label={"Created"}
-                      value={dayjs(version.created).format(DATE_TIME_FORMAT)}
-                      className={styles.versionNames}
-                    />
-                  </div>
-                  <Button
-                    buttonType={"text"}
-                    label={isCurrentVersion ? "Selected" : "Select"}
-                    disabled={isCurrentVersion}
-                    className={styles.versionSelectionButton}
-                    onClick={() => selectVersion(version.versionedResourceUri)}
-                  >
-                    {isCurrentVersion && (
-                      <>
-                        <Icon name={ICON_NAMES.CHECK} />
-                        <p>Selected</p>
-                      </>
-                    )}
-                  </Button>
-                </div>
-              );
-            })}
-            {!isLastPage && (
+      <div className={`${styles[theme]}`}>
+        <div className={styles.headerContainer}>
+          <p className={styles.resourceName}>{resourceName}</p>
+          <p className={styles.instructions}>
+            Select from the list below to see occurrences related to that
+            version
+          </p>
+        </div>
+        <div className={styles.searchContainer}>
+          <ResourceVersionSearchBar
+            onSubmit={(event) => {
+              event.preventDefault();
+            }}
+            helpText={
               <Button
-                buttonType="text"
-                onClick={goToNextPage}
-                label={"View More"}
-                className={styles.viewMoreResultsButton}
+                className={styles.viewAllButton}
+                buttonType={"text"}
+                label={"View all versions"}
+                onClick={() => {
+                  dispatch({
+                    type: stateActions.SET_RESOURCE_VERSION_SEARCH_TERM,
+                    data: SEARCH_ALL,
+                  });
+                }}
               />
-            )}
-          </>
-        ) : (
-          <p
-            className={styles.notFoundMessage}
-          >{`No versions found matching the given criteria.`}</p>
-        )}
-      </Loading>
+            }
+          />
+        </div>
+        <Loading loading={loading}>
+          {data?.length > 0 ? (
+            <>
+              {data.map((version) => {
+                const {
+                  resourceVersion,
+                  aliasLabel,
+                  aliases,
+                } = getResourceDetails(version.versionedResourceUri, version);
+                const isCurrentVersion = resourceVersion === currentVersion;
+
+                return (
+                  <div key={resourceVersion} className={styles.versionCard}>
+                    <div>
+                      <LabelWithValue
+                        label={"Version"}
+                        value={<ResourceVersion version={resourceVersion} />}
+                      />
+                      <LabelWithValue
+                        label={aliasLabel}
+                        value={aliases.join(", ")}
+                        className={styles.cardSubtext}
+                      />
+                      <LabelWithValue
+                        label={"Created"}
+                        value={dayjs(version.created).format(DATE_TIME_FORMAT)}
+                        className={styles.cardSubtext}
+                      />
+                    </div>
+                    <Button
+                      buttonType={"text"}
+                      label={isCurrentVersion ? "Selected" : "Select"}
+                      disabled={isCurrentVersion}
+                      className={styles.actionButton}
+                      onClick={() =>
+                        selectVersion(version.versionedResourceUri)
+                      }
+                    >
+                      {isCurrentVersion && (
+                        <>
+                          <Icon name={ICON_NAMES.CHECK} />
+                          <p>Selected</p>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                );
+              })}
+              {!isLastPage && (
+                <Button
+                  buttonType="text"
+                  onClick={goToNextPage}
+                  label={"View More"}
+                  className={styles.viewMoreResultsButton}
+                />
+              )}
+            </>
+          ) : (
+            <p
+              className={styles.notFoundMessage}
+            >{`No versions found matching the given criteria.`}</p>
+          )}
+        </Loading>
+      </div>
     </Drawer>
   );
 };
