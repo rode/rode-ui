@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Input from "components/Input";
 import Button from "components/Button";
-import styles from "styles/modules/Policy.module.scss";
+import styles from "styles/modules/PolicyForm.module.scss";
 import { useTheme } from "providers/theme";
 import { useRouter } from "next/router";
 import ExternalLink from "components/ExternalLink";

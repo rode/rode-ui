@@ -16,12 +16,14 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Policy.module.scss";
+import styles from "styles/modules/PolicyValidationResult.module.scss";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import Code from "components/Code";
+import { useTheme } from "providers/theme";
 
 const PolicyValidationResult = ({ validation }) => {
+  const { theme } = useTheme();
   if (!validation) {
     return null;
   }
@@ -29,12 +31,12 @@ const PolicyValidationResult = ({ validation }) => {
   return (
     <>
       {validation.isValid ? (
-        <div className={styles.validationResults}>
+        <div className={`${styles[theme]} ${styles.validationResults}`}>
           <Icon name={ICON_NAMES.BADGE_CHECK} />
           <p>This policy passes validation.</p>
         </div>
       ) : (
-        <div className={styles.failedResultsContainer}>
+        <div className={`${styles[theme]} ${styles.failedResultsContainer}`}>
           <div className={styles.validationResults}>
             <Icon name={ICON_NAMES.EXCLAMATION} />
             <p>This policy failed validation.</p>
