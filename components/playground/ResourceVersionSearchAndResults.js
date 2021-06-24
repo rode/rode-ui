@@ -16,7 +16,7 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Playground.module.scss";
+import styles from "styles/modules/PlaygroundSearchAndResults.module.scss";
 import Loading from "components/Loading";
 import {
   buildResourceVersionQueryParams,
@@ -31,6 +31,7 @@ import ResourceVersionSearchBar from "components/resources/ResourceVersionSearch
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import { useTheme } from "providers/theme";
 
 const ResourceVersionSearchAndResults = ({
   selectedResource,
@@ -38,6 +39,7 @@ const ResourceVersionSearchAndResults = ({
 }) => {
   const [versionSearch, setVersionSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(500);
+  const {theme} = useTheme();
   const { state, dispatch } = useAppState();
 
   const debouncedSearch = useDebouncedValue(
@@ -56,7 +58,7 @@ const ResourceVersionSearchAndResults = ({
   );
 
   return (
-    <div className={styles.searchContainer}>
+    <div className={`${styles[theme]} ${styles.searchContainer}`}>
       <ResourceVersionSearchBar
         onSubmit={(event) => {
           event.preventDefault();
@@ -101,7 +103,7 @@ const ResourceVersionSearchAndResults = ({
                       <LabelWithValue
                         label={"Version"}
                         value={<ResourceVersion version={resourceVersion} />}
-                        className={styles.cardText}
+                        className={styles.cardHeader}
                       />
                       <LabelWithValue
                         label={aliasLabel}
