@@ -20,7 +20,7 @@ import Button from "components/Button";
 import { useRouter } from "next/router";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
-import styles from "styles/modules/Search.module.scss";
+import styles from "styles/modules/SearchResult.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
 

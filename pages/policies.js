@@ -15,7 +15,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "styles/modules/Search.module.scss";
 import { useTheme } from "providers/theme";
@@ -81,9 +80,13 @@ const Policies = () => {
           helpText={
             <>
               You can search by policy name or{" "}
-              <Link href={`/policies?search=${SEARCH_ALL}`}>
+              <button
+                type={"button"}
+                onClick={() => router.push(`/policies?search=${SEARCH_ALL}`)}
+                className={styles.viewAllButton}
+              >
                 view all policies
-              </Link>
+              </button>
               .
             </>
           }

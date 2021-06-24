@@ -1,0 +1,98 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.searchCard {
+  width: 90%;
+  padding: 1rem;
+  margin: 0.5rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
+    padding: 2rem;
+    margin: 1rem auto;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  button {
+    margin: 0.5rem auto 0;
+
+    @include tabletAndLarger {
+      margin: 0;
+    }
+  }
+}
+
+.cardHeader {
+  text-align: left;
+  @include ellipsis(calc(100vw - 7rem));
+  white-space: pre-line;
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  @include ellipsis(calc(100vw - 7rem));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.darkTheme {
+  &.searchCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardHeader {
+    color: $DT_MAIN_TEXT;
+  }
+
+  .cardText {
+    color: $DT_SUB_TEXT;
+  }
+}
+
+.lightTheme {
+  &.searchCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardHeader {
+    color: $LT_MAIN_TEXT;
+  }
+
+  .cardText {
+    color: $GREY;
+  }
+}

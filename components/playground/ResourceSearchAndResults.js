@@ -16,7 +16,7 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Playground.module.scss";
+import styles from "styles/modules/PlaygroundSearchAndResults.module.scss";
 import ResourceSearchBar from "components/resources/ResourceSearchBar";
 import Loading from "components/Loading";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -33,10 +33,12 @@ import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import { useTheme } from "providers/theme";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.resourceSearchTerm,
@@ -51,7 +53,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
 
   return (
     <>
-      <div className={styles.searchContainer}>
+      <div className={`${styles[theme]} ${styles.searchContainer}`}>
         <ResourceSearchBar
           onSubmit={(event) => {
             event.preventDefault();

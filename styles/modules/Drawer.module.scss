@@ -69,88 +69,12 @@
   }
 }
 
-.versionSelectionHeader {
-  margin-bottom: 1rem;
-  width: 100%;
-  padding: 1rem 0.5rem;
-  text-align: center;
-}
-
-.versionSelectionName {
-  font-weight: 600;
-}
-
-.versionSelectionInstructions {
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-}
-
-.versionCard {
-  width: 90%;
-  margin: 0.25rem auto;
-  padding: 0.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  @include tabletAndLarger {
-    flex-direction: row;
-  }
-
-  &:last-of-type {
-    margin-bottom: 1rem;
-  }
-}
-
-.versionSelectionButton {
-  min-width: fit-content;
-}
-
-.versionNames {
-  font-size: 0.8rem;
-}
-
-.viewMoreResultsButton {
-  margin: 0 auto 1rem;
-}
-
-.versionSearchContainer {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.viewAllButton {
-  font-size: 0.85rem;
-  min-height: fit-content;
-  padding: 0.25rem;
-  margin-left: auto;
-}
-
-.notFoundMessage {
-  margin: 1rem auto;
-}
-
 .darkTheme {
   color: $DT_MAIN_TEXT;
 
   &.openDrawer {
     background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .versionSelectionHeader {
-    background-color: $LAGOON;
-    color: $DARKEST_GREY;
-  }
-
-  .versionCard {
-    background-color: $DT_BACKGROUND_LIGHT;
-    box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .versionNames {
-    color: $DT_SUB_TEXT;
   }
 }
 
@@ -160,19 +84,5 @@
   &.openDrawer {
     background-color: $LT_BACKGROUND_DARK;
     box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .versionSelectionHeader {
-    background-color: $DEEP_SEA;
-    color: $WHITE;
-  }
-
-  .versionCard {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .versionNames {
-    color: $LT_SUB_TEXT;
   }
 }

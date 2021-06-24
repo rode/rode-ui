@@ -16,7 +16,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Playground.module.scss";
+import styles from "styles/modules/PlaygroundSearchAndResults.module.scss";
 import Loading from "components/Loading";
 import PolicySearchBar from "components/policies/PolicySearchBar";
 import { stateActions } from "reducers/appState";
@@ -33,11 +33,13 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Drawer from "components/Drawer";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import { useTheme } from "providers/theme";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
+  const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const debouncedSearch = useDebouncedValue(
     state.policySearchTerm,
@@ -65,7 +67,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
         <Icon name={ICON_NAMES.SEARCH} />
       </Button>
       <Drawer isOpen={showDrawer} onClose={() => setShowDrawer(false)}>
-        <div className={styles.searchContainer}>
+        <div className={`${styles[theme]} ${styles.searchContainer}`}>
           <PolicySearchBar
             onSubmit={(event) => {
               event.preventDefault();

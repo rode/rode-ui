@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import styles from "styles/modules/Search.module.scss";
+import styles from "styles/modules/Breadcrumbs.module.scss";
 import Link from "next/link";
 import { SEARCH_ALL } from "utils/constants";
 import { useAppState } from "providers/appState";

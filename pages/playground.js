@@ -91,7 +91,7 @@ const PolicyPlayground = () => {
   }, []);
 
   return (
-    <div className={`${styles[theme]} ${styles.contentContainer}`}>
+    <div className={`${styles[theme]} ${styles.pageContainer}`}>
       <PageHeader>
         <h1>Policy Playground</h1>
         <p className={styles.instructions}>

@@ -14,29 +14,56 @@
  * limitations under the License.
  */
 
+@import "styles/constants";
 @import "styles/mixins";
 
-.container {
-  height: 100%;
+.breadcrumbs {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.resourceDetails {
-  display: flex;
   flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 1rem;
 
-  > *:not(*:last-of-type) {
-    margin-right: 1.5rem;
+  > * {
+    padding: 0 0.25rem;
+  }
+
+  > a {
+    @include ellipsis(calc(100vw - 12rem));
+  }
+
+  @include tabletAndLarger {
+    > a {
+      max-width: calc(100vw - 22rem);
+    }
   }
 }
 
-.notFound {
-  text-align: center;
-  align-self: center;
-  margin-top: 30vh;
-  @include ellipsis(calc(90vw - 3rem));
+.rootCrumb {
+  display: none;
+
+  @include tabletAndLarger {
+    display: unset;
+  }
+}
+
+.darkTheme {
+  &.breadcrumbs {
+    color: $DT_SUB_TEXT;
+
+    a {
+      color: $DT_LINK;
+    }
+  }
+}
+
+.lightTheme {
+  &.breadcrumbs {
+    color: $LT_SUB_TEXT;
+
+    a {
+      color: $LT_LINK;
+    }
+  }
 }

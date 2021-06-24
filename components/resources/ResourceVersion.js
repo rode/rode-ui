@@ -19,17 +19,20 @@ import PropTypes from "prop-types";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { copy as copyText } from "utils/shared-utils";
-import styles from "styles/modules/Resource.module.scss";
+import styles from "styles/modules/ResourceVersion.module.scss";
+import { useTheme } from "providers/theme";
 
 const ResourceVersion = (props) => {
   const { version, copy, buttonClassName = "" } = props;
+
+  const { theme } = useTheme();
 
   const shortenedVersion =
     version?.length > 12 ? version.substring(0, 12) : version;
 
   return (
     <>
-      <span className={styles.version}>
+      <span className={`${styles[theme]} ${styles.version}`}>
         {shortenedVersion}
         {copy && (
           <button

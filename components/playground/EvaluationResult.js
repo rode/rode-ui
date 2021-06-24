@@ -16,15 +16,17 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/Playground.module.scss";
+import styles from "styles/modules/PlaygroundEvaluationResult.module.scss";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import Button from "components/Button";
 import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
 import Code from "components/Code";
+import { useTheme } from "providers/theme";
 
 const EvaluationResult = ({ results }) => {
+  const { theme } = useTheme();
   const [showCode, setShowCode] = useState(false);
 
   if (!results) {
@@ -35,31 +37,33 @@ const EvaluationResult = ({ results }) => {
 
   return (
     <>
-      {results.pass ? (
-        <div className={styles.evaluationResults}>
-          <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
-          <p>The resource passed the policy.</p>
+      <div className={styles[theme]}>
+        {results.pass ? (
+          <div className={styles.evaluationResults}>
+            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
+            <p>The resource passed the policy.</p>
+          </div>
+        ) : (
+          <div className={styles.failedEvaluationResults}>
+            <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
+            <p>The resource failed the policy.</p>
+          </div>
+        )}
+        <div className={styles.violations}>
+          {results.result[0].violations.map((violation) => {
+            const outcome = violation.pass ? "pass" : "fail";
+            return (
+              <React.Fragment key={violation.id}>
+                <p className={`${styles.violationResult} ${styles[outcome]}`}>
+                  {outcome}
+                </p>
+                <p>
+                  {violation.message || "Rule message not specified in policy"}
+                </p>
+              </React.Fragment>
+            );
+          })}
         </div>
-      ) : (
-        <div className={styles.failedEvaluationResults}>
-          <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
-          <p>The resource failed the policy.</p>
-        </div>
-      )}
-      <div className={styles.violations}>
-        {results.result[0].violations.map((violation) => {
-          const outcome = violation.pass ? "pass" : "fail";
-          return (
-            <React.Fragment key={violation.id}>
-              <p className={`${styles.violationResult} ${styles[outcome]}`}>
-                {outcome}
-              </p>
-              <p>
-                {violation.message || "Rule message not specified in policy"}
-              </p>
-            </React.Fragment>
-          );
-        })}
       </div>
       <Button
         onClick={() => setShowCode(true)}
@@ -71,18 +75,20 @@ const EvaluationResult = ({ results }) => {
         onClose={() => setShowCode(false)}
         isVisible={showCode}
       >
-        <Button
-          onClick={() => copy(formattedExplanation)}
-          label={"Copy to Clipboard"}
-          buttonType={"text"}
-          className={styles.copyButton}
-        />
-        <Code
-          code={formattedExplanation}
-          language={"json"}
-          className={styles.explanationJson}
-          data-testid="codeBlock"
-        />
+        <div className={styles[theme]}>
+          <Button
+            onClick={() => copy(formattedExplanation)}
+            label={"Copy to Clipboard"}
+            buttonType={"text"}
+            className={styles.copyButton}
+          />
+          <Code
+            code={formattedExplanation}
+            language={"json"}
+            className={styles.explanationJson}
+            data-testid="codeBlock"
+          />
+        </div>
       </Modal>
     </>
   );

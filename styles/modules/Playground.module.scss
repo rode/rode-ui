@@ -20,7 +20,7 @@
 $CARD_WIDTH: 97%;
 $GAP: 1rem;
 
-.contentContainer {
+.pageContainer {
   height: calc(100% - calc(#{$GAP} * 2));
   width: 100%;
 
@@ -125,69 +125,6 @@ $GAP: 1rem;
   font-weight: 700;
 }
 
-.searchCard {
-  width: $CARD_WIDTH;
-  height: fit-content;
-  padding: 1rem;
-  margin: 0.5rem auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.cardHeader {
-  text-align: left;
-  @include ellipsis(calc(100vw - 7rem));
-  white-space: pre-line;
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
-}
-
-.cardText {
-  @extend .cardHeader;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-  @include ellipsis(calc(100vw - 7rem));
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
-}
-
-.actionButton,
-.selectedButton {
-  margin-top: 0.25rem;
-  align-self: flex-end;
-}
-
-.selectionContainer {
-  padding: 1rem 0.75rem;
-  width: $CARD_WIDTH;
-}
-
-.searchContainer {
-  width: 95%;
-  margin: 0.5rem auto;
-  height: fit-content;
-
-  @include tabletAndLarger {
-    margin: 1rem auto 2rem;
-  }
-}
-
-.viewAllButton {
-  font-size: 0.85rem;
-  min-height: fit-content;
-  padding: 0.25rem;
-  margin-left: auto;
-}
-
-.viewMoreButton {
-  margin: 0.5rem auto;
-}
-
 .codeContent {
   margin-top: 0.5rem;
   max-height: 100%;
@@ -218,49 +155,7 @@ $GAP: 1rem;
   }
 }
 
-.evaluationResults,
-.failedEvaluationResults {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: fit-content;
-  margin: 0 auto 0.5rem;
-  font-weight: 600;
-}
-
-.violations {
-  display: grid;
-  grid-template-columns: 4rem 1fr;
-  grid-gap: 0.5rem;
-  grid-template-areas: "outcome message";
-  width: fit-content;
-  margin: 0 auto;
-
-  > p {
-    white-space: normal;
-  }
-
-  .violationResult {
-    font-weight: 600;
-    text-transform: uppercase;
-    text-align: center;
-  }
-}
-
-.explanationJson {
-  max-height: 60vh;
-}
-
-.copyButton {
-  margin: 0 auto 0.5rem;
-}
-
 .darkTheme {
-  &.pageContainer {
-    background-color: $DT_BACKGROUND_LIGHT;
-  }
-
   .instructions,
   .selectToBeginText {
     color: $DT_SUB_TEXT;
@@ -274,54 +169,6 @@ $GAP: 1rem;
   .resourceDrawerNavigation {
     background-color: $DT_BACKGROUND_LIGHT;
     box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .searchCard {
-    background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW;
-  }
-
-  .cardHeader {
-    color: $DT_MAIN_TEXT;
-  }
-
-  .cardText {
-    color: $DT_SUB_TEXT;
-  }
-
-  .selectedButton {
-    svg,
-    p {
-      color: $BRIGHT_GREEN;
-    }
-  }
-
-  .evaluationResults,
-  .violationResult.pass {
-    color: $BRIGHT_GREEN;
-  }
-
-  .failedEvaluationResults,
-  .violationResult.fail {
-    color: $HOT_RED;
-  }
-
-  .explanationJson {
-    background-color: $DT_BACKGROUND_DARK;
-  }
-
-  .evaluationResultsContainer {
-    background-color: $DT_BACKGROUND_DARK;
-  }
-
-  .copyVersionButton {
-    @include transition;
-    color: $WHITE;
-
-    &:hover {
-      @include transition;
-      color: $LAGOON;
-    }
   }
 }
 
@@ -339,49 +186,5 @@ $GAP: 1rem;
   .resourceDrawerNavigation {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .searchCard {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .cardHeader {
-    color: $LT_MAIN_TEXT;
-  }
-
-  .cardText {
-    color: $LT_SUB_TEXT;
-  }
-
-  .selectedButton {
-    svg,
-    p {
-      color: $GREEN;
-    }
-  }
-
-  .evaluationResults,
-  .violationResult.pass {
-    color: $GREEN;
-  }
-
-  .failedEvaluationResults,
-  .violationResult.fail {
-    color: $HOT_RED;
-  }
-
-  .evaluationResultsContainer {
-    background-color: $LT_BACKGROUND_LIGHT;
-  }
-
-  .copyVersionButton {
-    @include transition;
-    color: $DARK_GREY;
-
-    &:hover {
-      @include transition;
-      color: $DEEP_SEA;
-    }
   }
 }

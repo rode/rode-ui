@@ -1,0 +1,116 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.headerContainer {
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.resourceName {
+  font-weight: 600;
+}
+
+.instructions {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.versionCard {
+  width: 90%;
+  margin: 0.25rem auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
+
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
+}
+
+.actionButton {
+  min-width: fit-content;
+}
+
+.cardSubtext {
+  font-size: 0.8rem;
+}
+
+.viewMoreResultsButton {
+  margin: 0 auto 1rem;
+}
+
+.searchContainer {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.viewAllButton {
+  font-size: 0.85rem;
+  min-height: fit-content;
+  padding: 0.25rem;
+  margin-left: auto;
+}
+
+.notFoundMessage {
+  margin: 1rem auto;
+}
+
+.darkTheme {
+  color: $DT_MAIN_TEXT;
+
+  &.headerContainer {
+    background-color: $LAGOON;
+    color: $DARKEST_GREY;
+  }
+
+  .versionCard {
+    background-color: $DT_BACKGROUND_LIGHT;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardSubtext {
+    color: $DT_SUB_TEXT;
+  }
+}
+
+.lightTheme {
+  color: $LT_MAIN_TEXT;
+
+  .headerContainer {
+    background-color: $DEEP_SEA;
+    color: $WHITE;
+  }
+
+  .versionCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardSubtext {
+    color: $LT_SUB_TEXT;
+  }
+}
