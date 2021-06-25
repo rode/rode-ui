@@ -24,7 +24,7 @@ export const getPolicyIdAndVersion = (policyVersionId) => {
   }
 }
 
-export const mapToClientModel = async (assignment) => {
+export const mapToClientModelWithPolicyDetails = async (assignment) => {
   const {policyId, policyVersion} = getPolicyIdAndVersion(assignment.policyVersionId);
 
   const { data, error } = await getPolicyByPolicyId(policyId);

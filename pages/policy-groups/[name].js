@@ -34,7 +34,6 @@ const PolicyGroup = () => {
 
   const { name } = router.query;
 
-  // TODO: figure out what is up with loading spinner now working
   const { policyGroup, loading } = usePolicyGroup(name);
 
   const { data, loading: loadingAssignments } = usePaginatedFetch(
@@ -54,7 +53,7 @@ const PolicyGroup = () => {
   return (
     <>
       <PageHeader>
-        <h1>Manage Policy Groups</h1>
+        <h1>Manage Policy Groups - ${policyGroup.name}</h1>
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>
@@ -110,7 +109,7 @@ const PolicyGroup = () => {
                 <Button
                   label={"Edit Assignments"}
                   buttonType={"text"}
-                  onClick={() => {}}
+                  onClick={ () => router.push(`/policy-groups/${name}/assignments`)}
                 />
               </div>
             </>

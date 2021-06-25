@@ -1,0 +1,110 @@
+/**
+ * Copyright 2021 The Rode Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  margin: 0 auto;
+  height: 100%;
+
+  @include tabletAndLarger {
+    justify-content: space-between;
+  }
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.assignmentsContainer {
+  width: 100%;
+  height: 100%;
+}
+
+$CHIP_HEIGHT: 4rem;
+
+.assignmentChip {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  height: $CHIP_HEIGHT;
+  border-radius: calc(#{$CHIP_HEIGHT} / 2);
+  padding: 1rem calc(#{$CHIP_HEIGHT} / 3) 1rem calc(#{$CHIP_HEIGHT} / 2);
+  margin: 1rem 2rem;
+
+  &:before {
+    content: "";
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+  }
+}
+
+.assignmentDetails {
+  margin-right: 1rem;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: flex-start;
+
+    > button:not(:last-of-type) {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.notFoundContainer {
+  width: fit-content;
+  max-width: 75vw;
+  margin: 0 auto;
+  text-align: center;
+
+  > h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem;
+  }
+}
+
+.darkTheme {
+  .assignmentChip {
+    background-color: $DT_BACKGROUND_MEDIUM
+  }
+}
+
+.lightTheme {
+}
