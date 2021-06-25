@@ -27,8 +27,11 @@ import { useTheme } from "providers/theme";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PageHeader from "components/layout/PageHeader";
+import { showSuccess } from "../../../utils/toast-utils";
 
 // TODO: style the assignments header and assigned policies section a bit more
+// TODO: implement version changing
+// TODO: updating a policy name then navigating policy groups results in mismatch of data - need to trigger a mutate for these calls?
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -36,14 +39,13 @@ const EditPolicyGroupAssignments = () => {
   const { name } = router.query;
   const { theme } = useTheme();
 
-  const { policyGroup, loading } = usePolicyGroup(name);
+  const [loadingForm, setLoadingForm] = useState(false);
+
+  const { policyGroup, loading: loadingPolicyGroup } = usePolicyGroup(name);
 
   const [assignments, setAssignments] = useState({});
 
-  const {
-    data,
-    loading: loadingAssignments,
-  } = usePaginatedFetch(
+  const { data, loading: loadingAssignments } = usePaginatedFetch(
     policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
     {},
     50
@@ -54,43 +56,78 @@ const EditPolicyGroupAssignments = () => {
       const assignmentData = {};
       data.forEach((assignment) => {
         assignmentData[assignment.policyVersionId] = assignment;
-      })
+      });
       setAssignments(assignmentData);
     }
   }, [data]);
 
   const onAssign = (assignment) => {
-    const updatedAssignments = {...assignments};
+    const updatedAssignments = { ...assignments };
     updatedAssignments[assignment.policyVersionId] = {
       ...assignment,
-      action: "ADD"
+      action: "ADD",
     };
 
     setAssignments(updatedAssignments);
   };
 
   const onRemove = (assignment) => {
-    const updatedAssignments = {...assignments};
+    const updatedAssignments = { ...assignments };
     updatedAssignments[assignment.policyVersionId] = {
       ...assignment,
-      action: "REMOVE"
+      action: "REMOVE",
     };
 
     setAssignments(updatedAssignments);
-  }
+  };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
 
-    const originalAssignmentPolicyVersionIds = data.map(({policyVersionId}) => policyVersionId);
-    console.log('originalAssignmentPolicyVersionIds', originalAssignmentPolicyVersionIds);
+    const originalAssignmentPolicyVersionIds = data.map(
+      ({ policyVersionId }) => policyVersionId
+    );
 
-    const assignmentsToCreate = Object.values(assignments).filter(({action, policyVersionId}) => action === "ADD" && !originalAssignmentPolicyVersionIds.includes(policyVersionId));
-    const assignmentsToRemove = Object.values(assignments).filter(({action, policyVersionId}) => action === "REMOVE" && originalAssignmentPolicyVersionIds.includes(policyVersionId));
+    const assignmentsToCreate = Object.values(assignments).filter(
+      ({ action, policyVersionId }) =>
+        action === "ADD" &&
+        !originalAssignmentPolicyVersionIds.includes(policyVersionId)
+    );
+    const assignmentsToRemove = Object.values(assignments).filter(
+      ({ action, policyVersionId }) =>
+        action === "REMOVE" &&
+        originalAssignmentPolicyVersionIds.includes(policyVersionId)
+    );
 
-  }
+    console.log('assignmentsToCreate', assignmentsToCreate);
+    console.log('assignmentsToRemove', assignmentsToRemove);
 
-  console.log('assignments', assignments);
+    const createPromises = assignmentsToCreate.map(async (assignment) => fetch(`/api/policy-groups/${name}/assignments`, {
+      method: "POST",
+      body: JSON.stringify(assignment),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }));
+
+    const deletePromises = assignmentsToRemove.map(async (assignment) => fetch(`/api/policy-groups/${name}/assignments?policyVersionId=${encodeURIComponent(assignment.policyVersionId)}`, {
+      method: "DELETE"
+    }));
+
+    setLoadingForm(true);
+    const response = await Promise.all([...createPromises, ...deletePromises]);
+    console.log('response;', response);
+    setLoadingForm(false);
+
+    if (!response.ok) {
+      console.log("Error", response);
+      return;
+    }
+
+    showSuccess('Saved!')
+  };
+
+  console.log("assignments", assignments);
 
   return (
     <>
@@ -98,7 +135,7 @@ const EditPolicyGroupAssignments = () => {
         <h1>Edit Policy Group Assignments</h1>
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
-        <Loading loading={loading}>
+        <Loading loading={loadingPolicyGroup}>
           {policyGroup ? (
             <div className={styles.contentContainer}>
               <div className={styles.assignmentsContainer}>
@@ -122,13 +159,30 @@ const EditPolicyGroupAssignments = () => {
                               <p>{assignment.policyName}</p>
                               <p>Version {assignment.policyVersion}</p>
                             </div>
-                            <Button
-                              label={"Remove Policy Assignment"}
-                              buttonType={"icon"}
-                              onClick={() => onRemove(assignment)}
-                            >
-                              <Icon name={ICON_NAMES.X_CIRCLE} size={"large"} />
-                            </Button>
+                            <div className={styles.assignmentActions}>
+                              <Button
+                                label={"Change Policy Version"}
+                                buttonType={"icon"}
+                                onClick={() => {alert("not implemented yet")}}
+                                showTooltip
+                              >
+                                <Icon
+                                  name={ICON_NAMES.PENCIL}
+                                  size={"large"}
+                                />
+                              </Button>
+                              <Button
+                                label={"Remove Policy Assignment"}
+                                buttonType={"icon"}
+                                onClick={() => onRemove(assignment)}
+                                showTooltip
+                              >
+                                <Icon
+                                  name={ICON_NAMES.X_CIRCLE}
+                                  size={"large"}
+                                />
+                              </Button>
+                            </div>
                           </div>
                         );
                       })}
@@ -156,12 +210,14 @@ const EditPolicyGroupAssignments = () => {
             label={"Save Assignments"}
             type={"button"}
             onClick={onSubmit}
+            loading={loadingForm}
           />
           <Button
             label={"Cancel"}
             buttonType={"text"}
             type={"button"}
             onClick={router.back}
+            disabled={loadingForm}
           />
         </div>
       </div>

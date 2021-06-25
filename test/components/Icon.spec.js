@@ -148,4 +148,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/plus circle/i)).toBeInTheDocument();
   });
+
+  it("should render the pencil icon when specified", () => {
+    render(<Icon name={ICON_NAMES.PENCIL} />);
+
+    expect(screen.getByTitle(/pencil/i)).toBeInTheDocument();
+  });
 });

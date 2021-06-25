@@ -59,7 +59,7 @@ $CHIP_HEIGHT: 5rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: fit-content;
+  width: 75%;
   min-width: fit-content;
   height: fit-content;
   min-height: $CHIP_HEIGHT;
@@ -70,6 +70,16 @@ $CHIP_HEIGHT: 5rem;
 
 .assignmentDetails {
   margin-right: 1rem;
+}
+
+.assignmentActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > * {
+    margin-left: 0.25rem;
+  }
 }
 
 .searchContainer {
