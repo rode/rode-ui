@@ -34,11 +34,9 @@ export const mapToClientModelWithPolicyDetails = async (assignment) => {
   }
 
   return {
-    id: assignment.id,
+    ...assignment,
     policyId,
     policyVersion,
     policyName: data.name,
-    policyGroup: assignment.policyGroup,
-    created: assignment.created
   }
 };

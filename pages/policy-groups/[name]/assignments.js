@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Loading from "components/Loading";
@@ -28,7 +28,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PageHeader from "components/layout/PageHeader";
 
-// TODO: style the assignments header and assigned policies a bit more
+// TODO: style the assignments header and assigned policies section a bit more
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -38,14 +38,59 @@ const EditPolicyGroupAssignments = () => {
 
   const { policyGroup, loading } = usePolicyGroup(name);
 
+  const [assignments, setAssignments] = useState({});
+
   const {
-    data: assignmentData,
+    data,
     loading: loadingAssignments,
   } = usePaginatedFetch(
     policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
     {},
     50
   );
+
+  useEffect(() => {
+    if (data?.length && !Object.keys(assignments).length) {
+      const assignmentData = {};
+      data.forEach((assignment) => {
+        assignmentData[assignment.policyVersionId] = assignment;
+      })
+      setAssignments(assignmentData);
+    }
+  }, [data]);
+
+  const onAssign = (assignment) => {
+    const updatedAssignments = {...assignments};
+    updatedAssignments[assignment.policyVersionId] = {
+      ...assignment,
+      action: "ADD"
+    };
+
+    setAssignments(updatedAssignments);
+  };
+
+  const onRemove = (assignment) => {
+    const updatedAssignments = {...assignments};
+    updatedAssignments[assignment.policyVersionId] = {
+      ...assignment,
+      action: "REMOVE"
+    };
+
+    setAssignments(updatedAssignments);
+  }
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    const originalAssignmentPolicyVersionIds = data.map(({policyVersionId}) => policyVersionId);
+    console.log('originalAssignmentPolicyVersionIds', originalAssignmentPolicyVersionIds);
+
+    const assignmentsToCreate = Object.values(assignments).filter(({action, policyVersionId}) => action === "ADD" && !originalAssignmentPolicyVersionIds.includes(policyVersionId));
+    const assignmentsToRemove = Object.values(assignments).filter(({action, policyVersionId}) => action === "REMOVE" && originalAssignmentPolicyVersionIds.includes(policyVersionId));
+
+  }
+
+  console.log('assignments', assignments);
 
   return (
     <>
@@ -60,9 +105,14 @@ const EditPolicyGroupAssignments = () => {
                 <p className={styles.assignmentsHeader}>{policyGroup.name}</p>
                 <p>Assigned Policies</p>
                 <Loading loading={loadingAssignments}>
-                  {assignmentData?.length > 0 ? (
+                  {Object.keys(assignments).length > 0 ? (
                     <>
-                      {assignmentData.map((assignment) => {
+                      {Object.keys(assignments).map((policyVersionId) => {
+                        const assignment = assignments[policyVersionId];
+                        if (assignment.action === "REMOVE") {
+                          return null;
+                        }
+
                         return (
                           <div
                             key={assignment.id}
@@ -75,7 +125,7 @@ const EditPolicyGroupAssignments = () => {
                             <Button
                               label={"Remove Policy Assignment"}
                               buttonType={"icon"}
-                              onClick={() => {}}
+                              onClick={() => onRemove(assignment)}
                             >
                               <Icon name={ICON_NAMES.X_CIRCLE} size={"large"} />
                             </Button>
@@ -88,7 +138,7 @@ const EditPolicyGroupAssignments = () => {
                   )}
                 </Loading>
               </div>
-              <PolicySearchAndResults />
+              <PolicySearchAndResults onAssign={onAssign} />
             </div>
           ) : (
             <div className={styles.notFoundContainer}>
@@ -105,7 +155,7 @@ const EditPolicyGroupAssignments = () => {
           <Button
             label={"Save Assignments"}
             type={"button"}
-            onClick={() => {}}
+            onClick={onSubmit}
           />
           <Button
             label={"Cancel"}

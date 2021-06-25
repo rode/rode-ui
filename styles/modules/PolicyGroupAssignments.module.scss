@@ -79,6 +79,12 @@ $CHIP_HEIGHT: 5rem;
   flex-direction: column;
 }
 
+.searchResultsContainer {
+  height: 100%;
+  max-height: 65vh;
+  overflow: auto;
+}
+
 .actionButtonsContainer {
   display: flex;
   flex-direction: column;

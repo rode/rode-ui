@@ -32,7 +32,9 @@ import { createSearchFilter } from "utils/shared-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-const PolicySearchAndResults = () => {
+// TODO: show a "selected" icon when the policy has already been assigned
+
+const PolicySearchAndResults = ({onAssign}) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
@@ -44,7 +46,7 @@ const PolicySearchAndResults = () => {
 
   const {
     data: policyData,
-    loading: loadingPolicies,
+    loading,
     isLastPage,
     goToNextPage,
   } = usePaginatedFetch(
@@ -85,8 +87,9 @@ const PolicySearchAndResults = () => {
           />
         }
       />
+      <div className={styles.searchResultsContainer}>
       {policySearch && (
-        <Loading loading={loadingPolicies} type={"button"}>
+        <Loading loading={loading} type={"button"}>
           {policyData?.length > 0 ? (
             <>
               {policyData.map((result) => (
@@ -101,7 +104,12 @@ const PolicySearchAndResults = () => {
                     </p>
                   </div>
                   <Button
-                    onClick={() => {}}
+                    onClick={() => onAssign({
+                      ...result,
+                      policyVersionId: `${result.id}.${result.latestVersion}`,
+                      policyName: result.name,
+                      policyVersion: result.latestVersion
+                    })}
                     buttonType={"icon"}
                     label={"Assign to Policy Group"}
                     className={styles.actionButton}
@@ -118,6 +126,7 @@ const PolicySearchAndResults = () => {
                   label={"See More Policies"}
                   className={styles.viewMoreButton}
                   id={"viewMorePoliciesButton"}
+                  loading={loading}
                 />
               )}
             </>
@@ -126,6 +135,7 @@ const PolicySearchAndResults = () => {
           )}
         </Loading>
       )}
+      </div>
     </div>
   );
 };
