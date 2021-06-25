@@ -142,4 +142,10 @@ describe("Icon", () => {
 
     expect(screen.getByTitle(/ban/i)).toBeInTheDocument();
   });
+
+  it("should render the plus circle icon when specified", () => {
+    render(<Icon name={ICON_NAMES.PLUS_CIRCLE} />);
+
+    expect(screen.getByTitle(/plus circle/i)).toBeInTheDocument();
+  });
 });

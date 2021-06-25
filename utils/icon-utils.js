@@ -33,6 +33,7 @@ import Check from "components/icons/Check";
 import Menu from "components/icons/Menu";
 import ClipboardCopy from "components/icons/ClipboardCopy";
 import Ban from "components/icons/Ban";
+import PlusCircle from "../components/icons/PlusCircle";
 
 const SEARCH = "SEARCH";
 const COG = "COG";
@@ -53,6 +54,7 @@ const TWITTER = "TWITTER";
 const MENU = "MENU";
 const CLIPBOARD_COPY = "CLIPBOARDCOPY";
 const BAN = "BAN";
+const PLUS_CIRCLE = "PLUS_CIRCLE";
 
 export const ICON_COMPONENTS = {
   [SEARCH]: Search,
@@ -74,6 +76,7 @@ export const ICON_COMPONENTS = {
   [MENU]: Menu,
   [CLIPBOARD_COPY]: ClipboardCopy,
   [BAN]: Ban,
+  [PLUS_CIRCLE]: PlusCircle
 };
 
 export const ICON_NAMES = {
@@ -93,6 +96,7 @@ export const ICON_NAMES = {
   MENU,
   CLIPBOARD_COPY,
   BAN,
+  PLUS_CIRCLE,
   LIATRIO,
   GITHUB,
   TWITTER,

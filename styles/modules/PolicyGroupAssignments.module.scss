@@ -46,7 +46,13 @@
   height: 100%;
 }
 
-$CHIP_HEIGHT: 4rem;
+.assignmentsHeader {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+$CHIP_HEIGHT: 5rem;
 
 .assignmentChip {
   display: flex;
@@ -54,20 +60,23 @@ $CHIP_HEIGHT: 4rem;
   justify-content: space-between;
   align-items: center;
   width: fit-content;
-  height: $CHIP_HEIGHT;
+  min-width: fit-content;
+  height: fit-content;
+  min-height: $CHIP_HEIGHT;
   border-radius: calc(#{$CHIP_HEIGHT} / 2);
-  padding: 1rem calc(#{$CHIP_HEIGHT} / 3) 1rem calc(#{$CHIP_HEIGHT} / 2);
-  margin: 1rem 2rem;
-
-  &:before {
-    content: "";
-    border-bottom-left-radius: 50%;
-    border-top-left-radius: 50%;
-  }
+  padding: 0.5rem calc(#{$CHIP_HEIGHT} / 3) 0.5rem calc(#{$CHIP_HEIGHT} / 2);
+  margin: 1rem 2rem 1rem 0;
 }
 
 .assignmentDetails {
   margin-right: 1rem;
+}
+
+.searchContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .actionButtonsContainer {
@@ -87,6 +96,59 @@ $CHIP_HEIGHT: 4rem;
   }
 }
 
+.viewAllButton {
+  font-size: 0.85rem;
+  min-height: fit-content;
+  padding: 0.25rem;
+  margin-left: auto;
+}
+
+.searchCard {
+  width: 97%;
+  height: fit-content;
+  padding: 1rem;
+  margin: 0.5rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.cardHeader {
+  text-align: left;
+  @include ellipsis(calc(100vw - 7rem));
+  white-space: pre-line;
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.cardText {
+  @extend .cardHeader;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  @include ellipsis(calc(100vw - 7rem));
+
+  @include tabletAndLarger {
+    max-width: calc(100vw - 24rem);
+  }
+}
+
+.actionButton,
+.selectedButton {
+  margin-top: 0.25rem;
+  align-self: flex-end;
+}
+
+.viewMoreButton {
+  margin: 0.5rem auto;
+}
+
 .notFoundContainer {
   width: fit-content;
   max-width: 75vw;
@@ -104,7 +166,36 @@ $CHIP_HEIGHT: 4rem;
   .assignmentChip {
     background-color: $DT_BACKGROUND_MEDIUM
   }
+
+  .searchCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .cardHeader {
+    color: $DT_MAIN_TEXT;
+  }
+
+  .cardText {
+    color: $DT_SUB_TEXT;
+  }
 }
 
 .lightTheme {
+  .assignmentChip {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .searchCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardHeader {
+    color: $LT_MAIN_TEXT;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
+  }
 }

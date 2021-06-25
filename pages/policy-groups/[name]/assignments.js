@@ -24,9 +24,11 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import PolicySearchAndResults from "components/policy-groups/PolicySearchAndResults";
 import { useTheme } from "providers/theme";
-import Icon from "../../../components/Icon";
-import { ICON_NAMES } from "../../../utils/icon-utils";
-import PageHeader from "../../../components/layout/PageHeader";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import PageHeader from "components/layout/PageHeader";
+
+// TODO: style the assignments header and assigned policies a bit more
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -55,14 +57,17 @@ const EditPolicyGroupAssignments = () => {
           {policyGroup ? (
             <div className={styles.contentContainer}>
               <div className={styles.assignmentsContainer}>
-                <p>{policyGroup.name}</p>
+                <p className={styles.assignmentsHeader}>{policyGroup.name}</p>
                 <p>Assigned Policies</p>
                 <Loading loading={loadingAssignments}>
                   {assignmentData?.length > 0 ? (
                     <>
                       {assignmentData.map((assignment) => {
                         return (
-                          <div key={assignment.id} className={styles.assignmentChip}>
+                          <div
+                            key={assignment.id}
+                            className={styles.assignmentChip}
+                          >
                             <div className={styles.assignmentDetails}>
                               <p>{assignment.policyName}</p>
                               <p>Version {assignment.policyVersion}</p>
@@ -97,8 +102,17 @@ const EditPolicyGroupAssignments = () => {
         </Loading>
 
         <div className={styles.actionButtonsContainer}>
-          <Button label={"Save Assignments"} type={"button"} onClick={() => {}}/>
-          <Button label={"Cancel"} buttonType={"text"} type={"button"} onClick={router.back}/>
+          <Button
+            label={"Save Assignments"}
+            type={"button"}
+            onClick={() => {}}
+          />
+          <Button
+            label={"Cancel"}
+            buttonType={"text"}
+            type={"button"}
+            onClick={router.back}
+          />
         </div>
       </div>
     </>

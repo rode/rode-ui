@@ -29,6 +29,8 @@ import PolicySearchBar from "components/policies/PolicySearchBar";
 import { useAppState } from "providers/appState";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { createSearchFilter } from "utils/shared-utils";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
 const PolicySearchAndResults = () => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -52,7 +54,7 @@ const PolicySearchAndResults = () => {
   );
 
   return (
-    <>
+    <div className={styles.searchContainer}>
       <PolicySearchBar
         onSubmit={(event) => {
           event.preventDefault();
@@ -79,6 +81,7 @@ const PolicySearchAndResults = () => {
               });
               setPolicySearch(true);
             }}
+            className={styles.viewAllButton}
           />
         }
       />
@@ -90,20 +93,22 @@ const PolicySearchAndResults = () => {
                 <div className={`${styles.searchCard}`} key={result.id}>
                   <div>
                     <p className={styles.cardHeader}>{result.name}</p>
-                    <p className={styles.cardText}>{result.description}</p>
+                    {result.description && (
+                      <p className={styles.cardText}>{result.description}</p>
+                    )}
+                    <p className={styles.cardText}>
+                      Latest Version {result.latestVersion}
+                    </p>
                   </div>
                   <Button
-                    onClick={() => {
-                      setPolicySearch(false);
-                      dispatch({
-                        type: stateActions.SET_POLICY_SEARCH_TERM,
-                        data: "",
-                      });
-                    }}
-                    buttonType={"text"}
-                    label={"Select Policy"}
+                    onClick={() => {}}
+                    buttonType={"icon"}
+                    label={"Assign to Policy Group"}
                     className={styles.actionButton}
-                  />
+                    showTooltip
+                  >
+                    <Icon name={ICON_NAMES.PLUS_CIRCLE} size={"large"}/>
+                  </Button>
                 </div>
               ))}
               {!isLastPage && (
@@ -121,7 +126,7 @@ const PolicySearchAndResults = () => {
           )}
         </Loading>
       )}
-    </>
+    </div>
   );
 };
 

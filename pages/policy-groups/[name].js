@@ -26,6 +26,7 @@ import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import LabelWithValue from "components/LabelWithValue";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const PolicyGroup = () => {
   return (
     <>
       <PageHeader>
-        <h1>Manage Policy Groups - ${policyGroup.name}</h1>
+        <h1>Manage Policy Groups</h1>
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>
@@ -77,7 +78,16 @@ const PolicyGroup = () => {
                 </div>
               </div>
               <div className={styles.policyGroupDetailsContainer}>
-                <p>Assigned Policies</p>
+                <div className={styles.assignmentsHeaderContainer}>
+                  <p className={styles.assignmentsHeader}>Assigned Policies</p>
+                  <Button
+                    label={"Edit Assignments"}
+                    buttonType={"text"}
+                    onClick={() =>
+                      router.push(`/policy-groups/${name}/assignments`)
+                    }
+                  />
+                </div>
                 <Loading loading={loadingAssignments}>
                   {data?.length > 0 ? (
                     <>
@@ -88,8 +98,8 @@ const PolicyGroup = () => {
                             className={styles.assignmentCard}
                           >
                             <div>
-                              <p>Policy {assignment.policyName}</p>
-                              <p>Policy Version {assignment.policyVersion}</p>
+                              <LabelWithValue label={"Policy"} value={assignment.policyName}/>
+                              <LabelWithValue label={"Version"} value={assignment.policyVersion}/>
                             </div>
                             <Button
                               label={"View Policy"}
@@ -103,14 +113,9 @@ const PolicyGroup = () => {
                       })}
                     </>
                   ) : (
-                    <p>No policies are assigned to this policy group.</p>
+                    <p className={styles.noAssignments}>No policies are assigned to this policy group.</p>
                   )}
                 </Loading>
-                <Button
-                  label={"Edit Assignments"}
-                  buttonType={"text"}
-                  onClick={ () => router.push(`/policy-groups/${name}/assignments`)}
-                />
               </div>
             </>
           ) : (
