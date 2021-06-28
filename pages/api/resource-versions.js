@@ -45,7 +45,8 @@ export default async (req, res) => {
     }
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(params)}`
+      `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(params)}`,
+        req.accessToken,
     );
 
     if (!response.ok) {

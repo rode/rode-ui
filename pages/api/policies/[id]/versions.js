@@ -25,13 +25,12 @@ export default async (req, res) => {
       .status(StatusCodes.METHOD_NOT_ALLOWED)
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
-
   const rodeUrl = getRodeUrl();
 
   try {
     const { id } = req.query;
 
-    const response = await get(`${rodeUrl}/v1alpha1/policies/${id}/versions`);
+    const response = await get(`${rodeUrl}/v1alpha1/policies/${id}/versions`, req.accessToken);
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);

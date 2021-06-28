@@ -33,7 +33,8 @@ export default async (req, res) => {
 
     const response = await post(
       `${rodeUrl}/v1alpha1/policies:validate`,
-      policy
+      policy,
+        req.accessToken,
     );
 
     if (!response.ok) {

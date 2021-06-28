@@ -32,7 +32,8 @@ export default async (req, res) => {
     const response = await get(
       `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUri
-      )}&fetchRelatedNotes=true&pageSize=1000`
+      )}&fetchRelatedNotes=true&pageSize=1000`,
+        req.accessToken,
     );
 
     if (!response.ok) {

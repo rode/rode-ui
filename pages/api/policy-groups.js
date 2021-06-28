@@ -42,7 +42,8 @@ export default async (req, res) => {
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`,
+          req.accessToken,
       );
 
       if (!response.ok) {
@@ -70,7 +71,7 @@ export default async (req, res) => {
   }
 
   try {
-    const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body);
+    const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body, req.accessToken);
 
     if (!response.ok) {
       if (response.status === StatusCodes.CONFLICT) {

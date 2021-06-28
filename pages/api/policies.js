@@ -43,7 +43,8 @@ export default async (req, res) => {
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`,
+          req.accessToken,
       );
 
       if (!response.ok) {
@@ -74,7 +75,7 @@ export default async (req, res) => {
   try {
     const postBody = mapToApiModel(req);
 
-    const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
+    const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody, req.accessToken);
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
