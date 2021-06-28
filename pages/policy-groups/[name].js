@@ -100,8 +100,14 @@ const PolicyGroup = () => {
                             className={styles.assignmentCard}
                           >
                             <div>
-                              <LabelWithValue label={"Policy"} value={assignment.policyName}/>
-                              <LabelWithValue label={"Version"} value={assignment.policyVersion}/>
+                              <LabelWithValue
+                                label={"Policy"}
+                                value={assignment.policyName}
+                              />
+                              <LabelWithValue
+                                label={"Version"}
+                                value={assignment.policyVersion}
+                              />
                             </div>
                             <Button
                               label={"View Policy"}
@@ -115,7 +121,9 @@ const PolicyGroup = () => {
                       })}
                     </>
                   ) : (
-                    <p className={styles.noAssignments}>No policies are assigned to this policy group.</p>
+                    <p className={styles.noAssignments}>
+                      No policies are assigned to this policy group.
+                    </p>
                   )}
                 </Loading>
               </div>

@@ -15,6 +15,7 @@
  */
 
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupAssignments.module.scss";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
@@ -34,7 +35,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 
 // TODO: show a "selected" icon when the policy has already been assigned
 
-const PolicySearchAndResults = ({onAssign}) => {
+const PolicySearchAndResults = ({ onAssign }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
@@ -88,56 +89,62 @@ const PolicySearchAndResults = ({onAssign}) => {
         }
       />
       <div className={styles.searchResultsContainer}>
-      {policySearch && (
-        <Loading loading={loading} type={"button"}>
-          {policyData?.length > 0 ? (
-            <>
-              {policyData.map((result) => (
-                <div className={`${styles.searchCard}`} key={result.id}>
-                  <div>
-                    <p className={styles.cardHeader}>{result.name}</p>
-                    {result.description && (
-                      <p className={styles.cardText}>{result.description}</p>
-                    )}
-                    <p className={styles.cardText}>
-                      Latest Version {result.latestVersion}
-                    </p>
+        {policySearch && (
+          <Loading loading={loading} type={"button"}>
+            {policyData?.length > 0 ? (
+              <>
+                {policyData.map((result) => (
+                  <div className={`${styles.searchCard}`} key={result.id}>
+                    <div>
+                      <p className={styles.cardHeader}>{result.name}</p>
+                      {result.description && (
+                        <p className={styles.cardText}>{result.description}</p>
+                      )}
+                      <p className={styles.cardText}>
+                        Latest Version {result.latestVersion}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        onAssign({
+                          ...result,
+                          policyVersionId: `${result.id}.${result.latestVersion}`,
+                          policyName: result.name,
+                          policyVersion: result.latestVersion,
+                        })
+                      }
+                      buttonType={"icon"}
+                      label={"Assign to Policy Group"}
+                      className={styles.actionButton}
+                      showTooltip
+                    >
+                      <Icon name={ICON_NAMES.PLUS_CIRCLE} size={"large"} />
+                    </Button>
                   </div>
+                ))}
+                {!isLastPage && (
                   <Button
-                    onClick={() => onAssign({
-                      ...result,
-                      policyVersionId: `${result.id}.${result.latestVersion}`,
-                      policyName: result.name,
-                      policyVersion: result.latestVersion
-                    })}
-                    buttonType={"icon"}
-                    label={"Assign to Policy Group"}
-                    className={styles.actionButton}
-                    showTooltip
-                  >
-                    <Icon name={ICON_NAMES.PLUS_CIRCLE} size={"large"}/>
-                  </Button>
-                </div>
-              ))}
-              {!isLastPage && (
-                <Button
-                  buttonType="text"
-                  onClick={goToNextPage}
-                  label={"See More Policies"}
-                  className={styles.viewMoreButton}
-                  id={"viewMorePoliciesButton"}
-                  loading={loading}
-                />
-              )}
-            </>
-          ) : (
-            <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
-          )}
-        </Loading>
-      )}
+                    buttonType="text"
+                    onClick={goToNextPage}
+                    label={"See More Policies"}
+                    className={styles.viewMoreButton}
+                    id={"viewMorePoliciesButton"}
+                    loading={loading}
+                  />
+                )}
+              </>
+            ) : (
+              <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
+            )}
+          </Loading>
+        )}
       </div>
     </div>
   );
+};
+
+PolicySearchAndResults.propTypes = {
+  onAssign: PropTypes.func.isRequired,
 };
 
 export default PolicySearchAndResults;

@@ -16,21 +16,26 @@
 
 import { getPolicyByPolicyId } from "./policy-utils";
 
-export const getPolicyIdAndVersion = (policyVersionId) => {
+const getPolicyIdAndVersion = (policyVersionId) => {
   const [policyId, policyVersion] = policyVersionId.split(".");
 
   return {
-    policyId, policyVersion
-  }
-}
+    policyId,
+    policyVersion,
+  };
+};
 
 export const mapToClientModelWithPolicyDetails = async (assignment) => {
-  const {policyId, policyVersion} = getPolicyIdAndVersion(assignment.policyVersionId);
+  const { policyId, policyVersion } = getPolicyIdAndVersion(
+    assignment.policyVersionId
+  );
 
   const { data, error } = await getPolicyByPolicyId(policyId);
 
   if (error) {
-    throw Error(`Error while fetching policy ${policyId} for policy group assignments.`);
+    throw Error(
+      `Error while fetching policy ${policyId} for policy group assignments.`
+    );
   }
 
   return {
@@ -38,5 +43,5 @@ export const mapToClientModelWithPolicyDetails = async (assignment) => {
     policyId,
     policyVersion,
     policyName: data.name,
-  }
+  };
 };

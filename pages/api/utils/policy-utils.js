@@ -23,7 +23,7 @@ export const mapToClientModel = (policyResponse) => {
     name: policyResponse.name,
     description: policyResponse.description,
     regoContent: policyResponse.policy.regoContent,
-    latestVersion: policyResponse.currentVersion
+    latestVersion: policyResponse.currentVersion,
   };
 };
 
@@ -41,6 +41,7 @@ export const mapToApiModel = (request) => {
 };
 
 // TODO: test this
+// TODO: is there a way to reuse the existing api endpoint?
 export const getPolicyByPolicyId = async (policyId) => {
   try {
     const response = await get(`${getRodeUrl()}/v1alpha1/policies/${policyId}`);
@@ -48,7 +49,7 @@ export const getPolicyByPolicyId = async (policyId) => {
     if (response.status === StatusCodes.NOT_FOUND) {
       return {
         status: StatusCodes.OK,
-        data: null
+        data: null,
       };
     }
 
@@ -56,8 +57,8 @@ export const getPolicyByPolicyId = async (policyId) => {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
       return {
         status: StatusCodes.INTERNAL_SERVER_ERROR,
-        error: ReasonPhrases.INTERNAL_SERVER_ERROR
-      }
+        error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+      };
     }
 
     const getPolicyResponse = await response.json();
@@ -66,14 +67,14 @@ export const getPolicyByPolicyId = async (policyId) => {
 
     return {
       status: StatusCodes.OK,
-      data: policy
-    }
+      data: policy,
+    };
   } catch (error) {
     console.error("Error getting policy", error);
 
     return {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
-      error: ReasonPhrases.INTERNAL_SERVER_ERROR
-    }
+      error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    };
   }
-}
+};

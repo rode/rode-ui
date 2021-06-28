@@ -33,8 +33,8 @@ import Check from "components/icons/Check";
 import Menu from "components/icons/Menu";
 import ClipboardCopy from "components/icons/ClipboardCopy";
 import Ban from "components/icons/Ban";
-import PlusCircle from "../components/icons/PlusCircle";
-import Pencil from "../components/icons/Pencil";
+import PlusCircle from "components/icons/PlusCircle";
+import Pencil from "components/icons/Pencil";
 
 const SEARCH = "SEARCH";
 const COG = "COG";
@@ -79,7 +79,7 @@ export const ICON_COMPONENTS = {
   [CLIPBOARD_COPY]: ClipboardCopy,
   [BAN]: Ban,
   [PLUS_CIRCLE]: PlusCircle,
-  [PENCIL]: Pencil
+  [PENCIL]: Pencil,
 };
 
 export const ICON_NAMES = {

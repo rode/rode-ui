@@ -27,7 +27,8 @@ import { useTheme } from "providers/theme";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PageHeader from "components/layout/PageHeader";
-import { showSuccess } from "../../../utils/toast-utils";
+import { showSuccess } from "utils/toast-utils";
+import { mutate } from "swr";
 
 // TODO: style the assignments header and assigned policies section a bit more
 // TODO: implement version changing
@@ -99,24 +100,30 @@ const EditPolicyGroupAssignments = () => {
         originalAssignmentPolicyVersionIds.includes(policyVersionId)
     );
 
-    console.log('assignmentsToCreate', assignmentsToCreate);
-    console.log('assignmentsToRemove', assignmentsToRemove);
+    const createPromises = assignmentsToCreate.map(async (assignment) =>
+      fetch(`/api/policy-groups/${name}/assignments`, {
+        method: "POST",
+        body: JSON.stringify(assignment),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    );
 
-    const createPromises = assignmentsToCreate.map(async (assignment) => fetch(`/api/policy-groups/${name}/assignments`, {
-      method: "POST",
-      body: JSON.stringify(assignment),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }));
-
-    const deletePromises = assignmentsToRemove.map(async (assignment) => fetch(`/api/policy-groups/${name}/assignments?policyVersionId=${encodeURIComponent(assignment.policyVersionId)}`, {
-      method: "DELETE"
-    }));
+    const deletePromises = assignmentsToRemove.map(async (assignment) =>
+      fetch(
+        `/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
+          assignment.id
+        )}`,
+        {
+          method: "DELETE",
+        }
+      )
+    );
 
     setLoadingForm(true);
-    const response = await Promise.all([...createPromises, ...deletePromises]);
-    console.log('response;', response);
+    const [response] = await Promise.all([...createPromises, ...deletePromises]);
+    console.log("response", response);
     setLoadingForm(false);
 
     if (!response.ok) {
@@ -124,10 +131,12 @@ const EditPolicyGroupAssignments = () => {
       return;
     }
 
-    showSuccess('Saved!')
-  };
+    // does not seem to be working?
+    await mutate(`/api/policy-groups/${policyGroup.name}/assignments`);
 
-  console.log("assignments", assignments);
+    showSuccess("Saved!");
+    router.push(`/policy-groups/${policyGroup.name}`)
+  };
 
   return (
     <>
@@ -163,13 +172,12 @@ const EditPolicyGroupAssignments = () => {
                               <Button
                                 label={"Change Policy Version"}
                                 buttonType={"icon"}
-                                onClick={() => {alert("not implemented yet")}}
+                                onClick={() => {
+                                  alert("not implemented yet");
+                                }}
                                 showTooltip
                               >
-                                <Icon
-                                  name={ICON_NAMES.PENCIL}
-                                  size={"large"}
-                                />
+                                <Icon name={ICON_NAMES.PENCIL} size={"large"} />
                               </Button>
                               <Button
                                 label={"Remove Policy Assignment"}

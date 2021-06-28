@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { mapToClientModel, mapToApiModel } from "pages/api/utils/policy-utils";
+import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
 
 describe("policy-utils", () => {
   describe("mapToClientModel", () => {

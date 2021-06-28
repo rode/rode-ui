@@ -57,7 +57,7 @@ export default async (req, res) => {
 
       const mappedAssignments = await Promise.all(promises);
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         data: mappedAssignments,
         pageToken: nextPageToken,
       });
@@ -88,12 +88,7 @@ export default async (req, res) => {
 
       const createdPolicyAssignmentResponse = await response.json();
 
-      console.log(
-        "createdPolicyAssignmentResponse",
-        createdPolicyAssignmentResponse
-      );
-
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         data: createdPolicyAssignmentResponse,
       });
     } catch (error) {
@@ -107,10 +102,10 @@ export default async (req, res) => {
 
   if (req.method === "DELETE") {
     try {
-      const { name, policyVersionId } = req.query;
+      const { assignmentId } = req.query;
 
       const response = await del(
-        `${rodeUrl}/v1alpha1/{id=policies/${policyVersionId}/assignments/${name}}`,
+        `${rodeUrl}/v1alpha1/${assignmentId}`
       );
 
       if (!response.ok) {
@@ -121,11 +116,6 @@ export default async (req, res) => {
       }
 
       const deletePolicyAssignmentResponse = await response.json();
-
-      console.log(
-        "deletePolicyAssignmentResponse",
-        deletePolicyAssignmentResponse
-      );
 
       res.status(StatusCodes.OK).json({
         data: deletePolicyAssignmentResponse,
