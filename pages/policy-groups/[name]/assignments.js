@@ -27,7 +27,7 @@ import { useTheme } from "providers/theme";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PageHeader from "components/layout/PageHeader";
-import { showSuccess } from "utils/toast-utils";
+import { showError, showSuccess } from "utils/toast-utils";
 import { mutate } from "swr";
 
 // TODO: style the assignments header and assigned policies section a bit more
@@ -122,20 +122,18 @@ const EditPolicyGroupAssignments = () => {
     );
 
     setLoadingForm(true);
-    const [response] = await Promise.all([...createPromises, ...deletePromises]);
-    console.log("response", response);
+    const responses = await Promise.all([...createPromises, ...deletePromises]);
     setLoadingForm(false);
 
-    if (!response.ok) {
-      console.log("Error", response);
+    if (responses.some(({ ok }) => !ok)) {
+      showError("Failed to save policy group assignments.");
       return;
     }
 
-    // does not seem to be working?
     await mutate(`/api/policy-groups/${policyGroup.name}/assignments`);
 
     showSuccess("Saved!");
-    router.push(`/policy-groups/${policyGroup.name}`)
+    router.push(`/policy-groups/${policyGroup.name}`);
   };
 
   return (

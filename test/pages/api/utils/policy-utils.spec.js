@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
+import {
+  getPolicyByPolicyId,
+  mapToApiModel,
+  mapToClientModel,
+} from "pages/api/utils/policy-utils";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { get, getRodeUrl } from "pages/api/utils/api-utils";
+
+jest.mock("pages/api/utils/api-utils");
 
 describe("policy-utils", () => {
   describe("mapToClientModel", () => {
@@ -85,6 +93,103 @@ describe("policy-utils", () => {
           regoContent: unmappedPolicy.regoContent,
           message: "",
         },
+      });
+    });
+  });
+
+  describe("getPolicyByPolicyId", () => {
+    let rodeUrl, policyId, fetchResponse, unmappedPolicy, actualResponse;
+
+    beforeEach(() => {
+      policyId = chance.guid();
+      unmappedPolicy = {
+        [chance.string()]: chance.string(),
+        id: policyId,
+        name: chance.string(),
+        description: chance.string(),
+        policy: {
+          regoContent: chance.string(),
+        },
+        currentVersion: chance.d4().toString(),
+      };
+      fetchResponse = {
+        status: StatusCodes.OK,
+        ok: true,
+        json: jest.fn().mockResolvedValue(unmappedPolicy),
+      };
+      rodeUrl = chance.url();
+      getRodeUrl.mockReturnValue(rodeUrl);
+    });
+
+    describe("happy path", () => {
+      beforeEach(async () => {
+        get.mockResolvedValue(fetchResponse);
+        actualResponse = await getPolicyByPolicyId(policyId);
+      });
+
+      it("should call to fetch the policy", () => {
+        expect(get).toHaveBeenCalledWith(
+          `${rodeUrl}/v1alpha1/policies/${policyId}`
+        );
+      });
+
+      it("should return the mappedPolicy", () => {
+        expect(actualResponse.error).toBeUndefined();
+        expect(actualResponse).toEqual({
+          data: {
+            id: policyId,
+            name: unmappedPolicy.name,
+            description: unmappedPolicy.description,
+            regoContent: unmappedPolicy.policy.regoContent,
+            latestVersion: unmappedPolicy.currentVersion,
+          },
+          status: StatusCodes.OK,
+        });
+      });
+    });
+
+    describe("sad path", () => {
+      it("should return null if the policy is not found", async () => {
+        fetchResponse.status = StatusCodes.NOT_FOUND;
+        get.mockResolvedValue(fetchResponse);
+        actualResponse = await getPolicyByPolicyId(policyId);
+
+        expect(actualResponse).toEqual({
+          status: StatusCodes.OK,
+          data: null,
+        });
+      });
+
+      it("should return an error when the call fails", async () => {
+        fetchResponse.ok = false;
+        get.mockResolvedValue(fetchResponse);
+        actualResponse = await getPolicyByPolicyId(policyId);
+
+        expect(actualResponse).toEqual({
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+      });
+
+      it("should return an error when the response json fails to parse", async () => {
+        fetchResponse.json.mockRejectedValue({});
+        get.mockResolvedValue(fetchResponse);
+        actualResponse = await getPolicyByPolicyId(policyId);
+
+        expect(actualResponse).toEqual({
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+      });
+
+      it("should return an error when an unexpected error occurs", async () => {
+        get.mockRejectedValue({});
+        actualResponse = await getPolicyByPolicyId(policyId);
+
+        expect(actualResponse).toEqual({
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
       });
     });
   });

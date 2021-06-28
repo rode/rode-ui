@@ -76,7 +76,7 @@ export default async (req, res) => {
       const requestBody = req.body;
 
       const response = await post(
-        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`,
+        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`
       );
 
       if (!response.ok) {
@@ -104,9 +104,7 @@ export default async (req, res) => {
     try {
       const { assignmentId } = req.query;
 
-      const response = await del(
-        `${rodeUrl}/v1alpha1/${assignmentId}`
-      );
+      const response = await del(`${rodeUrl}/v1alpha1/${assignmentId}`);
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

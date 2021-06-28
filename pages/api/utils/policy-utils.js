@@ -40,8 +40,6 @@ export const mapToApiModel = (request) => {
   };
 };
 
-// TODO: test this
-// TODO: is there a way to reuse the existing api endpoint?
 export const getPolicyByPolicyId = async (policyId) => {
   try {
     const response = await get(`${getRodeUrl()}/v1alpha1/policies/${policyId}`);
