@@ -2,6 +2,7 @@
   "name": "rode-ui",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
@@ -17,6 +18,7 @@
   "dependencies": {
     "dayjs": "^1.10.4",
     "diff": "^5.0.0",
+    "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
     "next": "10.0.8",
     "node-fetch": "^2.6.1",
