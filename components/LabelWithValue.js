@@ -35,14 +35,14 @@ const LabelWithValue = (props) => {
           : styles.labelWithValueContainer
       } ${className}`}
     >
-      <span className={styles.label}>{label}</span>
+      {label && <span className={styles.label}>{label}</span>}
       <span className={styles.value}>{value}</span>
     </Text>
   );
 };
 
 LabelWithValue.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
   vertical: PropTypes.bool,

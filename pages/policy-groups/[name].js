@@ -26,9 +26,7 @@ import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import LabelWithValue from "components/LabelWithValue";
-
-// TODO: add edit version to this screen?
+import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -95,28 +93,21 @@ const PolicyGroup = () => {
                     <>
                       {data.map((assignment) => {
                         return (
-                          <div
+                          <PolicyAssignmentCard
                             key={assignment.id}
-                            className={styles.assignmentCard}
-                          >
-                            <div>
-                              <LabelWithValue
-                                label={"Policy"}
-                                value={assignment.policyName}
+                            policy={assignment}
+                            actions={
+                              <Button
+                                label={"View Policy"}
+                                buttonType={"text"}
+                                onClick={() =>
+                                  router.push(
+                                    `/policies/${assignment.policyId}`
+                                  )
+                                }
                               />
-                              <LabelWithValue
-                                label={"Version"}
-                                value={assignment.policyVersion}
-                              />
-                            </div>
-                            <Button
-                              label={"View Policy"}
-                              buttonType={"text"}
-                              onClick={() =>
-                                router.push(`/policies/${assignment.policyId}`)
-                              }
-                            />
-                          </div>
+                            }
+                          />
                         );
                       })}
                     </>

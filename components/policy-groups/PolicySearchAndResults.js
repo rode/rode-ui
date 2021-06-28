@@ -33,9 +33,7 @@ import { createSearchFilter } from "utils/shared-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: show a "selected" icon when the policy has already been assigned
-
-const PolicySearchAndResults = ({ onAssign }) => {
+const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
   const [policySearch, setPolicySearch] = useState(false);
 
   const [debounceDelay, setDebounceDelay] = useState(DEFAULT_DEBOUNCE_DELAY);
@@ -55,6 +53,11 @@ const PolicySearchAndResults = ({ onAssign }) => {
     createSearchFilter(debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
+
+  const assignedPolicyIds = assignedToGroup.map((assignment) => {
+    const [policyId] = assignment.policyVersionId.split(".");
+    return policyId;
+  });
 
   return (
     <div className={styles.searchContainer}>
@@ -93,35 +96,52 @@ const PolicySearchAndResults = ({ onAssign }) => {
           <Loading loading={loading} type={"button"}>
             {policyData?.length > 0 ? (
               <>
-                {policyData.map((result) => (
-                  <div className={`${styles.searchCard}`} key={result.id}>
-                    <div>
-                      <p className={styles.cardHeader}>{result.name}</p>
-                      {result.description && (
-                        <p className={styles.cardText}>{result.description}</p>
-                      )}
-                      <p className={styles.cardText}>
-                        Latest Version {result.latestVersion}
-                      </p>
+                {policyData.map((result) => {
+                  const isSelected = assignedPolicyIds.includes(result.id);
+
+                  return (
+                    <div className={`${styles.searchCard}`} key={result.id}>
+                      <div>
+                        <p className={styles.cardHeader}>{result.name}</p>
+                        {result.description && (
+                          <p className={styles.cardText}>
+                            {result.description}
+                          </p>
+                        )}
+                        <p className={styles.cardText}>
+                          Latest Version {result.latestVersion}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() =>
+                          onAssign({
+                            ...result,
+                            policyVersionId: `${result.id}.${result.latestVersion}`,
+                            policyName: result.name,
+                            policyVersion: result.latestVersion,
+                          })
+                        }
+                        buttonType={"icon"}
+                        label={
+                          isSelected
+                            ? "Assigned to Policy Group"
+                            : "Assign to Policy Group"
+                        }
+                        disabled={isSelected}
+                        className={styles.actionButton}
+                        showTooltip
+                      >
+                        {isSelected ? (
+                          <>
+                            <Icon name={ICON_NAMES.CHECK} size={"large"} />
+                          </>
+                        ) : (
+                          <Icon name={ICON_NAMES.PLUS_CIRCLE} size={"large"} />
+                        )}
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() =>
-                        onAssign({
-                          ...result,
-                          policyVersionId: `${result.id}.${result.latestVersion}`,
-                          policyName: result.name,
-                          policyVersion: result.latestVersion,
-                        })
-                      }
-                      buttonType={"icon"}
-                      label={"Assign to Policy Group"}
-                      className={styles.actionButton}
-                      showTooltip
-                    >
-                      <Icon name={ICON_NAMES.PLUS_CIRCLE} size={"large"} />
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
                 {!isLastPage && (
                   <Button
                     buttonType="text"
@@ -145,6 +165,7 @@ const PolicySearchAndResults = ({ onAssign }) => {
 
 PolicySearchAndResults.propTypes = {
   onAssign: PropTypes.func.isRequired,
+  assignedToGroup: PropTypes.array.isRequired,
 };
 
 export default PolicySearchAndResults;

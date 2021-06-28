@@ -63,6 +63,11 @@ $DESKTOP_CONTENT_WIDTH: 50%;
 
   @include tabletAndLarger {
     padding: 1rem 2rem;
+    width: $TABLET_CONTENT_WIDTH;
+  }
+
+  @include desktopAndLarger {
+    width: $DESKTOP_CONTENT_WIDTH;
   }
 }
 
@@ -71,15 +76,11 @@ $DESKTOP_CONTENT_WIDTH: 50%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   @include tabletAndLarger {
-    width: $TABLET_CONTENT_WIDTH;
     flex-direction: row;
     justify-content: space-between;
-  }
-
-  @include desktopAndLarger {
-    width: $DESKTOP_CONTENT_WIDTH;
   }
 }
 
@@ -87,36 +88,6 @@ $DESKTOP_CONTENT_WIDTH: 50%;
   font-size: 1.25rem;
   font-weight: 400;
   margin: 1rem;
-}
-
-.assignmentCard {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0.5rem;
-
-  * {
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  @include tabletAndLarger {
-    padding: 1rem 2rem;
-    flex-direction: row;
-    justify-content: space-between;
-    width: $TABLET_CONTENT_WIDTH;
-
-    * {
-      text-align: unset;
-      margin: unset;
-    }
-  }
-
-  @include desktopAndLarger {
-    width: $DESKTOP_CONTENT_WIDTH;
-  }
 }
 
 .noAssignments {
@@ -158,11 +129,6 @@ $DESKTOP_CONTENT_WIDTH: 50%;
   .policyGroupDescription {
     color: $DT_SUB_TEXT;
   }
-
-  .assignmentCard {
-    background-color: $DT_BACKGROUND_MEDIUM;
-    box-shadow: $DT_BOX_SHADOW;
-  }
 }
 
 .lightTheme {
@@ -177,10 +143,5 @@ $DESKTOP_CONTENT_WIDTH: 50%;
 
   .policyGroupDescription {
     color: $LT_SUB_TEXT;
-  }
-
-  .assignmentCard {
-    background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
   }
 }

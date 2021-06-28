@@ -24,15 +24,15 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import PolicySearchAndResults from "components/policy-groups/PolicySearchAndResults";
 import { useTheme } from "providers/theme";
-import Icon from "components/Icon";
-import { ICON_NAMES } from "utils/icon-utils";
 import PageHeader from "components/layout/PageHeader";
 import { showError, showSuccess } from "utils/toast-utils";
 import { mutate } from "swr";
+import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
+import Icon from "components/Icon";
+import { ICON_NAMES } from "utils/icon-utils";
 
-// TODO: style the assignments header and assigned policies section a bit more
-// TODO: implement version changing
-// TODO: updating a policy name then navigating policy groups results in mismatch of data - need to trigger a mutate for these calls?
+const ADD = "ADD";
+const REMOVE = "REMOVE";
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -45,6 +45,7 @@ const EditPolicyGroupAssignments = () => {
   const { policyGroup, loading: loadingPolicyGroup } = usePolicyGroup(name);
 
   const [assignments, setAssignments] = useState({});
+  const [assignedToGroup, setAssignedToGroup] = useState([]);
 
   const { data, loading: loadingAssignments } = usePaginatedFetch(
     policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
@@ -62,25 +63,33 @@ const EditPolicyGroupAssignments = () => {
     }
   }, [data]);
 
-  const onAssign = (assignment) => {
+  useEffect(() => {
+    if (Object.keys(assignments).length > 0) {
+      const assignedToPolicyGroup = Object.keys(assignments)
+        .map((policyVersionId) => {
+          const assignment = assignments[policyVersionId];
+          if (assignment.action === REMOVE) {
+            return null;
+          } else return assignment;
+        })
+        .filter((val) => val);
+      setAssignedToGroup(assignedToPolicyGroup);
+    }
+  }, [assignments]);
+
+  const updateAssignments = (assignment, action) => {
     const updatedAssignments = { ...assignments };
     updatedAssignments[assignment.policyVersionId] = {
       ...assignment,
-      action: "ADD",
+      action,
     };
 
     setAssignments(updatedAssignments);
   };
 
-  const onRemove = (assignment) => {
-    const updatedAssignments = { ...assignments };
-    updatedAssignments[assignment.policyVersionId] = {
-      ...assignment,
-      action: "REMOVE",
-    };
+  const onAssign = (assignment) => updateAssignments(assignment, ADD);
 
-    setAssignments(updatedAssignments);
-  };
+  const onRemove = (assignment) => updateAssignments(assignment, REMOVE);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -91,12 +100,12 @@ const EditPolicyGroupAssignments = () => {
 
     const assignmentsToCreate = Object.values(assignments).filter(
       ({ action, policyVersionId }) =>
-        action === "ADD" &&
+        action === ADD &&
         !originalAssignmentPolicyVersionIds.includes(policyVersionId)
     );
     const assignmentsToRemove = Object.values(assignments).filter(
       ({ action, policyVersionId }) =>
-        action === "REMOVE" &&
+        action === REMOVE &&
         originalAssignmentPolicyVersionIds.includes(policyVersionId)
     );
 
@@ -149,47 +158,29 @@ const EditPolicyGroupAssignments = () => {
                 <p className={styles.assignmentsHeader}>{policyGroup.name}</p>
                 <p>Assigned Policies</p>
                 <Loading loading={loadingAssignments}>
-                  {Object.keys(assignments).length > 0 ? (
+                  {assignedToGroup.length > 0 ? (
                     <>
-                      {Object.keys(assignments).map((policyVersionId) => {
-                        const assignment = assignments[policyVersionId];
-                        if (assignment.action === "REMOVE") {
-                          return null;
-                        }
-
+                      {assignedToGroup.map((assignment) => {
                         return (
-                          <div
+                          <PolicyAssignmentCard
                             key={assignment.id}
-                            className={styles.assignmentChip}
-                          >
-                            <div className={styles.assignmentDetails}>
-                              <p>{assignment.policyName}</p>
-                              <p>Version {assignment.policyVersion}</p>
-                            </div>
-                            <div className={styles.assignmentActions}>
-                              <Button
-                                label={"Change Policy Version"}
-                                buttonType={"icon"}
-                                onClick={() => {
-                                  alert("not implemented yet");
-                                }}
-                                showTooltip
-                              >
-                                <Icon name={ICON_NAMES.PENCIL} size={"large"} />
-                              </Button>
-                              <Button
-                                label={"Remove Policy Assignment"}
-                                buttonType={"icon"}
-                                onClick={() => onRemove(assignment)}
-                                showTooltip
-                              >
-                                <Icon
-                                  name={ICON_NAMES.X_CIRCLE}
-                                  size={"large"}
-                                />
-                              </Button>
-                            </div>
-                          </div>
+                            policy={assignment}
+                            actions={
+                              <div className={styles.assignmentActions}>
+                                <Button
+                                  label={"Remove Policy Assignment"}
+                                  buttonType={"icon"}
+                                  onClick={() => onRemove(assignment)}
+                                  showTooltip
+                                >
+                                  <Icon
+                                    name={ICON_NAMES.X_CIRCLE}
+                                    size={"large"}
+                                  />
+                                </Button>
+                              </div>
+                            }
+                          />
                         );
                       })}
                     </>
@@ -198,7 +189,10 @@ const EditPolicyGroupAssignments = () => {
                   )}
                 </Loading>
               </div>
-              <PolicySearchAndResults onAssign={onAssign} />
+              <PolicySearchAndResults
+                onAssign={onAssign}
+                assignedToGroup={assignedToGroup}
+              />
             </div>
           ) : (
             <div className={styles.notFoundContainer}>

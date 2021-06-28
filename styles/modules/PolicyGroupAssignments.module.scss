@@ -44,6 +44,10 @@
 .assignmentsContainer {
   width: 100%;
   height: 100%;
+
+  @include tabletAndLarger {
+    padding-right: 2rem;
+  }
 }
 
 .assignmentsHeader {
@@ -52,34 +56,11 @@
   font-weight: 400;
 }
 
-$CHIP_HEIGHT: 5rem;
-
-.assignmentChip {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 75%;
-  min-width: fit-content;
-  height: fit-content;
-  min-height: $CHIP_HEIGHT;
-  border-radius: calc(#{$CHIP_HEIGHT} / 2);
-  padding: 0.5rem calc(#{$CHIP_HEIGHT} / 3) 0.5rem calc(#{$CHIP_HEIGHT} / 2);
-  margin: 1rem 2rem 1rem 0;
-}
-
-.assignmentDetails {
-  margin-right: 1rem;
-}
-
 .assignmentActions {
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  > * {
-    margin-left: 0.25rem;
-  }
+  justify-content: center;
 }
 
 .searchContainer {
@@ -179,10 +160,6 @@ $CHIP_HEIGHT: 5rem;
 }
 
 .darkTheme {
-  .assignmentChip {
-    background-color: $DT_BACKGROUND_MEDIUM;
-  }
-
   .searchCard {
     background-color: $DT_BACKGROUND_MEDIUM;
     box-shadow: $DT_BOX_SHADOW;
@@ -198,10 +175,6 @@ $CHIP_HEIGHT: 5rem;
 }
 
 .lightTheme {
-  .assignmentChip {
-    background-color: $LT_BACKGROUND_LIGHT;
-  }
-
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
