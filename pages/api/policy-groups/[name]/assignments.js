@@ -20,8 +20,6 @@ import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assign
 
 const ALLOWED_METHODS = ["GET", "POST", "DELETE"];
 
-// TODO: tests
-
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
     return res
@@ -113,11 +111,7 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      const deletePolicyAssignmentResponse = await response.json();
-
-      res.status(StatusCodes.OK).json({
-        data: deletePolicyAssignmentResponse,
-      });
+      res.status(StatusCodes.OK).send(null);
     } catch (error) {
       console.error("Error deleting policy assignment", error);
 
