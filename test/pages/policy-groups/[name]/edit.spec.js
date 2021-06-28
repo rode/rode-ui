@@ -20,9 +20,10 @@ import { render, screen, act } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
-import { showError } from "utils/toast-utils";
+import { showError, showSuccess } from "utils/toast-utils";
 import EditPolicyGroup from "pages/policy-groups/[name]/edit";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
+import { waitFor } from "@testing-library/dom";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -32,11 +33,11 @@ jest.mock("hooks/usePolicyGroup");
 describe("Edit Policy Group", () => {
   let router,
     usePolicyGroupResponse,
-    updatedPolicyGroup,
+    policyGroup,
     isValid,
     validationErrors,
     validateField,
-    saveResponse,
+    updateResponse,
     rerender;
 
   beforeEach(() => {
@@ -48,21 +49,20 @@ describe("Edit Policy Group", () => {
         name: policyGroupName,
       },
     };
-    updatedPolicyGroup = {
+    policyGroup = {
       [chance.string()]: chance.string(),
       name: policyGroupName,
       description: chance.string(),
     };
     usePolicyGroupResponse = {
-      policyGroup: updatedPolicyGroup,
+      policyGroup: policyGroup,
       loading: false,
     };
-    saveResponse = {
-      json: jest.fn().mockResolvedValue(updatedPolicyGroup),
+    updateResponse = {
+      json: jest.fn().mockResolvedValue(policyGroup),
       ok: true,
-    };
-    // eslint-disable-next-line no-undef
-    global.fetch = jest.fn().mockResolvedValue(saveResponse);
+    }; // eslint-disable-next-line no-undef
+    global.fetch = jest.fn().mockResolvedValue(updateResponse);
     isValid = jest.fn().mockReturnValue(true);
     validateField = jest.fn().mockReturnValue({});
     validationErrors = {};
@@ -86,7 +86,7 @@ describe("Edit Policy Group", () => {
     expect(usePolicyGroup).toHaveBeenCalledWith(router.query.name);
   });
 
-  describe("policy is not found", () => {
+  describe("policy group is not found", () => {
     it("should render the not found message", () => {
       usePolicyGroupResponse.policyGroup = null;
       rerender(<EditPolicyGroup />);
@@ -95,18 +95,18 @@ describe("Edit Policy Group", () => {
     });
   });
 
-  describe("policy exists", () => {
+  describe("policy group exists", () => {
     it("should render the name input", () => {
       const input = screen.getByLabelText(/name/i);
       expect(input).toBeInTheDocument();
       expect(input).toBeDisabled();
-      expect(input).toHaveValue(updatedPolicyGroup.name);
+      expect(input).toHaveValue(policyGroup.name);
     });
 
     it("should render the description input", () => {
       const input = screen.getByLabelText(/description/i);
       expect(input).toBeInTheDocument();
-      expect(input).toHaveValue(updatedPolicyGroup.description);
+      expect(input).toHaveValue(policyGroup.description);
     });
 
     it("should render the save button for the form", () => {
@@ -127,13 +127,16 @@ describe("Edit Policy Group", () => {
 
       beforeEach(async () => {
         formData = {
-          name: updatedPolicyGroup.name,
-          description: updatedPolicyGroup.description,
+          name: policyGroup.name,
+          description: policyGroup.description,
         };
 
         const renderedDescription = screen.getByLabelText(/description/i);
         userEvent.clear(renderedDescription);
         userEvent.type(renderedDescription, formData.description);
+
+        // eslint-disable-next-line no-undef
+        global.fetch = jest.fn().mockResolvedValue(updateResponse);
 
         await act(async () => {
           await userEvent.click(screen.getByText(/update policy group/i));
@@ -147,28 +150,25 @@ describe("Edit Policy Group", () => {
       it("should submit the form when filled out entirely", () => {
         expect(fetch)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(
-            `/api/policy-groups/${updatedPolicyGroup.name}`,
-            {
-              method: "PATCH",
-              body: JSON.stringify(formData),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          .toHaveBeenCalledWith(`/api/policy-groups/${policyGroup.name}`, {
+            method: "PATCH",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
       });
 
       it("should redirect the user to the updated policy group page", () => {
         expect(router.push)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`/policy-groups/${updatedPolicyGroup.name}`);
+          .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
       });
     });
 
     describe("unsuccessful save", () => {
       it("should show an error when the call to update failed", async () => {
-        saveResponse.ok = false;
+        updateResponse.ok = false;
         await act(async () => {
           await userEvent.click(screen.getByText(/update policy group/i));
         });
@@ -178,6 +178,80 @@ describe("Edit Policy Group", () => {
           .toHaveBeenCalledWith("Failed to update the policy group.");
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(router.push).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("deleting policy group", () => {
+      let deleteResponse;
+      beforeEach(() => {
+        deleteResponse = {
+          ok: true,
+        };
+        // eslint-disable-next-line no-undef
+        global.fetch = jest.fn().mockResolvedValue(deleteResponse);
+      });
+
+      it("should show the button to delete the policy group", () => {
+        const renderedDeleteButton = screen.getByText("Delete Policy Group");
+
+        expect(renderedDeleteButton).toBeInTheDocument();
+      });
+
+      it("should call to delete the policy group when prompted", () => {
+        const renderedDeleteButton = screen.getByText("Delete Policy Group");
+
+        act(() => {
+          userEvent.click(renderedDeleteButton);
+        });
+
+        expect(fetch).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}`,
+          {
+            method: "DELETE",
+          }
+        );
+      });
+
+      describe("successful delete", () => {
+        beforeEach(() => {
+          const renderedDeleteButton = screen.getByText("Delete Policy Group");
+
+          act(() => {
+            userEvent.click(renderedDeleteButton);
+          });
+        });
+
+        it("should show a success message", () => {
+          expect(showSuccess).toHaveBeenCalledWith(
+            "Policy group was successfully deleted."
+          );
+        });
+
+        it("should route the user to the policy groups dashboard", () => {
+          expect(router.push).toHaveBeenCalledWith("/policy-groups");
+        });
+      });
+
+      describe("unsuccessful delete", () => {
+        beforeEach(() => {
+          deleteResponse.ok = false;
+        });
+
+        it("should show an error message", async () => {
+          const renderedDeleteButton = screen.getByText("Delete Policy Group");
+
+          act(() => {
+            userEvent.click(renderedDeleteButton);
+          });
+
+          expect(showSuccess).not.toHaveBeenCalled();
+          expect(router.push).not.toHaveBeenCalled();
+          await waitFor(() =>
+            expect(showError).toHaveBeenCalledWith(
+              "An error occurred while deleting the policy group. Please try again."
+            )
+          );
+        });
       });
     });
   });

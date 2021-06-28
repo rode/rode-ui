@@ -24,7 +24,7 @@ import styles from "styles/modules/PolicyGroupForm.module.scss";
 import PageHeader from "components/layout/PageHeader";
 import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
-import { showError } from "utils/toast-utils";
+import { showError, showSuccess } from "utils/toast-utils";
 import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
@@ -90,7 +90,25 @@ const PolicyGroupForm = (props) => {
     router.push(`/policy-groups/${formData.name}`);
   };
 
-  // TODO: add delete
+  const onDelete = async (event) => {
+    event.preventDefault();
+
+    setLoading(true);
+    const response = await fetch(`/api/policy-groups/${policyGroup.name}`, {
+      method: "DELETE",
+    });
+    setLoading(false);
+
+    if (!response.ok) {
+      showError(
+        "An error occurred while deleting the policy group. Please try again."
+      );
+      return;
+    }
+
+    showSuccess("Policy group was successfully deleted.");
+    router.push("/policy-groups");
+  };
 
   return (
     <>
@@ -136,18 +154,30 @@ const PolicyGroupForm = (props) => {
             />
           </div>
           <div className={styles.buttonsContainer}>
-            <Button
-              label={submitButtonText}
-              type={"submit"}
-              loading={loading}
-            />
+            <div className={styles.primaryButtonsContainer}>
+              <Button
+                label={submitButtonText}
+                type={"submit"}
+                loading={loading}
+              />
 
-            <Button
-              label={"Cancel"}
-              onClick={() => router.back()}
-              buttonType={"text"}
-              disabled={loading}
-            />
+              <Button
+                label={"Cancel"}
+                onClick={() => router.back()}
+                buttonType={"text"}
+                disabled={loading}
+              />
+            </div>
+            {!creatingNewPolicyGroup && (
+              <div>
+                <Button
+                  label={"Delete Policy Group"}
+                  onClick={onDelete}
+                  buttonType={"textDestructive"}
+                  disabled={loading}
+                />
+              </div>
+            )}
           </div>
         </form>
         <div
