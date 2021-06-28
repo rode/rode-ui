@@ -43,12 +43,7 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
     debounceDelay
   );
 
-  const {
-    data: policyData,
-    loading,
-    isLastPage,
-    goToNextPage,
-  } = usePaginatedFetch(
+  const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
     debouncedSearch ? "/api/policies" : null,
     createSearchFilter(debouncedSearch),
     PLAYGROUND_SEARCH_PAGE_SIZE
@@ -94,9 +89,9 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
       <div className={styles.searchResultsContainer}>
         {policySearch && (
           <Loading loading={loading} type={"button"}>
-            {policyData?.length > 0 ? (
+            {data?.length > 0 ? (
               <>
-                {policyData.map((result) => {
+                {data.map((result) => {
                   const isSelected = assignedPolicyIds.includes(result.id);
 
                   return (
