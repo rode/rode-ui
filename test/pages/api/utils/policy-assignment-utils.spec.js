@@ -34,7 +34,7 @@ describe("policy-assignment-utils", () => {
       policy = {
         [chance.string()]: chance.string(),
         name: chance.string(),
-        policyId,
+        id: policyId,
         policyVersion,
       };
     });

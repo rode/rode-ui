@@ -25,9 +25,11 @@ export const mapToClientModelWithPolicyDetails = async (assignment) => {
     );
   }
 
+  console.log("data", data);
+
   return {
     ...assignment,
-    policyId: data.policyId,
+    policyId: data.id,
     policyVersion: data.policyVersion,
     policyName: data.name,
   };
