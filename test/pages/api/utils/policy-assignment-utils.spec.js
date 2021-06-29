@@ -36,6 +36,7 @@ describe("policy-assignment-utils", () => {
         name: chance.string(),
         id: policyId,
         policyVersion,
+        currentVersion: Number(policyVersion) + 1,
       };
     });
 
@@ -56,6 +57,7 @@ describe("policy-assignment-utils", () => {
         policyId,
         policyVersion,
         policyName: policy.name,
+        policyVersionCount: policy.currentVersion,
       });
     });
 

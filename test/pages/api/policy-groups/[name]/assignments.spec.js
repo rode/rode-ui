@@ -301,7 +301,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
       };
       request.query = {
         assignmentId: assignment.id,
-        name
+        name,
       };
       patch.mockResolvedValue(rodeResponse);
       rodeResponse.json.mockResolvedValue(assignment);
@@ -317,7 +317,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
             `${expectedRodeUrl}/v1alpha1/${assignment.id}`,
             {
               policyGroup: name,
-              policyVersionId: assignment.policyVersionId
+              policyVersionId: assignment.policyVersionId,
             }
           );
       });

@@ -51,20 +51,25 @@ const PolicyVersionDrawer = ({
       <div className={`${styles[theme]}`}>
         <div className={styles.drawerHeader}>
           <p className={styles.policyName}>{assignedPolicy.policyName}</p>
-          <p className={styles.instructions}>Target a specific version of this policy</p>
+          <p className={styles.instructions}>
+            Target a specific version of this policy
+          </p>
         </div>
         <Loading loading={loading}>
           {data ? (
             <>
               {data.map((version, index) => {
-                const isSelected = assignedPolicy.policyVersion === version.version;
+                const isSelected =
+                  assignedPolicy.policyVersion === version.version;
 
                 return (
                   <div key={version.id} className={styles.versionCard}>
                     <div>
                       <LabelWithValue
                         label={"Version"}
-                        value={`${version.version} ${index === 0 ? " (latest)" : ""}`}
+                        value={`${version.version} ${
+                          index === 0 ? " (latest)" : ""
+                        }`}
                       />
                       <LabelWithValue
                         label={"Created"}

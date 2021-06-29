@@ -32,10 +32,11 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PolicyVersionDrawer from "components/policy-groups/PolicyVersionDrawer";
 
-// TODO: hide the version button when no other versions exist
 const ADD = "ADD";
 const REMOVE = "REMOVE";
 const UPDATE = "UPDATE";
+
+// TODO: fix issues with showing old data
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -106,34 +107,25 @@ const EditPolicyGroupAssignments = () => {
 
     updateAssignments(updatedAssignment, action);
     setShowPolicyVersionDrawer(false);
-  }
+  };
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const originalAssignmentPolicyIds = data.map(
-      ({ policyId }) => policyId
-    );
+    const originalAssignmentPolicyIds = data.map(({ policyId }) => policyId);
 
     const assignmentsToCreate = Object.values(assignments).filter(
       ({ action, policyId }) =>
-        action === ADD &&
-        !originalAssignmentPolicyIds.includes(policyId)
+        action === ADD && !originalAssignmentPolicyIds.includes(policyId)
     );
     const assignmentsToRemove = Object.values(assignments).filter(
       ({ action, policyId }) =>
-        action === REMOVE &&
-        originalAssignmentPolicyIds.includes(policyId)
+        action === REMOVE && originalAssignmentPolicyIds.includes(policyId)
     );
     const assignmentsToUpdate = Object.values(assignments).filter(
       ({ action, policyId }) =>
-        action === UPDATE &&
-        originalAssignmentPolicyIds.includes(policyId)
+        action === UPDATE && originalAssignmentPolicyIds.includes(policyId)
     );
-
-    console.log('assignmentsToCreate', assignmentsToCreate);
-    console.log('assignmentsToRemove', assignmentsToRemove);
-    console.log('assignmentsToUpdate', assignmentsToUpdate);
 
     const createPromises = assignmentsToCreate.map(async (assignment) =>
       fetch(`/api/policy-groups/${name}/assignments`, {
@@ -157,19 +149,26 @@ const EditPolicyGroupAssignments = () => {
     );
 
     const updatePromises = assignmentsToUpdate.map(async (assignment) =>
-      fetch(`/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
-        assignment.id
-      )}`, {
-        method: "PATCH",
-        body: JSON.stringify(assignment),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-    )
+      fetch(
+        `/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
+          assignment.id
+        )}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(assignment),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    );
 
     setLoadingForm(true);
-    const responses = await Promise.all([...createPromises, ...deletePromises, ...updatePromises]);
+    const responses = await Promise.all([
+      ...createPromises,
+      ...deletePromises,
+      ...updatePromises,
+    ]);
     setLoadingForm(false);
 
     if (responses.some(({ ok }) => !ok)) {
@@ -208,26 +207,31 @@ const EditPolicyGroupAssignments = () => {
                   {assignedToGroup.length > 0 ? (
                     <>
                       {assignedToGroup.map((assignment) => {
+                        console.log("assignment", assignment);
+                        const hasMultipleVersions =
+                          assignment.policyVersionCount > 1;
                         return (
                           <PolicyAssignmentCard
                             key={assignment.id}
                             policy={assignment}
                             actions={
                               <div className={styles.assignmentActions}>
-                                <Button
-                                  label={"Change Policy Version"}
-                                  buttonType={"icon"}
-                                  onClick={() => {
-                                    setDrawerPolicy(assignment);
-                                    setShowPolicyVersionDrawer(true);
-                                  }}
-                                  showTooltip
-                                >
-                                  <Icon
-                                    name={ICON_NAMES.PENCIL}
-                                    size={"large"}
-                                  />
-                                </Button>
+                                {hasMultipleVersions && (
+                                  <Button
+                                    label={"Change Policy Version"}
+                                    buttonType={"icon"}
+                                    onClick={() => {
+                                      setDrawerPolicy(assignment);
+                                      setShowPolicyVersionDrawer(true);
+                                    }}
+                                    showTooltip
+                                  >
+                                    <Icon
+                                      name={ICON_NAMES.PENCIL}
+                                      size={"large"}
+                                    />
+                                  </Button>
+                                )}
                                 <Button
                                   label={"Remove Policy Assignment"}
                                   buttonType={"icon"}
