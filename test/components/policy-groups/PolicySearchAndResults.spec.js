@@ -42,15 +42,17 @@ describe("PolicySearchAndResults", () => {
     };
     assignedToGroup = [];
     dispatch = jest.fn();
-    fetchedPolicies = chance.n(
-      () => ({
-        id: chance.guid(),
+    fetchedPolicies = chance.n(() => {
+      const id = chance.guid();
+      const version = chance.d4().toString();
+      return {
+        id,
         name: chance.string(),
         description: chance.sentence(),
-        latestVersion: chance.d4().toString(),
-      }),
-      chance.d4()
-    );
+        latestVersion: version,
+        policyVersionId: `${id}.${version}`,
+      };
+    }, chance.d4());
     fetchResponse = {
       data: fetchedPolicies,
       loading: false,
@@ -143,7 +145,7 @@ describe("PolicySearchAndResults", () => {
   it("should render policies that are already assigned to the group as already assigned", () => {
     assignedToGroup = [
       {
-        policyVersionId: `${fetchedPolicies[0].id}.${fetchedPolicies[0].latestVersion}`,
+        policyVersionId: fetchedPolicies[0].policyVersionId,
       },
     ];
     rerender(
@@ -167,7 +169,6 @@ describe("PolicySearchAndResults", () => {
     userEvent.click(screen.getAllByLabelText("Assign to Policy Group")[0]);
     expect(onAssign).toHaveBeenCalledWith({
       ...fetchedPolicies[0],
-      policyVersionId: `${fetchedPolicies[0].id}.${fetchedPolicies[0].latestVersion}`,
       policyName: fetchedPolicies[0].name,
       policyVersion: fetchedPolicies[0].latestVersion,
     });

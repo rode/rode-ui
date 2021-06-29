@@ -49,10 +49,9 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
     PLAYGROUND_SEARCH_PAGE_SIZE
   );
 
-  const assignedPolicyIds = assignedToGroup.map((assignment) => {
-    const [policyId] = assignment.policyVersionId.split(".");
-    return policyId;
-  });
+  const assignedPolicyVersionIds = assignedToGroup.map(
+    ({ policyVersionId }) => policyVersionId
+  );
 
   return (
     <div className={styles.searchContainer}>
@@ -92,7 +91,9 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
             {data?.length > 0 ? (
               <>
                 {data.map((result) => {
-                  const isSelected = assignedPolicyIds.includes(result.id);
+                  const isSelected = assignedPolicyVersionIds.some(
+                    (versionId) => versionId.includes(result.id)
+                  );
 
                   return (
                     <div className={`${styles.searchCard}`} key={result.id}>
@@ -111,7 +112,6 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                         onClick={() =>
                           onAssign({
                             ...result,
-                            policyVersionId: `${result.id}.${result.latestVersion}`,
                             policyName: result.name,
                             policyVersion: result.latestVersion,
                           })
