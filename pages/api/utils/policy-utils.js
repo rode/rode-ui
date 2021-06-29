@@ -24,6 +24,8 @@ export const mapToClientModel = (policyResponse) => {
     description: policyResponse.description,
     regoContent: policyResponse.policy.regoContent,
     latestVersion: policyResponse.currentVersion,
+    policyVersionId: policyResponse.policy.id,
+    policyVersion: policyResponse.policy.version,
   };
 };
 

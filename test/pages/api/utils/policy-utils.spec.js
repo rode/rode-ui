@@ -36,6 +36,8 @@ describe("policy-utils", () => {
         policy: {
           [chance.string()]: chance.string(),
           regoContent: chance.string(),
+          id: chance.guid(),
+          version: chance.d4(),
         },
       };
     });
@@ -48,6 +50,9 @@ describe("policy-utils", () => {
         name: unmappedPolicy.name,
         description: unmappedPolicy.description,
         regoContent: unmappedPolicy.policy.regoContent,
+        latestVersion: unmappedPolicy.currentVersion,
+        policyVersionId: unmappedPolicy.policy.id,
+        policyVersion: unmappedPolicy.policy.version,
       });
     });
   });
@@ -109,6 +114,8 @@ describe("policy-utils", () => {
         description: chance.string(),
         policy: {
           regoContent: chance.string(),
+          id: chance.string(),
+          version: chance.d4(),
         },
         currentVersion: chance.d4().toString(),
       };
@@ -142,6 +149,8 @@ describe("policy-utils", () => {
             description: unmappedPolicy.description,
             regoContent: unmappedPolicy.policy.regoContent,
             latestVersion: unmappedPolicy.currentVersion,
+            policyVersionId: unmappedPolicy.policy.id,
+            policyVersion: unmappedPolicy.policy.version,
           },
           status: StatusCodes.OK,
         });

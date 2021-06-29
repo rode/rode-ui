@@ -112,6 +112,9 @@ describe("/api/policies/[id]", () => {
           name: foundPolicy.name,
           description: foundPolicy.description,
           regoContent: foundPolicy.policy.regoContent,
+          latestVersion: foundPolicy.currentVersion,
+          policyVersionId: foundPolicy.policy.id,
+          policyVersion: foundPolicy.policy.version,
         });
       });
 
@@ -200,6 +203,9 @@ describe("/api/policies/[id]", () => {
           name: foundPolicy.name,
           description: foundPolicy.description,
           regoContent: foundPolicy.policy.regoContent,
+          latestVersion: foundPolicy.currentVersion,
+          policyVersionId: foundPolicy.policy.id,
+          policyVersion: foundPolicy.policy.version,
         });
       });
     });

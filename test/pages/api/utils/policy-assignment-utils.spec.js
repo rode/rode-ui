@@ -34,6 +34,8 @@ describe("policy-assignment-utils", () => {
       policy = {
         [chance.string()]: chance.string(),
         name: chance.string(),
+        policyId,
+        policyVersion,
       };
     });
 
@@ -44,6 +46,10 @@ describe("policy-assignment-utils", () => {
       });
 
       const actual = await mapToClientModelWithPolicyDetails(assignment);
+
+      expect(getPolicyByPolicyId).toHaveBeenCalledWith(
+        assignment.policyVersionId
+      );
 
       expect(actual).toEqual({
         ...assignment,
@@ -64,7 +70,7 @@ describe("policy-assignment-utils", () => {
       } catch (error) {
         expect(error).toBeDefined();
         expect(error.message).toContain(
-          `Error while fetching policy ${policyId} for policy group assignments.`
+          `Error while fetching policy ${assignment.policyVersionId} for policy group assignments.`
         );
       }
 
