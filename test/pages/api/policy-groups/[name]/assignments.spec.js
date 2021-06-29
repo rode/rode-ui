@@ -15,24 +15,26 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import handler from "pages/api/policies/[id]";
-import { getRodeUrl, get, patch, del } from "pages/api/utils/api-utils";
-import { mapToApiModel } from "pages/api/utils/policy-utils";
+import handler from "pages/api/policy-groups/[name]/assignments";
+import { getRodeUrl, get, post, del } from "pages/api/utils/api-utils";
+import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/policy-assignment-utils");
 
-describe("/api/policies/[id]", () => {
-  let request, response, foundPolicy, rodeResponse, id, expectedRodeUrl;
+describe("/api/policy-groups/[name]/assignments", () => {
+  let request, response, assignment, rodeResponse, name, expectedRodeUrl;
 
   beforeEach(() => {
     expectedRodeUrl = chance.url();
-    id = chance.guid();
+    name = chance.string();
     request = {
       method: "GET",
       query: {
-        id,
+        name,
       },
+      body: {},
     };
     getRodeUrl.mockReturnValue(expectedRodeUrl);
 
@@ -42,22 +44,21 @@ describe("/api/policies/[id]", () => {
       send: jest.fn().mockReturnThis(),
     };
 
-    foundPolicy = {
-      id,
-      name: chance.string(),
+    assignment = {
+      id: chance.guid(),
+      policyVersionId: chance.guid(),
+      policyGroup: name,
       description: chance.string(),
-      policy: {
-        version: chance.d4(),
-        message: chance.string(),
-        regoContent: chance.string(),
-      },
+      created: chance.timestamp(),
     };
+
+    mapToClientModelWithPolicyDetails.mockResolvedValue(assignment);
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
-        id,
-        ...foundPolicy,
+        policyAssignments: [assignment],
+        nextPageToken: chance.string(),
       }),
     };
 
@@ -97,38 +98,24 @@ describe("/api/policies/[id]", () => {
 
         expect(get)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}/assignments`
+          );
       });
 
-      it("should return the found policy", async () => {
+      it("should return the found, mapped assignment", async () => {
         await handler(request, response);
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          id,
-          name: foundPolicy.name,
-          description: foundPolicy.description,
-          regoContent: foundPolicy.policy.regoContent,
-          currentVersion: foundPolicy.currentVersion,
-          policyVersionId: foundPolicy.policy.id,
-          policyVersion: foundPolicy.policy.version,
-        });
-      });
-
-      it("should return null when the policy is not found", async () => {
-        rodeResponse.status = 404;
-
-        await handler(request, response);
-
-        expect(response.status)
+        expect(response.json)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-        expect(response.send)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(null);
+          .toHaveBeenCalledWith({
+            data: [assignment],
+            pageToken: expect.any(String),
+          });
       });
     });
 
@@ -169,44 +156,38 @@ describe("/api/policies/[id]", () => {
     });
   });
 
-  describe("PATCH", () => {
+  describe("POST", () => {
     beforeEach(() => {
-      request.method = "PATCH";
-      request.body = JSON.stringify(foundPolicy);
+      request.method = "POST";
+      request.body = assignment;
       request.headers = {
         "Content-Type": "application/json",
       };
-      patch.mockResolvedValue(rodeResponse);
+      post.mockResolvedValue(rodeResponse);
+      rodeResponse.json.mockResolvedValue(assignment);
     });
 
     describe("successful call to Rode", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(patch)
+        expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${id}`,
-            mapToApiModel(request)
+            `${expectedRodeUrl}/v1alpha1/policies/${assignment.policyVersionId}/assignments/${name}`
           );
       });
 
-      it("should return the updated policy", async () => {
+      it("should return the created policy group assignment", async () => {
         await handler(request, response);
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          id,
-          name: foundPolicy.name,
-          description: foundPolicy.description,
-          regoContent: foundPolicy.policy.regoContent,
-          currentVersion: foundPolicy.currentVersion,
-          policyVersionId: foundPolicy.policy.id,
-          policyVersion: foundPolicy.policy.version,
-        });
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ data: assignment });
       });
     });
 
@@ -221,52 +202,6 @@ describe("/api/policies/[id]", () => {
           .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       };
 
-      it("should return a bad request status when Rego fails to compile", async () => {
-        const details = [
-          {
-            errors: chance.string(),
-          },
-        ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to compile the provided policy",
-        });
-
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          errors: details[0].errors,
-          isValid: false,
-        });
-      });
-
-      it("should return a bad request status when Rego fails to parse", async () => {
-        const details = [
-          {
-            errors: chance.string(),
-          },
-        ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to parse the provided policy",
-        });
-
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
-        expect(response.json).toHaveBeenCalledTimes(1).toHaveBeenCalledWith({
-          errors: details[0].errors,
-          isValid: false,
-        });
-      });
-
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
 
@@ -276,7 +211,7 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        patch.mockRejectedValue(new Error());
+        post.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -296,19 +231,14 @@ describe("/api/policies/[id]", () => {
   describe("DELETE", () => {
     beforeEach(() => {
       request.method = "DELETE";
+      request.query = {
+        assignmentId: assignment.id,
+      };
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
       beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
         del.mockResolvedValue(rodeResponse);
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
       });
 
       it("should hit the Rode API", async () => {
@@ -316,7 +246,7 @@ describe("/api/policies/[id]", () => {
 
         expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/policies/${id}`);
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/${assignment.id}`);
       });
 
       it("should return null if the delete was successful", async () => {

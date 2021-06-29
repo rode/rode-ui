@@ -41,6 +41,11 @@ describe("LabelWithValue", () => {
     expect(renderedValue).toHaveClass("value");
   });
 
+  it("should not render the label if it is not specified", () => {
+    rerender(<LabelWithValue label={null} value={value} />);
+    expect(screen.getByText(value).previousElementSibling).toBeNull();
+  });
+
   it("should return null if there is no value specified", () => {
     rerender(<LabelWithValue label={label} value={null} />);
 

@@ -17,18 +17,27 @@
 @import "styles/constants";
 @import "styles/mixins";
 
+$TABLET_CONTENT_WIDTH: 75%;
+$DESKTOP_CONTENT_WIDTH: 50%;
+
+.pageContainer {
+  height: 100%;
+}
+
 .policyGroupHeader {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0.5rem 1rem;
+  text-align: center;
 
   @include tabletAndLarger {
     flex-direction: row;
     justify-content: space-between;
     min-height: 4rem;
     padding: 1rem 2rem;
+    text-align: unset;
   }
 }
 
@@ -46,6 +55,52 @@
 
 .policyGroupDescription {
   padding-left: 1rem;
+}
+
+.policyGroupDetailsContainer {
+  height: 100%;
+  padding: 0.5rem;
+
+  @include tabletAndLarger {
+    padding: 1rem 2rem;
+    width: $TABLET_CONTENT_WIDTH;
+  }
+
+  @include desktopAndLarger {
+    width: $DESKTOP_CONTENT_WIDTH;
+  }
+}
+
+.assignmentsHeaderContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.assignmentsHeader {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 1rem;
+}
+
+.noAssignments {
+  margin-top: 1rem;
+  text-align: center;
+
+  @include tabletAndLarger {
+    width: $TABLET_CONTENT_WIDTH;
+  }
+
+  @include desktopAndLarger {
+    width: $DESKTOP_CONTENT_WIDTH;
+  }
 }
 
 .notFoundContainer {
