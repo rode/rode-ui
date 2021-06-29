@@ -23,7 +23,6 @@ import { showError, showSuccess } from "utils/toast-utils";
 import EditPolicyGroupAssignments from "pages/policy-groups/[name]/assignments";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { waitFor } from "@testing-library/dom";
 import { mutate } from "swr";
 
 jest.mock("swr");
@@ -36,8 +35,10 @@ describe("Edit Policy Group Assignments", () => {
   let router,
     usePolicyGroupResponse,
     policyGroup,
-    usePaginatedFetchResponse,
+    currentAssignments,
+    policySearchResults,
     assignments,
+    policies,
     saveResponse,
     rerender;
 
@@ -55,22 +56,46 @@ describe("Edit Policy Group Assignments", () => {
       name: policyGroupName,
       // description: chance.string(),
     };
-    assignments = chance.n(
-      () => ({
+    assignments = chance.n(() => {
+      const version = chance.d4().toString();
+      const id = chance.guid();
+      return {
         id: chance.guid(),
-        policyVersionId: `${chance.guid()}.${chance.d4()}`,
+        policyVersionId: `${id}.${version}`,
         policyName: chance.string(),
-        policyVersion: chance.d4().toString,
+        policyVersion: version,
         policyGroup: policyGroup.name,
-        policyId: chance.guid()
-      }),
-      chance.d4() + 1
-    );
-    usePaginatedFetchResponse = {
+        policyId: id,
+        latestVersion: version,
+      };
+    }, chance.d4() + 1);
+    policies = chance.n(() => {
+      const version = chance.d4().toString();
+      const id = chance.guid();
+      return {
+        id: `${id}.${version}`,
+        policyName: chance.string(),
+        policyVersion: version,
+        policyVersionId: `${id}.${version}`,
+        policyId: id,
+        latestVersion: version,
+      };
+    }, chance.d4() + 1);
+    currentAssignments = {
       data: assignments,
       loading: false,
     };
-    usePaginatedFetch.mockReturnValue(usePaginatedFetchResponse);
+    policySearchResults = {
+      data: policies,
+      loading: false,
+    };
+
+    usePaginatedFetch.mockImplementation((endpoint) => {
+      if (endpoint?.startsWith("/api/policy-groups")) {
+        return currentAssignments;
+      }
+      return policySearchResults;
+    });
     usePolicyGroupResponse = {
       policyGroup: policyGroup,
       loading: false,
@@ -122,7 +147,7 @@ describe("Edit Policy Group Assignments", () => {
       );
     });
 
-    it("should render a card for each policy assigned to the group", () => {
+    it("should render a card for each currently policy assigned to the group", () => {
       expect(screen.getByText("Assigned Policies")).toBeInTheDocument();
       assignments.forEach((assignment, index) => {
         expect(screen.getByText(assignment.policyName)).toBeInTheDocument();
@@ -147,24 +172,30 @@ describe("Edit Policy Group Assignments", () => {
 
     describe("creating a new assignment", () => {
       beforeEach(async () => {
-        act(() => {userEvent.click(screen.getByLabelText("View all policies"));});
-        act(() => {userEvent.click(screen.getAllByLabelText('Assign to Policy Group')[0])});
+        act(() => {
+          userEvent.click(screen.getByLabelText("View all policies"));
+        });
+        act(() => {
+          userEvent.click(
+            screen.getAllByLabelText("Assign to Policy Group")[0]
+          );
+        });
         await act(async () => {
           await userEvent.click(screen.getByLabelText("Save Assignments"));
         });
       });
 
       it("should call the correct endpoint", () => {
-        expect(fetch).toHaveBeenCalledWith(`/api/policy-groups/${policyGroup.name}/assignments`, {
-          method: "POST",
-          body: JSON.stringify({
-            ...assignments[0],
-            policyGroup: policyGroup.name
-          }),
-          headers: {
-            'Content-Type': 'application/json'
+        expect(fetch).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}/assignments`,
+          {
+            method: "POST",
+            body: expect.stringContaining("ADD"),
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
       });
 
       it("should show a success message", () => {
@@ -172,7 +203,9 @@ describe("Edit Policy Group Assignments", () => {
       });
 
       it("should redirect the user to the updated policy group assignments page", () => {
-        expect(mutate).toHaveBeenCalledWith(`/api/policy-groups/${policyGroup.name}/assignments`);
+        expect(mutate).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}/assignments`
+        );
         expect(router.push)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
@@ -180,26 +213,27 @@ describe("Edit Policy Group Assignments", () => {
     });
 
     describe("removing an assignment", () => {
-
-    });
-
-    describe("successful save", () => {
       beforeEach(async () => {
+        act(() =>
+          userEvent.click(
+            screen.getAllByLabelText("Remove Policy Assignment")[0]
+          )
+        );
+
         await act(async () => {
           await userEvent.click(screen.getByLabelText("Save Assignments"));
         });
       });
 
-      it("should submit the form when filled out entirely", () => {
-        expect(fetch)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`/api/policy-groups/${policyGroup.name}`, {
-            method: "PATCH",
-            body: JSON.stringify(formData),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+      it("should call the correct endpoint", () => {
+        expect(fetch).toHaveBeenCalledWith(
+          `/api/policy-groups/${
+            policyGroup.name
+          }/assignments?assignmentId=${encodeURIComponent(assignments[0].id)}`,
+          {
+            method: "DELETE",
+          }
+        );
       });
 
       it("should show a success message", () => {
@@ -207,7 +241,9 @@ describe("Edit Policy Group Assignments", () => {
       });
 
       it("should redirect the user to the updated policy group assignments page", () => {
-        expect(mutate).toHaveBeenCalledWith(`/api/policy-groups/${policyGroup.name}/assignments`);
+        expect(mutate).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}/assignments`
+        );
         expect(router.push)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
@@ -217,14 +253,20 @@ describe("Edit Policy Group Assignments", () => {
     describe("unsuccessful save", () => {
       it("should show an error when the call to save failed", async () => {
         saveResponse.ok = false;
+        act(() =>
+          userEvent.click(
+            screen.getAllByLabelText("Remove Policy Assignment")[0]
+          )
+        );
+
         await act(async () => {
           await userEvent.click(screen.getByLabelText("Save Assignments"));
         });
 
         expect(showError)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith("Failed to update the policy group.");
-        expect(fetch).toHaveBeenCalledTimes(1);
+          .toHaveBeenCalledWith("Failed to save policy group assignments.");
+        expect(showSuccess).not.toHaveBeenCalled();
         expect(router.push).not.toHaveBeenCalled();
       });
     });
