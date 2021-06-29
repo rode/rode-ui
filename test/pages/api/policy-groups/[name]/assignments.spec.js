@@ -16,7 +16,7 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]/assignments";
-import { getRodeUrl, get, post, del } from "pages/api/utils/api-utils";
+import { getRodeUrl, get, post, del, patch } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 jest.mock("node-fetch");
@@ -284,6 +284,86 @@ describe("/api/policy-groups/[name]/assignments", () => {
 
       it("should return an internal server error on a network or other fetch error", async () => {
         del.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+    });
+  });
+
+  describe("PATCH", () => {
+    beforeEach(() => {
+      request.method = "PATCH";
+      request.body = assignment;
+      request.headers = {
+        "Content-Type": "application/json",
+      };
+      request.query = {
+        assignmentId: assignment.id,
+        name
+      };
+      patch.mockResolvedValue(rodeResponse);
+      rodeResponse.json.mockResolvedValue(assignment);
+    });
+
+    describe("successful call to Rode", () => {
+      it("should hit the Rode API", async () => {
+        await handler(request, response);
+
+        expect(patch)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(
+            `${expectedRodeUrl}/v1alpha1/${assignment.id}`,
+            {
+              policyGroup: name,
+              policyVersionId: assignment.policyVersionId
+            }
+          );
+      });
+
+      it("should return the updated policy group assignment", async () => {
+        await handler(request, response);
+
+        expect(response.status)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.OK);
+
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ data: assignment });
+      });
+    });
+
+    describe("call to Rode fails", () => {
+      const assertInternalServerError = () => {
+        expect(response.status)
+          .toBeCalledTimes(1)
+          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
+
+        expect(response.json)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      };
+
+      it("should return an internal server error on a non-200 response from Rode", async () => {
+        rodeResponse.ok = false;
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error on a network or other fetch error", async () => {
+        patch.mockRejectedValue(new Error());
+
+        await handler(request, response);
+
+        assertInternalServerError();
+      });
+
+      it("should return an internal server error when JSON is invalid", async () => {
+        rodeResponse.json.mockRejectedValue(new Error());
 
         await handler(request, response);
 
