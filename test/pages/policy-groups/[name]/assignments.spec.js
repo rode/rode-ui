@@ -54,7 +54,6 @@ describe("Edit Policy Group Assignments", () => {
     policyGroup = {
       [chance.string()]: chance.string(),
       name: policyGroupName,
-      // description: chance.string(),
     };
     assignments = chance.n(() => {
       const version = chance.d4().toString();
@@ -155,6 +154,20 @@ describe("Edit Policy Group Assignments", () => {
           screen.getAllByLabelText("Remove Policy Assignment")[index]
         ).toBeInTheDocument();
       });
+    });
+
+    it("should render a message when no policies are assigned to the group", () => {
+      usePaginatedFetch.mockImplementation((endpoint) => {
+        if (endpoint?.startsWith("/api/policy-groups")) {
+          return { data: [], loading: false };
+        }
+        return policySearchResults;
+      });
+      rerender(<EditPolicyGroupAssignments />);
+
+      expect(
+        screen.getByText("No policies are assigned to this policy group.")
+      ).toBeInTheDocument();
     });
 
     it("should render the save button", () => {
