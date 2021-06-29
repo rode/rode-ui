@@ -49,7 +49,7 @@ describe("PolicySearchAndResults", () => {
         id,
         name: chance.string(),
         description: chance.sentence(),
-        latestVersion: version,
+        currentVersion: version,
         policyVersionId: `${id}.${version}`,
       };
     }, chance.d4());
@@ -170,7 +170,7 @@ describe("PolicySearchAndResults", () => {
     expect(onAssign).toHaveBeenCalledWith({
       ...fetchedPolicies[0],
       policyName: fetchedPolicies[0].name,
-      policyVersion: fetchedPolicies[0].latestVersion,
+      policyVersion: fetchedPolicies[0].currentVersion,
     });
   });
 

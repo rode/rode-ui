@@ -50,7 +50,7 @@ describe("policy-utils", () => {
         name: unmappedPolicy.name,
         description: unmappedPolicy.description,
         regoContent: unmappedPolicy.policy.regoContent,
-        latestVersion: unmappedPolicy.currentVersion,
+        currentVersion: unmappedPolicy.currentVersion,
         policyVersionId: unmappedPolicy.policy.id,
         policyVersion: unmappedPolicy.policy.version,
       });
@@ -148,7 +148,7 @@ describe("policy-utils", () => {
             name: unmappedPolicy.name,
             description: unmappedPolicy.description,
             regoContent: unmappedPolicy.policy.regoContent,
-            latestVersion: unmappedPolicy.currentVersion,
+            currentVersion: unmappedPolicy.currentVersion,
             policyVersionId: unmappedPolicy.policy.id,
             policyVersion: unmappedPolicy.policy.version,
           },

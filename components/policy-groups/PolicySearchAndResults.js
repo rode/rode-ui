@@ -105,7 +105,7 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                           </p>
                         )}
                         <p className={styles.cardText}>
-                          Latest Version {result.latestVersion}
+                          Latest Version {result.currentVersion}
                         </p>
                       </div>
                       <Button
@@ -113,7 +113,7 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                           onAssign({
                             ...result,
                             policyName: result.name,
-                            policyVersion: result.latestVersion,
+                            policyVersion: result.currentVersion,
                           })
                         }
                         buttonType={"icon"}

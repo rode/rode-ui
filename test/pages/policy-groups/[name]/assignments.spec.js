@@ -65,7 +65,7 @@ describe("Edit Policy Group Assignments", () => {
         policyVersion: version,
         policyGroup: policyGroup.name,
         policyId: id,
-        latestVersion: version,
+        currentVersion: version,
       };
     }, chance.d4() + 1);
     policies = chance.n(() => {
@@ -77,7 +77,7 @@ describe("Edit Policy Group Assignments", () => {
         policyVersion: version,
         policyVersionId: `${id}.${version}`,
         policyId: id,
-        latestVersion: version,
+        currentVersion: version,
       };
     }, chance.d4() + 1);
     currentAssignments = {
