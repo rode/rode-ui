@@ -30,9 +30,12 @@ import { mutate } from "swr";
 import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import PolicyVersionDrawer from "components/policy-groups/PolicyVersionDrawer";
 
+// TODO: hide the version button when no other versions exist
 const ADD = "ADD";
 const REMOVE = "REMOVE";
+const UPDATE = "UPDATE";
 
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
@@ -40,6 +43,8 @@ const EditPolicyGroupAssignments = () => {
   const { name } = router.query;
   const { theme } = useTheme();
 
+  const [showPolicyVersionDrawer, setShowPolicyVersionDrawer] = useState(false);
+  const [drawerPolicy, setDrawerPolicy] = useState(null);
   const [loadingForm, setLoadingForm] = useState(false);
 
   const { policyGroup, loading: loadingPolicyGroup } = usePolicyGroup(name);
@@ -57,7 +62,7 @@ const EditPolicyGroupAssignments = () => {
     if (data?.length && !Object.keys(assignments).length) {
       const assignmentData = {};
       data.forEach((assignment) => {
-        assignmentData[assignment.policyVersionId] = assignment;
+        assignmentData[assignment.policyId] = assignment;
       });
       setAssignments(assignmentData);
     }
@@ -66,8 +71,8 @@ const EditPolicyGroupAssignments = () => {
   useEffect(() => {
     if (Object.keys(assignments).length > 0) {
       const assignedToPolicyGroup = Object.keys(assignments)
-        .map((policyVersionId) => {
-          const assignment = assignments[policyVersionId];
+        .map((policyId) => {
+          const assignment = assignments[policyId];
           if (assignment.action === REMOVE) {
             return null;
           } else return assignment;
@@ -79,7 +84,7 @@ const EditPolicyGroupAssignments = () => {
 
   const updateAssignments = (assignment, action) => {
     const updatedAssignments = { ...assignments };
-    updatedAssignments[assignment.policyVersionId] = {
+    updatedAssignments[assignment.policyId] = {
       ...assignment,
       action,
     };
@@ -91,23 +96,44 @@ const EditPolicyGroupAssignments = () => {
 
   const onRemove = (assignment) => updateAssignments(assignment, REMOVE);
 
+  const onVersionSelect = (version, currentAssignment) => {
+    const updatedAssignment = {
+      ...currentAssignment,
+      policyVersion: version.version,
+      policyVersionId: version.id,
+    };
+    const action = currentAssignment.action === ADD ? ADD : UPDATE;
+
+    updateAssignments(updatedAssignment, action);
+    setShowPolicyVersionDrawer(false);
+  }
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const originalAssignmentPolicyVersionIds = data.map(
-      ({ policyVersionId }) => policyVersionId
+    const originalAssignmentPolicyIds = data.map(
+      ({ policyId }) => policyId
     );
 
     const assignmentsToCreate = Object.values(assignments).filter(
-      ({ action, policyVersionId }) =>
+      ({ action, policyId }) =>
         action === ADD &&
-        !originalAssignmentPolicyVersionIds.includes(policyVersionId)
+        !originalAssignmentPolicyIds.includes(policyId)
     );
     const assignmentsToRemove = Object.values(assignments).filter(
-      ({ action, policyVersionId }) =>
+      ({ action, policyId }) =>
         action === REMOVE &&
-        originalAssignmentPolicyVersionIds.includes(policyVersionId)
+        originalAssignmentPolicyIds.includes(policyId)
     );
+    const assignmentsToUpdate = Object.values(assignments).filter(
+      ({ action, policyId }) =>
+        action === UPDATE &&
+        originalAssignmentPolicyIds.includes(policyId)
+    );
+
+    console.log('assignmentsToCreate', assignmentsToCreate);
+    console.log('assignmentsToRemove', assignmentsToRemove);
+    console.log('assignmentsToUpdate', assignmentsToUpdate);
 
     const createPromises = assignmentsToCreate.map(async (assignment) =>
       fetch(`/api/policy-groups/${name}/assignments`, {
@@ -130,8 +156,20 @@ const EditPolicyGroupAssignments = () => {
       )
     );
 
+    const updatePromises = assignmentsToUpdate.map(async (assignment) =>
+      fetch(`/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
+        assignment.id
+      )}`, {
+        method: "PATCH",
+        body: JSON.stringify(assignment),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    )
+
     setLoadingForm(true);
-    const responses = await Promise.all([...createPromises, ...deletePromises]);
+    const responses = await Promise.all([...createPromises, ...deletePromises, ...updatePromises]);
     setLoadingForm(false);
 
     if (responses.some(({ ok }) => !ok)) {
@@ -150,6 +188,15 @@ const EditPolicyGroupAssignments = () => {
       <PageHeader>
         <h1>Edit Policy Group Assignments</h1>
       </PageHeader>
+      <PolicyVersionDrawer
+        onClose={() => {
+          setShowPolicyVersionDrawer(false);
+          setDrawerPolicy(null);
+        }}
+        isOpen={showPolicyVersionDrawer}
+        assignedPolicy={drawerPolicy}
+        onVersionSelect={onVersionSelect}
+      />
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loadingPolicyGroup}>
           {policyGroup ? (
@@ -167,6 +214,20 @@ const EditPolicyGroupAssignments = () => {
                             policy={assignment}
                             actions={
                               <div className={styles.assignmentActions}>
+                                <Button
+                                  label={"Change Policy Version"}
+                                  buttonType={"icon"}
+                                  onClick={() => {
+                                    setDrawerPolicy(assignment);
+                                    setShowPolicyVersionDrawer(true);
+                                  }}
+                                  showTooltip
+                                >
+                                  <Icon
+                                    name={ICON_NAMES.PENCIL}
+                                    size={"large"}
+                                  />
+                                </Button>
                                 <Button
                                   label={"Remove Policy Assignment"}
                                   buttonType={"icon"}

@@ -15,10 +15,10 @@
  */
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { del, get, getRodeUrl, post } from "pages/api/utils/api-utils";
+import { del, get, getRodeUrl, patch, post } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
-const ALLOWED_METHODS = ["GET", "POST", "DELETE"];
+const ALLOWED_METHODS = ["GET", "POST", "DELETE", "PATCH"];
 
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
@@ -114,6 +114,37 @@ export default async (req, res) => {
       res.status(StatusCodes.OK).send(null);
     } catch (error) {
       console.error("Error deleting policy assignment", error);
+
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+    }
+  }
+
+  if (req.method === "PATCH") {
+    try {
+      const { name, assignmentId } = req.query;
+      const requestBody = req.body;
+
+      const response = await patch(`${rodeUrl}/v1alpha1/${assignmentId}`, {
+        policyGroup: name,
+        policyVersionId: requestBody.policyVersionId,
+      });
+
+      if (!response.ok) {
+        console.error(`Unsuccessful response from Rode: ${response.status}`);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+
+      const createdPolicyAssignmentResponse = await response.json();
+
+      return res.status(StatusCodes.OK).json({
+        data: createdPolicyAssignmentResponse,
+      });
+    } catch (error) {
+      console.error("Error updating policy assignment", error);
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)

@@ -91,16 +91,9 @@ $DESKTOP_CONTENT_WIDTH: 50%;
 }
 
 .noAssignments {
-  margin-top: 1rem;
+  margin: 1rem auto;
   text-align: center;
-
-  @include tabletAndLarger {
-    width: $TABLET_CONTENT_WIDTH;
-  }
-
-  @include desktopAndLarger {
-    width: $DESKTOP_CONTENT_WIDTH;
-  }
+  width: 100%;
 }
 
 .notFoundContainer {
