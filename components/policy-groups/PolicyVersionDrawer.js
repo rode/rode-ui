@@ -44,7 +44,7 @@ const PolicyVersionDrawer = ({
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
-      {assignedPolicy && (
+      {assignedPolicy ? (
         <div className={`${styles[theme]}`}>
           <div className={styles.drawerHeader}>
             <p className={styles.policyName}>{assignedPolicy.policyName}</p>
@@ -110,7 +110,9 @@ const PolicyVersionDrawer = ({
             )}
           </Loading>
         </div>
-      )}
+      )
+      :
+      <div/>}
     </Drawer>
   );
 };
