@@ -42,8 +42,6 @@ const PolicyGroup = () => {
     loading: loadingAssignments,
   } = usePolicyGroupAssignments(policyGroup?.name);
 
-  console.log("assignments in policy group details view", assignments);
-
   const editPolicy = () => {
     dispatch({
       type: stateActions.SET_CURRENT_POLICY_GROUP,

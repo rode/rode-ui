@@ -25,6 +25,7 @@ import { usePolicyGroup } from "hooks/usePolicyGroup";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 import { stateActions } from "reducers/appState";
+import { StatusCodes } from "http-status-codes";
 
 jest.mock("swr");
 jest.mock("next/router");
@@ -83,7 +84,7 @@ describe("Edit Policy Group Assignments", () => {
         policyVersionId: `${id}.${version}`,
         policyId: id,
         currentVersion: version,
-        policyVersionCount: 2,
+        policyVersionCount: 4,
       };
     }, 1);
     usePolicyAssignmentsResponse = {
@@ -276,6 +277,7 @@ describe("Edit Policy Group Assignments", () => {
 
     describe("removing an assignment", () => {
       beforeEach(async () => {
+        saveResponse.status = StatusCodes.NO_CONTENT;
         act(() =>
           userEvent.click(
             screen.getAllByLabelText("Remove Policy Assignment")[0]

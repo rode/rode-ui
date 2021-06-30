@@ -114,7 +114,6 @@ describe("/api/policy-groups/[name]/assignments", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith({
             data: [assignment],
-            pageToken: expect.any(String),
           });
       });
     });
