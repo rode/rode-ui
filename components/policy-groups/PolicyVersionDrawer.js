@@ -53,7 +53,7 @@ const PolicyVersionDrawer = ({
             </p>
           </div>
           <Loading loading={loading}>
-            {data ? (
+            {data?.length > 0 ? (
               <>
                 {data.map((version, index) => {
                   const isSelected =

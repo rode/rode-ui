@@ -242,7 +242,7 @@ describe("Edit Policy Group Assignments", () => {
         expect(fetch).toHaveBeenCalledWith(
           `/api/policy-groups/${
             policyGroup.name
-          }/assignments?assignmentId=${encodeURIComponent(assignments[0].id)}`,
+          }/assignments/${encodeURIComponent(assignments[0].id)}`,
           {
             method: "DELETE",
           }
