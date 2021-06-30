@@ -21,18 +21,22 @@ import { useRouter } from "next/router";
 import { usePolicy } from "hooks/usePolicy";
 import Policy from "pages/policies/[id]";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { useFetch } from "hooks/useFetch";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/usePolicy");
 jest.mock("hooks/usePaginatedFetch");
+jest.mock("hooks/useFetch");
 
 describe("Policy Details", () => {
   let router,
     policy,
     mockUsePolicy,
     policyVersions,
+    assignments,
     mockPaginatedFetch,
+    mockFetch,
     rerender,
     dispatch;
 
@@ -65,6 +69,15 @@ describe("Policy Details", () => {
       }),
       chance.d4()
     );
+
+    assignments = chance.n(
+      () => ({
+        id: chance.guid(),
+        policyGroup: chance.string(),
+        policyVersionId: `${chance.guid()}.${chance.d10()}`,
+      }),
+      chance.d4()
+    );
     usePolicy.mockReturnValue(mockUsePolicy);
     useRouter.mockReturnValue(router);
     mockPaginatedFetch = {
@@ -73,7 +86,14 @@ describe("Policy Details", () => {
       isLastPage: false,
       goToNextPage: jest.fn(),
     };
+    mockFetch = {
+      data: {
+        policyAssignments: assignments,
+      },
+      loading: false,
+    };
     usePaginatedFetch.mockReturnValue(mockPaginatedFetch);
+    useFetch.mockReturnValue(mockFetch);
     const utils = render(<Policy />, {
       state: { policySearchTerm: "test search term" },
       dispatch: dispatch,
@@ -145,6 +165,15 @@ describe("Policy Details", () => {
 
       policyVersions.forEach((version) => {
         expect(screen.getByText(version.message)).toBeInTheDocument();
+      });
+    });
+
+    it("should render the policy assignments when the user navigates to that section", () => {
+      router.asPath = `${chance.word()}#assignments`;
+      rerender(<Policy />);
+
+      assignments.forEach((assignment) => {
+        expect(screen.getByText(assignment.policyGroup)).toBeInTheDocument();
       });
     });
   });
