@@ -42,7 +42,7 @@ export const usePolicyGroupAssignments = (policyGroupName) => {
 
       dispatch({
         type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
-        data: data.assignments,
+        data: data.data,
       });
     }
   }, [policyGroupName, currentPolicyGroupAssignments, data]);
