@@ -26,6 +26,7 @@ export const usePaginatedFetch = (url, query, pageSize) => {
     fetcher,
     {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     }
   );
 

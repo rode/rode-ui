@@ -28,6 +28,7 @@ export const useFetch = (url, query) => {
 
   const { data: swrData, error: swrError } = useSWR(urlWithQuery, fetcher, {
     revalidateOnFocus: false,
+    revalidateOnMount: true,
   });
 
   useEffect(() => {

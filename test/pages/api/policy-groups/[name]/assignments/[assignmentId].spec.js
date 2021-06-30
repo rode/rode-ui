@@ -15,22 +15,22 @@
  */
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import handler from "pages/api/policy-groups/[name]/assignments";
-import { get, getRodeUrl, post } from "pages/api/utils/api-utils";
+import handler from "pages/api/policy-groups/[name]/assignments/[assignmentId]";
+import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 jest.mock("pages/api/utils/policy-assignment-utils");
 
-describe("/api/policy-groups/[name]/assignments", () => {
+describe("/api/policy-groups/[name]/assignments/[assignmentId]", () => {
   let request, response, assignment, rodeResponse, name, expectedRodeUrl;
 
   beforeEach(() => {
     expectedRodeUrl = chance.url();
     name = chance.string();
     request = {
-      method: "GET",
+      method: "DELETE",
       query: {
         name,
       },
@@ -85,37 +85,37 @@ describe("/api/policy-groups/[name]/assignments", () => {
     });
   });
 
-  describe("GET", () => {
+  describe("DELETE", () => {
     beforeEach(() => {
-      request.method = "GET";
-
-      get.mockResolvedValue(rodeResponse);
+      request.method = "DELETE";
+      request.query = {
+        assignmentId: assignment.id,
+      };
     });
 
     describe("successful call to Rode", () => {
+      beforeEach(() => {
+        del.mockResolvedValue(rodeResponse);
+      });
+
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(get)
+        expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}/assignments`
-          );
+          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/${assignment.id}`);
       });
 
-      it("should return the found, mapped assignment", async () => {
+      it("should return null if the delete was successful", async () => {
         await handler(request, response);
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(StatusCodes.OK);
 
-        expect(response.json)
+        expect(response.send)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({
-            data: [assignment],
-            pageToken: expect.any(String),
-          });
+          .toHaveBeenCalledWith(null);
       });
     });
 
@@ -132,6 +132,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
 
       it("should return an internal server error on a non-200 response from Rode", async () => {
         rodeResponse.ok = false;
+        del.mockResolvedValue(rodeResponse);
 
         await handler(request, response);
 
@@ -139,15 +140,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        get.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
+        del.mockRejectedValue(new Error());
 
         await handler(request, response);
 
@@ -156,14 +149,18 @@ describe("/api/policy-groups/[name]/assignments", () => {
     });
   });
 
-  describe("POST", () => {
+  describe("PATCH", () => {
     beforeEach(() => {
-      request.method = "POST";
+      request.method = "PATCH";
       request.body = assignment;
       request.headers = {
         "Content-Type": "application/json",
       };
-      post.mockResolvedValue(rodeResponse);
+      request.query = {
+        assignmentId: assignment.id,
+        name,
+      };
+      patch.mockResolvedValue(rodeResponse);
       rodeResponse.json.mockResolvedValue(assignment);
     });
 
@@ -171,14 +168,18 @@ describe("/api/policy-groups/[name]/assignments", () => {
       it("should hit the Rode API", async () => {
         await handler(request, response);
 
-        expect(post)
+        expect(patch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${assignment.policyVersionId}/assignments/${name}`
+            `${expectedRodeUrl}/v1alpha1/${assignment.id}`,
+            {
+              policyGroup: name,
+              policyVersionId: assignment.policyVersionId,
+            }
           );
       });
 
-      it("should return the created policy group assignment", async () => {
+      it("should return the updated policy group assignment", async () => {
         await handler(request, response);
 
         expect(response.status)
@@ -211,7 +212,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
       });
 
       it("should return an internal server error on a network or other fetch error", async () => {
-        post.mockRejectedValue(new Error());
+        patch.mockRejectedValue(new Error());
 
         await handler(request, response);
 

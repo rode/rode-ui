@@ -34,81 +34,83 @@ const PolicyVersionDrawer = ({
   assignedPolicy,
   onVersionSelect,
 }) => {
-  if (!assignedPolicy) {
-    return null;
-  }
-
   const { theme } = useTheme();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
-    `/api/policies/${assignedPolicy.policyId}/versions`,
+    assignedPolicy ? `/api/policies/${assignedPolicy.policyId}/versions` : null,
     {},
     15
   );
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
-      <div className={`${styles[theme]}`}>
-        <div className={styles.drawerHeader}>
-          <p className={styles.policyName}>{assignedPolicy.policyName}</p>
-          <p className={styles.instructions}>
-            Target a specific version of this policy
-          </p>
-        </div>
-        <Loading loading={loading}>
-          {data ? (
-            <>
-              {data.map((version, index) => {
-                const isSelected =
-                  assignedPolicy.policyVersion === version.version;
+      {assignedPolicy && (
+        <div className={`${styles[theme]}`}>
+          <div className={styles.drawerHeader}>
+            <p className={styles.policyName}>{assignedPolicy.policyName}</p>
+            <p className={styles.instructions}>
+              Target a specific version of this policy
+            </p>
+          </div>
+          <Loading loading={loading}>
+            {data ? (
+              <>
+                {data.map((version, index) => {
+                  const isSelected =
+                    assignedPolicy.policyVersion === version.version;
 
-                return (
-                  <div key={version.id} className={styles.versionCard}>
-                    <div>
-                      <LabelWithValue
-                        label={"Version"}
-                        value={`${version.version} ${
-                          index === 0 ? " (latest)" : ""
-                        }`}
-                      />
-                      <LabelWithValue
-                        label={"Created"}
-                        value={dayjs(version.created).format(DATE_TIME_FORMAT)}
-                        className={styles.cardDetails}
-                      />
+                  return (
+                    <div key={version.id} className={styles.versionCard}>
+                      <div>
+                        <LabelWithValue
+                          label={"Version"}
+                          value={`${version.version} ${
+                            index === 0 ? " (latest)" : ""
+                          }`}
+                        />
+                        <LabelWithValue
+                          label={"Created"}
+                          value={dayjs(version.created).format(
+                            DATE_TIME_FORMAT
+                          )}
+                          className={styles.cardDetails}
+                        />
+                      </div>
+                      <div>
+                        <Button
+                          label={isSelected ? "Selected" : "Select Version"}
+                          buttonType={"text"}
+                          onClick={() =>
+                            onVersionSelect(version, assignedPolicy)
+                          }
+                          disabled={isSelected}
+                        >
+                          {isSelected && (
+                            <>
+                              <Icon name={ICON_NAMES.CHECK} />
+                              <p>Selected</p>
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <Button
-                        label={isSelected ? "Selected" : "Select Version"}
-                        buttonType={"text"}
-                        onClick={() => onVersionSelect(version, assignedPolicy)}
-                        disabled={isSelected}
-                      >
-                        {isSelected && (
-                          <>
-                            <Icon name={ICON_NAMES.CHECK} />
-                            <p>Selected</p>
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <p className={styles.noVersionsMessage}>No versions found</p>
-          )}
-          {!isLastPage && (
-            <Button
-              buttonType="text"
-              onClick={goToNextPage}
-              label={"View More"}
-              className={styles.viewMoreResultsButton}
-            />
-          )}
-        </Loading>
-      </div>
+                  );
+                })}
+              </>
+            ) : (
+              <p className={styles.noVersionsMessage}>No versions found</p>
+            )}
+            {!isLastPage && (
+              <Button
+                buttonType="text"
+                onClick={goToNextPage}
+                label={"View More"}
+                className={styles.viewMoreResultsButton}
+              />
+            )}
+          </Loading>
+        </div>
+      )}
     </Drawer>
   );
 };

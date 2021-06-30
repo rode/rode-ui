@@ -15,10 +15,9 @@
  */
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { get, getRodeUrl, post } from "pages/api/utils/api-utils";
-import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
+import { del, getRodeUrl, patch } from "pages/api/utils/api-utils";
 
-const ALLOWED_METHODS = ["GET", "POST"];
+const ALLOWED_METHODS = ["DELETE", "PATCH"];
 
 export default async (req, res) => {
   if (!ALLOWED_METHODS.includes(req.method)) {
@@ -29,13 +28,11 @@ export default async (req, res) => {
 
   const rodeUrl = getRodeUrl();
 
-  if (req.method === "GET") {
+  if (req.method === "DELETE") {
     try {
-      const { name } = req.query;
+      const { assignmentId } = req.query;
 
-      const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`
-      );
+      const response = await del(`${rodeUrl}/v1alpha1/${assignmentId}`);
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -44,23 +41,9 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      const getPolicyGroupAssignmentsResponse = await response.json();
-
-      const {
-        policyAssignments,
-        nextPageToken,
-      } = getPolicyGroupAssignmentsResponse;
-
-      const promises = policyAssignments.map(mapToClientModelWithPolicyDetails);
-
-      const mappedAssignments = await Promise.all(promises);
-
-      return res.status(StatusCodes.OK).json({
-        data: mappedAssignments,
-        pageToken: nextPageToken,
-      });
+      res.status(StatusCodes.OK).send(null);
     } catch (error) {
-      console.error("Error getting policy group assignment", error);
+      console.error("Error deleting policy assignment", error);
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -68,14 +51,15 @@ export default async (req, res) => {
     }
   }
 
-  if (req.method === "POST") {
+  if (req.method === "PATCH") {
     try {
-      const { name } = req.query;
+      const { name, assignmentId } = req.query;
       const requestBody = req.body;
 
-      const response = await post(
-        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`
-      );
+      const response = await patch(`${rodeUrl}/v1alpha1/${assignmentId}`, {
+        policyGroup: name,
+        policyVersionId: requestBody.policyVersionId,
+      });
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -90,7 +74,7 @@ export default async (req, res) => {
         data: createdPolicyAssignmentResponse,
       });
     } catch (error) {
-      console.error("Error creating policy assignment", error);
+      console.error("Error updating policy assignment", error);
 
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)

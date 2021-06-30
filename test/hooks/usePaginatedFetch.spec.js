@@ -72,6 +72,7 @@ describe("usePaginatedFetch", () => {
 
     expect(useSWRInfinite).toHaveBeenCalledWith(expect.any(Function), fetcher, {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     });
   });
 

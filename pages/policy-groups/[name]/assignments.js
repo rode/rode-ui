@@ -139,7 +139,7 @@ const EditPolicyGroupAssignments = () => {
 
     const deletePromises = assignmentsToRemove.map(async (assignment) =>
       fetch(
-        `/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
+        `/api/policy-groups/${name}/assignments/${encodeURIComponent(
           assignment.id
         )}`,
         {
@@ -150,7 +150,7 @@ const EditPolicyGroupAssignments = () => {
 
     const updatePromises = assignmentsToUpdate.map(async (assignment) =>
       fetch(
-        `/api/policy-groups/${name}/assignments?assignmentId=${encodeURIComponent(
+        `/api/policy-groups/${name}/assignments/${encodeURIComponent(
           assignment.id
         )}`,
         {

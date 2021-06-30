@@ -41,6 +41,7 @@ describe("useFetch", () => {
 
     expect(useSWR).toHaveBeenCalledWith(url, fetcher, {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     });
   });
 
@@ -50,7 +51,7 @@ describe("useFetch", () => {
     expect(useSWR).toHaveBeenCalledWith(
       `${url}?${new URLSearchParams(query)}`,
       fetcher,
-      { revalidateOnFocus: false }
+      { revalidateOnFocus: false, revalidateOnMount: true }
     );
   });
 
@@ -59,6 +60,7 @@ describe("useFetch", () => {
 
     expect(useSWR).toHaveBeenCalledWith(null, fetcher, {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     });
   });
 
@@ -67,6 +69,7 @@ describe("useFetch", () => {
 
     expect(useSWR).toHaveBeenCalledWith(null, fetcher, {
       revalidateOnFocus: false,
+      revalidateOnMount: true,
     });
   });
 
