@@ -18,7 +18,7 @@ import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { fetcher } from "utils/hook-utils";
 
-export const useFetch = (url, query, options = {}) => {
+export const useFetch = (url, query) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
@@ -29,7 +29,6 @@ export const useFetch = (url, query, options = {}) => {
   const { data: swrData, error: swrError } = useSWR(urlWithQuery, fetcher, {
     revalidateOnFocus: false,
     revalidateOnMount: true,
-    ...options,
   });
 
   useEffect(() => {

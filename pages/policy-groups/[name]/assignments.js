@@ -38,8 +38,6 @@ const ADD = "ADD";
 const REMOVE = "REMOVE";
 const UPDATE = "UPDATE";
 
-// TODO: fix issues with showing old data
-
 const EditPolicyGroupAssignments = () => {
   const router = useRouter();
 
