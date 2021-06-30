@@ -207,7 +207,6 @@ const EditPolicyGroupAssignments = () => {
                   {assignedToGroup.length > 0 ? (
                     <>
                       {assignedToGroup.map((assignment) => {
-                        console.log("assignment", assignment);
                         const hasMultipleVersions =
                           assignment.policyVersionCount > 1;
                         return (

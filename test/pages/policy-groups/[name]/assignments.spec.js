@@ -66,6 +66,7 @@ describe("Edit Policy Group Assignments", () => {
         policyGroup: policyGroup.name,
         policyId: id,
         currentVersion: version,
+        policyVersionCount: chance.d4() + 1,
       };
     }, chance.d4() + 1);
     policies = chance.n(() => {
@@ -224,6 +225,46 @@ describe("Edit Policy Group Assignments", () => {
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
       });
     });
+    describe("creating a new assignment and changing the policy version", () => {
+      beforeEach(async () => {
+        currentAssignments.data = [];
+        rerender(<EditPolicyGroupAssignments />);
+
+        act(() => {
+          userEvent.click(screen.getByLabelText("View all policies"));
+        });
+        act(() => {
+          userEvent.click(
+            screen.getAllByLabelText("Assign to Policy Group")[0]
+          );
+        });
+
+        act(() => {
+          userEvent.click(screen.getAllByLabelText("Change Policy Version")[0]);
+        });
+
+        act(() => {
+          userEvent.click(screen.getAllByLabelText("Select Version")[0]);
+        });
+
+        await act(async () => {
+          await userEvent.click(screen.getByLabelText("Save Assignments"));
+        });
+      });
+
+      it("should call the correct endpoint", () => {
+        expect(fetch).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}/assignments`,
+          {
+            method: "POST",
+            body: expect.stringContaining("ADD"),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      });
+    });
 
     describe("removing an assignment", () => {
       beforeEach(async () => {
@@ -245,6 +286,50 @@ describe("Edit Policy Group Assignments", () => {
           }/assignments/${encodeURIComponent(assignments[0].id)}`,
           {
             method: "DELETE",
+          }
+        );
+      });
+
+      it("should show a success message", () => {
+        expect(showSuccess).toHaveBeenCalledWith("Saved!");
+      });
+
+      it("should redirect the user to the updated policy group assignments page", () => {
+        expect(mutate).toHaveBeenCalledWith(
+          `/api/policy-groups/${policyGroup.name}/assignments`
+        );
+        expect(router.push)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
+      });
+    });
+
+    describe("updating an assignment", () => {
+      beforeEach(async () => {
+        act(() => {
+          userEvent.click(screen.getAllByLabelText("Change Policy Version")[0]);
+        });
+
+        act(() => {
+          userEvent.click(screen.getAllByLabelText("Select Version")[0]);
+        });
+
+        await act(async () => {
+          await userEvent.click(screen.getByLabelText("Save Assignments"));
+        });
+      });
+
+      it("should call the correct endpoint", () => {
+        expect(fetch).toHaveBeenCalledWith(
+          `/api/policy-groups/${
+            policyGroup.name
+          }/assignments/${encodeURIComponent(assignments[0].id)}`,
+          {
+            method: "PATCH",
+            body: expect.stringContaining("UPDATE"),
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
       });
