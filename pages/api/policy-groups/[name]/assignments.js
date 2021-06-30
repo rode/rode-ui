@@ -46,10 +46,7 @@ export default async (req, res) => {
 
       const getPolicyGroupAssignmentsResponse = await response.json();
 
-      const {
-        policyAssignments,
-        nextPageToken,
-      } = getPolicyGroupAssignmentsResponse;
+      const { policyAssignments } = getPolicyGroupAssignmentsResponse;
 
       const promises = policyAssignments.map(mapToClientModelWithPolicyDetails);
 
@@ -57,7 +54,6 @@ export default async (req, res) => {
 
       return res.status(StatusCodes.OK).json({
         data: mappedAssignments,
-        pageToken: nextPageToken,
       });
     } catch (error) {
       console.error("Error getting policy group assignment", error);

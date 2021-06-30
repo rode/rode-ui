@@ -110,9 +110,9 @@ const PolicyVersionDrawer = ({
             )}
           </Loading>
         </div>
-      )
-      :
-      <div/>}
+      ) : (
+        <div />
+      )}
     </Drawer>
   );
 };

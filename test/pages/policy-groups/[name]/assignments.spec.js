@@ -23,26 +23,30 @@ import { showError, showSuccess } from "utils/toast-utils";
 import EditPolicyGroupAssignments from "pages/policy-groups/[name]/assignments";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import { mutate } from "swr";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
+import { stateActions } from "reducers/appState";
 
 jest.mock("swr");
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/usePolicyGroup");
 jest.mock("hooks/usePaginatedFetch");
+jest.mock("hooks/usePolicyGroupAssignments");
 
 describe("Edit Policy Group Assignments", () => {
   let router,
     usePolicyGroupResponse,
     policyGroup,
-    currentAssignments,
+    usePolicyAssignmentsResponse,
     policySearchResults,
     assignments,
     policies,
     saveResponse,
+    dispatch,
     rerender;
 
   beforeEach(() => {
+    dispatch = jest.fn();
     const policyGroupName = chance.string({ alpha: true, casing: "lower" });
     router = {
       back: jest.fn(),
@@ -66,7 +70,7 @@ describe("Edit Policy Group Assignments", () => {
         policyGroup: policyGroup.name,
         policyId: id,
         currentVersion: version,
-        policyVersionCount: chance.d4() + 1,
+        policyVersionCount: 2,
       };
     }, chance.d4() + 1);
     policies = chance.n(() => {
@@ -79,35 +83,36 @@ describe("Edit Policy Group Assignments", () => {
         policyVersionId: `${id}.${version}`,
         policyId: id,
         currentVersion: version,
+        policyVersionCount: 2,
       };
-    }, chance.d4() + 1);
-    currentAssignments = {
-      data: assignments,
+    }, 1);
+    usePolicyAssignmentsResponse = {
+      assignments,
       loading: false,
     };
     policySearchResults = {
       data: policies,
       loading: false,
     };
-
-    usePaginatedFetch.mockImplementation((endpoint) => {
-      if (endpoint?.startsWith("/api/policy-groups")) {
-        return currentAssignments;
-      }
-      return policySearchResults;
-    });
     usePolicyGroupResponse = {
-      policyGroup: policyGroup,
+      policyGroup,
       loading: false,
     };
+
+    usePaginatedFetch.mockReturnValue(policySearchResults);
+    usePolicyGroupAssignments.mockReturnValue(usePolicyAssignmentsResponse);
+    usePolicyGroup.mockReturnValue(usePolicyGroupResponse);
+
     saveResponse = {
-      json: jest.fn().mockResolvedValue(policyGroup),
+      json: jest.fn().mockResolvedValue({
+        data: usePolicyAssignmentsResponse.assignments,
+      }),
       ok: true,
+      status: 200,
     }; // eslint-disable-next-line no-undef
     global.fetch = jest.fn().mockResolvedValue(saveResponse);
     useRouter.mockReturnValue(router);
-    usePolicyGroup.mockReturnValue(usePolicyGroupResponse);
-    const utils = render(<EditPolicyGroupAssignments />);
+    const utils = render(<EditPolicyGroupAssignments />, { dispatch });
     rerender = utils.rerender;
   });
 
@@ -130,7 +135,7 @@ describe("Edit Policy Group Assignments", () => {
     });
 
     it("should not call the fetch assignments for the policy group", () => {
-      expect(usePaginatedFetch).toHaveBeenCalledWith(null, {}, 50);
+      expect(usePolicyGroupAssignments).toHaveBeenCalledWith(undefined);
     });
   });
 
@@ -140,11 +145,7 @@ describe("Edit Policy Group Assignments", () => {
     });
 
     it("should call to get the assignments for the policy group", () => {
-      expect(usePaginatedFetch).toHaveBeenCalledWith(
-        `/api/policy-groups/${policyGroup.name}/assignments`,
-        {},
-        50
-      );
+      expect(usePolicyGroupAssignments).toHaveBeenCalledWith(policyGroup.name);
     });
 
     it("should render a card for each currently policy assigned to the group", () => {
@@ -158,12 +159,7 @@ describe("Edit Policy Group Assignments", () => {
     });
 
     it("should render a message when no policies are assigned to the group", () => {
-      usePaginatedFetch.mockImplementation((endpoint) => {
-        if (endpoint?.startsWith("/api/policy-groups")) {
-          return { data: [], loading: false };
-        }
-        return policySearchResults;
-      });
+      usePolicyGroupAssignments.mockReturnValue({ data: [], loading: false });
       rerender(<EditPolicyGroupAssignments />);
 
       expect(
@@ -186,6 +182,12 @@ describe("Edit Policy Group Assignments", () => {
 
     describe("creating a new assignment", () => {
       beforeEach(async () => {
+        const selectedPolicy = policies[0];
+        usePolicyAssignmentsResponse.assignments = [];
+        saveResponse.json.mockResolvedValue({
+          data: selectedPolicy,
+        });
+        rerender(<EditPolicyGroupAssignments />);
         act(() => {
           userEvent.click(screen.getByLabelText("View all policies"));
         });
@@ -217,17 +219,23 @@ describe("Edit Policy Group Assignments", () => {
       });
 
       it("should redirect the user to the updated policy group assignments page", () => {
-        expect(mutate).toHaveBeenCalledWith(
-          `/api/policy-groups/${policyGroup.name}/assignments`
-        );
+        expect(dispatch).toHaveBeenLastCalledWith({
+          type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+          data: expect.any(Array),
+        });
         expect(router.push)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
       });
     });
+
     describe("creating a new assignment and changing the policy version", () => {
       beforeEach(async () => {
-        currentAssignments.data = [];
+        const selectedPolicy = policies[0];
+        usePolicyAssignmentsResponse.assignments = [];
+        saveResponse.json.mockResolvedValue({
+          data: selectedPolicy,
+        });
         rerender(<EditPolicyGroupAssignments />);
 
         act(() => {
@@ -295,9 +303,10 @@ describe("Edit Policy Group Assignments", () => {
       });
 
       it("should redirect the user to the updated policy group assignments page", () => {
-        expect(mutate).toHaveBeenCalledWith(
-          `/api/policy-groups/${policyGroup.name}/assignments`
-        );
+        expect(dispatch).toHaveBeenLastCalledWith({
+          type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+          data: expect.any(Array),
+        });
         expect(router.push)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);
@@ -339,9 +348,10 @@ describe("Edit Policy Group Assignments", () => {
       });
 
       it("should redirect the user to the updated policy group assignments page", () => {
-        expect(mutate).toHaveBeenCalledWith(
-          `/api/policy-groups/${policyGroup.name}/assignments`
-        );
+        expect(dispatch).toHaveBeenLastCalledWith({
+          type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+          data: expect.any(Array),
+        });
         expect(router.push)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(`/policy-groups/${policyGroup.name}`);

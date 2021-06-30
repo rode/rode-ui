@@ -84,6 +84,13 @@ const setCurrentResource = (state, data) => {
   };
 };
 
+const setCurrentPolicyGroupAssignments = (state, data) => {
+  return {
+    ...state,
+    currentPolicyGroupAssignments: data,
+  };
+};
+
 const actionMap = {
   SET_POLICY_SEARCH_TERM: setPolicySearchTerm,
   SET_CURRENT_POLICY: setCurrentPolicy,
@@ -95,6 +102,7 @@ const actionMap = {
   SET_CURRENT_RESOURCE: setCurrentResource,
   SET_RESOURCE_VERSION_SEARCH_TERM: setResourceVersionSearchTerm,
   SET_RESOURCE_TYPE_SEARCH_FILTER: setResourceTypeSearchFilter,
+  SET_CURRENT_POLICY_GROUP_ASSIGNMENTS: setCurrentPolicyGroupAssignments,
 };
 
 export const appStateReducer = (state, action) => {
@@ -114,4 +122,5 @@ export const stateActions = {
   SET_CURRENT_RESOURCE: "SET_CURRENT_RESOURCE",
   SET_RESOURCE_VERSION_SEARCH_TERM: "SET_RESOURCE_VERSION_SEARCH_TERM",
   SET_RESOURCE_TYPE_SEARCH_FILTER: "SET_RESOURCE_TYPE_SEARCH_FILTER",
+  SET_CURRENT_POLICY_GROUP_ASSIGNMENTS: "SET_CURRENT_POLICY_GROUP_ASSIGNMENTS",
 };

@@ -324,7 +324,7 @@ describe("/api/policies/[id]", () => {
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
+          .toHaveBeenCalledWith(StatusCodes.NO_CONTENT);
 
         expect(response.send)
           .toHaveBeenCalledTimes(1)

@@ -20,17 +20,19 @@ import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Loading from "components/Loading";
 import Link from "next/link";
 import styles from "styles/modules/PolicyGroupAssignments.module.scss";
-import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Button from "components/Button";
 import PolicySearchAndResults from "components/policy-groups/PolicySearchAndResults";
 import { useTheme } from "providers/theme";
 import PageHeader from "components/layout/PageHeader";
 import { showError, showSuccess } from "utils/toast-utils";
-import { mutate } from "swr";
 import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import PolicyVersionDrawer from "components/policy-groups/PolicyVersionDrawer";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
+import { useAppState } from "providers/appState";
+import { stateActions } from "reducers/appState";
+import { StatusCodes } from "http-status-codes";
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -44,20 +46,21 @@ const EditPolicyGroupAssignments = () => {
   const { name } = router.query;
   const { theme } = useTheme();
 
+  const { dispatch } = useAppState();
+
   const [showPolicyVersionDrawer, setShowPolicyVersionDrawer] = useState(false);
   const [drawerPolicy, setDrawerPolicy] = useState(null);
   const [loadingForm, setLoadingForm] = useState(false);
 
   const { policyGroup, loading: loadingPolicyGroup } = usePolicyGroup(name);
 
+  const {
+    assignments: data,
+    loading: loadingAssignments,
+  } = usePolicyGroupAssignments(policyGroup?.name);
+
   const [assignments, setAssignments] = useState({});
   const [assignedToGroup, setAssignedToGroup] = useState([]);
-
-  const { data, loading: loadingAssignments } = usePaginatedFetch(
-    policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
-    {},
-    50
-  );
 
   useEffect(() => {
     if (data?.length && !Object.keys(assignments).length) {
@@ -176,7 +179,39 @@ const EditPolicyGroupAssignments = () => {
       return;
     }
 
-    await mutate(`/api/policy-groups/${policyGroup.name}/assignments`);
+    const parsingPromises = responses
+      .map((response) => {
+        if (response.status === StatusCodes.NO_CONTENT) {
+          return null;
+        }
+        return response.json();
+      })
+      .filter((v) => v);
+
+    const parsedResponses = await Promise.all(parsingPromises);
+
+    const mutatedAssignments = assignedToGroup.map((assignment) => {
+      if (assignment.action === ADD) {
+        const createdAssignment = parsedResponses.find((response) => {
+          return response.data.policyVersionId === assignment.policyVersionId;
+        });
+        return {
+          ...assignment,
+          id: createdAssignment.data.id,
+          action: null,
+        };
+      }
+
+      return {
+        ...assignment,
+        action: null,
+      };
+    });
+
+    dispatch({
+      type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+      data: mutatedAssignments,
+    });
 
     showSuccess("Saved!");
     router.push(`/policy-groups/${policyGroup.name}`);

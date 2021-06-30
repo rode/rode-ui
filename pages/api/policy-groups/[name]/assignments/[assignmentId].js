@@ -41,7 +41,7 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      res.status(StatusCodes.OK).send(null);
+      res.status(StatusCodes.NO_CONTENT).send(null);
     } catch (error) {
       console.error("Error deleting policy assignment", error);
 
@@ -68,10 +68,10 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      const createdPolicyAssignmentResponse = await response.json();
+      const updatedPolicyAssignment = await response.json();
 
       return res.status(StatusCodes.OK).json({
-        data: createdPolicyAssignmentResponse,
+        data: updatedPolicyAssignment,
       });
     } catch (error) {
       console.error("Error updating policy assignment", error);

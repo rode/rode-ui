@@ -42,7 +42,10 @@ describe("AppStateProvider", () => {
     expect(screen.getByText(/^currentPolicy$/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationPolicy/i)).toBeInTheDocument();
     expect(screen.getByText(/evaluationResource/i)).toBeInTheDocument();
-    expect(screen.getByText(/currentPolicyGroup/i)).toBeInTheDocument();
+    expect(screen.getByText(/^currentPolicyGroup$/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/currentPolicyGroupAssignments/i)
+    ).toBeInTheDocument();
     expect(screen.getByText(/resourceSearchTerm/i)).toBeInTheDocument();
     expect(screen.getByText(/resourceVersionSearchTerm/i)).toBeInTheDocument();
     expect(screen.getByText(/resourceTypeSearchFilter/i)).toBeInTheDocument();
