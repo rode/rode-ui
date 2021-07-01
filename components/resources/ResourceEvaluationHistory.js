@@ -19,16 +19,36 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/ResourceEvaluationHistory.module.scss";
 import { useTheme } from "providers/theme";
 import { useAppState } from "providers/appState";
+import { usePaginatedFetch } from "../../hooks/usePaginatedFetch";
+import Loading from "../Loading";
 
 const ResourceEvaluationHistory = (props) => {
   const { resourceUri } = props;
   const { state } = useAppState();
   const { theme } = useTheme();
 
+  console.log('resourceUri', resourceUri);
+  const {data, loading, isLastPage, goToNextPage} = usePaginatedFetch(
+    resourceUri ? `/api/resources/${encodeURIComponent(resourceUri)}/resource-evaluations` : null, {}, 10
+  );
+
+  console.log('data', data);
   return (
     <div className={`${styles[theme]}`}>
      <p className={styles.header}>Evaluation History</p>
-
+      <Loading loading={loading}>
+        {data && data?.length ?
+          (
+            data.map((evaluation) => {
+              return (
+                <p>{evaluation.resourceEvaluation.id}</p>
+              )
+            })
+          )
+        :
+        <p>This resource has not been evaluated.</p>
+        }
+      </Loading>
     </div>
   );
 };
