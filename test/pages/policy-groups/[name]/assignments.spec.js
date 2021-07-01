@@ -61,7 +61,7 @@ describe("Edit Policy Group Assignments", () => {
       name: policyGroupName,
     };
     assignments = chance.n(() => {
-      const version = chance.d4().toString();
+      const version = `${chance.d4() + 1}`;
       const id = chance.guid();
       return {
         id: chance.guid(),
@@ -71,22 +71,19 @@ describe("Edit Policy Group Assignments", () => {
         policyGroup: policyGroup.name,
         policyId: id,
         currentVersion: version,
-        policyVersionCount: 2,
+        policyVersionCount: Number(version),
       };
     }, chance.d4() + 1);
     policies = chance.n(() => {
-      const version = chance.d4().toString();
+      const version = `${chance.d4() + 1}`;
       const id = chance.guid();
       return {
         id: `${id}.${version}`,
-        policyName: chance.string(),
-        policyVersion: version,
+        name: chance.string(),
         policyVersionId: `${id}.${version}`,
-        policyId: id,
-        currentVersion: version,
-        policyVersionCount: chance.natural({ min: 4 }),
+        currentVersion: Number(version),
       };
-    }, 1);
+    }, chance.d4() + 1);
     usePolicyAssignmentsResponse = {
       assignments,
       loading: false,
@@ -232,11 +229,16 @@ describe("Edit Policy Group Assignments", () => {
 
     describe("creating a new assignment and changing the policy version", () => {
       beforeEach(async () => {
-        const selectedPolicy = policies[0];
+        const selectedPolicy = {
+          ...policies[0],
+          currentVersion: chance.d4() + 1,
+        };
         usePolicyAssignmentsResponse.assignments = [];
+        policySearchResults.data = [selectedPolicy];
         saveResponse.json.mockResolvedValue({
           data: selectedPolicy,
         });
+
         rerender(<EditPolicyGroupAssignments />);
 
         act(() => {
