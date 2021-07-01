@@ -17,14 +17,19 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-.headerContainer {
-  margin-bottom: 1rem;
-  width: 100%;
-  padding: 1rem 0.5rem;
+.drawerHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  padding: 1rem;
+
+  @include tabletAndLarger {
+    padding: 1rem 2rem;
+  }
 }
 
-.resourceName {
+.policyName {
   font-weight: 600;
 }
 
@@ -35,27 +40,20 @@
 
 .versionCard {
   width: 90%;
-  margin: 0.25rem auto;
-  padding: 0.5rem 1rem;
+  margin: 1rem auto;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   @include tabletAndLarger {
     flex-direction: row;
-  }
-
-  &:last-of-type {
-    margin-bottom: 1rem;
+    justify-content: space-between;
   }
 }
 
-.actionButton {
-  min-width: fit-content;
-}
-
-.cardSubtext {
+.cardDetails {
   font-size: 0.8rem;
 }
 
@@ -63,54 +61,37 @@
   margin: 0 auto 1rem;
 }
 
-.searchContainer {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.viewAllButton {
-  font-size: 0.85rem;
-  min-height: fit-content;
-  padding: 0.25rem;
-  margin-left: auto;
-}
-
-.notFoundMessage {
+.noVersionsMessage {
+  text-align: center;
   margin: 1rem auto;
 }
 
 .darkTheme {
-  color: $DT_MAIN_TEXT;
-
-  .headerContainer {
+  .drawerHeader {
     background-color: $LAGOON;
     color: $DARKEST_GREY;
   }
 
   .versionCard {
     background-color: $DT_BACKGROUND_LIGHT;
-    box-shadow: $DT_BOX_SHADOW;
   }
 
-  .cardSubtext {
+  .cardDetails {
     color: $DT_SUB_TEXT;
   }
 }
 
 .lightTheme {
-  color: $LT_MAIN_TEXT;
-
-  .headerContainer {
+  .drawerHeader {
     background-color: $DEEP_SEA;
     color: $WHITE;
   }
 
   .versionCard {
     background-color: $LT_BACKGROUND_LIGHT;
-    box-shadow: $LT_BOX_SHADOW;
   }
 
-  .cardSubtext {
+  .cardDetails {
     color: $LT_SUB_TEXT;
   }
 }

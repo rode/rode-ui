@@ -15,24 +15,22 @@
  */
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import handler from "pages/api/policy-groups/[name]/assignments";
-import { get, getRodeUrl, post } from "pages/api/utils/api-utils";
-import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
+import handler from "pages/api/policies/[id]/assignments";
+import { get, getRodeUrl } from "pages/api/utils/api-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
-jest.mock("pages/api/utils/policy-assignment-utils");
 
-describe("/api/policy-groups/[name]/assignments", () => {
-  let request, response, assignment, rodeResponse, name, expectedRodeUrl;
+describe("/api/policies/[id]/assignments", () => {
+  let request, response, assignment, rodeResponse, id, expectedRodeUrl;
 
   beforeEach(() => {
     expectedRodeUrl = chance.url();
-    name = chance.string();
+    id = chance.string();
     request = {
       method: "GET",
       query: {
-        name,
+        id,
       },
       body: {},
     };
@@ -41,24 +39,20 @@ describe("/api/policy-groups/[name]/assignments", () => {
     response = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis(),
     };
 
     assignment = {
       id: chance.guid(),
       policyVersionId: chance.guid(),
-      policyGroup: name,
+      policyGroup: id,
       description: chance.string(),
       created: chance.timestamp(),
     };
-
-    mapToClientModelWithPolicyDetails.mockResolvedValue(assignment);
 
     rodeResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({
         policyAssignments: [assignment],
-        nextPageToken: chance.string(),
       }),
     };
 
@@ -99,11 +93,11 @@ describe("/api/policy-groups/[name]/assignments", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}/assignments`
+            `${expectedRodeUrl}/v1alpha1/policies/${id}/assignments`
           );
       });
 
-      it("should return the found, mapped assignment", async () => {
+      it("should return the found assignment", async () => {
         await handler(request, response);
 
         expect(response.status)
@@ -113,7 +107,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
         expect(response.json)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith({
-            data: [assignment],
+            policyAssignments: [assignment],
           });
       });
     });
@@ -139,78 +133,6 @@ describe("/api/policy-groups/[name]/assignments", () => {
 
       it("should return an internal server error on a network or other fetch error", async () => {
         get.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-    });
-  });
-
-  describe("POST", () => {
-    beforeEach(() => {
-      request.method = "POST";
-      request.body = assignment;
-      request.headers = {
-        "Content-Type": "application/json",
-      };
-      post.mockResolvedValue(rodeResponse);
-      rodeResponse.json.mockResolvedValue(assignment);
-    });
-
-    describe("successful call to Rode", () => {
-      it("should hit the Rode API", async () => {
-        await handler(request, response);
-
-        expect(post)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${assignment.policyVersionId}/assignments/${name}`
-          );
-      });
-
-      it("should return the created policy group assignment", async () => {
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({ data: assignment });
-      });
-    });
-
-    describe("call to Rode fails", () => {
-      const assertInternalServerError = () => {
-        expect(response.status)
-          .toBeCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      };
-
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        post.mockRejectedValue(new Error());
 
         await handler(request, response);
 

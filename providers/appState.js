@@ -26,6 +26,7 @@ const initialState = {
   evaluationResource: null,
   evaluationPolicy: null,
   currentPolicyGroup: null,
+  currentPolicyGroupAssignments: [],
   resourceSearchTerm: "",
   resourceVersionSearchTerm: "",
   resourceTypeSearchFilter: [],

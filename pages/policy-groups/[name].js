@@ -25,8 +25,8 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
-import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -37,11 +37,10 @@ const PolicyGroup = () => {
 
   const { policyGroup, loading } = usePolicyGroup(name);
 
-  const { data, loading: loadingAssignments } = usePaginatedFetch(
-    policyGroup ? `/api/policy-groups/${policyGroup.name}/assignments` : null,
-    {},
-    50
-  );
+  const {
+    assignments,
+    loading: loadingAssignments,
+  } = usePolicyGroupAssignments(policyGroup?.name);
 
   const editPolicy = () => {
     dispatch({
@@ -89,9 +88,9 @@ const PolicyGroup = () => {
                   />
                 </div>
                 <Loading loading={loadingAssignments}>
-                  {data?.length > 0 ? (
+                  {assignments?.length > 0 ? (
                     <>
-                      {data.map((assignment) => {
+                      {assignments.map((assignment) => {
                         return (
                           <PolicyAssignmentCard
                             key={assignment.id}

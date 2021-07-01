@@ -30,5 +30,6 @@ export const mapToClientModelWithPolicyDetails = async (assignment) => {
     policyId: data.id,
     policyVersion: data.policyVersion,
     policyName: data.name,
+    policyVersionCount: data.currentVersion,
   };
 };

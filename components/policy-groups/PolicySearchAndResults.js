@@ -112,8 +112,10 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                         onClick={() =>
                           onAssign({
                             ...result,
+                            policyId: result.id,
                             policyName: result.name,
                             policyVersion: result.currentVersion,
+                            policyVersionCount: result.currentVersion,
                           })
                         }
                         buttonType={"icon"}

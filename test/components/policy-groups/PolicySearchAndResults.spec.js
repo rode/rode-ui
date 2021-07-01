@@ -169,8 +169,10 @@ describe("PolicySearchAndResults", () => {
     userEvent.click(screen.getAllByLabelText("Assign to Policy Group")[0]);
     expect(onAssign).toHaveBeenCalledWith({
       ...fetchedPolicies[0],
+      policyId: fetchedPolicies[0].id,
       policyName: fetchedPolicies[0].name,
       policyVersion: fetchedPolicies[0].currentVersion,
+      policyVersionCount: fetchedPolicies[0].currentVersion,
     });
   });
 

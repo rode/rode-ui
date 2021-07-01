@@ -70,7 +70,10 @@ describe("usePaginatedFetch", () => {
       <PaginatedFetchComponent url={url} query={query} pageSize={pageSize} />
     );
 
-    expect(useSWRInfinite).toHaveBeenCalledWith(expect.any(Function), fetcher);
+    expect(useSWRInfinite).toHaveBeenCalledWith(expect.any(Function), fetcher, {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    });
   });
 
   it("should return the formatted data if the call was successful", () => {

@@ -20,16 +20,16 @@ import { render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
-import { usePaginatedFetch } from "hooks/usePaginatedFetch";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 import PolicyGroup from "pages/policy-groups/[name]";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/usePolicyGroup");
-jest.mock("hooks/usePaginatedFetch");
+jest.mock("hooks/usePolicyGroupAssignments");
 
 describe("Policy Group Details", () => {
-  let router, dispatch, policyGroup, paginatedFetchResponse, rerender;
+  let router, dispatch, policyGroup, policyGroupAssignmentsResponse, rerender;
 
   beforeEach(() => {
     const policyGroupName = chance.string({ alpha: true, casing: "lower" });
@@ -46,8 +46,8 @@ describe("Policy Group Details", () => {
       name: policyGroupName,
       description: chance.string(),
     };
-    paginatedFetchResponse = {
-      data: [
+    policyGroupAssignmentsResponse = {
+      assignments: [
         {
           id: chance.guid(),
           policyId: chance.guid(),
@@ -62,7 +62,7 @@ describe("Policy Group Details", () => {
       loading: false,
     });
     useRouter.mockReturnValue(router);
-    usePaginatedFetch.mockReturnValue(paginatedFetchResponse);
+    usePolicyGroupAssignments.mockReturnValue(policyGroupAssignmentsResponse);
     const utils = render(<PolicyGroup />, { dispatch: dispatch });
     rerender = utils.rerender;
   });
@@ -113,15 +113,11 @@ describe("Policy Group Details", () => {
     });
 
     it("should call to get the current assignments", () => {
-      expect(usePaginatedFetch).toHaveBeenCalledWith(
-        `/api/policy-groups/${policyGroup.name}/assignments`,
-        {},
-        50
-      );
+      expect(usePolicyGroupAssignments).toHaveBeenCalledWith(policyGroup.name);
     });
 
     it("should render a card for each current policy assignment", () => {
-      const assignment = paginatedFetchResponse.data[0];
+      const assignment = policyGroupAssignmentsResponse.assignments[0];
       expect(screen.getByText(assignment.policyName)).toBeInTheDocument();
       expect(screen.getByText(assignment.policyVersion)).toBeInTheDocument();
 
@@ -133,7 +129,7 @@ describe("Policy Group Details", () => {
     });
 
     it("should render a message if no policies are assigned to the policy group", () => {
-      usePaginatedFetch.mockResolvedValue({
+      usePolicyGroupAssignments.mockReturnValue({
         data: [],
         loading: false,
       });

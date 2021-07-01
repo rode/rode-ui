@@ -20,31 +20,32 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { useSafeLayoutEffect } from "./useSafeLayoutEffect";
 
-export const usePolicyGroup = (policyGroupName) => {
-  const [policyGroup, setPolicyGroup] = React.useState(null);
+export const usePolicyGroupAssignments = (policyGroupName) => {
+  const [assignments, setAssignments] = React.useState(null);
   const {
-    state: { currentPolicyGroup },
+    state: { currentPolicyGroupAssignments },
     dispatch,
   } = useAppState();
 
   const { data, loading } = useFetch(
-    policyGroupName && policyGroupName !== currentPolicyGroup?.name
-      ? `/api/policy-groups/${policyGroupName}`
-      : null
+    policyGroupName
+      ? `/api/policy-groups/${policyGroupName}/assignments`
+      : null,
+    {}
   );
 
   useSafeLayoutEffect(() => {
-    if (policyGroupName === currentPolicyGroup?.name) {
-      setPolicyGroup(currentPolicyGroup);
+    if (policyGroupName === currentPolicyGroupAssignments?.[0]?.policyGroup) {
+      setAssignments(currentPolicyGroupAssignments);
     } else if (data) {
-      setPolicyGroup(data);
+      setAssignments(data.data);
 
       dispatch({
-        type: stateActions.SET_CURRENT_POLICY_GROUP,
-        data,
+        type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+        data: data.data,
       });
     }
-  }, [policyGroupName, currentPolicyGroup, data]);
+  }, [policyGroupName, currentPolicyGroupAssignments, data]);
 
-  return { policyGroup, loading };
+  return { assignments, loading };
 };

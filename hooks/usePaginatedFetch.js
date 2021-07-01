@@ -23,7 +23,11 @@ export const usePaginatedFetch = (url, query, pageSize) => {
   const { data, error, size, setSize } = useSWRInfinite(
     (_, previousPageData) =>
       getPaginatedUrlKey(previousPageData, url, query, pageSize),
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+    }
   );
 
   const loading = !data && !error;
