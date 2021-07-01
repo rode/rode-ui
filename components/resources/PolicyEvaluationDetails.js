@@ -19,7 +19,8 @@ import PropTypes from "prop-types";
 import { useTheme } from "providers/theme";
 import { ICON_NAMES } from "../../utils/icon-utils";
 import Icon from "../Icon";
-import styles from "styles/modules/ResourceEvaluationHistory.module.scss";
+import styles from "styles/modules/PolicyEvaluationDetails.module.scss";
+import LabelWithValue from "../LabelWithValue";
 
 // TODO: tests
 const PolicyEvaluationDetails = (props) => {
@@ -32,25 +33,41 @@ const PolicyEvaluationDetails = (props) => {
   };
 
   return (
-    <div key={policyEvaluation.id} className={styles.policyEvaluationCard}>
+    <div
+      key={policyEvaluation.id}
+      className={`${styles[theme]} ${styles.policyEvaluationCard}`}
+    >
       <div onClick={toggleDetail} className={styles.policyEvaluationCardHeader}>
-        {
-          policyEvaluation.pass ?
-            <Icon name={ICON_NAMES.BADGE_CHECK_OUTLINE} size={"large"} />
-            :
-            <Icon name={ICON_NAMES.EXCLAMATION_OUTLINE} size={"large"} />
-        }
-        <p>{policyEvaluation.policyName}</p>
-        <p>Version {policyEvaluation.policyVersion}</p>
+        <div className={styles.policyDetails}>
+          {policyEvaluation.pass ? (
+            <Icon
+              name={ICON_NAMES.BADGE_CHECK_OUTLINE}
+              size={"large"}
+              className={styles.pass}
+            />
+          ) : (
+            <Icon
+              name={ICON_NAMES.EXCLAMATION_OUTLINE}
+              size={"large"}
+              className={styles.fail}
+            />
+          )}
+          <p>{policyEvaluation.policyName}</p>
+          <p>v{policyEvaluation.policyVersion}</p>
+        </div>
         <Icon name={ICON_NAMES.CHEVRON_RIGHT} />
       </div>
       {showDetail && (
         <div>
           {policyEvaluation.violations.map((violation) => {
-            console.log('violation', violation);
+            console.log("violation", violation);
+            const outcome = violation.pass ? "pass" : "fail";
+
             return (
               <div key={violation.id} className={styles.violations}>
-                <p>{violation.pass ? "PASS" : "FAIL"}</p>
+                <p className={`${styles[outcome]} ${styles.violationResult}`}>
+                  {outcome}
+                </p>
                 <p>{violation.message}</p>
               </div>
             );

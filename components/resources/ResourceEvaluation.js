@@ -16,14 +16,11 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/ResourceEvaluationHistory.module.scss";
+import styles from "styles/modules/ResourceEvaluation.module.scss";
 import { useTheme } from "providers/theme";
 import { useAppState } from "providers/appState";
-import { usePaginatedFetch } from "hooks/usePaginatedFetch";
-import Loading from "components/Loading";
-import Button from "components/Button";
-import { ICON_NAMES } from "../../utils/icon-utils";
-import Icon from "../Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import Icon from "components/Icon";
 import PolicyEvaluationDetails from "./PolicyEvaluationDetails";
 
 // TODO: tests
@@ -38,21 +35,21 @@ const ResourceEvaluation = (props) => {
   };
 
   return (
-    <div className={styles.resourceEvaluationCard}>
+    <div className={`${styles[theme]} ${styles.resourceEvaluationCard}`}>
       <div
         className={styles.resourceEvaluationCardHeader}
         onClick={toggleDetail}
       >
         {evaluation.pass ? (
-          <div>
-            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
-            <p>Pass</p>
-          </div>
+          <p className={`${styles.pass}`}>
+            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"}/>
+            Pass
+          </p>
         ) : (
-          <div>
+          <p className={`${styles.fail}`}>
             <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
-            <p>Fail</p>
-          </div>
+            Fail
+          </p>
         )}
         <p>{evaluation.created}</p>
         <p>{evaluation.policyEvaluations.length} Policies Evaluated</p>

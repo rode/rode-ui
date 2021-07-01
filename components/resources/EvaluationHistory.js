@@ -16,7 +16,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "styles/modules/ResourceEvaluationHistory.module.scss";
+import styles from "styles/modules/EvaluationHistory.module.scss";
 import { useTheme } from "providers/theme";
 import { useAppState } from "providers/appState";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
