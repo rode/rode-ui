@@ -25,7 +25,7 @@ import Button from "components/Button";
 import ResourceEvaluation from "./ResourceEvaluation";
 
 // TODO: tests
-const ResourceEvaluationHistory = (props) => {
+const EvaluationHistory = (props) => {
   const { resourceUri } = props;
   const { state } = useAppState();
   const { theme } = useTheme();
@@ -65,8 +65,8 @@ const ResourceEvaluationHistory = (props) => {
   );
 };
 
-ResourceEvaluationHistory.propTypes = {
+EvaluationHistory.propTypes = {
   resourceUri: PropTypes.string.isRequired,
 };
 
-export default ResourceEvaluationHistory;
+export default EvaluationHistory;

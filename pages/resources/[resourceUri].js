@@ -33,8 +33,8 @@ import Loading from "components/Loading";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 import DetailsHeader from "components/shared/DetailsHeader";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
-import DetailsNavigation from "../../components/shared/DetailsNavigation";
-import ResourceEvaluationHistory from "../../components/resources/ResourceEvaluationHistory";
+import DetailsNavigation from "components/shared/DetailsNavigation";
+import EvaluationHistory from "components/resources/EvaluationHistory";
 
 const EVALUATION_HISTORY = "evaluationHistory";
 const OCCURRENCES = "occurrences";
@@ -146,7 +146,7 @@ const Resource = () => {
               />
               <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
               {activeSection === EVALUATION_HISTORY && (
-                <ResourceEvaluationHistory resourceUri={resourceUri}/>
+                <EvaluationHistory resourceUri={resourceUri}/>
               )}
               {activeSection === OCCURRENCES && (
                 <ResourceOccurrences occurrences={data} />

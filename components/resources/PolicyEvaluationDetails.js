@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import { useTheme } from "providers/theme";
 import { ICON_NAMES } from "../../utils/icon-utils";
 import Icon from "../Icon";
+import styles from "styles/modules/ResourceEvaluationHistory.module.scss";
 
 // TODO: tests
 const PolicyEvaluationDetails = (props) => {
@@ -29,22 +30,27 @@ const PolicyEvaluationDetails = (props) => {
   const toggleDetail = () => {
     setShowDetail(!showDetail);
   };
+
   return (
-    <div key={policyEvaluation.id}>
-      <div onClick={toggleDetail}>
+    <div key={policyEvaluation.id} className={styles.policyEvaluationCard}>
+      <div onClick={toggleDetail} className={styles.policyEvaluationCardHeader}>
+        {
+          policyEvaluation.pass ?
+            <Icon name={ICON_NAMES.BADGE_CHECK_OUTLINE} size={"large"} />
+            :
+            <Icon name={ICON_NAMES.EXCLAMATION_OUTLINE} size={"large"} />
+        }
         <p>{policyEvaluation.policyName}</p>
         <p>Version {policyEvaluation.policyVersion}</p>
-        <p>{policyEvaluation.pass ? "PASS" : "FAIL"}</p>
         <Icon name={ICON_NAMES.CHEVRON_RIGHT} />
       </div>
       {showDetail && (
         <div>
           {policyEvaluation.violations.map((violation) => {
+            console.log('violation', violation);
             return (
-              <div key={violation.id}>
+              <div key={violation.id} className={styles.violations}>
                 <p>{violation.pass ? "PASS" : "FAIL"}</p>
-                <p>{violation.name}</p>
-                <p>{violation.description}</p>
                 <p>{violation.message}</p>
               </div>
             );

@@ -29,129 +29,33 @@ describe("Icon", () => {
     expect(renderedIcon.closest("span")).toHaveClass(className);
   });
 
-  it("should render the search icon when specified", () => {
-    render(<Icon name={ICON_NAMES.SEARCH} />);
+  it.each([
+    ["search", ICON_NAMES.SEARCH],
+    ["github", ICON_NAMES.GITHUB],
+    ["twitter", ICON_NAMES.TWITTER],
+    ["liatrio", ICON_NAMES.LIATRIO],
+    ["cog", ICON_NAMES.COG],
+    ["shield check", ICON_NAMES.SHIELD_CHECK],
+    ["server", ICON_NAMES.SERVER],
+    ["chevron right", ICON_NAMES.CHEVRON_RIGHT],
+    ["chevron double right", ICON_NAMES.CHEVRON_DOUBLE_RIGHT],
+    ["fire", ICON_NAMES.FIRE],
+    ["flag", ICON_NAMES.FLAG],
+    ["external link", ICON_NAMES.EXTERNAL_LINK],
+    ["x circle", ICON_NAMES.X_CIRCLE],
+    ["badge check", ICON_NAMES.BADGE_CHECK],
+    ["exclamation", ICON_NAMES.EXCLAMATION],
+    ["check", ICON_NAMES.CHECK],
+    ["menu", ICON_NAMES.MENU],
+    ["clipboard copy", ICON_NAMES.CLIPBOARD_COPY],
+    ["ban", ICON_NAMES.BAN],
+    ["plus circle", ICON_NAMES.PLUS_CIRCLE],
+    ["pencil", ICON_NAMES.PENCIL],
+    ["badge check outline", ICON_NAMES.BADGE_CHECK_OUTLINE],
+    ["exclamation outline", ICON_NAMES.EXCLAMATION_OUTLINE]
+  ])("should render the \"%s\" icon when specified", (iconTitle, iconName) => {
+    render(<Icon name={iconName}/>);
 
-    expect(screen.getByTitle(/search/i)).toBeInTheDocument();
-  });
-
-  it("should render the github icon when specified", () => {
-    render(<Icon name={ICON_NAMES.GITHUB} />);
-
-    expect(screen.getByTitle(/github/i)).toBeInTheDocument();
-  });
-
-  it("should render the twitter icon when specified", () => {
-    render(<Icon name={ICON_NAMES.TWITTER} />);
-
-    expect(screen.getByTitle(/twitter/i)).toBeInTheDocument();
-  });
-
-  it("should render the liatrio icon when specified", () => {
-    render(<Icon name={ICON_NAMES.LIATRIO} />);
-
-    expect(screen.getByTitle(/liatrio/i)).toBeInTheDocument();
-  });
-
-  it("should render the cog icon when specified", () => {
-    render(<Icon name={ICON_NAMES.COG} />);
-
-    expect(screen.getByTitle(/cog/i)).toBeInTheDocument();
-  });
-
-  it("should render the shield check icon when specified", () => {
-    render(<Icon name={ICON_NAMES.SHIELD_CHECK} />);
-
-    expect(screen.getByTitle(/shield check/i)).toBeInTheDocument();
-  });
-
-  it("should render the server icon when specified", () => {
-    render(<Icon name={ICON_NAMES.SERVER} />);
-
-    expect(screen.getByTitle(/server/i)).toBeInTheDocument();
-  });
-
-  it("should render the chevron icon when specified", () => {
-    render(<Icon name={ICON_NAMES.CHEVRON_RIGHT} />);
-
-    expect(screen.getByTitle(/chevron/i)).toBeInTheDocument();
-  });
-
-  it("should render the double chevron icon when specified", () => {
-    render(<Icon name={ICON_NAMES.CHEVRON_DOUBLE_RIGHT} />);
-
-    expect(screen.getByTitle(/chevron double/i)).toBeInTheDocument();
-  });
-
-  it("should render the fire icon when specified", () => {
-    render(<Icon name={ICON_NAMES.FIRE} />);
-
-    expect(screen.getByTitle(/fire/i)).toBeInTheDocument();
-  });
-
-  it("should render the flag icon when specified", () => {
-    render(<Icon name={ICON_NAMES.FLAG} />);
-
-    expect(screen.getByTitle(/flag/i)).toBeInTheDocument();
-  });
-
-  it("should render the external link icon when specified", () => {
-    render(<Icon name={ICON_NAMES.EXTERNAL_LINK} />);
-
-    expect(screen.getByTitle(/external link/i)).toBeInTheDocument();
-  });
-
-  it("should render the x circle icon when specified", () => {
-    render(<Icon name={ICON_NAMES.X_CIRCLE} />);
-
-    expect(screen.getByTitle(/x circle/i)).toBeInTheDocument();
-  });
-
-  it("should render the badge check icon when specified", () => {
-    render(<Icon name={ICON_NAMES.BADGE_CHECK} />);
-
-    expect(screen.getByTitle(/badge check/i)).toBeInTheDocument();
-  });
-
-  it("should render the exclamation icon when specified", () => {
-    render(<Icon name={ICON_NAMES.EXCLAMATION} />);
-
-    expect(screen.getByTitle(/exclamation/i)).toBeInTheDocument();
-  });
-
-  it("should render the check icon when specified", () => {
-    render(<Icon name={ICON_NAMES.CHECK} />);
-
-    expect(screen.getByTitle(/check/i)).toBeInTheDocument();
-  });
-
-  it("should render the menu icon when specified", () => {
-    render(<Icon name={ICON_NAMES.MENU} />);
-
-    expect(screen.getByTitle(/menu/i)).toBeInTheDocument();
-  });
-
-  it("should render the clipboard copy icon when specified", () => {
-    render(<Icon name={ICON_NAMES.CLIPBOARD_COPY} />);
-
-    expect(screen.getByTitle(/clipboard copy/i)).toBeInTheDocument();
-  });
-
-  it("should render the ban icon when specified", () => {
-    render(<Icon name={ICON_NAMES.BAN} />);
-
-    expect(screen.getByTitle(/ban/i)).toBeInTheDocument();
-  });
-
-  it("should render the plus circle icon when specified", () => {
-    render(<Icon name={ICON_NAMES.PLUS_CIRCLE} />);
-
-    expect(screen.getByTitle(/plus circle/i)).toBeInTheDocument();
-  });
-
-  it("should render the pencil icon when specified", () => {
-    render(<Icon name={ICON_NAMES.PENCIL} />);
-
-    expect(screen.getByTitle(/pencil/i)).toBeInTheDocument();
-  });
+    expect(screen.getByTitle(new RegExp(iconTitle, "i"))).toBeInTheDocument();
+  })
 });

@@ -38,15 +38,28 @@ const ResourceEvaluation = (props) => {
   };
 
   return (
-    <div className={styles.evaluationCard}>
-      <div className={styles.evaluationCardHeader} onClick={toggleDetail}>
-        <p>{evaluation.pass ? "PASS" : "FAIL"}</p>
+    <div className={styles.resourceEvaluationCard}>
+      <div
+        className={styles.resourceEvaluationCardHeader}
+        onClick={toggleDetail}
+      >
+        {evaluation.pass ? (
+          <div>
+            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
+            <p>Pass</p>
+          </div>
+        ) : (
+          <div>
+            <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
+            <p>Fail</p>
+          </div>
+        )}
         <p>{evaluation.created}</p>
         <p>{evaluation.policyEvaluations.length} Policies Evaluated</p>
         <Icon name={ICON_NAMES.CHEVRON_RIGHT} />
       </div>
       {showDetail && (
-        <div>
+        <div className={styles.policyEvaluationsContainer}>
           <p>Policy Group {evaluation.policyGroup}</p>
           {evaluation.policyEvaluations.map((policyEvaluation) => {
             return (

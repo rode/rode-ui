@@ -19,9 +19,10 @@
 
 .container {
   width: 100%;
+  height: 100%;
 }
 
-.evaluationCard {
+.resourceEvaluationCard {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -33,21 +34,56 @@
   }
 }
 
-.evaluationCardHeader {
+.resourceEvaluationCardHeader, .policyEvaluationCardHeader {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
+.policyEvaluationsContainer {
+  width: 95%;
+  margin: 1rem auto;
+}
+
+.policyEvaluationCard {
+  padding: 1rem;
+  margin: 1rem auto;
+}
+
+.violations {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-gap: 0.5rem;
+  width: 100%;
+  margin: 0 auto;
+
+  @include tabletAndLarger {
+    width: 95%;
+    margin-left: auto;
+  }
+}
+
 .darkTheme {
-  .evaluationCard {
+  .resourceEvaluationCard {
     background-color: $DT_BACKGROUND_MEDIUM;
+    box-shadow: $DT_BOX_SHADOW;
+  }
+
+  .policyEvaluationCard {
+    background-color: $DT_BACKGROUND_DARK;
+    box-shadow: $DT_BOX_SHADOW;
   }
 }
 
 .lightTheme {
-  .evaluationCard {
+  .resourceEvaluationCard {
     background-color: $LT_BACKGROUND_LIGHT;
+    box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .policyEvaluationCard {
+    background-color: $LT_BACKGROUND_DARK;
+    box-shadow: $LT_BOX_SHADOW;
   }
 }
