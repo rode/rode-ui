@@ -84,7 +84,7 @@ describe("Edit Policy Group Assignments", () => {
         policyVersionId: `${id}.${version}`,
         policyId: id,
         currentVersion: version,
-        policyVersionCount: 4,
+        policyVersionCount: chance.natural({ min: 4 }),
       };
     }, 1);
     usePolicyAssignmentsResponse = {
