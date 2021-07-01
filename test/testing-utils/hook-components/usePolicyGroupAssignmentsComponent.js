@@ -24,7 +24,7 @@ const PolicyComponent = ({ policyGroupName }) => {
 
   return (
     <Loading loading={loading}>
-      {assignments?.length > 1 ? (
+      {assignments && assignments?.length > 1 ? (
         assignments.map((assignment) => {
           return <p key={assignment.id}>{assignment.id}</p>;
         })

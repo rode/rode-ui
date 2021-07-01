@@ -34,7 +34,7 @@ describe("usePolicyGroupAssignments", () => {
         id: chance.guid(),
         policyGroup: policyGroupName,
       }),
-      chance.d4()
+      chance.d4() + 1
     );
     dispatch = jest.fn();
     state = {
@@ -76,7 +76,9 @@ describe("usePolicyGroupAssignments", () => {
     expect(useFetch).not.toHaveBeenCalledWith(
       `/api/policy-groups/${policyGroupName}/assignments`
     );
-    expect(screen.getByText(assignments[0].id)).toBeInTheDocument();
+    assignments.forEach((assignment) => {
+      expect(screen.getByText(assignment.id)).toBeInTheDocument();
+    });
   });
 
   it("should fetch the policy group assignments if they are not saved in state", () => {
