@@ -16,7 +16,9 @@
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { buildPaginationParams, get, getRodeUrl } from "pages/api/utils/api-utils";
+import { mapToClientModelWithPolicyDetails } from "pages/api/utils/resource-evaluation-utils";
 
+// TODO: tests
 export default async (req, res) => {
   if (req.method !== "GET") {
     return res
@@ -42,6 +44,8 @@ export default async (req, res) => {
       `${rodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(params)}`
     );
 
+    console.log('response', response);
+
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
       return res
@@ -51,12 +55,15 @@ export default async (req, res) => {
 
     const listResourceEvaluationsResponse = await response.json();
 
-    // TODO: do some mapping here?
-    const evaluations = listResourceEvaluationsResponse.resourceEvaluations;
+    const {resourceEvaluations, nextPageToken} = listResourceEvaluationsResponse;
+
+    const promises = resourceEvaluations.map(mapToClientModelWithPolicyDetails);
+
+    const mappedEvaluations = await Promise.all(promises);
 
     res.status(StatusCodes.OK).json({
-      data: evaluations,
-      pageToken: listResourceEvaluationsResponse.nextPageToken,
+      data: mappedEvaluations,
+      pageToken: nextPageToken,
     });
   } catch (error) {
     console.error("Error listing resource evaluations", error);

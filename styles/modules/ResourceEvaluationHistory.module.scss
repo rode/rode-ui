@@ -17,14 +17,37 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-.header {
-  margin-top: 4rem;
+.container {
+  width: 100%;
+}
+
+.evaluationCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 1rem auto;
+  padding: 1rem;
+
+  @include tabletAndLarger {
+    padding: 1rem 2rem;
+  }
+}
+
+.evaluationCardHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .darkTheme {
-
+  .evaluationCard {
+    background-color: $DT_BACKGROUND_MEDIUM;
+  }
 }
 
 .lightTheme {
-
+  .evaluationCard {
+    background-color: $LT_BACKGROUND_LIGHT;
+  }
 }
