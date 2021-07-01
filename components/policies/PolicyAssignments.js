@@ -24,7 +24,6 @@ import { useFetch } from "hooks/useFetch";
 import Button from "components/Button";
 import { useRouter } from "next/router";
 
-// TODO: tests
 const PolicyAssignments = ({ policy }) => {
   const { theme } = useTheme();
   const router = useRouter();
