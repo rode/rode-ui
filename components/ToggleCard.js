@@ -21,7 +21,6 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import styles from "styles/modules/ToggleCard.module.scss";
 
-// TODO: tests
 const ToggleCard = (props) => {
   const { header, content, className = "" } = props;
   const { theme } = useTheme();
@@ -32,7 +31,10 @@ const ToggleCard = (props) => {
   };
 
   return (
-    <div className={`${styles[theme]} ${styles.toggleCard} ${className}`}>
+    <div
+      className={`${styles[theme]} ${styles.toggleCard} ${className}`}
+      data-testid={"toggleCard"}
+    >
       <button
         onClick={toggleDetail}
         className={styles.toggleCardHeader}

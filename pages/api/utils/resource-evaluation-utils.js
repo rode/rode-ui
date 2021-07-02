@@ -16,7 +16,6 @@
 
 import { getPolicyByPolicyId } from "./policy-utils";
 
-// TODO: tests
 const mapPolicyEvaluations = async (policyEvaluation) => {
   const { data, error } = await getPolicyByPolicyId(
     policyEvaluation.policyVersionId
