@@ -26,7 +26,6 @@ import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import ToggleCard from "components/ToggleCard";
 
-// TODO: tests
 const ResourceEvaluation = (props) => {
   const { evaluation } = props;
   const { theme } = useTheme();
