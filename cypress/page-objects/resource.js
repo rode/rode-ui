@@ -31,6 +31,7 @@ export const EvaluateResourceInPlaygroundButton = createButtonSelector(
 export const ShowJsonButton = createButtonSelector("Show JSON");
 
 // OCCURRENCES
+export const OccurrenceSection = /^Occurrences$/;
 export const BuildOccurrence = /produced \d artifact(s?)/i;
 export const VulnerabilityOccurrence = /\d vulnerabilities found/i;
 export const DeploymentOccurrence = /deployment to \w+/i;
