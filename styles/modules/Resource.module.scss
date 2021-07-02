@@ -27,10 +27,15 @@
 
 .resourceDetails {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
 
   > *:not(*:last-of-type) {
     margin-right: 1.5rem;
+  }
+
+  @include tabletAndLarger {
+    flex-direction: row;
   }
 }
 

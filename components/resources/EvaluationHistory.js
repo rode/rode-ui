@@ -37,7 +37,10 @@ const EvaluationHistory = (props) => {
   );
 
   return (
-    <div className={`${styles[theme]} ${styles.container}`}>
+    <div
+      className={`${styles[theme]} ${styles.container}`}
+      data-testid={"evaluationHistory"}
+    >
       <Loading loading={loading}>
         {data && data?.length ? (
           <>
@@ -59,7 +62,9 @@ const EvaluationHistory = (props) => {
             )}
           </>
         ) : (
-          <p>This resource has not been evaluated.</p>
+          <p className={styles.noEvaluationsMessage}>
+            This resource at this version has not been evaluated.
+          </p>
         )}
       </Loading>
     </div>

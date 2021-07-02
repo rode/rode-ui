@@ -31,11 +31,16 @@
 
 .resourceEvaluationDetails {
   display: grid;
-  grid-template-columns: 8rem 1fr 1fr;
+  grid-template-columns: auto;
   grid-template-rows: auto;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   width: 100%;
   align-items: center;
+
+  @include tabletAndLarger {
+    grid-template-columns: 8rem 1fr 1fr;
+    grid-gap: 1rem;
+  }
 }
 
 .evaluationResult {

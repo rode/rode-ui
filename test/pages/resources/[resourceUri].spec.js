@@ -36,6 +36,7 @@ describe("Resource Details page", () => {
         resourceUri,
       },
       push: jest.fn(),
+      asPath: resourceUri,
     };
 
     state = {
@@ -167,5 +168,45 @@ describe("Resource Details page", () => {
     expect(router.push)
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith("/playground");
+  });
+
+  it("should render the navigation for the resource", () => {
+    const baseUrl = `/resources/${encodeURIComponent(
+      router.query.resourceUri
+    )}`;
+    const renderedHistoryLink = screen.getByText("Evaluation History");
+    expect(renderedHistoryLink).toBeInTheDocument();
+    expect(renderedHistoryLink).toHaveAttribute(
+      "href",
+      `${baseUrl}#evaluationHistory`
+    );
+
+    const renderedOccurrenceLink = screen.getByText("Occurrences");
+    expect(renderedOccurrenceLink).toBeInTheDocument();
+    expect(renderedOccurrenceLink).toHaveAttribute(
+      "href",
+      `${baseUrl}#occurrences`
+    );
+  });
+
+  it("should render the evaluation history when no specific section is specified", () => {
+    expect(screen.getByTestId("evaluationHistory")).toBeInTheDocument();
+    expect(screen.queryByTestId("occurrences")).not.toBeInTheDocument();
+  });
+
+  it("should render the evaluation history when the user navigates to that section", () => {
+    router.asPath = `${router.query.resourceUri}#evaluationHistory`;
+    rerender(<Resource />);
+
+    expect(screen.getByTestId("evaluationHistory")).toBeInTheDocument();
+    expect(screen.queryByTestId("occurrences")).not.toBeInTheDocument();
+  });
+
+  it("should render the occurrence data when the user navigates to that section", () => {
+    router.asPath = `${router.query.resourceUri}#occurrences`;
+    rerender(<Resource />);
+
+    expect(screen.getByTestId("occurrences")).toBeInTheDocument();
+    expect(screen.queryByTestId("evaluationHistory")).not.toBeInTheDocument();
   });
 });

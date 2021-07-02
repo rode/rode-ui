@@ -24,13 +24,19 @@
 
 .policyDetails {
   display: grid;
-  grid-template-columns: 2rem 1fr 2rem;
+  grid-template-columns: auto;
   grid-template-rows: auto;
   align-items: center;
-  width: fit-content;
+  justify-items: center;
+  width: 100%;
 
   > p {
     margin: 0 1rem;
+  }
+
+  @include tabletAndLarger {
+    grid-template-columns: 2rem 1fr 2rem;
+    width: fit-content;
   }
 }
 
