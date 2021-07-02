@@ -23,7 +23,6 @@ import Loading from "components/Loading";
 import Button from "components/Button";
 import ResourceEvaluation from "./ResourceEvaluation";
 
-// TODO: tests
 const EvaluationHistory = (props) => {
   const { resourceUri } = props;
   const { theme } = useTheme();
