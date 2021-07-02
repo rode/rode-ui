@@ -29,11 +29,27 @@
   }
 }
 
-.resourceEvaluationCardHeader {
+.resourceEvaluationDetails {
+  display: grid;
+  grid-template-columns: 8rem 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 1rem;
+  width: 100%;
+  align-items: center;
+}
+
+.evaluationResult {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+
+  > p {
+    margin: 0 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
 }
 
 .policyEvaluationsContainer {

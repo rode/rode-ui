@@ -144,16 +144,6 @@ $SIDE_SPACING: 1rem;
   }
 }
 
-.toggleIcon {
-  @include transition;
-  transform: rotate(0deg);
-}
-
-.toggleIconExpanded {
-  @include transition;
-  transform: rotate(90deg);
-}
-
 .severity {
   display: inline-flex;
   flex-direction: row;
@@ -206,8 +196,7 @@ $SIDE_SPACING: 1rem;
     color: $DT_SUB_TEXT;
   }
 
-  .card,
-  .vulnerabilityCardHeader {
+  .card {
     background-color: $DT_BACKGROUND_LIGHT;
     color: $DT_MAIN_TEXT;
   }
@@ -216,10 +205,6 @@ $SIDE_SPACING: 1rem;
   .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $DT_SUB_TEXT;
-    }
-
-    .toggleIcon {
-      color: $DT_LINK;
     }
   }
 
@@ -245,8 +230,7 @@ $SIDE_SPACING: 1rem;
     color: $LT_SUB_TEXT;
   }
 
-  .card,
-  .vulnerabilityCardHeader {
+  .card {
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
   }
@@ -255,10 +239,6 @@ $SIDE_SPACING: 1rem;
   .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $LT_SUB_TEXT;
-    }
-
-    .toggleIcon {
-      color: $LT_LINK;
     }
   }
 

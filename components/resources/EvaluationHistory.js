@@ -18,7 +18,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/EvaluationHistory.module.scss";
 import { useTheme } from "providers/theme";
-import { useAppState } from "providers/appState";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import Button from "components/Button";
@@ -27,7 +26,6 @@ import ResourceEvaluation from "./ResourceEvaluation";
 // TODO: tests
 const EvaluationHistory = (props) => {
   const { resourceUri } = props;
-  const { state } = useAppState();
   const { theme } = useTheme();
 
   const { data, loading, isLastPage, goToNextPage } = usePaginatedFetch(
@@ -45,7 +43,10 @@ const EvaluationHistory = (props) => {
           <>
             {data.map((evaluation) => {
               return (
-               <ResourceEvaluation evaluation={evaluation} key={evaluation.id}/>
+                <ResourceEvaluation
+                  evaluation={evaluation}
+                  key={evaluation.id}
+                />
               );
             })}
             {!isLastPage && (

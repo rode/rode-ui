@@ -14,50 +14,53 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/ResourceEvaluation.module.scss";
 import { useTheme } from "providers/theme";
-import { useAppState } from "providers/appState";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import PolicyEvaluationDetails from "./PolicyEvaluationDetails";
+import LabelWithValue from "components/LabelWithValue";
+import dayjs from "dayjs";
+import { DATE_TIME_FORMAT } from "utils/constants";
+import ToggleCard from "components/ToggleCard";
 
 // TODO: tests
 const ResourceEvaluation = (props) => {
   const { evaluation } = props;
-  const { state } = useAppState();
   const { theme } = useTheme();
-  const [showDetail, setShowDetail] = useState(false);
 
-  const toggleDetail = () => {
-    setShowDetail(!showDetail);
-  };
+  const evaluationOutcome = evaluation.pass ? "pass" : "fail";
 
   return (
-    <div className={`${styles[theme]} ${styles.resourceEvaluationCard}`}>
-      <div
-        className={styles.resourceEvaluationCardHeader}
-        onClick={toggleDetail}
-      >
-        {evaluation.pass ? (
-          <p className={`${styles.pass}`}>
-            <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"}/>
-            Pass
-          </p>
-        ) : (
-          <p className={`${styles.fail}`}>
-            <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
-            Fail
-          </p>
-        )}
-        <p>{evaluation.created}</p>
-        <p>{evaluation.policyEvaluations.length} Policies Evaluated</p>
-        <Icon name={ICON_NAMES.CHEVRON_RIGHT} />
-      </div>
-      {showDetail && (
+    <ToggleCard
+      className={`${styles[theme]} ${styles.resourceEvaluationCard}`}
+      header={
+        <div className={styles.resourceEvaluationDetails}>
+          <div
+            className={`${styles[evaluationOutcome]} ${styles.evaluationResult}`}
+          >
+            {evaluation.pass ? (
+              <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
+            ) : (
+              <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
+            )}
+            <p>{evaluationOutcome}</p>
+          </div>
+          <LabelWithValue
+            label={"Policy Group"}
+            value={evaluation.policyGroup}
+          />
+          <LabelWithValue
+            label={"Completed"}
+            value={dayjs(evaluation.created).format(DATE_TIME_FORMAT)}
+          />
+        </div>
+      }
+      content={
         <div className={styles.policyEvaluationsContainer}>
-          <p>Policy Group {evaluation.policyGroup}</p>
+          <p>{evaluation.policyEvaluations.length} Policies Evaluated</p>
           {evaluation.policyEvaluations.map((policyEvaluation) => {
             return (
               <PolicyEvaluationDetails
@@ -67,8 +70,8 @@ const ResourceEvaluation = (props) => {
             );
           })}
         </div>
-      )}
-    </div>
+      }
+    />
   );
 };
 ResourceEvaluation.propTypes = {

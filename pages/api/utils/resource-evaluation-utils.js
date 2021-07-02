@@ -18,7 +18,9 @@ import { getPolicyByPolicyId } from "./policy-utils";
 
 // TODO: tests
 const mapPolicyEvaluations = async (policyEvaluation) => {
-  const { data, error } = await getPolicyByPolicyId(policyEvaluation.policyVersionId);
+  const { data, error } = await getPolicyByPolicyId(
+    policyEvaluation.policyVersionId
+  );
 
   if (error) {
     throw Error(
@@ -30,17 +32,19 @@ const mapPolicyEvaluations = async (policyEvaluation) => {
     ...policyEvaluation,
     policyVersion: data.policyVersion,
     policyId: data.id,
-    policyName: data.name
-  }
-}
+    policyName: data.name,
+  };
+};
 
 export const mapToClientModelWithPolicyDetails = async (evaluation) => {
-  const mappedPolicyEvaluations = await Promise.all(evaluation.policyEvaluations.map(mapPolicyEvaluations));
+  const mappedPolicyEvaluations = await Promise.all(
+    evaluation.policyEvaluations.map(mapPolicyEvaluations)
+  );
 
   return {
     ...evaluation.resourceEvaluation,
     resourceUri: evaluation.resourceEvaluation.resourceVersion.version,
     resourceAliases: evaluation.resourceEvaluation.resourceVersion.names,
-    policyEvaluations: mappedPolicyEvaluations
+    policyEvaluations: mappedPolicyEvaluations,
   };
-}
+};

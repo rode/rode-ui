@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "providers/theme";
-import { ICON_NAMES } from "../../utils/icon-utils";
-import Icon from "../Icon";
+import { ICON_NAMES } from "utils/icon-utils";
+import Icon from "components/Icon";
 import styles from "styles/modules/PolicyEvaluationDetails.module.scss";
-import LabelWithValue from "../LabelWithValue";
+import ToggleCard from "components/ToggleCard";
 
 // TODO: tests
 const PolicyEvaluationDetails = (props) => {
   const { policyEvaluation } = props;
   const { theme } = useTheme();
-  const [showDetail, setShowDetail] = useState(false);
-
-  const toggleDetail = () => {
-    setShowDetail(!showDetail);
-  };
 
   return (
-    <div
-      key={policyEvaluation.id}
+    <ToggleCard
       className={`${styles[theme]} ${styles.policyEvaluationCard}`}
-    >
-      <div onClick={toggleDetail} className={styles.policyEvaluationCardHeader}>
+      header={
         <div className={styles.policyDetails}>
           {policyEvaluation.pass ? (
             <Icon
@@ -55,16 +48,14 @@ const PolicyEvaluationDetails = (props) => {
           <p>{policyEvaluation.policyName}</p>
           <p>v{policyEvaluation.policyVersion}</p>
         </div>
-        <Icon name={ICON_NAMES.CHEVRON_RIGHT} />
-      </div>
-      {showDetail && (
-        <div>
+      }
+      content={
+        <div className={styles.violationsContainer}>
           {policyEvaluation.violations.map((violation) => {
-            console.log("violation", violation);
             const outcome = violation.pass ? "pass" : "fail";
 
             return (
-              <div key={violation.id} className={styles.violations}>
+              <div key={violation.id} className={styles.violation}>
                 <p className={`${styles[outcome]} ${styles.violationResult}`}>
                   {outcome}
                 </p>
@@ -73,8 +64,8 @@ const PolicyEvaluationDetails = (props) => {
             );
           })}
         </div>
-      )}
-    </div>
+      }
+    />
   );
 };
 

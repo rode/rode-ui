@@ -85,7 +85,7 @@ export const ICON_COMPONENTS = {
   [PLUS_CIRCLE]: PlusCircle,
   [PENCIL]: Pencil,
   [BADGE_CHECK_OUTLINE]: BadgeCheckOutline,
-  [EXCLAMATION_OUTLINE]: ExclamationOutline
+  [EXCLAMATION_OUTLINE]: ExclamationOutline,
 };
 
 export const ICON_NAMES = {

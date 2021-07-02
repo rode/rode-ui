@@ -15,7 +15,11 @@
  */
 
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { buildPaginationParams, get, getRodeUrl } from "pages/api/utils/api-utils";
+import {
+  buildPaginationParams,
+  get,
+  getRodeUrl,
+} from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/resource-evaluation-utils";
 
 // TODO: tests
@@ -33,7 +37,7 @@ export default async (req, res) => {
 
     const params = {
       ...buildPaginationParams(req),
-      resourceUri
+      resourceUri,
     };
 
     if (req.query.filter) {
@@ -44,8 +48,6 @@ export default async (req, res) => {
       `${rodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(params)}`
     );
 
-    console.log('response', response);
-
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);
       return res
@@ -55,7 +57,10 @@ export default async (req, res) => {
 
     const listResourceEvaluationsResponse = await response.json();
 
-    const {resourceEvaluations, nextPageToken} = listResourceEvaluationsResponse;
+    const {
+      resourceEvaluations,
+      nextPageToken,
+    } = listResourceEvaluationsResponse;
 
     const promises = resourceEvaluations.map(mapToClientModelWithPolicyDetails);
 

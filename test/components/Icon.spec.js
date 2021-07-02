@@ -52,10 +52,10 @@ describe("Icon", () => {
     ["plus circle", ICON_NAMES.PLUS_CIRCLE],
     ["pencil", ICON_NAMES.PENCIL],
     ["badge check outline", ICON_NAMES.BADGE_CHECK_OUTLINE],
-    ["exclamation outline", ICON_NAMES.EXCLAMATION_OUTLINE]
-  ])("should render the \"%s\" icon when specified", (iconTitle, iconName) => {
-    render(<Icon name={iconName}/>);
+    ["exclamation outline", ICON_NAMES.EXCLAMATION_OUTLINE],
+  ])('should render the "%s" icon when specified', (iconTitle, iconName) => {
+    render(<Icon name={iconName} />);
 
     expect(screen.getByTitle(new RegExp(iconTitle, "i"))).toBeInTheDocument();
-  })
+  });
 });

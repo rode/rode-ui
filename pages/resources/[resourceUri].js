@@ -146,7 +146,7 @@ const Resource = () => {
               />
               <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
               {activeSection === EVALUATION_HISTORY && (
-                <EvaluationHistory resourceUri={resourceUri}/>
+                <EvaluationHistory resourceUri={resourceUri} />
               )}
               {activeSection === OCCURRENCES && (
                 <ResourceOccurrences occurrences={data} />

@@ -17,23 +17,15 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-
 .policyEvaluationCard {
   padding: 1rem;
   margin: 1rem auto;
 }
 
-.policyEvaluationCardHeader {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .policyDetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 2rem 1fr 2rem;
+  grid-template-rows: auto;
   align-items: center;
   width: fit-content;
 
@@ -42,17 +34,24 @@
   }
 }
 
-.violations {
+.violationsContainer {
   display: grid;
-  grid-template-columns: 4rem 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
   grid-gap: 0.5rem;
   width: 100%;
-  margin: 0 auto;
+  margin: 1rem auto 0.5rem;
 
   @include tabletAndLarger {
-    width: 95%;
+    width: 90%;
     margin-left: auto;
   }
+}
+
+.violation {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  width: 100%;
 }
 
 .violationResult {
@@ -61,7 +60,7 @@
 }
 
 .darkTheme {
- &.policyEvaluationCard {
+  &.policyEvaluationCard {
     background-color: $DT_BACKGROUND_DARK;
     box-shadow: $DT_BOX_SHADOW;
   }
