@@ -22,7 +22,6 @@ import {
 } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/resource-evaluation-utils";
 
-// TODO: tests
 export default async (req, res) => {
   if (req.method !== "GET") {
     return res
