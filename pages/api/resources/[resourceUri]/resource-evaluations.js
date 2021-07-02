@@ -40,10 +40,6 @@ export default async (req, res) => {
       resourceUri,
     };
 
-    if (req.query.filter) {
-      params.filter = req.query.filter;
-    }
-
     const response = await get(
       `${rodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(params)}`
     );
