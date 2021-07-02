@@ -22,7 +22,6 @@ import Icon from "components/Icon";
 import styles from "styles/modules/PolicyEvaluationDetails.module.scss";
 import ToggleCard from "components/ToggleCard";
 
-// TODO: tests
 const PolicyEvaluationDetails = (props) => {
   const { policyEvaluation } = props;
   const { theme } = useTheme();
