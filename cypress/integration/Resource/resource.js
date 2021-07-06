@@ -79,12 +79,8 @@ Then(/^I see "([^"]*)" Vulnerability occurrence details$/, (resourceName) => {
       if (vulnerability.effectiveSeverity === "SEVERITY_UNSPECIFIED") {
         cy.contains("Severity N/A").should("be.visible");
       } else {
-        cy.contains("Severity").should(
-          "be.visible"
-        );
-        cy.contains(vulnerability.effectiveSeverity).should(
-          "be.visible"
-        );
+        cy.contains("Severity").should("be.visible");
+        cy.contains(vulnerability.effectiveSeverity).should("be.visible");
       }
 
       cy.contains(vulnerability.packageName).click();

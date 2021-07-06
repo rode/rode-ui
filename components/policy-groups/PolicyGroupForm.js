@@ -114,7 +114,7 @@ const PolicyGroupForm = (props) => {
   return (
     <>
       <PageHeader>
-        <h1>{title}</h1>
+        <Text.Heading1>{title}</Text.Heading1>
       </PageHeader>
       <div className={`${styles.pageContainer} ${styles[theme]}`}>
         <form onSubmit={onSubmit} className={styles.form}>
@@ -193,7 +193,7 @@ const PolicyGroupForm = (props) => {
           {creatingNewPolicyGroup && (
             <>
               <div>
-                <Text.Body1 as={"h2"}>Policy Group Name Guidelines</Text.Body1>
+                <Text.Heading2>Policy Group Name Guidelines</Text.Heading2>
                 <ul>
                   <li>Must be unique</li>
                   <li>Lowercase</li>
@@ -203,7 +203,7 @@ const PolicyGroupForm = (props) => {
                 </ul>
               </div>
               <div>
-                <Text.Body1 as={"h3"}>Examples</Text.Body1>
+                <Text.Heading3>Examples</Text.Heading3>
                 <code>development_3</code>
                 <code>pci-requirements</code>
                 <code>docker_images_prod</code>

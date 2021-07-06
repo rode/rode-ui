@@ -53,7 +53,7 @@ const PolicyGroups = () => {
         className={styles.createNewButton}
       />
       <PageHeader>
-        <h1>Manage Policy Groups</h1>
+        <Text.Heading1>Manage Policy Groups</Text.Heading1>
       </PageHeader>
       <div className={styles.cardsContainer}>
         <Loading loading={loading}>

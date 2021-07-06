@@ -65,6 +65,10 @@ $GAP: 1rem;
 .cardText {
   @extend .cardHeader;
   margin-left: 0.5rem;
+
+  > * {
+    font-size: 0.875rem;
+  }
 }
 
 .actionButton,
@@ -83,6 +87,10 @@ $GAP: 1rem;
     box-shadow: $DT_BOX_SHADOW;
   }
 
+  .cardText {
+    color: $DT_SUB_TEXT;
+  }
+
   .selectedButton {
     svg,
     p {
@@ -95,6 +103,10 @@ $GAP: 1rem;
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
+  }
+
+  .cardText {
+    color: $LT_SUB_TEXT;
   }
 
   .selectedButton {

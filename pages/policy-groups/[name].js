@@ -54,7 +54,7 @@ const PolicyGroup = () => {
   return (
     <>
       <PageHeader>
-        <h1>Manage Policy Groups</h1>
+        <Text.Heading1>Manage Policy Groups</Text.Heading1>
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>

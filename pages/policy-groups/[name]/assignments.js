@@ -219,7 +219,7 @@ const EditPolicyGroupAssignments = () => {
   return (
     <>
       <PageHeader>
-        <h1>Edit Policy Group Assignments</h1>
+        <Text.Heading1>Edit Policy Group Assignments</Text.Heading1>
       </PageHeader>
       <PolicyVersionDrawer
         onClose={() => {

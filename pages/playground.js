@@ -94,7 +94,7 @@ const PolicyPlayground = () => {
   return (
     <div className={`${styles[theme]} ${styles.pageContainer}`}>
       <PageHeader>
-        <h1>Policy Playground</h1>
+        <Text.Heading1>Policy Playground</Text.Heading1>
         <Text.Body1 className={styles.instructions}>
           Choose a resource, pick a policy, and evaluate.
         </Text.Body1>
