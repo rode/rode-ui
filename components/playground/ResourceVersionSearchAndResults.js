@@ -32,6 +32,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const ResourceVersionSearchAndResults = ({
   selectedResource,
@@ -131,7 +132,7 @@ const ResourceVersionSearchAndResults = ({
               )}
             </>
           ) : (
-            <p>{`No versions found matching "${state.resourceVersionSearchTerm}"`}</p>
+            <Text.Body1>{`No versions found matching "${state.resourceVersionSearchTerm}"`}</Text.Body1>
           )}
         </Loading>
       )}

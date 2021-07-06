@@ -34,6 +34,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
   const [resourceSearch, setResourceSearch] = useState(!!selectedResource);
@@ -99,7 +100,9 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
                   return (
                     <div className={`${styles.searchCard}`} key={id}>
                       <div>
-                        <p className={styles.cardHeader}>{name}</p>
+                        <Text.Body1 className={styles.cardHeader}>
+                          {name}
+                        </Text.Body1>
                         <LabelWithValue
                           label={"Type"}
                           value={type}
@@ -144,7 +147,7 @@ const ResourceSearchAndResults = ({ selectedResource, onResourceSelect }) => {
                 )}
               </>
             ) : (
-              <p>{`No resources found matching "${state.searchTerm}"`}</p>
+              <Text.Body1>{`No resources found matching "${state.resourceSearchTerm}"`}</Text.Body1>
             )}
           </Loading>
         )}

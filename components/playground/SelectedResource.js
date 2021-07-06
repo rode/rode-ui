@@ -17,7 +17,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Playground.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
 import { useFetch } from "hooks/useFetch";
 import Loading from "components/Loading";
@@ -29,6 +28,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import ResourceSelectionDrawer from "components/playground/ResourceSelectionDrawer";
 import { copy } from "utils/shared-utils";
+import Text from "components/Text";
 
 const SelectedResource = (props) => {
   const { resourceUri, setEvaluationResource, clearEvaluation } = props;
@@ -85,7 +85,7 @@ const SelectedResource = (props) => {
       </div>
       {resourceUri ? (
         <Loading loading={loading}>
-          <p className={textStyles.label}>Occurrence Data</p>
+          <Text.Label as={"p"}>Occurrence Data</Text.Label>
           <Code
             code={formattedOccurrenceData}
             language={"json"}
@@ -94,9 +94,9 @@ const SelectedResource = (props) => {
           />
         </Loading>
       ) : (
-        <p className={styles.selectToBeginText}>
+        <Text.Body1 className={styles.selectToBeginText}>
           Search for a resource to begin
-        </p>
+        </Text.Body1>
       )}
     </>
   );
