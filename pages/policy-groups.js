@@ -77,7 +77,7 @@ const PolicyGroups = () => {
               )}
             </>
           ) : (
-            <p>No policy groups exist.</p>
+            <p className={styles.noGroupsMessage}>No policy groups exist.</p>
           )}
         </Loading>
       </div>

@@ -73,6 +73,12 @@
   }
 }
 
+.noGroupsMessage {
+  text-align: center;
+  margin-top: 3rem;
+  grid-column: 1 / -1;
+}
+
 .darkTheme {
   .policyGroupName {
     color: $DT_LINK;
@@ -85,6 +91,7 @@
 
     &:hover {
       box-shadow: $DT_HOVER_SHADOW;
+      background-color: $DT_BACKGROUND_DARK;
     }
   }
 }
@@ -101,6 +108,7 @@
 
     &:hover {
       box-shadow: $LT_HOVER_SHADOW;
+      background-color: $LT_BACKGROUND_DARK;
     }
   }
 }
