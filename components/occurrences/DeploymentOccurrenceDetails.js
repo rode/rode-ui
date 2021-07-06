@@ -21,23 +21,23 @@ import { DATE_TIME_FORMAT } from "utils/constants";
 import dayjs from "dayjs";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
 import LabelWithValue from "components/LabelWithValue";
+import Text from "components/Text";
 
 const DeploymentOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
       <div className={styles.detailSummary}>
         <div>
-          <p className={styles.title}>Deployment</p>
-          <p>Deployed to {occurrence.platform}</p>
+          <Text.Body1>Deployed to {occurrence.platform}</Text.Body1>
         </div>
         <div className={styles.rightDetails}>
-          <p className={styles.timestamps}>
+          <Text.Body2 className={styles.timestamps}>
             Started {dayjs(occurrence.deploymentStart).format(DATE_TIME_FORMAT)}
-          </p>
-          <p className={styles.timestamps}>
+          </Text.Body2>
+          <Text.Body2 className={styles.timestamps}>
             Deployment End{" "}
             {dayjs(occurrence.deploymentEnd).format(DATE_TIME_FORMAT)}
-          </p>
+          </Text.Body2>
 
           <OccurrenceCodeModal json={occurrence.originals} />
         </div>

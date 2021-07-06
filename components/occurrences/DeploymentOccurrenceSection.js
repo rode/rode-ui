@@ -22,6 +22,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
+import Text from "components/Text";
 
 const DeploymentOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -32,7 +33,7 @@ const DeploymentOccurrenceSection = ({ occurrences }) => {
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
         <Icon name={ICON_NAMES.SERVER} />
-        <p>Deploy</p>
+        <Text.Heading2>Deploy</Text.Heading2>
       </div>
       {occurrences.map((occurrence) => (
         <OccurrencePreview

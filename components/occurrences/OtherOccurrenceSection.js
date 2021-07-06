@@ -22,6 +22,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
+import Text from "components/Text";
 
 const OtherOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -32,15 +33,19 @@ const OtherOccurrenceSection = ({ occurrences }) => {
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
         <Icon name={ICON_NAMES.FLAG} />
-        <p>Other</p>
+        <Text.Heading2>Other</Text.Heading2>
       </div>
       {occurrences.map((occurrence) => (
         <div className={styles.unknownPreviewContainer} key={occurrence.name}>
-          <p className={styles.previewMainText}>{occurrence.kind}</p>
+          <Text.Body1 className={styles.previewMainText}>
+            {occurrence.kind}
+          </Text.Body1>
           {occurrence.createTime && (
-            <p className={styles.previewTimestamp}>{`Created at ${dayjs(
-              occurrence.createTime
-            ).format(DATE_TIME_FORMAT)}`}</p>
+            <Text.Body2
+              className={styles.previewTimestamp}
+            >{`Created at ${dayjs(occurrence.createTime).format(
+              DATE_TIME_FORMAT
+            )}`}</Text.Body2>
           )}
           <OccurrenceCodeModal json={occurrence} fullWidth={true} />
         </div>

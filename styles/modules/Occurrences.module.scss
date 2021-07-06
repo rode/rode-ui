@@ -104,18 +104,14 @@ $INDENTATION: 1rem;
   margin-bottom: 0.25rem;
 }
 
-.previewSubText {
-  font-size: 0.85rem;
+.previewSubText,
+.previewTimestamp {
   margin-left: 0.5rem;
   line-height: 1.5rem;
 
   @include tabletAndLarger {
     margin-left: 1rem;
   }
-}
-
-.previewTimestamp {
-  @extend .previewSubText;
 }
 
 .previewBreakdown {
@@ -140,8 +136,8 @@ $INDENTATION: 1rem;
   font-weight: 600;
   font-size: 1.5rem;
 
-  > p {
-    margin-left: 0.25rem;
+  > span {
+    margin: 0 0.25rem;
   }
 }
 

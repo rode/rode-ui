@@ -22,13 +22,13 @@ import dayjs from "dayjs";
 import ExternalLink from "components/ExternalLink";
 import OccurrenceCodeModal from "./OccurrenceCodeModal";
 import LabelWithValue from "components/LabelWithValue";
+import Text from "components/Text";
 
 const BuildOccurrenceDetails = ({ occurrence }) => {
   return (
     <div>
       <div className={styles.detailSummary}>
         <div>
-          <p className={styles.title}>Build</p>
           <ExternalLink
             href={occurrence.sourceUri}
             label={"View source"}
@@ -43,20 +43,22 @@ const BuildOccurrenceDetails = ({ occurrence }) => {
           <LabelWithValue label={"Created By"} value={occurrence.creator} />
         </div>
         <div className={styles.rightDetails}>
-          <p className={styles.timestamps}>
+          <Text.Body2 className={styles.timestamps}>
             Started {dayjs(occurrence.started).format(DATE_TIME_FORMAT)}
-          </p>
-          <p className={styles.timestamps}>
+          </Text.Body2>
+          <Text.Body2 className={styles.timestamps}>
             Completed {dayjs(occurrence.completed).format(DATE_TIME_FORMAT)}
-          </p>
+          </Text.Body2>
           <OccurrenceCodeModal json={occurrence.originals} />
         </div>
       </div>
       <div className={styles.detailContentContainer}>
         {occurrence.artifacts?.map((artifact) => (
           <div key={artifact.id} className={styles.card}>
-            <p className={styles.cardTitle}>Build Artifact</p>
-            <p>{artifact.id}</p>
+            <Text.Heading3 className={styles.cardTitle}>
+              Build Artifact
+            </Text.Heading3>
+            <Text.Body1>{artifact.id}</Text.Body1>
             <LabelWithValue
               label={"Related Artifact(s)"}
               value={artifact.names.join(", ")}

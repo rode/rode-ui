@@ -18,6 +18,7 @@ import React from "react";
 import styles from "styles/modules/Toggle.module.scss";
 import { useTheme } from "providers/theme";
 import { DARK_THEME } from "utils/constants";
+import Text from "components/Text";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
@@ -25,7 +26,9 @@ const ThemeToggle = () => {
 
   return (
     <div className={`${styles.container} ${styles[theme]}`}>
-      <span id={"toggle-theme"}>Dark Mode: {isActive ? "ON" : "OFF"}</span>
+      <Text.Caption id={"toggle-theme"}>
+        Dark Mode: {isActive ? "ON" : "OFF"}
+      </Text.Caption>
       <button
         className={styles.toggle}
         onClick={toggleTheme}

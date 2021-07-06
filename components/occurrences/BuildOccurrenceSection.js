@@ -26,6 +26,7 @@ import { DATE_TIME_FORMAT } from "utils/constants";
 import { getResourceDetails, RESOURCE_TYPES } from "utils/resource-utils";
 import LabelWithValue from "components/LabelWithValue";
 import ResourceVersion from "components/resources/ResourceVersion";
+import Text from "components/Text";
 
 const BuildOccurrenceSection = ({ occurrences, type }) => {
   if (!occurrences?.length) {
@@ -36,7 +37,7 @@ const BuildOccurrenceSection = ({ occurrences, type }) => {
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
         <Icon name={ICON_NAMES.COG} />
-        <p>Build</p>
+        <Text.Heading2>Build</Text.Heading2>
       </div>
       {occurrences.map((occurrence) => {
         let producedArtifactVersions = null;
