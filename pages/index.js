@@ -25,8 +25,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { SEARCH_ALL } from "utils/constants";
 
-import Text from "components/Text";
-
 const Home = () => {
   const { theme } = useTheme();
   const router = useRouter();
@@ -57,14 +55,6 @@ const Home = () => {
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
       <div className={styles.card}>
-        <Text.Heading1>Heading 1</Text.Heading1>
-        <Text.Heading2>Heading 2</Text.Heading2>
-        <Text.Heading3>Heading 3</Text.Heading3>
-        <Text.Body1>Body 1</Text.Body1>
-        <Text.Body2>Body 2</Text.Body2>
-        <Text.Caption>Caption</Text.Caption>
-        <Text.Label>Label</Text.Label>
-        <Text.Value>Value</Text.Value>
         <ResourceSearchBar
           onSubmit={(event) =>
             onSubmit(event, "resources", state.resourceSearchTerm)

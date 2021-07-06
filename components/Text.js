@@ -19,10 +19,8 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Typography.module.scss";
 import { useTheme } from "providers/theme";
 
-// TODO: test this
-
 const BaseText = (props) => {
-  const { className = "", as = "p", style, children, ...otherProps } = props;
+  const { className = "", as, style, children, ...otherProps } = props;
   const { theme } = useTheme();
 
   if (!children) {
@@ -69,7 +67,6 @@ BaseText.propTypes = {
     "body1",
     "body2",
     "caption",
-    "button",
   ]).isRequired,
 };
 
