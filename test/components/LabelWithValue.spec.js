@@ -32,18 +32,13 @@ describe("LabelWithValue", () => {
   it("should render the label", () => {
     const renderedLabel = screen.getByText(label);
     expect(renderedLabel).toBeInTheDocument();
-    expect(renderedLabel).toHaveClass("label");
+    expect(renderedLabel).toHaveClass("body1");
   });
 
   it("should render the value", () => {
     const renderedValue = screen.getByText(value);
     expect(renderedValue).toBeInTheDocument();
     expect(renderedValue).toHaveClass("value");
-  });
-
-  it("should not render the label if it is not specified", () => {
-    rerender(<LabelWithValue label={null} value={value} />);
-    expect(screen.getByText(value).previousElementSibling).toBeNull();
   });
 
   it("should return null if there is no value specified", () => {
