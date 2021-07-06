@@ -62,7 +62,7 @@ const EvaluationHistory = (props) => {
           </>
         ) : (
           <p className={styles.noEvaluationsMessage}>
-            This resource at this version has not been evaluated.
+            The selected version of this resource has not been evaluated.
           </p>
         )}
       </Loading>
