@@ -48,10 +48,10 @@ const PolicyVersionDrawer = ({
       {assignedPolicy ? (
         <div className={`${styles[theme]}`}>
           <div className={styles.drawerHeader}>
-            <Text.Heading1>{assignedPolicy.policyName}</Text.Heading1>
-            <Text.Body1 className={styles.instructions}>
+            <Text.Body1>{assignedPolicy.policyName}</Text.Body1>
+            <Text.Body2 className={styles.instructions}>
               Target a specific version of this policy
-            </Text.Body1>
+            </Text.Body2>
           </div>
           <Loading loading={loading}>
             {data?.length > 0 ? (

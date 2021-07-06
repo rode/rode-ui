@@ -24,12 +24,7 @@
   text-align: center;
 }
 
-.resourceName {
-  font-weight: 600;
-}
-
 .instructions {
-  font-size: 0.8rem;
   margin-top: 0.5rem;
 }
 
@@ -56,7 +51,9 @@
 }
 
 .cardSubtext {
-  font-size: 0.8rem;
+  > * {
+    font-size: 0.875rem;
+  }
 }
 
 .viewMoreResultsButton {

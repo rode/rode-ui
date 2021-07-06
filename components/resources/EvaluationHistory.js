@@ -22,6 +22,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
 import Button from "components/Button";
 import ResourceEvaluation from "./ResourceEvaluation";
+import Text from "components/Text";
 
 const EvaluationHistory = (props) => {
   const { resourceUri } = props;
@@ -61,9 +62,9 @@ const EvaluationHistory = (props) => {
             )}
           </>
         ) : (
-          <p className={styles.noEvaluationsMessage}>
+          <Text.Body1 className={styles.noEvaluationsMessage}>
             The selected version of this resource has not been evaluated.
-          </p>
+          </Text.Body1>
         )}
       </Loading>
     </div>
