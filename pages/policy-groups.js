@@ -24,6 +24,7 @@ import Loading from "components/Loading";
 import styles from "styles/modules/PolicyGroupDashboard.module.scss";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import Text from "components/Text";
 
 const PolicyGroups = () => {
   const { theme } = useTheme();
@@ -77,7 +78,9 @@ const PolicyGroups = () => {
               )}
             </>
           ) : (
-            <p className={styles.noGroupsMessage}>No policy groups exist.</p>
+            <Text.Body1 className={styles.noGroupsMessage}>
+              No policy groups exist.
+            </Text.Body1>
           )}
         </Loading>
       </div>

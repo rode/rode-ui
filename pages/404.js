@@ -16,11 +16,12 @@
 
 import React from "react";
 import styles from "styles/modules/Errors.module.scss";
+import Text from "components/Text";
 
 const Custom404 = () => {
   return (
     <div className={styles.container}>
-      <p>404 - Page Not Found</p>
+      <Text.Body1>404 - Page Not Found</Text.Body1>
     </div>
   );
 };

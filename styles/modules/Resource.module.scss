@@ -41,7 +41,6 @@
 
 .notFound {
   text-align: center;
-  align-self: center;
-  margin-top: 30vh;
+  padding: 2rem 0;
   @include ellipsis(calc(90vw - 3rem));
 }

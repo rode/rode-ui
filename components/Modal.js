@@ -22,6 +22,7 @@ import Button from "./Button";
 import Icon from "./Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
+import Text from "components/Text";
 
 const Modal = (props) => {
   const { title, children, onClose, isVisible } = props;
@@ -53,9 +54,9 @@ const Modal = (props) => {
         <Icon name={ICON_NAMES.X_CIRCLE} size="xlarge" />
       </Button>
       <div className={styles.contentWrapper}>
-        <h1 id={"modalTitle"} className={styles.title}>
+        <Text.Heading1 id={"modalTitle"} className={styles.title}>
           {title}
-        </h1>
+        </Text.Heading1>
         <div className={styles.content}>{children}</div>
       </div>
     </div>

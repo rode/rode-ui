@@ -35,6 +35,8 @@ import DetailsHeader from "components/shared/DetailsHeader";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 import DetailsNavigation from "components/shared/DetailsNavigation";
 import EvaluationHistory from "components/resources/EvaluationHistory";
+import Text from "components/Text";
+import Link from "next/link";
 
 const EVALUATION_HISTORY = "evaluationHistory";
 const OCCURRENCES = "occurrences";
@@ -153,9 +155,14 @@ const Resource = () => {
               )}
             </>
           ) : (
-            <p className={styles.notFound}>
-              No resource found for <wbr /> {`"${resourceUri}"`}
-            </p>
+            <div className={styles.notFound}>
+              <Text.Heading1>
+                No resource found under {`"${resourceUri}"`}
+              </Text.Heading1>
+              <Text.Body1>
+                Try <Link href={"/resources"}>searching for a resource</Link>.
+              </Text.Body1>
+            </div>
           )}
         </Loading>
       </div>

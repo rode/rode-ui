@@ -19,13 +19,14 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/PolicyAssignmentCard.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicyAssignmentCard = ({ policy, actions }) => {
   const { theme } = useTheme();
   return (
     <div className={`${styles.assignmentCard} ${styles[theme]}`}>
       <div>
-        <LabelWithValue value={policy.policyName} />
+        <Text.Value>{policy.policyName}</Text.Value>
         <LabelWithValue label={"Version"} value={policy.policyVersion} />
       </div>
       {actions}

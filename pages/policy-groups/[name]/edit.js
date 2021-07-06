@@ -21,6 +21,7 @@ import PolicyGroupForm from "components/policy-groups/PolicyGroupForm";
 import Loading from "components/Loading";
 import Link from "next/link";
 import styles from "styles/modules/PolicyGroupForm.module.scss";
+import Text from "components/Text";
 
 const EditPolicyGroup = () => {
   const router = useRouter();
@@ -42,11 +43,13 @@ const EditPolicyGroup = () => {
         />
       ) : (
         <div className={styles.notFoundContainer}>
-          <h1>No policy group found under {`"${name}"`}</h1>
-          <p>
+          <Text.Heading1>
+            No policy group found under {`"${name}"`}
+          </Text.Heading1>
+          <Text.Body1>
             Go to the <Link href={"/policy-groups"}>dashboard</Link> to view all
             policy groups
-          </p>
+          </Text.Body1>
         </div>
       )}
     </Loading>

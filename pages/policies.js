@@ -28,6 +28,7 @@ import Button from "components/Button";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { DEFAULT_SEARCH_PAGE_SIZE, SEARCH_ALL } from "utils/constants";
 import useDebouncedValue from "hooks/useDebouncedValue";
+import Text from "components/Text";
 
 const Policies = () => {
   const { theme } = useTheme();
@@ -111,7 +112,9 @@ const Policies = () => {
               )}
             </>
           ) : (
-            <span className={styles.noResults}>No policies found</span>
+            <Text.Body1 className={styles.noResults}>
+              No policies found
+            </Text.Body1>
           )}
         </Loading>
       ) : null}

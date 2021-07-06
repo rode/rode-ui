@@ -29,6 +29,7 @@ import { buildResourceQueryParams } from "utils/resource-utils";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import Text from "components/Text";
 
 const Resources = () => {
   const { theme } = useTheme();
@@ -132,7 +133,9 @@ const Resources = () => {
                 )}
               </>
             ) : (
-              <span className={styles.noResults}>No resources found</span>
+              <Text.Body1 className={styles.noResults}>
+                No resources found
+              </Text.Body1>
             )}
           </Loading>
         </>

@@ -32,6 +32,7 @@ import DetailsNavigation from "components/shared/DetailsNavigation";
 import PolicyHistory from "components/policies/PolicyHistory";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
 import PolicyAssignments from "components/policies/PolicyAssignments";
+import Text from "components/Text";
 
 const DETAILS = "details";
 const HISTORY = "history";
@@ -96,7 +97,7 @@ const Policy = () => {
             <>
               <DetailsHeader
                 name={policy.name}
-                subText={<p>{policy.description}</p>}
+                subText={<Text.Body2>{policy.description}</Text.Body2>}
                 actionButton={
                   <Button label={"Edit Policy"} onClick={editPolicy} />
                 }
@@ -114,12 +115,10 @@ const Policy = () => {
             </>
           ) : (
             <div className={styles.notFound}>
-              <h1 className={styles.notFound}>
-                No policy found under {`"${id}"`}
-              </h1>
-              <p>
+              <Text.Heading1>No policy found under {`"${id}"`}</Text.Heading1>
+              <Text.Body1>
                 Try <Link href={"/policies"}>searching for a policy</Link>.
-              </p>
+              </Text.Body1>
             </div>
           )}
         </Loading>
