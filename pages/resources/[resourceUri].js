@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "providers/theme";
 import styles from "styles/modules/Resource.module.scss";
@@ -33,17 +33,46 @@ import Loading from "components/Loading";
 import { useSafeLayoutEffect } from "hooks/useSafeLayoutEffect";
 import DetailsHeader from "components/shared/DetailsHeader";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
+import DetailsNavigation from "components/shared/DetailsNavigation";
+import EvaluationHistory from "components/resources/EvaluationHistory";
+
+const EVALUATION_HISTORY = "evaluationHistory";
+const OCCURRENCES = "occurrences";
+const createLinks = (baseUrl) => {
+  return [
+    {
+      label: "Evaluation History",
+      href: `${baseUrl}#${EVALUATION_HISTORY}`,
+    },
+    {
+      label: "Occurrences",
+      href: `${baseUrl}#${OCCURRENCES}`,
+    },
+  ];
+};
 
 const Resource = () => {
   const { theme } = useTheme();
   const { state, dispatch } = useAppState();
   const router = useRouter();
   const [showVersionDrawer, setShowVersionDrawer] = useState(false);
+  const [activeSection, setActiveSection] = useState(EVALUATION_HISTORY);
   const { resourceUri } = router.query;
 
   const { data, loading } = useFetch(resourceUri ? `/api/occurrences` : null, {
     resourceUri,
   });
+
+  const navigationLinks = createLinks(
+    `/resources/${encodeURIComponent(resourceUri)}`
+  );
+
+  useEffect(() => {
+    const fullPath = router.asPath;
+    const [, hash] = fullPath.split("#");
+
+    setActiveSection(hash || navigationLinks[0].href.split("#")[1]);
+  }, [router.asPath]);
 
   useSafeLayoutEffect(() => {
     dispatch({
@@ -111,8 +140,17 @@ const Resource = () => {
                   />
                 }
               />
+              <DetailsNavigation
+                links={navigationLinks}
+                activeSection={activeSection}
+              />
               <EvaluateInPlaygroundButton onClick={evaluateInPlayground} />
-              <ResourceOccurrences occurrences={data} />
+              {activeSection === EVALUATION_HISTORY && (
+                <EvaluationHistory resourceUri={resourceUri} />
+              )}
+              {activeSection === OCCURRENCES && (
+                <ResourceOccurrences occurrences={data} />
+              )}
             </>
           ) : (
             <p className={styles.notFound}>

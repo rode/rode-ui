@@ -15,28 +15,25 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
-import Loading from "components/Loading";
-import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 
-const PolicyComponent = ({ policyGroupName }) => {
-  const { assignments, loading } = usePolicyGroupAssignments(policyGroupName);
-
+const Exclamation = () => {
   return (
-    <Loading loading={loading}>
-      {assignments && assignments?.length > 1 ? (
-        assignments.map((assignment) => {
-          return <p key={assignment.id}>{assignment.id}</p>;
-        })
-      ) : (
-        <p>No assignments</p>
-      )}
-    </Loading>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <title>Exclamation Outline</title>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+      />
+    </svg>
   );
 };
 
-PolicyComponent.propTypes = {
-  policyGroupName: PropTypes.string,
-};
-
-export default PolicyComponent;
+export default Exclamation;

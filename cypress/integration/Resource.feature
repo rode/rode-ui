@@ -20,6 +20,7 @@ Feature: Resources
 
   Scenario Outline: Viewing Resource Details
     Given I am on the "Existing" resource details page
+    When I select the Occurrence Section
     When I click on <occurrenceType> occurrence
     Then I see "Existing" <occurrenceType> occurrence details
     Scenarios:

@@ -116,13 +116,13 @@ $SIDE_SPACING: 1rem;
 
 .link {
   margin-top: 0.5rem;
+  word-break: break-all;
 }
 
 .vulnerabilityCardHeader {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   background-color: transparent;
   outline: none;
@@ -135,6 +135,12 @@ $SIDE_SPACING: 1rem;
       text-decoration: underline;
     }
   }
+
+  @include tabletAndLarger {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .vulnerabilitySubtext {
@@ -142,16 +148,6 @@ $SIDE_SPACING: 1rem;
     text-indent: 1rem;
     margin-bottom: 0.5rem;
   }
-}
-
-.toggleIcon {
-  @include transition;
-  transform: rotate(0deg);
-}
-
-.toggleIconExpanded {
-  @include transition;
-  transform: rotate(90deg);
 }
 
 .severity {
@@ -206,8 +202,7 @@ $SIDE_SPACING: 1rem;
     color: $DT_SUB_TEXT;
   }
 
-  .card,
-  .vulnerabilityCardHeader {
+  .card {
     background-color: $DT_BACKGROUND_LIGHT;
     color: $DT_MAIN_TEXT;
   }
@@ -216,10 +211,6 @@ $SIDE_SPACING: 1rem;
   .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $DT_SUB_TEXT;
-    }
-
-    .toggleIcon {
-      color: $DT_LINK;
     }
   }
 
@@ -245,8 +236,7 @@ $SIDE_SPACING: 1rem;
     color: $LT_SUB_TEXT;
   }
 
-  .card,
-  .vulnerabilityCardHeader {
+  .card {
     background-color: $LT_BACKGROUND_LIGHT;
     color: $LT_MAIN_TEXT;
   }
@@ -255,10 +245,6 @@ $SIDE_SPACING: 1rem;
   .vulnerabilityCardHeader:focus {
     .cardTitle {
       color: $LT_SUB_TEXT;
-    }
-
-    .toggleIcon {
-      color: $LT_LINK;
     }
   }
 
