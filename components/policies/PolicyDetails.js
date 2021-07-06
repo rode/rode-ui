@@ -17,9 +17,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/PolicyDetails.module.scss";
-import textStyles from "styles/modules/Typography.module.scss";
 import Code from "components/Code";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicyDetails = ({ policy }) => {
   const { theme } = useTheme();
@@ -27,7 +27,7 @@ const PolicyDetails = ({ policy }) => {
   return (
     <div className={`${styles[theme]} ${styles.container}`}>
       <div className={styles.regoContainer}>
-        <p className={textStyles.label}>Rego Policy Code</p>
+        <Text.Label as={"p"}>Rego Policy Code</Text.Label>
         <Code
           code={policy.regoContent}
           language={"rego"}

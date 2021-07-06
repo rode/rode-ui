@@ -24,6 +24,7 @@ import { DATE_TIME_FORMAT } from "utils/constants";
 import Button from "components/Button";
 import styles from "styles/modules/PolicyHistory.module.scss";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicyHistory = ({ policy }) => {
   const { theme } = useTheme();
@@ -48,10 +49,14 @@ const PolicyHistory = ({ policy }) => {
                         index === 0 ? " (latest)" : ""
                       }`}
                     />
-                    <p className={styles.versionMessage}>{version.message}</p>
+                    <Text.Body2 className={styles.versionMessage}>
+                      {version.message}
+                    </Text.Body2>
                   </div>
                   <div>
-                    <p>{dayjs(version.created).format(DATE_TIME_FORMAT)}</p>
+                    <Text.Body2>
+                      {dayjs(version.created).format(DATE_TIME_FORMAT)}
+                    </Text.Body2>
                   </div>
                 </div>
               );

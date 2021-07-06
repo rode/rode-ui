@@ -23,6 +23,7 @@ import { useTheme } from "providers/theme";
 import { useFetch } from "hooks/useFetch";
 import Button from "components/Button";
 import { useRouter } from "next/router";
+import Text from "components/Text";
 
 const PolicyAssignments = ({ policy }) => {
   const { theme } = useTheme();
@@ -61,9 +62,9 @@ const PolicyAssignments = ({ policy }) => {
             })}
           </>
         ) : (
-          <p className={styles.noAssignmentsMessage}>
+          <Text.Body1 className={styles.noAssignmentsMessage}>
             This policy is not assigned to any policy groups.
-          </p>
+          </Text.Body1>
         )}
       </Loading>
     </div>

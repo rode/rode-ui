@@ -33,6 +33,7 @@ import CodeEditor from "components/CodeEditor";
 import { mutate } from "swr";
 import TextArea from "components/TextArea";
 import * as Diff from "diff";
+import Text from "components/Text";
 
 const PolicyForm = ({
   title,
@@ -185,9 +186,9 @@ const PolicyForm = ({
         onClose={() => setShowDeleteModal(false)}
         title={"Confirm Policy Deletion"}
       >
-        <p className={styles.confirmDeleteText}>
+        <Text.Body1 className={styles.confirmDeleteText}>
           Are you sure you want to delete this policy?
-        </p>
+        </Text.Body1>
         <div className={styles.modalActionButtons}>
           <Button
             label={"Cancel"}
@@ -208,14 +209,14 @@ const PolicyForm = ({
         onClose={() => setShowUpdateModal(false)}
         title={"Policy Update Message"}
       >
-        <p className={styles.updateMessageText}>
+        <Text.Body1 className={styles.updateMessageText}>
           By updating the Rego Policy Code, you are creating a new version of
           this policy.
-        </p>
-        <p className={styles.updateMessageText}>
+        </Text.Body1>
+        <Text.Body1 className={styles.updateMessageText}>
           Attach an optional message to this version of the policy, describing
           the changes that were made.
-        </p>
+        </Text.Body1>
         <TextArea
           name={"message"}
           label={"Policy Update Message"}
@@ -284,7 +285,7 @@ const PolicyForm = ({
             rows={10}
             onBlur={validateField}
           />
-          <p className={styles.documentation}>
+          <Text.Caption as={"p"} className={styles.documentation}>
             Need help formulating? Check out the{" "}
             <ExternalLink
               href={
@@ -293,7 +294,7 @@ const PolicyForm = ({
               label={"Rego documentation"}
             />
             .
-          </p>
+          </Text.Caption>
           <div className={styles.policyValidationContainer}>
             <Button
               label={"Validate Policy"}

@@ -23,6 +23,7 @@ import { stateActions } from "reducers/appState";
 import styles from "styles/modules/SearchResult.module.scss";
 import LabelWithValue from "components/LabelWithValue";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicySearchResult = ({ searchResult }) => {
   const { name, description, id } = searchResult;
@@ -46,7 +47,7 @@ const PolicySearchResult = ({ searchResult }) => {
           value={name}
           className={styles.cardHeader}
         />
-        <p className={styles.cardText}>{description}</p>
+        <Text.Body2 className={styles.cardText}>{description}</Text.Body2>
       </div>
       <Button onClick={onClick} label={"View Policy"} />
     </div>

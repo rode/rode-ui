@@ -21,6 +21,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import Code from "components/Code";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicyValidationResult = ({ validation }) => {
   const { theme } = useTheme();
@@ -33,13 +34,13 @@ const PolicyValidationResult = ({ validation }) => {
       {validation.isValid ? (
         <div className={`${styles[theme]} ${styles.validationResults}`}>
           <Icon name={ICON_NAMES.BADGE_CHECK} />
-          <p>This policy passes validation.</p>
+          <Text.Body1>This policy passes validation.</Text.Body1>
         </div>
       ) : (
         <div className={`${styles[theme]} ${styles.failedResultsContainer}`}>
           <div className={styles.validationResults}>
             <Icon name={ICON_NAMES.EXCLAMATION} />
-            <p>This policy failed validation.</p>
+            <Text.Body1>This policy failed validation.</Text.Body1>
           </div>
           {validation.errors?.length ? (
             <Code

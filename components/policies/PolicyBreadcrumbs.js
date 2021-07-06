@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useAppState } from "providers/appState";
 import { SEARCH_ALL } from "utils/constants";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {
@@ -41,8 +42,8 @@ const PolicyBreadcrumbs = () => {
 
   return (
     <div className={`${styles[theme]} ${styles.breadcrumbs}`}>
-      <p className={styles.rootCrumb}>Policy Search</p>
-      <p className={styles.rootCrumb}>/</p>
+      <Text.Body1 className={styles.rootCrumb}>Policy Search</Text.Body1>
+      <Text.Body1 className={styles.rootCrumb}>/</Text.Body1>
       <Link href={`/policies?search=${encodeURIComponent(policySearchTerm)}`}>
         <a>{getSearchTermText(policySearchTerm)}</a>
       </Link>
