@@ -20,6 +20,7 @@ import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Editor from "react-simple-code-editor";
 import Prism from "prism/prism";
+import Text from "components/Text";
 
 const CodeEditor = (props) => {
   const {
@@ -38,18 +39,18 @@ const CodeEditor = (props) => {
   const highlightWithLineNumbers = (input) =>
     Prism.highlight(input, Prism.languages.rego)
       .split("\n")
-      .map((line, i) => `<span class='line-numbers'>${i + 1}</span>${line}`)
+      .map((line, i) => `<span class="line-numbers">${i + 1}</span>${line}`)
       .join("\n");
 
   return (
     <div className={styles.outerWrapper}>
       <div className={`${styles[theme]} ${styles.container}`}>
-        <label
+        <Text.Label
           htmlFor={name}
           className={`${styles.label} ${required ? "required" : ""}`}
         >
           {label}
-        </label>
+        </Text.Label>
         <Editor
           name={name}
           textareaId={name}

@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const Input = (props) => {
   const {
@@ -41,12 +42,12 @@ const Input = (props) => {
           horizontal ? styles.horizontalContainer : styles.container
         }`}
       >
-        <label
+        <Text.Label
           htmlFor={name}
           className={`${styles.label} ${required ? "required" : ""}`}
         >
           {label}
-        </label>
+        </Text.Label>
         <input
           type={type || "text"}
           name={name}

@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import styles from "styles/modules/Inputs.module.scss";
 import { useTheme } from "providers/theme";
 import Select from "react-select";
+import Text from "components/Text";
 
 const Dropdown = (props) => {
   const {
@@ -37,12 +38,12 @@ const Dropdown = (props) => {
   return (
     <div className={styles.outerWrapper}>
       <div className={`${styles[theme]} ${styles.container}`}>
-        <label
+        <Text.Label
           htmlFor={name}
           className={`${styles.label} ${required ? "required" : ""}`}
         >
           {label}
-        </label>
+        </Text.Label>
         <Select
           name={name}
           inputId={name}

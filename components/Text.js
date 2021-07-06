@@ -53,9 +53,13 @@ BaseText.propTypes = {
     "span",
     "p",
     "label",
+    "a",
   ]),
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
-    .isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.node,
+  ]).isRequired,
   style: PropTypes.oneOf([
     "heading1",
     "heading2",
