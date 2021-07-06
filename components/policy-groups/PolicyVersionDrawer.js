@@ -27,6 +27,7 @@ import { useTheme } from "providers/theme";
 import LabelWithValue from "components/LabelWithValue";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import Text from "components/Text";
 
 const PolicyVersionDrawer = ({
   isOpen,
@@ -47,10 +48,10 @@ const PolicyVersionDrawer = ({
       {assignedPolicy ? (
         <div className={`${styles[theme]}`}>
           <div className={styles.drawerHeader}>
-            <p className={styles.policyName}>{assignedPolicy.policyName}</p>
-            <p className={styles.instructions}>
+            <Text.Heading1>{assignedPolicy.policyName}</Text.Heading1>
+            <Text.Body1 className={styles.instructions}>
               Target a specific version of this policy
-            </p>
+            </Text.Body1>
           </div>
           <Loading loading={loading}>
             {data?.length > 0 ? (

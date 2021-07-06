@@ -127,13 +127,7 @@
 
 .cardText {
   @extend .cardHeader;
-  font-size: 0.8rem;
   margin-left: 0.5rem;
-  @include ellipsis(calc(100vw - 7rem));
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
 }
 
 .actionButton,
@@ -165,9 +159,9 @@
     box-shadow: $DT_BOX_SHADOW;
   }
 
-  .cardHeader {
-    color: $DT_MAIN_TEXT;
-  }
+  //.cardHeader {
+  //  color: $DT_MAIN_TEXT;
+  //}
 
   .cardText {
     color: $DT_SUB_TEXT;
@@ -180,9 +174,9 @@
     box-shadow: $LT_BOX_SHADOW;
   }
 
-  .cardHeader {
-    color: $LT_MAIN_TEXT;
-  }
+  //.cardHeader {
+  //  color: $LT_MAIN_TEXT;
+  //}
 
   .cardText {
     color: $LT_SUB_TEXT;

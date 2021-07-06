@@ -28,6 +28,7 @@ import { showError, showSuccess } from "utils/toast-utils";
 import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
+import Text from "components/Text";
 
 const PolicyGroupForm = (props) => {
   const {
@@ -133,10 +134,14 @@ const PolicyGroupForm = (props) => {
               disabled={!creatingNewPolicyGroup}
             />
             {creatingNewPolicyGroup && (
-              <p className={styles.hint} spacing={"Policy Group Name"}>
+              <Text.Caption
+                as={"p"}
+                className={styles.hint}
+                spacing={"Policy Group Name"}
+              >
                 <span>Please note:</span> Policy Group Name cannot be changed
                 after creation.
-              </p>
+              </Text.Caption>
             )}
             <Input
               name={"description"}
@@ -188,7 +193,7 @@ const PolicyGroupForm = (props) => {
           {creatingNewPolicyGroup && (
             <>
               <div>
-                <h2>Policy Group Name Guidelines</h2>
+                <Text.Body1 as={"h2"}>Policy Group Name Guidelines</Text.Body1>
                 <ul>
                   <li>Must be unique</li>
                   <li>Lowercase</li>
@@ -198,7 +203,7 @@ const PolicyGroupForm = (props) => {
                 </ul>
               </div>
               <div>
-                <p>Examples</p>
+                <Text.Body1 as={"h3"}>Examples</Text.Body1>
                 <code>development_3</code>
                 <code>pci-requirements</code>
                 <code>docker_images_prod</code>

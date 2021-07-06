@@ -29,12 +29,7 @@
   }
 }
 
-.policyName {
-  font-weight: 600;
-}
-
 .instructions {
-  font-size: 0.8rem;
   margin-top: 0.5rem;
 }
 
@@ -54,7 +49,9 @@
 }
 
 .cardDetails {
-  font-size: 0.8rem;
+  > * {
+    font-size: 0.875rem;
+  }
 }
 
 .viewMoreResultsButton {
