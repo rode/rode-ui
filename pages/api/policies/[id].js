@@ -33,7 +33,10 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const response = await get(`${rodeUrl}/v1alpha1/policies/${id}`, req.accessToken);
+      const response = await get(
+        `${rodeUrl}/v1alpha1/policies/${id}`,
+        req.accessToken
+      );
 
       if (response.status === StatusCodes.NOT_FOUND) {
         return res.status(StatusCodes.OK).send(null);
@@ -69,7 +72,7 @@ export default async (req, res) => {
       const response = await patch(
         `${rodeUrl}/v1alpha1/policies/${id}`,
         updateBody,
-          req.accessToken
+        req.accessToken
       );
 
       if (!response.ok) {
@@ -112,7 +115,10 @@ export default async (req, res) => {
     try {
       const { id } = req.query;
 
-      const response = await del(`${rodeUrl}/v1alpha1/policies/${id}`, req.accessToken);
+      const response = await del(
+        `${rodeUrl}/v1alpha1/policies/${id}`,
+        req.accessToken
+      );
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

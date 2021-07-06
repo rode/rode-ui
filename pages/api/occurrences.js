@@ -33,7 +33,7 @@ export default async (req, res) => {
       `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUri
       )}&fetchRelatedNotes=true&pageSize=1000`,
-        req.accessToken,
+      req.accessToken
     );
 
     if (!response.ok) {

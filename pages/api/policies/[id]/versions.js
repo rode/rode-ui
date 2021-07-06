@@ -30,7 +30,10 @@ export default async (req, res) => {
   try {
     const { id } = req.query;
 
-    const response = await get(`${rodeUrl}/v1alpha1/policies/${id}/versions`, req.accessToken);
+    const response = await get(
+      `${rodeUrl}/v1alpha1/policies/${id}/versions`,
+      req.accessToken
+    );
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);

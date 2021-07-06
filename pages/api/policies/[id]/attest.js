@@ -35,7 +35,7 @@ export default async (req, res) => {
     const response = await post(
       `${rodeUrl}/v1alpha1/policies/${id}:attest`,
       requestBody,
-        req.accessToken
+      req.accessToken
     );
 
     if (!response.ok) {

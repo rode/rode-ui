@@ -13,44 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import config from 'config';
-import express from 'express';
-import next from 'next';
-import {oidc, tokenRefresh} from './middleware.mjs';
+import config from "config";
+import express from "express";
+import next from "next";
+import { oidc, tokenRefresh } from "./middleware.mjs";
 
 export const newApp = async () => {
-    const app = express();
-    app.disable('x-powered-by');
+  const app = express();
+  app.disable("x-powered-by");
 
-    if (config.get('oidc.enabled')) {
-        app.use(oidc());
-        app.use(tokenRefresh());
-    }
+  if (config.get("oidc.enabled")) {
+    app.use(oidc());
+    app.use(tokenRefresh());
+  }
 
-    const nextApp = next({dev: config.get('app.dev')});
+  const nextApp = next({ dev: config.get("app.dev") });
 
-    await nextApp.prepare();
+  await nextApp.prepare();
 
-    app.all('*', nextApp.getRequestHandler());
+  app.all("*", nextApp.getRequestHandler());
 
-    return app;
+  return app;
 };
 
 export const configureGracefulShutdown = (server) => {
-    const handler = (signal) => () => {
-        console.log(`Received ${signal}, stopping server`);
-        server.close((error) => {
-            let exitCode = 0;
-            if (error) {
-                console.error('Error occurred stopping server', error);
-                exitCode = 1;
-            }
+  const handler = (signal) => () => {
+    console.log(`Received ${signal}, stopping server`);
+    server.close((error) => {
+      let exitCode = 0;
+      if (error) {
+        console.error("Error occurred stopping server", error);
+        exitCode = 1;
+      }
 
-            process.exit(exitCode);
-        });
-    };
-
-    ['SIGINT', 'SIGTERM'].forEach((signal) => {
-        process.once(signal, handler(signal))
+      process.exit(exitCode);
     });
+  };
+
+  ["SIGINT", "SIGTERM"].forEach((signal) => {
+    process.once(signal, handler(signal));
+  });
 };

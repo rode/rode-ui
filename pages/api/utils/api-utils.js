@@ -19,49 +19,53 @@ import * as nodeFetch from "node-fetch";
 export const getRodeUrl = () =>
   process.env.RODE_URL || "http://localhost:50051";
 
-const fetch = ({endpoint, method, body, accessToken}) => {
+const fetch = ({ endpoint, method, body, accessToken }) => {
   const options = {
     method,
-    headers: {}
+    headers: {},
   };
 
   if (body) {
     options.body = typeof body === "object" ? JSON.stringify(body) : body;
-    options.headers['Content-Type'] = 'application/json'
+    options.headers["Content-Type"] = "application/json";
   }
 
   if (accessToken) {
-    options.headers['Authorization'] = `Bearer ${accessToken}`
+    options.headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
   return nodeFetch(endpoint, options);
 };
 
-export const post = (endpoint, body, accessToken) => fetch({
-  accessToken,
-  body,
-  endpoint,
-  method: "POST"
-});
+export const post = (endpoint, body, accessToken) =>
+  fetch({
+    accessToken,
+    body,
+    endpoint,
+    method: "POST",
+  });
 
-export const patch = (endpoint, body, accessToken) => fetch({
-  accessToken,
-  body,
-  endpoint,
-  method: "PATCH"
-});
+export const patch = (endpoint, body, accessToken) =>
+  fetch({
+    accessToken,
+    body,
+    endpoint,
+    method: "PATCH",
+  });
 
-export const get = (endpoint, accessToken) => fetch({
-  accessToken,
-  endpoint,
-  method: "GET"
-});
+export const get = (endpoint, accessToken) =>
+  fetch({
+    accessToken,
+    endpoint,
+    method: "GET",
+  });
 
-export const del = (endpoint, accessToken) => fetch({
-  accessToken,
-  endpoint,
-  method: "DELETE"
-});
+export const del = (endpoint, accessToken) =>
+  fetch({
+    accessToken,
+    endpoint,
+    method: "DELETE",
+  });
 
 export const buildPaginationParams = (request) => {
   let params = {};

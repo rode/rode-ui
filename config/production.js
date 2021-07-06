@@ -15,7 +15,7 @@
  */
 
 module.exports = {
-    app: {
-        dev: false,
-    }
+  app: {
+    dev: false,
+  },
 };
