@@ -28,7 +28,7 @@ export const usePolicyGroup = (policyGroupName) => {
   } = useAppState();
 
   const { data, loading } = useFetch(
-    policyGroupName !== currentPolicyGroup?.name
+    policyGroupName && policyGroupName !== currentPolicyGroup?.name
       ? `/api/policy-groups/${policyGroupName}`
       : null
   );

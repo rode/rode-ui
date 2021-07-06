@@ -63,7 +63,6 @@ Feature: Policies
       | field   |
       | name        |
       | description |
-      | regoContent |
 
   Scenario: Edit policy - invalid rego
     Given I am on the "Existing" policy details page

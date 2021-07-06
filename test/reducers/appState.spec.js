@@ -54,6 +54,10 @@ describe("AppState Reducer", () => {
     [stateActions.SET_RESOURCE_TYPE_SEARCH_FILTER, "resourceTypeSearchFilter"],
     [stateActions.SET_OCCURRENCE_DETAILS, "occurrenceDetails"],
     [stateActions.SET_CURRENT_RESOURCE, "currentResource"],
+    [
+      stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
+      "currentPolicyGroupAssignments",
+    ],
   ])("should update state when the action type is %s", (action, fieldName) => {
     const actual = appStateReducer(state, {
       type: action,

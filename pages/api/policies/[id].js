@@ -128,7 +128,7 @@ export default async (req, res) => {
           .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
 
-      res.status(StatusCodes.OK).send(null);
+      res.status(StatusCodes.NO_CONTENT).send(null);
     } catch (error) {
       console.error("Error deleting policy", error);
 

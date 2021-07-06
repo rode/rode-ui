@@ -114,7 +114,6 @@
 }
 
 .buttonsContainer {
-  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -122,8 +121,20 @@
 
   @include tabletAndLarger {
     flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.primaryButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @include tabletAndLarger {
+    margin: 1rem 0;
+    flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
   }
 
   > button {

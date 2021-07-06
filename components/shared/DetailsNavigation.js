@@ -35,7 +35,9 @@ const DetailsNavigation = (props) => {
 
         return (
           <Link key={href} href={href} passHref>
-            <p className={className}>{label}</p>
+            <a className={className} tabIndex={0}>
+              {label}
+            </a>
           </Link>
         );
       })}

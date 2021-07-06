@@ -31,9 +31,12 @@ import DetailsHeader from "components/shared/DetailsHeader";
 import DetailsNavigation from "components/shared/DetailsNavigation";
 import PolicyHistory from "components/policies/PolicyHistory";
 import EvaluateInPlaygroundButton from "components/shared/EvaluateInPlaygroundButton";
+import PolicyAssignments from "components/policies/PolicyAssignments";
 
 const DETAILS = "details";
 const HISTORY = "history";
+const ASSIGNMENTS = "assignments";
+
 const createLinks = (baseUrl) => {
   return [
     {
@@ -43,6 +46,10 @@ const createLinks = (baseUrl) => {
     {
       label: "History",
       href: `${baseUrl}#${HISTORY}`,
+    },
+    {
+      label: "Assignments",
+      href: `${baseUrl}#${ASSIGNMENTS}`,
     },
   ];
 };
@@ -101,6 +108,9 @@ const Policy = () => {
               />
               {activeSection === DETAILS && <PolicyDetails policy={policy} />}
               {activeSection === HISTORY && <PolicyHistory policy={policy} />}
+              {activeSection === ASSIGNMENTS && (
+                <PolicyAssignments policy={policy} />
+              )}
             </>
           ) : (
             <div className={styles.notFound}>

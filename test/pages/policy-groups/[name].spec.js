@@ -20,14 +20,16 @@ import { render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 import PolicyGroup from "pages/policy-groups/[name]";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
 jest.mock("hooks/usePolicyGroup");
+jest.mock("hooks/usePolicyGroupAssignments");
 
 describe("Policy Group Details", () => {
-  let router, dispatch, policyGroup, rerender;
+  let router, dispatch, policyGroup, policyGroupAssignmentsResponse, rerender;
 
   beforeEach(() => {
     const policyGroupName = chance.string({ alpha: true, casing: "lower" });
@@ -44,11 +46,23 @@ describe("Policy Group Details", () => {
       name: policyGroupName,
       description: chance.string(),
     };
+    policyGroupAssignmentsResponse = {
+      assignments: [
+        {
+          id: chance.guid(),
+          policyId: chance.guid(),
+          policyName: chance.string({ alpha: true }),
+          policyVersion: chance.d4().toString(),
+        },
+      ],
+      loading: false,
+    };
     usePolicyGroup.mockReturnValue({
       policyGroup,
       loading: false,
     });
     useRouter.mockReturnValue(router);
+    usePolicyGroupAssignments.mockReturnValue(policyGroupAssignmentsResponse);
     const utils = render(<PolicyGroup />, { dispatch: dispatch });
     rerender = utils.rerender;
   });
@@ -86,6 +100,43 @@ describe("Policy Group Details", () => {
       expect(router.push).toHaveBeenCalledWith(
         `/policy-groups/${policyGroup.name}/edit`
       );
+    });
+
+    it("should render the button to edit the assigned policies", () => {
+      const renderedButton = screen.getByText("Edit Assignments");
+      expect(renderedButton).toBeInTheDocument();
+
+      userEvent.click(renderedButton);
+      expect(router.push).toHaveBeenCalledWith(
+        `/policy-groups/${router.query.name}/assignments`
+      );
+    });
+
+    it("should call to get the current assignments", () => {
+      expect(usePolicyGroupAssignments).toHaveBeenCalledWith(policyGroup.name);
+    });
+
+    it("should render a card for each current policy assignment", () => {
+      const assignment = policyGroupAssignmentsResponse.assignments[0];
+      expect(screen.getByText(assignment.policyName)).toBeInTheDocument();
+      expect(screen.getByText(assignment.policyVersion)).toBeInTheDocument();
+
+      const renderedViewPolicyButton = screen.getByText("View Policy");
+      userEvent.click(renderedViewPolicyButton);
+      expect(router.push).toHaveBeenCalledWith(
+        `/policies/${assignment.policyId}`
+      );
+    });
+
+    it("should render a message if no policies are assigned to the policy group", () => {
+      usePolicyGroupAssignments.mockReturnValue({
+        data: [],
+        loading: false,
+      });
+      rerender(<PolicyGroup />);
+      expect(
+        screen.getByText("No policies are assigned to this policy group.")
+      ).toBeInTheDocument();
     });
   });
 

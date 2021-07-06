@@ -112,6 +112,9 @@ describe("/api/policies/[id]", () => {
           name: foundPolicy.name,
           description: foundPolicy.description,
           regoContent: foundPolicy.policy.regoContent,
+          currentVersion: foundPolicy.currentVersion,
+          policyVersionId: foundPolicy.policy.id,
+          policyVersion: foundPolicy.policy.version,
         });
       });
 
@@ -200,6 +203,9 @@ describe("/api/policies/[id]", () => {
           name: foundPolicy.name,
           description: foundPolicy.description,
           regoContent: foundPolicy.policy.regoContent,
+          currentVersion: foundPolicy.currentVersion,
+          policyVersionId: foundPolicy.policy.id,
+          policyVersion: foundPolicy.policy.version,
         });
       });
     });
@@ -318,7 +324,7 @@ describe("/api/policies/[id]", () => {
 
         expect(response.status)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
+          .toHaveBeenCalledWith(StatusCodes.NO_CONTENT);
 
         expect(response.send)
           .toHaveBeenCalledTimes(1)

@@ -25,6 +25,8 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
+import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
+import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -34,6 +36,11 @@ const PolicyGroup = () => {
   const { name } = router.query;
 
   const { policyGroup, loading } = usePolicyGroup(name);
+
+  const {
+    assignments,
+    loading: loadingAssignments,
+  } = usePolicyGroupAssignments(policyGroup?.name);
 
   const editPolicy = () => {
     dispatch({
@@ -48,26 +55,69 @@ const PolicyGroup = () => {
       <PageHeader>
         <h1>Manage Policy Groups</h1>
       </PageHeader>
-      <div className={`${styles[theme]}`}>
+      <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>
           {policyGroup ? (
-            <div className={styles.policyGroupHeader}>
-              <div>
-                <p className={styles.policyGroupName}>{policyGroup.name}</p>
-                {policyGroup.description && (
-                  <p className={styles.policyGroupDescription}>
-                    {policyGroup.description}
-                  </p>
-                )}
+            <>
+              <div className={styles.policyGroupHeader}>
+                <div>
+                  <p className={styles.policyGroupName}>{policyGroup.name}</p>
+                  {policyGroup.description && (
+                    <p className={styles.policyGroupDescription}>
+                      {policyGroup.description}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Button
+                    label={"Edit Policy Group"}
+                    onClick={editPolicy}
+                    buttonType={"text"}
+                  />
+                </div>
               </div>
-              <div>
-                <Button
-                  label={"Edit Policy Group"}
-                  onClick={editPolicy}
-                  buttonType={"text"}
-                />
+              <div className={styles.policyGroupDetailsContainer}>
+                <div className={styles.assignmentsHeaderContainer}>
+                  <p className={styles.assignmentsHeader}>Assigned Policies</p>
+                  <Button
+                    label={"Edit Assignments"}
+                    buttonType={"text"}
+                    onClick={() =>
+                      router.push(`/policy-groups/${name}/assignments`)
+                    }
+                  />
+                </div>
+                <Loading loading={loadingAssignments}>
+                  {assignments?.length > 0 ? (
+                    <>
+                      {assignments.map((assignment) => {
+                        return (
+                          <PolicyAssignmentCard
+                            key={assignment.id}
+                            policy={assignment}
+                            actions={
+                              <Button
+                                label={"View Policy"}
+                                buttonType={"text"}
+                                onClick={() =>
+                                  router.push(
+                                    `/policies/${assignment.policyId}`
+                                  )
+                                }
+                              />
+                            }
+                          />
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <p className={styles.noAssignments}>
+                      No policies are assigned to this policy group.
+                    </p>
+                  )}
+                </Loading>
               </div>
-            </div>
+            </>
           ) : (
             <div className={styles.notFoundContainer}>
               <h1>No policy group found under {`"${name}"`}</h1>
