@@ -16,19 +16,19 @@
 
 // This randomly generated config is used by the unit tests. Jest will set NODE_ENV=test.
 module.exports = {
-    app: {
-        dev: chance.bool(),
-        secret: chance.string(),
-        url: chance.url(),
-    },
-    rode: {
-        url: chance.url(),
-    },
-    oidc: {
-        clientId: chance.word(),
-        clientSecret: chance.guid(),
-        enabled: chance.bool(),
-        issuerUrl: chance.url(),
-        scope: chance.word(),
-    },
+  app: {
+    dev: chance.bool(),
+    secret: chance.string(),
+    url: chance.url(),
+  },
+  rode: {
+    url: chance.url(),
+  },
+  oidc: {
+    clientId: chance.word(),
+    clientSecret: chance.guid(),
+    enabled: chance.bool(),
+    issuerUrl: chance.url(),
+    scope: chance.word(),
+  },
 };

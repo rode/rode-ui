@@ -14,114 +14,126 @@
  * limitations under the License.
  */
 
-jest.mock('express-openid-connect');
+jest.mock("express-openid-connect");
 
-import config from 'config';
-import {auth} from 'express-openid-connect';
-import {oidc, tokenRefresh} from 'server/middleware.mjs';
+import config from "config";
+import { auth } from "express-openid-connect";
+import { oidc, tokenRefresh } from "server/middleware.mjs";
 
-describe('middleware', () => {
-    afterEach(() => {
-        jest.resetAllMocks();
+describe("middleware", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  describe("oidc", () => {
+    let expectedAuthMiddleware;
+
+    beforeEach(() => {
+      expectedAuthMiddleware = () => chance.word();
+      auth.mockReturnValue(expectedAuthMiddleware);
     });
 
-    describe('oidc', () => {
-        it('should configure the middleware for express-openid-connect', () => {
-            oidc();
+    it("should configure the middleware for express-openid-connect", () => {
+      oidc();
 
-            expect(auth)
-                .toHaveBeenCalledTimes(1)
-                .toHaveBeenCalledWith({
-                    authRequired: false,
-                    authorizationParams: {
-                        response_type: 'code',
-                        response_mode: 'form_post',
-                        scope: config.get('oidc.scope'),
-                    },
-                    baseURL: config.get('app.url'),
-                    clientID: config.get('oidc.clientId'),
-                    clientSecret: config.get('oidc.clientSecret'),
-                    enableTelemetry: false,
-                    idpLogout: true,
-                    issuerBaseURL: config.get('oidc.issuerUrl'),
-                    routes: {
-                        callback: '/callback',
-                        login: '/login',
-                        logout: '/logout',
-                        postLogoutRedirect: '/',
-                    },
-                    secret: config.get('app.secret'),
-                });
-        })
+      expect(auth)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith({
+          authRequired: false,
+          authorizationParams: {
+            response_type: "code",
+            response_mode: "form_post",
+            scope: config.get("oidc.scope"),
+          },
+          baseURL: config.get("app.url"),
+          clientID: config.get("oidc.clientId"),
+          clientSecret: config.get("oidc.clientSecret"),
+          enableTelemetry: false,
+          idpLogout: true,
+          issuerBaseURL: config.get("oidc.issuerUrl"),
+          routes: {
+            callback: "/callback",
+            login: "/login",
+            logout: "/logout",
+            postLogoutRedirect: "/",
+          },
+          secret: config.get("app.secret"),
+        });
     });
 
-    describe('tokenRefresh', () => {
-        let request,
-            response,
-            next,
-            refresh,
+    it("should return the middleware", () => {
+      const actualMiddleware = oidc();
+
+      expect(actualMiddleware).toEqual(expectedAuthMiddleware);
+    });
+  });
+
+  describe("tokenRefresh", () => {
+    let request,
+      response,
+      next,
+      refresh,
+      isExpired,
+      nextAccessToken,
+      accessToken;
+
+    beforeEach(() => {
+      accessToken = chance.word();
+      nextAccessToken = chance.string();
+      refresh = jest.fn().mockResolvedValue({ access_token: nextAccessToken });
+      isExpired = jest.fn().mockReturnValue(false);
+      next = jest.fn();
+
+      request = {
+        oidc: {
+          accessToken: {
+            access_token: accessToken,
             isExpired,
-            nextAccessToken,
-            accessToken;
+            refresh,
+          },
+        },
+      };
+      response = {
+        redirect: jest.fn(),
+      };
+    });
 
-        beforeEach(() => {
-            accessToken = chance.word();
-            nextAccessToken = chance.string();
-            refresh = jest.fn().mockResolvedValue({'access_token': nextAccessToken});
-            isExpired = jest.fn().mockReturnValue(false);
-            next = jest.fn();
+    it("should add the access token to the request context", async () => {
+      await tokenRefresh()(request, response, next);
 
-            request = {
-                oidc: {
-                    accessToken: {
-                        'access_token': accessToken,
-                        isExpired,
-                        refresh,
-                    },
-                },
-            };
-            response = {
-                redirect: jest.fn(),
-            };
-        });
+      expect(request.accessToken).toEqual(accessToken);
+      expect(next).toHaveBeenCalled();
+      expect(refresh).not.toHaveBeenCalled();
+      expect(response.redirect).not.toHaveBeenCalled();
+    });
 
-        it('should add the access token to the request context', async () => {
-            await tokenRefresh()(request, response, next);
+    describe("the token is expired", () => {
+      beforeEach(() => {
+        isExpired.mockReturnValue(true);
+      });
 
-            expect(request.accessToken).toEqual(accessToken);
-            expect(next).toHaveBeenCalled();
-            expect(refresh).not.toHaveBeenCalled();
-            expect(response.redirect).not.toHaveBeenCalled();
-        });
+      it("should refresh the token", async () => {
+        isExpired.mockReturnValue(true);
 
+        await tokenRefresh()(request, response, next);
 
-        describe('the token is expired', () => {
-            beforeEach(() => {
-                isExpired.mockReturnValue(true);
-            });
+        expect(request.accessToken).toEqual(nextAccessToken);
+        expect(refresh).toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+        expect(response.redirect).not.toHaveBeenCalled();
+      });
 
-            it('should refresh the token', async () => {
-                isExpired.mockReturnValue(true);
+      it("should redirect the request to the login route if the refresh fails", async () => {
+        refresh.mockRejectedValue(new Error("refresh failed"));
 
-                await tokenRefresh()(request, response, next);
+        await tokenRefresh()(request, response, next);
 
-                expect(request.accessToken).toEqual(nextAccessToken);
-                expect(refresh).toHaveBeenCalled();
-                expect(next).toHaveBeenCalled();
-                expect(response.redirect).not.toHaveBeenCalled();
-            });
-
-            it('should redirect the request to the login route if the refresh fails', async () => {
-                refresh.mockRejectedValue(new Error('refresh failed'));
-
-                await tokenRefresh()(request, response, next);
-
-                expect(request.accessToken).toBeUndefined();
-                expect(next).not.toHaveBeenCalled();
-                expect(response.redirect)
-                    .toHaveBeenCalledTimes(1)
-                    .toHaveBeenCalledWith('/login');
-            });
-        })
-    })
+        expect(request.accessToken).toBeUndefined();
+        expect(next).not.toHaveBeenCalled();
+        expect(response.redirect)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith("/login");
+      });
+    });
+  });
 });
