@@ -95,7 +95,9 @@ describe("EvaluationHistory", () => {
     usePaginatedFetchResponse.data = [];
     rerender(<EvaluationHistory resourceUri={resourceUri} />);
     expect(
-      screen.getByText("This resource at this version has not been evaluated.")
+      screen.getByText(
+        "The selected version of this resource has not been evaluated."
+      )
     );
   });
 });
