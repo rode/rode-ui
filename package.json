@@ -11,10 +11,12 @@
     "lint": "eslint --max-warnings=0 .",
     "smoke": "./node_modules/.bin/cypress-tags run -e TAGS='@smoke'",
     "start": "next start",
+    "serve": "node index.mjs",
     "test": "jest",
     "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
+    "config": "^3.3.6",
     "dayjs": "^1.10.4",
     "diff": "^5.0.0",
     "express": "^4.17.1",
