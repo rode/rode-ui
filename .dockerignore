@@ -1,6 +1,8 @@
 *
 !jsconfig.json
+!index.mjs
 !.babelrc
+!config
 !components
 !hooks
 !package.json
@@ -10,6 +12,7 @@
 !public
 !reducers
 !schemas
+!server
 !styles
 !utils
 !yarn.lock

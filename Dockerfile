@@ -1,9 +1,5 @@
-FROM node:14.15.5-alpine3.12
+FROM node:14.17.1-alpine3.12
 
-ENV PORT 3000
-
-# Create app directory
-RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Installing dependencies
@@ -14,11 +10,10 @@ RUN yarn install --production
 RUN npx next telemetry disable
 
 # Copying source files
-COPY . /usr/src/app
+COPY . .
 
 # Building app
 RUN yarn build
-EXPOSE 3000
 
 # Running the app
-CMD "yarn" "start"
+ENTRYPOINT ["yarn", "serve"]
