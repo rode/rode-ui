@@ -27,6 +27,7 @@ describe("PolicyEvaluationDetails", () => {
       pass: chance.bool(),
       policyName: chance.string(),
       policyVersion: chance.d4(),
+      policyVersionId: chance.string(),
       created: chance.timestamp(),
       violations: [
         {
@@ -52,7 +53,12 @@ describe("PolicyEvaluationDetails", () => {
   });
 
   it("should render details about the evaluation", () => {
-    expect(screen.getByText(policyEvaluation.policyName)).toBeInTheDocument();
+    const renderedPolicyName = screen.getByText(policyEvaluation.policyName);
+    expect(renderedPolicyName).toBeInTheDocument();
+    expect(renderedPolicyName).toHaveAttribute(
+      "href",
+      `/policies/${policyEvaluation.policyVersionId}`
+    );
     expect(
       screen.getByText(`v${policyEvaluation.policyVersion}`)
     ).toBeInTheDocument();

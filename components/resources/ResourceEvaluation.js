@@ -26,6 +26,7 @@ import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import ToggleCard from "components/ToggleCard";
 import Text from "components/Text";
+import Link from "next/link";
 
 const ResourceEvaluation = (props) => {
   const { evaluation } = props;
@@ -50,7 +51,15 @@ const ResourceEvaluation = (props) => {
           </div>
           <LabelWithValue
             label={"Policy Group"}
-            value={evaluation.policyGroup}
+            value={
+              <Link
+                href={`/policy-groups/${encodeURIComponent(
+                  evaluation.policyGroup
+                )}`}
+              >
+                {evaluation.policyGroup}
+              </Link>
+            }
           />
           <LabelWithValue
             label={"Completed"}

@@ -22,6 +22,7 @@ import Icon from "components/Icon";
 import styles from "styles/modules/PolicyEvaluationDetails.module.scss";
 import ToggleCard from "components/ToggleCard";
 import Text from "components/Text";
+import Link from "next/link";
 
 const PolicyEvaluationDetails = (props) => {
   const { policyEvaluation } = props;
@@ -45,8 +46,12 @@ const PolicyEvaluationDetails = (props) => {
               className={styles.fail}
             />
           )}
-          <Text.Body1>{policyEvaluation.policyName}</Text.Body1>
-          <Text.Body1>v{policyEvaluation.policyVersion}</Text.Body1>
+          <Text.Body1>
+            <Link href={`/policies/${policyEvaluation.policyVersionId}`}>
+              {policyEvaluation.policyName}
+            </Link>
+          </Text.Body1>
+          <Text.Value>v{policyEvaluation.policyVersion}</Text.Value>
         </div>
       }
       content={

@@ -62,7 +62,12 @@ describe("ResourceEvaluation", () => {
   });
 
   it("should render details about the evaluation", () => {
-    expect(screen.getByText(evaluation.policyGroup)).toBeInTheDocument();
+    const renderedPolicyGroup = screen.getByText(evaluation.policyGroup);
+    expect(renderedPolicyGroup).toBeInTheDocument();
+    expect(renderedPolicyGroup).toHaveAttribute(
+      "href",
+      `/policy-groups/${encodeURIComponent(evaluation.policyGroup)}`
+    );
     expect(screen.getByText(evaluation.created)).toBeInTheDocument();
   });
 
