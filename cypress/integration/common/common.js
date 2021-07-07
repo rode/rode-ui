@@ -110,3 +110,9 @@ Then(/^I see the "([^"]*)" form$/, (formName) => {
     cy.get(button).should("be.visible");
   });
 });
+
+
+When(/^I select the ([^"]*) Section$/, (sectionName) => {
+  const section = `${sectionName}Section`;
+  cy.contains(selectors[section]).click();
+});

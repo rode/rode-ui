@@ -28,10 +28,6 @@ Given(/^I am on the "([^"]*)" resource details page$/, (resourceName) => {
   );
 });
 
-When(/^I select the Occurrence Section$/, () => {
-  cy.contains(selectors.OccurrenceSection).click();
-});
-
 When(/^I click on ([^"]*) occurrence$/, (occurrenceType) => {
   const occurrenceName = `${occurrenceType}Occurrence`;
   cy.contains(selectors[occurrenceName]).click();

@@ -82,10 +82,6 @@ When(
     const selectorName = `Policy${capitalize(field)}Input`;
     cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
     cy.get(selectors.UpdatePolicyButton).click();
-
-    if (field === "regoContent") {
-      cy.get(selectors.ConfirmUpdatePolicyButton).click();
-    }
   }
 );
 

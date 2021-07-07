@@ -30,6 +30,7 @@ export const PolicyFailedUpdateInvalidRegoMessage =
 export const PolicyFailedUpdateMessage = "Failed to update the policy.";
 export const PolicyFailedDeleteMessage =
   "An error occurred while deleting the policy. Please try again.";
+export const NewPolicyVersionMessage = "By updating the Rego Policy Code, you are creating a new version of this policy.";
 
 // BUTTONS
 export const SearchPolicyButton = createButtonSelector("Search Policies");
@@ -47,14 +48,21 @@ export const ConfirmUpdatePolicyButton = createButtonSelector(
   "Update & Save Policy"
 );
 
+// SECTIONS
+export const PolicyDetailsSection = /^Policy Details$/;
+export const HistorySection = /^History$/;
+export const Assignments = /^Assignments$/;
+
 // INPUTS
 export const PolicySearchInput = "#policySearchDisplay";
 export const PolicyNameInput = "#name";
 export const PolicyDescriptionInput = "#description";
 export const PolicyRegoContentInput = "#regoContent";
+export const PolicyUpdateMessageInput = "#message";
 
 // MODALS
 export const DeletePolicyModal = "div[role='dialog']";
+export const UpdatePolicyModal = "div[role='dialog']";
 
 // FORMS
 export const EditPolicyForm = {

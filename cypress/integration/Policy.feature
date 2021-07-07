@@ -64,6 +64,16 @@ Feature: Policies
       | name        |
       | description |
 
+  Scenario: Edit policy - create new policy version
+    Given I am on the "Existing" policy details page
+    When I click the "EditPolicy" button
+    Then I see the Edit Policy form for "Existing" policy
+    When I update and save the "Existing" policy regoContent
+    Then I see "NewPolicyVersion" message
+    When I type "this is an update message" into "PolicyUpdateMessage" input
+    And I click the "ConfirmUpdatePolicy" button
+    Then I see the updated "Existing" policy regoContent
+
   Scenario: Edit policy - invalid rego
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
