@@ -21,8 +21,8 @@ jest.mock("../../server/middleware.mjs");
 import config from "config";
 import express from "express";
 import next from "next";
-import { oidc, tokenRefresh } from "../../server/middleware.mjs";
-import { configureGracefulShutdown, newApp } from "../../server/server.mjs";
+import { oidc, tokenRefresh } from "server/middleware.mjs";
+import { configureGracefulShutdown, newApp } from "server/server.mjs";
 
 describe("server", () => {
   afterEach(() => {
