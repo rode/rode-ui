@@ -16,4 +16,4 @@ COPY . .
 RUN yarn build
 
 # Running the app
-ENTRYPOINT ["yarn", "serve"]
+ENTRYPOINT ["node", "index.mjs"]
