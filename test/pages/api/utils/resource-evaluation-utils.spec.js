@@ -21,9 +21,10 @@ jest.mock("pages/api/utils/policy-utils");
 
 describe("resource-evaluation-utils", () => {
   describe("mapToClientModelWithPolicyDetails", () => {
-    let evaluation, policy;
+    let accessToken, evaluation, policy;
 
     beforeEach(() => {
+      accessToken = chance.string();
       const policyId = chance.guid();
       const policyVersion = chance.d4();
       evaluation = {
@@ -57,10 +58,14 @@ describe("resource-evaluation-utils", () => {
         error: null,
       });
 
-      const actual = await mapToClientModelWithPolicyDetails(evaluation);
+      const actual = await mapToClientModelWithPolicyDetails(
+        evaluation,
+        accessToken
+      );
 
       expect(getPolicyByPolicyId).toHaveBeenCalledWith(
-        evaluation.policyEvaluations[0].policyVersionId
+        evaluation.policyEvaluations[0].policyVersionId,
+        accessToken
       );
 
       expect(actual).toEqual({
@@ -85,7 +90,7 @@ describe("resource-evaluation-utils", () => {
       });
 
       try {
-        await mapToClientModelWithPolicyDetails(evaluation);
+        await mapToClientModelWithPolicyDetails(evaluation, accessToken);
       } catch (error) {
         expect(error).toBeDefined();
         expect(error.message).toContain(

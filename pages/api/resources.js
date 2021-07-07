@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { buildPaginationParams, get, getRodeUrl } from "./utils/api-utils";
+import { buildPaginationParams, get } from "./utils/api-utils";
 
 export default async (req, res) => {
   if (req.method !== "GET") {
@@ -24,7 +25,7 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   try {
     const searchTerm = req.query.searchTerm;

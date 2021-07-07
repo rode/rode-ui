@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies";
-import {
-  get,
-  post,
-  getRodeUrl,
-  buildPaginationParams,
-} from "pages/api/utils/api-utils";
+import { get, post, buildPaginationParams } from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies", () => {
-  let request, response, rodeResponse;
+  let accessToken, request, response, rodeResponse;
 
   beforeEach(() => {
+    accessToken = chance.string();
     request = {
+      accessToken,
       method: chance.pickone(["GET", "POST"]),
       query: {},
       body: {},
@@ -41,8 +39,6 @@ describe("/api/policies", () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
     };
-
-    getRodeUrl.mockReturnValue("http://localhost:50051");
   });
 
   afterEach(() => {
@@ -81,6 +77,7 @@ describe("/api/policies", () => {
     beforeEach(() => {
       filterParam = chance.word();
       request = {
+        accessToken,
         method: "GET",
         query: {
           filter: filterParam,
@@ -114,29 +111,35 @@ describe("/api/policies", () => {
     });
 
     describe("successful call to Rode", () => {
-      const createExpectedUrl = (baseUrl, query = {}) => {
-        return `${baseUrl}/v1alpha1/policies?${new URLSearchParams(query)}`;
+      const createExpectedUrl = (query = {}) => {
+        return `${config.get(
+          "rode.url"
+        )}/v1alpha1/policies?${new URLSearchParams(query)}`;
       };
 
       it("should hit the Rode API", async () => {
-        const expectedUrl = createExpectedUrl("http://localhost:50051", {
+        const expectedUrl = createExpectedUrl({
           filter: `name.contains("${filterParam}")`,
         });
 
         await handler(request, response);
 
         expect(buildPaginationParams).toHaveBeenCalledWith(request);
-        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+        expect(get)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl, accessToken);
       });
 
       it("should hit the Rode API when no filter is specified", async () => {
-        const expectedUrl = createExpectedUrl("http://localhost:50051");
+        const expectedUrl = createExpectedUrl();
 
         request.query.filter = null;
         await handler(request, response);
 
         expect(buildPaginationParams).toHaveBeenCalledWith(request);
-        expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+        expect(get)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(expectedUrl, accessToken);
       });
 
       it("should return the mapped policies", async () => {
@@ -197,6 +200,7 @@ describe("/api/policies", () => {
         [chance.string()]: chance.string(),
       };
       request = {
+        accessToken,
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -228,8 +232,9 @@ describe("/api/policies", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            "http://localhost:50051/v1alpha1/policies",
-            mapToApiModel(request)
+            `${config.get("rode.url")}/v1alpha1/policies`,
+            mapToApiModel(request),
+            accessToken
           );
       });
 

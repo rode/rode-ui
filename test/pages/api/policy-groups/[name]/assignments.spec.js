@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]/assignments";
-import { get, getRodeUrl, post } from "pages/api/utils/api-utils";
+import { get, post } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 jest.mock("node-fetch");
@@ -24,19 +25,19 @@ jest.mock("pages/api/utils/api-utils");
 jest.mock("pages/api/utils/policy-assignment-utils");
 
 describe("/api/policy-groups/[name]/assignments", () => {
-  let request, response, assignment, rodeResponse, name, expectedRodeUrl;
+  let accessToken, request, response, assignment, rodeResponse, name;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     name = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         name,
       },
       body: {},
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -99,7 +100,10 @@ describe("/api/policy-groups/[name]/assignments", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}/assignments`
+            `${config.get(
+              "rode.url"
+            )}/v1alpha1/policy-groups/${name}/assignments`,
+            accessToken
           );
       });
 
@@ -173,7 +177,10 @@ describe("/api/policy-groups/[name]/assignments", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${assignment.policyVersionId}/assignments/${name}`
+            `${config.get("rode.url")}/v1alpha1/policies/${
+              assignment.policyVersionId
+            }/assignments/${name}`,
+            accessToken
           );
       });
 

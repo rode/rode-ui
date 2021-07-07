@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]/assignments/[assignmentId]";
-import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
+import { del, get, patch } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 jest.mock("node-fetch");
@@ -24,19 +25,19 @@ jest.mock("pages/api/utils/api-utils");
 jest.mock("pages/api/utils/policy-assignment-utils");
 
 describe("/api/policy-groups/[name]/assignments/[assignmentId]", () => {
-  let request, response, assignment, rodeResponse, name, expectedRodeUrl;
+  let accessToken, request, response, assignment, rodeResponse, name;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     name = chance.string();
     request = {
+      accessToken,
       method: "DELETE",
       query: {
         name,
       },
       body: {},
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -103,7 +104,10 @@ describe("/api/policy-groups/[name]/assignments/[assignmentId]", () => {
 
         expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(`${expectedRodeUrl}/v1alpha1/${assignment.id}`);
+          .toHaveBeenCalledWith(
+            `${config.get("rode.url")}/v1alpha1/${assignment.id}`,
+            accessToken
+          );
       });
 
       it("should return null if the delete was successful", async () => {
@@ -171,11 +175,12 @@ describe("/api/policy-groups/[name]/assignments/[assignmentId]", () => {
         expect(patch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/${assignment.id}`,
+            `${config.get("rode.url")}/v1alpha1/${assignment.id}`,
             {
               policyGroup: name,
               policyVersionId: assignment.policyVersionId,
-            }
+            },
+            accessToken
           );
       });
 

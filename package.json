@@ -59,6 +59,7 @@
     "cacheDirectory": ".jest/cache",
     "collectCoverageFrom": [
       "**/*.js",
+      "!config/**",
       "!.eslintrc.js",
       "!**/node_modules/**",
       "!**/.next/**",
@@ -79,7 +80,8 @@
       "<rootDir>/jest-setup.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/cypress"
+      "<rootDir>/cypress",
+      "<rootDir>/config"
     ],
     "transform": {
       "\\.m?js$": "babel-jest"

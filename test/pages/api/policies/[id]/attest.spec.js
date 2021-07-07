@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]/attest";
-import { getRodeUrl, post } from "pages/api/utils/api-utils";
+import { post } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/[id]/attest", () => {
-  let request, response, evalResponse, rodeResponse, id, expectedRodeUrl;
+  let accessToken, request, response, evalResponse, rodeResponse, id;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     id = chance.guid();
     request = {
+      accessToken,
       method: "POST",
       query: {
         id,
@@ -35,7 +37,6 @@ describe("/api/policies/[id]/attest", () => {
         [chance.string()]: chance.string(),
       },
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -84,8 +85,9 @@ describe("/api/policies/[id]/attest", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${id}:attest`,
-            request.body
+            `${config.get("rode.url")}/v1alpha1/policies/${id}:attest`,
+            request.body,
+            accessToken
           );
       });
 

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { del, getRodeUrl, patch } from "pages/api/utils/api-utils";
+import { del, patch } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["DELETE", "PATCH"];
 
@@ -26,13 +27,16 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   if (req.method === "DELETE") {
     try {
       const { assignmentId } = req.query;
 
-      const response = await del(`${rodeUrl}/v1alpha1/${assignmentId}`);
+      const response = await del(
+        `${rodeUrl}/v1alpha1/${assignmentId}`,
+        req.accessToken
+      );
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);
@@ -56,10 +60,14 @@ export default async (req, res) => {
       const { name, assignmentId } = req.query;
       const requestBody = req.body;
 
-      const response = await patch(`${rodeUrl}/v1alpha1/${assignmentId}`, {
-        policyGroup: name,
-        policyVersionId: requestBody.policyVersionId,
-      });
+      const response = await patch(
+        `${rodeUrl}/v1alpha1/${assignmentId}`,
+        {
+          policyGroup: name,
+          policyVersionId: requestBody.policyVersionId,
+        },
+        req.accessToken
+      );
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

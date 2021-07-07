@@ -16,8 +16,14 @@
 
 import { getPolicyByPolicyId } from "./policy-utils";
 
-export const mapToClientModelWithPolicyDetails = async (assignment) => {
-  const { data, error } = await getPolicyByPolicyId(assignment.policyVersionId);
+export const mapToClientModelWithPolicyDetails = async (
+  assignment,
+  accessToken
+) => {
+  const { data, error } = await getPolicyByPolicyId(
+    assignment.policyVersionId,
+    accessToken
+  );
 
   if (error) {
     throw Error(

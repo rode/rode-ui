@@ -16,9 +16,6 @@
 
 import * as nodeFetch from "node-fetch";
 
-export const getRodeUrl = () =>
-  process.env.RODE_URL || "http://localhost:50051";
-
 const fetch = ({ endpoint, method, body, accessToken }) => {
   const options = {
     method,
