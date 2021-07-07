@@ -32,6 +32,7 @@ import useDebouncedValue from "hooks/useDebouncedValue";
 import { createSearchFilter } from "utils/shared-utils";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
+import Text from "components/Text";
 
 const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -98,15 +99,17 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                   return (
                     <div className={`${styles.searchCard}`} key={result.id}>
                       <div>
-                        <p className={styles.cardHeader}>{result.name}</p>
+                        <Text.Body1 className={styles.cardHeader}>
+                          {result.name}
+                        </Text.Body1>
                         {result.description && (
-                          <p className={styles.cardText}>
+                          <Text.Body2 className={styles.cardText}>
                             {result.description}
-                          </p>
+                          </Text.Body2>
                         )}
-                        <p className={styles.cardText}>
+                        <Text.Body2 className={styles.cardText}>
                           Latest Version {result.currentVersion}
-                        </p>
+                        </Text.Body2>
                       </div>
                       <Button
                         onClick={() =>
@@ -151,7 +154,7 @@ const PolicySearchAndResults = ({ onAssign, assignedToGroup }) => {
                 )}
               </>
             ) : (
-              <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
+              <Text.Body1>{`No policies found matching "${state.policySearchTerm}"`}</Text.Body1>
             )}
           </Loading>
         )}

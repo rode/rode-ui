@@ -34,6 +34,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Drawer from "components/Drawer";
 import useDebouncedValue from "hooks/useDebouncedValue";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
   const [policySearch, setPolicySearch] = useState(false);
@@ -105,8 +106,12 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                   {data.map((result) => (
                     <div className={`${styles.searchCard}`} key={result.id}>
                       <div>
-                        <p className={styles.cardHeader}>{result.name}</p>
-                        <p className={styles.cardText}>{result.description}</p>
+                        <Text.Body1 className={styles.cardHeader}>
+                          {result.name}
+                        </Text.Body1>
+                        <Text.Body2 className={styles.cardText}>
+                          {result.description}
+                        </Text.Body2>
                       </div>
                       <Button
                         onClick={() => {
@@ -135,7 +140,7 @@ const PolicySearchAndResults = ({ setPolicy, clearEvaluation }) => {
                   )}
                 </>
               ) : (
-                <p>{`No policies found matching "${state.policySearchTerm}"`}</p>
+                <Text.Body1>{`No policies found matching "${state.policySearchTerm}"`}</Text.Body1>
               )}
             </Loading>
           )}

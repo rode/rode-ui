@@ -51,9 +51,7 @@
 }
 
 .assignmentsHeader {
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-  font-weight: 400;
+  margin: 1rem 0;
 }
 
 .assignmentActions {
@@ -127,13 +125,7 @@
 
 .cardText {
   @extend .cardHeader;
-  font-size: 0.8rem;
   margin-left: 0.5rem;
-  @include ellipsis(calc(100vw - 7rem));
-
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
-  }
 }
 
 .actionButton,
@@ -165,10 +157,6 @@
     box-shadow: $DT_BOX_SHADOW;
   }
 
-  .cardHeader {
-    color: $DT_MAIN_TEXT;
-  }
-
   .cardText {
     color: $DT_SUB_TEXT;
   }
@@ -178,10 +166,6 @@
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .cardHeader {
-    color: $LT_MAIN_TEXT;
   }
 
   .cardText {

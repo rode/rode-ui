@@ -24,6 +24,7 @@ import Modal from "components/Modal";
 import { copy } from "utils/shared-utils";
 import Code from "components/Code";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const EvaluationResult = ({ results }) => {
   const { theme } = useTheme();
@@ -41,12 +42,12 @@ const EvaluationResult = ({ results }) => {
         {results.pass ? (
           <div className={styles.evaluationResults}>
             <Icon name={ICON_NAMES.BADGE_CHECK} size={"large"} />
-            <p>The resource passed the policy.</p>
+            <Text.Body1>The resource passed the policy.</Text.Body1>
           </div>
         ) : (
           <div className={styles.failedEvaluationResults}>
             <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
-            <p>The resource failed the policy.</p>
+            <Text.Body1>The resource failed the policy.</Text.Body1>
           </div>
         )}
         <div className={styles.violations}>
@@ -54,12 +55,14 @@ const EvaluationResult = ({ results }) => {
             const outcome = violation.pass ? "pass" : "fail";
             return (
               <React.Fragment key={violation.id}>
-                <p className={`${styles.violationResult} ${styles[outcome]}`}>
+                <Text.Body1
+                  className={`${styles.violationResult} ${styles[outcome]}`}
+                >
                   {outcome}
-                </p>
-                <p>
+                </Text.Body1>
+                <Text.Body1>
                   {violation.message || "Rule message not specified in policy"}
-                </p>
+                </Text.Body1>
               </React.Fragment>
             );
           })}

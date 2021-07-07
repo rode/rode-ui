@@ -27,6 +27,7 @@ import { usePolicyGroup } from "hooks/usePolicyGroup";
 import Link from "next/link";
 import PolicyAssignmentCard from "components/policy-groups/PolicyAssignmentCard";
 import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
+import Text from "components/Text";
 
 const PolicyGroup = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const PolicyGroup = () => {
   return (
     <>
       <PageHeader>
-        <h1>Manage Policy Groups</h1>
+        <Text.Heading1>Manage Policy Groups</Text.Heading1>
       </PageHeader>
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loading}>
@@ -61,11 +62,13 @@ const PolicyGroup = () => {
             <>
               <div className={styles.policyGroupHeader}>
                 <div>
-                  <p className={styles.policyGroupName}>{policyGroup.name}</p>
+                  <Text.Heading1 className={styles.policyGroupName}>
+                    {policyGroup.name}
+                  </Text.Heading1>
                   {policyGroup.description && (
-                    <p className={styles.policyGroupDescription}>
+                    <Text.Body1 className={styles.policyGroupDescription}>
                       {policyGroup.description}
-                    </p>
+                    </Text.Body1>
                   )}
                 </div>
                 <div>
@@ -78,7 +81,9 @@ const PolicyGroup = () => {
               </div>
               <div className={styles.policyGroupDetailsContainer}>
                 <div className={styles.assignmentsHeaderContainer}>
-                  <p className={styles.assignmentsHeader}>Assigned Policies</p>
+                  <Text.Heading2 className={styles.assignmentsHeader}>
+                    Assigned Policies
+                  </Text.Heading2>
                   <Button
                     label={"Edit Assignments"}
                     buttonType={"text"}
@@ -111,20 +116,22 @@ const PolicyGroup = () => {
                       })}
                     </>
                   ) : (
-                    <p className={styles.noAssignments}>
+                    <Text.Body1 className={styles.noAssignments}>
                       No policies are assigned to this policy group.
-                    </p>
+                    </Text.Body1>
                   )}
                 </Loading>
               </div>
             </>
           ) : (
             <div className={styles.notFoundContainer}>
-              <h1>No policy group found under {`"${name}"`}</h1>
-              <p>
+              <Text.Heading1>
+                No policy group found under {`"${name}"`}
+              </Text.Heading1>
+              <Text.Body1>
                 Go to the <Link href={"/policy-groups"}>dashboard</Link> to view
                 all policy groups
-              </p>
+              </Text.Body1>
             </div>
           )}
         </Loading>

@@ -40,8 +40,6 @@
 }
 
 .name {
-  font-size: 1.25rem;
-  font-weight: 700;
   margin: 0 auto;
   @include ellipsis(calc(100vw - 5rem));
   text-align: center;

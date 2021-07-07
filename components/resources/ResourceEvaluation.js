@@ -25,6 +25,7 @@ import LabelWithValue from "components/LabelWithValue";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import ToggleCard from "components/ToggleCard";
+import Text from "components/Text";
 
 const ResourceEvaluation = (props) => {
   const { evaluation } = props;
@@ -45,7 +46,7 @@ const ResourceEvaluation = (props) => {
             ) : (
               <Icon name={ICON_NAMES.EXCLAMATION} size={"large"} />
             )}
-            <p>{evaluationOutcome}</p>
+            <Text.Body1>{evaluationOutcome}</Text.Body1>
           </div>
           <LabelWithValue
             label={"Policy Group"}
@@ -59,7 +60,9 @@ const ResourceEvaluation = (props) => {
       }
       content={
         <div className={styles.policyEvaluationsContainer}>
-          <p>{evaluation.policyEvaluations.length} Policies Evaluated</p>
+          <Text.Body1>
+            {evaluation.policyEvaluations.length} Policies Evaluated
+          </Text.Body1>
           {evaluation.policyEvaluations.map((policyEvaluation) => {
             return (
               <PolicyEvaluationDetails

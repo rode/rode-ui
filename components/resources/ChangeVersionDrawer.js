@@ -36,6 +36,7 @@ import ResourceVersionSearchBar from "components/resources/ResourceVersionSearch
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const ChangeVersionDrawer = (props) => {
   const { isOpen, closeDrawer } = props;
@@ -79,11 +80,11 @@ const ChangeVersionDrawer = (props) => {
     <Drawer isOpen={isOpen} onClose={closeDrawer}>
       <div className={`${styles[theme]}`}>
         <div className={styles.headerContainer}>
-          <p className={styles.resourceName}>{resourceName}</p>
-          <p className={styles.instructions}>
+          <Text.Body1>{resourceName}</Text.Body1>
+          <Text.Body2 className={styles.instructions}>
             Select from the list below to see occurrences related to that
             version
-          </p>
+          </Text.Body2>
         </div>
         <div className={styles.searchContainer}>
           <ResourceVersionSearchBar
@@ -163,9 +164,9 @@ const ChangeVersionDrawer = (props) => {
               )}
             </>
           ) : (
-            <p
+            <Text.Body1
               className={styles.notFoundMessage}
-            >{`No versions found matching the given criteria.`}</p>
+            >{`No versions found matching the given criteria.`}</Text.Body1>
           )}
         </Loading>
       </div>

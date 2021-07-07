@@ -33,6 +33,7 @@ import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { StatusCodes } from "http-status-codes";
+import Text from "components/Text";
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -218,7 +219,7 @@ const EditPolicyGroupAssignments = () => {
   return (
     <>
       <PageHeader>
-        <h1>Edit Policy Group Assignments</h1>
+        <Text.Heading1>Edit Policy Group Assignments</Text.Heading1>
       </PageHeader>
       <PolicyVersionDrawer
         onClose={() => {
@@ -232,91 +233,100 @@ const EditPolicyGroupAssignments = () => {
       <div className={`${styles[theme]} ${styles.pageContainer}`}>
         <Loading loading={loadingPolicyGroup}>
           {policyGroup ? (
-            <div className={styles.contentContainer}>
-              <div className={styles.assignmentsContainer}>
-                <p className={styles.assignmentsHeader}>{policyGroup.name}</p>
-                <p>Assigned Policies</p>
-                <Loading loading={loadingAssignments}>
-                  {assignedToGroup.length > 0 ? (
-                    <>
-                      {assignedToGroup.map((assignment) => {
-                        const hasMultipleVersions =
-                          assignment.policyVersionCount > 1;
-                        return (
-                          <PolicyAssignmentCard
-                            key={assignment.id}
-                            policy={assignment}
-                            actions={
-                              <div className={styles.assignmentActions}>
-                                {hasMultipleVersions && (
+            <>
+              <div className={styles.contentContainer}>
+                <div className={styles.assignmentsContainer}>
+                  <Text.Heading1 className={styles.assignmentsHeader}>
+                    {policyGroup.name}
+                  </Text.Heading1>
+                  <Text.Heading2 className={styles.assignmentsHeader}>
+                    Assigned Policies
+                  </Text.Heading2>
+                  <Loading loading={loadingAssignments}>
+                    {assignedToGroup.length > 0 ? (
+                      <>
+                        {assignedToGroup.map((assignment) => {
+                          const hasMultipleVersions =
+                            assignment.policyVersionCount > 1;
+                          return (
+                            <PolicyAssignmentCard
+                              key={assignment.id}
+                              policy={assignment}
+                              actions={
+                                <div className={styles.assignmentActions}>
+                                  {hasMultipleVersions && (
+                                    <Button
+                                      label={"Change Policy Version"}
+                                      buttonType={"icon"}
+                                      onClick={() => {
+                                        setDrawerPolicy(assignment);
+                                        setShowPolicyVersionDrawer(true);
+                                      }}
+                                      showTooltip
+                                    >
+                                      <Icon
+                                        name={ICON_NAMES.PENCIL}
+                                        size={"large"}
+                                      />
+                                    </Button>
+                                  )}
                                   <Button
-                                    label={"Change Policy Version"}
+                                    label={"Remove Policy Assignment"}
                                     buttonType={"icon"}
-                                    onClick={() => {
-                                      setDrawerPolicy(assignment);
-                                      setShowPolicyVersionDrawer(true);
-                                    }}
+                                    onClick={() => onRemove(assignment)}
                                     showTooltip
                                   >
                                     <Icon
-                                      name={ICON_NAMES.PENCIL}
+                                      name={ICON_NAMES.X_CIRCLE}
                                       size={"large"}
                                     />
                                   </Button>
-                                )}
-                                <Button
-                                  label={"Remove Policy Assignment"}
-                                  buttonType={"icon"}
-                                  onClick={() => onRemove(assignment)}
-                                  showTooltip
-                                >
-                                  <Icon
-                                    name={ICON_NAMES.X_CIRCLE}
-                                    size={"large"}
-                                  />
-                                </Button>
-                              </div>
-                            }
-                          />
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <p>No policies are assigned to this policy group.</p>
-                  )}
-                </Loading>
+                                </div>
+                              }
+                            />
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <Text.Body1>
+                        No policies are assigned to this policy group.
+                      </Text.Body1>
+                    )}
+                  </Loading>
+                </div>
+                <PolicySearchAndResults
+                  onAssign={onAssign}
+                  assignedToGroup={assignedToGroup}
+                />
               </div>
-              <PolicySearchAndResults
-                onAssign={onAssign}
-                assignedToGroup={assignedToGroup}
-              />
-            </div>
+              <div className={styles.actionButtonsContainer}>
+                <Button
+                  label={"Save Assignments"}
+                  type={"button"}
+                  onClick={onSubmit}
+                  loading={loadingForm}
+                />
+                <Button
+                  label={"Cancel"}
+                  buttonType={"text"}
+                  type={"button"}
+                  onClick={router.back}
+                  disabled={loadingForm}
+                />
+              </div>
+            </>
           ) : (
             <div className={styles.notFoundContainer}>
-              <h1>No policy group found under {`"${name}"`}</h1>
-              <p>
+              <Text.Heading1>
+                No policy group found under {`"${name}"`}
+              </Text.Heading1>
+              <Text.Body1>
                 Go to the <Link href={"/policy-groups"}>dashboard</Link> to view
                 all policy groups
-              </p>
+              </Text.Body1>
             </div>
           )}
         </Loading>
-
-        <div className={styles.actionButtonsContainer}>
-          <Button
-            label={"Save Assignments"}
-            type={"button"}
-            onClick={onSubmit}
-            loading={loadingForm}
-          />
-          <Button
-            label={"Cancel"}
-            buttonType={"text"}
-            type={"button"}
-            onClick={router.back}
-            disabled={loadingForm}
-          />
-        </div>
       </div>
     </>
   );

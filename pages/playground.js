@@ -25,6 +25,7 @@ import { stateActions } from "reducers/appState";
 import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
+import Text from "components/Text";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -93,10 +94,10 @@ const PolicyPlayground = () => {
   return (
     <div className={`${styles[theme]} ${styles.pageContainer}`}>
       <PageHeader>
-        <h1>Policy Playground</h1>
-        <p className={styles.instructions}>
+        <Text.Heading1>Policy Playground</Text.Heading1>
+        <Text.Body1 className={styles.instructions}>
           Choose a resource, pick a policy, and evaluate.
-        </p>
+        </Text.Body1>
       </PageHeader>
       <div className={styles.policyContainer}>
         <SelectedPolicy

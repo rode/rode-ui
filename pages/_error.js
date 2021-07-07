@@ -17,15 +17,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Errors.module.scss";
+import Text from "components/Text";
 
 const Error = ({ statusCode }) => {
   return (
     <div className={styles.container}>
-      <p>
+      <Text.Body1>
         {statusCode
           ? `An error ${statusCode} occurred on server.`
           : "An error occurred on client."}
-      </p>
+      </Text.Body1>
     </div>
   );
 };

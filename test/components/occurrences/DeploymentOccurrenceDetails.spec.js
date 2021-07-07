@@ -42,7 +42,6 @@ describe("DeploymentOccurrenceDetails", () => {
   });
 
   it("should display the summary details of the deployment", () => {
-    expect(screen.getByText("Deployment")).toBeInTheDocument();
     expect(screen.getByText(/deployed to/i)).toBeInTheDocument();
     expect(
       screen.getByText(`Started ${occurrence.deploymentStart}`)

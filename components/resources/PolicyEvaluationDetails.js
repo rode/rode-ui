@@ -21,6 +21,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "components/Icon";
 import styles from "styles/modules/PolicyEvaluationDetails.module.scss";
 import ToggleCard from "components/ToggleCard";
+import Text from "components/Text";
 
 const PolicyEvaluationDetails = (props) => {
   const { policyEvaluation } = props;
@@ -44,8 +45,8 @@ const PolicyEvaluationDetails = (props) => {
               className={styles.fail}
             />
           )}
-          <p>{policyEvaluation.policyName}</p>
-          <p>v{policyEvaluation.policyVersion}</p>
+          <Text.Body1>{policyEvaluation.policyName}</Text.Body1>
+          <Text.Body1>v{policyEvaluation.policyVersion}</Text.Body1>
         </div>
       }
       content={
@@ -55,10 +56,12 @@ const PolicyEvaluationDetails = (props) => {
 
             return (
               <div key={violation.id} className={styles.violation}>
-                <p className={`${styles[outcome]} ${styles.violationResult}`}>
+                <Text.Body1
+                  className={`${styles[outcome]} ${styles.violationResult}`}
+                >
                   {outcome}
-                </p>
-                <p>{violation.message}</p>
+                </Text.Body1>
+                <Text.Body1>{violation.message}</Text.Body1>
               </div>
             );
           })}

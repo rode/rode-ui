@@ -19,10 +19,9 @@ import PropTypes from "prop-types";
 import { ICON_NAMES } from "utils/icon-utils";
 import Icon from "./Icon";
 import styles from "styles/modules/Typography.module.scss";
-import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const ExternalLink = (props) => {
-  const { theme } = useTheme();
   const { href, label, className = "", fallback = null } = props;
 
   if (!href) {
@@ -30,15 +29,16 @@ const ExternalLink = (props) => {
   }
 
   return (
-    <a
-      className={`${styles[theme]} ${styles.externalLink} ${className}`}
+    <Text.Body1
+      as={"a"}
+      className={`${styles.externalLink} ${className}`}
       href={href}
       target="_blank"
       rel="noreferrer"
     >
       {label}
       <Icon name={ICON_NAMES.EXTERNAL_LINK} size={"small"} />
-    </a>
+    </Text.Body1>
   );
 };
 

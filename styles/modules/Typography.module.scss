@@ -21,6 +21,14 @@
   flex-direction: row;
   align-items: center;
   width: fit-content;
+
+  &.darkTheme {
+    color: $DT_LINK;
+  }
+
+  &.lightTheme {
+    color: $LT_LINK;
+  }
 }
 
 .codeContainer {
@@ -34,6 +42,10 @@
   display: flex;
   flex-direction: row;
   width: fit-content;
+
+  .value {
+    margin-left: 0.5rem;
+  }
 }
 
 .verticalLabelWithValueContainer {
@@ -45,19 +57,54 @@
   }
 }
 
-.label {
+.heading1 {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.heading2 {
   font-weight: 400;
-  padding-right: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.heading3 {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.body1 {
+  font-size: 1rem;
+}
+
+.body2 {
+  font-size: 0.875rem;
+}
+
+.caption {
+  font-size: 0.75rem;
+
+  &.darkTheme {
+    color: $DT_SUB_TEXT;
+  }
+
+  &.lightTheme {
+    color: $LT_SUB_TEXT;
+  }
+}
+
+.label {
+  display: block;
+  font-weight: 600;
+
+  &.darkTheme {
+    color: $DT_MAIN_TEXT;
+  }
+
+  &.lightTheme {
+    color: $LT_MAIN_TEXT;
+  }
 }
 
 .value {
   font-weight: 600;
-}
-
-.darkTheme {
-  color: $DT_LINK;
-}
-
-.lightTheme {
-  color: $LT_LINK;
 }

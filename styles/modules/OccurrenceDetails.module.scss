@@ -44,10 +44,6 @@ $SIDE_SPACING: 1rem;
   }
 }
 
-.title {
-  font-size: 1.5rem;
-}
-
 .rightMargin {
   margin-right: 0.75rem;
 }
@@ -105,8 +101,6 @@ $SIDE_SPACING: 1rem;
 }
 
 .cardTitle {
-  font-weight: 600;
-  font-size: 1.15rem;
   margin-bottom: 0.5rem;
 }
 
@@ -158,7 +152,7 @@ $SIDE_SPACING: 1rem;
   width: fit-content;
 
   > p {
-    padding: 0.1rem;
+    padding: 0.25rem;
   }
 }
 

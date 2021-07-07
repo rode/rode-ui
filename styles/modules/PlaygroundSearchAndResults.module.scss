@@ -64,12 +64,10 @@ $GAP: 1rem;
 
 .cardText {
   @extend .cardHeader;
-  font-size: 0.8rem;
   margin-left: 0.5rem;
-  @include ellipsis(calc(100vw - 7rem));
 
-  @include tabletAndLarger {
-    max-width: calc(100vw - 24rem);
+  > * {
+    font-size: 0.875rem;
   }
 }
 
@@ -89,10 +87,6 @@ $GAP: 1rem;
     box-shadow: $DT_BOX_SHADOW;
   }
 
-  .cardHeader {
-    color: $DT_MAIN_TEXT;
-  }
-
   .cardText {
     color: $DT_SUB_TEXT;
   }
@@ -109,10 +103,6 @@ $GAP: 1rem;
   .searchCard {
     background-color: $LT_BACKGROUND_LIGHT;
     box-shadow: $LT_BOX_SHADOW;
-  }
-
-  .cardHeader {
-    color: $LT_MAIN_TEXT;
   }
 
   .cardText {

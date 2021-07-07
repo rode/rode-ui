@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/DetailsHeader.module.scss";
 import { useTheme } from "providers/theme";
+import Text from "components/Text";
 
 const DetailsHeader = (props) => {
   const { name, subText, actionButton } = props;
@@ -26,7 +27,7 @@ const DetailsHeader = (props) => {
   return (
     <div className={`${styles[theme]} ${styles.detailsHeader}`}>
       <div>
-        <h1 className={styles.name}>{name}</h1>
+        <Text.Heading1 className={styles.name}>{name}</Text.Heading1>
         {subText}
       </div>
       {actionButton}

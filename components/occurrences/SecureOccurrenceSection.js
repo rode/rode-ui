@@ -23,6 +23,7 @@ import { ICON_NAMES } from "utils/icon-utils";
 import { getVulnerabilityBreakdown } from "utils/occurrence-utils";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
+import Text from "components/Text";
 
 const SecureOccurrenceSection = ({ occurrences }) => {
   if (!occurrences?.length) {
@@ -33,7 +34,7 @@ const SecureOccurrenceSection = ({ occurrences }) => {
     <div className={styles.sectionContainer}>
       <div className={styles.sectionTitle}>
         <Icon name={ICON_NAMES.SHIELD_CHECK} />
-        <p>Secure</p>
+        <Text.Heading2>Secure</Text.Heading2>
       </div>
       {occurrences.map((occurrence) => (
         <OccurrencePreview
@@ -50,13 +51,16 @@ const SecureOccurrenceSection = ({ occurrences }) => {
           subText={
             occurrence.completed ? (
               <>
-                <span>{`${occurrence.vulnerabilities.length} vulnerabilities found`}</span>
+                <Text.Body2
+                  as={"span"}
+                >{`${occurrence.vulnerabilities.length} vulnerabilities found`}</Text.Body2>
                 {!!occurrence.vulnerabilities.length && (
-                  <span
+                  <Text.Body2
                     className={styles.previewBreakdown}
+                    as={"span"}
                   >{`${getVulnerabilityBreakdown(
                     occurrence.vulnerabilities
-                  )}`}</span>
+                  )}`}</Text.Body2>
                 )}
               </>
             ) : null

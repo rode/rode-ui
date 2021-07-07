@@ -17,6 +17,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "styles/modules/Typography.module.scss";
+import Text from "components/Text";
 
 const LabelWithValue = (props) => {
   const { label, value, vertical = false, className = "", as = "p" } = props;
@@ -25,19 +26,19 @@ const LabelWithValue = (props) => {
     return null;
   }
 
-  const Text = as;
+  const Tag = as;
 
   return (
-    <Text
+    <Tag
       className={` ${
         vertical
           ? styles.verticalLabelWithValueContainer
           : styles.labelWithValueContainer
       } ${className}`}
     >
-      {label && <span className={styles.label}>{label}</span>}
-      <span className={styles.value}>{value}</span>
-    </Text>
+      <Text.Body1 as={"span"}>{label}</Text.Body1>
+      <Text.Value>{value}</Text.Value>
+    </Tag>
   );
 };
 

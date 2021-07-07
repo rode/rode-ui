@@ -49,11 +49,9 @@ $PADDING: 0.5rem;
   text-align: center;
   width: 100%;
   padding: 0.5rem;
-  font-size: 1.15rem;
 
   @include tabletAndLarger {
     padding: 1rem 2rem;
-    font-size: 1.5rem;
   }
 }
 

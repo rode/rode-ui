@@ -43,7 +43,6 @@ describe("BuildOccurrenceDetails", () => {
   });
 
   it("should display the summary details of the build", () => {
-    expect(screen.getByText("Build")).toBeInTheDocument();
     expect(screen.getByText(/view source/i))
       .toBeInTheDocument()
       .toHaveAttribute("href", occurrence.sourceUri);

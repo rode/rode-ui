@@ -21,6 +21,7 @@ import Loading from "components/Loading";
 import { usePolicy } from "hooks/usePolicy";
 import styles from "styles/modules/Policy.module.scss";
 import Link from "next/link";
+import Text from "components/Text";
 
 const EditPolicy = () => {
   const router = useRouter();
@@ -41,10 +42,10 @@ const EditPolicy = () => {
         />
       ) : (
         <div className={styles.notFound}>
-          <h1 className={styles.notFound}>No policy found under {`"${id}"`}</h1>
-          <p>
+          <Text.Heading1>No policy found under {`"${id}"`}</Text.Heading1>
+          <Text.Body1>
             Try <Link href={"/policies"}>searching for a policy</Link>.
-          </p>
+          </Text.Body1>
         </div>
       )}
     </Loading>

@@ -22,6 +22,7 @@ import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { SEARCH_ALL } from "utils/constants";
+import Text from "components/Text";
 
 const SearchBar = (props) => {
   const {
@@ -57,7 +58,9 @@ const SearchBar = (props) => {
           <Icon name={ICON_NAMES.SEARCH} size={"large"} />
         </Button>
       </div>
-      {helpText && <p className={styles.searchHelp}>{helpText}</p>}
+      {helpText && (
+        <Text.Caption className={styles.searchHelp}>{helpText}</Text.Caption>
+      )}
     </form>
   );
 };

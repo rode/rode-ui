@@ -21,6 +21,7 @@ import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
+import Text from "components/Text";
 
 const OccurrencePreview = ({
   mainText,
@@ -51,9 +52,9 @@ const OccurrencePreview = ({
       onClick={onClick}
     >
       <div className={styles.previewDetails}>
-        <p className={styles.previewMainText}>{mainText}</p>
-        <p className={styles.previewTimestamp}>{timestamp}</p>
-        <p className={styles.previewSubText}>{subText}</p>
+        <Text.Body1 className={styles.previewMainText}>{mainText}</Text.Body1>
+        <Text.Body2 className={styles.previewTimestamp}>{timestamp}</Text.Body2>
+        <Text.Body2 className={styles.previewSubText}>{subText}</Text.Body2>
       </div>
       <Icon
         name={

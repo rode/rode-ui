@@ -28,6 +28,7 @@ import { showError, showSuccess } from "utils/toast-utils";
 import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
+import Text from "components/Text";
 
 const PolicyGroupForm = (props) => {
   const {
@@ -113,7 +114,7 @@ const PolicyGroupForm = (props) => {
   return (
     <>
       <PageHeader>
-        <h1>{title}</h1>
+        <Text.Heading1>{title}</Text.Heading1>
       </PageHeader>
       <div className={`${styles.pageContainer} ${styles[theme]}`}>
         <form onSubmit={onSubmit} className={styles.form}>
@@ -133,10 +134,14 @@ const PolicyGroupForm = (props) => {
               disabled={!creatingNewPolicyGroup}
             />
             {creatingNewPolicyGroup && (
-              <p className={styles.hint} spacing={"Policy Group Name"}>
+              <Text.Caption
+                as={"p"}
+                className={styles.hint}
+                spacing={"Policy Group Name"}
+              >
                 <span>Please note:</span> Policy Group Name cannot be changed
                 after creation.
-              </p>
+              </Text.Caption>
             )}
             <Input
               name={"description"}
@@ -188,7 +193,7 @@ const PolicyGroupForm = (props) => {
           {creatingNewPolicyGroup && (
             <>
               <div>
-                <h2>Policy Group Name Guidelines</h2>
+                <Text.Heading2>Policy Group Name Guidelines</Text.Heading2>
                 <ul>
                   <li>Must be unique</li>
                   <li>Lowercase</li>
@@ -198,7 +203,7 @@ const PolicyGroupForm = (props) => {
                 </ul>
               </div>
               <div>
-                <p>Examples</p>
+                <Text.Heading3>Examples</Text.Heading3>
                 <code>development_3</code>
                 <code>pci-requirements</code>
                 <code>docker_images_prod</code>

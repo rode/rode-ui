@@ -19,6 +19,7 @@ import styles from "styles/modules/Breadcrumbs.module.scss";
 import Link from "next/link";
 import { SEARCH_ALL } from "utils/constants";
 import { useAppState } from "providers/appState";
+import Text from "components/Text";
 
 const getSearchTermText = (searchTerm) => {
   if (searchTerm === SEARCH_ALL) {
@@ -39,8 +40,8 @@ const ResourceBreadcrumbs = () => {
 
   return (
     <div className={styles.breadcrumbs}>
-      <p className={styles.rootCrumb}>Resource Search</p>
-      <p className={styles.rootCrumb}>/</p>
+      <Text.Body1 className={styles.rootCrumb}>Resource Search</Text.Body1>
+      <Text.Body1 className={styles.rootCrumb}>/</Text.Body1>
       <Link
         href={`/resources?search=${encodeURIComponent(resourceSearchTerm)}`}
       >
