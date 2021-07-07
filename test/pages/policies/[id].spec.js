@@ -54,6 +54,8 @@ describe("Policy Details", () => {
       name: chance.string(),
       description: chance.string(),
       regoContent: chance.word({ syllables: 4 }),
+      policyVersion: chance.d10(),
+      currentVersion: chance.d10()
     };
 
     mockUsePolicy = {
@@ -120,8 +122,10 @@ describe("Policy Details", () => {
 
   describe("policy has been found", () => {
     it("should render the policy header", () => {
-      expect(screen.getByText(policy.name)).toBeInTheDocument();
+      expect(screen.getByText(policy.name, {exact: false})).toBeInTheDocument();
       expect(screen.getByText(policy.description)).toBeInTheDocument();
+      expect(screen.getByText(`v${policy.policyVersion}`, {exact: false})).toBeInTheDocument();
+      expect(screen.getByText(`Latest Version ${policy.currentVersion}`)).toBeInTheDocument();
 
       const renderedButton = screen.getByText("Edit Policy");
       expect(renderedButton).toBeInTheDocument();
