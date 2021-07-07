@@ -16,9 +16,10 @@
 
 import { getPolicyByPolicyId } from "./policy-utils";
 
-const mapPolicyEvaluations = async (policyEvaluation) => {
+const mapPolicyEvaluations = async (policyEvaluation, accessToken) => {
   const { data, error } = await getPolicyByPolicyId(
-    policyEvaluation.policyVersionId
+    policyEvaluation.policyVersionId,
+    accessToken
   );
 
   if (error) {
@@ -35,9 +36,14 @@ const mapPolicyEvaluations = async (policyEvaluation) => {
   };
 };
 
-export const mapToClientModelWithPolicyDetails = async (evaluation) => {
+export const mapToClientModelWithPolicyDetails = async (
+  evaluation,
+  accessToken
+) => {
   const mappedPolicyEvaluations = await Promise.all(
-    evaluation.policyEvaluations.map(mapPolicyEvaluations)
+    evaluation.policyEvaluations.map((evaluation) =>
+      mapPolicyEvaluations(evaluation, accessToken)
+    )
   );
 
   return {

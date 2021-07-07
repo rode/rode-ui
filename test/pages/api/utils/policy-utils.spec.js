@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+import config from "config";
 import {
   getPolicyByPolicyId,
   mapToApiModel,
   mapToClientModel,
 } from "pages/api/utils/policy-utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { get, getRodeUrl } from "pages/api/utils/api-utils";
+import { get } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
@@ -103,9 +104,10 @@ describe("policy-utils", () => {
   });
 
   describe("getPolicyByPolicyId", () => {
-    let rodeUrl, policyId, fetchResponse, unmappedPolicy, actualResponse;
+    let accessToken, policyId, fetchResponse, unmappedPolicy, actualResponse;
 
     beforeEach(() => {
+      accessToken = chance.string();
       policyId = chance.guid();
       unmappedPolicy = {
         [chance.string()]: chance.string(),
@@ -124,19 +126,18 @@ describe("policy-utils", () => {
         ok: true,
         json: jest.fn().mockResolvedValue(unmappedPolicy),
       };
-      rodeUrl = chance.url();
-      getRodeUrl.mockReturnValue(rodeUrl);
     });
 
     describe("happy path", () => {
       beforeEach(async () => {
         get.mockResolvedValue(fetchResponse);
-        actualResponse = await getPolicyByPolicyId(policyId);
+        actualResponse = await getPolicyByPolicyId(policyId, accessToken);
       });
 
       it("should call to fetch the policy", () => {
         expect(get).toHaveBeenCalledWith(
-          `${rodeUrl}/v1alpha1/policies/${policyId}`
+          `${config.get("rode.url")}/v1alpha1/policies/${policyId}`,
+          accessToken
         );
       });
 
@@ -161,7 +162,7 @@ describe("policy-utils", () => {
       it("should return null if the policy is not found", async () => {
         fetchResponse.status = StatusCodes.NOT_FOUND;
         get.mockResolvedValue(fetchResponse);
-        actualResponse = await getPolicyByPolicyId(policyId);
+        actualResponse = await getPolicyByPolicyId(policyId, accessToken);
 
         expect(actualResponse).toEqual({
           status: StatusCodes.OK,

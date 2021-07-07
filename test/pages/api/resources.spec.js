@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resources";
-import {
-  getRodeUrl,
-  get,
-  buildPaginationParams,
-} from "pages/api/utils/api-utils";
+import { get, buildPaginationParams } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/resources", () => {
-  let request,
+  let accessToken,
+    request,
     response,
     allResources,
     rodeResponse,
     searchTerm,
     resourceTypes,
-    pageToken,
-    rodeUrl;
+    pageToken;
 
   beforeEach(() => {
     searchTerm = chance.word();
     resourceTypes = null;
+    accessToken = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         searchTerm,
@@ -68,9 +67,7 @@ describe("/api/resources", () => {
       }),
     };
 
-    rodeUrl = chance.url();
     buildPaginationParams.mockReturnValue({});
-    getRodeUrl.mockReturnValue(rodeUrl);
 
     get.mockResolvedValue(rodeResponse);
   });
@@ -97,7 +94,9 @@ describe("/api/resources", () => {
 
   describe("successful call to Rode", () => {
     const createExpectedUrl = (query = {}) => {
-      return `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(query)}`;
+      return `${config.get(
+        "rode.url"
+      )}/v1alpha1/resources?${new URLSearchParams(query)}`;
     };
 
     it("should pass the correct params for a specified search term", async () => {
@@ -110,7 +109,9 @@ describe("/api/resources", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should pass the correct params for specified resource types", async () => {
@@ -129,7 +130,9 @@ describe("/api/resources", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should pass the correct params when both search term and resource types are specified", async () => {
@@ -147,7 +150,9 @@ describe("/api/resources", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should hit the Rode API when no searchTerm or resourceTypes are specified", async () => {
@@ -160,7 +165,9 @@ describe("/api/resources", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should return the mapped resources", async () => {

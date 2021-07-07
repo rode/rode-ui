@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/occurrences";
 import {
@@ -21,21 +22,23 @@ import {
   createMockResourceUri,
 } from "test/testing-utils/mocks";
 import { mapOccurrencesToSections } from "pages/api/utils/occurrence-utils";
-import { getRodeUrl, get } from "pages/api/utils/api-utils";
+import { get } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/occurrences", () => {
-  let request,
+  let accessToken,
+    request,
     response,
     allOccurrences,
     rodeResponse,
-    resourceUriParam,
-    rodeUrl;
+    resourceUriParam;
 
   beforeEach(() => {
     resourceUriParam = createMockResourceUri();
+    accessToken = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         resourceUri: resourceUriParam,
@@ -59,9 +62,7 @@ describe("/api/occurrences", () => {
         occurrences: allOccurrences,
       }),
     };
-    rodeUrl = chance.url();
 
-    getRodeUrl.mockReturnValue(rodeUrl);
     get.mockResolvedValue(rodeResponse);
   });
 
@@ -87,14 +88,17 @@ describe("/api/occurrences", () => {
 
   describe("successful call to Rode", () => {
     it("should hit the Rode API", async () => {
-      const expectedUrl = `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
+      const expectedUrl = `${config.get(
+        "rode.url"
+      )}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUriParam
       )}&fetchRelatedNotes=true&pageSize=1000`;
 
       await handler(request, response);
 
-      expect(getRodeUrl).toHaveBeenCalledTimes(1);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should return the mapped resources", async () => {

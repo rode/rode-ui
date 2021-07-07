@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { get, getRodeUrl } from "./utils/api-utils";
+import { get } from "./utils/api-utils";
 import { mapOccurrencesToSections } from "./utils/occurrence-utils";
 
 export default async (req, res) => {
@@ -25,14 +26,15 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   try {
     const resourceUri = req.query.resourceUri;
     const response = await get(
       `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUri
-      )}&fetchRelatedNotes=true&pageSize=1000`
+      )}&fetchRelatedNotes=true&pageSize=1000`,
+      req.accessToken
     );
 
     if (!response.ok) {

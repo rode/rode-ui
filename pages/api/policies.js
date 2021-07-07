@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import {
-  buildPaginationParams,
-  get,
-  getRodeUrl,
-  post,
-} from "./utils/api-utils";
+import { buildPaginationParams, get, post } from "./utils/api-utils";
 import { mapToApiModel, mapToClientModel } from "./utils/policy-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
@@ -32,7 +28,7 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   if (req.method === "GET") {
     try {
@@ -43,7 +39,8 @@ export default async (req, res) => {
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policies?${new URLSearchParams(params)}`,
+        req.accessToken
       );
 
       if (!response.ok) {
@@ -74,7 +71,11 @@ export default async (req, res) => {
   try {
     const postBody = mapToApiModel(req);
 
-    const response = await post(`${rodeUrl}/v1alpha1/policies`, postBody);
+    const response = await post(
+      `${rodeUrl}/v1alpha1/policies`,
+      postBody,
+      req.accessToken
+    );
 
     if (!response.ok) {
       console.error(`Unsuccessful response from Rode: ${response.status}`);

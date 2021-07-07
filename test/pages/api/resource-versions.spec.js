@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/resource-versions";
-import {
-  getRodeUrl,
-  get,
-  buildPaginationParams,
-} from "pages/api/utils/api-utils";
+import { get, buildPaginationParams } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/resource-versions", () => {
-  let request,
+  let accessToken,
+    request,
     response,
     resourceVersions,
     rodeResponse,
     resourceId,
-    pageToken,
-    rodeUrl;
+    pageToken;
 
   beforeEach(() => {
     resourceId = chance.word();
+    accessToken = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         id: resourceId,
@@ -64,9 +63,6 @@ describe("/api/resource-versions", () => {
         nextPageToken: pageToken,
       }),
     };
-    rodeUrl = chance.url();
-
-    getRodeUrl.mockReturnValue(rodeUrl);
     buildPaginationParams.mockReturnValue({});
 
     get.mockResolvedValue(rodeResponse);
@@ -109,9 +105,9 @@ describe("/api/resource-versions", () => {
 
   describe("successful call to Rode", () => {
     const createExpectedUrl = (query = {}) => {
-      return `${rodeUrl}/v1alpha1/resource-versions?${new URLSearchParams(
-        query
-      )}`;
+      return `${config.get(
+        "rode.url"
+      )}/v1alpha1/resource-versions?${new URLSearchParams(query)}`;
     };
 
     it("should hit the Rode API", async () => {
@@ -124,7 +120,9 @@ describe("/api/resource-versions", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should pass the filter as a query param when a filter is specified", async () => {
@@ -140,7 +138,9 @@ describe("/api/resource-versions", () => {
       expect(buildPaginationParams)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(request);
-      expect(get).toHaveBeenCalledTimes(1).toHaveBeenCalledWith(expectedUrl);
+      expect(get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(expectedUrl, accessToken);
     });
 
     it("should return the resource versions", async () => {

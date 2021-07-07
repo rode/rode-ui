@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]/versions";
-import { getRodeUrl, get } from "pages/api/utils/api-utils";
+import { get } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/[id]/versions", () => {
-  let request, response, policyVersions, rodeResponse, id, expectedRodeUrl;
+  let accessToken, request, response, policyVersions, rodeResponse, id;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     id = chance.guid();
     request = {
+      accessToken,
       method: "GET",
       query: {
         id,
       },
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -85,7 +86,8 @@ describe("/api/policies/[id]/versions", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${id}/versions`
+            `${config.get("rode.url")}/v1alpha1/policies/${id}/versions`,
+            accessToken
           );
       });
 

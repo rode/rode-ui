@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import handler from "pages/api/resources/[resourceUri]/resource-evaluations";
-import { get, getRodeUrl } from "pages/api/utils/api-utils";
+import { get } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/resource-evaluation-utils";
 
 jest.mock("node-fetch");
@@ -24,25 +25,25 @@ jest.mock("pages/api/utils/api-utils");
 jest.mock("pages/api/utils/resource-evaluation-utils");
 
 describe("/api/resources/[resourceUri]/resource-evaluations", () => {
-  let request,
+  let accessToken,
+    request,
     response,
     evaluation,
     rodeResponse,
     resourceUri,
-    parsedJson,
-    expectedRodeUrl;
+    parsedJson;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     resourceUri = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         resourceUri,
       },
       body: {},
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -102,9 +103,12 @@ describe("/api/resources/[resourceUri]/resource-evaluations", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(
-              { resourceUri }
-            )}`
+            `${config.get(
+              "rode.url"
+            )}/v1alpha1/resource-evaluations?${new URLSearchParams({
+              resourceUri,
+            })}`,
+            accessToken
           );
       });
 

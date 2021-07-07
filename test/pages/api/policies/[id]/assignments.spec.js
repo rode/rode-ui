@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import handler from "pages/api/policies/[id]/assignments";
-import { get, getRodeUrl } from "pages/api/utils/api-utils";
+import { get } from "pages/api/utils/api-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/[id]/assignments", () => {
-  let request, response, assignment, rodeResponse, id, expectedRodeUrl;
+  let accessToken, request, response, assignment, rodeResponse, id;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     id = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         id,
       },
       body: {},
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -93,7 +94,8 @@ describe("/api/policies/[id]/assignments", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policies/${id}/assignments`
+            `${config.get("rode.url")}/v1alpha1/policies/${id}/assignments`,
+            accessToken
           );
       });
 

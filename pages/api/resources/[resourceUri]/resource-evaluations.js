@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import {
-  buildPaginationParams,
-  get,
-  getRodeUrl,
-} from "pages/api/utils/api-utils";
+import { buildPaginationParams, get } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/resource-evaluation-utils";
 
 export default async (req, res) => {
@@ -29,7 +26,7 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   try {
     const { resourceUri } = req.query;
@@ -40,7 +37,8 @@ export default async (req, res) => {
     };
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(params)}`
+      `${rodeUrl}/v1alpha1/resource-evaluations?${new URLSearchParams(params)}`,
+      req.accessToken
     );
 
     if (!response.ok) {
@@ -57,7 +55,9 @@ export default async (req, res) => {
       nextPageToken,
     } = listResourceEvaluationsResponse;
 
-    const promises = resourceEvaluations.map(mapToClientModelWithPolicyDetails);
+    const promises = resourceEvaluations.map((evaluation) =>
+      mapToClientModelWithPolicyDetails(evaluation, req.accessToken)
+    );
 
     const mappedEvaluations = await Promise.all(promises);
 

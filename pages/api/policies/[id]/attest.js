@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { getRodeUrl, post } from "pages/api/utils/api-utils";
+import { post } from "pages/api/utils/api-utils";
 
 const ALLOWED_METHODS = ["POST"];
 
@@ -26,7 +27,7 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   try {
     const { id } = req.query;
@@ -34,7 +35,8 @@ export default async (req, res) => {
 
     const response = await post(
       `${rodeUrl}/v1alpha1/policies/${id}:attest`,
-      requestBody
+      requestBody,
+      req.accessToken
     );
 
     if (!response.ok) {

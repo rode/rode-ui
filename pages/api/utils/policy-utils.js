@@ -1,6 +1,3 @@
-import { get, getRodeUrl } from "./api-utils";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
-
 /**
  * Copyright 2021 The Rode Authors
  *
@@ -16,6 +13,10 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import config from "config";
+import { get } from "./api-utils";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 export const mapToClientModel = (policyResponse) => {
   return {
@@ -42,9 +43,12 @@ export const mapToApiModel = (request) => {
   };
 };
 
-export const getPolicyByPolicyId = async (policyId) => {
+export const getPolicyByPolicyId = async (policyId, accessToken) => {
   try {
-    const response = await get(`${getRodeUrl()}/v1alpha1/policies/${policyId}`);
+    const response = await get(
+      `${config.get("rode.url")}/v1alpha1/policies/${policyId}`,
+      accessToken
+    );
 
     if (response.status === StatusCodes.NOT_FOUND) {
       return {

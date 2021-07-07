@@ -21,9 +21,10 @@ jest.mock("pages/api/utils/policy-utils");
 
 describe("policy-assignment-utils", () => {
   describe("mapToClientModelWithPolicyDetails", () => {
-    let assignment, policyId, policyVersion, policy;
+    let accessToken, assignment, policyId, policyVersion, policy;
 
     beforeEach(() => {
+      accessToken = chance.string();
       policyId = chance.guid();
       policyVersion = chance.d4().toString();
       assignment = {
@@ -46,10 +47,14 @@ describe("policy-assignment-utils", () => {
         error: null,
       });
 
-      const actual = await mapToClientModelWithPolicyDetails(assignment);
+      const actual = await mapToClientModelWithPolicyDetails(
+        assignment,
+        accessToken
+      );
 
       expect(getPolicyByPolicyId).toHaveBeenCalledWith(
-        assignment.policyVersionId
+        assignment.policyVersionId,
+        accessToken
       );
 
       expect(actual).toEqual({

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { get, getRodeUrl, post } from "pages/api/utils/api-utils";
+import { get, post } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
@@ -27,14 +28,15 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   if (req.method === "GET") {
     try {
       const { name } = req.query;
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`
+        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`,
+        req.accessToken
       );
 
       if (!response.ok) {
@@ -48,7 +50,9 @@ export default async (req, res) => {
 
       const { policyAssignments } = getPolicyGroupAssignmentsResponse;
 
-      const promises = policyAssignments.map(mapToClientModelWithPolicyDetails);
+      const promises = policyAssignments.map((assignment) =>
+        mapToClientModelWithPolicyDetails(assignment, req.accessToken)
+      );
 
       const mappedAssignments = await Promise.all(promises);
 
@@ -70,7 +74,8 @@ export default async (req, res) => {
       const requestBody = req.body;
 
       const response = await post(
-        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`
+        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`,
+        req.accessToken
       );
 
       if (!response.ok) {

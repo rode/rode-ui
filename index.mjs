@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-import { getPolicyByPolicyId } from "./policy-utils";
+import { newApp, configureGracefulShutdown } from "./server/server.mjs";
 
-export const mapToClientModelWithPolicyDetails = async (
-  assignment,
-  accessToken
-) => {
-  const { data, error } = await getPolicyByPolicyId(
-    assignment.policyVersionId,
-    accessToken
-  );
+const listen = (app) => {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(3000, "0.0.0.0", (err) => {
+      if (err) {
+        return reject(err);
+      }
 
-  if (error) {
-    throw Error(
-      `Error while fetching policy ${assignment.policyVersionId} for policy group assignments.`
-    );
-  }
-
-  return {
-    ...assignment,
-    policyId: data.id,
-    policyVersion: data.policyVersion,
-    policyName: data.name,
-    policyVersionCount: data.currentVersion,
-  };
+      return resolve(server);
+    });
+  });
 };
+
+try {
+  const app = await newApp();
+  const server = await listen(app);
+  configureGracefulShutdown(server);
+  console.log(
+    `Server listening on ${server.address().address}:${server.address().port}`
+  );
+} catch (error) {
+  console.error("Error starting server", error);
+  process.exit(1);
+}

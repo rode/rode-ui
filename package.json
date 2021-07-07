@@ -11,12 +11,16 @@
     "lint": "eslint --max-warnings=0 .",
     "smoke": "./node_modules/.bin/cypress-tags run -e TAGS='@smoke'",
     "start": "next start",
+    "serve": "node index.mjs",
     "test": "jest",
     "verify": "prettier --check . && yarn lint && yarn test"
   },
   "dependencies": {
+    "config": "^3.3.6",
     "dayjs": "^1.10.4",
     "diff": "^5.0.0",
+    "express": "^4.17.1",
+    "express-openid-connect": "^2.4.0",
     "http-status-codes": "^2.1.4",
     "next": "10.0.8",
     "node-fetch": "^2.6.1",
@@ -36,6 +40,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
+    "babel-jest": "^27.0.6",
     "chance": "^1.1.7",
     "cypress": "^6.6.0",
     "cypress-cucumber-preprocessor": "^4.0.3",
@@ -54,6 +59,7 @@
     "cacheDirectory": ".jest/cache",
     "collectCoverageFrom": [
       "**/*.js",
+      "!config/**",
       "!.eslintrc.js",
       "!**/node_modules/**",
       "!**/.next/**",
@@ -74,8 +80,12 @@
       "<rootDir>/jest-setup.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/cypress"
-    ]
+      "<rootDir>/cypress",
+      "<rootDir>/config"
+    ],
+    "transform": {
+      "\\.m?js$": "babel-jest"
+    }
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true

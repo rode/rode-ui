@@ -15,7 +15,6 @@
  */
 
 import {
-  getRodeUrl,
   post,
   patch,
   get,
@@ -27,37 +26,28 @@ import fetch from "node-fetch";
 jest.mock("node-fetch");
 
 describe("api-utils", () => {
-  describe("getRodeUrl", () => {
-    it("should return the environment variable if set", () => {
-      const expected = chance.string();
-      process.env.RODE_URL = expected;
+  let endpoint, body, accessToken;
 
-      const actual = getRodeUrl();
+  beforeEach(() => {
+    endpoint = chance.url();
+    accessToken = chance.string();
+    body = {
+      [chance.string()]: chance.string(),
+    };
+  });
 
-      expect(actual).toEqual(expected);
-    });
-
-    it("should return the default url if environment is not set", () => {
-      delete process.env.RODE_URL;
-      const actual = getRodeUrl();
-
-      expect(actual).toEqual("http://localhost:50051");
-    });
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   describe("post", () => {
-    let body, endpoint;
-
     it("should call fetch with the appropriate params", () => {
-      body = {
-        [chance.string()]: chance.string(),
-      };
-
-      endpoint = chance.url();
-
       post(endpoint, body);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
         method: "POST",
         body: JSON.stringify(body),
       });
@@ -65,27 +55,40 @@ describe("api-utils", () => {
 
     it("should pass the raw body if it is not an object", () => {
       body = chance.string();
-      endpoint = chance.url();
+
       post(endpoint, body);
+
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
         method: "POST",
         body,
+      });
+    });
+
+    it("should include the access token in the request", () => {
+      post(endpoint, body, accessToken);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(body),
       });
     });
   });
 
   describe("patch", () => {
-    let body, endpoint;
     it("should call fetch with the appropriate params", () => {
-      body = {
-        [chance.string()]: chance.string(),
-      };
-
-      endpoint = chance.url();
-
       patch(endpoint, body);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
         method: "PATCH",
         body: JSON.stringify(body),
       });
@@ -93,24 +96,49 @@ describe("api-utils", () => {
 
     it("should pass the raw body if it is not an object", () => {
       body = chance.string();
-      endpoint = chance.url();
 
       patch(endpoint, body);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
         method: "PATCH",
         body,
+      });
+    });
+
+    it("should include the access token if present", () => {
+      patch(endpoint, body, accessToken);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify(body),
       });
     });
   });
 
   describe("get", () => {
     it("should call fetch with the appropriate params", () => {
-      const endpoint = chance.url();
-
       get(endpoint);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {},
+        method: "GET",
+      });
+    });
+
+    it("should include the access token if present", () => {
+      get(endpoint, accessToken);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         method: "GET",
       });
     });
@@ -118,11 +146,21 @@ describe("api-utils", () => {
 
   describe("del", () => {
     it("should call fetch with the appropriate params", () => {
-      const endpoint = chance.url();
-
       del(endpoint);
 
       expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {},
+        method: "DELETE",
+      });
+    });
+
+    it("should include the access token if present", () => {
+      del(endpoint, accessToken);
+
+      expect(fetch).toHaveBeenCalledWith(endpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         method: "DELETE",
       });
     });

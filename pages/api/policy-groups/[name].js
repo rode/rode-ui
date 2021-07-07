@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { del, get, getRodeUrl, patch } from "pages/api/utils/api-utils";
+import { del, get, patch } from "pages/api/utils/api-utils";
 import {
   mapToApiModel,
   mapToClientModel,
@@ -30,13 +31,16 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   if (req.method === "GET") {
     try {
       const { name } = req.query;
 
-      const response = await get(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
+      const response = await get(
+        `${rodeUrl}/v1alpha1/policy-groups/${name}`,
+        req.accessToken
+      );
 
       if (response.status === StatusCodes.NOT_FOUND) {
         return res.status(StatusCodes.OK).send(null);
@@ -69,7 +73,8 @@ export default async (req, res) => {
 
       const response = await patch(
         `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        updateBody
+        updateBody,
+        req.accessToken
       );
 
       if (!response.ok) {
@@ -98,7 +103,10 @@ export default async (req, res) => {
     try {
       const { name } = req.query;
 
-      const response = await del(`${rodeUrl}/v1alpha1/policy-groups/${name}`);
+      const response = await del(
+        `${rodeUrl}/v1alpha1/policy-groups/${name}`,
+        req.accessToken
+      );
 
       if (!response.ok) {
         console.error(`Unsuccessful response from Rode: ${response.status}`);

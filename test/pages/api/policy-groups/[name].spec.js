@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]";
-import { getRodeUrl, get, patch, del } from "pages/api/utils/api-utils";
+import { get, patch, del } from "pages/api/utils/api-utils";
 import {
   mapToApiModel,
   mapToClientModel,
@@ -26,18 +27,18 @@ jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policy-groups/[name]", () => {
-  let request, response, policyGroup, rodeResponse, name, expectedRodeUrl;
+  let accessToken, request, response, policyGroup, rodeResponse, name;
 
   beforeEach(() => {
-    expectedRodeUrl = chance.url();
+    accessToken = chance.string();
     name = chance.string();
     request = {
+      accessToken,
       method: "GET",
       query: {
         name,
       },
     };
-    getRodeUrl.mockReturnValue(expectedRodeUrl);
 
     response = {
       status: jest.fn().mockReturnThis(),
@@ -92,7 +93,8 @@ describe("/api/policy-groups/[name]", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}`
+            `${config.get("rode.url")}/v1alpha1/policy-groups/${name}`,
+            accessToken
           );
       });
 
@@ -176,8 +178,9 @@ describe("/api/policy-groups/[name]", () => {
         expect(patch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}`,
-            mapToApiModel(request)
+            `${config.get("rode.url")}/v1alpha1/policy-groups/${name}`,
+            mapToApiModel(request),
+            accessToken
           );
       });
 
@@ -237,16 +240,8 @@ describe("/api/policy-groups/[name]", () => {
     });
 
     describe("successful call to Rode", () => {
-      let rodeUrlEnv;
-
       beforeEach(() => {
-        rodeUrlEnv = process.env.RODE_URL;
-        delete process.env.RODE_URL;
         del.mockResolvedValue(rodeResponse);
-      });
-
-      afterEach(() => {
-        process.env.RODE_URL = rodeUrlEnv;
       });
 
       it("should hit the Rode API", async () => {
@@ -255,7 +250,8 @@ describe("/api/policy-groups/[name]", () => {
         expect(del)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${expectedRodeUrl}/v1alpha1/policy-groups/${name}`
+            `${config.get("rode.url")}/v1alpha1/policy-groups/${name}`,
+            accessToken
           );
       });
 

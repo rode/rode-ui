@@ -14,28 +14,8 @@
  * limitations under the License.
  */
 
-import { getPolicyByPolicyId } from "./policy-utils";
-
-export const mapToClientModelWithPolicyDetails = async (
-  assignment,
-  accessToken
-) => {
-  const { data, error } = await getPolicyByPolicyId(
-    assignment.policyVersionId,
-    accessToken
-  );
-
-  if (error) {
-    throw Error(
-      `Error while fetching policy ${assignment.policyVersionId} for policy group assignments.`
-    );
-  }
-
-  return {
-    ...assignment,
-    policyId: data.id,
-    policyVersion: data.policyVersion,
-    policyName: data.name,
-    policyVersionCount: data.currentVersion,
-  };
+module.exports = {
+  app: {
+    dev: false,
+  },
 };

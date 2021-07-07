@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import {
-  buildPaginationParams,
-  get,
-  getRodeUrl,
-  post,
-} from "./utils/api-utils";
+import { buildPaginationParams, get, post } from "./utils/api-utils";
 
 const ALLOWED_METHODS = ["GET", "POST"];
 
@@ -31,7 +27,7 @@ export default async (req, res) => {
       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
   }
 
-  const rodeUrl = getRodeUrl();
+  const rodeUrl = config.get("rode.url");
 
   if (req.method === "GET") {
     try {
@@ -42,7 +38,8 @@ export default async (req, res) => {
       }
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`
+        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`,
+        req.accessToken
       );
 
       if (!response.ok) {
@@ -70,7 +67,11 @@ export default async (req, res) => {
   }
 
   try {
-    const response = await post(`${rodeUrl}/v1alpha1/policy-groups`, req.body);
+    const response = await post(
+      `${rodeUrl}/v1alpha1/policy-groups`,
+      req.body,
+      req.accessToken
+    );
 
     if (!response.ok) {
       if (response.status === StatusCodes.CONFLICT) {

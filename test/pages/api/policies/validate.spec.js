@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
+import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/validate";
-import { getRodeUrl, post } from "pages/api/utils/api-utils";
+import { post } from "pages/api/utils/api-utils";
 
 jest.mock("pages/api/utils/api-utils");
 
 describe("/api/policies/validate", () => {
-  let request, response, rodeResponse, validationResult;
+  let accessToken, request, response, rodeResponse, validationResult;
 
   beforeEach(() => {
+    accessToken = chance.string();
     request = {
+      accessToken,
       method: "POST",
       body: {
         [chance.string()]: chance.string(),
@@ -47,7 +50,6 @@ describe("/api/policies/validate", () => {
     };
 
     post.mockResolvedValue(rodeResponse);
-    getRodeUrl.mockReturnValue("http://localhost:50051");
   });
 
   afterEach(() => {
@@ -87,8 +89,9 @@ describe("/api/policies/validate", () => {
       expect(post)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(
-          "http://localhost:50051/v1alpha1/policies:validate",
-          request.body
+          `${config.get("rode.url")}/v1alpha1/policies:validate`,
+          request.body,
+          accessToken
         );
     });
 

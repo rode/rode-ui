@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-import { getPolicyByPolicyId } from "./policy-utils";
-
-export const mapToClientModelWithPolicyDetails = async (
-  assignment,
-  accessToken
-) => {
-  const { data, error } = await getPolicyByPolicyId(
-    assignment.policyVersionId,
-    accessToken
-  );
-
-  if (error) {
-    throw Error(
-      `Error while fetching policy ${assignment.policyVersionId} for policy group assignments.`
-    );
-  }
-
-  return {
-    ...assignment,
-    policyId: data.id,
-    policyVersion: data.policyVersion,
-    policyName: data.name,
-    policyVersionCount: data.currentVersion,
-  };
+// This randomly generated config is used by the unit tests. Jest will set NODE_ENV=test.
+module.exports = {
+  app: {
+    dev: chance.bool(),
+    secret: chance.string(),
+    url: chance.url(),
+  },
+  rode: {
+    url: chance.url(),
+  },
+  oidc: {
+    clientId: chance.word(),
+    clientSecret: chance.guid(),
+    enabled: chance.bool(),
+    issuerUrl: chance.url(),
+    scope: chance.word(),
+  },
 };
