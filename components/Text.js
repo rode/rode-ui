@@ -57,7 +57,7 @@ BaseText.propTypes = {
     PropTypes.string,
     PropTypes.object,
     PropTypes.node,
-  ]).isRequired,
+  ]),
   style: PropTypes.oneOf([
     "heading1",
     "heading2",

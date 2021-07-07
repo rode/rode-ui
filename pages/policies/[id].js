@@ -96,8 +96,15 @@ const Policy = () => {
           {policy ? (
             <>
               <DetailsHeader
-                name={policy.name}
-                subText={<Text.Body2>{policy.description}</Text.Body2>}
+                name={`${policy.name} v${policy.policyVersion}`}
+                subText={
+                  <div className={styles.policyDetails}>
+                    <Text.Body2>
+                      Latest Version {policy.currentVersion}
+                    </Text.Body2>
+                    <Text.Body2>{policy.description}</Text.Body2>
+                  </div>
+                }
                 actionButton={
                   <Button label={"Edit Policy"} onClick={editPolicy} />
                 }
