@@ -17,33 +17,66 @@
 @import "styles/constants";
 @import "styles/mixins";
 
-.versionCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
+.historyCard {
   width: 95%;
   margin: 1rem auto 0;
 
   &:last-of-type {
     margin-bottom: 1rem;
   }
+}
+
+.versionCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
 
   @include tabletAndLarger {
     flex-direction: row;
     justify-content: space-between;
-    padding: 2rem 3rem;
   }
 }
 
-.versionMessage {
-  margin: 1rem 0 0 1rem;
+.versionHeaderDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > * {
+    margin: 0.5rem;
+  }
+
+  @include tabletAndLarger {
+    flex-direction: row;
+  }
+}
+
+.versionDetails {
+  width: 95%;
+  margin: 0.5rem auto;
+
+  > p {
+    margin-bottom: 0.25rem;
+  }
 }
 
 .darkTheme {
-  .versionCard {
+  .historyCard {
     background-color: $DT_BACKGROUND_MEDIUM;
+  }
+
+  .versionCard {
+    &:hover {
+      .version {
+        color: $LAGOON;
+      }
+    }
   }
 
   .versionMessage {
@@ -52,8 +85,16 @@
 }
 
 .lightTheme {
-  .versionCard {
+  .historyCard {
     background-color: $LT_BACKGROUND_LIGHT;
+  }
+
+  .versionCard {
+    &:hover {
+      .version {
+        color: $DEEP_SEA;
+      }
+    }
   }
 
   .versionMessage {

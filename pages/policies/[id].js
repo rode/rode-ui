@@ -99,7 +99,9 @@ const Policy = () => {
                 name={`${policy.name} v${policy.policyVersion}`}
                 subText={
                   <div className={styles.policyDetails}>
-                    <Text.Body2>Latest Version {policy.currentVersion}</Text.Body2>
+                    <Text.Body2>
+                      Latest Version {policy.currentVersion}
+                    </Text.Body2>
                     <Text.Body2>{policy.description}</Text.Body2>
                   </div>
                 }

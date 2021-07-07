@@ -37,12 +37,13 @@ describe("PolicyHistory", () => {
         () => ({
           message: chance.string(),
           created: chance.timestamp(),
+          regoContent: chance.string(),
         }),
         chance.d4()
       )
       .map((version, index) => ({
         ...version,
-        version: index,
+        version: index + 1,
       }));
     goToNextPage = jest.fn();
     format = jest.fn();
@@ -83,9 +84,19 @@ describe("PolicyHistory", () => {
     });
   });
 
+  it("should show the rego content of the version when the user selects a version to view", () => {
+    policyVersions.forEach((version) => {
+      userEvent.click(
+        screen.getByText(`v${version.version}`, { exact: false })
+      );
+      expect(
+        screen.getByText(version.regoContent, { exact: false })
+      ).toBeInTheDocument();
+    });
+  });
+
   it("should indicate the latest version to the user", () => {
     policyVersions.forEach((version, index) => {
-      expect(screen.getAllByText("Policy Version")[index]).toBeInTheDocument();
       expect(
         screen.getByText(`v${version.version}${index === 0 ? " (latest)" : ""}`)
       ).toBeInTheDocument();

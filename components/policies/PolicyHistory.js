@@ -18,13 +18,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import Loading from "components/Loading";
-import LabelWithValue from "components/LabelWithValue";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "utils/constants";
 import Button from "components/Button";
 import styles from "styles/modules/PolicyHistory.module.scss";
 import { useTheme } from "providers/theme";
 import Text from "components/Text";
+import ToggleCard from "components/ToggleCard";
+import Code from "components/Code";
 
 const PolicyHistory = ({ policy }) => {
   const { theme } = useTheme();
@@ -41,24 +42,33 @@ const PolicyHistory = ({ policy }) => {
           <>
             {data.map((version, index) => {
               return (
-                <div key={version.version} className={styles.versionCard}>
-                  <div>
-                    <LabelWithValue
-                      label={"Policy Version"}
-                      value={`v${version.version}${
-                        index === 0 ? " (latest)" : ""
-                      }`}
-                    />
-                    <Text.Body2 className={styles.versionMessage}>
-                      {version.message}
-                    </Text.Body2>
-                  </div>
-                  <div>
-                    <Text.Body2>
-                      {dayjs(version.created).format(DATE_TIME_FORMAT)}
-                    </Text.Body2>
-                  </div>
-                </div>
+                <ToggleCard
+                  key={version.version}
+                  className={styles.historyCard}
+                  header={
+                    <div className={styles.versionCard}>
+                      <div className={styles.versionHeaderDetails}>
+                        <Text.Value className={styles.version}>{`v${
+                          version.version
+                        }${index === 0 ? " (latest)" : ""}`}</Text.Value>
+                        <Text.Body2 className={styles.versionMessage}>
+                          {version.message}
+                        </Text.Body2>
+                      </div>
+                      <div>
+                        <Text.Body2>
+                          {dayjs(version.created).format(DATE_TIME_FORMAT)}
+                        </Text.Body2>
+                      </div>
+                    </div>
+                  }
+                  content={
+                    <div className={styles.versionDetails}>
+                      <Text.Label as={"p"}>Rego Policy Code</Text.Label>
+                      <Code language={"rego"} code={version.regoContent} />
+                    </div>
+                  }
+                />
               );
             })}
           </>
