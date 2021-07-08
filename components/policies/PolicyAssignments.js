@@ -30,8 +30,6 @@ const PolicyAssignments = ({ policy }) => {
   const router = useRouter();
   const { data, loading } = useFetch(`/api/policies/${policy.id}/assignments`);
 
-  console.log('data', data);
-
   return (
     <div className={styles[theme]}>
       <Loading loading={loading}>

@@ -102,7 +102,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
           .toHaveBeenCalledWith(
             `${config.get(
               "rode.url"
-            )}/v1alpha1/policy-groups/${name}/assignments`,
+            )}/v1alpha1/policy-groups/${name}/assignments?pageSize=1000`,
             accessToken
           );
       });

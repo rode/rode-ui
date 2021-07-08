@@ -190,10 +190,13 @@ Then(/^I see "([^"]*)" policy assignment data$/, (policyName) => {
   cy.url().should("contain", "#assignments");
 
   cy.contains(policyAssignment.policyGroup).should("be.visible");
-  cy.contains(policyAssignment.policyVersionId.split(".")[1]).should("be.visible");
-  cy.get(selectors.ViewPolicyGroupButton)
-    .should("be.visible")
-    .click();
+  cy.contains(policyAssignment.policyVersionId.split(".")[1]).should(
+    "be.visible"
+  );
+  cy.get(selectors.ViewPolicyGroupButton).should("be.visible").click();
 
-  cy.url().should("match", new RegExp(`/policy-groups/${policyAssignment.policyGroup}`));
+  cy.url().should(
+    "match",
+    new RegExp(`/policy-groups/${policyAssignment.policyGroup}`)
+  );
 });

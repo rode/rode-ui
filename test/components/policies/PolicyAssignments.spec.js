@@ -41,7 +41,7 @@ describe("PolicyAssignments", () => {
     );
 
     mockResponse = {
-      data: { policyAssignments },
+      data: { data: policyAssignments },
       loading: false,
     };
     router = {

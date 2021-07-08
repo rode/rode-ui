@@ -27,7 +27,7 @@ describe("PolicyEvaluationDetails", () => {
       pass: chance.bool(),
       policyName: chance.string(),
       policyVersion: chance.d4(),
-      policyVersionId: chance.string(),
+      policyVersionId: chance.string({ alpha: true }),
       created: chance.timestamp(),
       violations: [
         {
