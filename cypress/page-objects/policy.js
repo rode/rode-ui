@@ -30,7 +30,8 @@ export const PolicyFailedUpdateInvalidRegoMessage =
 export const PolicyFailedUpdateMessage = "Failed to update the policy.";
 export const PolicyFailedDeleteMessage =
   "An error occurred while deleting the policy. Please try again.";
-export const NewPolicyVersionMessage = "By updating the Rego Policy Code, you are creating a new version of this policy.";
+export const NewPolicyVersionMessage =
+  "By updating the Rego Policy Code, you are creating a new version of this policy.";
 
 // BUTTONS
 export const SearchPolicyButton = createButtonSelector("Search Policies");

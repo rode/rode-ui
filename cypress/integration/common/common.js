@@ -111,7 +111,6 @@ Then(/^I see the "([^"]*)" form$/, (formName) => {
   });
 });
 
-
 When(/^I select the ([^"]*) Section$/, (sectionName) => {
   const section = `${sectionName}Section`;
   cy.contains(selectors[section]).click();

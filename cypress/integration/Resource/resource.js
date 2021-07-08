@@ -19,13 +19,22 @@ import resources from "../../fixtures/resources.json";
 import * as selectors from "../../page-objects/resource";
 
 Given(/^I am on the "([^"]*)" resource details page$/, (resourceName) => {
+  const resource = resources[resourceName].data[0];
   cy.mockRequest(
     { url: "**/api/occurrences*", method: "GET" },
-    resources[resourceName].data[0].occurrences
+    resource.occurrences
   );
-  cy.visit(
-    `/resources/${encodeURIComponent(resources[resourceName].data[0].uri)}`
+
+  cy.mockRequest(
+    { url: "**/api/resources/**/resource-evaluations*", method: "GET" },
+    { data: resource.evaluations }
   );
+
+  cy.mockRequest(
+    { url: "**/api/resource-versions*", method: "GET" },
+    { data: resource.versions }
+  );
+  cy.visit(`/resources/${encodeURIComponent(resource.uri)}`);
 });
 
 When(/^I click on ([^"]*) occurrence$/, (occurrenceType) => {
@@ -122,4 +131,33 @@ Then(/^I see "([^"]*)" resource details$/, (resourceName) => {
     .contains(resource.resourceVersion.substring(0, 12))
     .should("be.visible");
   cy.get(selectors.EvaluateResourceInPlaygroundButton).should("be.visible");
+});
+
+Then(/^I see evaluation history details$/, () => {
+  cy.url().should("contain", "#evaluationHistory");
+
+  const evaluation = resources.Existing.data[0].evaluations[0];
+
+  cy.get('[data-testid="toggleCard"]')
+    .click()
+    .within(() => {
+      cy.contains(evaluation.policyGroup).should("be.visible");
+      cy.contains(evaluation.policyEvaluations[0].policyName).should(
+        "be.visible"
+      );
+    });
+});
+
+Then(/^I see the available resource versions$/, () => {
+  const resourceVersion = resources.Existing.data[0].versions[0];
+
+  cy.get('[data-testid="drawer"]').within(() => {
+    cy.contains(resourceVersion.versionedResourceUri.substring(0, 12)).should(
+      "be.visible"
+    );
+    resourceVersion.aliases.forEach((alias) => {
+      const trimmedAlias = alias.split(":")[1];
+      cy.contains(trimmedAlias).should("be.visible");
+    });
+  });
 });

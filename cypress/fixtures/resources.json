@@ -584,7 +584,46 @@
             }
           ],
           "other": []
-        }
+        },
+        "evaluations": [
+          {
+            "id": "5e071925-f2d0-489e-8510-52da4dc0b3b6",
+            "pass": false,
+            "source": null,
+            "created": "2021-07-06T18:34:39.733446920Z",
+            "resourceVersion": {
+              "version": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
+              "names": ["test", "another tag"],
+              "created": "2021-07-06T13:58:56.024026238Z"
+            },
+            "policyGroup": "vulnerability_limits",
+            "resourceUri": "harbor.localhost/library/nginx@sha256:0b159cd1ee1203dad901967ac55eee18c24da84ba3be384690304be93538bea8",
+            "resourceAliases": [
+              "harbor.localhost/library/nginx:fail-harbor-policy-e6cbe59"
+            ],
+            "policyEvaluations": [
+              {
+                "id": "9f8adc21-7abd-46f8-92f2-e791344b2b9f",
+                "resourceEvaluationId": "5e071925-f2d0-489e-8510-52da4dc0b3b6",
+                "pass": false,
+                "policyVersionId": "923260c9-40e8-4a9a-b41f-547a2e190697.1",
+                "violations": [
+                  {
+                    "id": "harbor_scan_completed",
+                    "name": "Harbor Scan",
+                    "description": "Verify Harbor image scan completed",
+                    "message": "Harbor scanned image 1 times. Last completed at {'2021-07-06T13:59:21.912469Z'}",
+                    "link": "",
+                    "pass": true
+                  }
+                ],
+                "policyVersion": 1,
+                "policyId": "923260c9-40e8-4a9a-b41f-547a2e190697",
+                "policyName": "Sample Harbor Policy"
+              }
+            ]
+          }
+        ]
       }
     ],
     "pageToken": "123456789010pagetokenhere"
