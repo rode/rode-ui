@@ -10,7 +10,7 @@ Feature: Policies
     When I search for a "NonExistent" policy
     Then I see "NoPoliciesFound" message
 
-    @smoke
+  @smoke
   Scenario: Search for an existing policy
     Given I am on the "PolicySearch" page
     When I search for an "Existing" policy
@@ -18,7 +18,17 @@ Feature: Policies
     When I click the "ViewPolicy" button
     Then I see "Existing" policy details
 
-    @smoke
+  Scenario: View policy details
+    Given I am on the "Existing" policy details page
+    When I select the PolicyDetails Section
+    Then I see "Existing" policy details
+
+  Scenario: View policy version history
+    Given I am on the "Existing" policy details page
+    When I select the History Section
+    Then I see "Existing" policy version history
+
+  @smoke
   Scenario: Create policy
     Given I open the application
     When I navigate to the "CreatePolicy" page
@@ -48,11 +58,11 @@ Feature: Policies
     When I test <validity> Rego policy code
     Then I see "<message>" message
     Scenarios:
-    | validity | message |
-    | invalid  | PolicyFailedValidation |
-    | valid    | PolicyPassedValidation |
+      | validity | message                |
+      | invalid  | PolicyFailedValidation |
+      | valid    | PolicyPassedValidation |
 
-    @updatePolicy
+  @updatePolicy
   Scenario Outline: Edit policy - update fields
     Given I am on the "Existing" policy details page
     When I click the "EditPolicy" button
@@ -60,7 +70,7 @@ Feature: Policies
     When I update and save the "Existing" policy <field>
     Then I see the updated "Existing" policy <field>
     Scenarios:
-      | field   |
+      | field       |
       | name        |
       | description |
 

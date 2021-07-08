@@ -40,6 +40,11 @@ Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
     { url: "**/api/policies/*", method: "GET" },
     policies[policyName].data[0]
   );
+
+  cy.mockRequest(
+    { url: "**/api/policies/**/versions*", method: "GET" },
+    {data: policies[policyName].versions}
+  );
   cy.visit(`/policies/${policies[policyName].data[0].id}`);
 });
 
@@ -160,5 +165,15 @@ Then(/^I see the Edit Policy form for "([^"]*)" policy$/, (policyName) => {
   });
   form.buttons.forEach((button) => {
     cy.get(button).should("be.visible");
+  });
+});
+
+Then(/^I see "([^"]*)" policy version history$/, (policyName) => {
+  const policyVersion = policies[policyName].versions[0];
+  cy.url().should("contain", "#history");
+
+  cy.get('[data-testid="toggleCard"]').click().within(() => {
+    cy.contains("v1 (latest)").should("be.visible");
+    cy.contains(policyVersion.regoContent).should("be.visible");
   });
 });
