@@ -8,7 +8,7 @@ Feature: Resources
   Scenario: Search for a non-existent resource
     Given I am on the "ResourceSearch" page
     When I search for "NonExistent" resource
-    Then I see "NoResourcesFound" message
+    Then I see the "NoResourcesFound" message
 
   @smoke
   Scenario: Search for an existing resource

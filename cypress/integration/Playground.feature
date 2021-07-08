@@ -12,7 +12,7 @@ Feature: Policy Playground
     And I search for "Existing" resource version
     And I select "Existing" resource version for evaluation
     When the resource <outcome> the policy
-    Then I see "<message>" message
+    Then I see the "<message>" message
     Scenarios:
     | outcome | message |
     | passes | SuccessfulEvaluation |
@@ -29,4 +29,4 @@ Feature: Policy Playground
     And I search for "Existing" resource version
     And I select "Existing" resource version for evaluation
     When I evaluate and an error occurs
-    Then I see "EvaluationError" message
+    Then I see the "EvaluationError" message

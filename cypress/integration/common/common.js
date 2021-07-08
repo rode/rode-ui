@@ -90,7 +90,7 @@ Then(/^I see "([^"]*)"$/, (element) => {
   cy.get(selectors[element]).should("be.visible");
 });
 
-Then(/^I see "([^"]*)" message$/, (messageName) => {
+Then(/^I see the "([^"]*)" message$/, (messageName) => {
   const message = `${messageName}Message`;
   cy.contains(selectors[message]).should("be.visible");
 });
