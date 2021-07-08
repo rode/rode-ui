@@ -20,6 +20,8 @@ export const PolicyGroupDashboardHeader = "Manage Policy Groups";
 
 //MESSAGES
 export const NoPolicyGroupsFoundMessage = "No policy groups exist.";
+export const NoPolicyGroupAssignmentsMessage =
+  "No policies are assigned to this policy group.";
 export const InvalidPolicyGroupNameMessage =
   "Invalid character(s). Please refer to the name guidelines.";
 
@@ -34,6 +36,10 @@ export const UpdatePolicyGroupButton = createButtonSelector(
 );
 export const EditAssignmentsButton = createButtonSelector("Edit Assignments");
 const CancelButton = createButtonSelector("Cancel");
+export const AssignToPolicyGroupButton = createButtonSelector(
+  "Assign to Policy Group"
+);
+export const SaveAssignmentsButton = createButtonSelector("Save Assignments");
 
 // INPUTS
 export const PolicyGroupNameInput = "#name";

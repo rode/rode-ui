@@ -5,20 +5,20 @@
         "created": "2021-07-06T13:59:28.133457892Z",
         "deleted": false,
         "description": "policies that limit the number of vulnerabilities",
-        "name": "vulnerability_limits",
+        "name": "existing",
         "updated": "2021-07-06T13:59:28.133457892Z"
       }
     ],
     "assignments": [
       {
         "created": "2021-07-06T13:59:41.639466966Z",
-        "id": "policies/923260c9-40e8-4a9a-b41f-547a2e190697/assignments/vulnerability_limits",
-        "policyGroup": "vulnerability_limits",
-        "policyId": "923260c9-40e8-4a9a-b41f-547a2e190697",
+        "id": "policies/34912489-bd2a-409e-a00a-da274aff0635/assignments/existing",
+        "policyGroup": "existing",
+        "policyId": "34912489-bd2a-409e-a00a-da274aff0635",
         "policyVersion": 1,
         "policyVersionCount": 1,
-        "policyVersionId": "923260c9-40e8-4a9a-b41f-547a2e190697.1",
-        "policyName": "Sample policy",
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1",
+        "policyName": "My Policy Name",
         "updated": "2021-07-06T13:59:41.639466966Z"
       }
     ],

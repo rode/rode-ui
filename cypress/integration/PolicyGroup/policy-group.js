@@ -36,7 +36,7 @@ Given(/^I am on the ([^"]*) policy group details page$/, (policyGroupName) => {
 
   cy.mockRequest(
     { url: "**/api/policy-groups/**/assignments*", method: "GET" },
-    { data: policyGroups[policyGroupName].assignments }
+    { data: [] }
   );
   cy.visit(`/policy-groups/${policyGroups[policyGroupName].data[0].name}`);
 });
@@ -67,6 +67,34 @@ When(
       .clear()
       .type(updatedPolicyGroup.description);
     cy.get(selectors.UpdatePolicyGroupButton).click();
+  }
+);
+
+When(
+  /^I assign the ([^"]*) policy to the ([^"]*) policy group$/,
+  (policyName, policyGroupName) => {
+    const assignment = {
+      ...policyGroups[policyGroupName].assignments[0],
+      policyGroup: policyGroups[policyGroupName].assignments[0].policyGroup,
+    };
+    cy.mockRequest(
+      { url: "**/api/policy-groups/**/assignments*", method: "POST" },
+      {
+        data: assignment,
+      }
+    );
+    cy.mockRequest(
+      {
+        url: `**/api/policy-groups/${policyGroupName}/assignments*`,
+        method: "GET",
+      },
+      {
+        data: {
+          data: assignment,
+        },
+      }
+    );
+    cy.get(selectors.AssignToPolicyGroupButton).click();
   }
 );
 
@@ -102,3 +130,27 @@ Then(/^I see the policy groups dashboard$/, () => {
   cy.contains(selectors.PolicyGroupDashboardHeader).should("be.visible");
   cy.get(selectors.CreateNewPolicyGroupButton).should("be.visible");
 });
+
+Then(/^I see the Edit ([^"]*) Assignments page$/, (policyGroupName) => {
+  const policyGroup = policyGroups[policyGroupName].data[0];
+  cy.url().should(
+    "contain",
+    `/policy-groups/${encodeURIComponent(policyGroup.name)}/assignments`
+  );
+
+  cy.contains(policyGroup.name).should("be.visible");
+  cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
+});
+
+Then(
+  /^I see the ([^"]*) policy assigned to the ([^"]*) policy group$/,
+  (policyName, policyGroupName) => {
+    cy.contains("Saved!").should("be.visible");
+    const assignments = policyGroups[policyGroupName].assignments;
+
+    assignments.forEach((assignment) => {
+      cy.contains(assignment.policyName).should("be.visible");
+      cy.contains(assignment.policyVersion).should("be.visible");
+    });
+  }
+);

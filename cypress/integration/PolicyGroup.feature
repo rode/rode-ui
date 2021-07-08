@@ -25,7 +25,16 @@ Feature: Policy Groups
   @updatePolicyGroup
   Scenario: Edit policy group description
     Given I am on the Existing policy group details page
-      When I click the "EditPolicyGroup" button
-      Then I see the "EditPolicyGroup" form
-      When I update and save the Existing policy group description
-      Then I see the updated Existing policy group description
+    When I click the "EditPolicyGroup" button
+    Then I see the "EditPolicyGroup" form
+    When I update and save the Existing policy group description
+    Then I see the updated Existing policy group description
+
+  Scenario: Assign policy to policy group
+    Given I am on the Existing policy group details page
+    When I click the "EditAssignments" button
+    Then I see the Edit Existing Assignments page
+    When I search for an "Existing" policy
+    And I assign the Existing policy to the Existing policy group
+    And I click the "SaveAssignments" button
+    Then I see the Existing policy assigned to the Existing policy group

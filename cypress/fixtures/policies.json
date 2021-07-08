@@ -2,10 +2,13 @@
   "Existing": {
     "data": [
       {
-        "id": "12345678910",
+        "id": "34912489-bd2a-409e-a00a-da274aff0635",
+        "policyId": "34912489-bd2a-409e-a00a-da274aff0635",
         "name": "My Policy Name",
         "description": "This is a policy description",
-        "regoContent": "package RegoRegoRego"
+        "regoContent": "package RegoRegoRego",
+        "currentVersion": 1,
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1"
       }
     ],
     "versions": [
@@ -21,9 +24,9 @@
     "assignments": [
       {
         "created": "2021-07-06T13:59:41.639466966Z",
-        "id": "policies/923260c9-40e8-4a9a-b41f-547a2e190697/assignments/vulnerability_limits",
-        "policyGroup": "vulnerability_limits",
-        "policyVersionId": "923260c9-40e8-4a9a-b41f-547a2e190697.1",
+        "id": "policies/34912489-bd2a-409e-a00a-da274aff0635/assignments/existing",
+        "policyGroup": "existing",
+        "policyVersionId": "334912489-bd2a-409e-a00a-da274aff0635.1",
         "updated": "2021-07-06T13:59:41.639466966Z"
       }
     ],
