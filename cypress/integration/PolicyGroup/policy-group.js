@@ -20,6 +20,7 @@ import policyGroups from "../../fixtures/policy-groups.json";
 import policies from "../../fixtures/policies.json";
 import Chance from "chance";
 
+// TODO: figure out cy.fixture so I can "as" it throughout the remaining steps
 const chance = new Chance();
 let updatedValues;
 
@@ -102,6 +103,28 @@ When(
     cy.get(selectors.AssignToPolicyGroupButton).click();
   }
 );
+When(
+  /^I remove an assignment from the ([^"]*) policy group$/,
+  (policyGroupName) => {
+    const policyGroup = policyGroups[policyGroupName];
+    cy.mockRequest(
+      { url: `**/api/policy-groups/${policyGroup.data[0].name}/assignments/*`, method: "DELETE", status: 204 },
+      {}
+    );
+    cy.mockRequest(
+      {
+        url: `**/api/policy-groups/${policyGroup.data[0].name}/assignments*`,
+        method: "GET",
+      },
+      {
+        data: {
+          data: [],
+        },
+      }
+    );
+    cy.get(selectors.RemoveFromPolicyGroupButton).click();
+  }
+);
 
 Then(
   /^I see the updated ([^"]*) policy group description$/,
@@ -137,14 +160,22 @@ Then(/^I see the policy groups dashboard$/, () => {
 });
 
 Then(/^I see the Edit ([^"]*) Assignments page$/, (policyGroupName) => {
-  const policyGroup = policyGroups[policyGroupName].data[0];
+  const policyGroup = policyGroups[policyGroupName];
   cy.url().should(
     "contain",
-    `/policy-groups/${encodeURIComponent(policyGroup.name)}/assignments`
+    `/policy-groups/${encodeURIComponent(policyGroup.data[0].name)}/assignments`
   );
 
-  cy.contains(policyGroup.name).should("be.visible");
+  cy.contains(policyGroup.data[0].name).should("be.visible");
+  if (policyGroup.assignments.length > 0) {
+   policyGroup.assignments.forEach((assignment) => {
+     cy.contains(assignment.policyName).should("be.visible");
+     cy.contains(assignment.policyVersion).should("be.visible");
+   }) ;
+  } else {
+
   cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
+  }
 });
 
 Then(
@@ -156,5 +187,15 @@ Then(
 
     cy.contains(policy.data[0].name).should("be.visible");
     cy.contains(policy.data[0].currentVersion).should("be.visible");
+  }
+);
+
+Then(
+  /^I see no assignments for the ([^"]*) policy group$/,
+  (policyGroupName) => {
+    // TODO: why isn't this working? calls to get assignments are not returning [] after landing back on policy group page
+    cy.contains("Saved!").should("be.visible");
+
+    cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
   }
 );

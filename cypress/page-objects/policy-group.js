@@ -39,6 +39,7 @@ const CancelButton = createButtonSelector("Cancel");
 export const AssignToPolicyGroupButton = createButtonSelector(
   "Assign to Policy Group"
 );
+export const RemoveFromPolicyGroupButton = createButtonSelector("Remove Policy Assignment")
 export const SaveAssignmentsButton = createButtonSelector("Save Assignments");
 
 // INPUTS
