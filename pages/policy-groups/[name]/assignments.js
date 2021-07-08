@@ -192,6 +192,8 @@ const EditPolicyGroupAssignments = () => {
     const mutatedAssignments = assignedToGroup.map((assignment) => {
       if (assignment.action === ADD) {
         const createdAssignment = parsedResponses.find((response) => {
+          console.log('response', response);
+          console.log('assignment', assignment);
           return response.data.policyVersionId === assignment.policyVersionId;
         });
         return {
@@ -207,6 +209,8 @@ const EditPolicyGroupAssignments = () => {
         action: null,
       };
     });
+
+    console.log('mutatedAssignments', mutatedAssignments);
 
     dispatch({
       type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,

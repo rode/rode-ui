@@ -17,6 +17,7 @@
 import { Given, When, Then, Before } from "cypress-cucumber-preprocessor/steps";
 import * as selectors from "../../page-objects/policy-group";
 import policyGroups from "../../fixtures/policy-groups.json";
+import policies from "../../fixtures/policies.json";
 import Chance from "chance";
 
 const chance = new Chance();
@@ -36,7 +37,7 @@ Given(/^I am on the ([^"]*) policy group details page$/, (policyGroupName) => {
 
   cy.mockRequest(
     { url: "**/api/policy-groups/**/assignments*", method: "GET" },
-    { data: [] }
+    { data: policyGroups[policyGroupName].assignments }
   );
   cy.visit(`/policy-groups/${policyGroups[policyGroupName].data[0].name}`);
 });
@@ -73,9 +74,13 @@ When(
 When(
   /^I assign the ([^"]*) policy to the ([^"]*) policy group$/,
   (policyName, policyGroupName) => {
+    const policy = policies[policyName];
     const assignment = {
-      ...policyGroups[policyGroupName].assignments[0],
-      policyGroup: policyGroups[policyGroupName].assignments[0].policyGroup,
+      ...policy.assignments[0],
+      policyId: policy.data[0].id,
+      policyVersion: policy.data[0].currentVersion,
+      policyVersionCount: policy.data[0].currentVersion,
+      policyName: policy.data[0].name,
     };
     cy.mockRequest(
       { url: "**/api/policy-groups/**/assignments*", method: "POST" },
@@ -145,12 +150,11 @@ Then(/^I see the Edit ([^"]*) Assignments page$/, (policyGroupName) => {
 Then(
   /^I see the ([^"]*) policy assigned to the ([^"]*) policy group$/,
   (policyName, policyGroupName) => {
-    cy.contains("Saved!").should("be.visible");
-    const assignments = policyGroups[policyGroupName].assignments;
+    const policy = policies[policyName];
 
-    assignments.forEach((assignment) => {
-      cy.contains(assignment.policyName).should("be.visible");
-      cy.contains(assignment.policyVersion).should("be.visible");
-    });
+    cy.contains("Saved!").should("be.visible");
+
+    cy.contains(policy.data[0].name).should("be.visible");
+    cy.contains(policy.data[0].currentVersion).should("be.visible");
   }
 );

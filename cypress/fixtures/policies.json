@@ -7,7 +7,7 @@
         "name": "My Policy Name",
         "description": "This is a policy description",
         "regoContent": "package RegoRegoRego",
-        "currentVersion": 1,
+        "currentVersion": 2,
         "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1"
       }
     ],
@@ -26,7 +26,7 @@
         "created": "2021-07-06T13:59:41.639466966Z",
         "id": "policies/34912489-bd2a-409e-a00a-da274aff0635/assignments/existing",
         "policyGroup": "existing",
-        "policyVersionId": "334912489-bd2a-409e-a00a-da274aff0635.1",
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1",
         "updated": "2021-07-06T13:59:41.639466966Z"
       }
     ],

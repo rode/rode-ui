@@ -38,3 +38,8 @@ Feature: Policy Groups
     And I assign the Existing policy to the Existing policy group
     And I click the "SaveAssignments" button
     Then I see the Existing policy assigned to the Existing policy group
+
+#      @focus
+  Scenario: Remove policy from policy group
+    Given I am on the ExistingWithAssignments policy group details page
+
