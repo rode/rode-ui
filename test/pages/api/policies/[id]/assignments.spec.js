@@ -109,7 +109,7 @@ describe("/api/policies/[id]/assignments", () => {
         expect(response.json)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith({
-            policyAssignments: [assignment],
+            data: [assignment],
           });
       });
     });

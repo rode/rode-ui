@@ -28,6 +28,11 @@ Feature: Policies
     When I select the History Section
     Then I see "Existing" policy version history
 
+  Scenario: View policy assignments
+    Given I am on the "Existing" policy details page
+    When I select the Assignments Section
+    Then I see "Existing" policy assignment data
+
   @smoke
   Scenario: Create policy
     Given I open the application

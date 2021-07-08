@@ -48,11 +48,12 @@ export const DeletePolicyButton = createButtonSelector("Delete Policy");
 export const ConfirmUpdatePolicyButton = createButtonSelector(
   "Update & Save Policy"
 );
+export const ViewPolicyGroupButton = createButtonSelector("View Policy Group");
 
 // SECTIONS
 export const PolicyDetailsSection = /^Policy Details$/;
 export const HistorySection = /^History$/;
-export const Assignments = /^Assignments$/;
+export const AssignmentsSection = /^Assignments$/;
 
 // INPUTS
 export const PolicySearchInput = "#policySearchDisplay";

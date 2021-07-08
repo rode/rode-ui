@@ -49,7 +49,7 @@ export default async (req, res) => {
     const { policyAssignments } = getPolicyAssignments;
 
     return res.status(StatusCodes.OK).json({
-      policyAssignments,
+      data: policyAssignments,
     });
   } catch (error) {
     console.error("Error getting policy assignments", error);
