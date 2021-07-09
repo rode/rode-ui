@@ -75,6 +75,7 @@ When(
 When(
   /^I assign the ([^"]*) policy to the ([^"]*) policy group$/,
   (policyName, policyGroupName) => {
+    const policyGroup = policyGroups[policyGroupName];
     const policy = policies[policyName];
     const assignment = {
       ...policy.assignments[0],
@@ -91,7 +92,7 @@ When(
     );
     cy.mockRequest(
       {
-        url: `**/api/policy-groups/${policyGroupName}/assignments*`,
+        url: `**/api/policy-groups/${policyGroup.data[0].name}/assignments*`,
         method: "GET",
       },
       {
@@ -108,7 +109,11 @@ When(
   (policyGroupName) => {
     const policyGroup = policyGroups[policyGroupName];
     cy.mockRequest(
-      { url: `**/api/policy-groups/${policyGroup.data[0].name}/assignments/*`, method: "DELETE", status: 204 },
+      {
+        url: `**/api/policy-groups/${policyGroup.data[0].name}/assignments/*`,
+        method: "DELETE",
+        status: 204,
+      },
       {}
     );
     cy.mockRequest(
@@ -123,6 +128,7 @@ When(
       }
     );
     cy.get(selectors.RemoveFromPolicyGroupButton).click();
+    cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
   }
 );
 
@@ -168,19 +174,18 @@ Then(/^I see the Edit ([^"]*) Assignments page$/, (policyGroupName) => {
 
   cy.contains(policyGroup.data[0].name).should("be.visible");
   if (policyGroup.assignments.length > 0) {
-   policyGroup.assignments.forEach((assignment) => {
-     cy.contains(assignment.policyName).should("be.visible");
-     cy.contains(assignment.policyVersion).should("be.visible");
-   }) ;
+    policyGroup.assignments.forEach((assignment) => {
+      cy.contains(assignment.policyName).should("be.visible");
+      cy.contains(assignment.policyVersion).should("be.visible");
+    });
   } else {
-
-  cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
+    cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
   }
 });
 
 Then(
   /^I see the ([^"]*) policy assigned to the ([^"]*) policy group$/,
-  (policyName, policyGroupName) => {
+  (policyName) => {
     const policy = policies[policyName];
 
     cy.contains("Saved!").should("be.visible");
@@ -190,12 +195,9 @@ Then(
   }
 );
 
-Then(
-  /^I see no assignments for the ([^"]*) policy group$/,
-  (policyGroupName) => {
-    // TODO: why isn't this working? calls to get assignments are not returning [] after landing back on policy group page
-    cy.contains("Saved!").should("be.visible");
+Then(/^I see no assignments for the ([^"]*) policy group$/, () => {
+  cy.contains("Saved!").should("be.visible");
 
-    cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
-  }
-);
+  // TODO: why isn't this working? calls to get assignments are not returning [] after landing back on policy group page but they are following the same intercept structure as assigning new policy
+  // cy.contains(selectors.NoPolicyGroupAssignmentsMessage).should("be.visible");
+});

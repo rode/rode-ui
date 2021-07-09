@@ -208,8 +208,6 @@ const EditPolicyGroupAssignments = () => {
       };
     });
 
-    console.log('mutatedAssignments', mutatedAssignments);
-
     dispatch({
       type: stateActions.SET_CURRENT_POLICY_GROUP_ASSIGNMENTS,
       data: mutatedAssignments,
