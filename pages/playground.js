@@ -141,3 +141,4 @@ const PolicyPlayground = () => {
 };
 
 export default PolicyPlayground;
+export { getServerSideProps } from "utils/server";

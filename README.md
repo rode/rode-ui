@@ -61,6 +61,13 @@ Once a policy and a resource have been selected, you can evaluate to see how the
 To provide the best user experience possible the Rode UI has a dark mode, which you can find in the main navigation. Your preference will be remembered between sessions.
 ![Dark Mode Demo](./docs/images/DarkModev2.gif)
 
+### OpenID Connect
+
+For authentication, Rode UI uses [OpenID Connect](https://openid.net/connect/), specifically the authorization code flow.
+Internally, Rode UI uses [`express-openid-connect`](https://github.com/auth0/express-openid-connect) and [`openid-client`](https://github.com/panva/node-openid-client), which is an OpenID-certified relying party implementation.
+Sessions are stored in encrypted cookies, although it should be possible to extend with a custom session store.
+See the [configuration](#configuration) section for more information on setting up OpenID Connect.
+
 ## Development
 
 ### Local Development
@@ -85,3 +92,24 @@ Integration testing for `rode-ui` are implemented using [`Cypress`](https://www.
    1. If you want to run the tests by hitting a locally run copy of [Rode](https://github.com/rode/rode), you can instead run the command `yarn e2e-local`. _Please note: some of the test assertions are based on the mocked responses, so running the tests against your local instance may result in test failures._
 1. Run all tests by selecting the button in the top right of the test window, or run an individual test file by selecting the name of the file. For example, to run resource tests you can select `Resources.feature` from the list.
 1. You can close Cypress by exiting the test runner window or by pressing `ctrl + c` in the terminal window where you ran `yarn e2e`.
+
+### Configuration
+
+For configuration, Rode UI uses the [`config`](https://github.com/lorenwest/node-config) package. By default, the images we build set `NODE_ENV=production`;
+however additional configuration can be set with environment variables or by overriding [`NODE_CONFIG_DIR`](https://github.com/lorenwest/node-config/wiki/Environment-Variables#node_config_dir) or [`NODE_CONFIG`](https://github.com/lorenwest/node-config/wiki/Environment-Variables#node_config).
+
+| Environment Variable | Description                                                                  | Default                  |
+| -------------------- | ---------------------------------------------------------------------------- | ------------------------ |
+| `APP_SECRET`         | Used to encrypt session cookies. Must be set if authentication is enabled.   | N/A                      |
+| `APP_URL`            | Hostname and scheme for the application.                                     | `http://localhost:3000`  |
+| `RODE_URL`           | The Rode HTTP URL.                                                           | `http://localhost:50051` |
+| `OIDC_CLIENT_ID`     | The Rode client id, must already be configured in the identity provider.     | N/A                      |
+| `OIDC_CLIENT_SECRET` | The corresponding client secret for the given client id.                     | N/A                      |
+| `OIDC_ENABLED`       | Whether Rode UI will present a login option.                                 | false                    |
+| `OIDC_ISSUER_URL`    | The identity provider URL. Must be able to perform discovery using this URL. | N/A                      |
+| `OIDC_SCOPE`         | Scopes to request from the identity provider.                                | `openid profile email`   |
+
+### Server Side Code
+
+Code under `server` uses [ECMAScript modules](https://nodejs.org/api/esm.html) and have the extension `.mjs` instead of `.js`.
+This [issue](https://github.com/rode/rode-ui/issues/160) tracks progress towards using ESM in the entire codebase.

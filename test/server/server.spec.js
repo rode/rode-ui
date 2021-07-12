@@ -23,6 +23,7 @@ import express from "express";
 import next from "next";
 import { oidc, tokenRefresh } from "server/middleware.mjs";
 import { configureGracefulShutdown, newApp } from "server/server.mjs";
+import login from "server/routes/login.mjs";
 
 describe("server", () => {
   afterEach(() => {
@@ -40,6 +41,7 @@ describe("server", () => {
     beforeEach(() => {
       app = {
         all: jest.fn(),
+        get: jest.fn(),
         disable: jest.fn(),
         use: jest.fn(),
       };
@@ -73,6 +75,14 @@ describe("server", () => {
         .toHaveBeenCalledWith("x-powered-by");
     });
 
+    it("should add the login endpoint", async () => {
+      await newApp();
+
+      expect(app.get)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith("/login", login);
+    });
+
     it("should register the oidc and token refresh middleware", async () => {
       await newApp();
 
@@ -103,6 +113,12 @@ describe("server", () => {
     describe("oidc is disabled", () => {
       beforeEach(() => {
         config.get.mockReturnValue(false);
+      });
+
+      it("should not add the login endpoint", async () => {
+        await newApp();
+
+        expect(app.get).not.toHaveBeenCalled();
       });
 
       it("should not register any middleware", async () => {

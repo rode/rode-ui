@@ -28,7 +28,7 @@ import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
 
-const PageLayout = ({ children }) => {
+const PageLayout = ({ auth, children }) => {
   const { theme } = useTheme();
   return (
     <>
@@ -48,7 +48,7 @@ const PageLayout = ({ children }) => {
           </Button>
         )}
       />
-      <Header />
+      <Header auth={auth} />
       <main className={theme}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
@@ -58,6 +58,7 @@ const PageLayout = ({ children }) => {
 };
 
 PageLayout.propTypes = {
+  auth: PropTypes.object,
   children: PropTypes.node.isRequired,
 };
 

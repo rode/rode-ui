@@ -53,7 +53,7 @@ describe("middleware", () => {
           issuerBaseURL: config.get("oidc.issuerUrl"),
           routes: {
             callback: "/callback",
-            login: "/login",
+            login: false,
             logout: "/logout",
             postLogoutRedirect: "/",
           },

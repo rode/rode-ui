@@ -26,7 +26,7 @@ module.exports = {
   oidc: {
     clientId: process.env.OIDC_CLIENT_ID,
     clientSecret: process.env.OIDC_CLIENT_SECRET,
-    enabled: process.env.OIDC_ENABLED || false,
+    enabled: Boolean(process.env.OIDC_ENABLED),
     issuerUrl: process.env.OIDC_ISSUER_URL,
     scope: process.env.OIDC_SCOPE || "openid profile email",
   },

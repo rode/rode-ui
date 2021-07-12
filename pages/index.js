@@ -91,3 +91,4 @@ const Home = () => {
 };
 
 export default Home;
+export { getServerSideProps } from "utils/server";

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PolicyGroupForm from "components/policy-groups/PolicyGroupForm";
+import config from "config";
 
-const CreateNewPolicyGroup = () => {
-  return (
-    <PolicyGroupForm
-      title={"Create Policy Group"}
-      method={"POST"}
-      endpoint={"/api/policy-groups"}
-      verb={"create"}
-      submitButtonText={"Save Policy Group"}
-    />
-  );
+export const getServerSideProps = async (ctx) => {
+  const oidcContext = ctx.req.oidc;
+
+  return {
+    props: {
+      auth: {
+        enabled: config.get("oidc.enabled"),
+        user: {
+          name: oidcContext?.user?.name || "",
+          isAuthenticated: oidcContext?.isAuthenticated() || false,
+        },
+      },
+    },
+  };
 };
-
-export default CreateNewPolicyGroup;
-export { getServerSideProps } from "utils/server";

@@ -31,3 +31,4 @@ const NewPolicy = () => {
 };
 
 export default NewPolicy;
+export { getServerSideProps } from "utils/server";

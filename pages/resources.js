@@ -144,3 +144,4 @@ const Resources = () => {
   );
 };
 export default Resources;
+export { getServerSideProps } from "utils/server";

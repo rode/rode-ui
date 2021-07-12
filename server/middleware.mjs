@@ -38,7 +38,7 @@ export const oidc = () => {
     idpLogout: true,
     routes: {
       callback: "/callback",
-      login: "/login",
+      login: false,
       logout: "/logout",
       postLogoutRedirect: "/",
     },

@@ -17,6 +17,7 @@
 import config from "config";
 import express from "express";
 import next from "next";
+import login from "./routes/login.mjs";
 import { oidc, tokenRefresh } from "./middleware.mjs";
 
 export const newApp = async () => {
@@ -26,6 +27,7 @@ export const newApp = async () => {
   if (config.get("oidc.enabled")) {
     app.use(oidc());
     app.use(tokenRefresh());
+    app.get("/login", login);
   }
 
   const nextApp = next({ dev: config.get("app.dev") });
