@@ -66,49 +66,25 @@ describe("login", () => {
 
   describe("redirects", () => {
     it.each([
-      {
-        redirect: "wwww.google.com",
-        valid: false,
-      },
-      {
-        redirect: "https://www.google.com",
-        valid: false,
-      },
-      {
-        redirect: "//google.com",
-        valid: false,
-      },
-      {
-        redirect: "file://www.google.com",
-        valid: false,
-      },
-      {
-        redirect: "/foo-bar",
-        valid: true,
-      },
-      {
-        redirect: "/foo?bar=baz",
-        valid: true,
-      },
-      {
-        redirect: "/foo#bar",
-        valid: true,
-      },
-    ])(
-      "post-login redirect to $redirect is allowed ($valid)",
-      ({ redirect, valid }) => {
-        request.query.returnTo = redirect;
+      ["wwww.google.com", false],
+      ["https://www.google.com", false],
+      ["//google.com", false],
+      ["file://www.google.com", false],
+      ["/foo-bar", true],
+      ["/foo?bar=baz", true],
+      ["/foo#bar", true],
+    ])("post-login redirect to %s is allowed (%s)", (redirect, valid) => {
+      request.query.returnTo = redirect;
 
-        login(request, response);
+      login(request, response);
 
-        const expected = expectedRedirect(valid ? redirect : "/");
+      const expected = expectedRedirect(valid ? redirect : "/");
 
-        expect(response.oidc.login)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({
-            returnTo: expected,
-          });
-      }
-    );
+      expect(response.oidc.login)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith({
+          returnTo: expected,
+        });
+    });
   });
 });
