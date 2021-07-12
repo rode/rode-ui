@@ -96,4 +96,5 @@ node-config
 
 ### Server Side Code
 
-ESM
+Code under `server` uses [ECMAScript modules](https://nodejs.org/api/esm.html) and have the extension `.mjs` instead of `.js`.
+Ideally,
