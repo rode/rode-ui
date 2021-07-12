@@ -53,3 +53,4 @@ const EditPolicy = () => {
 };
 
 export default EditPolicy;
+export { getServerSideProps } from "utils/server";

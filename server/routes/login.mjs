@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-import React from "react";
-import PolicyGroupForm from "components/policy-groups/PolicyGroupForm";
+import config from "config";
 
-const CreateNewPolicyGroup = () => {
-  return (
-    <PolicyGroupForm
-      title={"Create Policy Group"}
-      method={"POST"}
-      endpoint={"/api/policy-groups"}
-      verb={"create"}
-      submitButtonText={"Save Policy Group"}
-    />
-  );
+const relativePath = new RegExp("^/[a-zA-Z0-9?/=#-]+$");
+
+export default (req, res) => {
+  let { returnTo = "/" } = req.query;
+  if (!relativePath.test(returnTo)) {
+    returnTo = "/";
+  }
+
+  return res.oidc.login({
+    returnTo: `${config.get("app.url")}${returnTo}`,
+  });
 };
-
-export default CreateNewPolicyGroup;
-export { getServerSideProps } from "utils/server";

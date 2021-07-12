@@ -333,3 +333,4 @@ const EditPolicyGroupAssignments = () => {
 };
 
 export default EditPolicyGroupAssignments;
+export { getServerSideProps } from "utils/server";

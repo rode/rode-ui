@@ -174,3 +174,4 @@ const Resource = () => {
   );
 };
 export default Resource;
+export { getServerSideProps } from "utils/server";

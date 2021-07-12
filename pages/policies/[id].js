@@ -134,3 +134,4 @@ const Policy = () => {
   );
 };
 export default Policy;
+export { getServerSideProps } from "utils/server";

@@ -15,11 +15,13 @@
  */
 
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import styles from "styles/modules/Header.module.scss";
 import RodeLogo from "./RodeLogo";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "providers/theme";
+import Auth from "components/Auth";
 import Button from "components/Button";
 import Icon from "components/Icon";
 import { ICON_NAMES } from "utils/icon-utils";
@@ -69,7 +71,7 @@ const navigationSections = [
   },
 ];
 
-const Header = () => {
+const Header = ({ auth = {} }) => {
   const { theme } = useTheme();
   const router = useRouter();
   const ref = useRef(null);
@@ -136,6 +138,7 @@ const Header = () => {
           className={showNavigation ? "" : styles.hidden}
           data-testid={"navigationContainer"}
         >
+          <Auth {...auth} />
           {navigationSections.map((section) => {
             return (
               <div key={section.title} className={styles.section}>
@@ -151,6 +154,7 @@ const Header = () => {
             );
           })}
         </div>
+
         <div
           className={
             showNavigation ? styles.themeToggleContainer : styles.hidden
@@ -161,6 +165,10 @@ const Header = () => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  auth: PropTypes.object,
 };
 
 export default Header;

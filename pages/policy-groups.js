@@ -89,3 +89,4 @@ const PolicyGroups = () => {
 };
 
 export default PolicyGroups;
+export { getServerSideProps } from "utils/server";

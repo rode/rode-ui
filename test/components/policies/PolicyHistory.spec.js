@@ -35,9 +35,9 @@ describe("PolicyHistory", () => {
     policyVersions = chance
       .n(
         () => ({
-          message: chance.string(),
+          message: chance.word(),
           created: chance.timestamp(),
-          regoContent: chance.string(),
+          regoContent: chance.word(),
         }),
         chance.d4()
       )

@@ -122,3 +122,4 @@ const Policies = () => {
   );
 };
 export default Policies;
+export { getServerSideProps } from "utils/server";

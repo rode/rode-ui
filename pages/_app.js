@@ -56,7 +56,7 @@ const MyApp = ({ Component, pageProps }) => {
               content="width=device-width, initial-scale=1"
             />
           </Head>
-          <PageLayout>
+          <PageLayout {...pageProps}>
             <Component {...pageProps} />
           </PageLayout>
         </React.Fragment>

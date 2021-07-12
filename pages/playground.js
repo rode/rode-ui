@@ -27,7 +27,8 @@ import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
 import Text from "components/Text";
 
-const PolicyPlayground = () => {
+const PolicyPlayground = (props) => {
+  console.log("playground props", props);
   const { theme } = useTheme();
   const { state, dispatch } = useAppState();
 
@@ -141,3 +142,4 @@ const PolicyPlayground = () => {
 };
 
 export default PolicyPlayground;
+export { getServerSideProps } from "utils/server";

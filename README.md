@@ -61,6 +61,10 @@ Once a policy and a resource have been selected, you can evaluate to see how the
 To provide the best user experience possible the Rode UI has a dark mode, which you can find in the main navigation. Your preference will be remembered between sessions.
 ![Dark Mode Demo](./docs/images/DarkModev2.gif)
 
+### OpenID Connect
+
+TODO
+
 ## Development
 
 ### Local Development
@@ -85,3 +89,11 @@ Integration testing for `rode-ui` are implemented using [`Cypress`](https://www.
    1. If you want to run the tests by hitting a locally run copy of [Rode](https://github.com/rode/rode), you can instead run the command `yarn e2e-local`. _Please note: some of the test assertions are based on the mocked responses, so running the tests against your local instance may result in test failures._
 1. Run all tests by selecting the button in the top right of the test window, or run an individual test file by selecting the name of the file. For example, to run resource tests you can select `Resources.feature` from the list.
 1. You can close Cypress by exiting the test runner window or by pressing `ctrl + c` in the terminal window where you ran `yarn e2e`.
+
+### Configuration
+
+node-config
+
+### Server Side Code
+
+ESM

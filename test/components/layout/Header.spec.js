@@ -25,7 +25,7 @@ describe("Header", () => {
     jest.spyOn(document, "removeEventListener");
     render(
       <div>
-        <Header />
+        <Header auth={{ enabled: true }} />
         <p>Trigger</p>
       </div>
     );
@@ -94,5 +94,9 @@ describe("Header", () => {
 
     expect(screen.getByText("Admin")).toBeInTheDocument();
     expect(screen.getByText("Policy Groups")).toBeInTheDocument();
+  });
+
+  it("should render the login section", () => {
+    expect(screen.getByText("Log In")).toBeInTheDocument();
   });
 });
