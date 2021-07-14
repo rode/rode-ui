@@ -75,7 +75,7 @@ export default async (req, res) => {
 
       const response = await post(
         `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`,
-        requestBody,
+        null,
         req.accessToken
       );
 
