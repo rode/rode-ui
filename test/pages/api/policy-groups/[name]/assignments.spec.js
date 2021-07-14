@@ -180,6 +180,7 @@ describe("/api/policy-groups/[name]/assignments", () => {
             `${config.get("rode.url")}/v1alpha1/policies/${
               assignment.policyVersionId
             }/assignments/${name}`,
+            assignment,
             accessToken
           );
       });
