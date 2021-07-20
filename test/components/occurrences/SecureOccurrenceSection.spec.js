@@ -101,5 +101,17 @@ describe("SecureOccurrenceSection", () => {
       );
       expect(renderedVulnerabilityCount).toHaveLength(occurrences.length - 1);
     });
+
+    it("should render a failure message when the analysis failed", () => {
+      occurrences[0].analysisStatus = "FINISHED_FAILED";
+
+      rerender(<SecureOccurrenceSection occurrences={occurrences} />);
+
+      expect(screen.getByText("Analysis Failed")).toBeInTheDocument();
+      const renderedVulnerabilityCount = screen.queryAllByText(
+        /vulnerabilities found/i
+      );
+      expect(renderedVulnerabilityCount).toHaveLength(occurrences.length - 1);
+    });
   });
 });

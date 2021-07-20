@@ -141,6 +141,7 @@ const matchAndMapVulnerabilities = (occurrences, notes) => {
           originals: {
             occurrences: [startScan, ...matchingVulnerabilities],
           },
+          analysisStatus: undefined,
         };
       }
 
@@ -153,6 +154,7 @@ const matchAndMapVulnerabilities = (occurrences, notes) => {
         originals: {
           occurrences: [startScan, endScan, ...matchingVulnerabilities],
         },
+        analysisStatus: endScan.discovered.discovered.analysisStatus,
       };
     })
     .filter((val) => val);
