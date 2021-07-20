@@ -89,7 +89,9 @@ describe("occurrence-utils", () => {
           expect(secure).toHaveLength(1);
           expect(secure[0].started).toEqual(startScanOccurrence.createTime);
           expect(secure[0].completed).toEqual(endScanOccurrence.createTime);
-          expect(secure[0].analysisStatus).toEqual(endScanOccurrence.discovered.discovered.analysisStatus);
+          expect(secure[0].analysisStatus).toEqual(
+            endScanOccurrence.discovered.discovered.analysisStatus
+          );
           expect(secure[0].notes).toEqual(notes[noteName]);
           expect(secure[0].originals.occurrences).toContain(
             startScanOccurrence
@@ -181,7 +183,7 @@ describe("occurrence-utils", () => {
           expect(secure).toHaveLength(1);
           expect(secure[0].completed).toBeNull();
           expect(secure[0].vulnerabilities).toHaveLength(0);
-          expect(secure[0].analysisStatus).toBeUndefined()
+          expect(secure[0].analysisStatus).toBeUndefined();
           expect(other).toHaveLength(1);
         });
       });

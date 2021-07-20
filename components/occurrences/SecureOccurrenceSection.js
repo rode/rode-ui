@@ -49,26 +49,26 @@ const SecureOccurrenceSection = ({ occurrences }) => {
               : "In Progress"
           }
           subText={
-            occurrence.completed ? occurrence.analysisStatus === "FINISHED_FAILED" ? (
-              <>
-                <Text.Body2
-                  as={"span"}
-                >Analysis Failed</Text.Body2>
-              </>
-            ) : (
-              <>
-                <Text.Body2
-                  as={"span"}
-                >{`${occurrence.vulnerabilities.length} vulnerabilities found`}</Text.Body2>
-                {!!occurrence.vulnerabilities.length && (
+            occurrence.completed ? (
+              occurrence.analysisStatus === "FINISHED_FAILED" ? (
+                <>
+                  <Text.Body2 as={"span"}>Analysis Failed</Text.Body2>
+                </>
+              ) : (
+                <>
                   <Text.Body2
-                    className={styles.previewBreakdown}
                     as={"span"}
-                  >{`${getVulnerabilityBreakdown(
-                    occurrence.vulnerabilities
-                  )}`}</Text.Body2>
-                )}
-              </>
+                  >{`${occurrence.vulnerabilities.length} vulnerabilities found`}</Text.Body2>
+                  {!!occurrence.vulnerabilities.length && (
+                    <Text.Body2
+                      className={styles.previewBreakdown}
+                      as={"span"}
+                    >{`${getVulnerabilityBreakdown(
+                      occurrence.vulnerabilities
+                    )}`}</Text.Body2>
+                  )}
+                </>
+              )
             ) : null
           }
         />
