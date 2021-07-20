@@ -194,6 +194,7 @@ export const createMockMappedVulnerabilityOccurrence = () => {
         createMockOccurrence("VULNERABILITY", sharedTimestamp),
       ],
     },
+    analysisStatus: "FINISHED_SUCCESS",
   };
 };
 

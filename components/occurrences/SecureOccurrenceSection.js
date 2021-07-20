@@ -49,7 +49,13 @@ const SecureOccurrenceSection = ({ occurrences }) => {
               : "In Progress"
           }
           subText={
-            occurrence.completed ? (
+            occurrence.completed ? occurrence.analysisStatus === "FINISHED_FAILED" ? (
+              <>
+                <Text.Body2
+                  as={"span"}
+                >Analysis Failed</Text.Body2>
+              </>
+            ) : (
               <>
                 <Text.Body2
                   as={"span"}
