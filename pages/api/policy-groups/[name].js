@@ -14,115 +14,55 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { del, get, patch } from "pages/api/utils/api-utils";
 import {
   mapToApiModel,
   mapToClientModel,
 } from "pages/api/utils/policy-group-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
+export default apiHandler({
+  get: async (req, res) => {
+    const { name } = req.query;
 
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
+    const response = await get(
+      `/v1alpha1/policy-groups/${name}`,
+      req.accessToken
+    );
+
+    // TODO: is this still necessary?
+    // if (response.status === StatusCodes.NOT_FOUND) {
+    //   return res.status(StatusCodes.OK).send(null);
+    // }
+
+    const getPolicyGroupResponse = await response.json();
+
     return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
+      .status(StatusCodes.OK)
+      .json(mapToClientModel(getPolicyGroupResponse));
+  },
+  patch: async (req, res) => {
+    const { name } = req.query;
 
-  const rodeUrl = config.get("rode.url");
+    const updateBody = mapToApiModel(req);
 
-  if (req.method === "GET") {
-    try {
-      const { name } = req.query;
+    const response = await patch(
+      `/v1alpha1/policy-groups/${name}`,
+      updateBody,
+      req.accessToken
+    );
 
-      const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        req.accessToken
-      );
+    const updatePolicyGroupResponse = await response.json();
+    const policy = mapToClientModel(updatePolicyGroupResponse);
 
-      if (response.status === StatusCodes.NOT_FOUND) {
-        return res.status(StatusCodes.OK).send(null);
-      }
+    return res.status(StatusCodes.OK).json(policy);
+  },
+  delete: async (req, res) => {
+    const { name } = req.query;
 
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
+    await del(`/v1alpha1/policy-groups/${name}`, req.accessToken);
 
-      const getPolicyGroupResponse = await response.json();
-
-      res.status(StatusCodes.OK).json(mapToClientModel(getPolicyGroupResponse));
-    } catch (error) {
-      console.error("Error getting policy group", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "PATCH") {
-    try {
-      const { name } = req.query;
-
-      const updateBody = mapToApiModel(req);
-
-      const response = await patch(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        updateBody,
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const updatePolicyGroupResponse = await response.json();
-
-      const policy = mapToClientModel(updatePolicyGroupResponse);
-
-      res.status(StatusCodes.OK).json(policy);
-    } catch (error) {
-      console.error("Error updating policy group", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "DELETE") {
-    try {
-      const { name } = req.query;
-
-      const response = await del(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}`,
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      res.status(StatusCodes.NO_CONTENT).send(null);
-    } catch (error) {
-      console.error("Error deleting policy group", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-};
+    return res.status(StatusCodes.NO_CONTENT).send(null);
+  },
+});

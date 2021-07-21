@@ -14,79 +14,35 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { del, patch } from "pages/api/utils/api-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["DELETE", "PATCH"];
+export default apiHandler({
+  delete: async (req, res) => {
+    const { assignmentId } = req.query;
 
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
+    await del(`/v1alpha1/${assignmentId}`, req.accessToken);
 
-  const rodeUrl = config.get("rode.url");
+    return res.status(StatusCodes.NO_CONTENT).send(null);
+  },
+  patch: async (req, res) => {
+    const { name, assignmentId } = req.query;
+    const requestBody = req.body;
 
-  if (req.method === "DELETE") {
-    try {
-      const { assignmentId } = req.query;
+    const response = await patch(
+      `/v1alpha1/${assignmentId}`,
+      {
+        policyGroup: name,
+        policyVersionId: requestBody.policyVersionId,
+      },
+      req.accessToken
+    );
 
-      const response = await del(
-        `${rodeUrl}/v1alpha1/${assignmentId}`,
-        req.accessToken
-      );
+    const updatedPolicyAssignment = await response.json();
 
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      res.status(StatusCodes.NO_CONTENT).send(null);
-    } catch (error) {
-      console.error("Error deleting policy assignment", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "PATCH") {
-    try {
-      const { name, assignmentId } = req.query;
-      const requestBody = req.body;
-
-      const response = await patch(
-        `${rodeUrl}/v1alpha1/${assignmentId}`,
-        {
-          policyGroup: name,
-          policyVersionId: requestBody.policyVersionId,
-        },
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const updatedPolicyAssignment = await response.json();
-
-      return res.status(StatusCodes.OK).json({
-        data: updatedPolicyAssignment,
-      });
-    } catch (error) {
-      console.error("Error updating policy assignment", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-};
+    return res.status(StatusCodes.OK).json({
+      data: updatedPolicyAssignment,
+    });
+  },
+});

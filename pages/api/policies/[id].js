@@ -14,128 +14,72 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { del, get, patch } from "pages/api/utils/api-utils";
+import { StatusCodes } from "http-status-codes";
+import { del, get, patch, RodeClientError } from "pages/api/utils/api-utils";
 import { mapToApiModel, mapToClientModel } from "pages/api/utils/policy-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["GET", "PATCH", "DELETE"];
+export default apiHandler({
+  get: async (req, res) => {
+    const { id } = req.query;
 
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
+    const response = await get(`/v1alpha1/policies/${id}`, req.accessToken);
 
-  const rodeUrl = config.get("rode.url");
+    // TODO: is this still necessary?
+    // if (response.status === StatusCodes.NOT_FOUND) {
+    //   return res.status(StatusCodes.OK).send(null);
+    // }
 
-  if (req.method === "GET") {
+    const getPolicyResponse = await response.json();
+
+    const policy = mapToClientModel(getPolicyResponse);
+
+    return res.status(StatusCodes.OK).json(policy);
+  },
+  patch: async (req, res) => {
+    const { id } = req.query;
+
+    const updateBody = mapToApiModel(req);
+
     try {
-      const { id } = req.query;
-
-      const response = await get(
-        `${rodeUrl}/v1alpha1/policies/${id}`,
-        req.accessToken
-      );
-
-      if (response.status === StatusCodes.NOT_FOUND) {
-        return res.status(StatusCodes.OK).send(null);
-      }
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const getPolicyResponse = await response.json();
-
-      const policy = mapToClientModel(getPolicyResponse);
-
-      res.status(StatusCodes.OK).json(policy);
-    } catch (error) {
-      console.error("Error getting policy", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "PATCH") {
-    try {
-      const { id } = req.query;
-
-      const updateBody = mapToApiModel(req);
-
       const response = await patch(
-        `${rodeUrl}/v1alpha1/policies/${id}`,
+        `/v1alpha1/policies/${id}`,
         updateBody,
         req.accessToken
       );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-        const parsedResponse = await response.json();
-
-        if (
-          parsedResponse?.message?.includes("failed to compile") ||
-          parsedResponse?.message?.includes("failed to parse")
-        ) {
-          const validationError = {
-            errors: parsedResponse.details[0].errors,
-            isValid: false,
-          };
-
-          return res.status(StatusCodes.BAD_REQUEST).json(validationError);
-        }
-
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
 
       const updatePolicyResponse = await response.json();
 
       const policy = mapToClientModel(updatePolicyResponse);
 
-      res.status(StatusCodes.OK).json(policy);
+      return res.status(StatusCodes.OK).json(policy);
     } catch (error) {
-      console.error("Error updating policy", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "DELETE") {
-    try {
-      const { id } = req.query;
-
-      const response = await del(
-        `${rodeUrl}/v1alpha1/policies/${id}`,
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      if (!error instanceof RodeClientError) {
+        throw error;
       }
 
-      res.status(StatusCodes.NO_CONTENT).send(null);
-    } catch (error) {
-      console.error("Error deleting policy", error);
+      const parsedResponse = JSON.parse(error.responseText);
 
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      if (
+        parsedResponse?.message?.includes("failed to compile") ||
+        parsedResponse?.message?.includes("failed to parse")
+      ) {
+        const validationError = {
+          errors: parsedResponse.details[0].errors,
+          isValid: false,
+        };
+
+        return res.status(StatusCodes.BAD_REQUEST).json(validationError);
+      }
+
+      throw error;
     }
-  }
-};
+  },
+  delete: async (req, res) => {
+    const { id } = req.query;
+
+    await del(`/v1alpha1/policies/${id}`, req.accessToken);
+
+    return res.status(StatusCodes.NO_CONTENT).send(null);
+  },
+});

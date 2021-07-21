@@ -17,17 +17,10 @@
 import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { buildPaginationParams, get } from "./utils/api-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-export default async (req, res) => {
-  if (req.method !== "GET") {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-
-  const rodeUrl = config.get("rode.url");
-
-  try {
+export default apiHandler({
+  get: async (req, res) => {
     const searchTerm = req.query.searchTerm;
     const resourceTypes = req.query.resourceTypes;
 
@@ -48,29 +41,16 @@ export default async (req, res) => {
     }
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/resources?${new URLSearchParams(params)}`,
+      `/v1alpha1/resources?${new URLSearchParams(params)}`,
       req.accessToken
     );
-
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
 
     const listResourcesResponse = await response.json();
     const resources = listResourcesResponse.resources;
 
-    res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.OK).json({
       data: resources,
       pageToken: listResourcesResponse.nextPageToken,
     });
-  } catch (error) {
-    console.error("Error listing resources", error);
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+  },
+});

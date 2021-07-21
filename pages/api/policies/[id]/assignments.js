@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { apiHandler } from "utils/api-page-handler";
+import { StatusCodes } from "http-status-codes";
 import { get } from "pages/api/utils/api-utils";
 
-const ALLOWED_METHODS = ["GET"];
-
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-
-  const rodeUrl = config.get("rode.url");
-
-  try {
+export default apiHandler({
+  get: async (req, res) => {
     const { id } = req.query;
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/policies/${id}/assignments`,
+      `/v1alpha1/policies/${id}/assignments`,
       req.accessToken
     );
-
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
 
     const getPolicyAssignments = await response.json();
 
@@ -51,11 +34,5 @@ export default async (req, res) => {
     return res.status(StatusCodes.OK).json({
       policyAssignments,
     });
-  } catch (error) {
-    console.error("Error getting policy assignments", error);
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+  },
+});
