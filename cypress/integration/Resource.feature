@@ -8,7 +8,7 @@ Feature: Resources
   Scenario: Search for a non-existent resource
     Given I am on the "ResourceSearch" page
     When I search for "NonExistent" resource
-    Then I see "NoResourcesFound" message
+    Then I see the "NoResourcesFound" message
 
   @smoke
   Scenario: Search for an existing resource
@@ -18,7 +18,7 @@ Feature: Resources
     When I click the search result to view the "Existing" resource
     Then I see "Existing" resource details
 
-  Scenario Outline: Viewing Resource Details
+  Scenario Outline: Viewing Resource Occurrences
     Given I am on the "Existing" resource details page
     When I select the Occurrence Section
     When I click on <occurrenceType> occurrence
@@ -28,3 +28,13 @@ Feature: Resources
     | Build |
     | Vulnerability |
     | Deployment |
+
+  Scenario: Viewing Resource Evaluation History
+    Given I am on the "Existing" resource details page
+    When I select the EvaluationHistory Section
+    Then I see evaluation history details
+
+  Scenario: Changing Resource Version
+    Given I am on the "Existing" resource details page
+    When I click the "ChangeVersion" button
+    Then I see the available resource versions

@@ -1,0 +1,48 @@
+{
+  "Existing": {
+    "data": [
+      {
+        "created": "2021-07-06T13:59:28.133457892Z",
+        "deleted": false,
+        "description": "policies that limit the number of vulnerabilities",
+        "name": "existing",
+        "updated": "2021-07-06T13:59:28.133457892Z"
+      }
+    ],
+    "assignments": [],
+    "pageToken": "12345678910pageTokenHere"
+  },
+  "ExistingWithAssignments": {
+    "data": [
+      {
+        "created": "2021-07-06T13:59:28.133457892Z",
+        "deleted": false,
+        "description": "policies that limit the number of vulnerabilities",
+        "name": "existingWithAssignments",
+        "updated": "2021-07-06T13:59:28.133457892Z"
+      }
+    ],
+    "assignments": [
+      {
+        "created": "2021-07-06T13:59:41.639466966Z",
+        "id": "policies/34912489-bd2a-409e-a00a-da274aff0635/assignments/existingWithAssignments",
+        "policyGroup": "existingWithAssignments",
+        "policyId": "34912489-bd2a-409e-a00a-da274aff0635",
+        "policyVersion": 1,
+        "policyVersionCount": 2,
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1",
+        "policyName": "My Policy Name",
+        "updated": "2021-07-06T13:59:41.639466966Z"
+      }
+    ],
+    "pageToken": "12345678910pageTokenHere"
+  },
+  "New": {
+    "data": [
+      {
+        "name": "my_brand_new_policy_group",
+        "description": "This policy group was just created"
+      }
+    ]
+  }
+}

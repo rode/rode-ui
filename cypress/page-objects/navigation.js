@@ -34,9 +34,15 @@ const CREATE_POLICY = {
   href: "/policies/new",
 };
 
+const POLICY_GROUP = {
+  label: "Policy Groups",
+  href: "/policy-groups",
+};
+
 export default {
   ResourceSearch: RESOURCE_SEARCH,
   PolicySearch: POLICY_SEARCH,
   PolicyPlayground: POLICY_PLAYGROUND,
   CreatePolicy: CREATE_POLICY,
+  PolicyGroup: POLICY_GROUP,
 };

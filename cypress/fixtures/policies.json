@@ -2,10 +2,32 @@
   "Existing": {
     "data": [
       {
-        "id": "12345678910",
+        "id": "34912489-bd2a-409e-a00a-da274aff0635",
+        "policyId": "34912489-bd2a-409e-a00a-da274aff0635",
         "name": "My Policy Name",
         "description": "This is a policy description",
-        "regoContent": "package RegoRegoRego"
+        "regoContent": "package RegoRegoRego",
+        "currentVersion": 2,
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1"
+      }
+    ],
+    "versions": [
+      {
+        "created": "2021-07-06T13:53:41.872378726Z",
+        "id": "34912489-bd2a-409e-a00a-da274aff0635.1",
+        "message": "Initial policy creation",
+        "regoContent": "package rode.demo.sonar\n\npass {\n\tcount(violation_count) == 0\n}\n\nviolation_count[v] {\n\tviolations[v].pass == false\n}\n\nsonar_scan_started[o] {\n\tstartswith(input.occurrences[i].noteName, \"projects/rode/notes/sonar-scan\")\n\tinput.occurrences[i].kind == \"DISCOVERY\"\n\tinput.occurrences[i].discovered.discovered.analysisStatus == \"SCANNING\"\n\to := input.occurrences[i]\n}\n\nsonar_scan_finished[t] {\n\tstartswith(input.occurrences[i].noteName, \"projects/rode/notes/sonar-scan\")\n\tinput.occurrences[i].kind == \"DISCOVERY\"\n\tinput.occurrences[i].discovered.discovered.analysisStatus == \"FINISHED_SUCCESS\"\n\tt := input.occurrences[i].createTime\n}\n\nviolations[result] {\n\tstarted := sonar_scan_started\n\tresult := {\n\t\t\"pass\": count(started) >= 1,\n\t\t\"id\": \"sonar_scan_started\",\n\t\t\"name\": \"SonarQube Analysis Started\",\n\t\t\"description\": \"Verify SonarQube analysis started\",\n\t\t\"message\": \"SonarQube analysis started\",\n\t}\n}\n\nviolations[result] {\n\tfinished := sonar_scan_finished\n\tresult := {\n\t\t\"pass\": count(finished) >= 1,\n\t\t\"id\": \"sonar_scan_completed\",\n\t\t\"name\": \"SonarQube Analysis Finished\",\n\t\t\"description\": \"Verify SonarQube analysis finished successfully\",\n\t\t\"message\": sprintf(\"SonarQube analysis completed at %v\", [finished]),\n\t}\n}\n",
+        "sourcePath": "",
+        "version": 1
+      }
+    ],
+    "assignments": [
+      {
+        "created": "2021-07-06T13:59:41.639466966Z",
+        "id": "policies/34912489-bd2a-409e-a00a-da274aff0635/assignments/existing",
+        "policyGroup": "existing",
+        "policyVersionId": "34912489-bd2a-409e-a00a-da274aff0635.1",
+        "updated": "2021-07-06T13:59:41.639466966Z"
       }
     ],
     "pageToken": "12345678910pageTokenHere"

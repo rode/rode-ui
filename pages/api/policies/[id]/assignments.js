@@ -33,7 +33,7 @@ export default async (req, res) => {
     const { id } = req.query;
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/policies/${id}/assignments`,
+      `${rodeUrl}/v1alpha1/policies/${id}/assignments?pageSize=1000`,
       req.accessToken
     );
 
@@ -49,7 +49,7 @@ export default async (req, res) => {
     const { policyAssignments } = getPolicyAssignments;
 
     return res.status(StatusCodes.OK).json({
-      policyAssignments,
+      data: policyAssignments,
     });
   } catch (error) {
     console.error("Error getting policy assignments", error);

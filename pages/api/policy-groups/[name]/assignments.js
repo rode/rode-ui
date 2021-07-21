@@ -35,7 +35,7 @@ export default async (req, res) => {
       const { name } = req.query;
 
       const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`,
+        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments?pageSize=1000`,
         req.accessToken
       );
 

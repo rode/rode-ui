@@ -32,7 +32,7 @@ export default async (req, res) => {
     const { id } = req.query;
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/policies/${id}/versions`,
+      `${rodeUrl}/v1alpha1/policies/${id}/versions?pageSize=1000`,
       req.accessToken
     );
 

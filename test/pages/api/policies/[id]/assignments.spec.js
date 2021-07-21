@@ -94,7 +94,9 @@ describe("/api/policies/[id]/assignments", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies/${id}/assignments`,
+            `${config.get(
+              "rode.url"
+            )}/v1alpha1/policies/${id}/assignments?pageSize=1000`,
             accessToken
           );
       });
@@ -109,7 +111,7 @@ describe("/api/policies/[id]/assignments", () => {
         expect(response.json)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith({
-            policyAssignments: [assignment],
+            data: [assignment],
           });
       });
     });

@@ -197,6 +197,7 @@ const EditPolicyGroupAssignments = () => {
         return {
           ...assignment,
           id: createdAssignment.data.id,
+          policyGroup: policyGroup.name,
           action: null,
         };
       }

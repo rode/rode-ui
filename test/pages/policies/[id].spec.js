@@ -90,7 +90,7 @@ describe("Policy Details", () => {
     };
     mockFetch = {
       data: {
-        policyAssignments: assignments,
+        data: assignments,
       },
       loading: false,
     };

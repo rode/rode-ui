@@ -86,7 +86,9 @@ describe("/api/policies/[id]/versions", () => {
         expect(get)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies/${id}/versions`,
+            `${config.get(
+              "rode.url"
+            )}/v1alpha1/policies/${id}/versions?pageSize=1000`,
             accessToken
           );
       });

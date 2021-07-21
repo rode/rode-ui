@@ -29,9 +29,11 @@ export const EvaluateResourceInPlaygroundButton = createButtonSelector(
   "Evaluate in Policy Playground"
 );
 export const ShowJsonButton = createButtonSelector("Show JSON");
+export const ChangeVersionButton = createButtonSelector("Change Version");
 
 // OCCURRENCES
 export const OccurrenceSection = /^Occurrences$/;
+export const EvaluationHistorySection = /^Evaluation History$/;
 export const BuildOccurrence = /produced \d artifact(s?)/i;
 export const VulnerabilityOccurrence = /\d vulnerabilities found/i;
 export const DeploymentOccurrence = /deployment to \w+/i;

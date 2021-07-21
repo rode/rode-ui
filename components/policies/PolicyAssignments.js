@@ -33,9 +33,9 @@ const PolicyAssignments = ({ policy }) => {
   return (
     <div className={styles[theme]}>
       <Loading loading={loading}>
-        {data && data?.policyAssignments?.length > 0 ? (
+        {data && data?.data?.length > 0 ? (
           <>
-            {data.policyAssignments.map((assignment) => {
+            {data.data.map((assignment) => {
               return (
                 <div key={assignment.id} className={styles.assignmentCard}>
                   <div>

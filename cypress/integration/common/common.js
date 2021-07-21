@@ -90,7 +90,7 @@ Then(/^I see "([^"]*)"$/, (element) => {
   cy.get(selectors[element]).should("be.visible");
 });
 
-Then(/^I see "([^"]*)" message$/, (messageName) => {
+Then(/^I see the "([^"]*)" message$/, (messageName) => {
   const message = `${messageName}Message`;
   cy.contains(selectors[message]).should("be.visible");
 });
@@ -109,4 +109,9 @@ Then(/^I see the "([^"]*)" form$/, (formName) => {
   form.buttons.forEach((button) => {
     cy.get(button).should("be.visible");
   });
+});
+
+When(/^I select the ([^"]*) Section$/, (sectionName) => {
+  const section = `${sectionName}Section`;
+  cy.contains(selectors[section]).click();
 });

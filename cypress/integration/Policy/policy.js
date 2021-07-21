@@ -40,6 +40,16 @@ Given(/^I am on the "([^"]*)" policy details page$/, (policyName) => {
     { url: "**/api/policies/*", method: "GET" },
     policies[policyName].data[0]
   );
+
+  cy.mockRequest(
+    { url: "**/api/policies/**/versions*", method: "GET" },
+    { data: policies[policyName].versions }
+  );
+
+  cy.mockRequest(
+    { url: "**/api/policies/**/assignments*", method: "GET" },
+    { data: policies[policyName].assignments }
+  );
   cy.visit(`/policies/${policies[policyName].data[0].id}`);
 });
 
@@ -82,10 +92,6 @@ When(
     const selectorName = `Policy${capitalize(field)}Input`;
     cy.get(selectors[selectorName]).clear().type(updatedValues[field]);
     cy.get(selectors.UpdatePolicyButton).click();
-
-    if (field === "regoContent") {
-      cy.get(selectors.ConfirmUpdatePolicyButton).click();
-    }
   }
 );
 
@@ -165,4 +171,32 @@ Then(/^I see the Edit Policy form for "([^"]*)" policy$/, (policyName) => {
   form.buttons.forEach((button) => {
     cy.get(button).should("be.visible");
   });
+});
+
+Then(/^I see "([^"]*)" policy version history$/, (policyName) => {
+  const policyVersion = policies[policyName].versions[0];
+  cy.url().should("contain", "#history");
+
+  cy.get('[data-testid="toggleCard"]')
+    .click()
+    .within(() => {
+      cy.contains("v1 (latest)").should("be.visible");
+      cy.contains(policyVersion.regoContent).should("be.visible");
+    });
+});
+
+Then(/^I see "([^"]*)" policy assignment data$/, (policyName) => {
+  const policyAssignment = policies[policyName].assignments[0];
+  cy.url().should("contain", "#assignments");
+
+  cy.contains(policyAssignment.policyGroup).should("be.visible");
+  cy.contains(policyAssignment.policyVersionId.split(".")[1]).should(
+    "be.visible"
+  );
+  cy.get(selectors.ViewPolicyGroupButton).should("be.visible").click();
+
+  cy.url().should(
+    "match",
+    new RegExp(`/policy-groups/${policyAssignment.policyGroup}`)
+  );
 });
