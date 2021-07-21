@@ -38,7 +38,7 @@ export default apiHandler({
 
       res.status(StatusCodes.OK).json(result);
     } catch (error) {
-      if (!error instanceof RodeClientError) {
+      if (!(error instanceof RodeClientError)) {
         throw error;
       }
 

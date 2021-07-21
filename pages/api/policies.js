@@ -63,7 +63,7 @@ export default apiHandler({
 
       return res.status(StatusCodes.OK).json(policy);
     } catch (error) {
-      if (!error instanceof RodeClientError) {
+      if (!(error instanceof RodeClientError)) {
         throw error;
       }
 

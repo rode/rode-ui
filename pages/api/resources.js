@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { buildPaginationParams, get } from "./utils/api-utils";
 import { apiHandler } from "utils/api-page-handler";
 

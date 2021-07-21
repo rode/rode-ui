@@ -24,7 +24,7 @@ export default apiHandler({
     const { name } = req.query;
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`,
+      `/v1alpha1/policy-groups/${name}/assignments`,
       req.accessToken
     );
 
