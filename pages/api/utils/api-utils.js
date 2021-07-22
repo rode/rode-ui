@@ -52,7 +52,7 @@ const fetch = async ({ endpoint, method, body, accessToken }) => {
 
   const responseText = await response.text();
 
-  throw new RodeClientError(response.statusCode, responseText);
+  throw new RodeClientError(response.status, responseText);
 };
 
 export const post = (endpoint, body, accessToken) =>

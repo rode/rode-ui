@@ -48,7 +48,7 @@ describe("api-utils", () => {
     expectedStatusCode = chance.integer({ min: 200, max: 500 });
     response = {
       ok: true,
-      statusCode: expectedStatusCode,
+      status: expectedStatusCode,
       text: jest.fn().mockResolvedValue(expectedResponseText),
     };
 
