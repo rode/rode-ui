@@ -19,7 +19,7 @@ import { post } from "pages/api/utils/api-utils";
 import { apiHandler } from "utils/api-page-handler";
 
 export default apiHandler({
-  get: async (req, res) => {
+  post: async (req, res) => {
     const { id } = req.query;
     const requestBody = req.body;
 

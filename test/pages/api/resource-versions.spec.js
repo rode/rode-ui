@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import handler from "pages/api/resource-versions";
 import { get, buildPaginationParams } from "pages/api/utils/api-utils";
 
@@ -72,22 +71,6 @@ describe("/api/resource-versions", () => {
     jest.resetAllMocks();
   });
 
-  describe("unimplemented method", () => {
-    it("should return method not allowed", async () => {
-      request.method = chance.word();
-
-      await handler(request, response);
-
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.METHOD_NOT_ALLOWED);
-
-      expect(response.json)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-    });
-  });
-
   describe("missing resource name", () => {
     it("should return bad request when the resource name is not provided", async () => {
       request.query.id = null;
@@ -105,9 +88,7 @@ describe("/api/resource-versions", () => {
 
   describe("successful call to Rode", () => {
     const createExpectedUrl = (query = {}) => {
-      return `${config.get(
-        "rode.url"
-      )}/v1alpha1/resource-versions?${new URLSearchParams(query)}`;
+      return `/v1alpha1/resource-versions?${new URLSearchParams(query)}`;
     };
 
     it("should hit the Rode API", async () => {
@@ -159,42 +140,6 @@ describe("/api/resource-versions", () => {
         data: mappedVersions,
         pageToken,
       });
-    });
-  });
-
-  describe("call to Rode fails", () => {
-    const assertInternalServerError = () => {
-      expect(response.status)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-
-      expect(response.json)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    };
-
-    it("should return an internal server error on a non-200 response from Rode", async () => {
-      rodeResponse.ok = false;
-
-      await handler(request, response);
-
-      assertInternalServerError();
-    });
-
-    it("should return an internal server error on a network or other fetch error", async () => {
-      get.mockRejectedValue(new Error());
-
-      await handler(request, response);
-
-      assertInternalServerError();
-    });
-
-    it("should return an internal server error when JSON is invalid", async () => {
-      rodeResponse.json.mockRejectedValue(new Error());
-
-      await handler(request, response);
-
-      assertInternalServerError();
     });
   });
 });

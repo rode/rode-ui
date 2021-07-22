@@ -18,13 +18,6 @@ import { StatusCodes } from "http-status-codes";
 import { buildPaginationParams, get, post } from "./utils/api-utils";
 import { apiHandler } from "utils/api-page-handler";
 
-// export default async (req, res) => {
-//   if (!ALLOWED_METHODS.includes(req.method)) {
-//     return res
-//       .status(StatusCodes.METHOD_NOT_ALLOWED)
-//       .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-//   }
-
 export default apiHandler({
   get: async (req, res) => {
     const params = buildPaginationParams(req);

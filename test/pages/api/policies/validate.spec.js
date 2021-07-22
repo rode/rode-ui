@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/validate";
-import { post } from "pages/api/utils/api-utils";
+import { post, RodeClientError } from "pages/api/utils/api-utils";
 
-jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/api-utils", () => ({
+  ...jest.requireActual("pages/api/utils/api-utils"),
+  post: jest.fn(),
+}));
 
 describe("/api/policies/validate", () => {
   let accessToken, request, response, rodeResponse, validationResult;
@@ -66,22 +68,6 @@ describe("/api/policies/validate", () => {
       .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
   };
 
-  describe("unimplemented methods", () => {
-    it("should return method not allowed", async () => {
-      request.method = chance.word();
-
-      await handler(request, response);
-
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.METHOD_NOT_ALLOWED);
-
-      expect(response.json)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-    });
-  });
-
   describe("successful call to Rode", () => {
     it("should hit the Rode API", async () => {
       await handler(request, response);
@@ -89,7 +75,7 @@ describe("/api/policies/validate", () => {
       expect(post)
         .toHaveBeenCalledTimes(1)
         .toHaveBeenCalledWith(
-          `${config.get("rode.url")}/v1alpha1/policies:validate`,
+          "/v1alpha1/policies:validate",
           request.body,
           accessToken
         );
@@ -116,11 +102,14 @@ describe("/api/policies/validate", () => {
           errors: chance.string(),
         },
       ];
-      rodeResponse.ok = false;
-      rodeResponse.json.mockResolvedValue({
-        details,
-        message: "failed to compile the provided policy",
-      });
+      const clientError = new RodeClientError(
+        StatusCodes.BAD_REQUEST,
+        JSON.stringify({
+          details,
+          message: "failed to compile the provided policy",
+        })
+      );
+      post.mockRejectedValue(clientError);
 
       await handler(request, response);
 
@@ -139,11 +128,14 @@ describe("/api/policies/validate", () => {
           errors: chance.string(),
         },
       ];
-      rodeResponse.ok = false;
-      rodeResponse.json.mockResolvedValue({
-        details,
-        message: "failed to parse the provided policy",
-      });
+      const clientError = new RodeClientError(
+        StatusCodes.BAD_REQUEST,
+        JSON.stringify({
+          details,
+          message: "failed to parse the provided policy",
+        })
+      );
+      post.mockRejectedValue(clientError);
 
       await handler(request, response);
 
@@ -162,12 +154,15 @@ describe("/api/policies/validate", () => {
           errors: chance.string(),
         },
       ];
-      rodeResponse.ok = false;
-      rodeResponse.json.mockResolvedValue({
-        details,
-        message:
-          "policy compiled successfully but is missing Rode required fields",
-      });
+      const clientError = new RodeClientError(
+        StatusCodes.BAD_REQUEST,
+        JSON.stringify({
+          details,
+          message:
+            "policy compiled successfully but is missing Rode required fields",
+        })
+      );
+      post.mockRejectedValue(clientError);
 
       await handler(request, response);
 
@@ -181,7 +176,9 @@ describe("/api/policies/validate", () => {
     });
 
     it("should return an internal server error on a non-200 response from Rode", async () => {
-      rodeResponse.ok = false;
+      post.mockRejectedValue(
+        new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "{}")
+      );
 
       await handler(request, response);
 
@@ -197,7 +194,9 @@ describe("/api/policies/validate", () => {
     });
 
     it("should return an internal server error when JSON is invalid", async () => {
-      rodeResponse.json.mockRejectedValue(new Error());
+      post.mockRejectedValue(
+        new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "}")
+      );
 
       await handler(request, response);
 

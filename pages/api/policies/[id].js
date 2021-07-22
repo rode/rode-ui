@@ -57,7 +57,6 @@ export default apiHandler({
       if (!(error instanceof RodeClientError)) {
         throw error;
       }
-
       const parsedResponse = JSON.parse(error.responseText);
 
       if (
