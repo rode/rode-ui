@@ -14,26 +14,45 @@
  * limitations under the License.
  */
 
+import config from "config";
 import {
   post,
   patch,
   get,
   del,
   buildPaginationParams,
+  RodeClientError,
 } from "pages/api/utils/api-utils";
 import fetch from "node-fetch";
 
 jest.mock("node-fetch");
 
 describe("api-utils", () => {
-  let endpoint, body, accessToken;
+  let endpoint,
+    body,
+    accessToken,
+    response,
+    expectedResponseText,
+    expectedStatusCode,
+    expectedUrl;
 
   beforeEach(() => {
-    endpoint = chance.url();
+    endpoint = `/${chance.word()}`;
+    expectedUrl = `${config.get("rode.url")}${endpoint}`;
     accessToken = chance.string();
     body = {
       [chance.string()]: chance.string(),
     };
+
+    expectedResponseText = chance.string();
+    expectedStatusCode = chance.integer({ min: 200, max: 500 });
+    response = {
+      ok: true,
+      statusCode: expectedStatusCode,
+      text: jest.fn().mockResolvedValue(expectedResponseText),
+    };
+
+    fetch.mockResolvedValue(response);
   });
 
   afterEach(() => {
@@ -41,10 +60,10 @@ describe("api-utils", () => {
   });
 
   describe("post", () => {
-    it("should call fetch with the appropriate params", () => {
-      post(endpoint, body);
+    it("should call fetch with the appropriate params", async () => {
+      await post(endpoint, body);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -53,12 +72,12 @@ describe("api-utils", () => {
       });
     });
 
-    it("should pass the raw body if it is not an object", () => {
+    it("should pass the raw body if it is not an object", async () => {
       body = chance.string();
 
-      post(endpoint, body);
+      await post(endpoint, body);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -67,25 +86,40 @@ describe("api-utils", () => {
       });
     });
 
-    it("should include the access token in the request", () => {
-      post(endpoint, body, accessToken);
+    it("should include the access token in the request", async () => {
+      await post(endpoint, body, accessToken);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify(body),
+      });
+    });
+
+    describe("non-200 response", () => {
+      it("should throw an error", async () => {
+        expect.hasAssertions();
+        response.ok = false;
+
+        try {
+          await post(endpoint, body, accessToken);
+        } catch (error) {
+          expect(error).toBeInstanceOf(RodeClientError);
+          expect(error.responseText).toEqual(expectedResponseText);
+          expect(error.statusCode).toEqual(expectedStatusCode);
+        }
       });
     });
   });
 
   describe("patch", () => {
-    it("should call fetch with the appropriate params", () => {
-      patch(endpoint, body);
+    it("should call fetch with the appropriate params", async () => {
+      await patch(endpoint, body);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -94,12 +128,12 @@ describe("api-utils", () => {
       });
     });
 
-    it("should pass the raw body if it is not an object", () => {
+    it("should pass the raw body if it is not an object", async () => {
       body = chance.string();
 
-      patch(endpoint, body);
+      await patch(endpoint, body);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -108,10 +142,10 @@ describe("api-utils", () => {
       });
     });
 
-    it("should include the access token if present", () => {
-      patch(endpoint, body, accessToken);
+    it("should include the access token if present", async () => {
+      await patch(endpoint, body, accessToken);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -120,48 +154,93 @@ describe("api-utils", () => {
         body: JSON.stringify(body),
       });
     });
+
+    describe("non-200 response", () => {
+      it("should throw an error", async () => {
+        expect.hasAssertions();
+        response.ok = false;
+
+        try {
+          await patch(endpoint, body, accessToken);
+        } catch (error) {
+          expect(error).toBeInstanceOf(RodeClientError);
+          expect(error.responseText).toEqual(expectedResponseText);
+          expect(error.statusCode).toEqual(expectedStatusCode);
+        }
+      });
+    });
   });
 
   describe("get", () => {
-    it("should call fetch with the appropriate params", () => {
-      get(endpoint);
+    it("should call fetch with the appropriate params", async () => {
+      await get(endpoint);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {},
         method: "GET",
       });
     });
 
-    it("should include the access token if present", () => {
-      get(endpoint, accessToken);
+    it("should include the access token if present", async () => {
+      await get(endpoint, accessToken);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         method: "GET",
+      });
+    });
+
+    describe("non-200 response", () => {
+      it("should throw an error", async () => {
+        expect.hasAssertions();
+        response.ok = false;
+
+        try {
+          await get(endpoint, accessToken);
+        } catch (error) {
+          expect(error).toBeInstanceOf(RodeClientError);
+          expect(error.responseText).toEqual(expectedResponseText);
+          expect(error.statusCode).toEqual(expectedStatusCode);
+        }
       });
     });
   });
 
   describe("del", () => {
-    it("should call fetch with the appropriate params", () => {
-      del(endpoint);
+    it("should call fetch with the appropriate params", async () => {
+      await del(endpoint);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {},
         method: "DELETE",
       });
     });
 
-    it("should include the access token if present", () => {
-      del(endpoint, accessToken);
+    it("should include the access token if present", async () => {
+      await del(endpoint, accessToken);
 
-      expect(fetch).toHaveBeenCalledWith(endpoint, {
+      expect(fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         method: "DELETE",
+      });
+    });
+
+    describe("non-200 response", () => {
+      it("should throw an error", async () => {
+        expect.hasAssertions();
+        response.ok = false;
+
+        try {
+          await del(endpoint, accessToken);
+        } catch (error) {
+          expect(error).toBeInstanceOf(RodeClientError);
+          expect(error.responseText).toEqual(expectedResponseText);
+          expect(error.statusCode).toEqual(expectedStatusCode);
+        }
       });
     });
   });
