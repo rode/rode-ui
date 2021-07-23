@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { get } from "./api-utils";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { get, RodeClientError } from "./api-utils";
+import { StatusCodes, ReasonPhrases } from "http-status-codes";
 
 export const mapToClientModel = (policyResponse) => {
   return {
@@ -45,26 +44,7 @@ export const mapToApiModel = (request) => {
 
 export const getPolicyByPolicyId = async (policyId, accessToken) => {
   try {
-    const response = await get(
-      `${config.get("rode.url")}/v1alpha1/policies/${policyId}`,
-      accessToken
-    );
-
-    if (response.status === StatusCodes.NOT_FOUND) {
-      return {
-        status: StatusCodes.OK,
-        data: null,
-      };
-    }
-
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return {
-        status: StatusCodes.INTERNAL_SERVER_ERROR,
-        error: ReasonPhrases.INTERNAL_SERVER_ERROR,
-      };
-    }
-
+    const response = await get(`/v1alpha1/policies/${policyId}`, accessToken);
     const getPolicyResponse = await response.json();
 
     const policy = mapToClientModel(getPolicyResponse);
@@ -74,6 +54,16 @@ export const getPolicyByPolicyId = async (policyId, accessToken) => {
       data: policy,
     };
   } catch (error) {
+    if (
+      error instanceof RodeClientError &&
+      error.statusCode === StatusCodes.NOT_FOUND
+    ) {
+      return {
+        status: StatusCodes.OK,
+        data: null,
+      };
+    }
+
     console.error("Error getting policy", error);
 
     return {

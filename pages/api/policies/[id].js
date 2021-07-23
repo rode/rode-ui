@@ -23,18 +23,22 @@ export default apiHandler({
   get: async (req, res) => {
     const { id } = req.query;
 
-    const response = await get(`/v1alpha1/policies/${id}`, req.accessToken);
+    try {
+      const response = await get(`/v1alpha1/policies/${id}`, req.accessToken);
+      const getPolicyResponse = await response.json();
+      const policy = mapToClientModel(getPolicyResponse);
 
-    // TODO: is this still necessary?
-    // if (response.status === StatusCodes.NOT_FOUND) {
-    //   return res.status(StatusCodes.OK).send(null);
-    // }
+      return res.status(StatusCodes.OK).json(policy);
+    } catch (error) {
+      if (
+        error instanceof RodeClientError &&
+        error.statusCode === StatusCodes.NOT_FOUND
+      ) {
+        return res.status(StatusCodes.OK).send(null);
+      }
 
-    const getPolicyResponse = await response.json();
-
-    const policy = mapToClientModel(getPolicyResponse);
-
-    return res.status(StatusCodes.OK).json(policy);
+      throw error;
+    }
   },
   patch: async (req, res) => {
     const { id } = req.query;

@@ -34,6 +34,7 @@ import { useAppState } from "providers/appState";
 import { stateActions } from "reducers/appState";
 import { StatusCodes } from "http-status-codes";
 import Text from "components/Text";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -172,6 +173,11 @@ const EditPolicyGroupAssignments = () => {
       ...updatePromises,
     ]);
     setLoadingForm(false);
+
+    if (responses.some(({ status }) => status === StatusCodes.FORBIDDEN)) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
 
     if (responses.some(({ ok }) => !ok)) {
       showError("Failed to save policy group assignments.");

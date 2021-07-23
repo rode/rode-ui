@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { StatusCodes } from "http-status-codes";
 import React from "react";
 import { act, render, screen } from "test/testing-utils/renderer";
 import userEvent from "@testing-library/user-event";
@@ -26,6 +27,7 @@ import {
 } from "test/testing-utils/mocks";
 import { showError } from "utils/toast-utils";
 import { RESOURCE_TYPES } from "utils/resource-utils";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 jest.mock("hooks/useFetch");
 jest.mock("hooks/usePaginatedFetch");
@@ -238,7 +240,7 @@ describe("PolicyPlayground", () => {
     });
 
     describe("Evaluation", () => {
-      it("should call to the correct endpoint", async () => {
+      it("should call the correct endpoint", async () => {
         fetch.mockClear();
         fetchResponse.json.mockClear();
         const renderedEvaluateButton = screen.getByRole("button", {
@@ -300,6 +302,23 @@ describe("PolicyPlayground", () => {
           .toHaveBeenCalledWith(
             "An error occurred while evaluating. Please try again."
           );
+      });
+
+      it("should render an error if the user is not authorized", async () => {
+        fetchResponse.ok = false;
+        fetchResponse.status = StatusCodes.FORBIDDEN;
+
+        const renderedEvaluateButton = screen.getByRole("button", {
+          name: "Evaluate",
+        });
+
+        await act(async () => {
+          await userEvent.click(renderedEvaluateButton);
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
       });
 
       it("should clear the selected policy and resource when you leave the playground", () => {

@@ -15,7 +15,7 @@
  */
 
 import { StatusCodes } from "http-status-codes";
-import { del, get, patch } from "pages/api/utils/api-utils";
+import { del, get, patch, RodeClientError } from "pages/api/utils/api-utils";
 import {
   mapToApiModel,
   mapToClientModel,
@@ -26,21 +26,27 @@ export default apiHandler({
   get: async (req, res) => {
     const { name } = req.query;
 
-    const response = await get(
-      `/v1alpha1/policy-groups/${name}`,
-      req.accessToken
-    );
+    try {
+      const response = await get(
+        `/v1alpha1/policy-groups/${name}`,
+        req.accessToken
+      );
 
-    // TODO: is this still necessary?
-    // if (response.status === StatusCodes.NOT_FOUND) {
-    //   return res.status(StatusCodes.OK).send(null);
-    // }
+      const getPolicyGroupResponse = await response.json();
 
-    const getPolicyGroupResponse = await response.json();
+      return res
+        .status(StatusCodes.OK)
+        .json(mapToClientModel(getPolicyGroupResponse));
+    } catch (error) {
+      if (
+        error instanceof RodeClientError &&
+        error.statusCode === StatusCodes.NOT_FOUND
+      ) {
+        return res.status(StatusCodes.OK).send(null);
+      }
 
-    return res
-      .status(StatusCodes.OK)
-      .json(mapToClientModel(getPolicyGroupResponse));
+      throw error;
+    }
   },
   patch: async (req, res) => {
     const { name } = req.query;

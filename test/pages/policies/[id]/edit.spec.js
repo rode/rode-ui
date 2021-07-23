@@ -15,6 +15,7 @@
  */
 
 import React from "react";
+import { StatusCodes } from "http-status-codes";
 import { render, screen, act, within } from "test/testing-utils/renderer";
 
 import EditPolicy from "pages/policies/[id]/edit";
@@ -26,6 +27,7 @@ import { showError, showSuccess } from "utils/toast-utils";
 import Prism from "prism/prism";
 import { mutate } from "swr";
 import { waitFor } from "@testing-library/dom";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 jest.mock("swr");
 jest.mock("next/router");
@@ -250,6 +252,26 @@ describe("Edit Policy", () => {
         );
       expect(router.push).not.toHaveBeenCalled();
     });
+
+    it("should show an error message when the user is unauthorized", async () => {
+      fetchResponse.ok = false;
+      fetchResponse.status = StatusCodes.FORBIDDEN;
+
+      act(() => {
+        userEvent.click(screen.getByText(/delete policy/i));
+      });
+      const renderedConfirmationModal = screen.getByRole("dialog");
+      const confirmDeleteButton = within(renderedConfirmationModal).getByText(
+        /delete policy/i
+      );
+      await act(async () => {
+        await userEvent.click(confirmDeleteButton);
+      });
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
+    });
   });
 
   describe("updating the policy and creating a new version", () => {
@@ -420,6 +442,19 @@ describe("Edit Policy", () => {
       );
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it("should show an error when the user is not authorized", async () => {
+      fetchResponse.ok = false;
+      fetchResponse.status = StatusCodes.FORBIDDEN;
+
+      await userEvent.click(screen.getByText(/update policy/i));
+
+      await waitFor(() => {
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
+      });
     });
   });
 });

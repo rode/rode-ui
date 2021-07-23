@@ -25,6 +25,7 @@ import PageHeader from "components/layout/PageHeader";
 import { useFormValidation } from "hooks/useFormValidation";
 import { schema } from "schemas/policy-group-form";
 import { showError, showSuccess } from "utils/toast-utils";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 import { stateActions } from "reducers/appState";
 import { useAppState } from "providers/appState";
 import { StatusCodes } from "http-status-codes";
@@ -78,6 +79,11 @@ const PolicyGroupForm = (props) => {
       return;
     }
 
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
+
     if (!response.ok) {
       showError(`Failed to ${verb} the policy group.`);
       return;
@@ -99,6 +105,11 @@ const PolicyGroupForm = (props) => {
       method: "DELETE",
     });
     setLoading(false);
+
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
 
     if (!response.ok) {
       showError(

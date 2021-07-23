@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { StatusCodes } from "http-status-codes";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Input from "components/Input";
@@ -34,6 +35,7 @@ import { mutate } from "swr";
 import TextArea from "components/TextArea";
 import * as Diff from "diff";
 import Text from "components/Text";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 const PolicyForm = ({
   title,
@@ -102,6 +104,11 @@ const PolicyForm = ({
 
     setLoading(false);
 
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
+
     if (!response.ok) {
       const parsedResponse = await response.json();
 
@@ -144,6 +151,11 @@ const PolicyForm = ({
       },
     });
 
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
+
     const result = await response.json();
 
     setValidationResults(result);
@@ -157,6 +169,11 @@ const PolicyForm = ({
       method: "DELETE",
     });
     setLoading(false);
+
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
 
     if (!response.ok) {
       showError(

@@ -16,14 +16,19 @@
 
 import { StatusCodes } from "http-status-codes";
 import handler from "pages/api/policy-groups/[name]";
-import { get, patch, del } from "pages/api/utils/api-utils";
+import { get, patch, del, RodeClientError } from "pages/api/utils/api-utils";
 import {
   mapToApiModel,
   mapToClientModel,
 } from "pages/api/utils/policy-group-utils";
 
 jest.mock("node-fetch");
-jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/api-utils", () => ({
+  ...jest.requireActual("pages/api/utils/api-utils"),
+  get: jest.fn(),
+  patch: jest.fn(),
+  del: jest.fn(),
+}));
 
 describe("/api/policy-groups/[name]", () => {
   let accessToken, request, response, policyGroup, rodeResponse, name;
@@ -89,18 +94,40 @@ describe("/api/policy-groups/[name]", () => {
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(policyGroup);
       });
+    });
 
-      it.skip("should return null when the policy group is not found", async () => {
-        rodeResponse.status = 404;
+    describe("call to Rode returns a non-200 status code", () => {
+      describe("the policy group is not found", () => {
+        it("should return null", async () => {
+          get.mockRejectedValue(
+            new RodeClientError(StatusCodes.NOT_FOUND, "{}")
+          );
 
-        await handler(request, response);
+          await handler(request, response);
 
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-        expect(response.send)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(null);
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(StatusCodes.OK);
+          expect(response.send)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(null);
+        });
+      });
+
+      describe("another status code is returned", () => {
+        it("should return the same status code", async () => {
+          const statusCode = chance.pickone([
+            StatusCodes.BAD_GATEWAY,
+            StatusCodes.FORBIDDEN,
+          ]);
+          get.mockRejectedValue(new RodeClientError(statusCode, "{}"));
+
+          await handler(request, response);
+
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(statusCode);
+        });
       });
     });
   });

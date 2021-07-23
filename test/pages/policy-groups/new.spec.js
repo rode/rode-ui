@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { StatusCodes } from "http-status-codes";
 import React from "react";
 import { render, screen, act } from "test/testing-utils/renderer";
 
@@ -22,6 +23,7 @@ import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
 import { showError } from "utils/toast-utils";
 import CreateNewPolicyGroup from "pages/policy-groups/new";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -175,7 +177,7 @@ describe("New Policy Group", () => {
     });
 
     it("should show an error when the call to create failed due to naming conflicts", async () => {
-      fetchResponse.status = 409;
+      fetchResponse.status = StatusCodes.CONFLICT;
       act(() => {
         userEvent.type(
           screen.getByLabelText("Policy Group Name"),
@@ -206,6 +208,20 @@ describe("New Policy Group", () => {
         .toHaveBeenCalledWith("Failed to create the policy group.");
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(dispatch).not.toHaveBeenCalled();
+      expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it("should render an error when the user is not authorized", async () => {
+      fetchResponse.ok = false;
+      fetchResponse.status = StatusCodes.FORBIDDEN;
+
+      await act(async () => {
+        await userEvent.click(screen.getByText(/save policy group/i));
+      });
+
+      expect(showError)
+        .toHaveBeenCalledTimes(1)
+        .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
       expect(router.push).not.toHaveBeenCalled();
     });
   });

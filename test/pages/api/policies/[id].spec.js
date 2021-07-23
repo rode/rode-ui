@@ -108,18 +108,41 @@ describe("/api/policies/[id]", () => {
           policyVersion: foundPolicy.policy.version,
         });
       });
+    });
 
-      it.skip("should return null when the policy is not found", async () => {
-        rodeResponse.status = 404;
+    describe("call to Rode returns a non-200 status code", () => {
+      describe("the policy is not found", () => {
+        it("should return null", async () => {
+          get.mockRejectedValue(
+            new RodeClientError(StatusCodes.NOT_FOUND, "{}")
+          );
 
-        await handler(request, response);
+          await handler(request, response);
 
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-        expect(response.send)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(null);
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(StatusCodes.OK);
+          expect(response.send)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(null);
+        });
+      });
+
+      describe("another status code is returned", () => {
+        it("should return that status", async () => {
+          const statusCode = chance.pickone([
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            StatusCodes.FORBIDDEN,
+            StatusCodes.BAD_GATEWAY,
+          ]);
+          get.mockRejectedValue(new RodeClientError(statusCode, "{}"));
+
+          await handler(request, response);
+
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(statusCode);
+        });
       });
     });
   });

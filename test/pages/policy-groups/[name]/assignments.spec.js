@@ -26,6 +26,7 @@ import { usePaginatedFetch } from "hooks/usePaginatedFetch";
 import { usePolicyGroupAssignments } from "hooks/usePolicyGroupAssignments";
 import { stateActions } from "reducers/appState";
 import { StatusCodes } from "http-status-codes";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 jest.mock("swr");
 jest.mock("next/router");
@@ -378,6 +379,28 @@ describe("Edit Policy Group Assignments", () => {
         expect(showError)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith("Failed to save policy group assignments.");
+        expect(showSuccess).not.toHaveBeenCalled();
+        expect(router.push).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("user is not authorized to edit assignments", () => {
+      it("should show an error message", async () => {
+        saveResponse.ok = false;
+        saveResponse.status = StatusCodes.FORBIDDEN;
+        act(() =>
+          userEvent.click(
+            screen.getAllByLabelText("Remove Policy Assignment")[0]
+          )
+        );
+
+        await act(async () => {
+          await userEvent.click(screen.getByLabelText("Save Assignments"));
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
         expect(showSuccess).not.toHaveBeenCalled();
         expect(router.push).not.toHaveBeenCalled();
       });

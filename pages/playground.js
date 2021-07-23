@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { StatusCodes } from "http-status-codes";
 import React, { useState, useEffect } from "react";
 import Button from "components/Button";
 import styles from "styles/modules/Playground.module.scss";
@@ -26,6 +27,7 @@ import PageHeader from "components/layout/PageHeader";
 import SelectedPolicy from "components/playground/SelectedPolicy";
 import SelectedResource from "components/playground/SelectedResource";
 import Text from "components/Text";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 const PolicyPlayground = () => {
   const { theme } = useTheme();
@@ -55,6 +57,11 @@ const PolicyPlayground = () => {
     const parsedResponse = await response.json();
 
     setEvaluationLoading(false);
+
+    if (response.status === StatusCodes.FORBIDDEN) {
+      showError(AUTHORIZATION_ERROR_MESSAGE);
+      return;
+    }
 
     if (!response.ok) {
       showError("An error occurred while evaluating. Please try again.");
