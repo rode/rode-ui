@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import handler from "pages/api/policy-groups";
 import { get, post, buildPaginationParams } from "pages/api/utils/api-utils";
 
@@ -44,32 +43,6 @@ describe("/api/policy-groups", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-  });
-
-  const assertInternalServerError = () => {
-    expect(response.status)
-      .toBeCalledTimes(1)
-      .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-
-    expect(response.json)
-      .toHaveBeenCalledTimes(1)
-      .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  };
-
-  describe("unimplemented methods", () => {
-    it("should return method not allowed", async () => {
-      request.method = chance.word();
-
-      await handler(request, response);
-
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.METHOD_NOT_ALLOWED);
-
-      expect(response.json)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-    });
   });
 
   describe("GET", () => {
@@ -105,9 +78,7 @@ describe("/api/policy-groups", () => {
 
     describe("successful call to Rode", () => {
       const createExpectedUrl = (query = {}) => {
-        return `${config.get(
-          "rode.url"
-        )}/v1alpha1/policy-groups?${new URLSearchParams(query)}`;
+        return `/v1alpha1/policy-groups?${new URLSearchParams(query)}`;
       };
 
       it("should hit the Rode API", async () => {
@@ -152,32 +123,6 @@ describe("/api/policy-groups", () => {
         });
       });
     });
-
-    describe("failed calls to Rode", () => {
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        get.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-    });
   });
 
   describe("POST", () => {
@@ -216,7 +161,7 @@ describe("/api/policy-groups", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policy-groups`,
+            "/v1alpha1/policy-groups",
             request.body,
             accessToken
           );
@@ -232,46 +177,6 @@ describe("/api/policy-groups", () => {
         expect(response.json)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(createdPolicyGroup);
-      });
-    });
-
-    describe("failed calls to Rode", () => {
-      it("should return a conflict error when the policy group name already exists", async () => {
-        rodeResponse.ok = false;
-        rodeResponse.status = 409;
-        await handler(request, response);
-
-        expect(response.status)
-          .toBeCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.CONFLICT);
-
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({ error: ReasonPhrases.CONFLICT });
-      });
-
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        post.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
       });
     });
   });

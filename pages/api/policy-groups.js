@@ -14,86 +14,40 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { buildPaginationParams, get, post } from "./utils/api-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["GET", "POST"];
-
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-
-  const rodeUrl = config.get("rode.url");
-
-  if (req.method === "GET") {
-    try {
-      const params = buildPaginationParams(req);
-
-      if (req.query.filter) {
-        params.filter = req.query.filter;
-      }
-
-      const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups?${new URLSearchParams(params)}`,
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const listPolicyGroupsResponse = await response.json();
-
-      const policyGroups = listPolicyGroupsResponse.policyGroups;
-
-      return res.status(StatusCodes.OK).json({
-        data: policyGroups,
-        pageToken: listPolicyGroupsResponse.nextPageToken,
-      });
-    } catch (error) {
-      console.error("Error listing policy groups", error);
-
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+export default apiHandler({
+  get: async (req, res) => {
+    const params = buildPaginationParams(req);
+    if (req.query.filter) {
+      params.filter = req.query.filter;
     }
-  }
 
-  try {
+    const response = await get(
+      `/v1alpha1/policy-groups?${new URLSearchParams(params)}`,
+      req.accessToken
+    );
+
+    const listPolicyGroupsResponse = await response.json();
+
+    const policyGroups = listPolicyGroupsResponse.policyGroups;
+
+    return res.status(StatusCodes.OK).json({
+      data: policyGroups,
+      pageToken: listPolicyGroupsResponse.nextPageToken,
+    });
+  },
+  post: async (req, res) => {
     const response = await post(
-      `${rodeUrl}/v1alpha1/policy-groups`,
+      "/v1alpha1/policy-groups",
       req.body,
       req.accessToken
     );
 
-    if (!response.ok) {
-      if (response.status === StatusCodes.CONFLICT) {
-        return res
-          .status(StatusCodes.CONFLICT)
-          .json({ error: ReasonPhrases.CONFLICT });
-      }
-
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-
     const createPolicyGroupResponse = await response.json();
 
     return res.status(StatusCodes.OK).json(createPolicyGroupResponse);
-  } catch (error) {
-    console.error("Error listing policy groups", error);
-
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+  },
+});

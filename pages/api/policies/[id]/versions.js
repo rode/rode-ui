@@ -14,47 +14,24 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { get } from "pages/api/utils/api-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["GET"];
-
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-  const rodeUrl = config.get("rode.url");
-
-  try {
+export default apiHandler({
+  get: async (req, res) => {
     const { id } = req.query;
 
     const response = await get(
-      `${rodeUrl}/v1alpha1/policies/${id}/versions`,
+      `/v1alpha1/policies/${id}/versions`,
       req.accessToken
     );
 
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-
     const getPolicyVersionsResponse = await response.json();
 
-    res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.OK).json({
       data: getPolicyVersionsResponse.versions,
       pageToken: getPolicyVersionsResponse.nextPageToken,
     });
-  } catch (error) {
-    console.error("Error fetching policy versions", error);
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+  },
+});

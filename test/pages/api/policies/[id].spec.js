@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies/[id]";
 import { get, patch, del } from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
-jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/api-utils", () => ({
+  ...jest.requireActual("pages/api/utils/api-utils"),
+  get: jest.fn(),
+  patch: jest.fn(),
+  del: jest.fn(),
+}));
+
+const { RodeClientError } = jest.requireActual("pages/api/utils/api-utils");
 
 describe("/api/policies/[id]", () => {
   let accessToken, request, response, foundPolicy, rodeResponse, id;
@@ -69,22 +75,6 @@ describe("/api/policies/[id]", () => {
     jest.resetAllMocks();
   });
 
-  describe("unimplemented method", () => {
-    it("should return method not allowed", async () => {
-      request.method = chance.word();
-
-      await handler(request, response);
-
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.METHOD_NOT_ALLOWED);
-
-      expect(response.json)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-    });
-  });
-
   describe("GET", () => {
     beforeEach(() => {
       request.method = "GET";
@@ -98,10 +88,7 @@ describe("/api/policies/[id]", () => {
 
         expect(get)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies/${id}`,
-            accessToken
-          );
+          .toHaveBeenCalledWith(`/v1alpha1/policies/${id}`, accessToken);
       });
 
       it("should return the found policy", async () => {
@@ -121,54 +108,41 @@ describe("/api/policies/[id]", () => {
           policyVersion: foundPolicy.policy.version,
         });
       });
-
-      it("should return null when the policy is not found", async () => {
-        rodeResponse.status = 404;
-
-        await handler(request, response);
-
-        expect(response.status)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.OK);
-        expect(response.send)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(null);
-      });
     });
 
-    describe("call to Rode fails", () => {
-      const assertInternalServerError = () => {
-        expect(response.status)
-          .toBeCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
+    describe("call to Rode returns a non-200 status code", () => {
+      describe("the policy is not found", () => {
+        it("should return null", async () => {
+          get.mockRejectedValue(
+            new RodeClientError(StatusCodes.NOT_FOUND, "{}")
+          );
 
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      };
+          await handler(request, response);
 
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-
-        await handler(request, response);
-
-        assertInternalServerError();
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(StatusCodes.OK);
+          expect(response.send)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(null);
+        });
       });
 
-      it("should return an internal server error on a network or other fetch error", async () => {
-        get.mockRejectedValue(new Error());
+      describe("another status code is returned", () => {
+        it("should return that status", async () => {
+          const statusCode = chance.pickone([
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            StatusCodes.FORBIDDEN,
+            StatusCodes.BAD_GATEWAY,
+          ]);
+          get.mockRejectedValue(new RodeClientError(statusCode, "{}"));
 
-        await handler(request, response);
+          await handler(request, response);
 
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
+          expect(response.status)
+            .toHaveBeenCalledTimes(1)
+            .toHaveBeenCalledWith(statusCode);
+        });
       });
     });
   });
@@ -190,7 +164,7 @@ describe("/api/policies/[id]", () => {
         expect(patch)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies/${id}`,
+            `/v1alpha1/policies/${id}`,
             mapToApiModel(request),
             accessToken
           );
@@ -232,11 +206,15 @@ describe("/api/policies/[id]", () => {
             errors: chance.string(),
           },
         ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to compile the provided policy",
-        });
+        const clientError = new RodeClientError(
+          StatusCodes.BAD_REQUEST,
+          JSON.stringify({
+            details,
+            message: "failed to parse the provided policy",
+          })
+        );
+
+        patch.mockRejectedValue(clientError);
 
         await handler(request, response);
 
@@ -255,11 +233,15 @@ describe("/api/policies/[id]", () => {
             errors: chance.string(),
           },
         ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to parse the provided policy",
-        });
+        const clientError = new RodeClientError(
+          StatusCodes.BAD_REQUEST,
+          JSON.stringify({
+            details,
+            message: "failed to parse the provided policy",
+          })
+        );
+
+        patch.mockRejectedValue(clientError);
 
         await handler(request, response);
 
@@ -273,7 +255,9 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
+        patch.mockRejectedValue(
+          new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "{}")
+        );
 
         await handler(request, response);
 
@@ -289,7 +273,9 @@ describe("/api/policies/[id]", () => {
       });
 
       it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
+        patch.mockRejectedValue(
+          new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "}")
+        );
 
         await handler(request, response);
 
@@ -313,10 +299,7 @@ describe("/api/policies/[id]", () => {
 
         expect(del)
           .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies/${id}`,
-            accessToken
-          );
+          .toHaveBeenCalledWith(`/v1alpha1/policies/${id}`, accessToken);
       });
 
       it("should return null if the delete was successful", async () => {
@@ -329,35 +312,6 @@ describe("/api/policies/[id]", () => {
         expect(response.send)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(null);
-      });
-    });
-
-    describe("call to Rode fails", () => {
-      const assertInternalServerError = () => {
-        expect(response.status)
-          .toBeCalledTimes(1)
-          .toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-
-        expect(response.json)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      };
-
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-        del.mockResolvedValue(rodeResponse);
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        del.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
       });
     });
   });

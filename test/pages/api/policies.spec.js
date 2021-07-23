@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-import config from "config";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import handler from "pages/api/policies";
-import { get, post, buildPaginationParams } from "pages/api/utils/api-utils";
+import {
+  get,
+  post,
+  buildPaginationParams,
+  RodeClientError,
+} from "pages/api/utils/api-utils";
 import { mapToApiModel } from "pages/api/utils/policy-utils";
 
 jest.mock("node-fetch");
 jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/api-utils", () => ({
+  ...jest.requireActual("pages/api/utils/api-utils"),
+  post: jest.fn(),
+  get: jest.fn(),
+  buildPaginationParams: jest.fn(),
+}));
 
 describe("/api/policies", () => {
   let accessToken, request, response, rodeResponse;
@@ -54,22 +64,6 @@ describe("/api/policies", () => {
       .toHaveBeenCalledTimes(1)
       .toHaveBeenCalledWith({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
   };
-
-  describe("unimplemented methods", () => {
-    it("should return method not allowed", async () => {
-      request.method = chance.word();
-
-      await handler(request, response);
-
-      expect(response.status)
-        .toHaveBeenCalledTimes(1)
-        .toHaveBeenCalledWith(StatusCodes.METHOD_NOT_ALLOWED);
-
-      expect(response.json)
-        .toBeCalledTimes(1)
-        .toHaveBeenCalledWith({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-    });
-  });
 
   describe("GET", () => {
     let filterParam, allPolicies, pageToken;
@@ -112,9 +106,7 @@ describe("/api/policies", () => {
 
     describe("successful call to Rode", () => {
       const createExpectedUrl = (query = {}) => {
-        return `${config.get(
-          "rode.url"
-        )}/v1alpha1/policies?${new URLSearchParams(query)}`;
+        return `/v1alpha1/policies?${new URLSearchParams(query)}`;
       };
 
       it("should hit the Rode API", async () => {
@@ -164,32 +156,6 @@ describe("/api/policies", () => {
         });
       });
     });
-
-    describe("failed calls to Rode", () => {
-      it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error on a network or other fetch error", async () => {
-        get.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-
-      it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
-
-        await handler(request, response);
-
-        assertInternalServerError();
-      });
-    });
   });
 
   describe("POST", () => {
@@ -232,7 +198,7 @@ describe("/api/policies", () => {
         expect(post)
           .toHaveBeenCalledTimes(1)
           .toHaveBeenCalledWith(
-            `${config.get("rode.url")}/v1alpha1/policies`,
+            "/v1alpha1/policies",
             mapToApiModel(request),
             accessToken
           );
@@ -261,11 +227,15 @@ describe("/api/policies", () => {
             errors: chance.string(),
           },
         ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to compile the provided policy",
-        });
+
+        const clientError = new RodeClientError(
+          StatusCodes.BAD_REQUEST,
+          JSON.stringify({
+            details,
+            message: "failed to compile the provided policy",
+          })
+        );
+        post.mockRejectedValue(clientError);
 
         await handler(request, response);
 
@@ -284,11 +254,14 @@ describe("/api/policies", () => {
             errors: chance.string(),
           },
         ];
-        rodeResponse.ok = false;
-        rodeResponse.json.mockResolvedValue({
-          details,
-          message: "failed to parse the provided policy",
-        });
+        const clientError = new RodeClientError(
+          StatusCodes.BAD_REQUEST,
+          JSON.stringify({
+            details,
+            message: "failed to parse the provided policy",
+          })
+        );
+        post.mockRejectedValue(clientError);
 
         await handler(request, response);
 
@@ -302,7 +275,9 @@ describe("/api/policies", () => {
       });
 
       it("should return an internal server error on a non-200 response from Rode", async () => {
-        rodeResponse.ok = false;
+        post.mockRejectedValue(
+          new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "{}")
+        );
 
         await handler(request, response);
 
@@ -318,7 +293,9 @@ describe("/api/policies", () => {
       });
 
       it("should return an internal server error when JSON is invalid", async () => {
-        rodeResponse.json.mockRejectedValue(new Error());
+        post.mockRejectedValue(
+          new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR, "}")
+        );
 
         await handler(request, response);
 

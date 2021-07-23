@@ -14,89 +14,48 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { get, post } from "pages/api/utils/api-utils";
 import { mapToClientModelWithPolicyDetails } from "pages/api/utils/policy-assignment-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["GET", "POST"];
+export default apiHandler({
+  get: async (req, res) => {
+    const { name } = req.query;
 
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
+    const response = await get(
+      `/v1alpha1/policy-groups/${name}/assignments`,
+      req.accessToken
+    );
 
-  const rodeUrl = config.get("rode.url");
+    const getPolicyGroupAssignmentsResponse = await response.json();
 
-  if (req.method === "GET") {
-    try {
-      const { name } = req.query;
+    const { policyAssignments } = getPolicyGroupAssignmentsResponse;
 
-      const response = await get(
-        `${rodeUrl}/v1alpha1/policy-groups/${name}/assignments`,
-        req.accessToken
-      );
+    const promises = policyAssignments.map((assignment) =>
+      mapToClientModelWithPolicyDetails(assignment, req.accessToken)
+    );
 
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
+    const mappedAssignments = await Promise.all(promises);
 
-      const getPolicyGroupAssignmentsResponse = await response.json();
+    return res.status(StatusCodes.OK).json({
+      data: mappedAssignments,
+    });
+  },
+  post: async (req, res) => {
+    const { name } = req.query;
+    const requestBody = req.body;
 
-      const { policyAssignments } = getPolicyGroupAssignmentsResponse;
+    const response = await post(
+      `/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`,
+      null,
+      req.accessToken
+    );
 
-      const promises = policyAssignments.map((assignment) =>
-        mapToClientModelWithPolicyDetails(assignment, req.accessToken)
-      );
+    const createdPolicyAssignmentResponse = await response.json();
 
-      const mappedAssignments = await Promise.all(promises);
-
-      return res.status(StatusCodes.OK).json({
-        data: mappedAssignments,
-      });
-    } catch (error) {
-      console.error("Error getting policy group assignment", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-
-  if (req.method === "POST") {
-    try {
-      const { name } = req.query;
-      const requestBody = req.body;
-
-      const response = await post(
-        `${rodeUrl}/v1alpha1/policies/${requestBody.policyVersionId}/assignments/${name}`,
-        null,
-        req.accessToken
-      );
-
-      if (!response.ok) {
-        console.error(`Unsuccessful response from Rode: ${response.status}`);
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-
-      const createdPolicyAssignmentResponse = await response.json();
-
-      return res.status(StatusCodes.OK).json({
-        data: createdPolicyAssignmentResponse,
-      });
-    } catch (error) {
-      console.error("Error creating policy assignment", error);
-
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
-  }
-};
+    return res.status(StatusCodes.OK).json({
+      data: createdPolicyAssignmentResponse,
+    });
+  },
+});

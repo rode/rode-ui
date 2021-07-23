@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
+import config from "config";
 import * as nodeFetch from "node-fetch";
 
-const fetch = ({ endpoint, method, body, accessToken }) => {
+export class RodeClientError extends Error {
+  constructor(statusCode, responseText) {
+    super();
+
+    this.name = "RodeClientError";
+    this.statusCode = statusCode;
+    this.responseText = responseText;
+
+    this.message = `Request failed (${statusCode}): ${responseText}`;
+  }
+}
+
+const fetch = async ({ endpoint, method, body, accessToken }) => {
   const options = {
     method,
     headers: {},
@@ -31,7 +44,15 @@ const fetch = ({ endpoint, method, body, accessToken }) => {
     options.headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
-  return nodeFetch(endpoint, options);
+  const rodeUrl = config.get("rode.url");
+  const response = await nodeFetch(`${rodeUrl}${endpoint}`, options);
+  if (response.ok) {
+    return response;
+  }
+
+  const responseText = await response.text();
+
+  throw new RodeClientError(response.status, responseText);
 };
 
 export const post = (endpoint, body, accessToken) =>

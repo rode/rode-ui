@@ -15,13 +15,17 @@
  */
 
 import React from "react";
+import { StatusCodes } from "http-status-codes";
 import { render, screen, act } from "test/testing-utils/renderer";
 
 import PolicyForm from "components/policies/PolicyForm";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { useFormValidation } from "hooks/useFormValidation";
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
+import { showError } from "utils/toast-utils";
 
+jest.mock("utils/toast-utils");
 jest.mock("next/router");
 jest.mock("hooks/useFormValidation");
 
@@ -166,6 +170,23 @@ describe("Policy Form", () => {
       expect(
         screen.getByText(/this policy failed validation/i)
       ).toBeInTheDocument();
+    });
+
+    describe("user is unauthorized", () => {
+      it("should render an error message", async () => {
+        fetchResponse.ok = false;
+        fetchResponse.status = StatusCodes.FORBIDDEN;
+
+        userEvent.type(screen.getByLabelText(/rego policy code/i), regoContent);
+        await act(async () => {
+          await userEvent.click(screen.getByText(/validate policy/i));
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
+        expect(fetchResponse.json).not.toHaveBeenCalled();
+      });
     });
   });
 });

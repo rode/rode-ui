@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { post } from "pages/api/utils/api-utils";
+import { StatusCodes } from "http-status-codes";
+import { post, RodeClientError } from "pages/api/utils/api-utils";
+import { apiHandler } from "utils/api-page-handler";
 
-const ALLOWED_METHODS = ["POST"];
-
-export default async (req, res) => {
-  if (!ALLOWED_METHODS.includes(req.method)) {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-
-  const rodeUrl = config.get("rode.url");
-
-  try {
+export default apiHandler({
+  post: async (req, res) => {
     const policy = req.body;
 
-    const response = await post(
-      `${rodeUrl}/v1alpha1/policies:validate`,
-      policy,
-      req.accessToken
-    );
+    try {
+      const response = await post(
+        "/v1alpha1/policies:validate",
+        policy,
+        req.accessToken
+      );
 
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
+      const validatePolicyResponse = await response.json();
 
-      const parsedResponse = await response.json();
+      const result = {
+        errors: validatePolicyResponse.errors,
+        isValid: validatePolicyResponse.compile,
+      };
+
+      res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      if (!(error instanceof RodeClientError)) {
+        throw error;
+      }
+
+      const parsedResponse = JSON.parse(error.responseText);
 
       if (
         parsedResponse?.message?.includes("failed to compile") ||
@@ -56,24 +57,7 @@ export default async (req, res) => {
         return res.status(StatusCodes.BAD_REQUEST).json(validationError);
       }
 
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      throw error;
     }
-
-    const validatePolicyResponse = await response.json();
-
-    const result = {
-      errors: validatePolicyResponse.errors,
-      isValid: validatePolicyResponse.compile,
-    };
-
-    res.status(StatusCodes.OK).json(result);
-  } catch (error) {
-    console.error("Error validating policy", error);
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+  },
+});

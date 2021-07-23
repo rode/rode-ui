@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-import config from "config";
 import {
   getPolicyByPolicyId,
   mapToApiModel,
   mapToClientModel,
 } from "pages/api/utils/policy-utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { get } from "pages/api/utils/api-utils";
+import { get, RodeClientError } from "pages/api/utils/api-utils";
 
-jest.mock("pages/api/utils/api-utils");
+jest.mock("pages/api/utils/api-utils", () => ({
+  ...jest.requireActual("pages/api/utils/api-utils"),
+  get: jest.fn(),
+}));
 
 describe("policy-utils", () => {
   describe("mapToClientModel", () => {
@@ -136,7 +138,7 @@ describe("policy-utils", () => {
 
       it("should call to fetch the policy", () => {
         expect(get).toHaveBeenCalledWith(
-          `${config.get("rode.url")}/v1alpha1/policies/${policyId}`,
+          `/v1alpha1/policies/${policyId}`,
           accessToken
         );
       });
@@ -160,8 +162,7 @@ describe("policy-utils", () => {
 
     describe("sad path", () => {
       it("should return null if the policy is not found", async () => {
-        fetchResponse.status = StatusCodes.NOT_FOUND;
-        get.mockResolvedValue(fetchResponse);
+        get.mockRejectedValue(new RodeClientError(StatusCodes.NOT_FOUND));
         actualResponse = await getPolicyByPolicyId(policyId, accessToken);
 
         expect(actualResponse).toEqual({
@@ -171,8 +172,9 @@ describe("policy-utils", () => {
       });
 
       it("should return an error when the call fails", async () => {
-        fetchResponse.ok = false;
-        get.mockResolvedValue(fetchResponse);
+        get.mockResolvedValue(
+          new RodeClientError(StatusCodes.INTERNAL_SERVER_ERROR)
+        );
         actualResponse = await getPolicyByPolicyId(policyId);
 
         expect(actualResponse).toEqual({
@@ -184,16 +186,6 @@ describe("policy-utils", () => {
       it("should return an error when the response json fails to parse", async () => {
         fetchResponse.json.mockRejectedValue({});
         get.mockResolvedValue(fetchResponse);
-        actualResponse = await getPolicyByPolicyId(policyId);
-
-        expect(actualResponse).toEqual({
-          status: StatusCodes.INTERNAL_SERVER_ERROR,
-          error: ReasonPhrases.INTERNAL_SERVER_ERROR,
-        });
-      });
-
-      it("should return an error when an unexpected error occurs", async () => {
-        get.mockRejectedValue({});
         actualResponse = await getPolicyByPolicyId(policyId);
 
         expect(actualResponse).toEqual({

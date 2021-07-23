@@ -14,35 +14,20 @@
  * limitations under the License.
  */
 
-import config from "config";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
+import { apiHandler } from "utils/api-page-handler";
 import { get } from "./utils/api-utils";
 import { mapOccurrencesToSections } from "./utils/occurrence-utils";
 
-export default async (req, res) => {
-  if (req.method !== "GET") {
-    return res
-      .status(StatusCodes.METHOD_NOT_ALLOWED)
-      .json({ error: ReasonPhrases.METHOD_NOT_ALLOWED });
-  }
-
-  const rodeUrl = config.get("rode.url");
-
-  try {
+export default apiHandler({
+  get: async (req, res) => {
     const resourceUri = req.query.resourceUri;
     const response = await get(
-      `${rodeUrl}/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
+      `/v1alpha1/versioned-resource-occurrences?resourceUri=${encodeURIComponent(
         resourceUri
       )}&fetchRelatedNotes=true&pageSize=1000`,
       req.accessToken
     );
-
-    if (!response.ok) {
-      console.error(`Unsuccessful response from Rode: ${response.status}`);
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-    }
 
     const listOccurrencesResponse = await response.json();
 
@@ -56,12 +41,6 @@ export default async (req, res) => {
       listOccurrencesResponse.relatedNotes
     );
 
-    res.status(StatusCodes.OK).json(occurrences);
-  } catch (error) {
-    console.error("Error listing occurrences", error);
-
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
-  }
-};
+    return res.status(StatusCodes.OK).json(occurrences);
+  },
+});

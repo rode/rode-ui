@@ -15,6 +15,7 @@
  */
 
 import React from "react";
+import { StatusCodes } from "http-status-codes";
 import { render, screen, act } from "test/testing-utils/renderer";
 
 import userEvent from "@testing-library/user-event";
@@ -24,6 +25,8 @@ import { showError, showSuccess } from "utils/toast-utils";
 import EditPolicyGroup from "pages/policy-groups/[name]/edit";
 import { usePolicyGroup } from "hooks/usePolicyGroup";
 import { waitFor } from "@testing-library/dom";
+
+import { AUTHORIZATION_ERROR_MESSAGE } from "utils/constants";
 
 jest.mock("next/router");
 jest.mock("utils/toast-utils");
@@ -179,6 +182,20 @@ describe("Edit Policy Group", () => {
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(router.push).not.toHaveBeenCalled();
       });
+
+      it("should show an error when the user is unauthorized", async () => {
+        updateResponse.ok = false;
+        updateResponse.status = StatusCodes.FORBIDDEN;
+
+        await act(async () => {
+          await userEvent.click(screen.getByText(/update policy group/i));
+        });
+
+        expect(showError)
+          .toHaveBeenCalledTimes(1)
+          .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE);
+        expect(router.push).not.toHaveBeenCalled();
+      });
     });
 
     describe("deleting policy group", () => {
@@ -251,6 +268,23 @@ describe("Edit Policy Group", () => {
               "An error occurred while deleting the policy group. Please try again."
             )
           );
+        });
+
+        it("should show an error message if the user unauthorized", async () => {
+          deleteResponse.status = StatusCodes.FORBIDDEN;
+          const renderedDeleteButton = screen.getByText("Delete Policy Group");
+
+          act(() => {
+            userEvent.click(renderedDeleteButton);
+          });
+
+          await waitFor(() =>
+            expect(showError)
+              .toHaveBeenCalledTimes(1)
+              .toHaveBeenCalledWith(AUTHORIZATION_ERROR_MESSAGE)
+          );
+
+          expect(router.push).not.toHaveBeenCalled();
         });
       });
     });
