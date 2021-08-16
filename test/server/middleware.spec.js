@@ -125,7 +125,7 @@ describe("middleware", () => {
         expect(response.oidc.logout).not.toHaveBeenCalled();
       });
 
-      it("should end the session ", async () => {
+      it("should end the session", async () => {
         refresh.mockRejectedValue(new Error("refresh failed"));
 
         await tokenRefresh()(request, response, next);
