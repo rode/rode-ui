@@ -60,7 +60,7 @@ export const tokenRefresh = () => async (req, res, next) => {
     } catch (error) {
       console.error("Error refreshing oidc token", error);
 
-      return res.redirect("/login");
+      return res.oidc.logout();
     }
   }
 

@@ -94,7 +94,9 @@ describe("middleware", () => {
         },
       };
       response = {
-        redirect: jest.fn(),
+        oidc: {
+          logout: jest.fn(),
+        },
       };
     });
 
@@ -104,7 +106,7 @@ describe("middleware", () => {
       expect(request.accessToken).toEqual(accessToken);
       expect(next).toHaveBeenCalled();
       expect(refresh).not.toHaveBeenCalled();
-      expect(response.redirect).not.toHaveBeenCalled();
+      expect(response.oidc.logout).not.toHaveBeenCalled();
     });
 
     describe("the token is expired", () => {
@@ -120,19 +122,17 @@ describe("middleware", () => {
         expect(request.accessToken).toEqual(nextAccessToken);
         expect(refresh).toHaveBeenCalled();
         expect(next).toHaveBeenCalled();
-        expect(response.redirect).not.toHaveBeenCalled();
+        expect(response.oidc.logout).not.toHaveBeenCalled();
       });
 
-      it("should redirect the request to the login route if the refresh fails", async () => {
+      it("should end the session ", async () => {
         refresh.mockRejectedValue(new Error("refresh failed"));
 
         await tokenRefresh()(request, response, next);
 
         expect(request.accessToken).toBeUndefined();
         expect(next).not.toHaveBeenCalled();
-        expect(response.redirect)
-          .toHaveBeenCalledTimes(1)
-          .toHaveBeenCalledWith("/login");
+        expect(response.oidc.logout).toHaveBeenCalledTimes(1);
       });
     });
   });
