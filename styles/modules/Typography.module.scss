@@ -34,6 +34,7 @@
 .codeContainer {
   width: 100%;
   overflow: auto;
+  white-space: pre-wrap;
   padding: 1rem;
   font-family: monospace;
 }
